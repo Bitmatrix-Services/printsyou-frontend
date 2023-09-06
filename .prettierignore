@@ -1,0 +1,14 @@
+.next
+.yarn
+.idea
+dist
+node_modules
+.pnpm-debug.log*
+.DS_Store
+*.pem
+.next/
+**/next-env.d.ts
+out/
+build
+.github
+pnpm-lock.yaml

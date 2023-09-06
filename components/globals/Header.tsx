@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import Container from "./Container";
-import SearchBar from "@/components/inputs/SearchBar";
+import SearchBar from "@components/inputs/SearchBar";
 
 const Header = () => {
   return (
