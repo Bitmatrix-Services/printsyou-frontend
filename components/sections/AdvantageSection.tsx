@@ -7,13 +7,13 @@ const AdvantageSection = () => {
   return (
     <section className="bg-greyLight py-8 lg:py-20">
       <Container>
-        <div className="flex flex-wrap items-center gap-3 mb-6">
-          <h2 className="text-3xl lg:text-4xl font-normal capitalize mr-auto">
+        <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
+          <h2 className="text-3xl lg:text-4xl font-normal capitalize text-center md:text-left md:mr-auto">
             The <strong className="font-extrabold">Identity-Links</strong>{" "}
             Advantage
           </h2>
           <Link
-            className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
+            className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
             href="!#"
           >
             VIEW MORE
@@ -200,6 +200,14 @@ const AdvantageSection = () => {
               </li>
             </ul>
           </div>
+        </div>
+        <div className="mt-12 mb-6 md:hidden text-center">
+          <Link
+            className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
+            href="!#"
+          >
+            VIEW MORE
+          </Link>
         </div>
       </Container>
     </section>

@@ -257,9 +257,9 @@ const ProductCategoriesSection = () => {
             <h2 className="mb-10 text-center text-body text-xl font-normal uppercase tracking-[3px]">
               POPULAR PROMOTIONAL PRODUCT CATEGORIES
             </h2>
-            <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-16 xl:gap-8 2xl:gap-20">
+            <ul className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20">
               {products.map((product, index) => (
-                <li key={index}>
+                <li key={index} className="mt-16 sm:mt-0">
                   <ProductCard product={product} />
                 </li>
               ))}

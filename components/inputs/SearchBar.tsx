@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import Image from "next/image";
 
 interface Product {
@@ -43,14 +43,22 @@ const categories: Category[] = [
 const populars: string[] = ["Kids Products", "Electronics", "Clothing"];
 
 const SearchBar = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
-    <form className="w-full relative">
+    <div className="w-full relative">
       <div className="w-full flex">
         <input
-          className="border border-[#eceef1] outline-none rounded-none py-4 px-4 text-sm flex-1"
           type="search"
           name="search"
+          className="border border-[#eceef1] outline-none rounded-none py-4 px-4 text-sm flex-1"
           placeholder="Search entire store here..."
+          value={searchQuery}
+          onChange={handleSearchQueryChange}
         />
         <button
           type="button"
@@ -61,75 +69,77 @@ const SearchBar = () => {
           }}
         />
       </div>
-      <div className="absolute hidden z-20 w-full max-h-96 overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
-        <div className="space-y-3">
-          <fieldset>
-            <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
-              Category
-            </h6>
-            <ul className="space-y-2">
-              {categories.map((category) => (
-                <li key={category.name}>
-                  <div className="flex gap-3 hover:bg-gray-100 p-2">
-                    <span className="block relative h-28 w-28 min-w-[7rem]">
-                      <Image
-                        fill
-                        className="object-contain"
-                        src={category.imageUrl}
-                        alt={category.name}
-                      />
-                    </span>
-                    <span className="font-normal text-xs">
-                      <b className="underline">{category.name}</b>
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </fieldset>
-          <fieldset>
-            <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
-              Product Matches
-            </h6>
-            <ul className="space-y-2">
-              {products.map((product) => (
-                <li key={product.id}>
-                  <div className="flex gap-3 hover:bg-gray-100 p-2">
-                    <span className="block relative h-12 w-12 min-w-[3rem]">
-                      <Image
-                        fill
-                        className="object-contain"
-                        src={product.imageUrl}
-                        alt={product.name}
-                      />
-                    </span>
-                    <span className="font-normal text-xs">
-                      <b className="underline">{product.name}</b>
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </fieldset>
-          <fieldset>
-            <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
-              Popular Searches
-            </h6>
-            <ul className="space-y-2">
-              {populars.map((name) => (
-                <li key={name}>
-                  <div className="flex gap-3 hover:bg-gray-100 p-2">
-                    <span className="font-normal text-xs">
-                      <b className="underline">{name}</b>
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </fieldset>
+      {searchQuery && (
+        <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
+          <div className="space-y-3">
+            <fieldset>
+              <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
+                Category
+              </h6>
+              <ul className="space-y-2">
+                {categories.map((category) => (
+                  <li key={category.name}>
+                    <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
+                      <span className="block relative h-28 w-28 min-w-[7rem]">
+                        <Image
+                          fill
+                          className="object-contain"
+                          src={category.imageUrl}
+                          alt={category.name}
+                        />
+                      </span>
+                      <span className="font-normal text-xs">
+                        <b className="underline">{category.name}</b>
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+            <fieldset>
+              <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
+                Product Matches
+              </h6>
+              <ul className="space-y-2">
+                {products.map((product) => (
+                  <li key={product.id}>
+                    <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
+                      <span className="block relative h-12 w-12 min-w-[3rem]">
+                        <Image
+                          fill
+                          className="object-contain"
+                          src={product.imageUrl}
+                          alt={product.name}
+                        />
+                      </span>
+                      <span className="font-normal text-xs">
+                        <b className="underline">{product.name}</b>
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+            <fieldset>
+              <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
+                Popular Searches
+              </h6>
+              <ul className="space-y-2">
+                {populars.map((name) => (
+                  <li key={name}>
+                    <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
+                      <span className="font-normal text-xs">
+                        <b className="underline">{name}</b>
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+          </div>
         </div>
-      </div>
-    </form>
+      )}
+    </div>
   );
 };
 
