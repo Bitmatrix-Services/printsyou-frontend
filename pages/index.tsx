@@ -1,14 +1,23 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import React from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+import AdvantageSection from "@/components/sections/AdvantageSection";
+import WhyIdentitySection from "@/components/sections/WhyIdentitySection";
+import Footer from "@/components/globals/Footer";
+import HeroSection from "@/components/sections/HeroSection";
+import ProductCategoriesSection from "@/components/sections/ProductCategoriesSection";
+import FeaturedSection from "@/components/sections/FeaturedSection";
+import Header from "@/components/globals/Header";
 
 export default function Home() {
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      Identity Links 
+    <main>
+      <Header />
+      <HeroSection />
+      <ProductCategoriesSection />
+      <FeaturedSection />
+      <AdvantageSection />
+      <WhyIdentitySection />
+      <Footer />
     </main>
-  )
+  );
 }
