@@ -56,7 +56,7 @@ const OurPetsSection = () => {
   };
 
   return (
-    <section className="bg-white py-8 lg:py-16">
+    <section className="bg-white py-8 lg:pb-16 lg:pt-9">
       <Container>
         <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start mb-6">
           <h2 className="text-3xl lg:text-[28px] font-bold capitalize text-center mb-5 md:text-left md:mr-auto">

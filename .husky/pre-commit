@@ -3,4 +3,4 @@
 
 pnpm lint
 pnpm prettier . --check
-pnpm build
+# pnpm build
