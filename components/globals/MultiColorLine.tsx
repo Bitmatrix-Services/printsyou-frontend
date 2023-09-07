@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const MultiColorLine = () => {
   return (
@@ -9,7 +9,7 @@ const MultiColorLine = () => {
 
       <span className="hover:text-[#9a605c]  sm:hover:border-t-[#9a605c]" />
       <span className="hover:text-[#dd6c99]  sm:hover:border-t-[#dd6c99]" />
-      <span className="hover:text-[#58c6f1]  sm:hover:border-t-[#58c6f1]" />
+      <span className="hover:text-[#58c6f1]  sm:hover:border-t-[#58c6f1]" />
 
       {/* nav-links */}
       <span className="hover:text-[#dd6c99] after:bg-[#dd6c99]" />

@@ -1,22 +1,22 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import Container from "./Container";
-import SearchBar from "@components/inputs/SearchBar";
-import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import Container from './Container';
+import SearchBar from '@components/inputs/SearchBar';
+import {Bars3Icon, ChevronDownIcon} from '@heroicons/react/24/solid';
 
 const navItems = [
-  { color: "#dd6c99", text: "About us", href: "/about_us" },
+  {color: '#dd6c99', text: 'About us', href: '/about_us'},
   {
-    color: "#58c6f1",
-    text: "How to order",
-    href: "/aditional_information/how_to_order",
+    color: '#58c6f1',
+    text: 'How to order',
+    href: '/aditional_information/how_to_order'
   },
-  { color: "#8fc23f", text: "Specials", href: "/specials" },
-  { color: "#9a605c", text: "Faq", href: "/faq" },
-  { color: "#1f8b95", text: "Artwork", href: "/aditional_information/artwork" },
-  { color: "#b658a2", text: "Contact us", href: "/contact_us" },
+  {color: '#8fc23f', text: 'Specials', href: '/specials'},
+  {color: '#9a605c', text: 'Faq', href: '/faq'},
+  {color: '#1f8b95', text: 'Artwork', href: '/aditional_information/artwork'},
+  {color: '#b658a2', text: 'Contact us', href: '/contact_us'}
 ];
 
 const Header = () => {
@@ -24,7 +24,7 @@ const Header = () => {
     <>
       <hr
         className="h-1 w-full"
-        style={{ backgroundImage: "url(/assets/bg-line-top-banner.jpg)" }}
+        style={{backgroundImage: 'url(/assets/bg-line-top-banner.jpg)'}}
       />
       <div className="py-5 bg-body" />
       <header className="sticky z-20 top-0 bg-white border-b border-[#eceef1]">
@@ -96,9 +96,7 @@ const Header = () => {
       <nav className="hidden lg:block bg-white border-b border-[#eceef1]">
         <Container>
           <div className="flex">
-            <div
-              className="p-5 lg:min-w-[13.4rem] border-l border-r border-b-4 border-b-primary-500 border-[#eceef1] relative transition-all duration-300 text-primary-500 hover:text-white after:transition-all after:duration-300 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0 after:bg-primary-500 hover:after:h-full"
-            >
+            <div className="p-5 lg:min-w-[13.4rem] border-l border-r border-b-4 border-b-primary-500 border-[#eceef1] relative transition-all duration-300 text-primary-500 hover:text-white after:transition-all after:duration-300 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0 after:bg-primary-500 hover:after:h-full">
               <div className="relative z-10 flex items-center gap-3">
                 <span className="text-sm font-semibold uppercase mr-auto">
                   ALL PRODUCTS

@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from "react";
-import Image from "next/image";
+import React, {ChangeEvent, useState} from 'react';
+import Image from 'next/image';
 
 interface Product {
   id: number;
@@ -10,16 +10,16 @@ interface Product {
 const products: Product[] = [
   {
     id: 1,
-    name: "UL 2 Port Wall Charger",
+    name: 'UL 2 Port Wall Charger',
     imageUrl:
-      "https://media.nextopia.net/b2048795ebfaa31a43ee438499a75b21/56bb9f81c27e7062218429c381430b4a.jpg?wm=0&h=50&w=50&bg=ffffff&src=https%3A%2F%2Fwww.identity-links.com%2Fimg%2Fucart%2Fimages%2Fpimage%2F135176%2Fmain.jpg",
+      'https://media.nextopia.net/b2048795ebfaa31a43ee438499a75b21/56bb9f81c27e7062218429c381430b4a.jpg?wm=0&h=50&w=50&bg=ffffff&src=https%3A%2F%2Fwww.identity-links.com%2Fimg%2Fucart%2Fimages%2Fpimage%2F135176%2Fmain.jpg'
   },
   {
     id: 2,
-    name: "UL 2 Port Wall Charger",
+    name: 'UL 2 Port Wall Charger',
     imageUrl:
-      "https://media.nextopia.net/b2048795ebfaa31a43ee438499a75b21/56bb9f81c27e7062218429c381430b4a.jpg?wm=0&h=50&w=50&bg=ffffff&src=https%3A%2F%2Fwww.identity-links.com%2Fimg%2Fucart%2Fimages%2Fpimage%2F135176%2Fmain.jpg",
-  },
+      'https://media.nextopia.net/b2048795ebfaa31a43ee438499a75b21/56bb9f81c27e7062218429c381430b4a.jpg?wm=0&h=50&w=50&bg=ffffff&src=https%3A%2F%2Fwww.identity-links.com%2Fimg%2Fucart%2Fimages%2Fpimage%2F135176%2Fmain.jpg'
+  }
 ];
 
 interface Category {
@@ -29,18 +29,18 @@ interface Category {
 
 const categories: Category[] = [
   {
-    name: "Kids Products",
+    name: 'Kids Products',
     imageUrl:
-      "https://www.identity-links.com/img/ucart/images/catimage/614/small.JPG",
+      'https://www.identity-links.com/img/ucart/images/catimage/614/small.JPG'
   },
   {
-    name: "Kids Products 2",
+    name: 'Kids Products 2',
     imageUrl:
-      "https://www.identity-links.com/img/ucart/images/catimage/614/small.JPG",
-  },
+      'https://www.identity-links.com/img/ucart/images/catimage/614/small.JPG'
+  }
 ];
 
-const populars: string[] = ["Kids Products", "Electronics", "Clothing"];
+const populars: string[] = ['Kids Products', 'Electronics', 'Clothing'];
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,7 +65,7 @@ const SearchBar = () => {
           className="py-4 px-12 bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300"
           style={{
             backgroundImage: 'url("/assets/icon-search-white.png")',
-            backgroundSize: "20px auto",
+            backgroundSize: '20px auto'
           }}
         />
       </div>
@@ -77,7 +77,7 @@ const SearchBar = () => {
                 Category
               </h6>
               <ul className="space-y-2">
-                {categories.map((category) => (
+                {categories.map(category => (
                   <li key={category.name}>
                     <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
                       <span className="block relative h-28 w-28 min-w-[7rem]">
@@ -101,7 +101,7 @@ const SearchBar = () => {
                 Product Matches
               </h6>
               <ul className="space-y-2">
-                {products.map((product) => (
+                {products.map(product => (
                   <li key={product.id}>
                     <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
                       <span className="block relative h-12 w-12 min-w-[3rem]">
@@ -125,7 +125,7 @@ const SearchBar = () => {
                 Popular Searches
               </h6>
               <ul className="space-y-2">
-                {populars.map((name) => (
+                {populars.map(name => (
                   <li key={name}>
                     <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
                       <span className="font-normal text-xs">

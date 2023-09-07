@@ -1,32 +1,32 @@
-import React from "react";
-import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import React from 'react';
+import Link from 'next/link';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Navigation} from 'swiper/modules';
 
-import Container from "../globals/Container";
-import { FeaturedCard } from "../cards/FeaturedCard";
+import Container from '../globals/Container';
+import {FeaturedCard} from '../cards/FeaturedCard';
 
 const FeaturedSection = () => {
   const breakpoints = {
     320: {
       slidesPerView: 1,
-      spaceBetween: 10,
+      spaceBetween: 10
     },
 
     600: {
       slidesPerView: 2,
-      spaceBetween: 10,
+      spaceBetween: 10
     },
 
     800: {
       slidesPerView: 3,
-      spaceBetween: 20,
+      spaceBetween: 20
     },
 
     1024: {
       slidesPerView: 4,
-      spaceBetween: 20,
-    },
+      spaceBetween: 20
+    }
   };
 
   return (
@@ -34,7 +34,7 @@ const FeaturedSection = () => {
       <Container>
         <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start mb-6">
           <h2 className="text-3xl lg:text-4xl font-normal text-center md:text-left md:mr-auto">
-            Under{" "}
+            Under{' '}
             <strong className="font-extrabold text-[#58c6f1]">a Buck</strong>
           </h2>
           <Link

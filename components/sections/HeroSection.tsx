@@ -1,33 +1,33 @@
-import React from "react";
-import Container from "../globals/Container";
-import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import React from 'react';
+import Container from '../globals/Container';
+import Link from 'next/link';
+import {Swiper, SwiperSlide} from 'swiper/react';
+import {Navigation, Pagination} from 'swiper/modules';
 
 const slidesData = [
   {
-    backgroundImage: "/assets/banner-1.png",
-    title: "Made In the USA Promotional Products",
+    backgroundImage: '/assets/banner-1.png',
+    title: 'Made In the USA Promotional Products',
     bulletPoints: [
-      "Made In the USA Promotional Products",
-      "Support Our Country",
-      "Hundreds of Items To Choose From",
-      "All Proudly Made In the USA",
-    ],
+      'Made In the USA Promotional Products',
+      'Support Our Country',
+      'Hundreds of Items To Choose From',
+      'All Proudly Made In the USA'
+    ]
   },
   {
-    backgroundImage: "/assets/banner-2.png",
-    title: "Sunglasses",
+    backgroundImage: '/assets/banner-2.png',
+    title: 'Sunglasses'
   },
   {
-    backgroundImage: "/assets/banner-3.png",
-    title: "Drinkware",
-    bulletPoints: ["Bottles", "Mugs", "Tumblers", "And Much More!"],
+    backgroundImage: '/assets/banner-3.png',
+    title: 'Drinkware',
+    bulletPoints: ['Bottles', 'Mugs', 'Tumblers', 'And Much More!']
   },
   {
-    backgroundImage: "/assets/banner-4.png",
-    title: "Lip Balm",
-  },
+    backgroundImage: '/assets/banner-4.png',
+    title: 'Lip Balm'
+  }
 ];
 
 const HeroSection = () => {
@@ -39,7 +39,7 @@ const HeroSection = () => {
           spaceBetween={10}
           slidesPerView={1}
           navigation
-          pagination={{ clickable: true }}
+          pagination={{clickable: true}}
           className="hero-swiper"
         >
           {slidesData.map((slide, index) => (
@@ -47,7 +47,7 @@ const HeroSection = () => {
               <div
                 className="slide-item bg-center"
                 style={{
-                  backgroundImage: `url(${slide.backgroundImage})`,
+                  backgroundImage: `url(${slide.backgroundImage})`
                 }}
               >
                 <div className="h-[25rem] py-6 md:px-20 max-w-[40rem] flex flex-col justify-center text-center">

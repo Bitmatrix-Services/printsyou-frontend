@@ -1,21 +1,21 @@
-import React, {FC} from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React, {FC} from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
+import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 
 interface Product {
   title: string;
   imageSrc: string;
   color: string;
-  categoryLinks: { title: string; href: string }[];
+  categoryLinks: {title: string; href: string}[];
 }
 
 interface ProductCardProps {
   product: Product;
 }
 
-const ProductCard: FC<ProductCardProps> = ({ product }) => {
+const ProductCard: FC<ProductCardProps> = ({product}) => {
   return (
     <button
       type="button"
@@ -39,7 +39,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
             {product.title}
           </Link>
           <ul className="hidden sm:block text-sm space-y-1 product-card__categories">
-            {product.categoryLinks.map((category) => (
+            {product.categoryLinks.map(category => (
               <li key={category.title}>
                 <Link
                   className={`capitalize text-mute3 hover:text-[${product.color}]`}

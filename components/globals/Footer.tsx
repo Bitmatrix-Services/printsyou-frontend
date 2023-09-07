@@ -1,61 +1,61 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import Container from "./Container";
-import { ArrowLongRightIcon } from "@heroicons/react/24/solid";
+import Container from './Container';
+import {ArrowLongRightIcon} from '@heroicons/react/24/solid';
 
 const categorylist = [
-  "Appreal",
-  "Awards",
-  "Bags",
-  "Calendars",
-  "Candy Jars",
-  "Car and Truck",
-  "Clipboards",
-  "Clocks & Watches",
-  "Desktop & Office",
-  "Displays and Signage",
-  "Drinkware",
-  "EMT / EMS",
-  "Environmentally Friendly",
-  "Events and Holidays",
-  "Foam",
-  "Food & Snack",
-  "Health & Safety",
-  "Home & Garden",
-  "Keychains",
-  "Kids",
-  "Lanyards & Badges",
-  "Light Up and Sound",
-  "Made In the USA",
-  "Magnets",
-  "Mouse Pads",
-  "Outdoor Items",
-  "Padfolios & Journals",
-  "Paper Products",
-  "Pens, Pencils, & More",
-  "Personal Care",
-  "Pet Products",
-  "Professions",
-  "School",
-  "Shapes",
-  "Sports",
-  "Sticky Notes",
-  "Stress Relievers",
-  "Technology & Mobile",
-  "Tools & Flashlights",
-  "Towels",
-  "Trade Show",
-  "Travel & Luggage",
-  "Umbrellas",
+  'Appreal',
+  'Awards',
+  'Bags',
+  'Calendars',
+  'Candy Jars',
+  'Car and Truck',
+  'Clipboards',
+  'Clocks & Watches',
+  'Desktop & Office',
+  'Displays and Signage',
+  'Drinkware',
+  'EMT / EMS',
+  'Environmentally Friendly',
+  'Events and Holidays',
+  'Foam',
+  'Food & Snack',
+  'Health & Safety',
+  'Home & Garden',
+  'Keychains',
+  'Kids',
+  'Lanyards & Badges',
+  'Light Up and Sound',
+  'Made In the USA',
+  'Magnets',
+  'Mouse Pads',
+  'Outdoor Items',
+  'Padfolios & Journals',
+  'Paper Products',
+  'Pens, Pencils, & More',
+  'Personal Care',
+  'Pet Products',
+  'Professions',
+  'School',
+  'Shapes',
+  'Sports',
+  'Sticky Notes',
+  'Stress Relievers',
+  'Technology & Mobile',
+  'Tools & Flashlights',
+  'Towels',
+  'Trade Show',
+  'Travel & Luggage',
+  'Umbrellas'
 ];
-const identityshop = ["All Products", "About Us", "Testimonials", "Contact Us"];
+const identityshop = ['All Products', 'About Us', 'Testimonials', 'Contact Us'];
 const customerhelp = [
-  "Artwork",
-  "How To Order",
-  "FAQs",
-  "Additional Information",
+  'Artwork',
+  'How To Order',
+  'FAQs',
+  'Additional Information'
 ];
 const Footer = () => {
   return (
@@ -297,7 +297,7 @@ const Footer = () => {
       </Container>
       <hr
         className="h-1 w-full"
-        style={{ backgroundImage: "url(/assets/bg-line-top-banner.jpg)" }}
+        style={{backgroundImage: 'url(/assets/bg-line-top-banner.jpg)'}}
       />
     </footer>
   );

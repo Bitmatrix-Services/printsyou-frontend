@@ -1,12 +1,12 @@
-import React, { FC } from "react";
-import Image from "next/image";
+import React, {FC} from 'react';
+import Image from 'next/image';
 
 interface IdentityCardProps {
   image: string;
   heading: string;
 }
 
-const IdentityCard: FC<IdentityCardProps> = ({ image, heading }) => {
+const IdentityCard: FC<IdentityCardProps> = ({image, heading}) => {
   return (
     <div>
       <div className="flex flex-col justify-center items-center text-center">

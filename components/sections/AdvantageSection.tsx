@@ -1,7 +1,7 @@
-import React from "react";
-import Container from "../globals/Container";
-import Link from "next/link";
-import Image from "next/image";
+import React from 'react';
+import Container from '../globals/Container';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const AdvantageSection = () => {
   return (
@@ -9,7 +9,7 @@ const AdvantageSection = () => {
       <Container>
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
           <h2 className="text-3xl lg:text-4xl font-normal capitalize text-center md:text-left md:mr-auto">
-            The <strong className="font-extrabold">Identity-Links</strong>{" "}
+            The <strong className="font-extrabold">Identity-Links</strong>{' '}
             Advantage
           </h2>
           <Link
@@ -164,13 +164,13 @@ const AdvantageSection = () => {
                     <p>
                       Sure, we can rave all day about how great we are, but we
                       prefer to let our customers do the talking for us. Check
-                      out{" "}
+                      out{' '}
                       <Link
                         href="/"
                         className="text-body font-semibold hover:text-primary-500"
                       >
                         our testimonials page
-                      </Link>{" "}
+                      </Link>{' '}
                       to see what satisfied customers have written about their
                       experience with Identity Links
                     </p>

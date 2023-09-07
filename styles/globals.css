@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
   body {
-    font-family: "Poppins", "Montserrat", sans-serif;
+    font-family: 'Poppins', 'Montserrat', sans-serif;
     @apply text-body font-medium;
   }
 
@@ -23,7 +23,7 @@
   }
 
   .title-line:after {
-    content: "";
+    content: '';
     @apply block w-[1.875rem] h-[0.1875rem] mt-[0.9375rem] mb-5 bg-[#e2e3e6];
   }
 
@@ -42,7 +42,7 @@
   .btn-primary::after,
   .btn-outline-1::after,
   .btn-outline-2::after {
-    content: "";
+    content: '';
     background-image: url(/assets/icon-more-white.png);
     @apply absolute -left-8 top-1/2 -translate-y-1/2 flex h-4 w-16 bg-contain bg-no-repeat;
   }
@@ -63,7 +63,7 @@
 }
 
 .box-bottom-link:after {
-  content: "";
+  content: '';
   position: absolute;
   height: 2px;
   bottom: -1px;
@@ -84,7 +84,7 @@
 
 .tp-product:after,
 .tp-product:before {
-  content: "";
+  content: '';
   position: absolute;
   height: 3px;
   bottom: -1px;

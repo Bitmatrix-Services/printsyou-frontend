@@ -1,33 +1,33 @@
-import React from "react";
-import IdentityCard from "../cards/IdentityCard";
-import Container from "../globals/Container";
-import Link from "next/link";
+import React from 'react';
+import IdentityCard from '../cards/IdentityCard';
+import Container from '../globals/Container';
+import Link from 'next/link';
 
 const identityitems = [
   {
-    image: "/assets/icon-identity-links-1.png",
-    heading: "In-House embroidery and art department",
+    image: '/assets/icon-identity-links-1.png',
+    heading: 'In-House embroidery and art department'
   },
   {
-    image: "/assets/icon-identity-links-2.png",
-    heading: "Exclusive promotional products",
+    image: '/assets/icon-identity-links-2.png',
+    heading: 'Exclusive promotional products'
   },
   {
-    image: "/assets/icon-identity-links-3.png",
-    heading: "35 years in the business",
+    image: '/assets/icon-identity-links-3.png',
+    heading: '35 years in the business'
   },
   {
-    image: "/assets/icon-identity-links-4.png",
-    heading: "Trained Product Service Specialists",
+    image: '/assets/icon-identity-links-4.png',
+    heading: 'Trained Product Service Specialists'
   },
   {
-    image: "/assets/icon-identity-links-5.png",
-    heading: "Offices in Chicago, Miami, Houston and Denver",
+    image: '/assets/icon-identity-links-5.png',
+    heading: 'Offices in Chicago, Miami, Houston and Denver'
   },
   {
-    image: "/assets/icon-identity-links-6.png",
-    heading: "35 years in the business",
-  },
+    image: '/assets/icon-identity-links-6.png',
+    heading: '35 years in the business'
+  }
 ];
 
 const WhyIdentitySection = () => {

@@ -1,28 +1,28 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import Dialog from "@mui/material/Dialog";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import dynamic from "next/dynamic";
-import lgZoom from "lightgallery/plugins/zoom";
+import React, {useState} from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import Dialog from '@mui/material/Dialog';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import dynamic from 'next/dynamic';
+import lgZoom from 'lightgallery/plugins/zoom';
 
 // icons
-import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import CloseIcon from "@mui/icons-material/Close";
+import {ShoppingBagIcon} from '@heroicons/react/24/outline';
+import CloseIcon from '@mui/icons-material/Close';
 
-const LightGallery = dynamic(() => import("lightgallery/react"), {
-  ssr: false,
+const LightGallery = dynamic(() => import('lightgallery/react'), {
+  ssr: false
 });
 
 const imageUrls = [
-  "https://www.identity-links.com/img/ucart/images/pimage/147330/001.jpg",
-  "https://www.identity-links.com/img/ucart/images/p_photo1665689014/147330/popup.jpg",
-  "https://www.identity-links.com/img/ucart/images/p_photo1665689015/147330/popup.jpg",
-  "https://www.identity-links.com/img/ucart/images/p_photo1665689016/147330/popup.jpg",
-  "https://www.identity-links.com/img/ucart/images/p_photo1665689017/147330/popup.jpg",
+  'https://www.identity-links.com/img/ucart/images/pimage/147330/001.jpg',
+  'https://www.identity-links.com/img/ucart/images/p_photo1665689014/147330/popup.jpg',
+  'https://www.identity-links.com/img/ucart/images/p_photo1665689015/147330/popup.jpg',
+  'https://www.identity-links.com/img/ucart/images/p_photo1665689016/147330/popup.jpg',
+  'https://www.identity-links.com/img/ucart/images/p_photo1665689017/147330/popup.jpg'
 ];
 
 export const FeaturedCard = () => {
@@ -46,7 +46,7 @@ export const FeaturedCard = () => {
               className="h-[3.125rem] w-[3.125rem] bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300 absolute z-20 top-0 left-0 opacity-0 group-hover:opacity-100"
               style={{
                 backgroundImage: 'url("/assets/icon-search-white.png")',
-                backgroundSize: "24px auto",
+                backgroundSize: '24px auto'
               }}
             />
 
@@ -86,7 +86,7 @@ export const FeaturedCard = () => {
       <Dialog
         open={open}
         onClose={handleClose}
-        classes={{ paper: "rounded-none min-w-[95%] xl:min-w-[62.5rem]" }}
+        classes={{paper: 'rounded-none min-w-[95%] xl:min-w-[62.5rem]'}}
       >
         <div className="p-3 mb-3 text-end">
           <button type="button" onClick={handleClose}>
@@ -154,25 +154,25 @@ export const FeaturedCard = () => {
                 <ul className="text-xs text-mute3 font-bold product-card__categories">
                   <li>
                     <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$30.00</span>{" "}
+                      Please add <span className="text-red-500">$30.00</span>{' '}
                       Setup Fee
                     </span>
                   </li>
                   <li>
                     <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$95.00</span>{" "}
+                      Please add <span className="text-red-500">$95.00</span>{' '}
                       Full Color Set Up Fee
                     </span>
                   </li>
                   <li>
                     <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$0.65</span>{" "}
+                      Please add <span className="text-red-500">$0.65</span>{' '}
                       Full Color Imprint
                     </span>
                   </li>
                   <li>
                     <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$0.25</span>{" "}
+                      Please add <span className="text-red-500">$0.25</span>{' '}
                       Additional Spot Color Imprint
                     </span>
                   </li>
@@ -269,7 +269,7 @@ export const FeaturedCard = () => {
                     </li>
                     <li>
                       Custom PopGrip Backer Cards available at an addition cost.
-                      Call for additional pricing.{" "}
+                      Call for additional pricing.{' '}
                     </li>
                   </ul>
                 </div>
