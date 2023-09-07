@@ -32,7 +32,7 @@
   }
 
   .btn-outline-1 {
-    @apply text-body bg-[#fbfbfb] border-2 border-[#3030411a] hover:text-white hover:bg-primary-500 relative transition-all duration-300;
+    @apply text-body bg-[#fbfbfb] border border-[#3030411a] hover:text-white hover:bg-primary-500 relative transition-all duration-300;
   }
 
   .btn-outline-2 {

@@ -1,8 +1,9 @@
 import React from "react";
-import Container from "../globals/Container";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+
+import Container from "../globals/Container";
 import { FeaturedCard } from "../cards/FeaturedCard";
 
 const FeaturedSection = () => {
