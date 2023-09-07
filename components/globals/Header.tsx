@@ -83,7 +83,7 @@ const Header = () => {
   };
 
   return (
-    <>
+    <div className="mb-5">
       <hr
         className="h-1 w-full"
         style={{backgroundImage: 'url(/assets/bg-line-top-banner.jpg)'}}
@@ -311,7 +311,7 @@ const Header = () => {
           </fieldset>
         </div>
       </Drawer>
-    </>
+    </div>
   );
 };
 
