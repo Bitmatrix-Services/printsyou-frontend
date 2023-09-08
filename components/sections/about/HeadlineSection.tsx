@@ -4,7 +4,7 @@ import Container from '../../globals/Container';
 import Image from 'next/image';
 
 const HeadlineSection = () => {
-  const headinText =
+  const headingText =
     "“We're here to make your purchasing experience an easy and enjoyable one. Here are some of the ways we do it.”";
 
   return (
@@ -20,7 +20,7 @@ const HeadlineSection = () => {
           />
           <div className="flex flex-wrap items-center gap-3 px-5 md:px-14 justify-center md:justify-center basis-[100%]">
             <h1 className="text-white font-normal text-2xl  italic">
-              {headinText}
+              {headingText}
             </h1>
           </div>
         </div>

@@ -13,7 +13,7 @@ export const PetsCard: FC<petDetailsProps> = ({image, name, link}) => {
     <>
       <div className="tp-product group relative bg-white border border-[#edeff2]">
         <div className="p-6">
-          <Link href={link} className="block relative h-52 w-52 group">
+          <Link href={link} className="block relative h-[290px] w-[100%] group">
             <Image
               fill
               className=" w-full h-full hover:scale-110 transition duration-300"
