@@ -21,7 +21,7 @@ const links = [
   },
   {color: '#8fc23f', text: 'Specials', href: '/specials'},
   {color: '#9a605c', text: 'Faq', href: '/faq'},
-  {color: '#1f8b95', text: 'Artwork', href: '/aditional_information/artwork'},
+  {color: '#1f8b95', text: 'Artwork', href: '/artwork'},
   {color: '#b658a2', text: 'Contact us', href: '/contact-us'}
 ];
 
