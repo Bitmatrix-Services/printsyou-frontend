@@ -7,6 +7,7 @@ import Container from '@components/globals/Container';
 import ArtworkSection from '@components/sections/about/ArtworkSection';
 import OrderingPaymentsSection from '@components/sections/about/OrderingPaymentsSection';
 import ShippingSection from '@components/sections/about/ShippingSection';
+import TermsSection from '@components/sections/about/TermsSection';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -73,7 +74,7 @@ export default function Artwork() {
               <ShippingSection />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
-              Item five
+              <TermsSection />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={5}>
               Item six
