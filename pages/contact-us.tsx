@@ -46,9 +46,7 @@ function ContactUs() {
                 name="message"
               />
             </div>
-            <button
-              className="w-fit hidden md:block py-6 px-32 text-sm  font-bold  bg-primary-500 hover:bg-body text-white"
-            >
+            <button className="w-fit hidden md:block py-6 px-32 text-sm  font-bold  bg-primary-500 hover:bg-body text-white">
               SUBMIT
             </button>
           </div>
