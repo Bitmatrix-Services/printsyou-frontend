@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 
 import PageHeader from '@components/globals/PageHeader';
 import Container from '@components/globals/Container';
