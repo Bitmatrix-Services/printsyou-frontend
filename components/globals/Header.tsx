@@ -13,16 +13,16 @@ import SearchBar from '@components/inputs/SearchBar';
 import Container from './Container';
 
 const links = [
-  {color: '#dd6c99', text: 'About us', href: '/about_us'},
+  {color: '#dd6c99', text: 'About us', href: '/about-us'},
   {
     color: '#58c6f1',
     text: 'How to order',
-    href: '/aditional_information/how_to_order'
+    href: '/how-to-order'
   },
   {color: '#8fc23f', text: 'Specials', href: '/specials'},
   {color: '#9a605c', text: 'Faq', href: '/faq'},
   {color: '#1f8b95', text: 'Artwork', href: '/aditional_information/artwork'},
-  {color: '#b658a2', text: 'Contact us', href: '/contact_us'}
+  {color: '#b658a2', text: 'Contact us', href: '/contact-us'}
 ];
 
 const menuLinks = [
