@@ -36,7 +36,7 @@ const IconBoxesSection = () => {
     <section className="w-full bg-center xl:flex justify-center items-center pt-20 pb-24">
       <Container>
         <div className="lg:flex justify-center items-center gap-12 text-center lg:text-left">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             {identityitems.map((items, index) => {
               return (
                 <AboutPageServicesCard
