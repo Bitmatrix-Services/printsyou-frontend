@@ -8,6 +8,8 @@ import ArtworkSection from '@components/sections/about/ArtworkSection';
 import OrderingPaymentsSection from '@components/sections/about/OrderingPaymentsSection';
 import ShippingSection from '@components/sections/about/ShippingSection';
 import TermsSection from '@components/sections/about/TermsSection';
+import TestimonialsSection from '@components/sections/about/TestimonialsSection';
+import OverviewArtworkSection from '@components/sections/about/OverviewArtworkSection';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -53,16 +55,16 @@ export default function Artwork() {
                 onChange={handleChange}
                 aria-label="basic tabs example"
               >
-                <Tab label="Overview" />
-                <Tab label="Artwork" />
-                <Tab label="Ordering & Payments" />
-                <Tab label="Shipping" />
-                <Tab label="Terms & Conditions" />
-                <Tab label="Testimonials" />
+                <Tab label="Overview" className="text-xl" />
+                <Tab label="Artwork" className="text-xl" />
+                <Tab label="Ordering & Payments" className="text-xl" />
+                <Tab label="Shipping" className="text-xl" />
+                <Tab label="Terms & Conditions" className="text-xl" />
+                <Tab label="Testimonials" className="text-xl" />
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              Item One
+              <OverviewArtworkSection />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
               <ArtworkSection />
@@ -77,7 +79,7 @@ export default function Artwork() {
               <TermsSection />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={5}>
-              Item six
+              <TestimonialsSection />
             </CustomTabPanel>
           </Box>
         </div>
