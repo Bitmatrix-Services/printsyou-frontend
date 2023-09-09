@@ -15,7 +15,6 @@ export default function Home() {
       <FeaturedSection />
       <AdvantageSection />
       <WhyIdentitySection />
-      <Footer />
     </main>
   );
 }
