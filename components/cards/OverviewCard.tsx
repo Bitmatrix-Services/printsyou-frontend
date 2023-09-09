@@ -8,7 +8,7 @@ interface OverviewCardProps {
 
 const OverviewCard: FC<OverviewCardProps> = ({image, heading}) => {
   return (
-    <div className="bg-[#febe40] py-14 px-2 border-b-2 border-b-black">
+    <div className="bg-[#febe40] py-14 px-4 border-b-2 border-b-black">
       <div className="flex flex-col justify-center items-center text-center">
         <div className="h-20 w-20 min-w-[5rem] relative mb-4">
           <Image

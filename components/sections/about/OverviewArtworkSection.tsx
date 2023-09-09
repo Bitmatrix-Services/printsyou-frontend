@@ -1,5 +1,6 @@
 import React from 'react';
 import OverviewCard from '@components/cards/OverviewCard';
+import Link from 'next/link';
 
 const identityitems = [
   {
@@ -32,7 +33,7 @@ const OverviewArtworkSection = () => {
   return (
     <section className="w-full  xl:flex justify-center items-center pt-20 pb-24">
       <div className="lg:flex justify-center items-center gap-12 text-center lg:text-left">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {identityitems.map((items, index) => {
             return (
               <OverviewCard
