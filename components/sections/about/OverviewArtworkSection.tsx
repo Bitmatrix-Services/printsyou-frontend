@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import OverviewCard from '@components/cards/OverviewCard';
 
 const identityitems = [
@@ -28,7 +28,13 @@ const identityitems = [
   }
 ];
 
-const OverviewArtworkSection = () => {
+interface OverviewArtworkSectionProps {
+  setTabValue: any;
+}
+
+const OverviewArtworkSection: FC<OverviewArtworkSectionProps> = ({
+  setTabValue
+}) => {
   return (
     <section className="w-full  xl:flex justify-center items-center pt-20 pb-24">
       <div className="lg:flex justify-center items-center gap-12 text-center lg:text-left">
@@ -37,8 +43,10 @@ const OverviewArtworkSection = () => {
             return (
               <OverviewCard
                 key={index}
+                index={index}
                 image={items.image}
                 heading={items.heading}
+                setTabValue={setTabValue}
               />
             );
           })}

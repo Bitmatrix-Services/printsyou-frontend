@@ -64,7 +64,7 @@ export default function Artwork() {
               </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-              <OverviewArtworkSection />
+              <OverviewArtworkSection setTabValue={setValue} />
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
               <ArtworkSection />

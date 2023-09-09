@@ -4,11 +4,21 @@ import Image from 'next/image';
 interface OverviewCardProps {
   image: string;
   heading: string;
+  setTabValue: any;
+  index: number;
 }
 
-const OverviewCard: FC<OverviewCardProps> = ({image, heading}) => {
+const OverviewCard: FC<OverviewCardProps> = ({
+  image,
+  heading,
+  setTabValue,
+  index
+}) => {
   return (
-    <div className="bg-[#febe40] py-14 px-2 border-b-2 border-b-black">
+    <div
+      className="bg-[#febe40] py-14 px-2 border-b-2 border-b-black hover:cursor-pointer"
+      onClick={() => setTabValue(index + 1)}
+    >
       <div className="flex flex-col justify-center items-center text-center">
         <div className="h-20 w-20 min-w-[5rem] relative mb-4">
           <Image
