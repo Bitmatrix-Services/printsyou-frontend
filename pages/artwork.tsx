@@ -53,7 +53,10 @@ export default function Artwork() {
               <Tabs
                 value={value}
                 onChange={handleChange}
-                aria-label="basic tabs example"
+                variant="scrollable"
+                scrollButtons="auto"
+                allowScrollButtonsMobile
+                aria-label="scrollable auto tabs example"
               >
                 <Tab label="Overview" className="text-xl" />
                 <Tab label="Artwork" className="text-xl" />
