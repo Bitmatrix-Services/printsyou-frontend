@@ -1,6 +1,4 @@
 import React from 'react';
-import Container from '../../globals/Container';
-import Image from 'next/image';
 
 export const aboutInfo = [
   {
@@ -18,7 +16,7 @@ const ArtworkSection = () => {
           <div className="text-2xl mb-5 font-bold">
             Help! I don't have a logo or artwork!
           </div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] ">
             Don't have a fancy logo? No problem! We can imprint a simple text
             message on your item at no additional cost. Many people choose to
             use just their company name, address and/or phone number imprinted
@@ -36,7 +34,7 @@ const ArtworkSection = () => {
             Help! I have a logo from our website/letterhead/business card; can I
             use this as my artwork?
           </div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px]">
             We can work with just about any image that you send us. However, we
             want your logo to show clearly on our promotional products, which is
             why we recommend using certain formats over others for production.
@@ -45,7 +43,7 @@ const ArtworkSection = () => {
             object. That is why we recommend using a vector format image to get
             ideal results that will look better than scanned images.
           </p>
-          <p className="text-mute font-medium text-xl mt-3">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] mt-3">
             If you do not have access to a vector format, we can recreate your
             image in vector format for free if it is a simple image. More
             complicated images may incur a small conversion fee. If you're
@@ -59,7 +57,7 @@ const ArtworkSection = () => {
           <div className="text-2xl mb-5 font-bold">
             Help! What is a proof and why do I need one?
           </div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px]">
             To ensure that you are completely happy with your promotional
             product, we provide you with a proof before the item even goes to
             production. All of our proofs are completely free, even if you
@@ -75,7 +73,7 @@ const ArtworkSection = () => {
         </div>
         <div className="pt-2 pb-8">
           <div className="text-2xl mb-5 font-bold">Time Frame for Proofs</div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px]">
             Depending on the complexity of your artwork and the format in which
             it is sent to us, your proof will take anywhere from 1 hour to 24
             hours. In most cases, you will receive your proof within a few hours
@@ -87,7 +85,7 @@ const ArtworkSection = () => {
             revisions you make to the proof will take additional time, so it is
             important to send us the artwork well in advance of your event date.
           </p>
-          <p className="text-mute font-medium text-xl mt-3">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] mt-3">
             Since many of our items have a quick turnaround production period of
             7 business days, we can have the item produced and sent to you in as
             little as two weeks. When placing your order, please inquire about
@@ -98,7 +96,7 @@ const ArtworkSection = () => {
             important to send us all of the information required for the proof
             to ensure that your order is sent quickly to our factory. Confused?
           </p>
-          <p className="text-mute font-medium text-xl mt-3">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] mt-3">
             If it is your first time ordering a promotional product, all of this
             jargon about vector formats and production times can be confusing.
             In short, we will try to work with whatever type of image you can

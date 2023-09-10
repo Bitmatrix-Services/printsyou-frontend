@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from '../../globals/Container';
 import Image from 'next/image';
 
 export const sectionDetials = [
@@ -35,7 +34,7 @@ const OrderingPaymentsSection = () => {
       <section className="bg-greyLight pt-2 pb-2 ">
         <div className="pt-2 pb-8 mb-10">
           <div className="text-2xl mb-5 font-bold">Ordering</div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             There are four ways by which you can place an order with Identity
             Links: online, over the phone, by email or by fax. No matter how you
             place your order, our sales associates are ready to make the process
@@ -69,7 +68,7 @@ const OrderingPaymentsSection = () => {
                     <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                       {detail.title}
                     </h2>
-                    <div className="text-base text-mute2 space-y-4">
+                    <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins space-y-4">
                       <p> {detail.description}</p>
                     </div>
                   </div>
@@ -84,7 +83,7 @@ const OrderingPaymentsSection = () => {
                     <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                       {detail.title}
                     </h2>
-                    <div className="text-base text-mute2 space-y-4">
+                    <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins space-y-4">
                       <p> {detail.description}</p>
                     </div>
                   </div>

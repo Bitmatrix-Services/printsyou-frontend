@@ -46,7 +46,7 @@ const HowToOrderPage = () => {
       <PageHeader pageTitle={'Frequently Asked Questions'} />
       <Container>
         <div className="py-12">
-          <p className="text-mute font-medium text-xl">
+          <p className="text-mute3  font-medium text-[16px] leading-[30px]">
             We hope that our list of Frequently Asked Questions provides the
             simple answers you are looking for. If not, please call one of our
             experienced sales representatives to get the quick answers you need.
@@ -57,17 +57,17 @@ const HowToOrderPage = () => {
         </div>
         <div className="" />
         <div className="py-12">
-          <div className=" flex flex-wrap flex-1 flex-row sm:gap-4">
+          <div className=" flex flex-wrap flex-1 flex-row sm:gap-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="md:w-[48%] lg:w-[49%]  mb-4">
-                <Accordion className="border border-gray-300">
+              <div key={index} className="md:w-[48%] lg:w-[47%]  mb-4">
+                <Accordion className="border border-[#e1e1e1] shadow-none">
                   <AccordionSummary
                     expandIcon={<AddIcon />}
                     aria-controls="panel1a-content"
                     id={`${index}-header`}
                     className=""
                   >
-                    <div className="flex my-6 md:pr-6">
+                    <div className="flex my-1 md:pr-6 items-center">
                       <div className="pr-6 ">
                         <div className="h-8 w-8 bg-[#febe40] rounded-full ">
                           <p className="w-4 h-4 relative text-white text-center top-1 left-2">
@@ -76,14 +76,16 @@ const HowToOrderPage = () => {
                         </div>
                       </div>
 
-                      <h4 className="text-xl font-bold capitalize">
+                      <h4 className="text-[16px] text-[#303541] font-bold capitalize">
                         {faq.question}
                       </h4>
                     </div>
                   </AccordionSummary>
                   <AccordionDetails>
                     <div>
-                      <p className="text-sm space-y-1 pl-5 ">{faq.answer}</p>
+                      <p className="text-[14px] text-mute3 leading-6 space-y-1 pl-5 ">
+                        {faq.answer}
+                      </p>
                     </div>
                   </AccordionDetails>
                 </Accordion>

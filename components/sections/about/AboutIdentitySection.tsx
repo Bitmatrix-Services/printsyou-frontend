@@ -22,7 +22,7 @@ const AboutIdentitySection = () => {
                   <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                     {about.title}
                   </h2>
-                  <div className="text-base text-mute2 space-y-4">
+                  <div className="text-[16px] leading-[30px] text-mute3 space-y-4">
                     <p> {about.text}</p>
                   </div>
                 </div>

@@ -1,7 +1,5 @@
 import React from 'react';
-import Container from '../../globals/Container';
 import Link from 'next/link';
-import Image from 'next/image';
 
 const testimonials = [
   {
@@ -54,11 +52,11 @@ const TestimonialsSection = () => {
           <ul className="">
             {firstHalfTestimonials.map((testimonial, index) => (
               <li key={index} className="mb-10">
-                <div className="text-base italic tracking-wide text-[#686d79] space-y-4">
+                <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins italic  space-y-4">
                   <p>"{testimonial.text}"</p>
                 </div>
                 <div className="text-base text-lime-950ute mt-4">
-                  <span className="text-xl md:text-2xl flex align-middle content-center items-center">
+                  <span className="text-[14px] flex align-middle font-poppins content-center items-center">
                     <span className="text-xl  font-bold capitalize mr-2">
                       <span className="mr-2">-</span>
                       {testimonial.name}
@@ -77,11 +75,11 @@ const TestimonialsSection = () => {
           <ul className="space-y-6">
             {secondHalfTestimonials.map((testimonial, index) => (
               <li key={index} className="mb-10">
-                <div className="text-base italic tracking-wide text-[#686d79] space-y-4">
+                <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins italic  space-y-4">
                   <p>"{testimonial.text}"</p>
                 </div>
                 <div className="text-base text-lime-950ute mt-4">
-                  <span className="text-xl md:text-2xl flex align-middle content-center items-center">
+                  <span className="text-[14px] flex align-middle font-poppins content-center items-center">
                     <span className="text-xl  font-bold capitalize mr-2">
                       <span className="mr-2">-</span>
                       {testimonial.name}

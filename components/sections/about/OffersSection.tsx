@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import Container from '../../globals/Container';
 import Image from 'next/image';
 
-import {CheckIcon} from '@heroicons/react/24/outline';
 const pricingList = [
   `In-house silk screening, embroidery, and engraving - all for faster lead times and lower costs.`,
   `Huge inventory of blank goods, such as promotional pens, promotional calculators, promotional desk clocks and more.`,
@@ -78,7 +77,9 @@ const PricingCard: FC<PricingCardProps> = ({title, description}) => {
         </div>
       </div>
 
-      <div className="text-black font-medium px-3">{description}</div>
+      <div className="text-[#303541] font-medium text-[16px] leading-6 px-3">
+        {description}
+      </div>
     </div>
   );
 };
