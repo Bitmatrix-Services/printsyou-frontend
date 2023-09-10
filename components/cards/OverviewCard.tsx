@@ -16,7 +16,7 @@ const OverviewCard: FC<OverviewCardProps> = ({
 }) => {
   return (
     <div
-      className="bg-[#febe40] py-14 px-2 border-b-2 border-b-black hover:cursor-pointer"
+      className="bg-[#febe40] py-14 px-14 border-b-2 border-b-black hover:cursor-pointer"
       onClick={() => setTabValue(index + 1)}
     >
       <div className="flex flex-col justify-center items-center text-center">
@@ -29,7 +29,9 @@ const OverviewCard: FC<OverviewCardProps> = ({
             alt="..."
           />
         </div>
-        <h6 className="mt-4 text-black font-semibold text-base">{heading}</h6>
+        <h6 className="mt-4 text-[#303541] font-medium text-[24px]">
+          {heading}
+        </h6>
       </div>
     </div>
   );

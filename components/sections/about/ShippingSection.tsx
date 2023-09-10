@@ -1,6 +1,4 @@
 import React from 'react';
-import Container from '../../globals/Container';
-import Image from 'next/image';
 import HeadlineCard from '@components/cards/HeadlineCard';
 
 const ShippingSection = () => {
@@ -9,7 +7,7 @@ const ShippingSection = () => {
       <section className="bg-greyLight pt-2 pb-2 ">
         <div className="pt-2 pb-11 ">
           <div className="text-2xl mb-5 font-bold">Shipping Information</div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             We make best efforts to ship your products to your desired
             destination in the most economical way possible given your specified
             date and production limitations. The most economical means of
@@ -21,7 +19,7 @@ const ShippingSection = () => {
           <HeadlineCard text="Should you have special shipping needs, including the need to divide shipments among multiple destinations, please contact info@identity-links." />
         </div>
         <div className="pt-4  pb-11 ">
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             We make best efforts to ship your products to your desired
             destination in the most economical way possible given your specified
             date and production limitations. The most economical means of
@@ -33,7 +31,7 @@ const ShippingSection = () => {
           <HeadlineCard text="We are able to ship to most locations in the US and abroad although individual carriers have restrictions regarding PO and APO boxes." />
         </div>
         <div className="pt-4  pb-4 ">
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             All orders will be shipped using Identity-Links account and billed
             with your order at published rates for that carrier. If you prefer
             to use your own account, we can accommodate you. Please provide us
@@ -45,7 +43,7 @@ const ShippingSection = () => {
           </p>
         </div>
         <div className="py-4 ">
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             Unless otherwise specified, all shipments sent using UPS or Federal
             Express services will be insured for full value by Identity-Links
             and included as part of our shipping and handling charges to you.
@@ -54,7 +52,7 @@ const ShippingSection = () => {
           </p>
         </div>
         <div className="py-4 ">
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             Identity-Links offers all classes of service offered by Fed Ex and
             UPS.
             <br />
@@ -65,7 +63,7 @@ const ShippingSection = () => {
           </p>
         </div>
         <div className="py-4 ">
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             Please keep in mind that there are differences in transit time and
             charges to residential and commercial address. If shipping to
             residential address you must specify to your sales rep prior to
@@ -79,7 +77,7 @@ const ShippingSection = () => {
           </p>
         </div>
         <div className="py-4 ">
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             Finally, because Identity-Links sends its products from a network of
             factories around the country, orders placed on the same day may
             arrive at different times. If you have unique needs regarding
@@ -90,7 +88,7 @@ const ShippingSection = () => {
         </div>
         <div className="py-4 ">
           <div className="text-2xl mb-5 font-bold">Split Shipments</div>
-          <p className="text-mute font-medium text-xl">
+          <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             Do you have a trade show in Los Angeles and a sales meeting in
             Boston? At Identity-Links, it is no problem at all for us to send
             your items where they need to be. In an email, just specify that you

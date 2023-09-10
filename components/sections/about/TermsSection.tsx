@@ -6,7 +6,7 @@ const TermsSection = () => {
       <div className="pt-2 pb-11 ">
         <div className="text-3xl mb-5 font-bold">Terms and Conditions</div>
         <div className="text-2xl mb-5 font-bold">Payment Terms</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links requires a full payment to start production. All
           outstanding balances must be paid in full before any new order
           production can proceed. By signing the provided Order Acknowledgment,
@@ -16,7 +16,7 @@ const TermsSection = () => {
           balance is paid in full, and then move forward with the payment terms
           as outlined below.
         </p>
-        <p className="text-mute font-medium text-xl">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
           Terms are given at the discretion of Identity-Links. The full amount
           of an invoice can be charged to the supplied credit card on file at
           any point before, during, or after production. There is a $50.00
@@ -29,12 +29,12 @@ const TermsSection = () => {
         </p>
 
         <div className="text-2xl mb-5 font-bold">Check Returns</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           In all cases where a check is returned for insufficient funds, a
           $50.00 fee per returned check will be assessed.
         </p>
         <div className="text-2xl mb-5 font-bold">Net 30 Terms</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           If payment terms are granted, the buyer agrees that late payment of an
           invoice will result in a 1.5% finance charge or the maximum charge
           permitted by law may be assessed against all accounts with past due
@@ -43,7 +43,7 @@ const TermsSection = () => {
           thereunder and not paid when due.
         </p>
         <div className="text-2xl mb-5 font-bold">Acceptance</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           The buyer's submittal of an online order, signature on an
           Estimate/Quote, or email acceptance of a Sales Order/Order
           Acknowledgment are all records of conditional acceptance by
@@ -61,7 +61,7 @@ const TermsSection = () => {
         <div className="text-2xl mb-5 font-bold">
           Cancellations and Alterations to Existing Orders
         </div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Once the buyer confirms the Order Acknowledgement and Artwork
           Approval, the order is initiated and production begins. After this
           time, Identity-Links cannot guarantee the ability to make changes or
@@ -72,7 +72,7 @@ const TermsSection = () => {
           information is required, the sales representative involved will be
           available for assistance and clarification.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links will make every effort to comply with the buyer's
           cancellation request. If the buyer has already received the Order
           Acknowledgment, there will be a minimum charge of $50.00 to cover
@@ -86,7 +86,7 @@ const TermsSection = () => {
           responsibility of the buyer. These fees will be billed at
           Identity-Links' discretion.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           The best way to avoid cancellation fees is to make selections
           carefully and thoughtfully and to be 100% confident before moving
           forward with an order.
@@ -94,13 +94,13 @@ const TermsSection = () => {
         <div className="text-2xl mb-5 font-bold">
           Claims, Adjustments, and Returns
         </div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           No returns of imprinted goods are accepted. Incomplete or partial
           returns will NOT be accepted. Unauthorized returns are NOT accepted.
           Any imprinted products returned in violation of this policy will be
           discarded at Identity-Links' discretion.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links strongly advises buyers to open all merchandise to
           check for quality and satisfaction. If any problems arise with an
           order, the buyer must contact customer service at 888-282-9507 with
@@ -110,7 +110,7 @@ const TermsSection = () => {
           (Return Material Authorization) Number and provide the buyer with a
           special shipping address.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           In the case that the buyer believes receipt of a product or order to
           be erroneous, customer service must be contacted within 5 working days
           of receipt of the merchandise. Claims made after this time will not be
@@ -123,19 +123,19 @@ const TermsSection = () => {
           otherwise noted. The Payment Terms section further outlines this
           process.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           In the case of a buyer error or unauthorized return (including
           rejected shipments), the buyer is responsible for the return freight,
           unless otherwise noted.
         </p>
         <div className="text-2xl mb-5 font-bold">Overages and Shortages</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Due to the nature of production and manufacturing standards, overruns
           and under runs may occur within a 5%-10% range. Therefore, the buyer
           may receive an overage or shortage
         </p>
         <div className="text-2xl mb-5 font-bold">Sales Tax</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links is required by law to collect all applicable state and
           local taxes for services and goods shipped to Illinois and California.
           Additionally, if the item ordered ships from a warehouse located in
@@ -147,7 +147,7 @@ const TermsSection = () => {
           resale certificate by email or fax to 847-329-9797.
         </p>
         <div className="text-2xl mb-5 font-bold">Shipping Policy</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           All orders will be shipped using Identity-Links account and billed
           with your order at published rates for that carrier. If you prefer to
           use your own account, we can accommodate you. Please provide us with
@@ -156,7 +156,7 @@ const TermsSection = () => {
           of your shipment. If your shipment is damaged or lost in transit, you
           will be responsible for the full invoiced amount of the items.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Under normal circumstances, Identity-Links will guarantee shipment of
           merchandise on or before the desired deadline. However, the buyer
           should be aware that Identity-Links cannot be held responsible for
@@ -168,7 +168,7 @@ const TermsSection = () => {
           unable to confirm an exact TIME of delivery.
         </p>
         <div className="text-2xl mb-5 font-bold">Shipping Delays</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links is not accountable for delays in delivery occasioned by
           Acts of God or other circumstances over which there is no direct
           control. Factory shipment or delivery dates are the best estimates of
@@ -178,12 +178,12 @@ const TermsSection = () => {
         <div className="text-2xl mb-5 font-bold">
           Transfer of Ownership of Merchandise
         </div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           All goods become property of the buyer at the time said goods are
           accepted from the carrier.
         </p>
         <div className="text-2xl mb-5 font-bold">Warranties</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links warrants that all goods sold are free of any security
           interest and will make available to the buyer all transferable
           warranties made to Identity-Links by the manufacturer of the goods.
@@ -192,7 +192,7 @@ const TermsSection = () => {
           for purpose.
         </p>
         <div className="text-2xl mb-5 font-bold">Proof Policy</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links requires that all new orders receive a Digital Proof
           and Order Acknowledgement prior to releasing the order to final
           production. A Digital Proof will be provided at no cost and is the
@@ -206,14 +206,14 @@ const TermsSection = () => {
           logo, the buyer must let Identity-Links know the Pantone color which
           they would like to have printed.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           If an error is discovered during order or artwork proofing, said error
           must be noted on the paperwork accordingly and/or the sales
           representative involved contacted. Identity-Links will make any
           corrections or changes promptly and for no additional charge. All
           changes must be confirmed in writing, preferably by email.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           The Digital Proof and Order Acknowledgement are checked for
           misspellings and other mistakes (such as item colors, sizing, imprint
           color, imprint locations, etc.) but, due to order volume, there are
@@ -225,7 +225,7 @@ const TermsSection = () => {
           sales representative involved will be available for assistance and
           clarification.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links is not responsible for any typographical mistakes or
           errors that are overlooked and later approved by the buyer. For
           example, if an order is supposed to read "Congratulations", but the
@@ -242,7 +242,7 @@ const TermsSection = () => {
           before replying with approval.
         </p>
         <div className="text-2xl mb-5 font-bold">Products Displayed</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Products displayed on the website are for demonstration purposes only.
           Actual product and color may vary slightly from the images portrayed
           on computer monitors. With the limitations in computer monitors and
@@ -254,7 +254,7 @@ const TermsSection = () => {
           terms of quality, color, size, etc.
         </p>
         <div className="text-2xl mb-5 font-bold">Merchandise Consistency</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links encourages buyers to review a sample of the actual
           product before ordering in bulk quantity, with the understanding that
           samples are representative in nature. While Identity-Links is very
@@ -266,7 +266,7 @@ const TermsSection = () => {
           material, color, and packaging.
         </p>
         <div className="text-2xl mb-5 font-bold">Imprinting and Ink Colors</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links will size all artwork to utilize each item's maximum
           imprint area unless otherwise noted in writing by the buyer. Imprint
           areas are approximate and may vary from piece to piece. Due to the
@@ -286,7 +286,7 @@ const TermsSection = () => {
           ordering.
         </p>
         <div className="text-2xl mb-5 font-bold">QR Code Printing</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           While QR codes are a convenient and widely used technology for sharing
           information, it is important to note that we cannot 100% guarantee
           that a QR code will print or scan correctly when printed. Several
@@ -294,7 +294,7 @@ const TermsSection = () => {
           of the printing device, the printing material used, and the lighting
           conditions during the scanning process.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Therefore, we strongly recommend that you thoroughly test the printed
           QR code to ensure its functionality before relying on it for important
           purposes, such as for business or marketing campaigns. Additionally,
@@ -306,7 +306,7 @@ const TermsSection = () => {
           notify the buyer of any applicable fees.
         </p>
         <div className="text-2xl mb-5 font-bold">Site Pricing</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           {' '}
           Though a great deal of effort is put into keeping Identity-Links'
           website current and up-to-date, from time to time, actual market
@@ -320,7 +320,7 @@ const TermsSection = () => {
         <div className="text-2xl mb-5 font-bold">
           Site Images and Descriptions
         </div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links works to provide clear and color-correct product images
           and descriptions on the website that best reflect the true nature of
           the products. Product descriptions (including, but not limited to,
@@ -335,7 +335,7 @@ const TermsSection = () => {
           a computer monitor and the final product.
         </p>
         <div className="text-2xl mb-5 font-bold">Trademarks</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           All trademarks and logos are registered trademarks and logos of their
           respective owners and copyright holders. They are provided only as a
           convenience for their lawful use and should only be used by said
@@ -352,7 +352,7 @@ const TermsSection = () => {
           promotional merchandise ordered by the buyer violates or infringes
           upon any rights of any third party.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           All buyers are solely responsible for obtaining proper permissions and
           licenses from third parties whose rights may be violated or infringed.
           To use any logo, trademark, or copyrighted items, a buyer MUST have
@@ -368,12 +368,12 @@ const TermsSection = () => {
           copyright that is printed on or otherwise applied to promotional
           merchandise ordered or purchased by the buyer through Identity-Links.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Unauthorized use of trademarks, logos, and copyrights found on this
           website is illegal.
         </p>
         <div className="text-2xl mb-5 font-bold">Copyright Statement</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           All of the content on this website, including, but not limited to,
           text, graphics, logos, button icons, images, and data, is the property
           of Identity-Links or the content suppliers. All of the content is
@@ -389,13 +389,13 @@ const TermsSection = () => {
           It is illegal for anyone to violate any of the rights provided by the
           Copyright Law.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Violation of copyright protection is a very serious offense and
           Identity-Links will take the necessary steps to correct any illegal
           misuse of its proprietary content.
         </p>
         <div className="text-2xl mb-5 font-bold">Right to Refuse Service</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links reserves the right to refuse service to anyone for any
           reason. Should it be determined that an order may be fraudulent,
           Identity-Links, at its own discretion, reserves the right to refuse or
@@ -404,7 +404,7 @@ const TermsSection = () => {
           online shopping environment for all buyers.
         </p>
         <div className="text-2xl mb-5 font-bold">Privacy Policy</div>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links collects, retains, and uses information about visitors
           to the website only for specific business purposes, including the
           following: to protect and administer buyer records and accounts; to
@@ -413,7 +413,7 @@ const TermsSection = () => {
           potential buyer needs so that high-quality products and service can be
           provided.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           If Identity-Links believes a legitimate business reason exists for
           sharing identification and other personal information with a third
           party, such as to offer a buyer certain discounts, products, or
@@ -421,7 +421,7 @@ const TermsSection = () => {
           Identity-Links may also disclose information about its buyers to third
           parties as required or permitted by applicable law.
         </p>
-        <p className="text-mute font-medium text-xl pb-6">
+        <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
           Identity-Links may place an electronic "cookie" in the browser files
           of a guest's computer. Cookies are pieces of information that a
           website transfers to an individual's computer hard drive for

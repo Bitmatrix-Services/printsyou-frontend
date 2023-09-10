@@ -26,7 +26,7 @@ const AboutPageServicesCard: FC<ServicesCardProps> = ({
           />
         </div>
         <h6 className="mt-4 font-bold text-base mb-5">{heading}</h6>
-        <div className="text-mute font-medium text-base tracking-wide px-3">
+        <div className="text-mute3 font-medium text-[14px] leading-6 px-3">
           {text}
         </div>
       </div>

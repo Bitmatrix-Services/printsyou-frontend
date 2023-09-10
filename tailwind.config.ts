@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        oswald: 'Oswald, sans-serif'
+        oswald: 'Oswald, sans-serif',
+        poppins: 'Poppins, sans-serif'
       },
       colors: {
         primary: {
