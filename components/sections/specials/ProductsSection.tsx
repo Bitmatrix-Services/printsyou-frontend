@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import Container from '../../globals/Container';
 import {FeaturedCard} from '../../cards/FeaturedCard';
 import TablePagination from '@mui/material/TablePagination';
@@ -35,7 +34,7 @@ const ProductsSection = () => {
             className=""
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6">
           <FeaturedCard isModal={false} isSale={true} />
           <FeaturedCard isModal={false} isSale={true} />
           <FeaturedCard isModal={false} isSale={true} />
