@@ -73,7 +73,18 @@
 .megamenu:hover .megamenu-button::after {
   @apply h-full;
 }
-
+.MuiTablePagination-root {
+  @apply lg:w-[100%] border-[1px] border-[#edeff2];
+}
+.MuiTablePagination-selectLabel + .MuiInputBase-root.MuiInputBase-colorPrimary {
+  @apply border-[1px] border-[#edeff2];
+}
+.MuiTablePagination-spacer {
+  @apply hidden;
+}
+.MuiTablePagination-actions {
+  @apply flex flex-wrap  lg:basis-[70%] md:justify-end;
+}
 .megamenu-inner {
   position: absolute;
   left: 0;
