@@ -71,7 +71,7 @@ export const FeaturedCard: FC<cardProps> = ({isModal, isSale}) => {
           {!isModal && (
             <Link
               href="#!"
-              className="block mt-4 text-[20px] font-semibold text-[#303541]"
+              className="block mt-4 text-[18px] font-semibold text-[#303541]"
             >
               PopGrip Wood POPSockets
             </Link>
@@ -85,16 +85,16 @@ export const FeaturedCard: FC<cardProps> = ({isModal, isSale}) => {
             <div className="prive-value flex items-end gap-1">
               {isSale && (
                 <div className="prive-value flex items-end gap-1">
-                  <div className="deno font-bold text-xl">$</div>
-                  <div className="value font-bold text-3xl font-oswald">
+                  <div className="deno font-semibold text-lg">$</div>
+                  <div className="value font-bold text-2xl font-oswald">
                     <span className="sale line-through">11.65</span>
                   </div>
                 </div>
               )}
 
               <div className="prive-value flex items-end gap-1">
-                <div className="deno font-semibold text-xl">$</div>
-                <div className="value font-semibold text-3xl font-oswald">
+                <div className="deno font-semibold text-lg">$</div>
+                <div className="value font-semibold text-2xl font-oswald">
                   <span className="sale">11.65</span>
                 </div>
               </div>
