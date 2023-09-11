@@ -51,19 +51,19 @@ const FeaturedSection = () => {
           className="featured-swiper"
         >
           <SwiperSlide>
-            <FeaturedCard />
+            <FeaturedCard isModal={true} isSale={false} />
           </SwiperSlide>
           <SwiperSlide>
-            <FeaturedCard />
+            <FeaturedCard isModal={true} isSale={false} />
           </SwiperSlide>
           <SwiperSlide>
-            <FeaturedCard />
+            <FeaturedCard isModal={true} isSale={false} />
           </SwiperSlide>
           <SwiperSlide>
-            <FeaturedCard />
+            <FeaturedCard isModal={true} isSale={false} />
           </SwiperSlide>
           <SwiperSlide>
-            <FeaturedCard />
+            <FeaturedCard isModal={true} isSale={false} />
           </SwiperSlide>
         </Swiper>
         <div className="mt-12 mb-6 md:hidden text-center">
