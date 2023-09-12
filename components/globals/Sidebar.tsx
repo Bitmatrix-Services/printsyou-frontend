@@ -51,7 +51,7 @@ const Sidebar = () => {
           >
             ITEM CATEGORIES
           </div>
-          <ul className="hidden sm:block text-sm  product-card__categories">
+          <ul className="text-sm  product-card__categories">
             {categoryList.map((category, index) => (
               <li key={index} className=" mb-2">
                 <Link className={`capitalize text-mute3`} href={category.link}>

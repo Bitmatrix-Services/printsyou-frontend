@@ -8,7 +8,7 @@ function Products() {
     <main>
       <div className="bg-white footer pt-10 lg:pt-24">
         <Container>
-          <div className="xl:flex xl:flex-row gap-3 lg:gap-8">
+          <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
             <Sidebar />
             <ProductDetailsSection />
           </div>

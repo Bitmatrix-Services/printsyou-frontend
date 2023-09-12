@@ -251,7 +251,7 @@ const ProductSubCategoriesSection = () => {
   return (
     <>
       <div>
-        <ul className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-10 md:gap-10 xl:gap-4 2xl:gap-10">
+        <ul className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 xl:gap-4 2xl:gap-10">
           {products.map((product, index) => (
             <li key={index} className="mt-16 sm:mt-0">
               <ProductsSubCategoryCard product={product} />
