@@ -4,12 +4,12 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@components/globals/Container';
-import ArtworkSection from '@components/sections/about/ArtworkSection';
-import OrderingPaymentsSection from '@components/sections/about/OrderingPaymentsSection';
-import ShippingSection from '@components/sections/about/ShippingSection';
-import TermsSection from '@components/sections/about/TermsSection';
-import TestimonialsSection from '@components/sections/about/TestimonialsSection';
-import OverviewArtworkSection from '@components/sections/about/OverviewArtworkSection';
+import ArtworkSection from '@components/sections/artwork/ArtworkSection';
+import OrderingPaymentsSection from '@components/sections/artwork/OrderingPaymentsSection';
+import ShippingSection from '@components/sections/artwork/ShippingSection';
+import TermsSection from '@components/sections/artwork/TermsSection';
+import TestimonialsSection from '@components/sections/artwork/TestimonialsSection';
+import OverviewArtworkSection from '@components/sections/artwork/OverviewArtworkSection';
 
 interface TabPanelProps {
   children?: React.ReactNode;
