@@ -41,7 +41,7 @@ const OffersSection = () => {
           <div className="py-2 md:w-[90%] m-auto ">
             <div className="md:grid md:grid-cols-2">
               {pricingList.map((item, index) => (
-                <PricingCard key={index} title={index + 1} description={item} />
+                <PricingCard key={index} description={item} />
               ))}
             </div>
           </div>
@@ -51,10 +51,9 @@ const OffersSection = () => {
   );
 };
 interface PricingCardProps {
-  title: number;
   description: string;
 }
-const PricingCard: FC<PricingCardProps> = ({title, description}) => {
+const PricingCard: FC<PricingCardProps> = ({description}) => {
   return (
     <div className="flex my-6 md:pr-6">
       <div className="pr-6 ">

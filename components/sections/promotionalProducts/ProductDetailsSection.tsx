@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
 import ProductSubCategoriesSection from './ProductSubCategoriesSection';
