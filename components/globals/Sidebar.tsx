@@ -9,6 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
+import PriceRangeSection from '@components/sections/promotionalProducts/PriceRangeSection';
 
 const categoryList = [
   {title: 'Aprons', link: '#'},
@@ -134,6 +135,9 @@ const Sidebar = () => {
             </Box>
           </div>
         </div>
+      </div>
+      <div className="lg:w-64 md:w-64 mb-8">
+        <PriceRangeSection />
       </div>
     </div>
   );
