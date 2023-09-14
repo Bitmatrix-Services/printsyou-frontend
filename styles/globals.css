@@ -266,3 +266,13 @@
   gap: 0.75rem;
   overflow: auto;
 }
+.css-eg0mwd-MuiSlider-thumb:before {
+  background-color: #fff;
+}
+.css-187mznn-MuiSlider-root {
+  height: 15px;
+  color: #2dd3d4;
+}
+.css-15v22id-MuiAccordionDetails-root {
+  padding: 0;
+}
