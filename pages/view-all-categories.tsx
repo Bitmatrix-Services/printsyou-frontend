@@ -9,16 +9,49 @@ import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 
 const categoryList = [
-  {title: 'Aprons', link: '#'},
-  {title: 'Belts and Suspenders', link: '#'},
-  {title: 'Footwear', link: '#'},
-  {title: 'Gloves', link: '#'},
-  {title: "Hats N' Caps", link: '#'},
-  {title: 'Patches', link: '#'},
-  {title: 'Ponchos', link: '#'},
-  {title: 'Robes', link: '#'},
-  {title: 'Safety', link: '#'},
-  {title: 'Scarves', link: '#'}
+  'Appreal',
+  'Awards',
+  'Bags',
+  'Calendars',
+  'Candy Jars',
+  'Car and Truck',
+  'Clipboards',
+  'Clocks & Watches',
+  'Desktop & Office',
+  'Displays and Signage',
+  'Drinkware',
+  'EMT / EMS',
+  'Environmentally Friendly',
+  'Events and Holidays',
+  'Foam',
+  'Food & Snack',
+  'Health & Safety',
+  'Home & Garden',
+  'Keychains',
+  'Kids',
+  'Lanyards & Badges',
+  'Light Up and Sound',
+  'Made In the USA',
+  'Magnets',
+  'Mouse Pads',
+  'Outdoor Items',
+  'Padfolios & Journals',
+  'Paper Products',
+  'Pens, Pencils, & More',
+  'Personal Care',
+  'Pet Products',
+  'Professions',
+  'School',
+  'Shapes',
+  'Sports',
+  'Sticky Notes',
+  'Stress Relievers',
+  'Technology & Mobile',
+  'Tools & Flashlights',
+  'Towels',
+  'Trade Show',
+  'Travel & Luggage',
+  'Umbrellas'
 ];
 const subCategoryList = [
   {title: 'Aprons', link: '#'},
@@ -51,7 +84,7 @@ const ViewAllCategories = () => {
                   >
                     <div className="flex my-1 md:pr-6 items-center">
                       <h4 className="text-[16px] text-[#303541] font-bold capitalize">
-                        {category.title}
+                        {category}
                       </h4>
                     </div>
                   </AccordionSummary>
