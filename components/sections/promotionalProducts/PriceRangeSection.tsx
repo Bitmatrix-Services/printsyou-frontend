@@ -3,6 +3,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
@@ -31,7 +32,7 @@ const PriceRangeSection = () => {
         className="border-b border-[#e1e1e1] shadow-none"
       >
         <AccordionSummary
-          expandIcon={<AddIcon />}
+          expandIcon={expanded === 'panel1' ? <RemoveIcon /> : <AddIcon />}
           aria-controls="panel1a-content"
           id={`1header`}
           className="p-0"
