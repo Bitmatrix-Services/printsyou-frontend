@@ -16,7 +16,7 @@ const HowToOrderPage = () => {
             here to help and guide you through the process.
           </p>
         </div>
-        <div className="mb-10 border-[0] border-t border-solid border-gray-200" />
+        <div className="border-[0] border-t border-solid border-gray-200" />
         <div className="py-12">
           <div className="md:grid md:grid-cols-2">
             {pricingList.map((item, index) => (

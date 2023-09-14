@@ -2,6 +2,8 @@ import {Provider} from 'react-redux';
 import type {AppProps} from 'next/app';
 
 import {store} from '@store/store';
+import Header from '@components/globals/Header';
+import Footer from '@components/globals/Footer';
 
 // css files
 import 'swiper/css';
@@ -14,7 +16,9 @@ import '@styles/globals.css';
 export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
+      <Header />
       <Component {...pageProps} />
+      <Footer />
     </Provider>
   );
 }

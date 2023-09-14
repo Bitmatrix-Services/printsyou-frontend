@@ -15,14 +15,14 @@ const AboutIdentitySection = () => {
     <>
       <section className="bg-greyLight pt-20 pb-16 lg:pb-20">
         <Container>
-          <div className="grid grid-cols-2 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20 items-center justify-center">
+          <div className="grid md:grid-cols-2 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20 items-center justify-center">
             {aboutInfo.map((about, index) => (
               <>
                 <div key={index} className="mt-16 sm:mt-0">
-                  <h2 className="text-3xl lg:text-[28px] font-bold capitalize text-center mb-5 md:text-left md:mr-auto">
+                  <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                     {about.title}
                   </h2>
-                  <div className="text-base text-mute2 space-y-4">
+                  <div className="text-[16px] leading-[30px] text-mute3 space-y-4">
                     <p> {about.text}</p>
                   </div>
                 </div>

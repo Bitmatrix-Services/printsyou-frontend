@@ -1,0 +1,40 @@
+import React, {FC} from 'react';
+import Image from 'next/image';
+
+interface OverviewCardProps {
+  image: string;
+  heading: string;
+  setTabValue: any;
+  index: number;
+}
+
+const OverviewCard: FC<OverviewCardProps> = ({
+  image,
+  heading,
+  setTabValue,
+  index
+}) => {
+  return (
+    <div
+      className="bg-[#febe40] py-14 px-14 border-b-2 border-b-black hover:cursor-pointer"
+      onClick={() => setTabValue(index + 1)}
+    >
+      <div className="flex flex-col justify-center items-center text-center">
+        <div className="h-20 w-20 min-w-[5rem] relative mb-4">
+          <Image
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            fill
+            className="object-contain"
+            src={image}
+            alt="..."
+          />
+        </div>
+        <h6 className="mt-4 text-[#303541] font-medium text-[24px]">
+          {heading}
+        </h6>
+      </div>
+    </div>
+  );
+};
+
+export default OverviewCard;
