@@ -49,7 +49,6 @@ const categoryList = [
   'Technology & Mobile',
   'Tools & Flashlights',
   'Towels',
-  'Trade Show',
   'Travel & Luggage',
   'Umbrellas'
 ];
