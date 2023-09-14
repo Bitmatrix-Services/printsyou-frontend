@@ -79,7 +79,7 @@ const Sidebar = () => {
           </AccordionSummary>
 
           <AccordionDetails>
-            <ul className="hidden sm:block text-sm  product-card__categories">
+            <ul className="block text-sm  product-card__categories">
               {subCategoryList.map((category, index) => (
                 <li key={index} className=" mb-2">
                   <Link

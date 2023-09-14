@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React from 'react';
 import PageHeader from '@components/globals/PageHeader';
 import ProductsSection from '@components/sections/specials/ProductsSection';
 
