@@ -1,12 +1,7 @@
 import React from 'react';
-
 import Container from '@components/globals/Container';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
 import Link from 'next/link';
 import Image from 'next/image';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
 import lgZoom from 'lightgallery/plugins/zoom';
