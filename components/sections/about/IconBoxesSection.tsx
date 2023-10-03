@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from '../../globals/Container';
-import Link from 'next/link';
 import AboutPageServicesCard from '@components/cards/AboutPageServicesCard';
 
 const identityitems = [

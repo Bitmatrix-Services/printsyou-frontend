@@ -2,7 +2,6 @@ import React, {FC} from 'react';
 import Container from '../../globals/Container';
 import Image from 'next/image';
 
-import {CheckIcon} from '@heroicons/react/24/outline';
 const pricingList = [
   `In-house silk screening, embroidery, and engraving - all for faster lead times and lower costs.`,
   `Huge inventory of blank goods, such as promotional pens, promotional calculators, promotional desk clocks and more.`,
@@ -42,7 +41,7 @@ const OffersSection = () => {
           <div className="py-2 md:w-[90%] m-auto ">
             <div className="md:grid md:grid-cols-2">
               {pricingList.map((item, index) => (
-                <PricingCard key={index} title={index + 1} description={item} />
+                <PricingCard key={index} description={item} />
               ))}
             </div>
           </div>
@@ -52,10 +51,9 @@ const OffersSection = () => {
   );
 };
 interface PricingCardProps {
-  title: number;
   description: string;
 }
-const PricingCard: FC<PricingCardProps> = ({title, description}) => {
+const PricingCard: FC<PricingCardProps> = ({description}) => {
   return (
     <div className="flex my-6 md:pr-6">
       <div className="pr-6 ">
@@ -78,7 +76,9 @@ const PricingCard: FC<PricingCardProps> = ({title, description}) => {
         </div>
       </div>
 
-      <div className="text-black font-medium px-3">{description}</div>
+      <div className="text-[#303541] font-medium text-[16px] leading-6 px-3">
+        {description}
+      </div>
     </div>
   );
 };

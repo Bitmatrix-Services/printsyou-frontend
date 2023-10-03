@@ -73,7 +73,21 @@
 .megamenu:hover .megamenu-button::after {
   @apply h-full;
 }
-
+.MuiTablePagination-root {
+  @apply w-[100%] border-[1px] border-[#edeff2];
+}
+.MuiTablePagination-selectLabel + .MuiInputBase-root.MuiInputBase-colorPrimary {
+  @apply border-[1px] border-[#edeff2];
+}
+.MuiTablePagination-spacer {
+  @apply hidden;
+}
+.MuiTablePagination-actions {
+  @apply flex flex-wrap sm:basis-[55%] lg:basis-[60%] xl:basis-[70%] sm:justify-end;
+}
+.promo-products .MuiTablePagination-actions {
+  @apply sm:basis-[55%] lg:basis-[60%] xl:basis-[65%];
+}
 .megamenu-inner {
   position: absolute;
   left: 0;
@@ -128,9 +142,28 @@
   transition: all 0.3s;
 }
 
+.tp-product-sub-cat {
+  position: relative;
+}
 .tp-product:hover:before {
   top: -1px;
   background: url(/assets/top-line-hover-product.jpg) center repeat-x;
+  width: 100%;
+}
+.tp-product-sub-cat:after {
+  content: '';
+  position: absolute;
+  height: 3px;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  transform: translateX(-50%);
+  transition: all 0.3s;
+}
+
+.tp-product-sub-cat:hover:after {
+  bottom: -1px;
+  background-color: #feab40;
   width: 100%;
 }
 
@@ -232,4 +265,14 @@
   display: flex;
   gap: 0.75rem;
   overflow: auto;
+}
+.css-eg0mwd-MuiSlider-thumb:before {
+  background-color: #fff;
+}
+.css-187mznn-MuiSlider-root {
+  height: 15px;
+  color: #2dd3d4;
+}
+.css-15v22id-MuiAccordionDetails-root {
+  padding: 0;
 }
