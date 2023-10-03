@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {Drawer} from '@mui/material';
@@ -8,9 +8,15 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/solid';
+import sanitizeHtml from 'sanitize-html';
 
+import {useAppDispatch, useAppSelector} from '@store/hooks';
 import SearchBar from '@components/inputs/SearchBar';
 import Container from './Container';
+import {
+  getAllCategoryList,
+  selectCategoryList
+} from '@store/slices/category/catgory.slice';
 
 const links = [
   {color: '#dd6c99', text: 'About us', href: '/about-us'},
@@ -25,55 +31,16 @@ const links = [
   {color: '#b658a2', text: 'Contact us', href: '/contact-us'}
 ];
 
-const menuLinks = [
-  {href: '/apparel', text: 'Apparel'},
-  {href: '/awards', text: 'Awards'},
-  {href: '/bags', text: 'Bags'},
-  {href: '/calendars', text: 'Calendars'},
-  {href: '/cookie-amp-candy-jars', text: 'Candy Jars'},
-  {href: '/car-and-truck', text: 'Car and Truck'},
-  {href: '/clipboards', text: 'Clipboards'},
-  {href: '/clocks-watches', text: 'Clocks & Watches'},
-  {href: '/desktop-office', text: 'Desktop & Office'},
-  {href: '/Displays-and-Signs', text: 'Displays and Signage'},
-  {href: '/drinkware', text: 'Drinkware'},
-  {href: '/emt-ems', text: 'EMT / EMS'},
-  {href: '/environmentally-friendly', text: 'Environmentally Friendly'},
-  {href: '/events', text: 'Events and Holidays'},
-  {href: '/foam-promotional-products', text: 'Foam'},
-  {href: '/food-amp-snack', text: 'Food & Snack'},
-  {href: '/health-safety', text: 'Health & Safety'},
-  {href: '/home-amp-garden', text: 'Home & Garden'},
-  {href: '/keychains', text: 'Keychains'},
-  {href: '/kids', text: 'Kids'},
-  {href: '/lanyards-badges', text: 'Lanyards & Badges'},
-  {href: '/light-up', text: 'Light Up and Sound'},
-  {href: '/Made-in-USA', text: 'Made In the USA'},
-  {href: '/magnets', text: 'Magnets'},
-  {href: '/mouse-pads', text: 'Mouse Pads'},
-  {href: '/outdoor-items', text: 'Outdoor Items'},
-  {href: '/padfolios-journals', text: 'Padfolios & Journals'},
-  {href: '/paper-products', text: 'Paper Products'},
-  {href: '/pens-pencils-amp-more', text: 'Pens, Pencils, & More'},
-  {href: '/personal-care', text: 'Personal Care'},
-  {href: '/pet-products', text: 'Pet Products'},
-  {href: '/Protection-and-Wellness', text: 'PPE'},
-  {href: '/professions', text: 'Professions'},
-  {href: '/school', text: 'School'},
-  {href: '/Shapes', text: 'Shapes'},
-  {href: '/sports', text: 'Sports'},
-  {href: '/sticky-notes', text: 'Sticky Notes'},
-  {href: '/stress-relievers', text: 'Stress Relievers'},
-  {href: '/electronics', text: 'Technology & Mobile'},
-  {href: '/tools-amp-flashlights', text: 'Tools & Flashlights'},
-  {href: '/Towels', text: 'Towels'},
-  {href: '/trade-show', text: 'Trade Show'},
-  {href: '/travel-amp-luggage', text: 'Travel & Luggage'},
-  {href: '/umbrellas', text: 'Umbrellas'}
-];
-
 const Header = () => {
-  const [mobileMenu, setMobileMenu] = React.useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const cateoryList = useAppSelector(selectCategoryList);
+
+  useEffect(() => {
+    dispatch(getAllCategoryList());
+  }, []);
 
   const handleOpen = () => {
     setMobileMenu(true);
@@ -173,14 +140,18 @@ const Header = () => {
               </button>
               <div className="megamenu-inner">
                 <Container>
-                  <ul className="menu-link grid grid-cols-4 xl:grid-cols-5 gap-6">
-                    {menuLinks.map((link, index) => (
-                      <li key={index}>
+                  <ul className="menu-link grid grid-cols-4 xl:grid-cols-5 gap-4">
+                    {cateoryList.map(cateory => (
+                      <li key={cateory.id}>
                         <Link
                           className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
-                          href={link.href}
+                          href={'cateory.link'}
                         >
-                          <span>{link.text}</span>
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizeHtml(cateory.categoryName)
+                            }}
+                          ></span>
                           <span className="ml-1 transition-all duration-150 opacity-0 group-hover:opacity-100">
                             <TrendingFlatIcon />
                           </span>
@@ -248,22 +219,31 @@ const Header = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <div>
-                  <ul className="menu-link grid grid-cols-2 gap-6">
-                    {menuLinks.map((link, index) => (
-                      <li key={index}>
+                  <ul className="menu-link grid grid-cols-2 gap-4">
+                    {cateoryList.map(category => (
+                      <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-primary-500"
-                          href={link.href}
+                          href={'category.link'}
                         >
-                          {link.text}
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizeHtml(category.categoryName)
+                            }}
+                          ></span>
                         </Link>
                       </li>
                     ))}
                   </ul>
-                  <ul className="menu-link grid grid-cols-2 gap-6 text-sm text-[#b5b8c1]">
-                    {menuLinks.map((item, index) => (
-                      <li key={index}>
-                        <a href={item.href}>{item.text}</a>
+                  <ul className="menu-link grid grid-cols-2 gap-4 text-sm text-[#b5b8c1]">
+                    {cateoryList.map(category => (
+                      <li key={category.id}>
+                        <a
+                          href={'category.link'}
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(category.categoryName)
+                          }}
+                        ></a>
                       </li>
                     ))}
                   </ul>
