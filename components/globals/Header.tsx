@@ -36,7 +36,7 @@ const Header = () => {
 
   const dispatch = useAppDispatch();
 
-  const cateoryList = useAppSelector(selectCategoryList);
+  const categoryList = useAppSelector(selectCategoryList);
 
   useEffect(() => {
     dispatch(getAllCategoryList());
@@ -141,15 +141,15 @@ const Header = () => {
               <div className="megamenu-inner">
                 <Container>
                   <ul className="menu-link grid grid-cols-4 xl:grid-cols-5 gap-4">
-                    {cateoryList.map(cateory => (
-                      <li key={cateory.id}>
+                    {categoryList.map(category => (
+                      <li key={category.id}>
                         <Link
                           className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
-                          href={'cateory.link'}
+                          href={'category.link'}
                         >
                           <span
                             dangerouslySetInnerHTML={{
-                              __html: sanitizeHtml(cateory.categoryName)
+                              __html: sanitizeHtml(category.categoryName)
                             }}
                           ></span>
                           <span className="ml-1 transition-all duration-150 opacity-0 group-hover:opacity-100">
@@ -220,7 +220,7 @@ const Header = () => {
               <AccordionDetails>
                 <div>
                   <ul className="menu-link grid grid-cols-2 gap-4">
-                    {cateoryList.map(category => (
+                    {categoryList.map(category => (
                       <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-primary-500"
@@ -236,7 +236,7 @@ const Header = () => {
                     ))}
                   </ul>
                   <ul className="menu-link grid grid-cols-2 gap-4 text-sm text-[#b5b8c1]">
-                    {cateoryList.map(category => (
+                    {categoryList.map(category => (
                       <li key={category.id}>
                         <a
                           href={'category.link'}
