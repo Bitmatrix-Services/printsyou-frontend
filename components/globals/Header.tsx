@@ -115,7 +115,7 @@ const Header = () => {
                     TOLL FREE NUMBER
                   </div>
                   <div className="text-xl font-bold text-black hover:text-primary-500">
-                    (888) 282 9507
+                    (888) 282 95055
                   </div>
                 </div>
               </a>
