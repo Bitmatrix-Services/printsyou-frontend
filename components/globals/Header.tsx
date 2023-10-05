@@ -145,7 +145,7 @@ const Header = () => {
                       <li key={category.id}>
                         <Link
                           className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
-                          href={'category.link'}
+                          href={`/${category.ucategoryName}`}
                         >
                           <span
                             dangerouslySetInnerHTML={{
@@ -224,7 +224,7 @@ const Header = () => {
                       <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-primary-500"
-                          href={'category.link'}
+                          href={`/${category.ucategoryName}`}
                         >
                           <span
                             dangerouslySetInnerHTML={{
@@ -239,7 +239,7 @@ const Header = () => {
                     {categoryList.map(category => (
                       <li key={category.id}>
                         <a
-                          href={'category.link'}
+                          href={`/${category.ucategoryName}`}
                           dangerouslySetInnerHTML={{
                             __html: sanitizeHtml(category.categoryName)
                           }}

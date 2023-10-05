@@ -8,5 +8,6 @@ export type Category = {
   id: string;
   imageUrl: string;
   level: string;
+  ucategoryName: string;
   subCategories: Category[];
 };
