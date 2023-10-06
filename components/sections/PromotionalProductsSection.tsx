@@ -1,6 +1,9 @@
 import React from 'react';
+
 import Container from '../globals/Container';
 import ProductCard from '../cards/ProductCard';
+import {useAppSelector} from '@store/hooks';
+import {selectPromotionalProducts} from '@store/slices/product/product.slice';
 
 export const products = [
   {
@@ -248,7 +251,9 @@ export const products = [
   }
 ];
 
-const ProductCategoriesSection = () => {
+const PromotionalProductsSection = () => {
+  const promotionalProducts = useAppSelector(selectPromotionalProducts);
+  console.log('first', promotionalProducts);
   return (
     <>
       <section className="bg-greyLight pt-10 pb-8 lg:pb-20">
@@ -271,4 +276,4 @@ const ProductCategoriesSection = () => {
   );
 };
 
-export default ProductCategoriesSection;
+export default PromotionalProductsSection;

@@ -1,12 +1,27 @@
-import React from 'react';
+import React, {FC} from 'react';
 import Link from 'next/link';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Navigation} from 'swiper/modules';
 
 import Container from '../globals/Container';
-import {FeaturedCard} from '../cards/FeaturedCard';
+import {FeaturedProductCard} from '../cards/FeaturedProductCard';
+import {Product} from '@store/slices/product/product';
 
-const FeaturedSection = () => {
+interface FeaturedSectionProps {
+  title: string;
+  subTitle: string;
+  titleColor?: string;
+  subTitleColor?: string;
+  products: Product[];
+}
+
+const FeaturedSection: FC<FeaturedSectionProps> = ({
+  title,
+  subTitle,
+  subTitleColor,
+  titleColor,
+  products
+}) => {
   const breakpoints = {
     320: {
       slidesPerView: 1,
@@ -30,12 +45,26 @@ const FeaturedSection = () => {
   };
 
   return (
-    <section className="bg-white py-8 lg:py-20">
+    <section className="bg-white pt-8 lg:pt-20">
       <Container>
         <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start mb-6">
-          <h2 className="text-3xl lg:text-4xl font-normal text-center md:text-left md:mr-auto">
-            Under{' '}
-            <strong className="font-extrabold text-[#58c6f1]">a Buck</strong>
+          <h2
+            className={`text-3xl lg:text-4xl font-normal text-center md:text-left md:mr-auto`}
+          >
+            <span
+              className={`${titleColor && 'font-extrabold'} ${
+                titleColor && titleColor
+              }`}
+            >
+              {title}{' '}
+            </span>
+            <span
+              className={`${subTitleColor && 'font-extrabold'}  text-[${
+                subTitleColor ? subTitleColor : 'black'
+              }]`}
+            >
+              {subTitle}
+            </span>
           </h2>
           <Link
             className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
@@ -50,21 +79,11 @@ const FeaturedSection = () => {
           breakpoints={breakpoints}
           className="featured-swiper"
         >
-          <SwiperSlide>
-            <FeaturedCard isModal={true} isSale={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeaturedCard isModal={true} isSale={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeaturedCard isModal={true} isSale={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeaturedCard isModal={true} isSale={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeaturedCard isModal={true} isSale={false} />
-          </SwiperSlide>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(product => (
+            <SwiperSlide key={product}>
+              <FeaturedProductCard product={''} />
+            </SwiperSlide>
+          ))}
         </Swiper>
         <div className="mt-12 mb-6 md:hidden text-center">
           <Link

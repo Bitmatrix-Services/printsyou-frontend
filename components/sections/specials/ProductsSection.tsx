@@ -1,17 +1,17 @@
 import React, {FC} from 'react';
 import Container from '../../globals/Container';
-import {FeaturedCard} from '../../cards/FeaturedCard';
+import {FeaturedProductCard} from '../../cards/FeaturedProductCard';
 import TablePagination from '@mui/material/TablePagination';
 
 interface ProductsSectionProps {
-  isModal: boolean;
-  isSale: boolean;
+  isModal?: boolean;
+  onSale?: boolean;
   isContainer: boolean;
 }
 
 const ProductsSection: FC<ProductsSectionProps> = ({
   isModal,
-  isSale,
+  onSale,
   isContainer
 }) => {
   const [page, setPage] = React.useState(2);
@@ -46,15 +46,14 @@ const ProductsSection: FC<ProductsSectionProps> = ({
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6">
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(item => (
+              <FeaturedProductCard
+                key={item}
+                isModal={isModal}
+                onSale={onSale}
+                product={''}
+              />
+            ))}
           </div>
           <div className="flex flex-wrap items-center justify-center md:justify-start mb-6">
             <TablePagination
@@ -82,15 +81,14 @@ const ProductsSection: FC<ProductsSectionProps> = ({
             />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6">
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
-            <FeaturedCard isModal={isModal} isSale={isSale} />
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(item => (
+              <FeaturedProductCard
+                key={item}
+                isModal={isModal}
+                onSale={onSale}
+                product={''}
+              />
+            ))}
           </div>
           <div className="flex flex-wrap items-center justify-center md:justify-start mb-6">
             <TablePagination

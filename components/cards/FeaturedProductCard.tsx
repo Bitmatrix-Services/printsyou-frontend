@@ -9,6 +9,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
 
+import {Product} from '@store/slices/product/product';
+
 // icons
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
@@ -24,11 +26,15 @@ const imageUrls = [
   'https://www.identity-links.com/img/ucart/images/p_photo1665689016/147330/popup.jpg',
   'https://www.identity-links.com/img/ucart/images/p_photo1665689017/147330/popup.jpg'
 ];
-interface cardProps {
-  isModal: boolean;
-  isSale: boolean;
+interface CardProps {
+  product: string;
+  isModal?: boolean;
+  onSale?: boolean;
 }
-export const FeaturedCard: FC<cardProps> = ({isModal, isSale}) => {
+export const FeaturedProductCard: FC<CardProps> = ({
+  isModal = true,
+  onSale = true
+}) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -83,7 +89,7 @@ export const FeaturedCard: FC<cardProps> = ({isModal, isSale}) => {
               AS LOW AS
             </div>
             <div className="prive-value flex items-end gap-1">
-              {isSale && (
+              {onSale && (
                 <div className="prive-value flex items-end gap-1">
                   <div className="deno font-semibold text-lg">$</div>
                   <div className="value font-bold text-2xl font-oswald">
