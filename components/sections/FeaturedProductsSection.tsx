@@ -13,7 +13,7 @@ interface FeaturedSectionProps {
   titleColor?: string;
   subTitleColor?: string;
   products: Product[];
-  onSale?:boolean;
+  onSale?: boolean;
 }
 
 const FeaturedSection: FC<FeaturedSectionProps> = ({
@@ -22,7 +22,7 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
   subTitleColor,
   titleColor,
   products,
-  onSale=false,
+  onSale = false
 }) => {
   const breakpoints = {
     320: {

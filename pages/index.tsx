@@ -6,7 +6,11 @@ import HeroSection from '@components/sections/HeroSection';
 import PromotionalProductsSection from '@components/sections/PromotionalProductsSection';
 import FeaturedProductsSection from '@components/sections/FeaturedProductsSection';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
-import {getPromotionalProducts, getUnderABuckProducts, selectUnderABuckProducts} from '@store/slices/product/product.slice';
+import {
+  getPromotionalProducts,
+  getUnderABuckProducts,
+  selectUnderABuckProducts
+} from '@store/slices/product/product.slice';
 
 export default function Home() {
   const dispatch = useAppDispatch();
