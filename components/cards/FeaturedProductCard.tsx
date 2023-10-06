@@ -8,6 +8,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
+import sanitizeHtml from 'sanitize-html';
 
 import {Product} from '@store/slices/product/product';
 
@@ -18,24 +19,22 @@ import CloseIcon from '@mui/icons-material/Close';
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
-
-const imageUrls = [
-  'https://www.identity-links.com/img/ucart/images/pimage/147330/001.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689014/147330/popup.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689015/147330/popup.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689016/147330/popup.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689017/147330/popup.jpg'
-];
-interface CardProps {
-  product: string;
+interface FeaturedProductCardProps {
+  product: Product;
   isModal?: boolean;
   onSale?: boolean;
 }
-export const FeaturedProductCard: FC<CardProps> = ({
+export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   isModal = true,
-  onSale = true
+  onSale = true,
+  product
 }) => {
   const [open, setOpen] = useState(false);
+
+  const productImageUrl =
+    product.productImages && product.productImages[0]
+      ? product.productImages[0]
+      : 'https://www.identity-links.com/img/ucart/images/pimage/147330/main.jpg';
 
   const handleOpen = () => {
     setOpen(true);
@@ -43,6 +42,8 @@ export const FeaturedProductCard: FC<CardProps> = ({
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log('product', product);
 
   return (
     <>
@@ -65,13 +66,13 @@ export const FeaturedProductCard: FC<CardProps> = ({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
-              src="https://www.identity-links.com/img/ucart/images/pimage/147330/main.jpg"
+              src={productImageUrl}
               alt="..."
             />
           </Link>
           {isModal && (
             <Link href="#!" className="block mt-4 text-xl font-extrabold">
-              PopGrip Wood POPSockets
+              {product.productName}
             </Link>
           )}
           {!isModal && (
@@ -79,7 +80,7 @@ export const FeaturedProductCard: FC<CardProps> = ({
               href="#!"
               className="block mt-4 text-[18px] font-semibold text-[#303541]"
             >
-              PopGrip Wood POPSockets
+              {product.productName}
             </Link>
           )}
         </div>
@@ -101,7 +102,9 @@ export const FeaturedProductCard: FC<CardProps> = ({
               <div className="prive-value flex items-end gap-1">
                 <div className="deno font-semibold text-lg">$</div>
                 <div className="value font-semibold text-2xl font-oswald">
-                  <span className="sale">11.65</span>
+                  <span className="sale">
+                    {product.priceGrids && product.priceGrids[0]?.price}
+                  </span>
                 </div>
               </div>
             </div>
@@ -133,93 +136,69 @@ export const FeaturedProductCard: FC<CardProps> = ({
                     ITEM#: <span className="text-primary-500">POP113</span>
                   </h6>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize">
-                    Promotional PopGrip Wood POPSockets
+                    Promotional {product.productName}
                   </h3>
                 </div>
                 <div className="mt-4 overflow-auto">
                   <table className="w-full">
                     <tbody>
                       <tr className="one">
-                        <td className="headcell">50</td>
-                        <td className="headcell">100</td>
-                        <td className="headcell">500</td>
-                        <td className="headcell">1000</td>
+                        {product.priceGrids &&
+                          [...product.priceGrids]
+                            .sort((a, b) => a.countFrom - b.countFrom)
+                            .map(row => (
+                              <td className="headcell" key={row.id}>
+                                {row.countFrom}
+                              </td>
+                            ))}
                       </tr>
                       <tr className="two">
-                        <td className="pricecell">
-                          <div className="prive-value flex items-end gap-1">
-                            <div className="deno font-semibold text-xl">$</div>
-                            <div className="value font-semibold text-3xl font-oswald">
-                              <span className="sale">11.65</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="pricecell">
-                          <div className="prive-value flex items-end gap-1">
-                            <div className="deno font-semibold text-xl">$</div>
-                            <div className="value font-semibold text-3xl font-oswald">
-                              <span className="sale">11.82</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="pricecell">
-                          <div className="prive-value flex items-end gap-1">
-                            <div className="deno font-semibold text-xl">$</div>
-                            <div className="value font-semibold text-3xl font-oswald">
-                              <span className="sale">11.73</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="pricecell">
-                          <div className="prive-value flex items-end gap-1">
-                            <div className="deno font-semibold text-xl">$</div>
-                            <div className="value font-semibold text-3xl font-oswald">
-                              <span className="sale">11.65</span>
-                            </div>
-                          </div>
-                        </td>
+                        {product.priceGrids &&
+                          [...product.priceGrids]
+                            .sort((a, b) => a.countFrom - b.countFrom)
+                            .map(row => (
+                              <td className="pricecell" key={row.id}>
+                                <div className="prive-value flex items-end justify-center gap-1">
+                                  <div className="deno font-semibold text-xl">
+                                    $
+                                  </div>
+                                  <div className="value font-semibold text-3xl font-oswald">
+                                    <span className="sale">{row.price}</span>
+                                  </div>
+                                </div>
+                              </td>
+                            ))}
                       </tr>
                     </tbody>
                   </table>
                 </div>
                 <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
-                    <li>
-                      <span className="pt-[2px] block">
-                        Please add <span className="text-red-500">$30.00</span>{' '}
-                        Setup Fee
-                      </span>
-                    </li>
-                    <li>
-                      <span className="pt-[2px] block">
-                        Please add <span className="text-red-500">$95.00</span>{' '}
-                        Full Color Set Up Fee
-                      </span>
-                    </li>
-                    <li>
-                      <span className="pt-[2px] block">
-                        Please add <span className="text-red-500">$0.65</span>{' '}
-                        Full Color Imprint
-                      </span>
-                    </li>
-                    <li>
-                      <span className="pt-[2px] block">
-                        Please add <span className="text-red-500">$0.25</span>{' '}
-                        Additional Spot Color Imprint
-                      </span>
-                    </li>
+                    {product.additionalRows
+                      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                      .map(row => (
+                        <li key={row.id}>
+                          <span className="pt-[2px] block">
+                            Please add{' '}
+                            <span className="text-red-500">
+                              ${row.priceDiff}
+                            </span>{' '}
+                            {row.name}
+                          </span>
+                        </li>
+                      ))}
                   </ul>
                 </div>
                 <div className="mt-4 flex flex-col sm:flex-row gap-3">
                   <Link
                     href="#!"
-                    className="block w-full text-center py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold"
+                    className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold"
                   >
-                    PLACE ORDER
+                    Add to cart
                   </Link>
                   <Link
                     href="#!"
-                    className="block w-full text-center py-5 px-8 text-body bg-white hover:bg-body hover:text-white border border-[#eaeaec] text-sm font-bold"
+                    className="block w-full text-center uppercase py-5 px-8 text-body bg-white hover:bg-body hover:text-white border border-[#eaeaec] text-sm font-bold"
                   >
                     REQUEST MORE INFO
                   </Link>
@@ -228,13 +207,13 @@ export const FeaturedProductCard: FC<CardProps> = ({
               <figure className="order-first lg:order-last">
                 <div>
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                    <a className="cursor-pointer" data-src={imageUrls[0]}>
+                    <a className="cursor-pointer" data-src={productImageUrl}>
                       <span className="block relative aspect-square">
                         <Image
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={imageUrls[0]}
+                          src={productImageUrl}
                           alt={`big image`}
                         />
                       </span>
@@ -243,7 +222,7 @@ export const FeaturedProductCard: FC<CardProps> = ({
                 </div>
                 <div className="gallery-container">
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                    {imageUrls.map((imageUrl, index) => (
+                    {product.productImages?.map((imageUrl, index) => (
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
@@ -275,8 +254,13 @@ export const FeaturedProductCard: FC<CardProps> = ({
                   <h4 className="text-xl font-bold capitalize">Description</h4>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <div>
-                    <ul className="text-sm space-y-1 pl-5 list-disc marker:text-[#febe40] marker:text-lg">
+                  <div
+                    className="px-4"
+                    // dangerouslySetInnerHTML={{
+                    //   __html: sanitizeHtml(product.productDescription)
+                    // }}
+                  >
+                    <ul className="text-sm space-y-1 pb-4 pl-5 list-disc marker:text-[#febe40] marker:text-lg">
                       <li>
                         Get on the latest trend bandwagon with our custom
                         printed PopGrip Wood&nbsp;POPSockets!
@@ -319,38 +303,18 @@ export const FeaturedProductCard: FC<CardProps> = ({
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className="overflow-auto">
-                    <table className="w-full">
-                      <tbody>
-                        <tr>
-                          <td className="label">
-                            <b className="brown">Approximate Size: </b>
-                          </td>
-                          <td>
-                            Expanded: 1.53&quot; x 1.53&quot; x 0.9&quot; <br />
-                            Collapsed: 1.53&quot; x 1.53&quot; x 0.26&quot;
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="label">
-                            <b className="brown">Colors Available: </b>
-                          </td>
-                          <td>Bamboo, Rosewood</td>
-                        </tr>
-
-                        <tr>
-                          <td className="label">
-                            <b className="brown">Imprint Area: </b>
-                          </td>
-                          <td>1.3&quot; Diameter</td>
-                        </tr>
-                        <tr>
-                          <td className="label">
-                            <b className="brown">Price Includes: </b>
-                          </td>
-                          <td>One Location Laser Engrave</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <div className="w-full">
+                      {product.additionalFieldProductValues?.map(row => (
+                        <div className="px-4 pb-4 flex" key={row.fieldValue}>
+                          <span className="label flex-1">
+                            <b className="brown">{row.fieldName}: </b>
+                          </span>
+                          <span className="flex-auto text-left">
+                            {row.fieldValue}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </AccordionDetails>
               </Accordion>

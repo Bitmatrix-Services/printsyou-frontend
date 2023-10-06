@@ -26,7 +26,7 @@ export const getPromotionalProducts = createAsyncThunk(
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
   async () => {
-    const res = await http.get(`category/all`);
+    const res = await http.get(`product/underBuck`);
     return res?.data.payload;
   }
 );

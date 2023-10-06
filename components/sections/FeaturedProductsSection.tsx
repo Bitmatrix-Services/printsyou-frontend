@@ -13,6 +13,7 @@ interface FeaturedSectionProps {
   titleColor?: string;
   subTitleColor?: string;
   products: Product[];
+  onSale?:boolean;
 }
 
 const FeaturedSection: FC<FeaturedSectionProps> = ({
@@ -20,7 +21,8 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
   subTitle,
   subTitleColor,
   titleColor,
-  products
+  products,
+  onSale=false,
 }) => {
   const breakpoints = {
     320: {
@@ -79,9 +81,9 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
           breakpoints={breakpoints}
           className="featured-swiper"
         >
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(product => (
-            <SwiperSlide key={product}>
-              <FeaturedProductCard product={''} />
+          {products?.map(product => (
+            <SwiperSlide key={product.id}>
+              <FeaturedProductCard product={product} onSale={onSale} />
             </SwiperSlide>
           ))}
         </Swiper>
