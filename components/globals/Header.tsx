@@ -219,7 +219,7 @@ const Header = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <div>
-                  <ul className="menu-link grid grid-cols-2 gap-4">
+                  <ul className="menu-link grid grid-cols-2 px-3 gap-4">
                     {categoryList.map(category => (
                       <li key={category.id}>
                         <Link
