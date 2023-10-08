@@ -8,13 +8,14 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
-import sanitizeHtml from 'sanitize-html';
+import {useRouter} from 'next/router';
 
 import {Product} from '@store/slices/product/product';
 
 // icons
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
+import {getProductDescription, getProductImage} from '@utils/utils';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -29,30 +30,33 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   onSale = true,
   product
 }) => {
-  const [open, setOpen] = useState(false);
-
-  const productImageUrl =
-    product.productImages && product.productImages[0]
-      ? product.productImages[0]
-      : 'https://www.identity-links.com/img/ucart/images/pimage/147330/main.jpg';
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  console.log('product', product);
+  const router = useRouter();
+  const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
 
   return (
     <>
-      <div className="tp-product group relative bg-white border border-[#edeff2]">
+      <div
+        onClick={() =>
+          router.push(
+            {
+              pathname: 'product-details',
+              query: {
+                product: JSON.stringify(product)
+              }
+            },
+            `product/${product.id}`
+          )
+        }
+        className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"
+      >
         <div className="p-6">
-          <Link href="#!" className="block relative h-48 w-48 mx-auto group">
+          <div className="block relative h-48 w-48 mx-auto group">
             {isModal && (
               <button
-                onClick={handleOpen}
+                onClick={e => {
+                  setIsViewProductModalOpen(true);
+                  e.stopPropagation();
+                }}
                 type="button"
                 className="h-[3.125rem] w-[3.125rem] bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300 absolute z-20 top-0 left-0 opacity-0 group-hover:opacity-100"
                 style={{
@@ -66,22 +70,19 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
-              src={productImageUrl}
+              src={getProductImage(product.productImages)}
               alt="..."
             />
-          </Link>
+          </div>
           {isModal && (
-            <Link href="#!" className="block mt-4 text-xl font-extrabold">
+            <div className="block mt-4 text-xl font-extrabold">
               {product.productName}
-            </Link>
+            </div>
           )}
           {!isModal && (
-            <Link
-              href="#!"
-              className="block mt-4 text-[18px] font-semibold text-[#303541]"
-            >
+            <div className="block mt-4 text-[18px] font-semibold text-[#303541]">
               {product.productName}
-            </Link>
+            </div>
           )}
         </div>
         <div className="border-t border-[#edeff2] flex">
@@ -119,12 +120,15 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
       </div>
       {isModal && (
         <Dialog
-          open={open}
-          onClose={handleClose}
+          open={isViewProductModalOpen}
+          onClose={() => setIsViewProductModalOpen(false)}
           classes={{paper: 'rounded-none min-w-[95%] xl:min-w-[62.5rem]'}}
         >
           <div className="p-3 mb-3 text-end">
-            <button type="button" onClick={handleClose}>
+            <button
+              type="button"
+              onClick={() => setIsViewProductModalOpen(false)}
+            >
               <CloseIcon />
             </button>
           </div>
@@ -133,45 +137,52 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               <figure>
                 <div className="max-w-sm">
                   <h6 className="mb-2 text-sm font-semibold text-body">
-                    ITEM#: <span className="text-primary-500">POP113</span>
+                    ITEM#:{' '}
+                    <span className="text-primary-500">{product.sku}</span>
                   </h6>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize">
-                    Promotional {product.productName}
+                    {product.prefix} {product.productName}
                   </h3>
                 </div>
-                <div className="mt-4 overflow-auto">
-                  <table className="w-full">
-                    <tbody>
-                      <tr className="one">
-                        {product.priceGrids &&
-                          [...product.priceGrids]
-                            .sort((a, b) => a.countFrom - b.countFrom)
-                            .map(row => (
-                              <td className="headcell" key={row.id}>
-                                {row.countFrom}
-                              </td>
-                            ))}
-                      </tr>
-                      <tr className="two">
-                        {product.priceGrids &&
-                          [...product.priceGrids]
-                            .sort((a, b) => a.countFrom - b.countFrom)
-                            .map(row => (
-                              <td className="pricecell" key={row.id}>
-                                <div className="prive-value flex items-end justify-center gap-1">
-                                  <div className="deno font-semibold text-xl">
-                                    $
-                                  </div>
-                                  <div className="value font-semibold text-3xl font-oswald">
-                                    <span className="sale">{row.price}</span>
-                                  </div>
-                                </div>
-                              </td>
-                            ))}
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                {product?.priceGrids &&
+                  [...product.priceGrids].sort(
+                    (a, b) => a.countFrom - b.countFrom
+                  )[0].countFrom !== 0 && (
+                    <div className="mt-4 overflow-auto">
+                      <table className="w-full">
+                        <tbody>
+                          <tr className="one">
+                            {[...product.priceGrids]
+                              .sort((a, b) => a.countFrom - b.countFrom)
+                              .map(row => (
+                                <td className="headcell" key={row.id}>
+                                  {row.countFrom}
+                                </td>
+                              ))}
+                          </tr>
+                          <tr className="two">
+                            {product?.priceGrids &&
+                              [...product.priceGrids]
+                                .sort((a, b) => a.countFrom - b.countFrom)
+                                .map(row => (
+                                  <td className="pricecell" key={row.id}>
+                                    <div className="prive-value flex items-end justify-center gap-1">
+                                      <div className="deno font-semibold text-xl">
+                                        $
+                                      </div>
+                                      <div className="value font-semibold text-3xl font-oswald">
+                                        <span className="sale">
+                                          {row.price}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                ))}
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
                     {product.additionalRows
@@ -207,13 +218,16 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               <figure className="order-first lg:order-last">
                 <div>
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                    <a className="cursor-pointer" data-src={productImageUrl}>
+                    <a
+                      className="cursor-pointer"
+                      data-src={getProductImage(product.productImages)}
+                    >
                       <span className="block relative aspect-square">
                         <Image
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={productImageUrl}
+                          src={getProductImage(product.productImages)}
                           alt={`big image`}
                         />
                       </span>
@@ -254,39 +268,11 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   <h4 className="text-xl font-bold capitalize">Description</h4>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <div
-                    className="px-4"
-                    // dangerouslySetInnerHTML={{
-                    //   __html: sanitizeHtml(product.productDescription)
-                    // }}
-                  >
+                  <div className="px-4">
                     <ul className="text-sm space-y-1 pb-4 pl-5 list-disc marker:text-[#febe40] marker:text-lg">
-                      <li>
-                        Get on the latest trend bandwagon with our custom
-                        printed PopGrip Wood&nbsp;POPSockets!
-                      </li>
-                      <li>
-                        Our PopGrip Wood sticks flat to the back of your phone,
-                        tablet or case with its easy to rinse and repositional
-                        gel.&nbsp;
-                      </li>
-                      <li>
-                        Once extended, the&nbsp;PopGrip Wood becomes a media
-                        stand for your device, a photo or texting grip, or
-                        simply lower it for a video chat.
-                      </li>
-                      <li>
-                        This item can be used on the back of any brand
-                        phone.&nbsp;
-                      </li>
-                      <li>
-                        Available in Bamboo and Rosewood, the unique wood finish
-                        lends perfectly to a classic laser engraving
-                      </li>
-                      <li>
-                        Custom PopGrip Backer Cards available at an addition
-                        cost. Call for additional pricing.{' '}
-                      </li>
+                      {getProductDescription(product.productDescription)?.map(
+                        row => <li key={row}>{row}</li>
+                      )}
                     </ul>
                   </div>
                 </AccordionDetails>

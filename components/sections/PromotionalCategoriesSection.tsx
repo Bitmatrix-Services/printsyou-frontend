@@ -1,9 +1,9 @@
 import React from 'react';
 
 import Container from '../globals/Container';
-import ProductCard from '../cards/ProductCard';
+import CategoryCard from '../cards/CategoryCard';
 import {useAppSelector} from '@store/hooks';
-import {selectPromotionalProducts} from '@store/slices/product/product.slice';
+import {selectPromotionalCategories} from '@store/slices/category/catgory.slice';
 
 export const products = [
   {
@@ -251,9 +251,10 @@ export const products = [
   }
 ];
 
-const PromotionalProductsSection = () => {
-  const promotionalProducts = useAppSelector(selectPromotionalProducts);
-  console.log('first', promotionalProducts);
+const PromotionalCategoriesSection = () => {
+  const promotionalCategories = useAppSelector(selectPromotionalCategories);
+  console.log('promotionalCategories', promotionalCategories);
+
   return (
     <>
       <section className="bg-greyLight pt-10 pb-8 lg:pb-20">
@@ -265,7 +266,7 @@ const PromotionalProductsSection = () => {
             <ul className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20">
               {products.map((product, index) => (
                 <li key={index} className="mt-16 sm:mt-0">
-                  <ProductCard product={product} />
+                  <CategoryCard category={product} />
                 </li>
               ))}
             </ul>
@@ -276,4 +277,4 @@ const PromotionalProductsSection = () => {
   );
 };
 
-export default PromotionalProductsSection;
+export default PromotionalCategoriesSection;

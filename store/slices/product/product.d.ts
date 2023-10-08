@@ -1,6 +1,4 @@
 export interface ProductInitialState {
-  promotionalProducts: Product[];
-  promotionalProductsLoading: boolean;
   underABuckProducts: Product[];
   underABuckProductsLoading: boolean;
   uniqueIdeaProducts: Product[];

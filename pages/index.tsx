@@ -3,14 +3,14 @@ import React, {useEffect} from 'react';
 import AdvantageSection from '@components/sections/AdvantageSection';
 import WhyIdentitySection from '@components/sections/WhyIdentitySection';
 import HeroSection from '@components/sections/HeroSection';
-import PromotionalProductsSection from '@components/sections/PromotionalProductsSection';
+import PromotionalCategoriesSection from '@components/sections/PromotionalCategoriesSection';
 import FeaturedProductsSection from '@components/sections/FeaturedProductsSection';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  getPromotionalProducts,
   getUnderABuckProducts,
   selectUnderABuckProducts
 } from '@store/slices/product/product.slice';
+import {getPromotionalCategories} from '@store/slices/category/catgory.slice';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -18,14 +18,14 @@ export default function Home() {
   const underABuckProducts = useAppSelector(selectUnderABuckProducts);
 
   useEffect(() => {
-    dispatch(getPromotionalProducts());
+    dispatch(getPromotionalCategories());
     dispatch(getUnderABuckProducts());
   }, []);
 
   return (
     <main>
       <HeroSection />
-      <PromotionalProductsSection />
+      <PromotionalCategoriesSection />
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"

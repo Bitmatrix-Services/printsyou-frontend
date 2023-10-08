@@ -5,8 +5,6 @@ import {http} from 'services/axios.service';
 import {RootState} from '@store/store';
 
 const INITIAL_STATE: ProductInitialState = {
-  promotionalProducts: [],
-  promotionalProductsLoading: false,
   underABuckProducts: [],
   underABuckProductsLoading: false,
   uniqueIdeaProducts: [],
@@ -14,14 +12,6 @@ const INITIAL_STATE: ProductInitialState = {
   newAndExclusiveProducts: [],
   newAndExclusiveProductsLoading: false
 };
-
-export const getPromotionalProducts = createAsyncThunk(
-  'product/getPromotionalProducts',
-  async () => {
-    const res = await http.get(`category/all`);
-    return res?.data.payload;
-  }
-);
 
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
@@ -52,20 +42,6 @@ export const productSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {},
   extraReducers: {
-    [getPromotionalProducts.pending.type]: state => {
-      state.promotionalProductsLoading = true;
-    },
-    [getPromotionalProducts.fulfilled.type]: (
-      state,
-      action: PayloadAction<Product[]>
-    ) => {
-      state.promotionalProducts = action.payload;
-      state.promotionalProductsLoading = false;
-    },
-    [getPromotionalProducts.rejected.type]: state => {
-      state.promotionalProductsLoading = false;
-    },
-
     [getUnderABuckProducts.pending.type]: state => {
       state.underABuckProductsLoading = true;
     },
@@ -109,11 +85,6 @@ export const productSlice = createSlice({
     }
   }
 });
-
-export const selectPromotionalProducts = (state: RootState) =>
-  state.product.promotionalProducts;
-export const selectPromotionalProductsLoading = (state: RootState) =>
-  state.product.promotionalProductsLoading;
 
 export const selectUnderABuckProducts = (state: RootState) =>
   state.product.underABuckProducts;

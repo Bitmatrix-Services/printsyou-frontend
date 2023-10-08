@@ -5,19 +5,21 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
 import lgZoom from 'lightgallery/plugins/zoom';
+import {useRouter} from 'next/router';
+
+import {getProductDescription, getProductImage} from '@utils/utils';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
-const imageUrls = [
-  'https://www.identity-links.com/img/ucart/images/pimage/147330/001.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689014/147330/popup.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689015/147330/popup.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689016/147330/popup.jpg',
-  'https://www.identity-links.com/img/ucart/images/p_photo1665689017/147330/popup.jpg'
-];
 
 const ProductDetails = () => {
+  const {query} = useRouter();
+
+  const product = JSON.parse(query.product);
+
+  console.log('product', product);
+
   return (
     <>
       <Container>
@@ -55,13 +57,13 @@ const ProductDetails = () => {
                   width={437}
                   height={281}
                   className="object-contain w-[85%]"
-                  src={'/assets/product.jpg'}
+                  src={getProductImage(product.productImages)}
                   alt="..."
                 />
               </div>
               <div className="gallery-container">
                 <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                  {imageUrls.map((imageUrl, index) => (
+                  {product.productImages?.map((imageUrl, index) => (
                     <a
                       key={index}
                       className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
@@ -84,10 +86,10 @@ const ProductDetails = () => {
             <figure className="pt-8">
               <div className="mb-10">
                 <h6 className="mb-4 text-sm font-semibold text-body">
-                  ITEM#: <span className="text-primary-500">POP113</span>
+                  ITEM#: <span className="text-primary-500">{product.sku}</span>
                 </h6>
                 <h3 className="text-3xl my-5  font-semibold capitalize">
-                  Promotional PopGrip Wood POPSockets
+                  {product.prefix} {product.productName}
                 </h3>
               </div>
               <div className="mb-12">
@@ -95,105 +97,61 @@ const ProductDetails = () => {
                   Description
                 </h4>
                 <ul className="text-sm space-y-3 text-[#757a84] pl-5 list-disc marker:text-[#febe40] marker:text-lg">
-                  <li>
-                    Get on the latest trend bandwagon with our custom printed
-                    PopGrip Wood&nbsp;POPSockets!
-                  </li>
-                  <li>
-                    Our PopGrip Wood sticks flat to the back of your phone,
-                    tablet or case with its easy to rinse and repositional
-                    gel.&nbsp;
-                  </li>
-                  <li>
-                    Once extended, the&nbsp;PopGrip Wood becomes a media stand
-                    for your device, a photo or texting grip, or simply lower it
-                    for a video chat.
-                  </li>
-                  <li>
-                    This item can be used on the back of any brand phone.&nbsp;
-                  </li>
-                  <li>
-                    Available in Bamboo and Rosewood, the unique wood finish
-                    lends perfectly to a classic laser engraving
-                  </li>
-                  <li>
-                    Custom PopGrip Backer Cards available at an addition cost.
-                    Call for additional pricing.{' '}
-                  </li>
+                  {getProductDescription(product.productDescription)?.map(
+                    row => <li key={row}>{row}</li>
+                  )}
                 </ul>
               </div>
-              <div className="mt-8 overflow-auto">
-                <table className="w-full">
-                  <tbody>
-                    <tr className="one">
-                      <td className="headcell">50</td>
-                      <td className="headcell">100</td>
-                      <td className="headcell">500</td>
-                      <td className="headcell">1000</td>
-                    </tr>
-                    <tr className="two">
-                      <td className="pricecell">
-                        <div className="prive-value flex items-end gap-1">
-                          <div className="deno font-semibold text-xl">$</div>
-                          <div className="value font-semibold text-3xl font-oswald">
-                            <span className="sale">11.65</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="pricecell">
-                        <div className="prive-value flex items-end gap-1">
-                          <div className="deno font-semibold text-xl">$</div>
-                          <div className="value font-semibold text-3xl font-oswald">
-                            <span className="sale">11.82</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="pricecell">
-                        <div className="prive-value flex items-end gap-1">
-                          <div className="deno font-semibold text-xl">$</div>
-                          <div className="value font-semibold text-3xl font-oswald">
-                            <span className="sale">11.73</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="pricecell">
-                        <div className="prive-value flex items-end gap-1">
-                          <div className="deno font-semibold text-xl">$</div>
-                          <div className="value font-semibold text-3xl font-oswald">
-                            <span className="sale">11.65</span>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              {product?.priceGrids &&
+                [...product.priceGrids].sort(
+                  (a, b) => a.countFrom - b.countFrom
+                )[0].countFrom !== 0 && (
+                  <div className="mt-4 overflow-auto">
+                    <table className="w-full">
+                      <tbody>
+                        <tr className="one">
+                          {[...product.priceGrids]
+                            .sort((a, b) => a.countFrom - b.countFrom)
+                            .map(row => (
+                              <td className="headcell" key={row.id}>
+                                {row.countFrom}
+                              </td>
+                            ))}
+                        </tr>
+                        <tr className="two">
+                          {product?.priceGrids &&
+                            [...product.priceGrids]
+                              .sort((a, b) => a.countFrom - b.countFrom)
+                              .map(row => (
+                                <td className="pricecell" key={row.id}>
+                                  <div className="prive-value flex items-end justify-center gap-1">
+                                    <div className="deno font-semibold text-xl">
+                                      $
+                                    </div>
+                                    <div className="value font-semibold text-3xl font-oswald">
+                                      <span className="sale">{row.price}</span>
+                                    </div>
+                                  </div>
+                                </td>
+                              ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                 <ul className="text-xs text-mute3 font-bold product-card__categories">
-                  <li>
-                    <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$30.00</span>{' '}
-                      Setup Fee
-                    </span>
-                  </li>
-                  <li>
-                    <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$95.00</span>{' '}
-                      Full Color Set Up Fee
-                    </span>
-                  </li>
-                  <li>
-                    <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$0.65</span>{' '}
-                      Full Color Imprint
-                    </span>
-                  </li>
-                  <li>
-                    <span className="pt-[2px] block">
-                      Please add <span className="text-red-500">$0.25</span>{' '}
-                      Additional Spot Color Imprint
-                    </span>
-                  </li>
+                  {product.additionalRows
+                    .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                    .map(row => (
+                      <li key={row.id}>
+                        <span className="pt-[2px] block">
+                          Please add{' '}
+                          <span className="text-red-500">${row.priceDiff}</span>{' '}
+                          {row.name}
+                        </span>
+                      </li>
+                    ))}
                 </ul>
               </div>
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
@@ -215,38 +173,16 @@ const ProductDetails = () => {
                   Additional Information
                 </h4>
                 <div className="overflow-auto">
-                  <table className="w-full border-separate border-spacing-y-12 ">
-                    <tbody>
-                      <tr className="border-b border-black pb-5">
-                        <td className="label">
-                          <b className="brown">Approximate Size: </b>
-                        </td>
-                        <td>
-                          Expanded: 1.53&quot; x 1.53&quot; x 0.9&quot; <br />
-                          Collapsed: 1.53&quot; x 1.53&quot; x 0.26&quot;
-                        </td>
-                      </tr>
-                      <tr className="mb-[50px] border-b border-black">
-                        <td className="label">
-                          <b className="brown">Colors Available: </b>
-                        </td>
-                        <td>Bamboo, Rosewood</td>
-                      </tr>
-
-                      <tr>
-                        <td className="label">
-                          <b className="brown">Imprint Area: </b>
-                        </td>
-                        <td>1.3&quot; Diameter</td>
-                      </tr>
-                      <tr>
-                        <td className="label">
-                          <b className="brown">Price Includes: </b>
-                        </td>
-                        <td>One Location Laser Engrave</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  {product.additionalFieldProductValues?.map(row => (
+                    <div className="px-4 pb-4 flex" key={row.fieldValue}>
+                      <span className="label flex-1">
+                        <b className="brown">{row.fieldName}: </b>
+                      </span>
+                      <span className="flex-auto text-left">
+                        {row.fieldValue}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </figure>

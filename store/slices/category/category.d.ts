@@ -1,6 +1,8 @@
 export interface CategoryInitialState {
   categoryList: Category[];
   categoryListLoading: boolean;
+  promotionalCategories: Product[];
+  promotionalCategoriesLoading: boolean;
 }
 
 export type Category = {
