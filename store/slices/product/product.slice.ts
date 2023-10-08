@@ -6,33 +6,13 @@ import {RootState} from '@store/store';
 
 const INITIAL_STATE: ProductInitialState = {
   underABuckProducts: [],
-  underABuckProductsLoading: false,
-  uniqueIdeaProducts: [],
-  uniqueIdeaProductsLoading: false,
-  newAndExclusiveProducts: [],
-  newAndExclusiveProductsLoading: false
+  underABuckProductsLoading: false
 };
 
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
   async () => {
     const res = await http.get(`product/underBuck`);
-    return res?.data.payload;
-  }
-);
-
-export const getUniqueIdeaProducts = createAsyncThunk(
-  'product/getUniqueIdeaProducts',
-  async () => {
-    const res = await http.get(`category/all`);
-    return res?.data.payload;
-  }
-);
-
-export const getNewAndExclusiveProducts = createAsyncThunk(
-  'product/getNewAndExclusiveProducts',
-  async () => {
-    const res = await http.get(`category/all`);
     return res?.data.payload;
   }
 );
@@ -54,34 +34,6 @@ export const productSlice = createSlice({
     },
     [getUnderABuckProducts.rejected.type]: state => {
       state.underABuckProductsLoading = false;
-    },
-
-    [getUniqueIdeaProducts.pending.type]: state => {
-      state.uniqueIdeaProductsLoading = true;
-    },
-    [getUniqueIdeaProducts.fulfilled.type]: (
-      state,
-      action: PayloadAction<Product[]>
-    ) => {
-      state.uniqueIdeaProducts = action.payload;
-      state.uniqueIdeaProductsLoading = false;
-    },
-    [getUniqueIdeaProducts.rejected.type]: state => {
-      state.uniqueIdeaProductsLoading = false;
-    },
-
-    [getNewAndExclusiveProducts.pending.type]: state => {
-      state.newAndExclusiveProductsLoading = true;
-    },
-    [getNewAndExclusiveProducts.fulfilled.type]: (
-      state,
-      action: PayloadAction<Product[]>
-    ) => {
-      state.newAndExclusiveProducts = action.payload;
-      state.newAndExclusiveProductsLoading = false;
-    },
-    [getNewAndExclusiveProducts.rejected.type]: state => {
-      state.newAndExclusiveProductsLoading = false;
     }
   }
 });
@@ -90,15 +42,5 @@ export const selectUnderABuckProducts = (state: RootState) =>
   state.product.underABuckProducts;
 export const selectUnderABuckProductsLoading = (state: RootState) =>
   state.product.underABuckProductsLoading;
-
-export const selectUniqueIdeaProducts = (state: RootState) =>
-  state.product.uniqueIdeaProducts;
-export const selectUniqueIdeaProductsLoading = (state: RootState) =>
-  state.product.uniqueIdeaProductsLoading;
-
-export const selectNewAndExclusiveProducts = (state: RootState) =>
-  state.product.newAndExclusiveProducts;
-export const selectNewAndExclusiveProductsLoading = (state: RootState) =>
-  state.product.newAndExclusiveProductsLoading;
 
 export const productReducer = productSlice.reducer;
