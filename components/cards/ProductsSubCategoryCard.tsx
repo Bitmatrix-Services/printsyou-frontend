@@ -21,8 +21,8 @@ const ProductsSubCategoryCard: FC<ProductsSubCategoryCardProps> = ({
       type="button"
       className={`tp-product-sub-cat product-card h-full w-full text-start block relative bg-white border border-[#d9dee4]  `}
     >
-      <div className="py-4 flex flex-col 2xl:flex-row items-center px-6 gap-2 ">
-        <figure className="  flex justify-center sm:top-0 sm:left-0 sm:translate-x-0 relative min-w-[7rem] w-28 h-28 sm:min-w-[13.125rem] sm:w-[13.125rem] sm:h-[13.125rem] 2xl:scale-105 2xl:-translate-x-11 ">
+      <div className="py-4 flex flex-col items-center px-6 gap-2 ">
+        <figure className="  flex justify-center sm:top-0 sm:left-0 sm:translate-x-0 relative min-w-[7rem] w-28 h-28 sm:min-w-[13.125rem] sm:w-[13.125rem] sm:h-[13.125rem]  ">
           <Image
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-contain md:w-[60%] lg:w-[85%] "

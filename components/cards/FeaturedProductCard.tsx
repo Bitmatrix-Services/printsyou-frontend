@@ -104,7 +104,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <div className="deno font-semibold text-lg">$</div>
                 <div className="value font-semibold text-2xl font-oswald">
                   <span className="sale">
-                    {product.priceGrids && product.priceGrids[0]?.price}
+                    {product?.priceGrids && product?.priceGrids[0]?.price}
                   </span>
                 </div>
               </div>
@@ -185,8 +185,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   )}
                 <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
-                    {product.additionalRows
-                      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                    {product?.additionalRows
+                      ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                       .map(row => (
                         <li key={row.id}>
                           <span className="pt-[2px] block">
@@ -236,7 +236,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 </div>
                 <div className="gallery-container">
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                    {product.productImages?.map((imageUrl, index) => (
+                    {product?.productImages?.map((imageUrl, index) => (
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
@@ -290,7 +290,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <AccordionDetails>
                   <div className="overflow-auto">
                     <div className="w-full">
-                      {product.additionalFieldProductValues?.map(row => (
+                      {product?.additionalFieldProductValues?.map(row => (
                         <div className="px-4 pb-4 flex" key={row.fieldValue}>
                           <span className="label flex-1">
                             <b className="brown">{row.fieldName}: </b>

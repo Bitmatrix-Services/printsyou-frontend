@@ -8,7 +8,7 @@ const HowToOrderPage = () => {
       <PageHeader pageTitle={'Specials and Sales'} />
 
       <div className="py-12">
-        <ProductsSection isModal={false} isSale={true} isContainer={true} />
+        <ProductsSection isModal={false} onSale={true} isContainer={true} />
       </div>
     </>
   );
