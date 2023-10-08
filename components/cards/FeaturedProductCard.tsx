@@ -21,7 +21,7 @@ const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
 interface FeaturedProductCardProps {
-  product: Product;
+  product?: Product;
   isModal?: boolean;
   onSale?: boolean;
 }
@@ -44,7 +44,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 product: JSON.stringify(product)
               }
             },
-            `product/${product.id}`
+            `product/${product?.id}`
           )
         }
         className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"
@@ -70,18 +70,18 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
-              src={getProductImage(product.productImages)}
+              src={getProductImage(product?.productImages)}
               alt="..."
             />
           </div>
           {isModal && (
             <div className="block mt-4 text-xl font-extrabold">
-              {product.productName}
+              {product?.productName}
             </div>
           )}
           {!isModal && (
             <div className="block mt-4 text-[18px] font-semibold text-[#303541]">
-              {product.productName}
+              {product?.productName}
             </div>
           )}
         </div>
@@ -138,10 +138,10 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <div className="max-w-sm">
                   <h6 className="mb-2 text-sm font-semibold text-body">
                     ITEM#:{' '}
-                    <span className="text-primary-500">{product.sku}</span>
+                    <span className="text-primary-500">{product?.sku}</span>
                   </h6>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize">
-                    {product.prefix} {product.productName}
+                    {product?.prefix} {product?.productName}
                   </h3>
                 </div>
                 {product?.priceGrids &&
@@ -220,14 +220,14 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
                     <a
                       className="cursor-pointer"
-                      data-src={getProductImage(product.productImages)}
+                      data-src={getProductImage(product?.productImages)}
                     >
                       <span className="block relative aspect-square">
                         <Image
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={getProductImage(product.productImages)}
+                          src={getProductImage(product?.productImages)}
                           alt={`big image`}
                         />
                       </span>
@@ -270,9 +270,10 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <AccordionDetails>
                   <div className="px-4">
                     <ul className="text-sm space-y-1 pb-4 pl-5 list-disc marker:text-[#febe40] marker:text-lg">
-                      {getProductDescription(product.productDescription)?.map(
-                        row => <li key={row}>{row}</li>
-                      )}
+                      {product &&
+                        getProductDescription(product.productDescription)?.map(
+                          row => <li key={row}>{row}</li>
+                        )}
                     </ul>
                   </div>
                 </AccordionDetails>
