@@ -18,3 +18,13 @@ export const getProductDescription = (productDescription: string) => {
 
   return textArray;
 };
+
+export const getProductPriceGridTable = (productDescription: string) => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = productDescription;
+
+  const heading = tempDiv.querySelector('p');
+  const priceTable = tempDiv.querySelector('table');
+
+  return {heading, priceTable};
+};

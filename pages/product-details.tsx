@@ -6,8 +6,13 @@ import dynamic from 'next/dynamic';
 import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
 import lgZoom from 'lightgallery/plugins/zoom';
 import {useRouter} from 'next/router';
+import sanitizeHtml from 'sanitize-html';
 
-import {getProductDescription, getProductImage} from '@utils/utils';
+import {
+  getProductDescription,
+  getProductImage,
+  getProductPriceGridTable
+} from '@utils/utils';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -103,42 +108,62 @@ const ProductDetails = () => {
                 </ul>
               </div>
               {product?.priceGrids &&
-                [...product.priceGrids].sort(
-                  (a, b) => a.countFrom - b.countFrom
-                )[0].countFrom !== 0 && (
-                  <div className="mt-4 overflow-auto">
-                    <table className="w-full">
-                      <tbody>
-                        <tr className="one">
-                          {[...product.priceGrids]
+              [...product.priceGrids].sort(
+                (a, b) => a.countFrom - b.countFrom
+              )[0].countFrom !== 0 ? (
+                <div className="mt-4 overflow-auto">
+                  <table className="w-full">
+                    <tbody>
+                      <tr className="one">
+                        {[...product.priceGrids]
+                          .sort((a, b) => a.countFrom - b.countFrom)
+                          .map(row => (
+                            <td className="headcell" key={row.id}>
+                              {row.countFrom}
+                            </td>
+                          ))}
+                      </tr>
+                      <tr className="two">
+                        {product?.priceGrids &&
+                          [...product.priceGrids]
                             .sort((a, b) => a.countFrom - b.countFrom)
                             .map(row => (
-                              <td className="headcell" key={row.id}>
-                                {row.countFrom}
+                              <td className="pricecell" key={row.id}>
+                                <div className="prive-value flex items-end justify-center gap-1">
+                                  <div className="deno font-semibold text-xl">
+                                    $
+                                  </div>
+                                  <div className="value font-semibold text-3xl font-oswald">
+                                    <span className="sale">{row.price}</span>
+                                  </div>
+                                </div>
                               </td>
                             ))}
-                        </tr>
-                        <tr className="two">
-                          {product?.priceGrids &&
-                            [...product.priceGrids]
-                              .sort((a, b) => a.countFrom - b.countFrom)
-                              .map(row => (
-                                <td className="pricecell" key={row.id}>
-                                  <div className="prive-value flex items-end justify-center gap-1">
-                                    <div className="deno font-semibold text-xl">
-                                      $
-                                    </div>
-                                    <div className="value font-semibold text-3xl font-oswald">
-                                      <span className="sale">{row.price}</span>
-                                    </div>
-                                  </div>
-                                </td>
-                              ))}
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(
+                        getProductPriceGridTable(product.productDescription)
+                          ?.heading?.outerHTML ?? ''
+                      )
+                    }}
+                  ></div>
+                  <div
+                    className="border"
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(
+                        getProductPriceGridTable(product.productDescription)
+                          ?.priceTable?.outerHTML ?? ''
+                      )
+                    }}
+                  ></div>
+                </>
+              )}
               <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                 <ul className="text-xs text-mute3 font-bold product-card__categories">
                   {product.additionalRows

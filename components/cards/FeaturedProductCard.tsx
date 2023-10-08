@@ -9,19 +9,24 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
 import {useRouter} from 'next/router';
+import sanitizeHtml from 'sanitize-html';
 
 import {Product} from '@store/slices/product/product';
 
 // icons
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
-import {getProductDescription, getProductImage} from '@utils/utils';
+import {
+  getProductDescription,
+  getProductImage,
+  getProductPriceGridTable
+} from '@utils/utils';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
 interface FeaturedProductCardProps {
-  product?: Product;
+  product: Product;
   isModal?: boolean;
   onSale?: boolean;
 }
@@ -32,6 +37,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
 }) => {
   const router = useRouter();
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
+
+  console.log('product', product);
 
   return (
     <>
@@ -144,45 +151,63 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     {product?.prefix} {product?.productName}
                   </h3>
                 </div>
-                {product?.priceGrids &&
+                <div className="mt-4 overflow-auto">
+                  {product?.priceGrids &&
                   [...product.priceGrids].sort(
                     (a, b) => a.countFrom - b.countFrom
-                  )[0].countFrom !== 0 && (
-                    <div className="mt-4 overflow-auto">
-                      <table className="w-full">
-                        <tbody>
-                          <tr className="one">
-                            {[...product.priceGrids]
+                  )[0].countFrom !== 0 ? (
+                    <table className="w-full">
+                      <tbody>
+                        <tr className="one">
+                          {[...product.priceGrids]
+                            .sort((a, b) => a.countFrom - b.countFrom)
+                            .map(row => (
+                              <td className="headcell" key={row.id}>
+                                {row.countFrom}
+                              </td>
+                            ))}
+                        </tr>
+                        <tr className="two">
+                          {product?.priceGrids &&
+                            [...product.priceGrids]
                               .sort((a, b) => a.countFrom - b.countFrom)
                               .map(row => (
-                                <td className="headcell" key={row.id}>
-                                  {row.countFrom}
+                                <td className="pricecell" key={row.id}>
+                                  <div className="prive-value flex items-end justify-center gap-1">
+                                    <div className="deno font-semibold text-xl">
+                                      $
+                                    </div>
+                                    <div className="value font-semibold text-3xl font-oswald">
+                                      <span className="sale">{row.price}</span>
+                                    </div>
+                                  </div>
                                 </td>
                               ))}
-                          </tr>
-                          <tr className="two">
-                            {product?.priceGrids &&
-                              [...product.priceGrids]
-                                .sort((a, b) => a.countFrom - b.countFrom)
-                                .map(row => (
-                                  <td className="pricecell" key={row.id}>
-                                    <div className="prive-value flex items-end justify-center gap-1">
-                                      <div className="deno font-semibold text-xl">
-                                        $
-                                      </div>
-                                      <div className="value font-semibold text-3xl font-oswald">
-                                        <span className="sale">
-                                          {row.price}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                ))}
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                  ) : (
+                    <>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(
+                            getProductPriceGridTable(product.productDescription)
+                              ?.heading?.outerHTML ?? ''
+                          )
+                        }}
+                      ></div>
+                      <div
+                        className="border"
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(
+                            getProductPriceGridTable(product.productDescription)
+                              ?.priceTable?.outerHTML ?? ''
+                          )
+                        }}
+                      ></div>
+                    </>
                   )}
+                </div>
                 <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
                     {product?.additionalRows
