@@ -174,8 +174,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 </div>
                 <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
-                    {product.additionalRows
-                      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                    {product?.additionalRows
+                      ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                       .map(row => (
                         <li key={row.id}>
                           <span className="pt-[2px] block">
