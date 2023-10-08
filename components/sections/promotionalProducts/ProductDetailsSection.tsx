@@ -55,7 +55,7 @@ const ProductDetailsSection = () => {
           </div>
         </div>
         <ProductSubCategoriesSection />
-        <ProductsSection isModal={true} isSale={false} isContainer={false} />
+        <ProductsSection isModal={true} onSale={false} isContainer={false} />
       </div>
     </div>
   );

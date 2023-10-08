@@ -51,7 +51,6 @@ const ProductsSection: FC<ProductsSectionProps> = ({
                 key={item}
                 isModal={isModal}
                 onSale={onSale}
-                product={''}
               />
             ))}
           </div>
@@ -86,7 +85,6 @@ const ProductsSection: FC<ProductsSectionProps> = ({
                 key={item}
                 isModal={isModal}
                 onSale={onSale}
-                product={''}
               />
             ))}
           </div>

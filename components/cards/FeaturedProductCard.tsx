@@ -8,7 +8,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
-import sanitizeHtml from 'sanitize-html';
 
 import {Product} from '@store/slices/product/product';
 
@@ -20,7 +19,7 @@ const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
 interface FeaturedProductCardProps {
-  product: Product;
+  product?: Product;
   isModal?: boolean;
   onSale?: boolean;
 }
@@ -32,7 +31,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   const [open, setOpen] = useState(false);
 
   const productImageUrl =
-    product.productImages && product.productImages[0]
+    product?.productImages && product.productImages[0]
       ? product.productImages[0]
       : 'https://www.identity-links.com/img/ucart/images/pimage/147330/main.jpg';
 
@@ -72,7 +71,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
           </Link>
           {isModal && (
             <Link href="#!" className="block mt-4 text-xl font-extrabold">
-              {product.productName}
+              {product?.productName}
             </Link>
           )}
           {!isModal && (
@@ -80,7 +79,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               href="#!"
               className="block mt-4 text-[18px] font-semibold text-[#303541]"
             >
-              {product.productName}
+              {product?.productName}
             </Link>
           )}
         </div>
@@ -103,7 +102,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <div className="deno font-semibold text-lg">$</div>
                 <div className="value font-semibold text-2xl font-oswald">
                   <span className="sale">
-                    {product.priceGrids && product.priceGrids[0]?.price}
+                    {product?.priceGrids && product?.priceGrids[0]?.price}
                   </span>
                 </div>
               </div>
@@ -136,15 +135,15 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     ITEM#: <span className="text-primary-500">POP113</span>
                   </h6>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize">
-                    Promotional {product.productName}
+                    Promotional {product?.productName}
                   </h3>
                 </div>
                 <div className="mt-4 overflow-auto">
                   <table className="w-full">
                     <tbody>
                       <tr className="one">
-                        {product.priceGrids &&
-                          [...product.priceGrids]
+                        {product?.priceGrids &&
+                          [...product?.priceGrids]
                             .sort((a, b) => a.countFrom - b.countFrom)
                             .map(row => (
                               <td className="headcell" key={row.id}>
@@ -153,8 +152,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                             ))}
                       </tr>
                       <tr className="two">
-                        {product.priceGrids &&
-                          [...product.priceGrids]
+                        {product?.priceGrids &&
+                          [...product?.priceGrids]
                             .sort((a, b) => a.countFrom - b.countFrom)
                             .map(row => (
                               <td className="pricecell" key={row.id}>
@@ -222,7 +221,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 </div>
                 <div className="gallery-container">
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                    {product.productImages?.map((imageUrl, index) => (
+                    {product?.productImages?.map((imageUrl, index) => (
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
@@ -304,7 +303,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <AccordionDetails>
                   <div className="overflow-auto">
                     <div className="w-full">
-                      {product.additionalFieldProductValues?.map(row => (
+                      {product?.additionalFieldProductValues?.map(row => (
                         <div className="px-4 pb-4 flex" key={row.fieldValue}>
                           <span className="label flex-1">
                             <b className="brown">{row.fieldName}: </b>
