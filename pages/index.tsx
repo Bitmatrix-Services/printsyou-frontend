@@ -34,7 +34,7 @@ export default function Home() {
       <FeaturedProductsSection
         title="Under"
         subTitle="a buck"
-        subTitleColor="#58c6f1"
+        subTitleColor="text-[#56dabf]"
         products={underABuckProducts}
       />
       {/* unique ideas section */}
