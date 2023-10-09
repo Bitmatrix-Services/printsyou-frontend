@@ -62,7 +62,7 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
             </span>
             <span
               className={`${subTitleColor && 'font-extrabold'} ${
-                subTitleColor && subTitleColor 
+                subTitleColor && subTitleColor
               }`}
             >
               {subTitle}
