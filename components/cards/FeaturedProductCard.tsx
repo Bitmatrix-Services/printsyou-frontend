@@ -187,42 +187,47 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       </tbody>
                     </table>
                   ) : (
-                    <>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(
-                            getProductPriceGridTable(product.productDescription)
-                              ?.heading?.outerHTML ?? ''
-                          )
-                        }}
-                      ></div>
-                      <div
-                        className="border"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(
-                            getProductPriceGridTable(product.productDescription)
-                              ?.priceTable?.outerHTML ?? ''
-                          )
-                        }}
-                      ></div>
-                    </>
+                    product && (
+                      <>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(
+                              getProductPriceGridTable(
+                                product.productDescription
+                              )?.heading?.outerHTML ?? ''
+                            )
+                          }}
+                        ></div>
+                        <div
+                          className="border"
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(
+                              getProductPriceGridTable(
+                                product.productDescription
+                              )?.priceTable?.outerHTML ?? ''
+                            )
+                          }}
+                        ></div>
+                      </>
+                    )
                   )}
                 </div>
                 <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
-                    {[...product?.additionalRows]
-                      ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                      .map(row => (
-                        <li key={row.id}>
-                          <span className="pt-[2px] block">
-                            Please add{' '}
-                            <span className="text-red-500">
-                              ${row.priceDiff}
-                            </span>{' '}
-                            {row.name}
-                          </span>
-                        </li>
-                      ))}
+                    {product?.additionalRows &&
+                      [...product.additionalRows]
+                        ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                        .map(row => (
+                          <li key={row.id}>
+                            <span className="pt-[2px] block">
+                              Please add{' '}
+                              <span className="text-red-500">
+                                ${row.priceDiff}
+                              </span>{' '}
+                              {row.name}
+                            </span>
+                          </li>
+                        ))}
                   </ul>
                 </div>
                 <div className="mt-4 flex flex-col sm:flex-row gap-3">
