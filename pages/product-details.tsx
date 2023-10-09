@@ -149,7 +149,14 @@ const ProductDetails = () => {
                     dangerouslySetInnerHTML={{
                       __html: sanitizeHtml(
                         getProductPriceGridTable(product.productDescription)
-                          ?.heading?.outerHTML ?? ''
+                          ?.heading?.outerHTML ?? '',
+                        {
+                          allowedTags: ['p', 'span', 'td', 'b'],
+                          allowedAttributes: {
+                            span: ['style'],
+                            td: ['style']
+                          }
+                        }
                       )
                     }}
                   ></div>
@@ -158,7 +165,22 @@ const ProductDetails = () => {
                     dangerouslySetInnerHTML={{
                       __html: sanitizeHtml(
                         getProductPriceGridTable(product.productDescription)
-                          ?.priceTable?.outerHTML ?? ''
+                          ?.priceTable?.outerHTML ?? '',
+                        {
+                          allowedTags: [
+                            'table',
+                            'tbody',
+                            'tr',
+                            'span',
+                            'td',
+                            'br',
+                            'b'
+                          ],
+                          allowedAttributes: {
+                            span: ['style'],
+                            td: ['style']
+                          }
+                        }
                       )
                     }}
                   ></div>
