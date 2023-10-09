@@ -82,7 +82,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
             />
           </div>
           {isModal && (
-            <div className="block mt-4 text-xl font-extrabold">
+            <div className="block mt-4 text-xl font-extrabold min-h-[60px]">
               {product?.productName}
             </div>
           )}

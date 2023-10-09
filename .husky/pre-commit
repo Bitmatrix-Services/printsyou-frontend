@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 pnpm lint
-pnpm prettier . --check
+pnpm prettier . --check && git add .
 # pnpm build
