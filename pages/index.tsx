@@ -8,7 +8,9 @@ import FeaturedProductsSection from '@components/sections/FeaturedProductsSectio
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
   getUnderABuckProducts,
-  selectUnderABuckProducts
+  selectUnderABuckProducts,
+  getNewAndExclusiveProducts,
+  selectNewAndExclusiveProducts
 } from '@store/slices/product/product.slice';
 import {getPromotionalCategories} from '@store/slices/category/catgory.slice';
 
@@ -16,10 +18,12 @@ export default function Home() {
   const dispatch = useAppDispatch();
 
   const underABuckProducts = useAppSelector(selectUnderABuckProducts);
+  const newAndExclusiveProducts = useAppSelector(selectNewAndExclusiveProducts);
 
   useEffect(() => {
     dispatch(getPromotionalCategories());
     dispatch(getUnderABuckProducts());
+    dispatch(getNewAndExclusiveProducts());
   }, []);
 
   return (
@@ -45,7 +49,7 @@ export default function Home() {
         title="New"
         titleColor="text-primary-600"
         subTitle="& Exclusive"
-        products={underABuckProducts}
+        products={newAndExclusiveProducts}
       />
       <AdvantageSection />
       <WhyIdentitySection />
