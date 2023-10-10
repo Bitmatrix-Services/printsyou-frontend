@@ -14,14 +14,14 @@ const INITIAL_STATE: ProductInitialState = {
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
   async () => {
-    const res = await http.get(`product/underBuck`);
+    const res = await http.get(`/product/underBuck`);
     return res?.data.payload;
   }
 );
 export const getNewAndExclusiveProducts = createAsyncThunk(
   'product/newAndExclusive',
   async () => {
-    const res = await http.get(`product/newAndExclusive`);
+    const res = await http.get(`/product/newAndExclusive`);
     return res?.data.payload;
   }
 );

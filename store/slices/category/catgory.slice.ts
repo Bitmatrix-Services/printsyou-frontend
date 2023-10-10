@@ -15,7 +15,7 @@ const INITIAL_STATE: CategoryInitialState = {
 export const getAllCategoryList = createAsyncThunk(
   'category/getAllCategoryList',
   async () => {
-    const res = await http.get(`category/all`);
+    const res = await http.get(`/category/all`);
     return res?.data.payload;
   }
 );
@@ -23,7 +23,7 @@ export const getAllCategoryList = createAsyncThunk(
 export const getPromotionalCategories = createAsyncThunk(
   'product/getPromotionalCategories',
   async () => {
-    const res = await http.get(`category/promotionalCategory`);
+    const res = await http.get(`/category/promotionalCategory`);
     return res?.data.payload;
   }
 );
