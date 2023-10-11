@@ -37,10 +37,15 @@ export interface AdditionalRows {
   priceDiff: number;
   sequenceNumber: number;
 }
+export interface ProductImages {
+  imageUrl: string;
+  sequenceNumber: number;
+}
 
 export interface Product {
   id: string;
   productName: string;
+  uproductName: string;
   sku: string;
   price: ProductPrice[];
   images: ProductImage[];
@@ -52,7 +57,7 @@ export interface Product {
   productDescription: string;
   additionalRow: AdditionalRow[];
   priceGrids: PriceGrids[];
-  productImages?: string[];
+  productImages?: ProductImages[];
   additionalFieldProductValues: AdditionalFieldProductValues[];
   additionalRows: AdditionalRows[];
 }

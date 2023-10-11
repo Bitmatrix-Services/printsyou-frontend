@@ -1,5 +1,6 @@
-import React from 'react';
-import ProductsSubCategoryCard from '@components/cards/ProductsSubCategoryCard';
+import React, {FC} from 'react';
+import SubCategoryCard from '@components/cards/SubCategoryCard';
+import {Category} from '@store/slices/category/category';
 
 export const products = [
   {
@@ -247,14 +248,20 @@ export const products = [
   }
 ];
 
-const ProductSubCategoriesSection = () => {
+interface SubCategoriesSectionProps {
+  subCategoryList: Category[];
+}
+
+const SubCategoriesSection: FC<SubCategoriesSectionProps> = ({
+  subCategoryList
+}) => {
   return (
     <>
       <div>
         <ul className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 xl:gap-4 2xl:gap-10">
-          {products.map((product, index) => (
-            <li key={index} className="mt-16 sm:mt-0">
-              <ProductsSubCategoryCard product={product} />
+          {subCategoryList.map((category, index) => (
+            <li key={category.id} className="mt-16 sm:mt-0">
+              <SubCategoryCard category={category} />
             </li>
           ))}
         </ul>
@@ -263,4 +270,4 @@ const ProductSubCategoriesSection = () => {
   );
 };
 
-export default ProductSubCategoriesSection;
+export default SubCategoriesSection;

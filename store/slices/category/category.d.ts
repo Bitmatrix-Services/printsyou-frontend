@@ -8,6 +8,7 @@ export interface CategoryInitialState {
 export type Category = {
   categoryName: string;
   id: string;
+  categoryDescription: string;
   imageUrl: string;
   level: string;
   ucategoryName: string;

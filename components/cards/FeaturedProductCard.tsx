@@ -16,11 +16,7 @@ import {Product} from '@store/slices/product/product';
 // icons
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  getProductDescription,
-  getProductImage,
-  getProductPriceGridTable
-} from '@utils/utils';
+import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -38,22 +34,10 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   const router = useRouter();
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
 
-  console.log('product', product);
-
   return (
     <>
       <div
-        onClick={() =>
-          router.push(
-            {
-              pathname: 'product-details',
-              query: {
-                product: JSON.stringify(product)
-              }
-            },
-            `product/${product?.id}`
-          )
-        }
+        onClick={() => router.push(`products/${product.uproductName}`)}
         className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"
       >
         <div className="p-6">
@@ -77,8 +61,12 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
-              src={getProductImage(product?.productImages)}
-              alt="..."
+              src={
+                product?.productImages && product.productImages[0]
+                  ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                  : '/assets/logo.png'
+              }
+              alt="product"
             />
           </div>
           {isModal && (
@@ -272,23 +260,29 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   <LightGallery mode="lg-fade" plugins={[lgZoom]}>
                     <a
                       className="cursor-pointer"
-                      data-src={getProductImage(product?.productImages)}
+                      data-src={
+                        product?.productImages && product.productImages[0]
+                      }
                     >
                       <span className="block relative aspect-square">
                         <Image
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={getProductImage(product?.productImages)}
-                          alt={`big image`}
+                          src={
+                            product?.productImages && product.productImages[0]
+                              ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                              : '/assets/logo.png'
+                          }
+                          alt={`product`}
                         />
                       </span>
                     </a>
                   </LightGallery>
                 </div>
                 <div className="gallery-container">
-                  <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                    {product?.productImages?.map((imageUrl, index) => (
+                  {/* <LightGallery mode="lg-fade" plugins={[lgZoom]}>
+                    {product?.productImages?.map((image, index) => (
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
@@ -305,7 +299,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                         </span>
                       </a>
                     ))}
-                  </LightGallery>
+                  </LightGallery> */}
                 </div>
               </figure>
             </div>
