@@ -17,7 +17,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
       <div className="bg-white footer pt-10 lg:pt-20">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
-            <Sidebar />
+            <Sidebar selectedCategory={category} />
             <CateoryDetailsSection category={category} />
           </div>
         </Container>
