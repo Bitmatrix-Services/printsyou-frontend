@@ -14,7 +14,7 @@ interface CategoryDetailsProps {
 const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
   return (
     <main>
-      <div className="bg-white footer pt-10 lg:pt-20">
+      <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
             <Sidebar selectedCategory={category} />
@@ -29,10 +29,8 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  // const uCategoryName = context.req.url;
   const {data} = await http.get(
-    // `/category/uCategory?uCategoryName=${uCategoryName}`
-    `category/uCategory?uCategoryName=desktop-office`
+    `/category/uCategory?uCategoryName=${context.query.ucategoryName}`
   );
 
   let category = data.payload ?? {};
