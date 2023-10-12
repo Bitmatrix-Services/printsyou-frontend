@@ -1,8 +1,10 @@
 export interface ProductInitialState {
-  underABuckProducts: Product[];
   underABuckProductsLoading: boolean;
-  newAndExclusiveProducts: Product[];
+  underABuckProducts: Product[];
   newAndExclusiveProductsLoading: boolean;
+  newAndExclusiveProducts: Product[];
+  uniqueIdeaProductsLoading: boolean;
+  uniqueIdeaProducts: Product[];
 }
 
 export interface ProductPrice {

@@ -10,7 +10,9 @@ import {
   getUnderABuckProducts,
   selectUnderABuckProducts,
   getNewAndExclusiveProducts,
-  selectNewAndExclusiveProducts
+  selectNewAndExclusiveProducts,
+  getUniqueIdeaProducts,
+  selectUniqueIdeaProducts
 } from '@store/slices/product/product.slice';
 import {getPromotionalCategories} from '@store/slices/category/catgory.slice';
 
@@ -19,11 +21,13 @@ export default function Home() {
 
   const underABuckProducts = useAppSelector(selectUnderABuckProducts);
   const newAndExclusiveProducts = useAppSelector(selectNewAndExclusiveProducts);
+  const uniqueIdeaProducts = useAppSelector(selectUniqueIdeaProducts);
 
   useEffect(() => {
     dispatch(getPromotionalCategories());
     dispatch(getUnderABuckProducts());
     dispatch(getNewAndExclusiveProducts());
+    dispatch(getUniqueIdeaProducts());
   }, []);
 
   return (
@@ -42,7 +46,7 @@ export default function Home() {
         title="Unique"
         titleColor="text-red-500"
         subTitle="Ideas"
-        products={underABuckProducts}
+        products={uniqueIdeaProducts}
       />
       {/*New & Exclusive */}
       <FeaturedProductsSection
