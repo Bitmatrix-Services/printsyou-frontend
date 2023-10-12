@@ -10,7 +10,7 @@ const INITIAL_STATE: ProductInitialState = {
   newAndExclusiveProducts: [],
   newAndExclusiveProductsLoading: false,
   uniqueIdeaProducts: [],
-  uniqueIdeaProductsLoading: false,
+  uniqueIdeaProductsLoading: false
 };
 
 export const getUnderABuckProducts = createAsyncThunk(
@@ -55,7 +55,7 @@ export const productSlice = createSlice({
     [getUnderABuckProducts.rejected.type]: state => {
       state.underABuckProductsLoading = false;
     },
-    
+
     [getNewAndExclusiveProducts.pending.type]: state => {
       state.newAndExclusiveProductsLoading = true;
     },
@@ -82,7 +82,7 @@ export const productSlice = createSlice({
     },
     [getUniqueIdeaProducts.rejected.type]: state => {
       state.uniqueIdeaProductsLoading = false;
-    },
+    }
   }
 });
 
@@ -95,10 +95,10 @@ export const selectNewAndExclusiveProducts = (state: RootState) =>
   state.product.newAndExclusiveProducts;
 export const selectNewAndExclusiveProductssLoading = (state: RootState) =>
   state.product.newAndExclusiveProductsLoading;
-  
+
 export const selectUniqueIdeaProducts = (state: RootState) =>
-state.product.uniqueIdeaProducts;
+  state.product.uniqueIdeaProducts;
 export const selectUniqueIdeaProductsLoading = (state: RootState) =>
-state.product.uniqueIdeaProductsLoading;
+  state.product.uniqueIdeaProductsLoading;
 
 export const productReducer = productSlice.reducer;
