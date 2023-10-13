@@ -276,3 +276,7 @@
 .css-15v22id-MuiAccordionDetails-root {
   padding: 0;
 }
+
+.bullet-icon {
+  background: url(/assets/icon-bullet-orange) center no-repeat;
+}

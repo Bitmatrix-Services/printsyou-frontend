@@ -3,7 +3,6 @@ import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import {CategoryInitialState, Category} from './category';
 import {http} from 'services/axios.service';
 import {RootState} from '@store/store';
-import {Product} from '../product/product';
 
 const INITIAL_STATE: CategoryInitialState = {
   categoryList: [],
@@ -23,7 +22,7 @@ export const getAllCategoryList = createAsyncThunk(
 export const getPromotionalCategories = createAsyncThunk(
   'product/getPromotionalCategories',
   async () => {
-    const res = await http.get(`/category/promotionalCategory`);
+    const res = await http.get(`/category/byTag?tag=promotional`);
     return res?.data.payload;
   }
 );
@@ -51,7 +50,7 @@ export const categorySlice = createSlice({
     },
     [getPromotionalCategories.fulfilled.type]: (
       state,
-      action: PayloadAction<Product[]>
+      action: PayloadAction<Category[]>
     ) => {
       state.promotionalCategories = action.payload;
       state.promotionalCategoriesLoading = false;
