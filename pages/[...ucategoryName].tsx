@@ -29,11 +29,16 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const {data} = await http.get(
-    `/category/uCategory?uCategoryName=${context.query.ucategoryName}`
-  );
+  const uCategoryName = context.params?.ucategoryName;
 
-  let category = data.payload ?? {};
+  let category = {};
+
+  if (Array.isArray(uCategoryName)) {
+    const {data} = await http.get(
+      `category/uCategory?uCategoryName=${uCategoryName.join('/')}`
+    );
+    category = data.payload;
+  }
   return {props: {category}};
 };
 
