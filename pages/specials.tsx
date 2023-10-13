@@ -1,17 +1,23 @@
 import React from 'react';
+
 import PageHeader from '@components/globals/PageHeader';
 import ProductsSection from '@components/sections/specials/ProductsSection';
 
-const HowToOrderPage = () => {
+const Specials = () => {
   return (
     <>
       <PageHeader pageTitle={'Specials and Sales'} />
 
       <div className="py-12">
-        <ProductsSection categoryId='' isModal={false} onSale={true} isContainer={true} />
+        <ProductsSection
+          categoryId=""
+          isModal={false}
+          onSale={true}
+          isContainer={true}
+        />
       </div>
     </>
   );
 };
 
-export default HowToOrderPage;
+export default Specials;
