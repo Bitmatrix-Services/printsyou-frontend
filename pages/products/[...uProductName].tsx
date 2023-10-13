@@ -1,30 +1,25 @@
-import React from 'react';
+import React, {FC} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
 import lgZoom from 'lightgallery/plugins/zoom';
-import {useRouter} from 'next/router';
 import sanitizeHtml from 'sanitize-html';
 
-import {
-  getProductDescription,
-  getProductImage,
-  getProductPriceGridTable
-} from '@utils/utils';
+import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
+import {GetServerSidePropsContext} from 'next';
+import {Product} from '@store/slices/product/product';
+import {http} from 'services/axios.service';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
+interface ProductDetailsProps {
+  product: Product;
+}
 
-const ProductDetails = () => {
-  const {query} = useRouter();
-
-  const product = JSON.parse(query.product);
-
-  console.log('product', product);
-
+const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   return (
     <>
       <Container>
@@ -62,24 +57,32 @@ const ProductDetails = () => {
                   width={437}
                   height={281}
                   className="object-contain w-[85%]"
-                  src={getProductImage(product.productImages)}
+                  src={
+                    product?.productImages && product.productImages[0]
+                      ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                      : '/assets/logo.png'
+                  }
                   alt="..."
                 />
               </div>
               <div className="gallery-container">
                 <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                  {product.productImages?.map((imageUrl, index) => (
+                  {product.productImages?.map((images, index) => (
                     <a
-                      key={index}
+                      key={images.imageUrl}
                       className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
-                      data-src={imageUrl}
+                      data-src={images}
                     >
                       <span className="block relative aspect-square border border-[#eceef1]">
                         <Image
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={imageUrl}
+                          src={
+                            images
+                              ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${images.imageUrl}`
+                              : '/assets/logo.png'
+                          }
                           alt={`gallery-image-${index}`}
                         />
                       </span>
@@ -238,6 +241,18 @@ const ProductDetails = () => {
       </Container>
     </>
   );
+};
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  // console.log('context', context.req.url);
+  const {data} = await http.get(
+    '/product/byCategory/00453f82-9533-4f1d-a8a7-e1265b9c3acc'
+  );
+
+  let product = data.payload.content ?? {};
+  return {props: {product}};
 };
 
 export default ProductDetails;

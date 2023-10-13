@@ -1,9 +1,3 @@
-export const getProductImage = (productImages: string[] | undefined) => {
-  return productImages && productImages[0]
-    ? productImages[0]
-    : '/assets/logo.png';
-};
-
 export const getProductDescription = (productDescription: string) => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = productDescription;
@@ -27,4 +21,22 @@ export const getProductPriceGridTable = (productDescription: string) => {
   const priceTable = tempDiv.querySelector('table');
 
   return {heading, priceTable};
+};
+
+export const getCateoryTitleAndDescription = (cateoryDescription: string) => {
+  if (document) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = cateoryDescription;
+
+    const title = tempDiv.querySelector('h1')?.textContent;
+    const pElements = tempDiv.querySelectorAll('p');
+
+    const descriptionList: string[] = [];
+
+    pElements?.forEach(p => {
+      if (p.textContent) descriptionList.push(p.textContent.trim());
+    });
+
+    return {title, descriptionList};
+  }
 };

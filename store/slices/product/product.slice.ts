@@ -8,20 +8,31 @@ const INITIAL_STATE: ProductInitialState = {
   underABuckProducts: [],
   underABuckProductsLoading: false,
   newAndExclusiveProducts: [],
-  newAndExclusiveProductsLoading: false
+  newAndExclusiveProductsLoading: false,
+  uniqueIdeaProducts: [],
+  uniqueIdeaProductsLoading: false
 };
 
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
   async () => {
-    const res = await http.get(`/product/underBuck`);
+    const res = await http.get(`/product/byTag?tag=buck`);
     return res?.data.payload;
   }
 );
+
 export const getNewAndExclusiveProducts = createAsyncThunk(
   'product/newAndExclusive',
   async () => {
-    const res = await http.get(`/product/newAndExclusive`);
+    const res = await http.get(`/product/byTag?tag=exclusive`);
+    return res?.data.payload;
+  }
+);
+
+export const getUniqueIdeaProducts = createAsyncThunk(
+  'product/getUniqueIdeaProducts',
+  async () => {
+    const res = await http.get(`/product/byTag?tag=idea`);
     return res?.data.payload;
   }
 );
@@ -44,6 +55,7 @@ export const productSlice = createSlice({
     [getUnderABuckProducts.rejected.type]: state => {
       state.underABuckProductsLoading = false;
     },
+
     [getNewAndExclusiveProducts.pending.type]: state => {
       state.newAndExclusiveProductsLoading = true;
     },
@@ -56,6 +68,20 @@ export const productSlice = createSlice({
     },
     [getNewAndExclusiveProducts.rejected.type]: state => {
       state.newAndExclusiveProductsLoading = false;
+    },
+
+    [getUniqueIdeaProducts.pending.type]: state => {
+      state.uniqueIdeaProductsLoading = true;
+    },
+    [getUniqueIdeaProducts.fulfilled.type]: (
+      state,
+      action: PayloadAction<Product[]>
+    ) => {
+      state.uniqueIdeaProducts = action.payload;
+      state.uniqueIdeaProductsLoading = false;
+    },
+    [getUniqueIdeaProducts.rejected.type]: state => {
+      state.uniqueIdeaProductsLoading = false;
     }
   }
 });
@@ -69,5 +95,10 @@ export const selectNewAndExclusiveProducts = (state: RootState) =>
   state.product.newAndExclusiveProducts;
 export const selectNewAndExclusiveProductssLoading = (state: RootState) =>
   state.product.newAndExclusiveProductsLoading;
+
+export const selectUniqueIdeaProducts = (state: RootState) =>
+  state.product.uniqueIdeaProducts;
+export const selectUniqueIdeaProductsLoading = (state: RootState) =>
+  state.product.uniqueIdeaProductsLoading;
 
 export const productReducer = productSlice.reducer;

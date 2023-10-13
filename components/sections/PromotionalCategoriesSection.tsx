@@ -2,8 +2,8 @@ import React from 'react';
 
 import Container from '../globals/Container';
 import CategoryCard from '../cards/CategoryCard';
-import {useAppSelector} from '@store/hooks';
-import {selectPromotionalCategories} from '@store/slices/category/catgory.slice';
+// import {useAppSelector} from '@store/hooks';
+// import {selectPromotionalCategories} from '@store/slices/category/catgory.slice';
 
 export const products = [
   {
@@ -252,8 +252,7 @@ export const products = [
 ];
 
 const PromotionalCategoriesSection = () => {
-  const promotionalCategories = useAppSelector(selectPromotionalCategories);
-  console.log('promotionalCategories', promotionalCategories);
+  //const promotionalCategories = useAppSelector(selectPromotionalCategories);
 
   return (
     <>
