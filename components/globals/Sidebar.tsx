@@ -14,7 +14,6 @@ interface SidebarProps {
 }
 
 const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
-
   return (
     <div className="xl:w-64 mb-6 xl:mb-0">
       {selectedCategory?.subCategories?.length > 0 && (
