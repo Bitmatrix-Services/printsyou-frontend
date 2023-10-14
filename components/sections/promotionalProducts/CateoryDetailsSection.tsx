@@ -1,42 +1,31 @@
 import React, {FC} from 'react';
-import Link from 'next/link';
-import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
-import sanitize from 'sanitize-html';
+import {useRouter} from 'next/router';
 
 import ProductSubCategoriesSection from './SubCategoriesSection';
 import ProductsSection from '../specials/ProductsSection';
 import {Category} from '@store/slices/category/category';
 import {getCateoryTitleAndDescription} from '@utils/utils';
+import Breadcrumb from '@components/globals/Breadcrumb';
 
 interface CategoryDetailsSectionProps {
   category: Category;
 }
 
 const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
+  const router = useRouter();
+
   return (
     <div className="flex-1">
       <div className="grid grid-cols-1 items-center promo-products">
         <div>
-          <div className="flex text-sm font-medium mb-6 items-center text-[#787b82]">
-            <Link href={'/'}>
-              <HomeIcon className="h-4 w-4 mr-1 text-[#febe40] " />
-            </Link>
-            <div>
-              <ChevronRightIcon className="h-3 w-3 mr-1 " />
-            </div>
-            <Link className=" mr-1 " href={'/'}>
-              Promotional Products
-            </Link>
-            <div>
-              <ChevronRightIcon className="h-3 w-3 mr-1 " />
-            </div>
-            <div
-              className="text-[#303541]"
-              dangerouslySetInnerHTML={{
-                __html: sanitize(category.categoryName)
-              }}
-            ></div>
-          </div>
+          <Breadcrumb
+            prefixTitle="Promotional Products"
+            queryParams={
+              Array.isArray(router.query?.ucategoryName)
+                ? router.query?.ucategoryName
+                : []
+            }
+          />
         </div>
         {category?.categoryDescription && (
           <div className="flex gap-2">
