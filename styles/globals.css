@@ -60,17 +60,17 @@
 
 /* megamenu */
 
-.megamenu:hover .megamenu-inner {
+.megamenu.show .megamenu-inner {
   opacity: 1;
   visibility: visible;
   pointer-events: all;
 }
 
-.megamenu:hover .megamenu-button {
+.megamenu.show .megamenu-button {
   @apply text-white;
 }
 
-.megamenu:hover .megamenu-button::after {
+.megamenu.show .megamenu-button::after {
   @apply h-full;
 }
 .MuiTablePagination-root {
