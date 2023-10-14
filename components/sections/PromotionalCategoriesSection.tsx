@@ -16,7 +16,7 @@ const PromotionalCategoriesSection = () => {
             <h2 className="mb-10 text-center text-body text-xl font-normal uppercase tracking-[3px]">
               POPULAR PROMOTIONAL PRODUCT CATEGORIES
             </h2>
-            <ul className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20">
+            <ul className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-16">
               {promotionalCategories?.map(category => (
                 <li key={category.id} className="mt-16 sm:mt-0">
                   <PromotionalCategoryCard category={category} />
