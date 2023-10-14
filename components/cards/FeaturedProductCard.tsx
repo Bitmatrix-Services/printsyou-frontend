@@ -69,16 +69,16 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               alt="product"
             />
           </div>
-          {isModal && (
-            <div className="block mt-4 text-xl font-extrabold min-h-[60px]">
-              {product?.productName}
-            </div>
-          )}
-          {!isModal && (
-            <div className="block mt-4 text-[18px] font-semibold text-[#303541]">
-              {product?.productName}
-            </div>
-          )}
+          <div
+            className={`block mt-4  ${
+              isModal
+                ? 'text-xl font-extrabold min-h-[60px]'
+                : 'text-[18px] font-semibold text-[#303541]'
+            } `}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(product?.productName)
+            }}
+          ></div>
         </div>
         <div className="border-t border-[#edeff2] flex">
           <div className="py-2 flex-1 flex gap-3 items-center px-5 group-hover:bg-primary-500 group-hover:text-white">
