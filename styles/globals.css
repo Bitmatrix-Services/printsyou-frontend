@@ -278,7 +278,9 @@
 }
 
 .bullet-icon {
-  background: url(/assets/icon-bullet-orange) center no-repeat;
+  background: url(/assets/icon-bullet-orange.png) left 6px no-repeat;
+  padding: 0 0 7px 12px;
+
 }
 
 #products-page .list-product .sort-show {
