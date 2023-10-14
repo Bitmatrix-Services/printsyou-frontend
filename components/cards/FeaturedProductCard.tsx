@@ -17,6 +17,7 @@ import {Product} from '@store/slices/product/product';
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
 import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
+import ImageWithFallback from '@components/ImageWithFallback';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -57,15 +58,16 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               />
             )}
 
-            <Image
+            <ImageWithFallback
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
               src={
                 product?.productImages && product.productImages[0]
                   ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                  : '/assets/logo.png'
+                  : ''
               }
+              fallbackSrc="/assets/logo.png"
               alt="product"
             />
           </div>
@@ -265,15 +267,16 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       }
                     >
                       <span className="block relative aspect-square">
-                        <Image
+                        <ImageWithFallback
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
                           src={
                             product?.productImages && product.productImages[0]
                               ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                              : '/assets/logo.png'
+                              : ''
                           }
+                          fallbackSrc="/assets/logo.png"
                           alt={`product`}
                         />
                       </span>
