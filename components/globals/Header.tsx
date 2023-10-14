@@ -33,6 +33,7 @@ const links = [
 
 const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [showList, setShowList] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -126,9 +127,13 @@ const Header = () => {
       <nav className="hidden lg:block bg-white border-b border-[#eceef1]">
         <Container>
           <div className="flex">
-            <div className="megamenu">
+            <div
+              className={`megamenu ${showList && 'show'}`}
+              onMouseLeave={() => setShowList(false)}
+            >
               <button
                 type="button"
+                onMouseEnter={() => setShowList(true)}
                 className="megamenu-button p-5 lg:min-w-[13.4rem] border-l border-r border-b-4 border-b-primary-500 border-[#eceef1] relative transition-all duration-300 text-primary-500 hover:text-white after:transition-all after:duration-300 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0 after:bg-primary-500 hover:after:h-full"
               >
                 <div className="relative z-10 flex items-center gap-3">
@@ -142,7 +147,7 @@ const Header = () => {
                 <Container>
                   <ul className="menu-link grid grid-cols-4 xl:grid-cols-5 gap-4">
                     {categoryList.map(category => (
-                      <li key={category.id}>
+                      <li key={category.id} onClick={() => setShowList(false)}>
                         <Link
                           className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
                           href={`/${category.ucategoryName}`}
