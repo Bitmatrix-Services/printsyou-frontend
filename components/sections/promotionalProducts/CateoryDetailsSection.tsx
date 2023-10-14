@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useState,useEffect} from 'react';
 import {useRouter} from 'next/router';
 
 import ProductSubCategoriesSection from './SubCategoriesSection';
@@ -14,6 +14,13 @@ interface CategoryDetailsSectionProps {
 const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
   const router = useRouter();
 
+  const [mount, setMount] = useState(false)
+
+  useEffect(() => {
+    setMount(true)
+  }, [])
+  
+
   return (
     <div className="flex-1">
       <div className="grid grid-cols-1 items-center promo-products">
@@ -27,7 +34,7 @@ const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
             }
           />
         </div>
-        {category?.categoryDescription && (
+        {mount && category?.categoryDescription && (
           <div className="flex gap-2">
             <div className="pt-2 pb-8 mb-2">
               <div className="text-[#303541] font-light text-[32px] leading-[41.6px] mb-3">

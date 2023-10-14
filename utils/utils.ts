@@ -24,19 +24,17 @@ export const getProductPriceGridTable = (productDescription: string) => {
 };
 
 export const getCateoryTitleAndDescription = (cateoryDescription: string) => {
-  if (document) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = cateoryDescription;
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = cateoryDescription;
 
-    const title = tempDiv.querySelector('h1')?.textContent;
-    const pElements = tempDiv.querySelectorAll('p');
+  const title = tempDiv.querySelector('h1')?.textContent;
+  const pElements = tempDiv.querySelectorAll('p');
 
-    const descriptionList: string[] = [];
+  const descriptionList: string[] = [];
 
-    pElements?.forEach(p => {
-      if (p.textContent) descriptionList.push(p.textContent.trim());
-    });
+  pElements?.forEach(p => {
+    if (p.textContent) descriptionList.push(p.textContent.trim());
+  });
 
-    return {title, descriptionList};
-  }
+  return {title, descriptionList};
 };
