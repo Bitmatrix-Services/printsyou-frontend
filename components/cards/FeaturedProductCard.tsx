@@ -17,6 +17,7 @@ import {Product} from '@store/slices/product/product';
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
 import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
+import ImageWithFallback from '@components/ImageWithFallback';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -57,28 +58,29 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               />
             )}
 
-            <Image
+            <ImageWithFallback
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
               src={
                 product?.productImages && product.productImages[0]
                   ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                  : '/assets/logo.png'
+                  : ''
               }
+              fallbackSrc="/assets/logo.png"
               alt="product"
             />
           </div>
-          {isModal && (
-            <div className="block mt-4 text-xl font-extrabold min-h-[60px]">
-              {product?.productName}
-            </div>
-          )}
-          {!isModal && (
-            <div className="block mt-4 text-[18px] font-semibold text-[#303541]">
-              {product?.productName}
-            </div>
-          )}
+          <div
+            className={`block mt-4  ${
+              isModal
+                ? 'text-xl font-extrabold min-h-[60px]'
+                : 'text-[18px] font-semibold text-[#303541]'
+            } `}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHtml(product?.productName)
+            }}
+          ></div>
         </div>
         <div className="border-t border-[#edeff2] flex">
           <div className="py-2 flex-1 flex gap-3 items-center px-5 group-hover:bg-primary-500 group-hover:text-white">
@@ -265,15 +267,16 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       }
                     >
                       <span className="block relative aspect-square">
-                        <Image
+                        <ImageWithFallback
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
                           src={
                             product?.productImages && product.productImages[0]
                               ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                              : '/assets/logo.png'
+                              : ''
                           }
+                          fallbackSrc="/assets/logo.png"
                           alt={`product`}
                         />
                       </span>
