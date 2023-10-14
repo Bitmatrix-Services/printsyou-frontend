@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React from 'react';
 
 import Container from '../globals/Container';
 import PromotionalCategoryCard from '../cards/PromotionalCategoryCard';
