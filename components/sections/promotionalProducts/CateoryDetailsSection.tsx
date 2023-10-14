@@ -1,4 +1,4 @@
-import React, {FC, useState,useEffect} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
 
 import ProductSubCategoriesSection from './SubCategoriesSection';
@@ -14,12 +14,11 @@ interface CategoryDetailsSectionProps {
 const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
   const router = useRouter();
 
-  const [mount, setMount] = useState(false)
+  const [mount, setMount] = useState(false);
 
   useEffect(() => {
-    setMount(true)
-  }, [])
-  
+    setMount(true);
+  }, []);
 
   return (
     <div className="flex-1">
