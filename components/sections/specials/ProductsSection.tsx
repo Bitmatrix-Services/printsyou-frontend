@@ -1,9 +1,8 @@
 import React, {FC, useEffect, useState} from 'react';
-import Container from '../../globals/Container';
 import {FeaturedProductCard} from '../../cards/FeaturedProductCard';
-import TablePagination from '@mui/material/TablePagination';
 import {http} from 'services/axios.service';
 import {Product} from '@store/slices/product/product';
+import PaginationHeader from '@components/globals/PaginationHeader';
 
 interface ProductsSectionProps {
   isModal?: boolean;
@@ -18,108 +17,67 @@ const ProductsSection: FC<ProductsSectionProps> = ({
   isContainer,
   categoryId
 }) => {
-  const [page, setPage] = useState(2);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
+
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number | string>(24);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  // const [sort, setSort] = useState(25);
 
   useEffect(() => {
     if (categoryId) getProductByCategory();
-  }, [categoryId]);
+  }, [categoryId, pageNumber, pageSize]);
 
   const getProductByCategory = async () => {
     const {data} = await http.get(
-      'product/byCategory/0f993462-4b96-4859-b053-10bac39c81e2?page=1'
+      `product/byCategory/${categoryId}?page=${pageNumber}&size=${pageSize}`
     );
 
-    setProductsByCategory(data.payload.content);
+    if (data.payload.content.length > 0) {
+      setProductsByCategory(data.payload.content);
+      setTotalPages(data.payload.totalPages);
+    }
   };
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
   return (
     <section className="bg-white py-8 lg:py-20">
-      {isContainer ? (
-        <Container>
-          <div className="flex flex-wrap items-center justify-center md:justify-start mb-6">
-            <TablePagination
-              component="div"
-              count={100}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              className=""
+      <PaginationHeader
+        pageNumber={pageNumber}
+        setPageNumber={setPageNumber}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        totalPages={totalPages}
+        // sort={sort}
+        // setSort={setSort}
+      />
+
+      <div
+        className={`${
+          isContainer
+            ? 'max-w-[100rem] mx-auto px-4 md:px-8 xl:px-24 relative'
+            : ''
+        }`}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6">
+          {productsByCategory?.map(product => (
+            <FeaturedProductCard
+              key={product.id}
+              isModal={isModal}
+              onSale={onSale}
+              product={product}
             />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6">
-            {productsByCategory?.map(product => (
-              <FeaturedProductCard
-                key={product.id}
-                isModal={isModal}
-                onSale={onSale}
-                product={product}
-              />
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center justify-center md:justify-start mb-6">
-            <TablePagination
-              component="div"
-              count={100}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              className=""
-            />
-          </div>
-        </Container>
-      ) : (
-        <div>
-          <div className="flex flex-wrap items-center justify-center md:justify-start mb-6">
-            <TablePagination
-              component="div"
-              count={100}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              className=""
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-6">
-            {productsByCategory?.map(product => (
-              <FeaturedProductCard
-                key={product.id}
-                isModal={isModal}
-                onSale={onSale}
-                product={product}
-              />
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center justify-center md:justify-start mb-6">
-            <TablePagination
-              component="div"
-              count={100}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              className=""
-            />
-          </div>
+          ))}
         </div>
-      )}
+        <PaginationHeader
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          totalPages={totalPages}
+          // sort={sort}
+          // setSort={setSort}
+        />
+      </div>
     </section>
   );
 };

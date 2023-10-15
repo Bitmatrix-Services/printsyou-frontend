@@ -1,7 +1,34 @@
+import React, {Dispatch, FC, SetStateAction} from 'react';
 import {ArrowLeftIcon, ArrowRightIcon} from '@heroicons/react/24/solid';
-import React from 'react';
 
-const PaginationHeader = () => {
+const sortList = [
+  {lable: 'Price Low To High', value: 'lowcost'},
+  {lable: 'Price High To Low', value: 'highcost'},
+  {lable: 'Most Recent First', value: 'desc'},
+  {lable: 'Least Recent First', value: 'asc'},
+  {lable: 'A to Z', value: 'az'},
+  {lable: 'Z to A', value: 'za'}
+];
+
+interface PaginationHeaderProps {
+  pageNumber: number;
+  setPageNumber: Dispatch<SetStateAction<number>>;
+  pageSize: number | string;
+  setPageSize: Dispatch<SetStateAction<number | string>>;
+  totalPages: number;
+  // sort: number;
+  // setSort: void;
+}
+
+const PaginationHeader: FC<PaginationHeaderProps> = ({
+  pageNumber,
+  setPageNumber,
+  pageSize,
+  setPageSize,
+  totalPages
+  // sort,
+  // setSort
+}) => {
   return (
     <div id="products-page">
       <div className="list-product">
@@ -12,45 +39,67 @@ const PaginationHeader = () => {
                 <div className="name">Sort by</div>
                 <div className="select">
                   <select name="theme4" className="custom_theme4 outline-none">
-                    <option value="sort_type=lowcost">Price Low To High</option>
-                    <option value="sort_type=highcost">
-                      Price High To Low
-                    </option>
-                    <option value="sort_type=desc">Most Recent First</option>
-                    <option value="sort_type=asc">Least Recent First</option>
-                    <option value="sort_type=az">A to Z</option>
-                    <option value="sort_type=za">Z to A</option>
+                    {sortList.map(item => (
+                      <option key={item.value} value={item.value}>
+                        {item.lable}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
               <div className="item show">
                 <div className="name">Show</div>
                 <div className="select">
-                  <select name="theme5" className="custom_theme5 outline-none">
-                    <option value="on_page=24" selected>
-                      24
-                    </option>
-                    <option value="on_page=48">48</option>
-                    <option value="viewall=1">All</option>
+                  <select
+                    name="theme5"
+                    className="custom_theme5 outline-none"
+                    value={pageSize}
+                    onChange={e => setPageSize(e.target.value)}
+                  >
+                    {[24, 48, 'All'].map(item => (
+                      <option key={item} value={item}>
+                        {item}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="per">per page</div>
               </div>
             </div>
             <div className="paging flex gap-2">
-              <button type="button" className="item prev">
+              <button
+                type="button"
+                className="item prev"
+                onClick={() => {
+                  if (pageNumber > 1) setPageNumber(prevState => prevState - 1);
+                }}
+              >
                 <ArrowLeftIcon className="h-4 w-4" />
               </button>
               <div className="numbers flex gap-2">
-                <button type="button" className="item number is-active">
-                  1
-                </button>
-                <button type="button" className="item number">
-                  2
-                </button>
-                <button className="item number">3</button>
+                {Array.from({length: totalPages}, (_, index) => index + 1).map(
+                  page => (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => setPageNumber(page)}
+                      className={`item number ${
+                        pageNumber === page && 'is-active'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
               </div>
-              <button type="button" className="item next">
+              <button
+                type="button"
+                className="item next"
+                onClick={() => {
+                  if (pageNumber < totalPages)
+                    setPageNumber(prevState => prevState + 1);
+                }}
+              >
                 <ArrowRightIcon className="h-4 w-4" />
               </button>
             </div>
