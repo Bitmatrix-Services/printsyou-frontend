@@ -426,3 +426,37 @@
 #products-page .list-product .sort-show.bottom .select-sort .item.show .per {
   display: none;
 }
+
+
+/* artwork tabs styles */
+
+.tabs-styles button {
+  @apply text-body relative;
+}
+
+.tabs-styles .Mui-selected {
+  @apply text-primary-500;
+}
+
+.tabs-styles button span {
+  @apply flex items-center;
+}
+
+.tabs-styles button span::after {
+  content: '';
+  position: static;
+  width: 4px;
+  height: 4px;
+  background-color: #000;
+  border-radius: 100%;
+  display: flex;
+  margin-top: 3px;
+}
+
+.tabs-styles button:first-child span::after {
+  display: none;
+}
+
+.tabs-styles .MuiTabs-indicator {
+  display: none;
+}
