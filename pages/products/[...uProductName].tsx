@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -20,6 +20,11 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
+  const [mount, setMount] = useState(false);
+
+  useEffect(() => {
+    setMount(true);
+  }, []);
   return (
     <>
       <Container>
@@ -104,11 +109,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                 <h4 className="text-xl font-bold capitalize py-[19px]">
                   Description
                 </h4>
-                <ul className="text-sm space-y-3 text-[#757a84] pl-5 list-disc marker:text-[#febe40] marker:text-lg">
-                  {getProductDescription(product.productDescription)?.map(
-                    row => <li key={row}>{row}</li>
-                  )}
-                </ul>
+                {mount && (
+                  <ul className="text-sm space-y-3 text-[#757a84] pl-5 list-disc marker:text-[#febe40] marker:text-lg">
+                    {getProductDescription(product.productDescription)?.map(
+                      row => <li key={row}>{row}</li>
+                    )}
+                  </ul>
+                )}
               </div>
               {product?.priceGrids &&
               [...product.priceGrids].sort(
@@ -246,12 +253,16 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  // console.log('context', context.req.url);
-  const {data} = await http.get(
-    '/product/byCategory/00453f82-9533-4f1d-a8a7-e1265b9c3acc'
-  );
+  const uProductName = context.params?.uProductName;
 
-  let product = data.payload.content ?? {};
+  let product = {};
+
+  if (Array.isArray(uProductName)) {
+    const {data} = await http.get(
+      `product/uProduct?uProductName=${uProductName.join('/')}`
+    );
+    product = data.payload;
+  }
   return {props: {product}};
 };
 
