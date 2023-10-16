@@ -1,0 +1,65 @@
+export interface ProductInitialState {
+  underABuckProductsLoading: boolean;
+  underABuckProducts: Product[];
+  newAndExclusiveProductsLoading: boolean;
+  newAndExclusiveProducts: Product[];
+  uniqueIdeaProductsLoading: boolean;
+  uniqueIdeaProducts: Product[];
+}
+
+export interface ProductPrice {
+  countFrom: number;
+  price: number;
+}
+
+export interface ProductImage {
+  imageUrl: string;
+  sequenceNumber: number;
+}
+
+export interface AdditionalRow {
+  sequenceNumber: number;
+  name: string;
+  priceDiff: number;
+}
+
+export interface AdditionalFieldProductValues {
+  fieldName: string;
+  fieldValue: string;
+}
+
+export interface PriceGrids {
+  id: string;
+  countFrom: number;
+  price: number;
+}
+export interface AdditionalRows {
+  id: string;
+  name: string;
+  priceDiff: number;
+  sequenceNumber: number;
+}
+export interface ProductImages {
+  imageUrl: string;
+  sequenceNumber: number;
+}
+
+export interface Product {
+  id: string;
+  productName: string;
+  uproductName: string;
+  sku: string;
+  price: ProductPrice[];
+  images: ProductImage[];
+  esp?: string | null;
+  asi?: string | null;
+  prefix?: string | null;
+  suffix?: string | null;
+  description: string | null;
+  productDescription: string;
+  additionalRow: AdditionalRow[];
+  priceGrids: PriceGrids[];
+  productImages?: ProductImages[];
+  additionalFieldProductValues: AdditionalFieldProductValues[];
+  additionalRows: AdditionalRows[];
+}

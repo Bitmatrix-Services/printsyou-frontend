@@ -59,7 +59,7 @@ const customerhelp = [
 ];
 const Footer = () => {
   return (
-    <footer className="bg-white footer pt-10 lg:pt-24">
+    <footer className="bg-white footer pt-10 lg:pt-15">
       <Container>
         <div className="xl:flex xl:flex-row gap-6 lg:gap-8">
           <div className="xl:w-64 mb-6 xl:mb-0">

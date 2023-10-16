@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Container from '@components/globals/Container';
 
 const testimonials = [
   {
@@ -46,64 +47,66 @@ const firstHalfTestimonials = testimonials.slice(0, middleIndex); // returns [1,
 const secondHalfTestimonials = testimonials.slice(middleIndex);
 const TestimonialsSection = () => {
   return (
-    <section className="bg-greyLight py-8 lg:py-20">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div>
-          <ul className="">
-            {firstHalfTestimonials.map((testimonial, index) => (
-              <li key={index} className="mb-10">
-                <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins italic  space-y-4">
-                  <p>"{testimonial.text}"</p>
-                </div>
-                <div className="text-base text-lime-950ute mt-4">
-                  <span className="text-[14px] flex align-middle font-poppins content-center items-center">
-                    <span className="text-xl  font-bold capitalize mr-2">
-                      <span className="mr-2">-</span>
-                      {testimonial.name}
-                    </span>{' '}
-                    <span className="text-2xl font-normal mr-2">/</span>
-                    <span className="text-lg font-normal ">
-                      {testimonial.company}
+    <div className="bg-white py-14">
+      <Container>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div>
+            <ul className="">
+              {firstHalfTestimonials.map((testimonial, index) => (
+                <li key={index} className="mb-10">
+                  <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins italic  space-y-4">
+                    <p>"{testimonial.text}"</p>
+                  </div>
+                  <div className="text-base text-lime-950ute mt-4">
+                    <span className="text-[14px] flex align-middle font-poppins content-center items-center">
+                      <span className="text-xl  font-bold capitalize mr-2">
+                        <span className="mr-2">-</span>
+                        {testimonial.name}
+                      </span>{' '}
+                      <span className="text-2xl font-normal mr-2">/</span>
+                      <span className="text-lg font-normal ">
+                        {testimonial.company}
+                      </span>
                     </span>
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <ul className="space-y-6">
-            {secondHalfTestimonials.map((testimonial, index) => (
-              <li key={index} className="mb-10">
-                <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins italic  space-y-4">
-                  <p>"{testimonial.text}"</p>
-                </div>
-                <div className="text-base text-lime-950ute mt-4">
-                  <span className="text-[14px] flex align-middle font-poppins content-center items-center">
-                    <span className="text-xl  font-bold capitalize mr-2">
-                      <span className="mr-2">-</span>
-                      {testimonial.name}
-                    </span>{' '}
-                    <span className="text-2xl font-normal mr-2">/</span>
-                    <span className="text-lg font-normal ">
-                      {testimonial.company}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <ul className="space-y-6">
+              {secondHalfTestimonials.map((testimonial, index) => (
+                <li key={index} className="mb-10">
+                  <div className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins italic  space-y-4">
+                    <p>"{testimonial.text}"</p>
+                  </div>
+                  <div className="text-base text-lime-950ute mt-4">
+                    <span className="text-[14px] flex align-middle font-poppins content-center items-center">
+                      <span className="text-xl  font-bold capitalize mr-2">
+                        <span className="mr-2">-</span>
+                        {testimonial.name}
+                      </span>{' '}
+                      <span className="text-2xl font-normal mr-2">/</span>
+                      <span className="text-lg font-normal ">
+                        {testimonial.company}
+                      </span>
                     </span>
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-      <div className="mt-12 mb-6 md:hidden text-center">
-        <Link
-          className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-          href="!#"
-        >
-          VIEW MORE
-        </Link>
-      </div>
-    </section>
+        <div className="mt-12 mb-6 md:hidden text-center">
+          <Link
+            className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
+            href="!#"
+          >
+            VIEW MORE
+          </Link>
+        </div>
+      </Container>
+    </div>
   );
 };
 

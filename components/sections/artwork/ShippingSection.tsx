@@ -1,10 +1,11 @@
 import React from 'react';
 import HeadlineCard from '@components/cards/HeadlineCard';
+import Container from '@components/globals/Container';
 
 const ShippingSection = () => {
   return (
-    <>
-      <section className="bg-greyLight pt-2 pb-2 ">
+    <div className="bg-white py-8">
+      <Container>
         <div className="pt-2 pb-11 ">
           <div className="text-2xl mb-5 font-bold">Shipping Information</div>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
@@ -100,8 +101,8 @@ const ShippingSection = () => {
             for each additional location may be added.
           </p>
         </div>
-      </section>
-    </>
+      </Container>
+    </div>
   );
 };
 
