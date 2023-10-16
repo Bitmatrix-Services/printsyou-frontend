@@ -1,5 +1,4 @@
 import React, {FC, useState} from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import Dialog from '@mui/material/Dialog';
 import Accordion from '@mui/material/Accordion';
