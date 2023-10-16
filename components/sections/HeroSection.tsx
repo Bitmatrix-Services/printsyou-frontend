@@ -1,8 +1,9 @@
-import React from 'react';
-import Container from '../globals/Container';
+import React, {useCallback, useRef} from 'react';
 import Link from 'next/link';
 import {Swiper, SwiperSlide} from 'swiper/react';
-import {Navigation, Pagination} from 'swiper/modules';
+import {Pagination} from 'swiper/modules';
+
+import Container from '../globals/Container';
 
 const slidesData = [
   {
@@ -31,14 +32,37 @@ const slidesData = [
 ];
 
 const HeroSection = () => {
+  const sliderRef = useRef<any>(null);
+
+  const handlePrev = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slidePrev();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slideNext();
+  }, []);
+
   return (
-    <section className="bg-greyLight pt-8 lg:pt-20">
+    <section className="bg-grey pt-8 lg:pt-20">
       <Container>
+        <button
+          type="button"
+          className="swiper-button-prev"
+          onClick={handlePrev}
+        />
+        <button
+          type="button"
+          className="swiper-button-next"
+          onClick={handleNext}
+        />
         <Swiper
-          modules={[Navigation, Pagination]}
+          ref={sliderRef}
+          loop
+          modules={[Pagination]}
           spaceBetween={10}
           slidesPerView={1}
-          navigation
           pagination={{clickable: true}}
           className="hero-swiper"
         >

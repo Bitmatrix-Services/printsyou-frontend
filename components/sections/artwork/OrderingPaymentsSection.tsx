@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Container from '@components/globals/Container';
 
 export const sectionDetials = [
   {
@@ -30,8 +31,8 @@ export const sectionDetials = [
 
 const OrderingPaymentsSection = () => {
   return (
-    <>
-      <section className="bg-greyLight pt-2 pb-2 ">
+    <div className="bg-white py-12">
+      <Container>
         <div className="pt-2 pb-8 mb-10">
           <div className="text-2xl mb-5 font-bold">Ordering</div>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
@@ -41,14 +42,14 @@ const OrderingPaymentsSection = () => {
             as easy and quick as possible.
           </p>
         </div>
-        <div className="flex flex-wrap gap-6  xl:gap-8 2xl:gap-20 items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8 2xl:gap-20 items-center justify-center">
           {sectionDetials.map((detail, index) => (
             <>
               {index % 2 === 0 ? ( // If the index is even, render the title first and then the image
                 <>
                   <div
                     key={index}
-                    className="mt-16 sm:mt-0 md:basis-[41%]  md:py-12 "
+                    className="mt-16 sm:mt-0 md:basis-[41%] md:py-12"
                   >
                     <Image
                       sizes=""
@@ -56,14 +57,14 @@ const OrderingPaymentsSection = () => {
                       layout="resposive"
                       width={437}
                       height={281}
-                      className="object-contain w-[85%]"
+                      className="object-contain"
                       src={detail.imageSrc}
                       alt="..."
                     />
                   </div>
                   <div
                     key={index}
-                    className="mt-16 sm:mt-0 md:basis-[55%]  md:py-12"
+                    className="mt-16 sm:mt-0 md:basis-[55%] lg:col-span-2  md:py-12"
                   >
                     <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                       {detail.title}
@@ -78,7 +79,7 @@ const OrderingPaymentsSection = () => {
                 <>
                   <div
                     key={index}
-                    className="mt-16 sm:mt-0 md:basis-[55%]  md:py-12"
+                    className="mt-16 sm:mt-0 md:basis-[55%] lg:col-span-2  md:py-12"
                   >
                     <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                       {detail.title}
@@ -97,7 +98,7 @@ const OrderingPaymentsSection = () => {
                       layout="resposive"
                       width={437}
                       height={281}
-                      className="object-contain w-[85%]"
+                      className="object-contain"
                       src={detail.imageSrc}
                       alt="..."
                     />
@@ -107,8 +108,8 @@ const OrderingPaymentsSection = () => {
             </>
           ))}
         </div>
-      </section>
-    </>
+      </Container>
+    </div>
   );
 };
 

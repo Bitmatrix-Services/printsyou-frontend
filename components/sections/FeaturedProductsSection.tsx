@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useCallback, useRef} from 'react';
 import Link from 'next/link';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Navigation} from 'swiper/modules';
@@ -14,6 +14,7 @@ interface FeaturedSectionProps {
   subTitleColor?: string;
   products: Product[];
   onSale?: boolean;
+  navNumber?: string;
 }
 
 const FeaturedSection: FC<FeaturedSectionProps> = ({
@@ -22,8 +23,21 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
   subTitleColor,
   titleColor,
   products,
-  onSale = false
+  onSale = false,
+  navNumber
 }) => {
+  const sliderRef = useRef<any>(null);
+
+  const handlePrev = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slidePrev();
+  }, []);
+
+  const handleNext = useCallback(() => {
+    if (!sliderRef.current) return;
+    sliderRef.current.swiper.slideNext();
+  }, []);
+
   const breakpoints = {
     320: {
       slidesPerView: 1,
@@ -75,18 +89,33 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
             VIEW MORE
           </Link>
         </div>
-        <Swiper
-          modules={[Navigation]}
-          navigation
-          breakpoints={breakpoints}
-          className="featured-swiper"
-        >
-          {products?.map(product => (
-            <SwiperSlide key={product.id}>
-              <FeaturedProductCard product={product} onSale={onSale} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        <div className="featured-swiper relative">
+          <button
+            type="button"
+            className={`swiper-button-prev swiper-nav-prev-${navNumber}`}
+            onClick={handlePrev}
+          />
+          <button
+            type="button"
+            className={`swiper-button-next swiper-nav-next-${navNumber}`}
+            onClick={handleNext}
+          />
+          <Swiper
+            modules={[Navigation]}
+            navigation={{
+              nextEl: `.swiper-nav-next-${navNumber}`,
+              prevEl: `.swiper-nav-prev-${navNumber}`
+            }}
+            ref={sliderRef}
+            breakpoints={breakpoints}
+          >
+            {products?.map(product => (
+              <SwiperSlide key={product.id}>
+                <FeaturedProductCard product={product} onSale={onSale} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
         <div className="mt-12 mb-6 md:hidden text-center">
           <Link
             className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"

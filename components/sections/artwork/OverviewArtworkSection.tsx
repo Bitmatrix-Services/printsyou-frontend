@@ -1,29 +1,39 @@
 import React, {FC} from 'react';
-import OverviewCard from '@components/cards/OverviewCard';
 
-const identityitems = [
+import OverviewCard from '@components/cards/OverviewCard';
+import Container from '@components/globals/Container';
+
+// icons
+import ArtworkIcon from '@components/icons/ArtworkIcon';
+import OrderingIcon from '@components/icons/OrderingIcon';
+import ShippingIcon from '@components/icons/ShippingIcon';
+import TosIcon from '@components/icons/TosIcon';
+import TestiIcon from '@components/icons/TestiIcon';
+import BlogIcon from '@components/icons/BlogIcon';
+
+const tabSectionList = [
   {
-    image: '/assets/artwork.svg',
+    icon: <ArtworkIcon />,
     heading: 'Artwork'
   },
   {
-    image: '/assets/ordering.svg',
+    icon: <OrderingIcon />,
     heading: 'Ordering & Payments'
   },
   {
-    image: '/assets/shipping.svg',
+    icon: <ShippingIcon />,
     heading: 'Shipping'
   },
   {
-    image: '/assets/tos.svg',
+    icon: <TosIcon />,
     heading: 'Terms & Conditions'
   },
   {
-    image: '/assets/testi.svg',
+    icon: <TestiIcon />,
     heading: 'Testimonials'
   },
   {
-    image: '/assets/blog.svg',
+    icon: <BlogIcon />,
     heading: 'Promotional Blog'
   }
 ];
@@ -36,22 +46,22 @@ const OverviewArtworkSection: FC<OverviewArtworkSectionProps> = ({
   setTabValue
 }) => {
   return (
-    <section className="w-full  xl:flex justify-center items-center pt-20 pb-24">
-      <div className="lg:flex justify-center items-centertext-center lg:text-left">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {identityitems.map((items, index) => {
+    <section className="py-12 md:py-20">
+      <Container>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-10">
+          {tabSectionList.map((items, index) => {
             return (
               <OverviewCard
                 key={index}
                 index={index}
-                image={items.image}
+                icon={items.icon}
                 heading={items.heading}
                 setTabValue={setTabValue}
               />
             );
           })}
         </div>
-      </div>
+      </Container>
     </section>
   );
 };

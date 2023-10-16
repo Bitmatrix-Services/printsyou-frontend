@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Container from '@components/globals/Container';
+
 export const aboutInfo = [
   {
     title: 'Identity Links',
@@ -10,8 +12,8 @@ export const aboutInfo = [
 
 const ArtworkSection = () => {
   return (
-    <>
-      <section className="bg-greyLight pt-2 pb-2 ">
+    <div className="bg-white py-8">
+      <Container>
         <div className="pt-2 pb-8">
           <div className="text-2xl mb-5 font-bold">
             Help! I don't have a logo or artwork!
@@ -105,8 +107,8 @@ const ArtworkSection = () => {
             work with you to make the process as simple as possible.
           </p>
         </div>
-      </section>
-    </>
+      </Container>
+    </div>
   );
 };
 

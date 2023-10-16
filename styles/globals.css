@@ -92,7 +92,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  z-index: 10;
+  z-index: 15;
   background: #fff;
   border: 1px solid #eceef1;
   border-top: none;
@@ -248,6 +248,24 @@
 
 .hero-swiper .swiper-pagination-bullet-active {
   background-color: #fff;
+}
+
+.featured-swiper .swiper-button-prev {
+  left: -5.5rem;
+}
+
+.featured-swiper .swiper-button-next {
+  right: -5.5rem;
+}
+
+@media screen and (max-width: 1280px) {
+  .featured-swiper .swiper-button-prev {
+    left: -1.5rem;
+  }
+
+  .featured-swiper .swiper-button-next {
+    right: -1.5rem;
+  }
 }
 
 /* == */
@@ -424,5 +442,38 @@
 
 #products-page .list-product .sort-show.bottom .select-sort .item.sort-by,
 #products-page .list-product .sort-show.bottom .select-sort .item.show .per {
+  display: none;
+}
+
+/* artwork tabs styles */
+
+.tabs-styles button {
+  @apply text-body relative;
+}
+
+.tabs-styles .Mui-selected {
+  @apply text-primary-500;
+}
+
+.tabs-styles button span {
+  @apply flex items-center;
+}
+
+.tabs-styles button span::after {
+  content: '';
+  position: static;
+  width: 4px;
+  height: 4px;
+  background-color: #000;
+  border-radius: 100%;
+  display: flex;
+  margin-top: 3px;
+}
+
+.tabs-styles button:first-child span::after {
+  display: none;
+}
+
+.tabs-styles .MuiTabs-indicator {
   display: none;
 }

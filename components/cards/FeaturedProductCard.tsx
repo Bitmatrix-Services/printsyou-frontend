@@ -41,7 +41,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
         onClick={() => router.push(`products/${product.uproductName}`)}
         className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"
       >
-        <div className="p-6">
+        <div className="p-6 min-h-[21.40rem]">
           <div className="block relative h-48 w-48 mx-auto group">
             {isModal && (
               <button
@@ -98,8 +98,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               )}
 
               <div className="prive-value flex items-end gap-1">
-                <div className="deno font-semibold text-lg">$</div>
-                <div className="value font-semibold text-2xl font-oswald">
+                <div className="deno font-semibold text-xl">$</div>
+                <div className="value font-semibold text-2xl xl:text-4xl font-oswald">
                   <span className="sale">
                     {product?.priceGrids && product?.priceGrids[0]?.price}
                   </span>
