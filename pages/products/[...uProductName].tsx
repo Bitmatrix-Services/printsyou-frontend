@@ -35,7 +35,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               <div>
                 <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
                   <Breadcrumb
-                    prefixTitle="Promotional Productssfsf"
+                    prefixTitle="Promotional Products"
                     queryParams={
                       Array.isArray(router.query?.uProductName)
                         ? router.query?.uProductName
