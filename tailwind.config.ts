@@ -32,7 +32,7 @@ const config: Config = {
         mute2: '#787b82',
         mute3: '#686d79',
         greyLight: '#FFFFFF',
-        grey: "#F8F6F7",
+        grey: '#F8F6F7',
         light: '#d0d5df',
         body: '#303541'
       },
