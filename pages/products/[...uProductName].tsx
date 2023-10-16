@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
 import sanitizeHtml from 'sanitize-html';
@@ -12,6 +11,7 @@ import {Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
 import Breadcrumb from '@components/globals/Breadcrumb';
 import {useRouter} from 'next/router';
+import ImageWithFallback from '@components/ImageWithFallback';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -30,22 +30,22 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
     <>
       <Container>
         <div className="px-8 py-8">
+          <div>
+            <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
+              <Breadcrumb
+                prefixTitle="Promotional Products"
+                queryParams={
+                  Array.isArray(router.query?.uProductName)
+                    ? router.query?.uProductName
+                    : []
+                }
+              />
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <figure className="order-first ">
-              <div>
-                <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
-                  <Breadcrumb
-                    prefixTitle="Promotional Products"
-                    queryParams={
-                      Array.isArray(router.query?.uProductName)
-                        ? router.query?.uProductName
-                        : []
-                    }
-                  />
-                </div>
-              </div>
               <div className="md:pt-8">
-                <Image
+                <ImageWithFallback
                   sizes=""
                   style={{position: 'relative'}}
                   layout="resposive"
@@ -55,9 +55,10 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   src={
                     product?.productImages && product.productImages[0]
                       ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                      : '/assets/logo.png'
+                      : ''
                   }
-                  alt="..."
+                  alt="Product"
+                  fallbackSrc="/assets/logo.png"
                 />
               </div>
               <div className="gallery-container">
@@ -69,16 +70,17 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       data-src={images}
                     >
                       <span className="block relative aspect-square border border-[#eceef1]">
-                        <Image
+                        <ImageWithFallback
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
                           src={
                             images
                               ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${images.imageUrl}`
-                              : '/assets/logo.png'
+                              : ''
                           }
-                          alt={`gallery-image-${index}`}
+                          alt={`Product`}
+                          fallbackSrc="/assets/logo.png"
                         />
                       </span>
                     </a>
