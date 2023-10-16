@@ -1,37 +1,30 @@
 import React, {FC} from 'react';
-import Image from 'next/image';
 
 interface OverviewCardProps {
-  image: string;
+  icon: any;
   heading: string;
   setTabValue: any;
   index: number;
 }
 
 const OverviewCard: FC<OverviewCardProps> = ({
-  image,
+  icon,
   heading,
   setTabValue,
   index
 }) => {
   return (
     <div
-      className="bg-[#febe40] py-14 px-14 border-b-2 border-b-black hover:cursor-pointer"
+      className="group bg-white hover:bg-primary-500 text-body hover:text-white px-7 py-10 xl:py-12 2xl:py-20 border-b-2 border-b-black hover:cursor-pointer"
       onClick={() => setTabValue(index + 1)}
     >
       <div className="flex flex-col justify-center items-center text-center">
-        <div className="h-20 w-20 min-w-[5rem] relative mb-4">
-          <Image
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            fill
-            className="object-contain"
-            src={image}
-            alt="..."
-          />
+        <div className="h-24 w-24 min-w-[6rem] relative mb-4">
+          <span className="text-primary-500 group-hover:text-white">
+            {icon}
+          </span>
         </div>
-        <h6 className="mt-4 text-[#303541] font-medium text-[24px]">
-          {heading}
-        </h6>
+        <h6 className="mt-4 font-medium text-2xl">{heading}</h6>
       </div>
     </div>
   );

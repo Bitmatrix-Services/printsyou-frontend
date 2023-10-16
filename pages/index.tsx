@@ -37,6 +37,7 @@ export default function Home() {
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"
+        navNumber="1"
         subTitle="a buck"
         subTitleColor="text-[#56dabf]"
         products={underABuckProducts}
@@ -44,6 +45,7 @@ export default function Home() {
       {/* unique ideas section */}
       <FeaturedProductsSection
         title="Unique"
+        navNumber="2"
         titleColor="text-red-500"
         subTitle="Ideas"
         products={uniqueIdeaProducts}
@@ -51,6 +53,7 @@ export default function Home() {
       {/*New & Exclusive */}
       <FeaturedProductsSection
         title="New"
+        navNumber="3"
         titleColor="text-primary-600"
         subTitle="& Exclusive"
         products={newAndExclusiveProducts}

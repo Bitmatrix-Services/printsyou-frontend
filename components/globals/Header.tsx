@@ -51,14 +51,14 @@ const Header = () => {
   };
 
   return (
-    <div className="mb-5">
+    <>
       <hr
         className="h-1 w-full"
         style={{backgroundImage: 'url(/assets/bg-line-top-banner.jpg)'}}
       />
       <div className="py-5 bg-body" />
       <header className="sticky z-20 top-0 bg-white border-b border-[#eceef1]">
-        <div className="max-w-[100rem] mx-auto px-4 md:px-8 xl:px-0 relative">
+        <div className="max-w-[100rem] mx-auto px-4 md:px-8 relative">
           <nav className="flex">
             <div className="flex flex-col lg:flex-row gap-3 flex-1 py-4">
               <div className="flex">
@@ -296,7 +296,7 @@ const Header = () => {
           </fieldset>
         </div>
       </Drawer>
-    </div>
+    </>
   );
 };
 

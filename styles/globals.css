@@ -92,7 +92,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  z-index: 10;
+  z-index: 15;
   background: #fff;
   border: 1px solid #eceef1;
   border-top: none;
@@ -248,6 +248,24 @@
 
 .hero-swiper .swiper-pagination-bullet-active {
   background-color: #fff;
+}
+
+.featured-swiper .swiper-button-prev {
+  left: -5.5rem;
+}
+
+.featured-swiper .swiper-button-next {
+  right: -5.5rem;
+}
+
+@media screen and (max-width: 1280px) {
+  .featured-swiper .swiper-button-prev {
+    left: -1.5rem;
+  }
+
+  .featured-swiper .swiper-button-next {
+    right: -1.5rem;
+  }
 }
 
 /* == */
@@ -426,7 +444,6 @@
 #products-page .list-product .sort-show.bottom .select-sort .item.show .per {
   display: none;
 }
-
 
 /* artwork tabs styles */
 
