@@ -1,4 +1,4 @@
-import React, { ReactNode, SyntheticEvent, useState } from 'react';
+import React, {ReactNode, SyntheticEvent, useState} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -18,13 +18,13 @@ interface TabPanelProps {
 }
 
 const tabsList = [
-  "Overview",
-  "Artwork",
-  "Ordering & Payments",
-  "Shipping",
-  "Terms & Conditions",
-  "Testimonials"
-]
+  'Overview',
+  'Artwork',
+  'Ordering & Payments',
+  'Shipping',
+  'Terms & Conditions',
+  'Testimonials'
+];
 
 function CustomTabPanel(props: TabPanelProps) {
   const {children, value, index, ...other} = props;
@@ -63,12 +63,12 @@ export default function Artwork() {
               allowScrollButtonsMobile
               className="tabs-styles"
             >
-              {tabsList.map(tabItem=> (
+              {tabsList.map(tabItem => (
                 <Tab
-                key={tabItem}
-                label={tabItem}
-                className="text-base font-poppins font-medium capitalize"
-              />
+                  key={tabItem}
+                  label={tabItem}
+                  className="text-base font-poppins font-medium capitalize"
+                />
               ))}
             </Tabs>
           </Container>
