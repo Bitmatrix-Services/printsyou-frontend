@@ -37,7 +37,6 @@ function ContactUs() {
               name="name"
               placeholder="Full Name"
               type="text"
-              required
               value={values.name}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -55,7 +54,6 @@ function ContactUs() {
                   value={values.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  required
                 />
                 {touched.email && errors.email ? (
                   <p className="text-red-700">{errors.email}</p>
@@ -85,7 +83,6 @@ function ContactUs() {
               value={values.subject}
               onChange={handleChange}
               onBlur={handleBlur}
-              required
             />
             {touched.subject && errors.subject ? (
               <p className="text-red-700">{errors.subject}</p>
@@ -98,7 +95,6 @@ function ContactUs() {
                 value={values.message}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                required
               />
               {touched.message && errors.message ? (
                 <p className="text-red-700">{errors.message}</p>
