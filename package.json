@@ -28,7 +28,7 @@
     "axios": "^1.5.0",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
-    "formik": "^2.4.3",
+    "formik": "^2.4.4",
     "lightgallery": "^2.7.1",
     "next": "13.4.19",
     "pnpm": "^8.7.4",
