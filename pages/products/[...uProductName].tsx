@@ -3,7 +3,6 @@ import Container from '@components/globals/Container';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
 import lgZoom from 'lightgallery/plugins/zoom';
 import sanitizeHtml from 'sanitize-html';
 
@@ -11,6 +10,8 @@ import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
 import {GetServerSidePropsContext} from 'next';
 import {Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
+import Breadcrumb from '@components/globals/Breadcrumb';
+import {useRouter} from 'next/router';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -21,7 +22,7 @@ interface ProductDetailsProps {
 
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   const [mount, setMount] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     setMount(true);
   }, []);
@@ -33,25 +34,14 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
             <figure className="order-first ">
               <div>
                 <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
-                  <Link href={'/'}>
-                    <HomeIcon className="h-4 w-4 mr-1 text-[#febe40] " />
-                  </Link>
-                  <div>
-                    <ChevronRightIcon className="h-3 w-3 mr-1 " />
-                  </div>
-                  <Link className=" mr-1 " href={'/'}>
-                    Promotional Products
-                  </Link>
-                  <div>
-                    <ChevronRightIcon className="h-3 w-3 mr-1 " />
-                  </div>
-                  <Link className=" mr-1 " href={'/'}>
-                    Technology & Mobile
-                  </Link>
-                  <div>
-                    <ChevronRightIcon className="h-3 w-3 mr-1 " />
-                  </div>
-                  <div className="text-[#303541]">Apparel</div>
+                  <Breadcrumb
+                    prefixTitle="Promotional Productssfsf"
+                    queryParams={
+                      Array.isArray(router.query?.uProductName)
+                        ? router.query?.uProductName
+                        : []
+                    }
+                  />
                 </div>
               </div>
               <div className="md:pt-8">
