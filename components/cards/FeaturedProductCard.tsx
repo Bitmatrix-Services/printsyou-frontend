@@ -37,7 +37,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   return (
     <>
       <div
-        onClick={() => router.push(`products/${product.uproductName}`)}
+        onClick={() => router.push(`products/${product.uniqueProductName}`)}
         className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"
       >
         <div className="p-6 min-h-[21.40rem]">

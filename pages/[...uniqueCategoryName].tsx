@@ -35,7 +35,7 @@ export const getServerSideProps = async (
 
   if (Array.isArray(uniqueCategoryName)) {
     const {data} = await http.get(
-      `category/uCategory?uCategoryName=${uniqueCategoryName.join('/')}`
+      `category?uCategoryName=${uniqueCategoryName.join('/')}`
     );
     category = data.payload;
   }

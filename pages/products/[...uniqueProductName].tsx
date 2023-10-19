@@ -35,8 +35,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               <Breadcrumb
                 prefixTitle="Promotional Products"
                 queryParams={
-                  Array.isArray(router.query?.uProductName)
-                    ? router.query?.uProductName
+                  Array.isArray(router.query?.uniqueProductName)
+                    ? router.query?.uniqueProductName
                     : []
                 }
               />
@@ -245,13 +245,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const uProductName = context.params?.uProductName;
+  const uniqueProductName = context.params?.uniqueProductName;
 
   let product = {};
 
-  if (Array.isArray(uProductName)) {
+  if (Array.isArray(uniqueProductName)) {
     const {data} = await http.get(
-      `product/uProduct?uProductName=${uProductName.join('/')}`
+      `product?uProductName=${uniqueProductName.join('/')}`
     );
     product = data.payload;
   }

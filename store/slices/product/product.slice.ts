@@ -16,7 +16,7 @@ const INITIAL_STATE: ProductInitialState = {
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
   async () => {
-    const res = await http.get(`/product/byTag?tag=buck`);
+    const res = await http.get(`/product/byTag?tag=underABuck`);
     return res?.data.payload;
   }
 );
@@ -24,7 +24,7 @@ export const getUnderABuckProducts = createAsyncThunk(
 export const getNewAndExclusiveProducts = createAsyncThunk(
   'product/newAndExclusive',
   async () => {
-    const res = await http.get(`/product/byTag?tag=exclusive`);
+    const res = await http.get(`/product/byTag?tag=newAndExclusive`);
     return res?.data.payload;
   }
 );
@@ -32,7 +32,7 @@ export const getNewAndExclusiveProducts = createAsyncThunk(
 export const getUniqueIdeaProducts = createAsyncThunk(
   'product/getUniqueIdeaProducts',
   async () => {
-    const res = await http.get(`/product/byTag?tag=idea`);
+    const res = await http.get(`/product/byTag?tag=uniqueIdeas`);
     return res?.data.payload;
   }
 );

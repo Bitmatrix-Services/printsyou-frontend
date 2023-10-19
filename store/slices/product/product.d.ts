@@ -47,7 +47,7 @@ export interface ProductImages {
 export interface Product {
   id: string;
   productName: string;
-  uproductName: string;
+  uniqueProductName: string;
   sku: string;
   price: ProductPrice[];
   images: ProductImage[];
