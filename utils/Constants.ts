@@ -1,4 +1,4 @@
 export const metaConstants = {
-    SITE_NAME : 'identityLinks',
-    DESCRIPTION : '',
-}
+  SITE_NAME: 'identityLinks',
+  DESCRIPTION: ''
+};
