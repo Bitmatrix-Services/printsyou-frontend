@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-
+import React, {Fragment, useEffect} from 'react';
 import AdvantageSection from '@components/sections/AdvantageSection';
 import WhyIdentitySection from '@components/sections/WhyIdentitySection';
 import HeroSection from '@components/sections/HeroSection';
@@ -31,7 +30,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
+    <Fragment>
       <HeroSection />
       <PromotionalCategoriesSection />
       {/* under a buck section */}
@@ -60,6 +59,6 @@ export default function Home() {
       />
       <AdvantageSection />
       <WhyIdentitySection />
-    </main>
+    </Fragment>
   );
 }
