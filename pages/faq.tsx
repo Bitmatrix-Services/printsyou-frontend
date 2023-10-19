@@ -19,7 +19,6 @@ interface FaqsProps {
 }
 
 const Faqs: FC<FaqsProps> = ({faqs}) => {
-
   return (
     <>
       <PageHeader pageTitle={'Frequently Asked Questions'} />
@@ -81,7 +80,6 @@ const Faqs: FC<FaqsProps> = ({faqs}) => {
 };
 
 export const getServerSideProps = async () => {
-
   const {data} = await http.get(`/faqs/all`);
   const faqs = data.payload;
   return {props: {faqs}};
