@@ -150,7 +150,7 @@ const Header = () => {
                       <li key={category.id} onClick={() => setShowList(false)}>
                         <Link
                           className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
-                          href={`/${category.ucategoryName}`}
+                          href={`/${category.uniqueCategoryName}`}
                         >
                           <span
                             dangerouslySetInnerHTML={{
@@ -229,7 +229,7 @@ const Header = () => {
                       <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-primary-500"
-                          href={`/${category.ucategoryName}`}
+                          href={`/${category.uniqueCategoryName}`}
                         >
                           <span
                             dangerouslySetInnerHTML={{
@@ -244,7 +244,7 @@ const Header = () => {
                     {categoryList.map(category => (
                       <li key={category.id}>
                         <a
-                          href={`/${category.ucategoryName}`}
+                          href={`/${category.uniqueCategoryName}`}
                           dangerouslySetInnerHTML={{
                             __html: sanitizeHtml(category.categoryName)
                           }}

@@ -43,7 +43,7 @@ const ViewAllCategories = () => {
                         <li key={subCat.id} className=" mb-2">
                           <Link
                             className={`capitalize text-mute3`}
-                            href={subCat.ucategoryName}
+                            href={subCat.uniqueCategoryName}
                           >
                             <span
                               dangerouslySetInnerHTML={{

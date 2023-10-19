@@ -29,13 +29,13 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const uCategoryName = context.params?.ucategoryName;
+  const uniqueCategoryName = context.params?.uniqueCategoryName;
 
   let category = {};
 
-  if (Array.isArray(uCategoryName)) {
+  if (Array.isArray(uniqueCategoryName)) {
     const {data} = await http.get(
-      `category/uCategory?uCategoryName=${uCategoryName.join('/')}`
+      `category/uCategory?uCategoryName=${uniqueCategoryName.join('/')}`
     );
     category = data.payload;
   }

@@ -19,8 +19,8 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
           <Breadcrumb
             prefixTitle="Search Results"
             queryParams={
-              Array.isArray(router.query?.ucategoryName)
-                ? router.query?.ucategoryName
+              Array.isArray(router.query?.uniqueCategoryName)
+                ? router.query?.uniqueCategoryName
                 : []
             }
           />

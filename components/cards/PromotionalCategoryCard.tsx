@@ -13,7 +13,7 @@ interface CategoryCardProps {
 const PromotionalCategoryCard: FC<CategoryCardProps> = ({category}) => {
   return (
     <Link
-      href={category.ucategoryName}
+      href={category.uniqueCategoryName}
       className={`category-card h-full w-full text-start block relative bg-white border border-[#d9dee4] border-t-2 sm:border-t-body hover:border-t-[#e42b1e]`}
     >
       <div className="pt-14 pb-2 sm:py-10 flex flex-col sm:flex-row items-center px-6 2xl:px-0 gap-6 xl:gap-0">
@@ -33,7 +33,7 @@ const PromotionalCategoryCard: FC<CategoryCardProps> = ({category}) => {
         </figure>
         <div className="xl:pr-4">
           <Link
-            href={category.ucategoryName}
+            href={category.uniqueCategoryName}
             className={`mb-4 block text-body hover:text-[#e42b1e] font-bold text-sm sm:text-base 2xl:text-sm text-center sm:text-left capitalize`}
           >
             <span
@@ -50,7 +50,7 @@ const PromotionalCategoryCard: FC<CategoryCardProps> = ({category}) => {
                 <Link
                   title={subCat.categoryName}
                   className={`capitalize text-mute3 md:text-xs hover:text-[#e42b1e] line-clamp-1`}
-                  href={subCat.ucategoryName}
+                  href={subCat.uniqueCategoryName}
                 >
                   <span
                     dangerouslySetInnerHTML={{
@@ -64,7 +64,7 @@ const PromotionalCategoryCard: FC<CategoryCardProps> = ({category}) => {
         </div>
       </div>
       <div className="hidden sm:flex absolute bottom-[-2.125rem] left-1/2 -translate-x-1/2 h-16 w-16 items-center justify-center bg-white hover:bg-body hover:text-white border border-[#3030411a]">
-        <Link href={category.ucategoryName}>
+        <Link href={category.uniqueCategoryName}>
           <ShoppingBagIcon className="h-7 w-7" />
         </Link>
       </div>

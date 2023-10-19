@@ -29,11 +29,11 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const uCategoryName = 'desktop-office';
+  const uniqueCategoryName = 'desktop-office';
 
   let category = {};
   const {data} = await http.get(
-    `category/uCategory?uCategoryName=${uCategoryName}`
+    `category/uCategory?uCategoryName=${uniqueCategoryName}`
   );
   category = data.payload;
 

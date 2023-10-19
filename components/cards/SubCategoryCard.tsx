@@ -11,7 +11,7 @@ interface ProductsSubCategoryCardProps {
 const SubCategoryCard: FC<ProductsSubCategoryCardProps> = ({category}) => {
   return (
     <Link
-      href={category.ucategoryName}
+      href={category.uniqueCategoryName}
       className={`tp-category-sub-cat category-card h-full w-full text-start block relative bg-white border border-[#d9dee4]  `}
     >
       <div className="py-4 flex flex-col items-center px-6 gap-2 ">

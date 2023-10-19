@@ -11,6 +11,6 @@ export type Category = {
   categoryDescription: string;
   imageUrl: string;
   level: string;
-  ucategoryName: string;
+  uniqueCategoryName: string;
   subCategories: Category[];
 };

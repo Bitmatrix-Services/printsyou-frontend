@@ -31,7 +31,7 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
                     <li key={index} className=" mb-2">
                       <Link
                         className={`capitalize text-mute3`}
-                        href={category.ucategoryName}
+                        href={category.uniqueCategoryName}
                       >
                         <span
                           dangerouslySetInnerHTML={{
@@ -67,7 +67,7 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
                     <li key={index} className=" mb-2">
                       <Link
                         className={`capitalize text-mute3`}
-                        href={category.ucategoryName}
+                        href={category.uniqueCategoryName}
                       >
                         {category.categoryName}
                       </Link>
