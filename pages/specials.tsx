@@ -19,9 +19,7 @@ const Specials = () => {
   }, [pageNumber, pageSize]);
 
   const getSpecialProducts = async () => {
-    const {data} = await http.get(
-      `/product/byTag?tag=special`
-    );
+    const {data} = await http.get(`/product/byTag?tag=special`);
 
     if (data.payload?.length > 0) {
       setSpecialProducts(data.payload);
