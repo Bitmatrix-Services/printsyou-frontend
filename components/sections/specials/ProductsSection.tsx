@@ -20,7 +20,7 @@ const ProductsSection: FC<ProductsSectionProps> = ({
   const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
 
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number | string>(24);
+  const [pageSize, setPageSize] = useState<number>(24);
   const [totalPages, setTotalPages] = useState<number>(1);
   // const [sort, setSort] = useState(25);
 

@@ -10,7 +10,7 @@ import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
 const Specials = () => {
   const [specialProducts, setSpecialProducts] = useState<Product[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number | string>(24);
+  const [pageSize, setPageSize] = useState<number>(24);
   const [totalPages, setTotalPages] = useState<number>(1);
   // const [sort, setSort] = useState(25);
 

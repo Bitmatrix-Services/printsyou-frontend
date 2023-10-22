@@ -13,8 +13,8 @@ const sortList = [
 interface PaginationHeaderProps {
   pageNumber: number;
   setPageNumber: Dispatch<SetStateAction<number>>;
-  pageSize: number | string;
-  setPageSize: Dispatch<SetStateAction<number | string>>;
+  pageSize: number;
+  setPageSize: Dispatch<SetStateAction<number>>;
   totalPages: number;
   // sort: number;
   // setSort: void;
@@ -54,9 +54,9 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     name="theme5"
                     className="custom_theme5 outline-none"
                     value={pageSize}
-                    onChange={e => setPageSize(e.target.value)}
+                    onChange={e => setPageSize(parseInt(e.target.value))}
                   >
-                    {[24, 48, 'All'].map(item => (
+                    {[24, 48].map(item => (
                       <option key={item} value={item}>
                         {item}
                       </option>
