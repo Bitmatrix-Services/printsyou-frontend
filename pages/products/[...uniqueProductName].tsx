@@ -30,16 +30,16 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
     <>
       <Container>
         <div className="px-8 py-8">
-            <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
-              <Breadcrumb
-                prefixTitle="Promotional Products"
-                queryParams={
-                  Array.isArray(router.query?.uniqueProductName)
-                    ? router.query?.uniqueProductName
-                    : []
-                }
-              />
-            </div>
+          <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
+            <Breadcrumb
+              prefixTitle="Promotional Products"
+              queryParams={
+                Array.isArray(router.query?.uniqueProductName)
+                  ? router.query?.uniqueProductName
+                  : []
+              }
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <figure className="order-first ">
               <div className="md:pt-8">
