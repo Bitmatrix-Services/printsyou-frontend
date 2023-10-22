@@ -3,7 +3,7 @@ import React from 'react';
 import PageHeader from '@components/globals/PageHeader';
 import Container from '@components/globals/Container';
 import {useFormik} from 'formik';
-import {ContactUsSchema} from '@components/validationSchemas/ContactUs';
+import {ContactUsSchema} from '@utils/validationSchemas';
 
 function ContactUs() {
   const initialValues = {

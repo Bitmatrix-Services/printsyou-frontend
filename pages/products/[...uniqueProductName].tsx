@@ -30,7 +30,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
     <>
       <Container>
         <div className="px-8 py-8">
-          <div>
             <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">
               <Breadcrumb
                 prefixTitle="Promotional Products"
@@ -41,7 +40,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                 }
               />
             </div>
-          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <figure className="order-first ">
               <div className="md:pt-8">
@@ -205,13 +203,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               </div>
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="#!"
+                  href="/order-request"
                   className="block w-full text-center py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold"
                 >
                   PLACE ORDER
                 </Link>
                 <Link
-                  href="#!"
+                  href={`/more_info?item_id=${product.id}`}
                   className="block w-full text-center py-5 px-8 text-body bg-white hover:bg-body hover:text-white border border-[#eaeaec] text-sm font-bold"
                 >
                   REQUEST MORE INFO
