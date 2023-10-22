@@ -283,25 +283,26 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   </LightGallery>
                 </div>
                 <div className="gallery-container">
-                  {/* <LightGallery mode="lg-fade" plugins={[lgZoom]}>
+                  <LightGallery mode="lg-fade" plugins={[lgZoom]}>
                     {product?.productImages?.map((image, index) => (
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
-                        data-src={imageUrl}
+                        data-src={image.imageUrl}
                       >
                         <span className="block relative aspect-square border border-[#eceef1]">
-                          <Image
+                          <ImageWithFallback
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             fill
                             className="object-contain"
-                            src={imageUrl}
+                            src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`}
+                            fallbackSrc="/assets/logo.png"
                             alt={`gallery-image-${index}`}
                           />
                         </span>
                       </a>
                     ))}
-                  </LightGallery> */}
+                  </LightGallery>
                 </div>
               </figure>
             </div>
