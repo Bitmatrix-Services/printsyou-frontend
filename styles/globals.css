@@ -176,8 +176,8 @@
 
 .swiper-button-prev,
 .swiper-button-next {
-  width: 4.375rem;
-  height: 4.375rem;
+  width: 4.375rem !important;
+  height: 4.375rem !important;
   border: 1px solid rgba(48, 48, 65, 0.1);
 }
 
