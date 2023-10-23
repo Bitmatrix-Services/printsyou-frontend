@@ -110,8 +110,31 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
             </div>
           </div>
           <div>
-            <FormHeading text="Quantity:" />
-            <FormHeading text="Sub Total:" />
+            <div className="flex justify-between">
+              <FormHeading text="Quantity:" />
+              <FormHeading text="Sub Total:" />
+            </div>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <FormInput
+                  type="text"
+                  name="quantity"
+                  placeHolder="Quantity"
+                  formik={formik}
+                />
+                <h4 className="ml-5">x $0.00</h4>
+              </div>
+              <h2 className="text-primary-500 text-2xl font-bold">$0.00</h2>
+            </div>
+            <div className="flex justify-between items-center mt-4">
+              <div className="text-red-500 text-xs font-semibold">
+                Min Qty is 50
+              </div>
+              <div className="text-xs">
+                *Final total including shipping and any additional charges will
+                be sent with the artwork proof after the order is placed.
+              </div>
+            </div>
           </div>
         </div>
         <hr className="mt-12 border border-[#eceef1]" />
