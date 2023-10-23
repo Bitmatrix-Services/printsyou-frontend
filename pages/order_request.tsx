@@ -11,6 +11,8 @@ import Link from 'next/link';
 import {http} from 'services/axios.service';
 import {GetServerSidePropsContext} from 'next';
 import {Product} from '@store/slices/product/product';
+import ImageWithFallback from '@components/ImageWithFallback';
+import TootipBlack from '@components/globals/TootipBlack';
 
 interface OrderRequest {
   product: Product;
@@ -62,32 +64,54 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
     <Fragment>
       <PageHeader pageTitle="Order Request" />
       <Container>
-        <div className="xs:flex md:grid md:grid-cols-2 space-x-16">
-          <div className="mt-4 ">
-            <h3 className="text-2xl mb-6 sm:text-xl md:text-xl font-bold capitalize">
-              {product?.prefix} {product?.productName}
-            </h3>
-
-            <h6 className="mb-3 text-sm font-semibold text-body">
-              ITEM#: <span className="text-primary-500">{product?.sku}</span>
-            </h6>
-
-            <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
-              <ul className="text-xs text-mute3 font-bold product-card__categories">
-                {product?.additionalRows &&
-                  [...product.additionalRows]
-                    ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                    .map(row => (
-                      <li key={row.id}>
-                        <span className="pt-[2px] block">
-                          Please add{' '}
-                          <span className="text-red-500">${row.priceDiff}</span>{' '}
-                          {row.name}
-                        </span>
-                      </li>
-                    ))}
-              </ul>
+        <div className="xs:flex md:grid md:grid-cols-2 mt-6 space-x-16">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative min-w-[10rem] h-40 w-40">
+              <ImageWithFallback
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                fill
+                className="object-contain"
+                src={
+                  product?.productImages && product.productImages[0]
+                    ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                    : ''
+                }
+                fallbackSrc="/assets/logo.png"
+                alt="product"
+              />
             </div>
+            <div>
+              <h3 className="text-2xl mb-6 sm:text-xl md:text-xl font-bold capitalize">
+                {product?.prefix} {product?.productName}
+              </h3>
+
+              <h6 className="mb-3 text-sm font-semibold text-body">
+                ITEM#: <span className="text-primary-500">{product?.sku}</span>
+              </h6>
+
+              <div className="mt-4 w-full bg-[#f6f7f8] p-3 rounded-xl">
+                <ul className="text-xs text-mute3 font-bold product-card__categories">
+                  {product?.additionalRows &&
+                    [...product.additionalRows]
+                      ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                      .map(row => (
+                        <li key={row.id}>
+                          <span className="pt-[2px] block">
+                            Please add{' '}
+                            <span className="text-red-500">
+                              ${row.priceDiff}
+                            </span>{' '}
+                            {row.name}
+                          </span>
+                        </li>
+                      ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div>
+            <FormHeading text="Quantity:" />
+            <FormHeading text="Sub Total:" />
           </div>
         </div>
         <hr className="mt-12 border border-[#eceef1]" />
@@ -95,101 +119,80 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           <div className="xs:flex md:grid md:grid-cols-2 space-x-16">
             <div>
               <FormHeading text="Billing Information" />
-              <div className="flex justify-between space-x-4  mt-6 ">
-                <div className="w-[100%]">
-                  <FormInput
-                    type="text"
-                    name="name"
-                    placeHolder="Name"
-                    formik={formik}
-                  />
-                </div>
-                <div className="w-[100%]">
-                  <FormInput
-                    type="text"
-                    name="company"
-                    placeHolder="Company"
-                    formik={formik}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-between space-x-4 mt-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <FormInput
                   type="text"
-                  name="address"
-                  placeHolder="Address"
+                  name="name"
+                  placeHolder="Name"
                   formik={formik}
                 />
-              </div>
-
-              <div className="flex justify-between space-x-4 mt-6">
                 <FormInput
                   type="text"
-                  name="address2"
-                  placeHolder="Address 2"
+                  name="company"
+                  placeHolder="Company"
                   formik={formik}
                 />
-              </div>
 
-              <div className="flex justify-between space-x-4 mt-6">
-                <div className="w-[100%] ">
+                <div className="md:col-span-2">
                   <FormInput
                     type="text"
-                    name="city"
-                    placeHolder="City"
+                    name="address"
+                    placeHolder="Address"
                     formik={formik}
                   />
                 </div>
-                <div className="w-[100%] ">
+                <div className="md:col-span-2">
                   <FormInput
                     type="text"
-                    name="state"
-                    placeHolder="State"
+                    name="address2"
+                    placeHolder="Address 2"
                     formik={formik}
                   />
                 </div>
-              </div>
 
-              <div className="flex justify-between space-x-4 mt-6">
-                <div className="w-[100%] ">
-                  <FormInput
-                    type="text"
-                    name="zip"
-                    placeHolder="Zip Code"
-                    formik={formik}
-                  />
-                </div>
-                <div className="w-[100%] ">
-                  <FormInput
-                    type="text"
-                    name="phone"
-                    placeHolder="Phone"
-                    formik={formik}
-                  />
-                </div>
-              </div>
+                <FormInput
+                  type="text"
+                  name="city"
+                  placeHolder="City"
+                  formik={formik}
+                />
+                <FormInput
+                  type="text"
+                  name="state"
+                  placeHolder="State"
+                  formik={formik}
+                />
 
-              <div className="flex justify-between space-x-4 mt-6">
-                <div className="w-[100%] ">
+                <FormInput
+                  type="text"
+                  name="zip"
+                  placeHolder="Zip Code"
+                  formik={formik}
+                />
+                <FormInput
+                  type="text"
+                  name="phone"
+                  placeHolder="Phone"
+                  formik={formik}
+                />
+
+                <TootipBlack title="Please type the email address you would like us to use for all correspondance for the order process.  This will be where your sales confirmation and artwork proof will be sent to.">
                   <FormInput
                     type="text"
                     name="email"
-                    tooltip="Please type the email address you would like us to use for all correspondance for the order process.  This will be where your sales confirmation and artwork proof will be sent to."
                     placeHolder="Email"
                     formik={formik}
                   />
-                </div>
-                <div className="w-[100%] "></div>
+                </TootipBlack>
               </div>
               <FormHeading text="Shipping Information" />
               <div className="flex justify-between space-x-4 mt-6">
-                <div className="w-[100%] ">
+                <div className="flex items-center">
                   <input
                     type="checkbox"
                     id="sameBillingAddress"
                     name="sameBillingAddress"
-                    className="accent-[#f8ab11] rounded-none"
+                    className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
                     checked={formik.values.sameBillingAddress}
                     onChange={e => {
                       formik.setFieldValue('diffBillingAddress', false);
@@ -200,12 +203,12 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     Same as my billing address
                   </label>
                 </div>
-                <div className="w-[100%] ">
+                <div className="flex items-center">
                   <input
                     type="checkbox"
                     id="diffBillingAddress"
                     name="diffBillingAddress"
-                    className="accent-[#f8ab11] rounded-none"
+                    className="accent-[#f8ab11] rounded-0 min-[1.25rem] h-5 w-5"
                     checked={formik.values.diffBillingAddress}
                     onChange={e => {
                       formik.setFieldValue('sameBillingAddress', false);
@@ -219,82 +222,59 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
               </div>
 
               {formik.values.diffBillingAddress && (
-                <>
-                  <div className="flex justify-between space-x-4  mt-6 ">
-                    <div className="w-[100%]">
-                      <FormInput
-                        type="text"
-                        name="billingName"
-                        placeHolder="Name"
-                        formik={formik}
-                      />
-                    </div>
-                    <div className="w-[100%]">
-                      <FormInput
-                        type="text"
-                        name="billingCompany"
-                        placeHolder="Company"
-                        formik={formik}
-                      />
-                    </div>
-                  </div>
+                <div className="grid md:grid-cols-2 gap-6 mt-6">
+                  <FormInput
+                    type="text"
+                    name="billingName"
+                    placeHolder="Name"
+                    formik={formik}
+                  />
+                  <FormInput
+                    type="text"
+                    name="billingCompany"
+                    placeHolder="Company"
+                    formik={formik}
+                  />
+                  <FormInput
+                    type="text"
+                    name="billingAddress"
+                    placeHolder="Address"
+                    formik={formik}
+                  />
 
-                  <div className="flex justify-between space-x-4 mt-6">
-                    <FormInput
-                      type="text"
-                      name="billingAddress"
-                      placeHolder="Address"
-                      formik={formik}
-                    />
-                  </div>
+                  <FormInput
+                    type="text"
+                    name="billingAddress2"
+                    placeHolder="Address 2"
+                    formik={formik}
+                  />
 
-                  <div className="flex justify-between space-x-4 mt-6">
-                    <FormInput
-                      type="text"
-                      name="billingAddress2"
-                      placeHolder="Address 2"
-                      formik={formik}
-                    />
-                  </div>
+                  <FormInput
+                    type="text"
+                    name="billingCity"
+                    placeHolder="City"
+                    formik={formik}
+                  />
+                  <FormInput
+                    type="text"
+                    name="billingState"
+                    placeHolder="State"
+                    formik={formik}
+                  />
 
-                  <div className="flex justify-between space-x-4 mt-6">
-                    <div className="w-[100%] ">
-                      <FormInput
-                        type="text"
-                        name="billingCity"
-                        placeHolder="City"
-                        formik={formik}
-                      />
-                    </div>
-                    <div className="w-[100%] ">
-                      <FormInput
-                        type="text"
-                        name="billingState"
-                        placeHolder="State"
-                        formik={formik}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between space-x-4 mt-6">
-                    <div className="w-[100%] ">
-                      <FormInput
-                        type="text"
-                        name="billingZip"
-                        placeHolder="Zip Code"
-                        formik={formik}
-                      />
-                    </div>
-                    <div className="w-[100%] ">
-                      <FormInput
-                        type="text"
-                        name="billingPhone"
-                        placeHolder="Phone"
-                        formik={formik}
-                      />
-                    </div>
-                  </div>
-                </>
+                  <FormInput
+                    type="text"
+                    name="billingZip"
+                    placeHolder="Zip Code"
+                    formik={formik}
+                  />
+                  <FormInput
+                    type="text"
+                    name="billingPhone"
+                    placeHolder="Phone"
+                    formik={formik}
+                  />
+                </div>
               )}
               <FormHeading text="Payment Information" />
               <FormDescription
@@ -309,32 +289,32 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
             {/* 2nd column */}
             <div>
               <FormHeading text="Product Details" />
-              <div className="flex justify-between space-x-4  mt-6 ">
-                <div className="w-[100%]">
+              <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <TootipBlack title="Please type the color/s of the item you are ordering.  If the item does not have a color code, or it is a full color item, you may enter N/A.">
                   <FormInput
                     type="text"
                     name="color"
-                    placeHolder="Color"
+                    placeHolder="Item Colors"
                     formik={formik}
                   />
-                </div>
-                <div className="w-[100%]">
+                </TootipBlack>
+                <TootipBlack title="This is not a mandatory field.  If the item has different sizes, please enter the size/s that you are ordering.  If the item only comes in one size, you may leave this field blank.">
                   <FormInput
                     type="text"
                     name="size"
                     placeHolder="Size"
                     formik={formik}
                   />
-                </div>
-              </div>
+                </TootipBlack>
 
-              <div className="flex justify-between space-x-4 mt-6">
-                <FormInput
-                  type="text"
-                  name="imprintColor"
-                  placeHolder="Imprint Color"
-                  formik={formik}
-                />
+                <TootipBlack title="This is not a mandatory field.  If the item has different sizes, please enter the size/s that you are ordering.  If the item only comes in one size, you may leave this field blank">
+                  <FormInput
+                    type="text"
+                    name="imprintColor"
+                    placeHolder="Imprint Color"
+                    formik={formik}
+                  />
+                </TootipBlack>
               </div>
               <FormHeading text="Artwork files" />
               <FormDescription
@@ -343,8 +323,8 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                   `We will send a digital artwork proof for approval once the order is received.`
                 ]}
               />
-              <div className="w-fit flex py-5 px-10 text-sm font-bold  bg-[#58beaa] hover:bg-primary-500 text-white">
-                <span className="bg-[#49c8ae] text-center">
+              <div className="w-fit flex group text-sm font-bold  bg-[rgb(88,190,170)] hover:bg-primary-500 text-white">
+                <span className="group-hover:bg-primary-600 bg-[#49c8ae] text-center px-5 py-5">
                   <Image
                     height={15}
                     width={15}
@@ -352,36 +332,37 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     alt="..."
                   />
                 </span>
-                <span className="">ADD FILES...</span>
+                <span className="pr-5 pl-3 py-5">ADD FILES...</span>
               </div>
               <FormHeading text="Additional Information" />
-              <div className="flex justify-between space-x-4  mt-6 ">
-                <div className="w-[100%]">
+              <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <TootipBlack title="Use this field to let us know the date you need the order in your hands.   If you do not have a deadline, you may leave this blank.">
                   <FormInput
                     type="date"
                     name="deliveryDate"
                     placeHolder="Delivery Date"
                     formik={formik}
                   />
-                </div>
-                <div className="w-[100%]">
+                </TootipBlack>
+                <TootipBlack title="If there was an Identity Links sales rep who helped you with the order, you may enter their name here.  If not, you may leave this field blank.">
                   <FormInput
                     type="text"
                     name="salesRep"
                     placeHolder="Sales Rep"
                     formik={formik}
                   />
+                </TootipBlack>
+                <div className="md:col-span-2">
+                  <TootipBlack title="Use this field to let us know any additional information you may have in regards to your order.  This includes any drop ship instructions, any added verbage you would like added to the imprint, or any other information you think may be important for us to process your order">
+                    <FormInput
+                      inputType="textarea"
+                      type="text"
+                      name="additionalInfo"
+                      placeHolder="Additional Information"
+                      formik={formik}
+                    />
+                  </TootipBlack>
                 </div>
-              </div>
-
-              <div className="flex justify-between space-x-4 mt-6">
-                <FormInput
-                  inputType="textarea"
-                  type="text"
-                  name="additionalInfo"
-                  placeHolder="Additional Information"
-                  formik={formik}
-                />
               </div>
             </div>
           </div>
@@ -393,7 +374,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                   type="checkbox"
                   id="newsLetter"
                   name="newsLetter"
-                  className="accent-[#f8ab11] rounded-none"
+                  className="accent-[#f8ab11] rounded-0"
                   checked={formik.values.newsLetter}
                   onChange={formik.handleChange}
                 />
@@ -407,7 +388,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                   type="checkbox"
                   id="agreeToTerms"
                   name="agreeToTerms"
-                  className="accent-[#f8ab11] rounded-none"
+                  className="accent-[#f8ab11] rounded-0"
                   checked={formik.values.agreeToTerms}
                   onChange={formik.handleChange}
                 />

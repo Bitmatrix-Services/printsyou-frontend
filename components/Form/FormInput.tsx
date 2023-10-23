@@ -6,7 +6,6 @@ interface FormInputProps {
   placeHolder: string;
   type: string;
   inputType?: string;
-  tooltip?: string;
   formik: any;
 }
 
@@ -15,18 +14,15 @@ const FormInput: FC<FormInputProps> = ({
   placeHolder,
   type,
   inputType,
-  tooltip,
   formik
 }) => {
   return (
-    <>
+    <div>
       {inputType !== 'textarea' ? (
         <input
-          className="block border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+          className="block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
           type={type}
           name={name}
-          data-tooltip-trigger="hover"
-          data-tooltip-target={name}
           placeholder={placeHolder}
           value={formik.values[name]}
           onChange={formik.handleChange}
@@ -36,27 +32,18 @@ const FormInput: FC<FormInputProps> = ({
         <textarea
           className="block resize-none border w-full h-14 pt-3 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
           name={name}
+          rows={4}
+          cols={8}
           placeholder={placeHolder}
-          data-tooltip-target={name}
           value={formik.values[name]}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         />
       )}
-      {tooltip && (
-        <div
-          id={name}
-          role="tooltip"
-          className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-        >
-          {tooltip}
-          <div className="tooltip-arrow" data-popper-arrow></div>
-        </div>
-      )}
       {formik.touched[name] && formik.errors[name] ? (
         <p className="text-red-500">{formik.errors[name]}</p>
       ) : null}
-    </>
+    </div>
   );
 };
 
