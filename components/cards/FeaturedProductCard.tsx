@@ -277,6 +277,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       className="cursor-pointer"
                       data-src={
                         product?.productImages && product.productImages[0]
+                          ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                          : ''
                       }
                     >
                       <span className="block relative aspect-square">
@@ -290,7 +292,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                               : ''
                           }
                           fallbackSrc="/assets/logo.png"
-                          alt={`product`}
+                          alt=""
                         />
                       </span>
                     </a>
@@ -302,7 +304,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
-                        data-src={image.imageUrl}
+                        data-src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`}
                       >
                         <span className="block relative aspect-square border border-[#eceef1]">
                           <ImageWithFallback
@@ -311,7 +313,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                             className="object-contain"
                             src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`}
                             fallbackSrc="/assets/logo.png"
-                            alt={`gallery-image-${index}`}
+                            alt=""
                           />
                         </span>
                       </a>
