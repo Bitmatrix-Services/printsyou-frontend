@@ -41,7 +41,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(getAllCategoryList());
-  }, []);
+  });
 
   const handleOpen = () => {
     setMobileMenu(true);

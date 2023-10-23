@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import {FormikProps} from 'formik';
 
 interface FormInputProps {
   name: string;

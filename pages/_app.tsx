@@ -11,7 +11,6 @@ import 'swiper/css/pagination';
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
 import '@styles/globals.css';
-import {url} from 'inspector';
 
 export default function App({Component, pageProps}: AppProps) {
   return (
