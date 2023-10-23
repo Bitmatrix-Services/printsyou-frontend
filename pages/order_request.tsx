@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {FC, Fragment} from 'react';
 import Container from '@components/globals/Container';
 import PageHeader from '@components/globals/PageHeader';
 import {useFormik} from 'formik';
@@ -8,8 +8,15 @@ import FormDescription from '@components/Form/FormDescription';
 import Image from 'next/image';
 import FormInput from '@components/Form/FormInput';
 import Link from 'next/link';
+import {http} from 'services/axios.service';
+import {GetServerSidePropsContext} from 'next';
+import {Product} from '@store/slices/product/product';
 
-const OrderRequest = () => {
+interface OrderRequest {
+  product: Product;
+}
+
+const OrderRequest: FC<OrderRequest> = ({product}) => {
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -49,10 +56,40 @@ const OrderRequest = () => {
     }
   });
 
+  console.log('product', product);
+
   return (
     <Fragment>
       <PageHeader pageTitle="Order Request" />
       <Container>
+        <div className="xs:flex md:grid md:grid-cols-2 space-x-16">
+          <div className="mt-4 ">
+            <h3 className="text-2xl mb-6 sm:text-xl md:text-xl font-bold capitalize">
+              {product?.prefix} {product?.productName}
+            </h3>
+
+            <h6 className="mb-3 text-sm font-semibold text-body">
+              ITEM#: <span className="text-primary-500">{product?.sku}</span>
+            </h6>
+
+            <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
+              <ul className="text-xs text-mute3 font-bold product-card__categories">
+                {product?.additionalRows &&
+                  [...product.additionalRows]
+                    ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                    .map(row => (
+                      <li key={row.id}>
+                        <span className="pt-[2px] block">
+                          Please add{' '}
+                          <span className="text-red-500">${row.priceDiff}</span>{' '}
+                          {row.name}
+                        </span>
+                      </li>
+                    ))}
+              </ul>
+            </div>
+          </div>
+        </div>
         <hr className="mt-12 border border-[#eceef1]" />
         <form onSubmit={formik.handleSubmit}>
           <div className="xs:flex md:grid md:grid-cols-2 space-x-16">
@@ -321,9 +358,9 @@ const OrderRequest = () => {
               <div className="flex justify-between space-x-4  mt-6 ">
                 <div className="w-[100%]">
                   <FormInput
-                    type="text"
-                    name="itemColor"
-                    placeHolder="Item Color"
+                    type="date"
+                    name="deliveryDate"
+                    placeHolder="Delivery Date"
                     formik={formik}
                   />
                 </div>
@@ -399,6 +436,17 @@ const OrderRequest = () => {
       </Container>
     </Fragment>
   );
+};
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const productId = context.query.item_id;
+
+  const {data} = await http.get(`product/${productId}`);
+  const product = data.payload;
+
+  return {props: {product}};
 };
 
 export default OrderRequest;

@@ -9,10 +9,8 @@ import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
 import {useRouter} from 'next/router';
 import sanitizeHtml from 'sanitize-html';
-
+import {NextSeo} from 'next-seo';
 import {Product} from '@store/slices/product/product';
-
-// icons
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
 import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
@@ -36,6 +34,22 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
 
   return (
     <>
+      <NextSeo
+        title={product.metaTitle ?? ''}
+        description={product.metaDescription ?? ''}
+        openGraph={{
+          images: [
+            {
+              url: product.productImages[0]?.imageUrl
+                ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                : '/assets/logo.png',
+              height: 70,
+              width: 70,
+              alt: 'product'
+            }
+          ]
+        }}
+      />
       <div
         onClick={() => router.push(`products/${product.uniqueProductName}`)}
         className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"

@@ -22,7 +22,7 @@ const FormInput: FC<FormInputProps> = ({
     <>
       {inputType !== 'textarea' ? (
         <input
-          className="block border w-full h-14 pl-4 pr-16 rounded-sm text-sm focus:outline-none"
+          className="block border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
           type={type}
           name={name}
           data-tooltip-trigger="hover"
@@ -34,7 +34,7 @@ const FormInput: FC<FormInputProps> = ({
         />
       ) : (
         <textarea
-          className="block resize-none border w-full h-14 pt-3 pl-4 pr-16 rounded-sm text-sm focus:outline-none"
+          className="block resize-none border w-full h-14 pt-3 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
           name={name}
           placeholder={placeHolder}
           data-tooltip-target={name}

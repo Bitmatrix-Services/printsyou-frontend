@@ -50,13 +50,15 @@ export interface Product {
   uniqueProductName: string;
   sku: string;
   price: ProductPrice[];
-  images: ProductImage[];
+  productImages: ProductImage[];
   esp?: string | null;
   asi?: string | null;
   prefix?: string | null;
   suffix?: string | null;
   description: string | null;
   productDescription: string;
+  metaTitle: string | null;
+  metaDescription: string | null;
   additionalRow: AdditionalRow[];
   priceGrids: PriceGrids[];
   productImages?: ProductImages[];
