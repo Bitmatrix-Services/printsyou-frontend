@@ -237,7 +237,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     )
                   )}
                 </div>
-                <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
+                <div className="mt-4 w-full bg-[#f6f7f8] p-4 rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
                     {product?.additionalRows &&
                       [...product.additionalRows]

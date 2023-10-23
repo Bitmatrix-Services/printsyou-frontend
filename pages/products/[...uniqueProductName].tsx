@@ -61,11 +61,15 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               </div>
               <div className="gallery-container">
                 <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                  {product.productImages?.map((images, index) => (
+                  {product.productImages?.map(image => (
                     <a
-                      key={images.imageUrl}
+                      key={image.imageUrl}
                       className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
-                      data-src={images}
+                      data-src={
+                        image
+                          ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`
+                          : ''
+                      }
                     >
                       <span className="block relative aspect-square border border-[#eceef1]">
                         <ImageWithFallback
@@ -73,11 +77,11 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                           fill
                           className="object-contain"
                           src={
-                            images
-                              ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${images.imageUrl}`
+                            image
+                              ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`
                               : ''
                           }
-                          alt={`Product`}
+                          alt={``}
                           fallbackSrc="/assets/logo.png"
                         />
                       </span>
@@ -186,7 +190,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   ></div>
                 </>
               )}
-              <div className="mt-4 p-4 w-full bg-greyLight rounded-xl">
+              <div className="mt-4 p-4 w-full bg-[#f6f7f8] rounded-xl">
                 <ul className="text-xs text-mute3 font-bold product-card__categories">
                   {product.additionalRows
                     .sort((a, b) => a.sequenceNumber - b.sequenceNumber)

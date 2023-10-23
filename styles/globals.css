@@ -477,3 +477,17 @@
 .tabs-styles .MuiTabs-indicator {
   display: none;
 }
+
+.category-card-border:hover:before {
+  bottom: -1px;
+  top: unset;
+  background: #febe40;
+}
+
+.lg-backdrop {
+  z-index: 1500;
+}
+
+.lg-outer {
+  z-index: 1500;
+}
