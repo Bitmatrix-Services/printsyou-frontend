@@ -146,8 +146,6 @@ export const getServerSideProps = async (
 ) => {
   const productId = context.query?.item_id;
 
-  console.log('productId', productId);
-
   const {data} = await http.get(`product/${productId}`);
   const product = data.payload;
 

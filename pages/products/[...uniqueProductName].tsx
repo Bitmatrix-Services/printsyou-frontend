@@ -203,7 +203,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               </div>
               <div className="mt-4 flex flex-col sm:flex-row gap-3">
                 <Link
-                  href="/order-request"
+                  href={`/order_request?item_id=${product.id}`}
                   className="block w-full text-center py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold"
                 >
                   PLACE ORDER

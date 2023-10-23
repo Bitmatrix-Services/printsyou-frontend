@@ -13,4 +13,6 @@ export type Category = {
   level: string;
   uniqueCategoryName: string;
   subCategories: Category[];
+  metaTitle: string | null;
+  metaDescription: string | null;
 };
