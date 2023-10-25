@@ -6,7 +6,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/solid';
 import sanitizeHtml from 'sanitize-html';
 
@@ -17,6 +16,8 @@ import {
   getAllCategoryList,
   selectCategoryList
 } from '@store/slices/category/catgory.slice';
+import {useScrollingUp} from 'hooks/useScrolllingUp';
+import {DropDownNavMenu} from './DropDownNavMenu';
 
 const links = [
   {color: '#dd6c99', text: 'About us', href: '/about-us'},
@@ -32,10 +33,10 @@ const links = [
 ];
 
 const Header = () => {
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [showList, setShowList] = useState(false);
-
   const dispatch = useAppDispatch();
+  const {scrollingUp, scrollValue} = useScrollingUp();
+
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   const categoryList = useAppSelector(selectCategoryList);
 
@@ -57,10 +58,18 @@ const Header = () => {
         style={{backgroundImage: 'url(/assets/bg-line-top-banner.jpg)'}}
       />
       <div className="py-5 bg-body" />
-      <header className="sticky z-20 top-0 bg-white border-b border-[#eceef1]">
+      <header
+        className={`${
+          scrollingUp ? 'sticky' : ''
+        } z-20 top-0 bg-white border-b border-[#eceef1]`}
+      >
         <div className="max-w-[100rem] mx-auto px-4 md:px-8 relative">
           <nav className="flex">
-            <div className="flex flex-col lg:flex-row gap-3 flex-1 py-4">
+            <div
+              className={`flex flex-col lg:flex-row gap-3 flex-1 ${
+                scrollValue > 100 ? 'pt-4' : 'py-4'
+              }`}
+            >
               <div className="flex">
                 <Link href="/" className="w-44 h-11 block relative mr-auto">
                   <Image
@@ -76,7 +85,7 @@ const Header = () => {
                     href="tel: 8882829507"
                     className="h-full flex items-center"
                   >
-                    <div className="w-7 h-7 relative">
+                    <div className="w-7 h-7 relative mr-5">
                       <Image
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         fill
@@ -94,11 +103,20 @@ const Header = () => {
                   </button>
                 </div>
               </div>
-              <div className="flex-1 lg:ml-6">
+              <div className="flex-1 lg:ml-6 mr-16">
                 <SearchBar />
               </div>
+              {scrollingUp && scrollValue > 100 && (
+                <div className="ml-10">
+                  <DropDownNavMenu />
+                </div>
+              )}
             </div>
-            <div className="hidden lg:block ml-6 xl:ml-28 pl-6 border-l border-[#eceef1]">
+            <div
+              className={`hidden lg:block ${
+                scrollValue < 100 && 'xl:ml-28'
+              } pl-6 border-l border-[#eceef1]`}
+            >
               <a
                 href="tel: 8882829507"
                 className="h-full flex items-center gap-3"
@@ -127,46 +145,7 @@ const Header = () => {
       <nav className="hidden lg:block bg-white border-b border-[#eceef1]">
         <Container>
           <div className="flex">
-            <div
-              className={`megamenu ${showList && 'show'}`}
-              onMouseLeave={() => setShowList(false)}
-            >
-              <button
-                type="button"
-                onMouseEnter={() => setShowList(true)}
-                className="megamenu-button p-5 lg:min-w-[13.4rem] border-l border-r border-b-4 border-b-primary-500 border-[#eceef1] relative transition-all duration-300 text-primary-500 hover:text-white after:transition-all after:duration-300 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0 after:bg-primary-500 hover:after:h-full"
-              >
-                <div className="relative z-10 flex items-center gap-3">
-                  <span className="text-sm font-semibold uppercase mr-auto">
-                    ALL PRODUCTS
-                  </span>
-                  <ExpandMoreIcon className="h-6 w-6" />
-                </div>
-              </button>
-              <div className="megamenu-inner">
-                <Container>
-                  <ul className="menu-link grid grid-cols-4 xl:grid-cols-5 gap-4">
-                    {categoryList.map(category => (
-                      <li key={category.id} onClick={() => setShowList(false)}>
-                        <Link
-                          className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
-                          href={`/${category.uniqueCategoryName}`}
-                        >
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: sanitizeHtml(category.categoryName)
-                            }}
-                          ></span>
-                          <span className="ml-1 transition-all duration-150 opacity-0 group-hover:opacity-100">
-                            <TrendingFlatIcon />
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </Container>
-              </div>
-            </div>
+            <DropDownNavMenu />
 
             <ul className="w-full flex flex-wrap justify-between gap-8 xl:gap-12 ms-10 xl:ms-20">
               {links.map((link, index) => (
@@ -184,6 +163,7 @@ const Header = () => {
         </Container>
       </nav>
 
+      {/* mobile view  */}
       <Drawer
         open={mobileMenu}
         onClose={handleClose}
