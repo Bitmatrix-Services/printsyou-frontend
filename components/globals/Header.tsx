@@ -61,7 +61,7 @@ const Header = () => {
       <header
         className={`${
           scrollingUp ? 'sticky' : ''
-        } z-20 top-0 bg-white border-b border-[#eceef1]`}
+        } z-20 top-0 bg-white border-b border-[#eceef1] main-header`}
       >
         <div className="max-w-[100rem] mx-auto px-4 md:px-8 relative">
           <nav className="flex">
