@@ -8,7 +8,7 @@ import FormInput from '@components/Form/FormInput';
 import axios from 'axios';
 
 function ContactUs() {
-  const [isSubmitted, setIsSubmitted] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -23,7 +23,6 @@ function ContactUs() {
     validateOnBlur: false,
     //// By disabling validation onChange and onBlur formik will validate on submit.
     onSubmit: async (values, action) => {
-      console.log('Form values', values);
       try {
         await axios.post('/contact_us', values);
         setIsSubmitted(true);
