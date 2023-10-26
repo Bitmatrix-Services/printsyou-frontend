@@ -1,22 +1,22 @@
 import React, {useState} from 'react';
-
 import PageHeader from '@components/globals/PageHeader';
 import Container from '@components/globals/Container';
 import {useFormik} from 'formik';
 import {ContactUsSchema} from '@utils/validationSchemas';
 import FormInput from '@components/Form/FormInput';
 import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      fullName: 'abdul',
-      emailAddress: 'abdul@gmail.com',
+      fullName: '',
+      emailAddress: '',
       phoneNumber: '',
-      subject: 'tests',
-      message: 'this is testing'
+      subject: '',
+      message: ''
     },
     validationSchema: ContactUsSchema,
     validateOnChange: true,
@@ -79,9 +79,15 @@ function ContactUs() {
 
               <button
                 type="submit"
-                className="w-fit mt-6 hidden md:block py-5 px-[9rem] text-sm  font-bold  bg-primary-500 hover:bg-body text-white"
+                className={`w-fit mt-6 hidden md:block ${
+                  formik.isSubmitting ? 'py-3' : 'py-5'
+                } px-[9rem] text-sm  font-bold  bg-primary-500 hover:bg-body text-white`}
               >
-                {formik.isSubmitting ? 'loading' : 'SUBMIT'}
+                {formik.isSubmitting ? (
+                  <CircularProgress style={{color: 'whilte'}} color="inherit" />
+                ) : (
+                  'SUBMIT'
+                )}
               </button>
             </form>
             <iframe
