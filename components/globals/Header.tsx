@@ -29,15 +29,12 @@ const links = [
   {color: '#8fc23f', text: 'Specials', href: '/specials'},
   {color: '#9a605c', text: 'Faq', href: '/faq'},
   {color: '#1f8b95', text: 'Artwork', href: '/artwork'},
-  {color: '#b658a2', text: 'Contact us', href: '/contact-us'}
+  {color: '#b658a2', text: 'Contact us', href: '/contact_us'}
 ];
 
 const Header = () => {
   const dispatch = useAppDispatch();
-  // const {scrollingUp, scrollValue} = useScrollingUp();
-
-  const scrollingUp = false;
-  const scrollValue = 60;
+  const {scrollingUp, scrollValue} = useScrollingUp();
 
   const [mobileMenu, setMobileMenu] = useState(false);
 
@@ -45,7 +42,7 @@ const Header = () => {
 
   useEffect(() => {
     dispatch(getAllCategoryList());
-  });
+  }, []);
 
   const handleOpen = () => {
     setMobileMenu(true);

@@ -29,7 +29,7 @@ const FormInput: FC<FormInputProps> = ({
         />
       ) : (
         <textarea
-          className="block resize-none border w-full h-14 pt-3 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+          className="block placeholder:text-[#303541] resize-none border w-full h-14 pt-3 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
           name={name}
           rows={4}
           cols={8}

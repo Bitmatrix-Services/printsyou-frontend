@@ -4,12 +4,10 @@ const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const ContactUsSchema = Yup.object({
-  name: Yup.string().min(2).max(25).required('Please enter your Name'),
-  email: Yup.string().email().required('Please enter your Email'),
-  phone: Yup.string()
-    .required('Please enter Zip Code')
-    .matches(phoneRegExp, 'Phone number is not valid'),
-  subject: Yup.string().min(5).max(55).required('Please enter your Subject'),
+  fullName: Yup.string().min(2).max(25).required('Please enter your Name'),
+  emailAddress: Yup.string().email().required('Please enter your Email'),
+  phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+  subject: Yup.string().min(5).max(55).required('Please enter Subject'),
   message: Yup.string().min(7).max(100).required('Please enter Message')
 });
 
