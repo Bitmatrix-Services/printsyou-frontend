@@ -84,7 +84,7 @@ function ContactUs() {
                 } px-[9rem] text-sm  font-bold  bg-primary-500 hover:bg-body text-white`}
               >
                 {formik.isSubmitting ? (
-                  <CircularProgress style={{color: 'whilte'}} color="inherit" />
+                  <CircularProgress color="inherit" />
                 ) : (
                   'SUBMIT'
                 )}
