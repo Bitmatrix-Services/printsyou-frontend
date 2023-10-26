@@ -29,6 +29,11 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   // sort,
   // setSort
 }) => {
+  const pagesToShow = Array.from(
+    {length: totalPages},
+    (_, index) => index + 1
+  ).filter(page => page >= pageNumber - 2 && page <= pageNumber + 2);
+
   return (
     <div id="products-page" className="my-6">
       <div className="list-product">
@@ -77,20 +82,18 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 <ArrowLeftIcon className="h-4 w-4" />
               </button>
               <div className="numbers flex gap-2">
-                {Array.from({length: totalPages}, (_, index) => index + 1).map(
-                  page => (
-                    <button
-                      key={page}
-                      type="button"
-                      onClick={() => setPageNumber(page)}
-                      className={`item number ${
-                        pageNumber === page && 'is-active'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  )
-                )}
+                {pagesToShow?.map(page => (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setPageNumber(page)}
+                    className={`item number ${
+                      pageNumber === page && 'is-active'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
               </div>
               <button
                 type="button"
