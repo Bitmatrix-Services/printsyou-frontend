@@ -2,12 +2,12 @@ import React, {Dispatch, FC, SetStateAction} from 'react';
 import {ArrowLeftIcon, ArrowRightIcon} from '@heroicons/react/24/solid';
 
 const sortList = [
-  {lable: 'Price Low To High', value: 'lowcost'},
-  {lable: 'Price High To Low', value: 'highcost'},
-  {lable: 'Most Recent First', value: 'desc'},
-  {lable: 'Least Recent First', value: 'asc'},
-  {lable: 'A to Z', value: 'az'},
-  {lable: 'Z to A', value: 'za'}
+  {lable: 'Price Low To High', value: 'priceLowToHigh'},
+  {lable: 'Price High To Low', value: 'priceHighToLow'},
+  {lable: 'Most Recent First', value: 'mostRecentFirst'},
+  {lable: 'Least Recent First', value: 'mostRecentLast'},
+  {lable: 'A to Z', value: 'AToZ'},
+  {lable: 'Z to A', value: 'ZToA'}
 ];
 
 interface PaginationHeaderProps {
@@ -16,8 +16,8 @@ interface PaginationHeaderProps {
   pageSize: number;
   setPageSize: Dispatch<SetStateAction<number>>;
   totalPages: number;
-  // sort: number;
-  // setSort: void;
+  sort: string;
+  setSort: Dispatch<SetStateAction<string>>;
 }
 
 const PaginationHeader: FC<PaginationHeaderProps> = ({
@@ -25,15 +25,14 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   setPageNumber,
   pageSize,
   setPageSize,
-  totalPages
-  // sort,
-  // setSort
+  totalPages,
+  sort,
+  setSort
 }) => {
   const pagesToShow = Array.from(
     {length: totalPages},
     (_, index) => index + 1
   ).filter(page => page >= pageNumber - 2 && page <= pageNumber + 2);
-
   return (
     <div id="products-page" className="my-6">
       <div className="list-product">
@@ -43,7 +42,12 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
               <div className="item sort-by">
                 <div className="name">Sort by</div>
                 <div className="select">
-                  <select name="theme4" className="custom_theme4 outline-none">
+                  <select
+                    name="theme4"
+                    value={sort}
+                    className="custom_theme4 outline-none"
+                    onChange={e => setSort(e.target.value)}
+                  >
                     {sortList.map(item => (
                       <option key={item.value} value={item.value}>
                         {item.lable}

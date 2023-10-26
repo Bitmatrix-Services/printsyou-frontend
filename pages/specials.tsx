@@ -6,27 +6,31 @@ import {http} from 'services/axios.service';
 import Container from '@components/globals/Container';
 import {Product} from '@store/slices/product/product';
 import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Specials = () => {
   const [specialProducts, setSpecialProducts] = useState<Product[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(24);
   const [totalPages, setTotalPages] = useState<number>(1);
-  // const [sort, setSort] = useState(25);
+  const [sort, setSort] = useState('priceLowToHigh');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getSpecialProducts();
-  }, [pageNumber, pageSize]);
+  }, [pageNumber, pageSize, sort]);
 
   const getSpecialProducts = async () => {
+    setIsLoading(true);
     const {data} = await http.get(
-      `/product/byTag?tag=special&page=${pageNumber}&size=${pageSize}`
+      `/product/byTag?tag=special&page=${pageNumber}&size=${pageSize}&filter=${sort}`
     );
 
     if (data.payload?.content?.length > 0) {
       setSpecialProducts(data.payload.content);
       setTotalPages(data.payload.totalPages);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -41,28 +45,33 @@ const Specials = () => {
             pageSize={pageSize}
             setPageSize={setPageSize}
             totalPages={totalPages}
-            // sort={sort}
-            // setSort={setSort}
+            sort={sort}
+            setSort={setSort}
           />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {specialProducts?.map(product => (
-              <FeaturedProductCard
-                key={product.id}
-                isModal={true}
-                onSale={false}
-                product={product}
-              />
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center align-middle items-center h-[20rem]">
+              <CircularProgress color="warning" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              {specialProducts?.map(product => (
+                <FeaturedProductCard
+                  key={product.id}
+                  isModal={true}
+                  onSale={false}
+                  product={product}
+                />
+              ))}
+            </div>
+          )}
           <PaginationHeader
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
             pageSize={pageSize}
             setPageSize={setPageSize}
             totalPages={totalPages}
-            // sort={sort}
-            // setSort={setSort}
+            sort={sort}
+            setSort={setSort}
           />
         </section>
       </Container>
