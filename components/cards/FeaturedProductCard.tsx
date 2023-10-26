@@ -7,7 +7,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
-import {useRouter} from 'next/router';
 import sanitizeHtml from 'sanitize-html';
 import {NextSeo} from 'next-seo';
 import {Product} from '@store/slices/product/product';
@@ -29,7 +28,6 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   onSale = true,
   product
 }) => {
-  const router = useRouter();
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
 
   return (
@@ -86,8 +84,8 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
           <div
             className={`block mt-4  ${
               isModal
-                ? 'text-xl font-extrabold min-h-[60px]'
-                : 'text-[18px] font-semibold text-[#303541]'
+                ? 'text-xl font-extrabold min-h-[60px] text-center'
+                : 'text-[18px] font-semibold text-[#303541] text-center'
             } `}
             dangerouslySetInnerHTML={{
               __html: sanitizeHtml(product?.productName)
