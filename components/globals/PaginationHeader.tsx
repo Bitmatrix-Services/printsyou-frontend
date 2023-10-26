@@ -30,7 +30,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   // setSort
 }) => {
   return (
-    <div id="products-page">
+    <div id="products-page" className="my-6">
       <div className="list-product">
         <div className="pagination-top paginations">
           <div className="sort-show leftpagnation flex items-center flex-col md:flex-row justify-center">

@@ -19,10 +19,12 @@ const Specials = () => {
   }, [pageNumber, pageSize]);
 
   const getSpecialProducts = async () => {
-    const {data} = await http.get(`/product/byTag?tag=special`);
+    const {data} = await http.get(
+      `/product/byTag?tag=special&page=${pageNumber}&size=${pageSize}`
+    );
 
-    if (data.payload?.length > 0) {
-      setSpecialProducts(data.payload);
+    if (data.payload?.content?.length > 0) {
+      setSpecialProducts(data.payload.content);
       setTotalPages(data.payload.totalPages);
     }
   };
