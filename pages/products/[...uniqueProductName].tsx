@@ -56,7 +56,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       : ''
                   }
                   alt="Product"
-                  fallbackSrc="/assets/logo.png"
                 />
               </div>
               <div className="gallery-container">
@@ -82,7 +81,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                               : ''
                           }
                           alt={``}
-                          fallbackSrc="/assets/logo.png"
                         />
                       </span>
                     </a>

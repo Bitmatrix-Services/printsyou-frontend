@@ -17,6 +17,28 @@ interface FeaturedSectionProps {
   navNumber?: string;
 }
 
+const breakpoints = {
+  320: {
+    slidesPerView: 1,
+    spaceBetween: 10
+  },
+
+  600: {
+    slidesPerView: 2,
+    spaceBetween: 10
+  },
+
+  800: {
+    slidesPerView: 3,
+    spaceBetween: 20
+  },
+
+  1024: {
+    slidesPerView: 4,
+    spaceBetween: 20
+  }
+};
+
 const FeaturedSection: FC<FeaturedSectionProps> = ({
   title,
   subTitle,
@@ -37,28 +59,6 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
     if (!sliderRef.current) return;
     sliderRef.current.swiper.slideNext();
   }, []);
-
-  const breakpoints = {
-    320: {
-      slidesPerView: 1,
-      spaceBetween: 10
-    },
-
-    600: {
-      slidesPerView: 2,
-      spaceBetween: 10
-    },
-
-    800: {
-      slidesPerView: 3,
-      spaceBetween: 20
-    },
-
-    1024: {
-      slidesPerView: 4,
-      spaceBetween: 20
-    }
-  };
 
   return (
     <section className="bg-white pt-8 lg:pt-20">

@@ -17,7 +17,7 @@ export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
   async () => {
     const res = await http.get(`/product/byTag?tag=underABuck`);
-    return res?.data.payload;
+    return res?.data.payload.content;
   }
 );
 
@@ -25,7 +25,7 @@ export const getNewAndExclusiveProducts = createAsyncThunk(
   'product/newAndExclusive',
   async () => {
     const res = await http.get(`/product/byTag?tag=newAndExclusive`);
-    return res?.data.payload;
+    return res?.data.payload.content;
   }
 );
 
@@ -33,7 +33,7 @@ export const getUniqueIdeaProducts = createAsyncThunk(
   'product/getUniqueIdeaProducts',
   async () => {
     const res = await http.get(`/product/byTag?tag=uniqueIdeas`);
-    return res?.data.payload;
+    return res?.data.payload.content;
   }
 );
 

@@ -50,17 +50,17 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
           ]
         }}
       />
-      <div
-        onClick={() => router.push(`products/${product.uniqueProductName}`)}
-        className="tp-product group relative bg-white border border-[#edeff2] cursor-pointer"
+      <Link
+        href={`products/${product.uniqueProductName}`}
+        className="tp-product group relative bg-white cursor-pointer"
       >
-        <div className="p-6 min-h-[21.40rem]">
+        <div className="p-6 min-h-[21.40rem] border border-[#edeff2]">
           <div className="block relative h-48 w-48 mx-auto group">
             {isModal && (
               <button
                 onClick={e => {
                   setIsViewProductModalOpen(true);
-                  e.stopPropagation();
+                  e.preventDefault();
                 }}
                 type="button"
                 className="h-[3.125rem] w-[3.125rem] bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300 absolute z-20 top-0 left-0 opacity-0 group-hover:opacity-100"
@@ -80,7 +80,6 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
                   : ''
               }
-              fallbackSrc="/assets/logo.png"
               alt="product"
             />
           </div>
@@ -127,7 +126,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
             <ShoppingBagIcon className="h-7 w-7" />
           </Link>
         </div>
-      </div>
+      </Link>
       {isModal && (
         <Dialog
           open={isViewProductModalOpen}
@@ -291,7 +290,6 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                               ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
                               : ''
                           }
-                          fallbackSrc="/assets/logo.png"
                           alt=""
                         />
                       </span>
@@ -312,7 +310,6 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                             fill
                             className="object-contain"
                             src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`}
-                            fallbackSrc="/assets/logo.png"
                             alt=""
                           />
                         </span>

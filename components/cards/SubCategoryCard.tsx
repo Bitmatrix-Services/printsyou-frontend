@@ -25,7 +25,6 @@ const SubCategoryCard: FC<ProductsSubCategoryCardProps> = ({category}) => {
                 ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`
                 : ``
             }
-            fallbackSrc="/assets/logo.png"
             alt="category"
           />
         </figure>

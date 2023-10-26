@@ -34,7 +34,10 @@ const links = [
 
 const Header = () => {
   const dispatch = useAppDispatch();
-  const {scrollingUp, scrollValue} = useScrollingUp();
+  // const {scrollingUp, scrollValue} = useScrollingUp();
+
+  const scrollingUp= false 
+  const scrollValue = 60
 
   const [mobileMenu, setMobileMenu] = useState(false);
 

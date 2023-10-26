@@ -1,15 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import Image from 'next/image';
+import Image, {ImageProps} from 'next/image';
 
-interface ImageWithFallbackProps {
+interface ImageWithFallbackProps extends ImageProps {
   src: string;
-  fallbackSrc: string;
+  fallbackSrc?: string;
   alt: string;
-  [key: string]: any;
 }
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
-  const {src, fallbackSrc, alt, ...rest} = props;
+  const {src, fallbackSrc = '/assets/logo.png', alt, ...rest} = props;
   const [imgSrc, setImgSrc] = useState(src);
 
   useEffect(() => {

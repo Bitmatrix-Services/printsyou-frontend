@@ -76,7 +76,6 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
                     : ''
                 }
-                fallbackSrc="/assets/logo.png"
                 alt="product"
               />
             </div>
