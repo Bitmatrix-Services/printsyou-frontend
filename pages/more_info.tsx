@@ -44,11 +44,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                     width={156}
                     height={100}
                     className="object-contain "
-                    src={
-                      product?.productImages
-                        ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product?.productImages[0]?.imageUrl}`
-                        : ''
-                    }
+                    src={product?.productImages?.[0]?.imageUrl}
                     alt="product"
                   />
                 </div>

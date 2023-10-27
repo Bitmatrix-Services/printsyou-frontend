@@ -50,11 +50,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   width={437}
                   height={281}
                   className="object-contain w-[85%]"
-                  src={
-                    product?.productImages && product.productImages[0]
-                      ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                      : ''
-                  }
+                  src={product?.productImages?.[0]?.imageUrl}
                   alt="Product"
                 />
               </div>
@@ -75,12 +71,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={
-                            image
-                              ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`
-                              : ''
-                          }
-                          alt={``}
+                          src={image?.imageUrl}
+                          alt=""
                         />
                       </span>
                     </a>

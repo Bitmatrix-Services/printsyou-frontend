@@ -73,11 +73,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
-              src={
-                product?.productImages && product.productImages[0]
-                  ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                  : ''
-              }
+              src={product?.productImages?.[0]?.imageUrl}
               alt="product"
             />
           </div>
@@ -273,7 +269,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     <a
                       className="cursor-pointer"
                       data-src={
-                        product?.productImages && product.productImages[0]
+                        product?.productImages?.[0]
                           ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
                           : ''
                       }
@@ -283,11 +279,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={
-                            product?.productImages && product.productImages[0]
-                              ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                              : ''
-                          }
+                          src={product?.productImages?.[0]?.imageUrl}
                           alt=""
                         />
                       </span>
@@ -307,7 +299,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             fill
                             className="object-contain"
-                            src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`}
+                            src={image.imageUrl}
                             alt=""
                           />
                         </span>

@@ -20,11 +20,7 @@ const SubCategoryCard: FC<ProductsSubCategoryCardProps> = ({category}) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-contain md:w-[60%] lg:w-[85%] "
             fill
-            src={
-              category.imageUrl
-                ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`
-                : ``
-            }
+            src={category?.imageUrl}
             alt="category"
           />
         </figure>
