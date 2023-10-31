@@ -1,63 +1,27 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import sanitizeHtml from 'sanitize-html';
 import Container from './Container';
 import {ArrowLongRightIcon} from '@heroicons/react/24/solid';
+import {useAppSelector} from '@store/hooks';
+import {selectCategoryList} from '@store/slices/category/catgory.slice';
 
-const categorylist = [
-  'Appreal',
-  'Awards',
-  'Bags',
-  'Calendars',
-  'Candy Jars',
-  'Car and Truck',
-  'Clipboards',
-  'Clocks & Watches',
-  'Desktop & Office',
-  'Displays and Signage',
-  'Drinkware',
-  'EMT / EMS',
-  'Environmentally Friendly',
-  'Events and Holidays',
-  'Foam',
-  'Food & Snack',
-  'Health & Safety',
-  'Home & Garden',
-  'Keychains',
-  'Kids',
-  'Lanyards & Badges',
-  'Light Up and Sound',
-  'Made In the USA',
-  'Magnets',
-  'Mouse Pads',
-  'Outdoor Items',
-  'Padfolios & Journals',
-  'Paper Products',
-  'Pens, Pencils, & More',
-  'Personal Care',
-  'Pet Products',
-  'Professions',
-  'School',
-  'Shapes',
-  'Sports',
-  'Sticky Notes',
-  'Stress Relievers',
-  'Technology & Mobile',
-  'Tools & Flashlights',
-  'Towels',
-  'Trade Show',
-  'Travel & Luggage',
-  'Umbrellas'
+const identityShop = [
+  {name: 'All Products', url: '/'},
+  {name: 'About Us', url: '/about_us'},
+  {name: 'Testimonials', url: '/'},
+  {name: 'Contact Us', url: '/contact_us'}
 ];
-const identityshop = ['All Products', 'About Us', 'Testimonials', 'Contact Us'];
-const customerhelp = [
-  'Artwork',
-  'How To Order',
-  'FAQs',
-  'Additional Information'
+const customerHelp = [
+  {name: 'Artwork', url: '/artwork'},
+  {name: 'How To Order', url: '/how-to-order'},
+  {name: 'FAQs', url: '/faq'},
+  {name: 'Additional Information', url: '/'}
 ];
+
 const Footer = () => {
+  const categoryList = useAppSelector(selectCategoryList);
   return (
     <footer className="bg-white footer pt-10 lg:pt-15">
       <Container>
@@ -200,14 +164,15 @@ const Footer = () => {
                 </h1>
 
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6">
-                  {categorylist.map((value, index) => (
+                  {categoryList.map(category => (
                     <Link
-                      href="!#"
+                      href={`/${category.uniqueCategoryName}`}
                       className="block text-sm hover:text-primary-500 text-mute"
-                      key={index}
-                    >
-                      {value}
-                    </Link>
+                      key={category.id}
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(category.categoryName)
+                      }}
+                    ></Link>
                   ))}
                 </div>
               </div>
@@ -217,13 +182,13 @@ const Footer = () => {
                     IDENTITY SHOP
                   </h1>
                   <div className="space-y-4">
-                    {identityshop.map((value, index) => (
+                    {identityShop.map(linkItem => (
                       <Link
-                        href="!#"
+                        href={linkItem.url}
                         className="block text-sm hover:text-primary-500 text-mute"
-                        key={index}
+                        key={linkItem.name}
                       >
-                        {value}
+                        {linkItem.name}
                       </Link>
                     ))}
                   </div>
@@ -233,13 +198,13 @@ const Footer = () => {
                     CUSTOMER HELP
                   </h1>
                   <div className="space-y-4">
-                    {customerhelp.map((value, index) => (
+                    {customerHelp.map(linkItem => (
                       <Link
-                        href="!#"
+                        href={linkItem.url}
                         className="block text-sm hover:text-primary-500 text-mute"
-                        key={index}
+                        key={linkItem.name}
                       >
-                        {value}
+                        {linkItem.name}
                       </Link>
                     ))}
                   </div>
