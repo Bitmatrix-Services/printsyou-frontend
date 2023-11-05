@@ -1,4 +1,4 @@
-import React, {FC, Fragment} from 'react';
+import React, {FC, Fragment, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import PageHeader from '@components/globals/PageHeader';
 import {useFormik} from 'formik';
@@ -18,47 +18,104 @@ interface OrderRequest {
   product: Product;
 }
 
+const shippingFormFields = [
+  {name: 'shippingFullName', placeholder: 'Name'},
+  {name: 'shippingCompany', placeholder: 'Company'},
+  {name: 'shippingAddressLineOne', placeholder: 'Address'},
+  {name: 'shippingAddressLineTwo', placeholder: 'Address 2'},
+  {name: 'shippingCity', placeholder: 'City'},
+  {name: 'shippingState', placeholder: 'State'},
+  {name: 'shippingZipcode', placeholder: 'Zip Code'},
+  {name: 'shippingPhoneNumber', placeholder: 'Phone'}
+];
+
 const OrderRequest: FC<OrderRequest> = ({product}) => {
+  const [minQuantity, setMinQuantity] = useState(0);
+  const [salePriceToShow, setSalePriceToShow] = useState(0);
+  const [singleItemPrice, setSingleItemPrice] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [minQuantityError, setMinQuantityError] = useState(false);
+
   const formik = useFormik({
     initialValues: {
-      name: '',
-      company: '',
-      address: '',
-      address2: '',
-      city: '',
-      state: '',
-      zip: '',
-      phone: '',
-      email: '',
+      billingFullName: '',
+      billingCompany: '',
+      billingAddressLineOne: '',
+      billingAddressLineTwo: '',
+      billingCity: '',
+      billingState: '',
+      billingZipcode: '',
+      billingPhoneNumber: '',
+      billingEmailAddress: '',
       color: '',
       size: '',
       imprintColor: '',
       itemColor: '',
-      salesRep: '',
-      additionalInfo: '',
-      sameBillingAddress: true,
+      saleRepName: '',
+      quantityOrdered: 0,
+      inHandDate: new Date(),
+      additionalInformation: '',
+      shippingAddressSame: true,
       diffBillingAddress: false,
-      billingName: '',
-      billingCompany: '',
-      billingAddress: '',
-      billingAddress2: '',
-      billingCity: '',
-      billingState: '',
-      billingZip: '',
-      billingPhone: '',
+      shippingFullName: '',
+      shippingCompany: '',
+      shippingAddressLineOne: '',
+      shippingAddressLineTwo: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingZipcode: '',
+      shippingPhoneNumber: '',
       newsLetter: false,
       agreeToTerms: false
     },
     validationSchema: orderRequestSchema,
     validateOnChange: true,
     validateOnBlur: false,
-    onSubmit: (values, action) => {
-      console.log('Form values', values);
-      action.resetForm();
+    onSubmit: async (values, action) => {
+      try {
+        await http.post('/order', {...values, productId: product.id});
+        setIsSubmitted(true);
+        action.resetForm();
+      } catch (error) {
+        console.log('error', error);
+      }
     }
   });
 
-  console.log('product', product);
+  useEffect(() => {
+    let firstOffer = [...product.priceGrids].sort(
+      (a, b) => a.countFrom - b.countFrom
+    )[0];
+
+    if (firstOffer) {
+      setMinQuantity(firstOffer.countFrom);
+    }
+  }, []);
+
+  const calculatePrices = () => {
+    const orderedQuantity = formik.values.quantityOrdered;
+
+    if (orderedQuantity < minQuantity) {
+      setMinQuantityError(true);
+      return;
+    } else {
+      setMinQuantityError(false);
+    }
+    const sortedPriceGrid = [...product.priceGrids].sort(
+      (a, b) => a.countFrom - b.countFrom
+    );
+
+    let priceRangeObject = sortedPriceGrid.find(
+      item => orderedQuantity <= item.countFrom
+    );
+
+    const maxPriceRange = sortedPriceGrid[product.priceGrids.length - 1];
+
+    const priceRange = priceRangeObject || maxPriceRange;
+
+    setSalePriceToShow(priceRange.price * orderedQuantity);
+    setSingleItemPrice(priceRange.price);
+  };
 
   return (
     <Fragment>
@@ -112,18 +169,27 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <FormInput
-                  type="text"
-                  name="quantity"
+                  type="number"
+                  name="quantityOrdered"
                   placeHolder="Quantity"
                   formik={formik}
+                  handleOnBlur={() => calculatePrices()}
                 />
-                <h4 className="ml-5">x $0.00</h4>
+                <h4 className="ml-5">x ${singleItemPrice}</h4>
               </div>
-              <h2 className="text-primary-500 text-2xl font-bold">$0.00</h2>
+              {!minQuantityError ? (
+                <h2 className="text-primary-500 text-2xl font-bold">
+                  ${salePriceToShow}
+                </h2>
+              ) : (
+                <h2 className="text-red-500 text-2xl font-bold">
+                  Min Qty is {minQuantity}
+                </h2>
+              )}
             </div>
             <div className="flex justify-between items-center mt-4">
               <div className="text-red-500 text-xs font-semibold">
-                Min Qty is 50
+                Min Qty is {minQuantity}
               </div>
               <div className="text-xs">
                 *Final total including shipping and any additional charges will
@@ -140,13 +206,13 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
               <div className="grid md:grid-cols-2 gap-6">
                 <FormInput
                   type="text"
-                  name="name"
+                  name="billingFullName"
                   placeHolder="Name"
                   formik={formik}
                 />
                 <FormInput
                   type="text"
-                  name="company"
+                  name="billingCompany"
                   placeHolder="Company"
                   formik={formik}
                 />
@@ -154,7 +220,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <div className="md:col-span-2">
                   <FormInput
                     type="text"
-                    name="address"
+                    name="billingAddressLineOne"
                     placeHolder="Address"
                     formik={formik}
                   />
@@ -162,7 +228,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <div className="md:col-span-2">
                   <FormInput
                     type="text"
-                    name="address2"
+                    name="billingAddressLineTwo"
                     placeHolder="Address 2"
                     formik={formik}
                   />
@@ -170,26 +236,26 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
 
                 <FormInput
                   type="text"
-                  name="city"
+                  name="billingCity"
                   placeHolder="City"
                   formik={formik}
                 />
                 <FormInput
                   type="text"
-                  name="state"
+                  name="billingState"
                   placeHolder="State"
                   formik={formik}
                 />
 
                 <FormInput
                   type="text"
-                  name="zip"
+                  name="billingZipCode"
                   placeHolder="Zip Code"
                   formik={formik}
                 />
                 <FormInput
                   type="text"
-                  name="phone"
+                  name="shippingPhoneNumber"
                   placeHolder="Phone"
                   formik={formik}
                 />
@@ -197,7 +263,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <TootipBlack title="Please type the email address you would like us to use for all correspondance for the order process.  This will be where your sales confirmation and artwork proof will be sent to.">
                   <FormInput
                     type="text"
-                    name="email"
+                    name="billingEmailAddress"
                     placeHolder="Email"
                     formik={formik}
                   />
@@ -208,16 +274,16 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
-                    id="sameBillingAddress"
-                    name="sameBillingAddress"
+                    id="shippingAddressSame"
+                    name="shippingAddressSame"
                     className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
-                    checked={formik.values.sameBillingAddress}
+                    checked={formik.values.shippingAddressSame}
                     onChange={e => {
                       formik.setFieldValue('diffBillingAddress', false);
                       if (e.target.checked) formik.handleChange(e);
                     }}
                   />
-                  <label className="ml-2" htmlFor="sameBillingAddress">
+                  <label className="ml-2" htmlFor="shippingAddressSame">
                     Same as my billing address
                   </label>
                 </div>
@@ -229,7 +295,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     className="accent-[#f8ab11] rounded-0 min-[1.25rem] h-5 w-5"
                     checked={formik.values.diffBillingAddress}
                     onChange={e => {
-                      formik.setFieldValue('sameBillingAddress', false);
+                      formik.setFieldValue('shippingAddressSame', false);
                       if (e.target.checked) formik.handleChange(e);
                     }}
                   />
@@ -241,57 +307,15 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
 
               {formik.values.diffBillingAddress && (
                 <div className="grid md:grid-cols-2 gap-6 mt-6">
-                  <FormInput
-                    type="text"
-                    name="billingName"
-                    placeHolder="Name"
-                    formik={formik}
-                  />
-                  <FormInput
-                    type="text"
-                    name="billingCompany"
-                    placeHolder="Company"
-                    formik={formik}
-                  />
-                  <FormInput
-                    type="text"
-                    name="billingAddress"
-                    placeHolder="Address"
-                    formik={formik}
-                  />
-
-                  <FormInput
-                    type="text"
-                    name="billingAddress2"
-                    placeHolder="Address 2"
-                    formik={formik}
-                  />
-
-                  <FormInput
-                    type="text"
-                    name="billingCity"
-                    placeHolder="City"
-                    formik={formik}
-                  />
-                  <FormInput
-                    type="text"
-                    name="billingState"
-                    placeHolder="State"
-                    formik={formik}
-                  />
-
-                  <FormInput
-                    type="text"
-                    name="billingZip"
-                    placeHolder="Zip Code"
-                    formik={formik}
-                  />
-                  <FormInput
-                    type="text"
-                    name="billingPhone"
-                    placeHolder="Phone"
-                    formik={formik}
-                  />
+                  {shippingFormFields.map(field => (
+                    <FormInput
+                      key={field.name}
+                      type="text"
+                      name={field.name}
+                      placeHolder={field.placeholder}
+                      formik={formik}
+                    />
+                  ))}
                 </div>
               )}
               <FormHeading text="Payment Information" />
@@ -357,7 +381,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <TootipBlack title="Use this field to let us know the date you need the order in your hands.   If you do not have a deadline, you may leave this blank.">
                   <FormInput
                     type="date"
-                    name="deliveryDate"
+                    name="inHandDate"
                     placeHolder="Delivery Date"
                     formik={formik}
                   />
@@ -365,7 +389,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <TootipBlack title="If there was an Identity Links sales rep who helped you with the order, you may enter their name here.  If not, you may leave this field blank.">
                   <FormInput
                     type="text"
-                    name="salesRep"
+                    name="saleRepName"
                     placeHolder="Sales Rep"
                     formik={formik}
                   />
@@ -375,7 +399,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <FormInput
                       inputType="textarea"
                       type="text"
-                      name="additionalInfo"
+                      name="additionalInformation"
                       placeHolder="Additional Information"
                       formik={formik}
                     />
