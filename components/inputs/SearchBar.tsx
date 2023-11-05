@@ -1,52 +1,40 @@
-import React, {ChangeEvent, useState} from 'react';
-import Image from 'next/image';
+import React, {useEffect, useState} from 'react';
+import {http} from 'services/axios.service';
+import ImageWithFallback from '@components/ImageWithFallback';
+import Link from 'next/link';
+import sanitize from 'sanitize-html';
+import {useRouter} from 'next/router';
+import {useDebounce} from 'hooks/useDeboune';
 
-interface Product {
-  id: number;
-  name: string;
+type ItemType = {
+  id: string;
   imageUrl: string;
-}
-
-const products: Product[] = [
-  {
-    id: 1,
-    name: 'UL 2 Port Wall Charger',
-    imageUrl:
-      'https://media.nextopia.net/b2048795ebfaa31a43ee438499a75b21/56bb9f81c27e7062218429c381430b4a.jpg?wm=0&h=50&w=50&bg=ffffff&src=https%3A%2F%2Fwww.identity-links.com%2Fimg%2Fucart%2Fimages%2Fpimage%2F135176%2Fmain.jpg'
-  },
-  {
-    id: 2,
-    name: 'UL 2 Port Wall Charger',
-    imageUrl:
-      'https://media.nextopia.net/b2048795ebfaa31a43ee438499a75b21/56bb9f81c27e7062218429c381430b4a.jpg?wm=0&h=50&w=50&bg=ffffff&src=https%3A%2F%2Fwww.identity-links.com%2Fimg%2Fucart%2Fimages%2Fpimage%2F135176%2Fmain.jpg'
-  }
-];
-
-interface Category {
   name: string;
-  imageUrl: string;
+  uniqueName: string;
+};
+interface SearchResult {
+  categories?: ItemType[];
+  products?: ItemType[];
 }
-
-const categories: Category[] = [
-  {
-    name: 'Kids Products',
-    imageUrl:
-      'https://www.identity-links.com/img/ucart/images/catimage/614/small.JPG'
-  },
-  {
-    name: 'Kids Products 2',
-    imageUrl:
-      'https://www.identity-links.com/img/ucart/images/catimage/614/small.JPG'
-  }
-];
-
-const populars: string[] = ['Kids Products', 'Electronics', 'Clothing'];
 
 const SearchBar = () => {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResult, setSearchResult] = useState<SearchResult>();
+  const debouncedValue = useDebounce<string>(searchQuery, 500);
 
-  const handleSearchQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+  useEffect(() => {
+    if (searchQuery) handleSearch();
+  }, [debouncedValue]);
+
+  const handleSearch = async () => {
+    const {data} = await http.get(`search?query=${searchQuery}`);
+    if (data.payload?.categories.length || data.payload?.products.length) {
+      let result = data.payload;
+      setSearchResult(result);
+    } else {
+      setSearchResult({});
+    }
   };
 
   return (
@@ -58,10 +46,20 @@ const SearchBar = () => {
           className="border border-[#eceef1] outline-none rounded-none py-4 px-4 text-sm flex-1"
           placeholder="Search entire store here..."
           value={searchQuery}
-          onChange={handleSearchQueryChange}
+          onBlur={() =>
+            setTimeout(() => {
+              setSearchResult({});
+            }, 500)
+          }
+          onChange={e => setSearchQuery(e.target.value)}
+          onKeyDown={({key}) => {
+            if (key === 'Enter') {
+              router.push(`/serach_results?keywords=${searchQuery}`);
+            }
+          }}
         />
-        <button
-          type="button"
+        <Link
+          href={`/serach_results?keywords=${searchQuery}`}
           className="py-4 px-12 bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300"
           style={{
             backgroundImage: 'url("/assets/icon-search-white.png")',
@@ -69,58 +67,90 @@ const SearchBar = () => {
           }}
         />
       </div>
-      {searchQuery && (
+      {searchResult && Object.keys(searchResult)?.length !== 0 && (
         <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
           <div className="space-y-3">
-            <fieldset>
-              <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
-                Category
-              </h6>
-              <ul className="space-y-2">
-                {categories.map(category => (
-                  <li key={category.name}>
-                    <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
-                      <span className="block relative h-28 w-28 min-w-[7rem]">
-                        <Image
-                          fill
-                          className="object-contain"
-                          src={category.imageUrl}
-                          alt={category.name}
-                        />
-                      </span>
-                      <span className="font-normal text-xs">
-                        <b className="underline">{category.name}</b>
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
-            <fieldset>
-              <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
-                Product Matches
-              </h6>
-              <ul className="space-y-2">
-                {products.map(product => (
-                  <li key={product.id}>
-                    <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
-                      <span className="block relative h-12 w-12 min-w-[3rem]">
-                        <Image
-                          fill
-                          className="object-contain"
-                          src={product.imageUrl}
-                          alt={product.name}
-                        />
-                      </span>
-                      <span className="font-normal text-xs">
-                        <b className="underline">{product.name}</b>
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
-            <fieldset>
+            {searchResult?.categories && (
+              <fieldset>
+                <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
+                  Category
+                </h6>
+                <ul className="space-y-2">
+                  {searchResult.categories.map(category => (
+                    <Link
+                      className="hover:cursor-pointer"
+                      href={category.uniqueName}
+                      key={category.id}
+                      onClick={() =>
+                        setTimeout(() => {
+                          setSearchResult({});
+                        }, 500)
+                      }
+                    >
+                      <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
+                        <span className="block relative h-28 w-28 min-w-[7rem]">
+                          <ImageWithFallback
+                            fill
+                            className="object-contain"
+                            src={category.imageUrl}
+                            alt="category"
+                          />
+                        </span>
+                        <span className="font-normal text-xs">
+                          <b
+                            className="underline"
+                            dangerouslySetInnerHTML={{
+                              __html: sanitize(category.name)
+                            }}
+                          ></b>
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </ul>
+              </fieldset>
+            )}
+            {searchResult?.products && (
+              <fieldset>
+                <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
+                  Product Matches
+                </h6>
+                <ul className="space-y-2">
+                  {searchResult.products.map(product => (
+                    <Link
+                      className="hover:cursor-pointer"
+                      href={`/products/${product.uniqueName}`}
+                      key={product.id}
+                      onClick={() =>
+                        setTimeout(() => {
+                          setSearchResult({});
+                        }, 500)
+                      }
+                    >
+                      <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
+                        <span className="block relative h-12 w-12 min-w-[3rem]">
+                          <ImageWithFallback
+                            fill
+                            className="object-contain"
+                            src={product.imageUrl}
+                            alt="product"
+                          />
+                        </span>
+                        <span className="font-normal text-xs">
+                          <b
+                            className="underline"
+                            dangerouslySetInnerHTML={{
+                              __html: sanitize(product.name)
+                            }}
+                          ></b>
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </ul>
+              </fieldset>
+            )}
+            {/* <fieldset>
               <h6 className="mb-3 text-base font-semibold text-primary-500 uppercase">
                 Popular Searches
               </h6>
@@ -135,7 +165,7 @@ const SearchBar = () => {
                   </li>
                 ))}
               </ul>
-            </fieldset>
+            </fieldset> */}
           </div>
         </div>
       )}

@@ -8,17 +8,19 @@ import SearchSidebar from '@components/globals/SearchSidebar';
 import SearchResultsSection from '@components/sections/searchResults/SearchResultsSection';
 
 interface CategoryDetailsProps {
-  category: Category;
+  products: Category;
 }
 
-const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
+const CategoryDetails: FC<CategoryDetailsProps> = ({products}) => {
+  console.log('products', products);
+
   return (
     <main>
       <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
-            <SearchSidebar selectedCategory={category} />
-            <SearchResultsSection category={category} />
+            {/* <SearchSidebar selectedCategory={products} />
+            <SearchResultsSection category={products} /> */}
           </div>
         </Container>
       </div>
@@ -29,15 +31,13 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const uniqueCategoryName = 'desktop-office';
+  const keywords = context.params?.keywords;
 
-  let category = {};
-  const {data} = await http.get(
-    `category/uCategory?uCategoryName=${uniqueCategoryName}`
-  );
-  category = data.payload;
+  let products = {};
+  const {data} = await http.get(`product?uProductName=${keywords}`);
+  products = data.payload;
 
-  return {props: {category}};
+  return {props: {products}};
 };
 
 export default CategoryDetails;
