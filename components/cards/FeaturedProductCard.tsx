@@ -250,13 +250,13 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 </div>
                 <div className="mt-4 flex flex-col sm:flex-row gap-3">
                   <Link
-                    href="#!"
+                    href={`/order_request?item_id=${product.id}`}
                     className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold"
                   >
-                    Add to cart
+                    PLACE ORDER
                   </Link>
                   <Link
-                    href="#!"
+                    href={`/more_info?item_id=${product.id}`}
                     className="block w-full text-center uppercase py-5 px-8 text-body bg-white hover:bg-body hover:text-white border border-[#eaeaec] text-sm font-bold"
                   >
                     REQUEST MORE INFO
