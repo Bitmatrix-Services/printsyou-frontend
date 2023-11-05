@@ -6,6 +6,7 @@ interface FormInputProps {
   type: string;
   inputType?: string;
   formik: any;
+  handleOnBlur?: () => void;
 }
 
 const FormInput: FC<FormInputProps> = ({
@@ -13,7 +14,8 @@ const FormInput: FC<FormInputProps> = ({
   placeHolder,
   type,
   inputType,
-  formik
+  formik,
+  handleOnBlur
 }) => {
   return (
     <div>
@@ -25,7 +27,10 @@ const FormInput: FC<FormInputProps> = ({
           placeholder={placeHolder}
           value={formik.values[name]}
           onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
+          onBlur={e => {
+            formik?.handleBlur(e);
+            handleOnBlur && handleOnBlur();
+          }}
         />
       ) : (
         <textarea
