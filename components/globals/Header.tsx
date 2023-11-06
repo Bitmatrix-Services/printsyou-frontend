@@ -67,7 +67,7 @@ const Header = () => {
           <nav className="flex">
             <div
               className={`flex flex-col lg:flex-row gap-3 flex-1 ${
-                scrollValue > 100 ? 'pt-4' : 'py-4'
+                scrollValue > 130 ? 'pt-4' : 'py-4'
               }`}
             >
               <div className="flex">
@@ -106,15 +106,22 @@ const Header = () => {
               <div className="flex-1 lg:ml-6 mr-16">
                 <SearchBar />
               </div>
-              {scrollingUp && scrollValue > 100 && (
-                <div className="ml-10">
+              {scrollValue !== undefined && (
+                <div
+                  className={`ml-10 ${scrollValue > 130 ? 'block' : 'hidden'}`}
+                >
                   <DropDownNavMenu />
                 </div>
               )}
+              {/* {scrollingUp && scrollValue > 100 && (
+                <div className="ml-10">
+                  <DropDownNavMenu />
+                </div>
+              )} */}
             </div>
             <div
               className={`hidden lg:block ${
-                scrollValue < 100 && 'xl:ml-28'
+                scrollValue < 130 && 'xl:ml-28'
               } pl-6 border-l border-[#eceef1]`}
             >
               <a
