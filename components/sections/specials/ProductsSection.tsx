@@ -72,7 +72,6 @@ const ProductsSection: FC<ProductsSectionProps> = ({
               <FeaturedProductCard
                 key={product.id}
                 isModal={isModal}
-                onSale={onSale}
                 product={product}
               />
             ))}

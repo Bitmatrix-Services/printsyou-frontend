@@ -32,6 +32,7 @@ export interface PriceGrids {
   id: string;
   countFrom: number;
   price: number;
+  salePrice: number;
 }
 export interface AdditionalRows {
   id: string;

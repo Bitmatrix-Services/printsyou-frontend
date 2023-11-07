@@ -58,7 +58,6 @@ const Specials = () => {
                 <FeaturedProductCard
                   key={product.id}
                   isModal={true}
-                  onSale={false}
                   product={product}
                 />
               ))}

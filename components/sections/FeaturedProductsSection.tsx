@@ -111,7 +111,7 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
           >
             {products?.map(product => (
               <SwiperSlide key={product.id}>
-                <FeaturedProductCard product={product} onSale={onSale} />
+                <FeaturedProductCard product={product} />
               </SwiperSlide>
             ))}
           </Swiper>

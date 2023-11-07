@@ -21,11 +21,9 @@ const LightGallery = dynamic(() => import('lightgallery/react'), {
 interface FeaturedProductCardProps {
   product: Product;
   isModal?: boolean;
-  onSale?: boolean;
 }
 export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
   isModal = true,
-  onSale = true,
   product
 }) => {
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
@@ -94,11 +92,19 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
               AS LOW AS
             </div>
             <div className="prive-value flex items-end gap-1">
-              {onSale && (
+              {[...product.priceGrids].sort(
+                (a, b) => a.countFrom - b.countFrom
+              )[0]?.salePrice > 0 && (
                 <div className="prive-value flex items-end gap-1">
                   <div className="deno font-semibold text-lg">$</div>
                   <div className="value font-bold text-2xl font-oswald">
-                    <span className="sale line-through">11.65</span>
+                    <span className="sale line-through">
+                      {
+                        [...product.priceGrids].sort(
+                          (a, b) => a.countFrom - b.countFrom
+                        )[0]?.salePrice
+                      }
+                    </span>
                   </div>
                 </div>
               )}
@@ -114,7 +120,7 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
             </div>
           </div>
           <Link
-            href="#!"
+            href={`/order_request?item_id=${product.id}`}
             className="h-16 w-16 flex items-center justify-center bg-white group-hover:bg-black group-hover:border-black group-hover:text-white border-l border-[#edeff2]"
           >
             <ShoppingBagIcon className="h-7 w-7" />
