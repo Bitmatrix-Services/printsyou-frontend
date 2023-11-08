@@ -3,8 +3,6 @@ import Link from 'next/link';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
 
-import Container from '../globals/Container';
-
 const slidesData = [
   {
     backgroundImage: '/assets/banner-1.png',
@@ -46,7 +44,7 @@ const HeroSection = () => {
 
   return (
     <section className="bg-grey pt-8 lg:pt-20">
-      <Container>
+      <div className="max-w-[120rem] mx-auto px-4 md:px-8 xl:px-24 relative">
         <button
           type="button"
           className="swiper-button-prev"
@@ -100,7 +98,7 @@ const HeroSection = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </Container>
+      </div>
     </section>
   );
 };

@@ -215,13 +215,14 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                 </h4>
                 <div className="overflow-auto">
                   {product.additionalFieldProductValues?.map(row => (
-                    <div className="px-4 pb-4 flex" key={row.fieldValue}>
-                      <span className="label flex-1">
+                    <div
+                      className="px-4 pb-4 flex flex-col md:flex-row gap-4"
+                      key={row.fieldValue}
+                    >
+                      <span className="label min-w-[300px]">
                         <b className="brown">{row.fieldName}: </b>
                       </span>
-                      <span className="flex-auto text-left">
-                        {row.fieldValue}
-                      </span>
+                      <span className="flex-1 text-left">{row.fieldValue}</span>
                     </div>
                   ))}
                 </div>
