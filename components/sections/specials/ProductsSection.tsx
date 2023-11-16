@@ -7,14 +7,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 interface ProductsSectionProps {
   isModal?: boolean;
-  onSale?: boolean;
   isContainer: boolean;
   categoryId: string;
 }
 
 const ProductsSection: FC<ProductsSectionProps> = ({
   isModal,
-  onSale,
   isContainer,
   categoryId
 }) => {

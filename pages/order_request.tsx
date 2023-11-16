@@ -13,9 +13,14 @@ import {GetServerSidePropsContext} from 'next';
 import {Product} from '@store/slices/product/product';
 import ImageWithFallback from '@components/ImageWithFallback';
 import TootipBlack from '@components/globals/TootipBlack';
+import {XMarkIcon} from '@heroicons/react/24/solid';
 
 interface OrderRequest {
   product: Product;
+}
+interface ImageListProps {
+  images: any[];
+  handleFileRemove: (e: number) => void;
 }
 
 const shippingFormFields = [
@@ -30,11 +35,12 @@ const shippingFormFields = [
 ];
 
 const OrderRequest: FC<OrderRequest> = ({product}) => {
-  const [minQuantity, setMinQuantity] = useState(0);
-  const [salePriceToShow, setSalePriceToShow] = useState(0);
-  const [singleItemPrice, setSingleItemPrice] = useState(0);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [minQuantityError, setMinQuantityError] = useState(false);
+  const [minQuantity, setMinQuantity] = useState<number>(0);
+  const [salePriceToShow, setSalePriceToShow] = useState<number>(0);
+  const [singleItemPrice, setSingleItemPrice] = useState<number>(0);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [minQuantityError, setMinQuantityError] = useState<boolean>(false);
+  const [artWorkFiles, setArtWorkFiles] = useState<any>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -407,14 +413,31 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       />
                       <input
                         type="file"
+                        accept="image/jpeg, image/png"
                         className="hidden"
-                        onChange={e =>
-                          console.log('e.target.files', e.target.files)
-                        }
+                        multiple
+                        onChange={e => {
+                          setArtWorkFiles((prevState: any) => [
+                            ...prevState,
+                            e.target.files
+                          ]);
+                          e.target.files = null;
+                        }}
                       />
                     </span>
                     <span className="pr-5 pl-3 py-5">ADD FILES...</span>
                   </label>
+                  {artWorkFiles.length > 0 && (
+                    <ImageList
+                      images={artWorkFiles}
+                      handleFileRemove={index => {
+                        const updatedFiles = artWorkFiles?.filter(
+                          (_: any, itemIndex: number) => index !== itemIndex
+                        );
+                        setArtWorkFiles(updatedFiles);
+                      }}
+                    />
+                  )}
                   <FormHeading text="Additional Information" />
                   <div className="grid md:grid-cols-2 gap-6 mt-6">
                     <TootipBlack title="Use this field to let us know the date you need the order in your hands.   If you do not have a deadline, you may leave this blank.">
@@ -564,4 +587,31 @@ export const getServerSideProps = async (
 
 export default OrderRequest;
 
-const uploadFileList = () => <div>google</div>;
+const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
+  return (
+    <ul className="mt-6">
+      {images?.map((image, index) => (
+        <li
+          key={index}
+          className="flex justify-between items-center border w-full h-14 pl-4 pr-6 rounded-0 focus:outline-none"
+        >
+          <div className="h-20 w-20 min-w-[7rem] relative">
+            <Image
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              fill
+              className="object-contain"
+              src={URL.createObjectURL(image[0])}
+              alt={image.name}
+            />
+          </div>
+          <div className="text-blue-500">{image[0]?.name}</div>
+          <div>{Math.ceil(image[0]?.size / 1024).toFixed(1)} KB</div>
+          <XMarkIcon
+            className="h-5 w-5 cursor-pointer"
+            onClick={() => handleFileRemove(index)}
+          />
+        </li>
+      ))}
+    </ul>
+  );
+};

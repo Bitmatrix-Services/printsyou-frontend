@@ -54,12 +54,12 @@ const SearchBar = () => {
           onChange={e => setSearchQuery(e.target.value)}
           onKeyDown={({key}) => {
             if (key === 'Enter') {
-              router.push(`/serach_results?keywords=${searchQuery}`);
+              router.push(`/search_results?keywords=${searchQuery}`);
             }
           }}
         />
         <Link
-          href={`/serach_results?keywords=${searchQuery}`}
+          href={`/search_results?keywords=${searchQuery}`}
           className="py-4 px-12 bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300"
           style={{
             backgroundImage: 'url("/assets/icon-search-white.png")',
