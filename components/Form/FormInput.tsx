@@ -7,6 +7,7 @@ interface FormInputProps {
   inputType?: string;
   formik: any;
   handleOnBlur?: () => void;
+  handleOnChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const FormInput: FC<FormInputProps> = ({
@@ -15,7 +16,8 @@ const FormInput: FC<FormInputProps> = ({
   type,
   inputType,
   formik,
-  handleOnBlur
+  handleOnBlur,
+  handleOnChange
 }) => {
   return (
     <div>
@@ -26,7 +28,9 @@ const FormInput: FC<FormInputProps> = ({
           name={name}
           placeholder={placeHolder}
           value={formik.values[name]}
-          onChange={formik.handleChange}
+          onChange={e =>
+            handleOnChange ? handleOnChange(e) : formik.handleChange(e)
+          }
           onBlur={e => {
             formik?.handleBlur(e);
             handleOnBlur && handleOnBlur();
@@ -34,10 +38,9 @@ const FormInput: FC<FormInputProps> = ({
         />
       ) : (
         <textarea
-          className="block placeholder:text-[#303541] resize-none border w-full h-14 pt-3 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+          className="block placeholder:text-[#303541] resize-none border w-full pt-3 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
           name={name}
-          rows={4}
-          cols={8}
+          rows={6}
           placeholder={placeHolder}
           value={formik.values[name]}
           onChange={formik.handleChange}

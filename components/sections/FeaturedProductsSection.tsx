@@ -13,7 +13,6 @@ interface FeaturedSectionProps {
   titleColor?: string;
   subTitleColor?: string;
   products: Product[];
-  onSale?: boolean;
   navNumber?: string;
 }
 
@@ -45,7 +44,6 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
   subTitleColor,
   titleColor,
   products,
-  onSale = false,
   navNumber
 }) => {
   const sliderRef = useRef<any>(null);
@@ -111,7 +109,7 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
           >
             {products?.map(product => (
               <SwiperSlide key={product.id}>
-                <FeaturedProductCard product={product} onSale={onSale} />
+                <FeaturedProductCard product={product} />
               </SwiperSlide>
             ))}
           </Swiper>
