@@ -80,7 +80,6 @@ const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
           <ProductsSection
             categoryId={category.id}
             isModal={true}
-            onSale={false}
             isContainer={false}
           />
         </div>
