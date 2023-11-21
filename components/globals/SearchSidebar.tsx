@@ -8,7 +8,6 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import {XMarkIcon} from '@heroicons/react/24/solid';
-
 import RemoveIcon from '@mui/icons-material/Remove';
 import sanitize from 'sanitize-html';
 
@@ -17,12 +16,18 @@ type searchType = {
   count: number;
 };
 
+type categoryType = {
+  name: string;
+  uCategoryName: string;
+  count: number;
+};
+
 type filterType = {
   color: string[];
   price: string[];
 };
 interface SidebarProps {
-  byCategory: searchType[];
+  byCategory: categoryType[];
   byColor: searchType[];
   byPriceRange: searchType[];
   filters: filterType;
@@ -36,9 +41,9 @@ const SearchSidebar: FC<SidebarProps> = ({
   filters,
   setFilters
 }) => {
-  const [priceExpanded, setPriceExpanded] = useState<boolean>(false);
-  const [colorExpanded, setColorExpanded] = useState<boolean>(false);
-  const [categoryExpanded, setCategoryExpanded] = useState<boolean>(false);
+  const [priceExpanded, setPriceExpanded] = useState<boolean>(true);
+  const [colorExpanded, setColorExpanded] = useState<boolean>(true);
+  const [categoryExpanded, setCategoryExpanded] = useState<boolean>(true);
 
   const handleFilterChange = (
     selectedValue: string,
@@ -130,7 +135,7 @@ const SearchSidebar: FC<SidebarProps> = ({
             </div>
           </AccordionSummary>
 
-          <AccordionDetails>
+          <AccordionDetails className="max-h-64 overflow-y-scroll">
             <FormGroup>
               {byPriceRange?.map(price => (
                 <FormControlLabel
@@ -175,7 +180,7 @@ const SearchSidebar: FC<SidebarProps> = ({
             </div>
           </AccordionSummary>
 
-          <AccordionDetails>
+          <AccordionDetails className="max-h-64 overflow-y-scroll">
             <FormGroup>
               {byColor?.map(color => (
                 <FormControlLabel
@@ -220,12 +225,11 @@ const SearchSidebar: FC<SidebarProps> = ({
             </div>
           </AccordionSummary>
 
-          <AccordionDetails>
+          <AccordionDetails className="max-h-64 overflow-y-scroll">
             {byCategory?.map(category => (
-              <Link
-                key={category.name}
+              <div
+                key={category.uCategoryName}
                 className="block border-b-2 font-normal mb-2"
-                href={category.name}
               >
                 <span
                   dangerouslySetInnerHTML={{__html: sanitize(category.name)}}
@@ -233,7 +237,7 @@ const SearchSidebar: FC<SidebarProps> = ({
                 <span className="text-xs font-bold text-primary ml-2">
                   ({category.count})
                 </span>
-              </Link>
+              </div>
             ))}
           </AccordionDetails>
         </Accordion>
