@@ -14,14 +14,17 @@ import {Product} from '@store/slices/product/product';
 import ImageWithFallback from '@components/ImageWithFallback';
 import TootipBlack from '@components/globals/TootipBlack';
 import {XMarkIcon} from '@heroicons/react/24/solid';
+import {CircularProgress} from '@mui/material';
 
 interface OrderRequest {
   product: Product;
 }
 interface ImageListProps {
-  images: any[];
+  images: File[];
   handleFileRemove: (e: number) => void;
 }
+
+type orderType = {};
 
 const shippingFormFields = [
   {name: 'shippingFullName', placeholder: 'Name'},
@@ -39,8 +42,17 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
   const [salePriceToShow, setSalePriceToShow] = useState<number>(0);
   const [singleItemPrice, setSingleItemPrice] = useState<number>(0);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-  const [minQuantityError, setMinQuantityError] = useState<boolean>(false);
-  const [artWorkFiles, setArtWorkFiles] = useState<any>([]);
+  const [minQuantityError, setMinQuantityError] = useState<boolean>(true);
+  const [artWorkFiles, setArtWorkFiles] = useState<File[]>([]);
+
+  const getInHandDateEst = () => {
+    const currentDate = new Date();
+
+    const sevenDaysLater = new Date();
+    sevenDaysLater.setDate(currentDate.getDate() + 7);
+
+    return sevenDaysLater.toISOString().split('T')[0];
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -69,7 +81,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
       ],
       saleRepName: '',
       quantityOrdered: 0,
-      inHandDate: new Date(),
+      inHandDate: getInHandDateEst(),
       additionalInformation: '',
       shippingAddressSame: true,
       diffBillingAddress: false,
@@ -89,7 +101,47 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
     validateOnBlur: false,
     onSubmit: async (values, action) => {
       try {
-        await http.post('/order', {...values, productId: product.id});
+        if (minQuantityError) {
+          window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+          return;
+        }
+
+        let orderData: any = {...values, productId: product.id};
+
+        if (orderData.newsLetter) {
+          // call api here
+        }
+
+        delete orderData.newsLetter;
+        // exclude shipping address details in case of same shipping address
+        if (orderData.shippingAddressSame) {
+          delete orderData.shippingFullName;
+          delete orderData.shippingCompany;
+          delete orderData.shippingAddressLineOne;
+          delete orderData.shippingAddressLineTwo;
+          delete orderData.shippingCity;
+          delete orderData.shippingState;
+          delete orderData.shippingZipcode;
+          delete orderData.shippingPhoneNumber;
+        }
+
+        const formData = new FormData();
+
+        Object.entries(orderData).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            formData.append(`specifications`, JSON.stringify(value));
+          } else {
+            formData.append(key, value);
+          }
+        });
+
+        console.log('artWorkFiles', artWorkFiles);
+
+        if (artWorkFiles) {
+          formData.append(`artWorkFiles`, artWorkFiles);
+        }
+
+        await http.post('/order', formData);
         setIsSubmitted(true);
         action.resetForm();
       } catch (error) {
@@ -129,7 +181,11 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
 
     const priceRange = priceRangeObject || maxPriceRange;
 
-    setSalePriceToShow(priceRange.price * orderedQuantity);
+    const salePrice = parseFloat(
+      (priceRange.price * orderedQuantity).toFixed(2)
+    );
+
+    setSalePriceToShow(salePrice);
     setSingleItemPrice(priceRange.price);
   };
 
@@ -269,13 +325,13 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
 
                     <FormInput
                       type="text"
-                      name="billingZipCode"
+                      name="billingZipcode"
                       placeHolder="Zip Code"
                       formik={formik}
                     />
                     <FormInput
                       type="text"
-                      name="shippingPhoneNumber"
+                      name="billingPhoneNumber"
                       placeHolder="Phone"
                       formik={formik}
                     />
@@ -432,7 +488,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       images={artWorkFiles}
                       handleFileRemove={index => {
                         const updatedFiles = artWorkFiles?.filter(
-                          (_: any, itemIndex: number) => index !== itemIndex
+                          (_: File, itemIndex: number) => index !== itemIndex
                         );
                         setArtWorkFiles(updatedFiles);
                       }}
@@ -507,13 +563,23 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       </Link>
                     </label>
                   </div>
+                  {formik.touched['agreeToTerms'] &&
+                  formik.errors['agreeToTerms'] ? (
+                    <p className="text-red-500">
+                      {formik.errors['agreeToTerms']}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="mt-6">
                   <button
                     type="submit"
                     className="w-fit flex py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-body text-white"
                   >
-                    SUBMIT
+                    {formik.isSubmitting ? (
+                      <CircularProgress color="inherit" />
+                    ) : (
+                      'SUBMIT'
+                    )}
                   </button>
                 </div>
               </div>
@@ -590,7 +656,7 @@ export default OrderRequest;
 const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
   return (
     <ul className="mt-6">
-      {images?.map((image, index) => (
+      {images?.map((image: any, index) => (
         <li
           key={index}
           className="flex justify-between items-center border w-full h-14 pl-4 pr-6 rounded-0 focus:outline-none"
