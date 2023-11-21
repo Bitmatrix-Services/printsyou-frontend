@@ -20,6 +20,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
       alt={alt}
       {...rest}
       src={imgSrc}
+      priority
       onError={() => setImgSrc(fallbackSrc)}
     />
   );
