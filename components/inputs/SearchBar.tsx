@@ -53,13 +53,13 @@ const SearchBar = () => {
           }
           onChange={e => setSearchQuery(e.target.value)}
           onKeyDown={({key}) => {
-            if (key === 'Enter') {
+            if (key === 'Enter' && searchQuery) {
               router.push(`/search_results?keywords=${searchQuery}`);
             }
           }}
         />
-        <Link
-          href={`/search_results?keywords=${searchQuery}`}
+        <div
+          onClick={() => router.push(`/search_results?keywords=${searchQuery}`)}
           className="py-4 px-12 bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300"
           style={{
             backgroundImage: 'url("/assets/icon-search-white.png")',
@@ -67,6 +67,7 @@ const SearchBar = () => {
           }}
         />
       </div>
+
       {searchResult && Object.keys(searchResult)?.length !== 0 && (
         <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
           <div className="space-y-3">
@@ -168,6 +169,16 @@ const SearchBar = () => {
             </fieldset> */}
           </div>
         </div>
+        // ) : (
+        //   searchQuery && (
+        //     <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
+        //       <fieldset>
+        //         <h6 className="text-base font-semibold text-primary-500 uppercase">
+        //           No Match Found
+        //         </h6>
+        //       </fieldset>
+        //     </div>
+        //   )
       )}
     </div>
   );
