@@ -11,6 +11,7 @@ import Link from 'next/link';
 interface CategoryDetailsSectionProps {
   products: Product[];
   pageNumber: number;
+  totalProducts: number;
   setPageNumber: Dispatch<SetStateAction<number>>;
   pageSize: number;
   setPageSize: Dispatch<SetStateAction<number>>;
@@ -29,7 +30,8 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   totalPages,
   sort,
   setSort,
-  isLoading
+  isLoading,
+  totalProducts
 }) => {
   const router = useRouter();
 
@@ -54,12 +56,20 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
         <div className="flex justify-between flex-col md:flex-row">
           <div className="text-[#000] font-extralight text-xl leading-[22px] mb-3">
             Search Results for{' '}
-            <span className="text-[#4598ff]">{`"${router.query.keywords}"`}</span>
+            <span>
+              "
+              <span className="text-[#4598ff] underline">{`${router.query.keywords}`}</span>
+              "
+            </span>
           </div>
           <div className="text-[#000] font-light text-xs  mb-3">
-            Displaying <span className="font-semibold">1 - 4</span> of{' '}
-            <span className="font-semibold">4</span> results for{' '}
-            <span className="font-semibold"> {router.query.keywords}</span>
+            Displaying{' '}
+            <span className="font-semibold">
+              {(pageNumber - 1) * pageSize + 1} -{' '}
+              {Math.min(pageNumber * pageSize, totalProducts)}
+            </span>{' '}
+            of <span className="font-semibold">{totalProducts}</span> results
+            for <span className="font-semibold"> {router.query.keywords}</span>
           </div>
         </div>
 
