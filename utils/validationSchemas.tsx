@@ -23,8 +23,9 @@ export const orderRequestSchema = Yup.object({
   billingPhoneNumber: Yup.string()
     .required('Please enter phone number')
     .matches(phoneRegExp, 'invalid format'),
-  agreeToTerms: Yup.boolean().oneOf([true], 'You must agree to the terms'),
+  billingEmailAddress: Yup.string().email().required('Please enter email'),
   diffBillingAddress: Yup.boolean(),
+
   shippingFullName: Yup.string().when('diffBillingAddress', {
     is: true,
     then: schema => schema.min(3).max(25).required('Please enter name')
@@ -51,5 +52,10 @@ export const orderRequestSchema = Yup.object({
       schema
         .required('Please enter phone number')
         .matches(phoneRegExp, 'invalid format')
-  })
+  }),
+  specificationsColor: Yup.string().required('Please enter color'),
+  specificationsSize: Yup.string().required('Please enter size'),
+  specificationsImprintColor: Yup.string(),
+
+  agreeToTerms: Yup.boolean().oneOf([true], 'You must agree to the terms')
 });

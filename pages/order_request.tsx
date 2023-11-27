@@ -65,20 +65,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
       billingZipcode: '',
       billingPhoneNumber: '',
       billingEmailAddress: '',
-      specifications: [
-        {
-          fieldName: 'Color',
-          fieldValue: ''
-        },
-        {
-          fieldName: 'Size',
-          fieldValue: ''
-        },
-        {
-          fieldName: 'ImprintColor',
-          fieldValue: ''
-        }
-      ],
+      specificationsColor: '',
+      specificationsSize: '',
+      specificationsImprintColor: '',
       saleRepName: '',
       quantityOrdered: 0,
       inHandDate: getInHandDateEst(),
@@ -106,13 +95,36 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           return;
         }
 
-        let orderData: any = {...values, productId: product.id};
+        const specifications = [
+          {
+            fieldName: 'Color',
+            fieldValue: values.specificationsColor
+          },
+          {
+            fieldName: 'Size',
+            fieldValue: values.specificationsSize
+          },
+          {
+            fieldName: 'ImprintColor',
+            fieldValue: values.specificationsImprintColor
+          }
+        ];
+
+        let orderData: any = {
+          ...values,
+          specifications: specifications,
+          productId: product.id
+        };
 
         if (orderData.newsLetter) {
           // call api here
         }
 
         delete orderData.newsLetter;
+        delete orderData.specificationsColor;
+        delete orderData.specificationsSize;
+        delete orderData.specificationsImprintColor;
+
         // exclude shipping address details in case of same shipping address
         if (orderData.shippingAddressSame) {
           delete orderData.shippingFullName;
@@ -135,10 +147,10 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           }
         });
 
-        console.log('artWorkFiles', artWorkFiles);
-
-        if (artWorkFiles) {
-          formData.append(`artWorkFiles`, artWorkFiles);
+        if (artWorkFiles.length) {
+          artWorkFiles.forEach((fileItem, index) =>
+            formData.append(`artWorkFiles[${index}]`, fileItem)
+          );
         }
 
         await http.post('/order', formData);
@@ -411,44 +423,26 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <TootipBlack title="Please type the color/s of the item you are ordering.  If the item does not have a color code, or it is a full color item, you may enter N/A.">
                       <FormInput
                         type="text"
-                        name="specifications[0].fieldValue"
+                        name="specificationsColor"
                         placeHolder="Item Colors"
                         formik={formik}
-                        handleOnChange={e =>
-                          formik.setFieldValue(
-                            'specifications[0].fieldValue',
-                            e.target.value
-                          )
-                        }
                       />
                     </TootipBlack>
                     <TootipBlack title="This is not a mandatory field.  If the item has different sizes, please enter the size/s that you are ordering.  If the item only comes in one size, you may leave this field blank.">
                       <FormInput
                         type="text"
-                        name="specifications[1].fieldValue"
+                        name="specificationsSize"
                         placeHolder="Size"
                         formik={formik}
-                        handleOnChange={e =>
-                          formik.setFieldValue(
-                            'specifications[1].fieldValue',
-                            e.target.value
-                          )
-                        }
                       />
                     </TootipBlack>
 
                     <TootipBlack title="This is not a mandatory field.  If the item has different sizes, please enter the size/s that you are ordering.  If the item only comes in one size, you may leave this field blank">
                       <FormInput
                         type="text"
-                        name="specifications[3].fieldValue"
+                        name="specificationsImprintColor"
                         placeHolder="Imprint Color"
                         formik={formik}
-                        handleOnChange={e =>
-                          formik.setFieldValue(
-                            'specifications[2].fieldValue',
-                            e.target.value
-                          )
-                        }
                       />
                     </TootipBlack>
                   </div>
@@ -473,11 +467,13 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         className="hidden"
                         multiple
                         onChange={e => {
-                          setArtWorkFiles((prevState: any) => [
-                            ...prevState,
-                            e.target.files
-                          ]);
-                          e.target.files = null;
+                          if (e.target.files) {
+                            setArtWorkFiles((prevState: any) => [
+                              ...prevState,
+                              e.target.files[0]
+                            ]);
+                            e.target.files = null;
+                          }
                         }}
                       />
                     </span>
@@ -666,12 +662,12 @@ const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
               className="object-contain"
-              src={URL.createObjectURL(image[0])}
+              src={URL.createObjectURL(image)}
               alt={image.name}
             />
           </div>
-          <div className="text-blue-500">{image[0]?.name}</div>
-          <div>{Math.ceil(image[0]?.size / 1024).toFixed(1)} KB</div>
+          <div className="text-blue-500">{image?.name}</div>
+          <div>{Math.ceil(image?.size / 1024).toFixed(1)} KB</div>
           <XMarkIcon
             className="h-5 w-5 cursor-pointer"
             onClick={() => handleFileRemove(index)}
