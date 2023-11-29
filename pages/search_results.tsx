@@ -22,6 +22,15 @@ type filterType = {
   price: string[];
 };
 
+type searchResultsData = {
+  products: Product[];
+  totalPages: number;
+  totalProducts: number;
+  byPriceRange: searchType[];
+  byColors: searchType[];
+  byCategory: categoryType[];
+};
+
 const CategoryDetails = () => {
   const router = useRouter();
 
@@ -32,14 +41,18 @@ const CategoryDetails = () => {
 
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(24);
-  const [totalPages, setTotalPages] = useState<number>(1);
   const [sort, setSort] = useState<string>('priceLowToHigh');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [totalProducts, setTotalProdcuts] = useState<number>(1);
-  const [priceRangeData, setPriceRangeData] = useState<searchType[]>([]);
-  const [colorsData, setColorsRangeData] = useState<searchType[]>([]);
-  const [categoryData, setCategoryData] = useState<categoryType[]>([]);
+  const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
+    {
+      products: [],
+      totalPages: 0,
+      totalProducts: 0,
+      byPriceRange: [],
+      byColors: [],
+      byCategory: []
+    }
+  );
 
   useEffect(() => {
     if (router.query.keywords) handleSearch();
@@ -51,13 +64,15 @@ const CategoryDetails = () => {
       const {data} = await http.get(
         `search-result?query=${router.query.keywords}&page=${pageNumber}&size=${pageSize}&filter=${sort}`
       );
-      const searchResults = data.payload;
-      setProducts(searchResults.products.content);
-      setTotalPages(searchResults.products.totalPages);
-      setTotalProdcuts(searchResults.products.totalElements);
-      setPriceRangeData(searchResults.byPriceRange);
-      setColorsRangeData(searchResults.byColors);
-      setCategoryData(searchResults.byCategory);
+      const searchResults = {
+        products: data.payload.products.content,
+        totalPages: data.payload.products.totalPages,
+        totalProducts: data.payload.products.totalElements,
+        byPriceRange: data.payload.byPriceRange,
+        byColors: data.payload.byColors,
+        byCategory: data.payload.byCategory
+      };
+      setSearchResultsData(searchResults);
     } catch (error) {
       console.log('error.message', error);
     } finally {
@@ -71,20 +86,20 @@ const CategoryDetails = () => {
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
             <SearchSidebar
-              byPriceRange={priceRangeData}
-              byColor={colorsData}
-              byCategory={categoryData}
+              byPriceRange={searchResultsData.byPriceRange}
+              byColor={searchResultsData.byColors}
+              byCategory={searchResultsData.byCategory}
               filters={filters}
               setFilters={setFilters}
             />
             <SearchResultsSection
-              products={products}
-              totalProducts={totalProducts}
+              products={searchResultsData.products}
+              totalProducts={searchResultsData.totalProducts}
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
               pageSize={pageSize}
               setPageSize={setPageSize}
-              totalPages={totalPages}
+              totalPages={searchResultsData.totalPages}
               sort={sort}
               setSort={setSort}
               isLoading={isLoading}

@@ -21,19 +21,27 @@ const SearchBar = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState<SearchResult>();
+  const [showResults, setShowResults] = useState<string>('');
   const debouncedValue = useDebounce<string>(searchQuery, 500);
 
   useEffect(() => {
     if (searchQuery) handleSearch();
-  }, [debouncedValue]);
+  }, [debouncedValue, searchQuery]);
 
   const handleSearch = async () => {
-    const {data} = await http.get(`search?query=${searchQuery}`);
-    if (data.payload?.categories.length || data.payload?.products.length) {
-      let result = data.payload;
-      setSearchResult(result);
-    } else {
+    try {
+      const {data} = await http.get(`search?query=${searchQuery}`);
+      if (data.payload?.categories.length || data.payload?.products.length) {
+        let result = data.payload;
+        setSearchResult(result);
+        setShowResults('data found');
+      } else {
+        setSearchResult({});
+        setShowResults('no data');
+      }
+    } catch (error) {
       setSearchResult({});
+      setShowResults('no data');
     }
   };
 
@@ -48,13 +56,19 @@ const SearchBar = () => {
           value={searchQuery}
           onBlur={() =>
             setTimeout(() => {
-              setSearchResult({});
+              setShowResults('');
             }, 500)
           }
+          onFocus={e => {
+            if (e.target.value) {
+              handleSearch();
+            }
+          }}
           onChange={e => setSearchQuery(e.target.value)}
           onKeyDown={({key}) => {
             if (key === 'Enter' && searchQuery) {
               router.push(`/search_results?keywords=${searchQuery}`);
+              setShowResults('');
             }
           }}
         />
@@ -68,7 +82,7 @@ const SearchBar = () => {
         />
       </div>
 
-      {searchResult && Object.keys(searchResult)?.length !== 0 && (
+      {searchQuery && showResults === 'data found' && (
         <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
           <div className="space-y-3">
             {searchResult?.categories && (
@@ -84,7 +98,7 @@ const SearchBar = () => {
                       key={category.id}
                       onClick={() =>
                         setTimeout(() => {
-                          setSearchResult({});
+                          setShowResults('');
                         }, 500)
                       }
                     >
@@ -124,7 +138,7 @@ const SearchBar = () => {
                       key={product.id}
                       onClick={() =>
                         setTimeout(() => {
-                          setSearchResult({});
+                          setShowResults('');
                         }, 500)
                       }
                     >
@@ -169,16 +183,15 @@ const SearchBar = () => {
             </fieldset> */}
           </div>
         </div>
-        // ) : (
-        //   searchQuery && (
-        //     <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
-        //       <fieldset>
-        //         <h6 className="text-base font-semibold text-primary-500 uppercase">
-        //           No Match Found
-        //         </h6>
-        //       </fieldset>
-        //     </div>
-        //   )
+      )}
+      {searchQuery && showResults === 'no data' && (
+        <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
+          <fieldset>
+            <h6 className="text-base font-semibold text-primary-500 uppercase">
+              No Match Found
+            </h6>
+          </fieldset>
+        </div>
       )}
     </div>
   );
