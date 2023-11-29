@@ -143,7 +143,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           if (Array.isArray(value)) {
             formData.append(`specifications`, JSON.stringify(value));
           } else {
-            formData.append(key, value);
+            formData.append(key, String(value));
           }
         });
 
@@ -467,10 +467,11 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         className="hidden"
                         multiple
                         onChange={e => {
-                          if (e.target.files) {
+                          if (e.target.files?.length) {
+                            const fileToUpload = e.target.files[0];
                             setArtWorkFiles((prevState: any) => [
                               ...prevState,
-                              e.target.files[0]
+                              fileToUpload
                             ]);
                             e.target.files = null;
                           }
