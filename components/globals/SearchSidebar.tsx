@@ -117,131 +117,141 @@ const SearchSidebar: FC<SidebarProps> = ({
           </h5>
         </div>
       )}
-      <div className="lg:w-64 md:w-64 ">
-        <Accordion
-          expanded={priceExpanded}
-          onChange={(_, newExpanded) => setPriceExpanded(newExpanded)}
-          className=" shadow-none"
-        >
-          <AccordionSummary
-            expandIcon={priceExpanded ? <RemoveIcon /> : <AddIcon />}
-            aria-controls="panel1a-content"
-            className="p-0"
+      {byPriceRange && (
+        <div className="lg:w-64 md:w-64 ">
+          <Accordion
+            expanded={priceExpanded}
+            onChange={(_, newExpanded) => setPriceExpanded(newExpanded)}
+            className=" shadow-none"
           >
-            <div className="flex my-1 md:pr-6 items-center">
-              <h4 className=" text-body font-semibold text-sm  uppercase ">
-                Price
-              </h4>
-            </div>
-          </AccordionSummary>
-
-          <AccordionDetails className="max-h-64 overflow-y-scroll">
-            <FormGroup>
-              {byPriceRange?.map(price => (
-                <FormControlLabel
-                  key={price.name}
-                  control={
-                    <Checkbox
-                      name={price.name}
-                      checked={!!filters?.price?.includes(price.name)}
-                      onChange={e => handleFilterChange(e.target.name, 'price')}
-                    />
-                  }
-                  label={
-                    <div>
-                      <span>{price.name}</span>
-                      <span className="text-xs font-bold text-primary ml-2">
-                        ({price.count})
-                      </span>
-                    </div>
-                  }
-                  className="border-b-2"
-                />
-              ))}
-            </FormGroup>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-      <div className="lg:w-64 md:w-64">
-        <Accordion
-          expanded={colorExpanded}
-          onChange={(_, newExpanded) => setColorExpanded(newExpanded)}
-          className=" shadow-none"
-        >
-          <AccordionSummary
-            expandIcon={colorExpanded ? <RemoveIcon /> : <AddIcon />}
-            aria-controls="panel1a-content"
-            className="p-0"
-          >
-            <div className="flex my-1 md:pr-6 items-center">
-              <h4 className=" text-body font-semibold text-sm  uppercase ">
-                COLOR FAMILY
-              </h4>
-            </div>
-          </AccordionSummary>
-
-          <AccordionDetails className="max-h-64 overflow-y-scroll">
-            <FormGroup>
-              {byColor?.map(color => (
-                <FormControlLabel
-                  key={color.name}
-                  control={
-                    <Checkbox
-                      name={color.name}
-                      checked={!!filters?.color?.includes(color.name)}
-                      onChange={e => handleFilterChange(e.target.name, 'color')}
-                    />
-                  }
-                  label={
-                    <div>
-                      <span>{color.name}</span>
-                      <span className="text-xs font-bold text-primary ml-2">
-                        ({color.count})
-                      </span>
-                    </div>
-                  }
-                  className="border-b-2"
-                />
-              ))}
-            </FormGroup>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-      <div className="lg:w-64 md:w-64 mb-8">
-        <Accordion
-          expanded={categoryExpanded}
-          onChange={(_, newExpanded) => setCategoryExpanded(newExpanded)}
-          className=" shadow-none"
-        >
-          <AccordionSummary
-            expandIcon={categoryExpanded ? <RemoveIcon /> : <AddIcon />}
-            aria-controls="panel1a-content"
-            className="p-0"
-          >
-            <div className="flex my-1 md:pr-6 items-center">
-              <h4 className=" text-body font-semibold text-sm  uppercase ">
-                CATEGORY
-              </h4>
-            </div>
-          </AccordionSummary>
-
-          <AccordionDetails className="max-h-64 overflow-y-scroll">
-            {byCategory?.map(category => (
-              <div
-                key={category.uCategoryName}
-                className="block border-b-2 font-normal mb-2"
-              >
-                <span
-                  dangerouslySetInnerHTML={{__html: sanitize(category.name)}}
-                ></span>
-                <span className="text-xs font-bold text-primary ml-2">
-                  ({category.count})
-                </span>
+            <AccordionSummary
+              expandIcon={priceExpanded ? <RemoveIcon /> : <AddIcon />}
+              aria-controls="panel1a-content"
+              className="p-0"
+            >
+              <div className="flex my-1 md:pr-6 items-center">
+                <h4 className=" text-body font-semibold text-sm  uppercase ">
+                  Price
+                </h4>
               </div>
-            ))}
-          </AccordionDetails>
-        </Accordion>
-      </div>
+            </AccordionSummary>
+
+            <AccordionDetails className="max-h-64 overflow-y-scroll">
+              <FormGroup>
+                {byPriceRange?.map(price => (
+                  <FormControlLabel
+                    key={price.name}
+                    control={
+                      <Checkbox
+                        name={price.name}
+                        checked={!!filters?.price?.includes(price.name)}
+                        onChange={e =>
+                          handleFilterChange(e.target.name, 'price')
+                        }
+                      />
+                    }
+                    label={
+                      <div>
+                        <span>{price.name}</span>
+                        <span className="text-xs font-bold text-primary ml-2">
+                          ({price.count})
+                        </span>
+                      </div>
+                    }
+                    className="border-b-2"
+                  />
+                ))}
+              </FormGroup>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      )}
+      {byColor && (
+        <div className="lg:w-64 md:w-64">
+          <Accordion
+            expanded={colorExpanded}
+            onChange={(_, newExpanded) => setColorExpanded(newExpanded)}
+            className=" shadow-none"
+          >
+            <AccordionSummary
+              expandIcon={colorExpanded ? <RemoveIcon /> : <AddIcon />}
+              aria-controls="panel1a-content"
+              className="p-0"
+            >
+              <div className="flex my-1 md:pr-6 items-center">
+                <h4 className=" text-body font-semibold text-sm  uppercase ">
+                  COLOR FAMILY
+                </h4>
+              </div>
+            </AccordionSummary>
+
+            <AccordionDetails className="max-h-64 overflow-y-scroll">
+              <FormGroup>
+                {byColor?.map(color => (
+                  <FormControlLabel
+                    key={color.name}
+                    control={
+                      <Checkbox
+                        name={color.name}
+                        checked={!!filters?.color?.includes(color.name)}
+                        onChange={e =>
+                          handleFilterChange(e.target.name, 'color')
+                        }
+                      />
+                    }
+                    label={
+                      <div>
+                        <span>{color.name}</span>
+                        <span className="text-xs font-bold text-primary ml-2">
+                          ({color.count})
+                        </span>
+                      </div>
+                    }
+                    className="border-b-2"
+                  />
+                ))}
+              </FormGroup>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      )}
+      {byCategory && (
+        <div className="lg:w-64 md:w-64 mb-8">
+          <Accordion
+            expanded={categoryExpanded}
+            onChange={(_, newExpanded) => setCategoryExpanded(newExpanded)}
+            className=" shadow-none"
+          >
+            <AccordionSummary
+              expandIcon={categoryExpanded ? <RemoveIcon /> : <AddIcon />}
+              aria-controls="panel1a-content"
+              className="p-0"
+            >
+              <div className="flex my-1 md:pr-6 items-center">
+                <h4 className=" text-body font-semibold text-sm  uppercase ">
+                  CATEGORY
+                </h4>
+              </div>
+            </AccordionSummary>
+
+            <AccordionDetails className="max-h-64 overflow-y-scroll">
+              {byCategory?.map(category => (
+                <div
+                  key={category.uCategoryName}
+                  className="block border-b-2 font-normal mb-2"
+                >
+                  <span
+                    dangerouslySetInnerHTML={{__html: sanitize(category.name)}}
+                  ></span>
+                  <span className="text-xs font-bold text-primary ml-2">
+                    ({category.count})
+                  </span>
+                </div>
+              ))}
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      )}
     </div>
   );
 };
