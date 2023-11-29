@@ -60,7 +60,7 @@ const Header = () => {
       <div className="py-5 bg-body" />
       <header
         className={`${
-          scrollingUp ? 'sticky translate-y-0 ' : '-translate-y-full'
+          scrollingUp ? 'sticky translate-y-0 ' : ''
         } z-20 top-0 bg-white border-b border-[#eceef1] transition-transform duration-300`}
       >
         <div className="max-w-[100rem] mx-auto px-4 md:px-8 relative">
