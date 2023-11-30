@@ -20,7 +20,7 @@ import {useScrollingUp} from 'hooks/useScrolllingUp';
 import {DropDownNavMenu} from './DropDownNavMenu';
 
 const links = [
-  {color: '#dd6c99', text: 'About us', href: '/about-us'},
+  {color: '#dd6c99', text: 'About us', href: '/about_us'},
   {
     color: '#58c6f1',
     text: 'How to order',
