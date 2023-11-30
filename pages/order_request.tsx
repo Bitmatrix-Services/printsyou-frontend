@@ -274,11 +274,11 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     </h2>
                   )}
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                  <div className="text-red-500 text-xs font-semibold">
+                <div className="flex gap-2 flex-wrap justify-between items-center mt-4 ">
+                  <div className="text-red-500 text-xs font-semibold mr-auto">
                     Min Qty is {minQuantity}
                   </div>
-                  <div className="text-xs">
+                  <div className="text-xs max-w-[25rem]">
                     *Final total including shipping and any additional charges
                     will be sent with the artwork proof after the order is
                     placed.

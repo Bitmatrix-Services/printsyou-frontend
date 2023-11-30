@@ -18,6 +18,13 @@ const MultiColorLine = () => {
       <span className="hover:text-[#9a605c] after:bg-[#9a605c]" />
       <span className="hover:text-[#1f8b95] after:bg-[#1f8b95]" />
       <span className="hover:text-[#b658a2] after:bg-[#b658a2]" />
+
+      <span className="text-[#dd6c99] after:bg-[#dd6c99]" />
+      <span className="text-[#58c6f1] after:bg-[#58c6f1]" />
+      <span className="text-[#8fc23f] after:bg-[#8fc23f]" />
+      <span className="text-[#9a605c] after:bg-[#9a605c]" />
+      <span className="text-[#1f8b95] after:bg-[#1f8b95]" />
+      <span className="text-[#b658a2] after:bg-[#b658a2]" />
     </>
   );
 };

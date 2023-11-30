@@ -5,6 +5,7 @@ import SearchSidebar from '@components/globals/SearchSidebar';
 import SearchResultsSection from '@components/sections/searchResults/SearchResultsSection';
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
+import {getMinMaxRange} from '@utils/utils';
 
 type searchType = {
   name: string;
@@ -20,6 +21,7 @@ type categoryType = {
 type filterType = {
   color: string[];
   price: string[];
+  category: categoryType;
 };
 
 type searchResultsData = {
@@ -36,7 +38,12 @@ const CategoryDetails = () => {
 
   const [filters, setFilters] = useState<filterType>({
     color: [],
-    price: []
+    price: [],
+    category: {
+      name: '',
+      uCategoryName: '',
+      count: 0
+    }
   });
 
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -56,14 +63,41 @@ const CategoryDetails = () => {
 
   useEffect(() => {
     if (router.query.keywords) handleSearch();
-  }, [pageNumber, pageSize, sort, router.query.keywords]);
+  }, [
+    pageNumber,
+    pageSize,
+    sort,
+    router.query.keywords,
+    filters,
+    filters.category.name
+  ]);
 
   const handleSearch = async () => {
     setIsLoading(true);
+    let queryString = `search-result?query=${router.query.keywords}&page=${pageNumber}&size=${pageSize}&filter=${sort}`;
+
+    if (filters.color && filters.color.length > 0) {
+      queryString += `&colors=${filters.color.join(',')}`;
+    }
+    if (filters.category.name) {
+      queryString += `&category=${filters.category.uCategoryName}`;
+    }
+
+    if (filters.price && filters.price.length > 0) {
+      const result = getMinMaxRange(filters.price);
+      if (result.length) {
+        let max = Number.NEGATIVE_INFINITY;
+        let min = Number.POSITIVE_INFINITY;
+        result.forEach(item => {
+          max = Math.max(max, item.maxValue);
+          min = Math.min(min, item.minValue);
+        });
+        queryString += `&minPrice=${min}&maxPrice=${max}`;
+      }
+    }
+
     try {
-      const {data} = await http.get(
-        `search-result?query=${router.query.keywords}&page=${pageNumber}&size=${pageSize}&filter=${sort}`
-      );
+      const {data} = await http.get(queryString);
       const searchResults = {
         products: data.payload.products.content,
         totalPages: data.payload.products.totalPages,

@@ -18,9 +18,10 @@ import {
 } from '@store/slices/category/catgory.slice';
 import {useScrollingUp} from 'hooks/useScrolllingUp';
 import {DropDownNavMenu} from './DropDownNavMenu';
+import {useRouter} from 'next/router';
 
 const links = [
-  {color: '#dd6c99', text: 'About us', href: '/about-us'},
+  {color: '#dd6c99', text: 'About us', href: '/about_us'},
   {
     color: '#58c6f1',
     text: 'How to order',
@@ -35,6 +36,7 @@ const links = [
 const Header = () => {
   const dispatch = useAppDispatch();
   const {scrollingUp, scrollValue} = useScrollingUp();
+  const router = useRouter();
 
   const [mobileMenu, setMobileMenu] = useState(false);
 
@@ -50,6 +52,8 @@ const Header = () => {
   const handleClose = () => {
     setMobileMenu(false);
   };
+
+  console.log('router.pathname', router.pathname);
 
   return (
     <>
@@ -159,7 +163,13 @@ const Header = () => {
                 <li key={`link-${index}`}>
                   <Link
                     href={link.href}
-                    className={`nav-link text-body hover:text-[${link.color}] after:bg-[${link.color}]`}
+                    className={`nav-link ${
+                      router.pathname === link.href
+                        ? `text-[${link.color}] after:w-full`
+                        : ''
+                    } text-body hover:text-[${link.color}] after:bg-[${
+                      link.color
+                    }]`}
                   >
                     {link.text}
                   </Link>
