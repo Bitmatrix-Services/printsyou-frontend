@@ -136,7 +136,7 @@ const SearchSidebar: FC<SidebarProps> = ({
               </div>
             </AccordionSummary>
 
-            <AccordionDetails className="max-h-64 overflow-y-scroll">
+            <AccordionDetails className="max-h-64 overflow-y-auto">
               <FormGroup>
                 {byPriceRange?.map(price => (
                   <FormControlLabel
@@ -185,7 +185,7 @@ const SearchSidebar: FC<SidebarProps> = ({
               </div>
             </AccordionSummary>
 
-            <AccordionDetails className="max-h-64 overflow-y-scroll">
+            <AccordionDetails className="max-h-64 overflow-y-auto">
               <FormGroup>
                 {byColor?.map(color => (
                   <FormControlLabel
@@ -234,7 +234,7 @@ const SearchSidebar: FC<SidebarProps> = ({
               </div>
             </AccordionSummary>
 
-            <AccordionDetails className="max-h-64 overflow-y-scroll">
+            <AccordionDetails className="max-h-64 overflow-y-auto">
               {byCategory?.map(category => (
                 <div
                   key={category.uCategoryName}
