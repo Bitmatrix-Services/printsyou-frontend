@@ -27,14 +27,14 @@ interface ImageListProps {
 type orderType = {};
 
 const shippingFormFields = [
-  {name: 'shippingFullName', placeholder: 'Name'},
+  {name: 'shippingFullName', placeholder: 'Name*'},
   {name: 'shippingCompany', placeholder: 'Company'},
-  {name: 'shippingAddressLineOne', placeholder: 'Address'},
+  {name: 'shippingAddressLineOne', placeholder: 'Address*'},
   {name: 'shippingAddressLineTwo', placeholder: 'Address 2'},
-  {name: 'shippingCity', placeholder: 'City'},
-  {name: 'shippingState', placeholder: 'State'},
-  {name: 'shippingZipcode', placeholder: 'Zip Code'},
-  {name: 'shippingPhoneNumber', placeholder: 'Phone'}
+  {name: 'shippingCity', placeholder: 'City*'},
+  {name: 'shippingState', placeholder: 'State*'},
+  {name: 'shippingZipcode', placeholder: 'Zip Code*'},
+  {name: 'shippingPhoneNumber', placeholder: 'Phone*'}
 ];
 
 const OrderRequest: FC<OrderRequest> = ({product}) => {
@@ -258,7 +258,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <FormInput
                       type="number"
                       name="quantityOrdered"
-                      placeHolder="Quantity"
+                      placeHolder="Quantity*"
                       formik={formik}
                       handleOnBlur={() => calculatePrices()}
                     />
@@ -295,7 +295,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <FormInput
                       type="text"
                       name="billingFullName"
-                      placeHolder="Name"
+                      placeHolder="Name*"
                       formik={formik}
                     />
                     <FormInput
@@ -309,7 +309,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="billingAddressLineOne"
-                        placeHolder="Address"
+                        placeHolder="Address*"
                         formik={formik}
                       />
                     </div>
@@ -325,26 +325,26 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <FormInput
                       type="text"
                       name="billingCity"
-                      placeHolder="City"
+                      placeHolder="City*"
                       formik={formik}
                     />
                     <FormInput
                       type="text"
                       name="billingState"
-                      placeHolder="State"
+                      placeHolder="State*"
                       formik={formik}
                     />
 
                     <FormInput
                       type="text"
                       name="billingZipcode"
-                      placeHolder="Zip Code"
+                      placeHolder="Zip Code*"
                       formik={formik}
                     />
                     <FormInput
                       type="text"
                       name="billingPhoneNumber"
-                      placeHolder="Phone"
+                      placeHolder="Phone*"
                       formik={formik}
                     />
 
@@ -352,7 +352,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="billingEmailAddress"
-                        placeHolder="Email"
+                        placeHolder="Email*"
                         formik={formik}
                       />
                     </TootipBlack>
@@ -424,7 +424,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="specificationsColor"
-                        placeHolder="Item Colors"
+                        placeHolder="Item Colors*"
                         formik={formik}
                       />
                     </TootipBlack>
@@ -432,7 +432,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="specificationsSize"
-                        placeHolder="Size"
+                        placeHolder="Size*"
                         formik={formik}
                       />
                     </TootipBlack>

@@ -96,14 +96,14 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                       <FormInput
                         type="text"
                         name="fullName"
-                        placeHolder="Name"
+                        placeHolder="Name*"
                         formik={formik}
                       />
                       <div className="flex flex-col md:flex-row justify-between md:space-x-4">
                         <FormInput
                           type="text"
                           name="emailAddress"
-                          placeHolder="Email"
+                          placeHolder="Email*"
                           formik={formik}
                         />
                         <FormInput
@@ -116,7 +116,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                       <FormInput
                         type="text"
                         name="subject"
-                        placeHolder="Subject"
+                        placeHolder="Subject*"
                         formik={formik}
                       />
                       <div className="my-6">
@@ -124,7 +124,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                           inputType="textarea"
                           type="text"
                           name="message"
-                          placeHolder="Message"
+                          placeHolder="Message*"
                           formik={formik}
                         />
                       </div>

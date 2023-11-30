@@ -53,8 +53,6 @@ const Header = () => {
     setMobileMenu(false);
   };
 
-  console.log('router.pathname', router.pathname);
-
   return (
     <>
       <hr
