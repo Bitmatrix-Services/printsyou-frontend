@@ -38,3 +38,31 @@ export const getCateoryTitleAndDescription = (cateoryDescription: string) => {
 
   return {title, descriptionList};
 };
+
+export const getMinMaxRange = (input: string[]) => {
+  const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
+  return input.map((value: string) => {
+    let minValue: number = 0;
+    let maxValue: number = -1;
+    if (~value.toLowerCase().indexOf('under'))
+      maxValue = +value.toLowerCase().replaceAll('under $', '');
+    else if (~value.toLowerCase().indexOf('over')) {
+      minValue = 50;
+      maxValue = Number.MAX_SAFE_INTEGER;
+    } else {
+      const matchValue = value.match(regex);
+      if (matchValue) {
+        minValue = +matchValue[1];
+        maxValue = +matchValue[3];
+      }
+    }
+
+    if (maxValue === -1)
+      throw Error('Invalid calculations of min and max values');
+
+    return {
+      minValue: minValue,
+      maxValue: maxValue
+    };
+  });
+};

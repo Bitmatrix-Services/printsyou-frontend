@@ -1,5 +1,4 @@
 import React, {Dispatch, FC, SetStateAction, useState} from 'react';
-import Link from 'next/link';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -25,7 +24,9 @@ type categoryType = {
 type filterType = {
   color: string[];
   price: string[];
+  category: categoryType;
 };
+
 interface SidebarProps {
   byCategory: categoryType[];
   byColor: searchType[];
@@ -73,7 +74,9 @@ const SearchSidebar: FC<SidebarProps> = ({
 
   return (
     <div className="xl:w-64 mb-6 xl:mb-0">
-      {(filters.color.length > 0 || filters.price.length > 0) && (
+      {(filters.color.length > 0 ||
+        filters.price.length > 0 ||
+        filters.category.name) && (
         <div className="lg:w-64 md:w-64 border border-[#edeff2] p-2">
           <h5 className="text-sm">YOUR SELECTIONS</h5>
           {filters.color?.map(color => (
@@ -109,9 +112,36 @@ const SearchSidebar: FC<SidebarProps> = ({
               <hr />
             </div>
           ))}
+          {filters.category.name && (
+            <div>
+              <div className="flex justify-between items-center mt-3 mb-2">
+                <span className="text-xs">
+                  Category: <strong>{filters.category.name}</strong>
+                </span>
+                <span>
+                  <XMarkIcon
+                    className="h-4 w-4 cursor-pointer"
+                    onClick={() =>
+                      setFilters({
+                        ...filters,
+                        category: {name: '', uCategoryName: '', count: 0}
+                      })
+                    }
+                  />
+                </span>
+              </div>
+              <hr />
+            </div>
+          )}
           <h5
             className="text-[10px] font-bold cursor-pointer mt-4"
-            onClick={() => setFilters({color: [], price: []})}
+            onClick={() =>
+              setFilters({
+                color: [],
+                price: [],
+                category: {name: '', uCategoryName: '', count: 0}
+              })
+            }
           >
             Clear All
           </h5>
@@ -215,7 +245,7 @@ const SearchSidebar: FC<SidebarProps> = ({
           </Accordion>
         </div>
       )}
-      {byCategory && (
+      {byCategory && !filters.category.name && (
         <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={categoryExpanded}
@@ -238,7 +268,8 @@ const SearchSidebar: FC<SidebarProps> = ({
               {byCategory?.map(category => (
                 <div
                   key={category.uCategoryName}
-                  className="block border-b-2 font-normal mb-2"
+                  className="block border-b-2 font-normal mb-2 cursor-pointer"
+                  onClick={() => setFilters({...filters, category: category})}
                 >
                   <span
                     dangerouslySetInnerHTML={{__html: sanitize(category.name)}}
