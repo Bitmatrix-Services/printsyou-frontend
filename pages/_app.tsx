@@ -11,10 +11,45 @@ import 'swiper/css/pagination';
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
 import '@styles/globals.css';
+import {useAppDispatch} from '@store/hooks';
+import {useRouter} from 'next/router';
+import {FC, useEffect} from 'react';
+import {setTopProgressState} from '@store/slices/progress.slice';
+import {LinearIndeterminate} from '@components/linear-inderminate.component';
+
+export const ShowLinearIndeterminateOnAll: FC = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  useEffect(() => {
+    const start = (url: string, {shallow}: {shallow: boolean}) => {
+      if (!shallow) {
+        dispatch(setTopProgressState(true));
+      }
+    };
+    const stop = () => {
+      dispatch(setTopProgressState(false));
+    };
+
+    router.events.on('routeChangeStart', start);
+    router.events.on('routeChangeComplete', stop);
+    router.events.on('routeChangeError', stop);
+
+    return () => {
+      router.events.off('routeChangeStart', start);
+      router.events.off('routeChangeComplete', stop);
+      router.events.off('routeChangeError', stop);
+    };
+  }, [router]);
+
+  return null;
+};
 
 export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
+      <ShowLinearIndeterminateOnAll />
+      <LinearIndeterminate />
       <DefaultSeo
         title={metaConstants.SITE_NAME}
         description={metaConstants.DESCRIPTION}

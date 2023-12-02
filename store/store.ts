@@ -2,11 +2,13 @@ import {configureStore} from '@reduxjs/toolkit';
 
 import {categoryReducer} from './slices/category/catgory.slice';
 import {productReducer} from './slices/product/product.slice';
+import {ProgressReducer} from '@store/slices/progress.slice';
 
 export const store = configureStore({
   reducer: {
     category: categoryReducer,
-    product: productReducer
+    product: productReducer,
+    progress: ProgressReducer
   }
 });
 
