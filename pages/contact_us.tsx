@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import PageHeader from '@components/globals/PageHeader';
 import Container from '@components/globals/Container';
-import {useFormik} from 'formik';
+import {FormikConfig, useFormik} from 'formik';
 import {ContactUsSchema} from '@utils/validationSchemas';
 import FormInput from '@components/Form/FormInput';
 import axios from 'axios';

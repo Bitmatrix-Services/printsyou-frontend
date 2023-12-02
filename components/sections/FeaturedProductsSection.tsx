@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useRef} from 'react';
 import Link from 'next/link';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Navigation} from 'swiper/modules';
 
 import Container from '../globals/Container';
@@ -46,7 +46,7 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
   products,
   navNumber
 }) => {
-  const sliderRef = useRef<any>(null);
+  const sliderRef = useRef<SwiperRef>(null);
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;

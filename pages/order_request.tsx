@@ -45,7 +45,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
   const [singleItemPrice, setSingleItemPrice] = useState<number>(0);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [minQuantityError, setMinQuantityError] = useState<boolean>(true);
-  const [artWorkFiles, setArtWorkFiles] = useState<File[]>([]);
+  const [artWorkFiles, setArtWorkFiles] = useState<globalThis.File[]>([]);
 
   const getInHandDateEst = () => {
     const currentDate = new Date();
@@ -478,7 +478,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         onChange={e => {
                           if (e.target.files?.length) {
                             const fileToUpload = e.target.files[0];
-                            setArtWorkFiles((prevState: any) => [
+                            setArtWorkFiles(prevState => [
                               ...prevState,
                               fileToUpload
                             ]);
@@ -662,7 +662,7 @@ export default OrderRequest;
 const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
   return (
     <ul className="mt-6">
-      {images?.map((image: any, index) => (
+      {images?.map((image, index) => (
         <li
           key={index}
           className="flex justify-between items-center border w-full h-14 pl-4 pr-6 rounded-0 focus:outline-none"

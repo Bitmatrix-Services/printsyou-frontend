@@ -1,6 +1,6 @@
 import React, {useCallback, useRef} from 'react';
 import Link from 'next/link';
-import {Swiper, SwiperSlide} from 'swiper/react';
+import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
 
 const slidesData = [
@@ -30,7 +30,7 @@ const slidesData = [
 ];
 
 const HeroSection = () => {
-  const sliderRef = useRef<any>(null);
+  const sliderRef = useRef<SwiperRef>(null);
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;

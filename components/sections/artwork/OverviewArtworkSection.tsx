@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {Dispatch as ReactDispatch, FC, SetStateAction} from 'react';
 
 import OverviewCard from '@components/cards/OverviewCard';
 import Container from '@components/globals/Container';
@@ -39,7 +39,7 @@ const tabSectionList = [
 ];
 
 interface OverviewArtworkSectionProps {
-  setTabValue: any;
+  setTabValue: ReactDispatch<SetStateAction<number>>;
 }
 
 const OverviewArtworkSection: FC<OverviewArtworkSectionProps> = ({

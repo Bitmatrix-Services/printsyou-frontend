@@ -1,9 +1,14 @@
-import React, {FC} from 'react';
+import React, {
+  FC,
+  ReactNode,
+  Dispatch as ReactDispatch,
+  SetStateAction
+} from 'react';
 
 interface OverviewCardProps {
-  icon: any;
+  icon: ReactNode;
   heading: string;
-  setTabValue: any;
+  setTabValue: ReactDispatch<SetStateAction<number>>;
   index: number;
 }
 
