@@ -8,7 +8,6 @@ import {GetServerSidePropsContext} from 'next';
 import {http} from 'services/axios.service';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
-import produce from 'immer';
 
 interface CategoryDetailsProps {
   category: Category;
