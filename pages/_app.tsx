@@ -16,6 +16,8 @@ import {useRouter} from 'next/router';
 import {FC, useEffect} from 'react';
 import {setTopProgressState} from '@store/slices/progress.slice';
 import {LinearIndeterminate} from '@components/linear-inderminate.component';
+import {ThemeProvider} from '@mui/material';
+import {theme} from '@utils/theme';
 
 export const ShowLinearIndeterminateOnAll: FC = () => {
   const dispatch = useAppDispatch();
@@ -48,27 +50,29 @@ export const ShowLinearIndeterminateOnAll: FC = () => {
 export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
-      <ShowLinearIndeterminateOnAll />
-      <LinearIndeterminate />
-      <DefaultSeo
-        title={metaConstants.SITE_NAME}
-        description={metaConstants.DESCRIPTION}
-        openGraph={{
-          images: [
-            {
-              url: '/assets/logo.png',
-              height: 70,
-              width: 70,
-              alt: 'site logo'
-            }
-          ]
-        }}
-      />
-      <Header />
-      <main>
-        <Component {...pageProps} />
-      </main>
-      <Footer />
+      <ThemeProvider theme={theme}>
+        <ShowLinearIndeterminateOnAll />
+        <LinearIndeterminate />
+        <DefaultSeo
+          title={metaConstants.SITE_NAME}
+          description={metaConstants.DESCRIPTION}
+          openGraph={{
+            images: [
+              {
+                url: '/assets/logo.png',
+                height: 70,
+                width: 70,
+                alt: 'site logo'
+              }
+            ]
+          }}
+        />
+        <Header />
+        <main>
+          <Component {...pageProps} />
+        </main>
+        <Footer />
+      </ThemeProvider>
     </Provider>
   );
 }
