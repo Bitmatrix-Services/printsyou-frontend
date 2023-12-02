@@ -32,7 +32,9 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   return (
     <>
       <NextSeo
-        title={`${product.metaTitle} | ${metaConstants.SITE_NAME}`}
+        title={`${product.metaTitle || product.productName} | ${
+          metaConstants.SITE_NAME
+        }`}
         description={product.metaDescription || ''}
         openGraph={{
           images: (product.productImages || []).map(value => ({
