@@ -3,8 +3,8 @@ import React, {FC} from 'react';
 import PageHeader from '@components/globals/PageHeader';
 import PaymentsSection from '@components/sections/PaymentsSection';
 import Container from '@components/globals/Container';
-import {NextSeo} from "next-seo";
-import {metaConstants} from "@utils/Constants";
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 const HowToOrderPage = () => {
   return (

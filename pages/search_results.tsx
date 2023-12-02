@@ -6,8 +6,8 @@ import SearchResultsSection from '@components/sections/searchResults/SearchResul
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
 import {getMinMaxRange} from '@utils/utils';
-import {NextSeo} from "next-seo";
-import {metaConstants} from "@utils/Constants";
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 type searchType = {
   name: string;

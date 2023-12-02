@@ -9,8 +9,8 @@ import {Product} from '@store/slices/product/product';
 import ImageWithFallback from '@components/ImageWithFallback';
 import PageHeader from '@components/globals/PageHeader';
 import {CircularProgress} from '@mui/material';
-import {NextSeo} from "next-seo";
-import {metaConstants} from "@utils/Constants";
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 interface MoreInfoProps {
   product: Product;
@@ -43,7 +43,9 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
 
   return (
     <>
-      <NextSeo title={`Request Info | ${product.productName} | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Request Info | ${product.productName} | ${metaConstants.SITE_NAME}`}
+      />
       <PageHeader pageTitle={'More Info'} />
       <Container>
         <div className="px-8 pb-8 pt-10">

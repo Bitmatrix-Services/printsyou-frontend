@@ -15,8 +15,8 @@ import ImageWithFallback from '@components/ImageWithFallback';
 import TootipBlack from '@components/globals/TootipBlack';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {CircularProgress} from '@mui/material';
-import {NextSeo} from "next-seo";
-import {metaConstants} from "@utils/Constants";
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 interface OrderRequest {
   product: Product;

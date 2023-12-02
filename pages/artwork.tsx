@@ -10,8 +10,8 @@ import TermsSection from '@components/sections/artwork/TermsSection';
 import TestimonialsSection from '@components/sections/artwork/TestimonialsSection';
 import OverviewArtworkSection from '@components/sections/artwork/OverviewArtworkSection';
 import PageHeader from '@components/globals/PageHeader';
-import {NextSeo} from "next-seo";
-import {metaConstants} from "@utils/Constants";
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 interface TabPanelProps {
   children?: ReactNode;

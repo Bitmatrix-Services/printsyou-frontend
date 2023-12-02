@@ -24,7 +24,9 @@ interface FaqsProps {
 const Faqs: FC<FaqsProps> = ({faqs}) => {
   return (
     <>
-      <NextSeo title={`Frequently Asked Questions | FAQ | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Frequently Asked Questions | FAQ | ${metaConstants.SITE_NAME}`}
+      />
       <PageHeader pageTitle={'Frequently Asked Questions'} />
       <Container>
         <div className="py-12">

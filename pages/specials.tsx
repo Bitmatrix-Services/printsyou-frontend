@@ -7,8 +7,8 @@ import Container from '@components/globals/Container';
 import {Product} from '@store/slices/product/product';
 import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
 import CircularProgress from '@mui/material/CircularProgress';
-import {NextSeo} from "next-seo";
-import {metaConstants} from "@utils/Constants";
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 const Specials = () => {
   const [specialProducts, setSpecialProducts] = useState<Product[]>([]);
