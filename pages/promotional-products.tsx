@@ -10,11 +10,14 @@ import Container from '@components/globals/Container';
 import {useAppSelector} from '@store/hooks';
 import {selectCategoryList} from '@store/slices/category/catgory.slice';
 import sanitize from 'sanitize-html';
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 const ViewAllCategories = () => {
   const categoryList = useAppSelector(selectCategoryList);
   return (
     <>
+      <NextSeo title={`Categories | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle={'Promotional Products Categories'} />
       <Container>
         <div className="py-12">

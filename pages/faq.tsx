@@ -7,6 +7,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AddIcon from '@mui/icons-material/Add';
 import {http} from 'services/axios.service';
 import sanitize from 'sanitize-html';
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 type Faqs = {
   id: string;
@@ -14,6 +16,7 @@ type Faqs = {
   answer: string;
   sequenceNumber: number;
 };
+
 interface FaqsProps {
   faqs: Faqs[];
 }
@@ -21,6 +24,7 @@ interface FaqsProps {
 const Faqs: FC<FaqsProps> = ({faqs}) => {
   return (
     <>
+      <NextSeo title={`Frequently Asked Questions | FAQ | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle={'Frequently Asked Questions'} />
       <Container>
         <div className="py-12">

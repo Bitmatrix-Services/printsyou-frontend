@@ -6,6 +6,8 @@ import Sidebar from '@components/globals/Sidebar';
 import {Category} from '@store/slices/category/category';
 import {GetServerSidePropsContext} from 'next';
 import {http} from 'services/axios.service';
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 interface CategoryDetailsProps {
   category: Category;
@@ -13,7 +15,20 @@ interface CategoryDetailsProps {
 
 const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
   return (
-    <main>
+    <>
+      <NextSeo
+        title={`${category.metaTitle} | ${metaConstants.SITE_NAME}`}
+        description={category.metaDescription || ''}
+        openGraph={{
+          images: category.imageUrl
+            ? [
+                {
+                  url: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`
+                }
+              ]
+            : []
+        }}
+      />
       <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
@@ -22,7 +37,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
           </div>
         </Container>
       </div>
-    </main>
+    </>
   );
 };
 

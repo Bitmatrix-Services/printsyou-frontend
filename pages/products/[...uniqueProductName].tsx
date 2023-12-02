@@ -12,10 +12,13 @@ import {http} from 'services/axios.service';
 import Breadcrumb from '@components/globals/Breadcrumb';
 import {useRouter} from 'next/router';
 import ImageWithFallback from '@components/ImageWithFallback';
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
+
 interface ProductDetailsProps {
   product: Product;
 }
@@ -28,6 +31,15 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   }, []);
   return (
     <>
+      <NextSeo
+        title={`${product.metaTitle} | ${metaConstants.SITE_NAME}`}
+        description={product.metaDescription || ''}
+        openGraph={{
+          images: (product.productImages || []).map(value => ({
+            url: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${value.imageUrl}`
+          }))
+        }}
+      />
       <Container>
         <div className="px-8 py-8">
           <div className="flex text-[10px] sm:text-sm md:text-[10px] lg:text-sm font-medium mb-6 items-center text-[#787b82]">

@@ -10,6 +10,8 @@ import TermsSection from '@components/sections/artwork/TermsSection';
 import TestimonialsSection from '@components/sections/artwork/TestimonialsSection';
 import OverviewArtworkSection from '@components/sections/artwork/OverviewArtworkSection';
 import PageHeader from '@components/globals/PageHeader';
+import {NextSeo} from "next-seo";
+import {metaConstants} from "@utils/Constants";
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -50,7 +52,8 @@ export default function Artwork() {
   };
 
   return (
-    <main>
+    <>
+      <NextSeo title={`Artworks | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle="Additional information" />
       <section className="bg-grey">
         <div className="bg-white border-t border-b py-4">
@@ -94,6 +97,6 @@ export default function Artwork() {
           </CustomTabPanel>
         </div>
       </section>
-    </main>
+    </>
   );
 }

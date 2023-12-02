@@ -6,6 +6,8 @@ import SearchResultsSection from '@components/sections/searchResults/SearchResul
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
 import {getMinMaxRange} from '@utils/utils';
+import {NextSeo} from "next-seo";
+import {metaConstants} from "@utils/Constants";
 
 type searchType = {
   name: string;
@@ -115,7 +117,8 @@ const CategoryDetails = () => {
   };
 
   return (
-    <main>
+    <>
+      <NextSeo title={`Search | ${metaConstants.SITE_NAME}`} />
       <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
@@ -141,7 +144,7 @@ const CategoryDetails = () => {
           </div>
         </Container>
       </div>
-    </main>
+    </>
   );
 };
 

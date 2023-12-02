@@ -3,10 +3,13 @@ import React, {FC} from 'react';
 import PageHeader from '@components/globals/PageHeader';
 import PaymentsSection from '@components/sections/PaymentsSection';
 import Container from '@components/globals/Container';
+import {NextSeo} from "next-seo";
+import {metaConstants} from "@utils/Constants";
 
 const HowToOrderPage = () => {
   return (
     <>
+      <NextSeo title={`How to Order | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle={'How to order'} />
       <Container>
         <div className="py-12">
@@ -49,10 +52,12 @@ const pricingList = [
 
 const PricingCard: FC<PricingCardProps> = ({title, description}) => {
   return (
-    <div className="flex my-6 md:pr-6">
-      <div className="pr-6 pt-2 text-primary text-5xl font-bold">{title}</div>
-      <div className="text-mute font-medium px-3">{description}</div>
-    </div>
+    <>
+      <div className="flex my-6 md:pr-6">
+        <div className="pr-6 pt-2 text-primary text-5xl font-bold">{title}</div>
+        <div className="text-mute font-medium px-3">{description}</div>
+      </div>
+    </>
   );
 };
 

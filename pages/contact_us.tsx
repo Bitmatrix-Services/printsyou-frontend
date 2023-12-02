@@ -6,6 +6,8 @@ import {ContactUsSchema} from '@utils/validationSchemas';
 import FormInput from '@components/Form/FormInput';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NextSeo} from "next-seo";
+import {metaConstants} from "@utils/Constants";
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -33,7 +35,8 @@ function ContactUs() {
     }
   });
   return (
-    <div>
+    <>
+      <NextSeo title={`Contact Us | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle="Contact Us" />
       <Container>
         {!isSubmitted ? (
@@ -109,7 +112,7 @@ function ContactUs() {
           </div>
         )}
       </Container>
-    </div>
+    </>
   );
 }
 

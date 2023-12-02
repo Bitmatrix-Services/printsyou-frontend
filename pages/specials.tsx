@@ -7,6 +7,8 @@ import Container from '@components/globals/Container';
 import {Product} from '@store/slices/product/product';
 import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NextSeo} from "next-seo";
+import {metaConstants} from "@utils/Constants";
 
 const Specials = () => {
   const [specialProducts, setSpecialProducts] = useState<Product[]>([]);
@@ -35,8 +37,8 @@ const Specials = () => {
 
   return (
     <>
+      <NextSeo title={`Special Products | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle={'Specials and Sales'} />
-
       <Container>
         <section className="bg-white py-8 lg:py-20">
           <PaginationHeader

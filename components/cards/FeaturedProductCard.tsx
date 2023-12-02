@@ -30,22 +30,6 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
 
   return (
     <>
-      <NextSeo
-        title={product.metaTitle ?? ''}
-        description={product.metaDescription ?? ''}
-        openGraph={{
-          images: [
-            {
-              url: product.productImages[0]?.imageUrl
-                ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
-                : '/assets/logo.png',
-              height: 70,
-              width: 70,
-              alt: 'product'
-            }
-          ]
-        }}
-      />
       <Link
         href={`products/${product.uniqueProductName}`}
         className="tp-product group relative bg-white cursor-pointer"

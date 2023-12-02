@@ -22,22 +22,6 @@ const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
 
   return (
     <>
-      <NextSeo
-        title={category.metaTitle ?? ''}
-        description={category.metaDescription ?? ''}
-        openGraph={{
-          images: [
-            {
-              url: category.imageUrl
-                ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`
-                : '/assets/logo.png',
-              height: 70,
-              width: 70,
-              alt: 'category'
-            }
-          ]
-        }}
-      />
       <div className="flex-1">
         <div className="grid grid-cols-1 items-center promo-products">
           <div>
