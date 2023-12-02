@@ -13,7 +13,7 @@ export const DropDownNavMenu = () => {
 
   return (
     <div
-      className={`megamenu ${showList && 'show'}`}
+      className={`megamenu ${showList && 'show'} hidden md:block`}
       onMouseLeave={() => setShowList(false)}
     >
       <button

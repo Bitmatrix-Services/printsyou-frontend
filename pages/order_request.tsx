@@ -207,7 +207,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
       <Container>
         {!isSubmitted ? (
           <>
-            <div className="xs:flex md:grid md:grid-cols-2 mt-6 space-x-16">
+            <div className="xs:flex md:grid md:grid-cols-2 mt-6 md:space-x-16">
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative min-w-[10rem] h-40 w-40">
                   <ImageWithFallback
@@ -249,32 +249,38 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 </div>
               </div>
               <div>
-                <div className="flex justify-between">
-                  <FormHeading text="Quantity:" />
-                  <FormHeading text="Sub Total:" />
-                </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <FormInput
-                      type="number"
-                      name="quantityOrdered"
-                      placeHolder="Quantity*"
-                      formik={formik}
-                      handleOnBlur={() => calculatePrices()}
-                    />
-                    <h4 className="ml-5">x ${singleItemPrice}</h4>
+                <div className="flex flex-wrap gap-2 justify-between items-center">
+                  <div>
+                    <FormHeading text="Quantity:" />
+                    <div className="flex items-center">
+                      <FormInput
+                        type="number"
+                        name="quantityOrdered"
+                        placeHolder="Quantity"
+                        formik={formik}
+                        handleOnBlur={() => calculatePrices()}
+                      />
+                      <h4 className="ml-5">x ${singleItemPrice}</h4>
+                    </div>
                   </div>
-                  {!minQuantityError ? (
-                    <h2 className="text-primary-500 text-2xl font-bold">
-                      ${salePriceToShow}
-                    </h2>
-                  ) : (
-                    <h2 className="text-red-500 text-2xl font-bold">
-                      Min Qty is {minQuantity}
-                    </h2>
-                  )}
+                  <div>
+                    <h4>
+                      <FormHeading text="Sub Total:" />
+                    </h4>
+                    <div>
+                      {!minQuantityError ? (
+                        <h2 className="text-primary-500 text-2xl font-bold">
+                          ${salePriceToShow}
+                        </h2>
+                      ) : (
+                        <h2 className="text-red-500 text-2xl font-bold">
+                          Min Qty is {minQuantity}
+                        </h2>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex gap-2 flex-wrap justify-between items-center mt-4 ">
+                <div className="flex gap-2 flex-wrap justify-between items-center mt-4">
                   <div className="text-red-500 text-xs font-semibold mr-auto">
                     Min Qty is {minQuantity}
                   </div>
@@ -288,7 +294,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
             </div>
             <hr className="mt-12 border border-[#eceef1]" />
             <form onSubmit={formik.handleSubmit}>
-              <div className="xs:flex md:grid md:grid-cols-2 space-x-16">
+              <div className="xs:flex md:grid md:grid-cols-2 md:space-x-16">
                 <div>
                   <FormHeading text="Billing Information" />
                   <div className="grid md:grid-cols-2 gap-6">
@@ -358,13 +364,13 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     </TootipBlack>
                   </div>
                   <FormHeading text="Shipping Information" />
-                  <div className="flex justify-between space-x-4 mt-6">
+                  <div className="flex flex-wrap justify-between gap-4 mt-6">
                     <div className="flex items-center">
                       <input
                         type="checkbox"
                         id="shippingAddressSame"
                         name="shippingAddressSame"
-                        className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
+                        className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5 mt-2 sm:mt-0"
                         checked={formik.values.shippingAddressSame}
                         onChange={e => {
                           formik.setFieldValue('diffBillingAddress', false);
@@ -524,14 +530,14 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 </div>
               </div>
               <hr className="mt-12 border border-[#eceef1]" />
-              <div className="flex justify-between">
+              <div className="flex flex-wrap gap-3 justify-between">
                 <div>
-                  <div className="flex space-x-4 mt-6">
+                  <div className="flex items-start sm:items-center space-x-4 mt-6">
                     <input
                       type="checkbox"
                       id="newsLetter"
                       name="newsLetter"
-                      className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
+                      className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5 mt-2 sm:mt-0"
                       checked={formik.values.newsLetter}
                       onChange={formik.handleChange}
                     />
@@ -540,12 +546,12 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       newsletters now.
                     </label>
                   </div>
-                  <div className="flex space-x-4 mt-6">
+                  <div className="flex items-start sm:items-center space-x-4 mt-6">
                     <input
                       type="checkbox"
                       id="agreeToTerms"
                       name="agreeToTerms"
-                      className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
+                      className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5 mt-2 sm:mt-0"
                       checked={formik.values.agreeToTerms}
                       onChange={formik.handleChange}
                     />
