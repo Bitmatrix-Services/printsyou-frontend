@@ -32,9 +32,9 @@ const OffersSection = () => {
               alt="..."
             />
             <div className="flex flex-wrap items-center gap-3 px-5 md:px-14 justify-center md:justify-center basis-[100%]">
-              <h1 className="text-black font-normal text-3xl ml-4 italic">
+              <h3 className="text-black font-normal text-3xl ml-4 italic">
                 {headingText}
-              </h1>
+              </h3>
             </div>
           </div>
 

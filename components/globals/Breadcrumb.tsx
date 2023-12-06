@@ -10,6 +10,13 @@ interface Breadcrumb {
 
 const Breadcrumb: FC<Breadcrumb> = ({queryParams, prefixTitle}) => {
   const router = useRouter();
+
+  const removeHyphensAndCapitalize = (text: string) => {
+    return text.replace(/-/g, ' ').replace(/(?:^|\s)\S/g, a => {
+      return a.toUpperCase();
+    });
+  };
+
   return (
     <div className="flex text-sm font-medium mb-6 items-center text-[#787b82]">
       <Link href={'/'}>
@@ -34,7 +41,7 @@ const Breadcrumb: FC<Breadcrumb> = ({queryParams, prefixTitle}) => {
               }
             }}
           >
-            {url}
+            {removeHyphensAndCapitalize(url)}
           </div>
         </React.Fragment>
       ))}

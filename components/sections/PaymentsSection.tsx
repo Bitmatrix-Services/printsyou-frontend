@@ -8,7 +8,7 @@ const PaymentsSection = () => {
         <div className="mb-10 border-[0] border-t border-solid border-mute3" />
         <div className="flex md:flex-row sm:flex-col max-sm:flex-col  md:space-x-4">
           <div className="">
-            <h1 className="text-white font-bold mb-5">First Time Orders</h1>
+            <h3 className="text-white font-bold mb-5">First Time Orders</h3>
             <p className="text-mute font-semibold">
               First time orders from Non-Rated accounts require a credit card
               deposit or prepayment by company check. You may use a credit card
@@ -18,7 +18,7 @@ const PaymentsSection = () => {
             </p>
           </div>
           <div className="mt-10 md:mt-0">
-            <h1 className="text-white font-bold mb-5 ">Purchase Orders</h1>
+            <h3 className="text-white font-bold mb-5 ">Purchase Orders</h3>
             <p className="text-mute font-semibold">
               Identity-Links may accept Purchase Orders. Please contact us to
               see if you are eligible for this payment option.
@@ -26,7 +26,7 @@ const PaymentsSection = () => {
           </div>
         </div>
         <div className="mt-10">
-          <h1 className="text-white font-bold mb-5">Credit Cards</h1>
+          <h3 className="text-white font-bold mb-5">Credit Cards</h3>
           <p className="text-mute font-semibold">
             The majority of our customers prefer to pay for their orders by
             credit card. Identity-Links accepts Visa, MasterCard, and American

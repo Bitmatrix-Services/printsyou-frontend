@@ -159,9 +159,9 @@ const Footer = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 mt-6 sm:mt-8">
               <div className="sm:col-span-2">
-                <h1 className="text-base font-bold title-line">
+                <h3 className="text-base font-bold title-line">
                   ALL CATEGORIES
-                </h1>
+                </h3>
 
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6">
                   {categoryList.map(category => (
@@ -178,9 +178,9 @@ const Footer = () => {
               </div>
               <div className="mt-8 lg:mt-0">
                 <div>
-                  <h1 className="text-base font-bold title-line">
+                  <h3 className="text-base font-bold title-line">
                     IDENTITY SHOP
-                  </h1>
+                  </h3>
                   <div className="space-y-4">
                     {identityShop.map(linkItem => (
                       <Link
@@ -194,9 +194,9 @@ const Footer = () => {
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-base mt-8 font-bold title-line">
+                  <h3 className="text-base mt-8 font-bold title-line">
                     CUSTOMER HELP
-                  </h1>
+                  </h3>
                   <div className="space-y-4">
                     {customerHelp.map(linkItem => (
                       <Link

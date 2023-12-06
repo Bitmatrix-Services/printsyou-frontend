@@ -148,7 +148,7 @@ const SearchSidebar: FC<SidebarProps> = ({
         </div>
       )}
       {byPriceRange && (
-        <div className="lg:w-64 md:w-64 ">
+        <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={priceExpanded}
             onChange={(_, newExpanded) => setPriceExpanded(newExpanded)}
@@ -197,7 +197,7 @@ const SearchSidebar: FC<SidebarProps> = ({
         </div>
       )}
       {byColor && (
-        <div className="lg:w-64 md:w-64">
+        <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={colorExpanded}
             onChange={(_, newExpanded) => setColorExpanded(newExpanded)}
