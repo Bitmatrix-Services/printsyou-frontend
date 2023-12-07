@@ -7,7 +7,7 @@ import FormInput from '@components/Form/FormInput';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
-import { http } from 'services/axios.service';
+import {http} from 'services/axios.service';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
