@@ -14,7 +14,7 @@ function About() {
       <NextSeo title={`About Us | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle="About us" />
       <AboutIdentitySection />
-      <OurPetsSection />
+      {/* <OurPetsSection /> */}
       <HealineSection />
       <IconBoxesSection />
       <OffersSection />
