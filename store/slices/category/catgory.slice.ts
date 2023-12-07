@@ -22,7 +22,7 @@ export const getAllCategoryList = createAsyncThunk(
 export const getPromotionalCategories = createAsyncThunk(
   'product/getPromotionalCategories',
   async () => {
-    const res = await http.get(`/category/byTag?tag=promotional`);
+    const res = await http.get(`/category/popular`);
     return res?.data.payload;
   }
 );
