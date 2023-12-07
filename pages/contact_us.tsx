@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import PageHeader from '@components/globals/PageHeader';
 import Container from '@components/globals/Container';
-import {FormikConfig, useFormik} from 'formik';
+import {useFormik} from 'formik';
 import {ContactUsSchema} from '@utils/validationSchemas';
 import FormInput from '@components/Form/FormInput';
-import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import { http } from 'services/axios.service';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -26,7 +26,7 @@ function ContactUs() {
     //// By disabling validation onChange and onBlur formik will validate on submit.
     onSubmit: async (values, action) => {
       try {
-        await axios.post('/contact_us', values);
+        await http.post('/contact_us', values);
         setIsSubmitted(true);
         action.resetForm();
       } catch (error) {
