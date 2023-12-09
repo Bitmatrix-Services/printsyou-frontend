@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useState} from 'react';
+import React, {FC, useState} from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import RemoveIcon from '@mui/icons-material/Remove';
 import sanitize from 'sanitize-html';
+import {useRouter} from 'next/router';
 
 type searchType = {
   name: string;
@@ -21,37 +22,33 @@ type categoryType = {
   count: number;
 };
 
-type filterType = {
-  color: string[];
-  price: string[];
-  category: categoryType;
-};
-
 interface SidebarProps {
   byCategory: categoryType[];
   byColor: searchType[];
   byPriceRange: searchType[];
-  filters: filterType;
-  setFilters: Dispatch<SetStateAction<filterType>>;
 }
 
 const SearchSidebar: FC<SidebarProps> = ({
   byCategory,
   byColor,
-  byPriceRange,
-  filters,
-  setFilters
+  byPriceRange
 }) => {
+  const router = useRouter();
+  const {minPrice, maxPrice, colors, category}: any = router.query;
+
   const [priceExpanded, setPriceExpanded] = useState<boolean>(true);
   const [colorExpanded, setColorExpanded] = useState<boolean>(true);
   const [categoryExpanded, setCategoryExpanded] = useState<boolean>(true);
 
   const handleFilterChange = (
     selectedValue: string,
-    type: 'price' | 'color'
+    type: 'price' | 'colors'
   ) => {
-    const updateFilters = (currentFilters: string[], filterType: string) => {
-      let updatedFilters = [...currentFilters];
+    const updateColorFilters = (
+      currentFilters: string | undefined,
+      filterType: string
+    ) => {
+      let updatedFilters = currentFilters ? currentFilters.split(',') : [];
 
       if (updatedFilters.includes(selectedValue)) {
         updatedFilters = updatedFilters.filter(item => item !== selectedValue);
@@ -59,44 +56,102 @@ const SearchSidebar: FC<SidebarProps> = ({
         updatedFilters.push(selectedValue);
       }
 
-      setFilters({
-        ...filters,
-        [filterType]: updatedFilters
+      const currentQuery = router.query;
+      let updatedQuery = currentQuery;
+      if (updatedFilters.length > 0) {
+        updatedQuery = {
+          ...currentQuery,
+          [filterType]: updatedFilters.join(','),
+          page: '1'
+        };
+      } else {
+        delete updatedQuery.colors;
+      }
+
+      router.push({
+        pathname: router.pathname,
+        query: updatedQuery
+      });
+    };
+
+    function findMinMaxValues(
+      array1: number[],
+      array2: number[]
+    ): [number, number] {
+      const combinedArray: number[] = [...array1, ...array2];
+
+      const min = Math.min(...combinedArray);
+      const max = Math.max(...combinedArray);
+
+      return [min, max];
+    }
+
+    const updatePriceFilters = () => {
+
+      let [selectedMin, selectedMax] =
+        selectedValue.match(/\d+\.\d+|\d+/g)?.map(Number) || [];
+      let result = [selectedMin, selectedMax];
+      if (minPrice && maxPrice) {
+        result = findMinMaxValues(
+          [selectedMin, selectedMax],
+          [minPrice, maxPrice]
+        );
+      }
+      console.log('result', result);
+      const currentQuery = router.query;
+      let updatedQuery = {
+        ...currentQuery,
+        minPrice: result[0],
+        maxPrice: result[1]
+      };
+      router.push({
+        pathname: router.pathname,
+        query: updatedQuery
       });
     };
 
     if (type === 'price') {
-      updateFilters(filters.price, 'price');
-    } else if (type === 'color') {
-      updateFilters(filters.color, 'color');
+     // updatePriceFilters();
+    } else if (type === 'colors') {
+      updateColorFilters(colors, 'colors');
     }
   };
 
+  function isInPriceRange(value: string): boolean {
+    const matches = value.match(/\d+\.\d+|\d+/g)?.map(Number);
+
+    if (matches && matches.length === 2) {
+      const [rangeMin, rangeMax] = matches;
+      return parseInt(minPrice) >= rangeMin && parseInt(maxPrice) <= rangeMax;
+    }
+
+    return false;
+  }
+
   return (
     <div className="xl:w-64 mb-6 xl:mb-0">
-      {(filters.color.length > 0 ||
-        filters.price.length > 0 ||
-        filters.category.name) && (
+      {(colors || (minPrice && maxPrice) || category) && (
         <div className="lg:w-64 md:w-64 border border-[#edeff2] p-2">
           <h5 className="text-sm">YOUR SELECTIONS</h5>
-          {filters.color?.map(color => (
-            <div key={color}>
-              <div className="flex justify-between items-center mt-3 mb-2">
-                <span className="text-xs">
-                  Color Family: <strong>{color}</strong>
-                </span>
-                <span>
-                  <XMarkIcon
-                    className="h-4 w-4 cursor-pointer"
-                    onClick={() => handleFilterChange(color, 'color')}
-                  />
-                </span>
+          {colors &&
+            colors.split(',')?.map((color: any) => (
+              <div key={color}>
+                <div className="flex justify-between items-center mt-3 mb-2">
+                  <span className="text-xs">
+                    Color Family: <strong>{color}</strong>
+                  </span>
+                  <span>
+                    <XMarkIcon
+                      className="h-4 w-4 cursor-pointer"
+                      onClick={() => handleFilterChange(color, 'colors')}
+                    />
+                  </span>
+                </div>
+                <hr />
               </div>
-              <hr />
-            </div>
-          ))}
+            ))}
 
-          {filters.price?.map(price => (
+          {/* {filters.price?.map(price => (
             <div key={price}>
               <div className="flex justify-between items-center mt-3 mb-2">
                 <span className="text-xs">
@@ -111,22 +166,31 @@ const SearchSidebar: FC<SidebarProps> = ({
               </div>
               <hr />
             </div>
-          ))}
-          {filters.category.name && (
+          ))} */}
+          {category && (
             <div>
               <div className="flex justify-between items-center mt-3 mb-2">
                 <span className="text-xs">
-                  Category: <strong>{filters.category.name}</strong>
+                  Category:{' '}
+                  <strong>
+                    {
+                      byCategory.find(item => item.uCategoryName === category)
+                        ?.name
+                    }
+                  </strong>
                 </span>
                 <span>
                   <XMarkIcon
                     className="h-4 w-4 cursor-pointer"
-                    onClick={() =>
-                      setFilters({
-                        ...filters,
-                        category: {name: '', uCategoryName: '', count: 0}
-                      })
-                    }
+                    onClick={() => {
+                      let updatedQuery = {...router.query};
+                      updatedQuery.page = '1';
+                      delete updatedQuery.category;
+                      router.push({
+                        pathname: router.pathname,
+                        query: updatedQuery
+                      });
+                    }}
                   />
                 </span>
               </div>
@@ -135,13 +199,18 @@ const SearchSidebar: FC<SidebarProps> = ({
           )}
           <h5
             className="text-[10px] font-bold cursor-pointer mt-4"
-            onClick={() =>
-              setFilters({
-                color: [],
-                price: [],
-                category: {name: '', uCategoryName: '', count: 0}
-              })
-            }
+            onClick={() => {
+              let updatedQuery = {...router.query};
+              delete updatedQuery.category;
+              delete updatedQuery.minPrice;
+              delete updatedQuery.maxPrice;
+              delete updatedQuery.colors;
+              updatedQuery.page = '1';
+              router.push({
+                pathname: router.pathname,
+                query: updatedQuery
+              });
+            }}
           >
             Clear All
           </h5>
@@ -168,13 +237,14 @@ const SearchSidebar: FC<SidebarProps> = ({
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
               <FormGroup>
-                {byPriceRange?.map(price => (
-                  <FormControlLabel
-                    key={price.name}
+                {byPriceRange?.map(priceRange => {
+                  console.log(priceRange.name, isInPriceRange(priceRange.name))
+                  return <FormControlLabel
+                    key={priceRange.name}
                     control={
                       <Checkbox
-                        name={price.name}
-                        checked={!!filters?.price?.includes(price.name)}
+                        name={priceRange.name}
+                        checked={isInPriceRange(priceRange.name)}
                         onChange={e =>
                           handleFilterChange(e.target.name, 'price')
                         }
@@ -182,15 +252,15 @@ const SearchSidebar: FC<SidebarProps> = ({
                     }
                     label={
                       <div>
-                        <span>{price.name}</span>
+                        <span>{priceRange.name}</span>
                         <span className="text-xs font-bold text-primary ml-2">
-                          ({price.count})
+                          ({priceRange.count})
                         </span>
                       </div>
                     }
                     className="border-b-2"
                   />
-                ))}
+                  })}
               </FormGroup>
             </AccordionDetails>
           </Accordion>
@@ -223,9 +293,9 @@ const SearchSidebar: FC<SidebarProps> = ({
                     control={
                       <Checkbox
                         name={color.name}
-                        checked={!!filters?.color?.includes(color.name)}
+                        checked={!!colors?.includes(color.name)}
                         onChange={e =>
-                          handleFilterChange(e.target.name, 'color')
+                          handleFilterChange(e.target.name, 'colors')
                         }
                       />
                     }
@@ -245,7 +315,7 @@ const SearchSidebar: FC<SidebarProps> = ({
           </Accordion>
         </div>
       )}
-      {byCategory && !filters.category.name && (
+      {byCategory && !category && (
         <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={categoryExpanded}
@@ -269,7 +339,19 @@ const SearchSidebar: FC<SidebarProps> = ({
                 <div
                   key={category.uCategoryName}
                   className="block border-b-2 font-normal mb-2 cursor-pointer"
-                  onClick={() => setFilters({...filters, category: category})}
+                  onClick={() => {
+                    const currentQuery = router.query;
+                    let updatedQuery = {
+                      ...currentQuery,
+                      category: category.uCategoryName,
+                      page: '1'
+                    };
+
+                    router.push({
+                      pathname: router.pathname,
+                      query: updatedQuery
+                    });
+                  }}
                 >
                   <span
                     dangerouslySetInnerHTML={{__html: sanitize(category.name)}}

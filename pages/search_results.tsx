@@ -5,7 +5,6 @@ import SearchSidebar from '@components/globals/SearchSidebar';
 import SearchResultsSection from '@components/sections/searchResults/SearchResultsSection';
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
-import {getMinMaxRange} from '@utils/utils';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 
@@ -20,12 +19,6 @@ type categoryType = {
   count: number;
 };
 
-type filterType = {
-  color: string[];
-  price: string[];
-  category: categoryType;
-};
-
 type searchResultsData = {
   products: Product[];
   totalPages: number;
@@ -37,20 +30,11 @@ type searchResultsData = {
 
 const CategoryDetails = () => {
   const router = useRouter();
+  const {keywords, page, minPrice, maxPrice, colors, category, filter, size} =
+    router.query;
 
-  const [filters, setFilters] = useState<filterType>({
-    color: [],
-    price: [],
-    category: {
-      name: '',
-      uCategoryName: '',
-      count: 0
-    }
-  });
+  console.log('router.query in search results', router.query);
 
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(24);
-  const [sort, setSort] = useState<string>('priceLowToHigh');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
     {
@@ -65,37 +49,35 @@ const CategoryDetails = () => {
 
   useEffect(() => {
     if (router.query.keywords) handleSearch();
-  }, [
-    pageNumber,
-    pageSize,
-    sort,
-    router.query.keywords,
-    filters,
-    filters.category.name
-  ]);
+  }, [router.query]);
 
   const handleSearch = async () => {
     setIsLoading(true);
-    let queryString = `search-result?query=${router.query.keywords}&page=${pageNumber}&size=${pageSize}&filter=${sort}`;
+    let queryString = `search-result?query=${keywords}`;
 
-    if (filters.color && filters.color.length > 0) {
-      queryString += `&colors=${filters.color.join(',')}`;
+    if (page) {
+      queryString += `&page=${page}`;
     }
-    if (filters.category.name) {
-      queryString += `&category=${filters.category.uCategoryName}`;
+    if (size) {
+      queryString += `&size=${size}`;
     }
 
-    if (filters.price && filters.price.length > 0) {
-      const result = getMinMaxRange(filters.price);
-      if (result.length) {
-        let max = Number.NEGATIVE_INFINITY;
-        let min = Number.POSITIVE_INFINITY;
-        result.forEach(item => {
-          max = Math.max(max, item.maxValue);
-          min = Math.min(min, item.minValue);
-        });
-        queryString += `&minPrice=${min}&maxPrice=${max}`;
-      }
+    if (filter) {
+      queryString += `&filter=${filter}`;
+    }
+
+    if (colors && Array.isArray(colors)) {
+      queryString += `&colors=${colors.join(',')}`;
+    } else if (colors) {
+      queryString += `&colors=${colors}`;
+    }
+
+    if (category) {
+      queryString += `&category=${category}`;
+    }
+
+    if (minPrice && maxPrice) {
+      queryString += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     }
 
     try {
@@ -126,19 +108,11 @@ const CategoryDetails = () => {
               byPriceRange={searchResultsData.byPriceRange}
               byColor={searchResultsData.byColors}
               byCategory={searchResultsData.byCategory}
-              filters={filters}
-              setFilters={setFilters}
             />
             <SearchResultsSection
               products={searchResultsData.products}
               totalProducts={searchResultsData.totalProducts}
-              pageNumber={pageNumber}
-              setPageNumber={setPageNumber}
-              pageSize={pageSize}
-              setPageSize={setPageSize}
               totalPages={searchResultsData.totalPages}
-              sort={sort}
-              setSort={setSort}
               isLoading={isLoading}
             />
           </div>

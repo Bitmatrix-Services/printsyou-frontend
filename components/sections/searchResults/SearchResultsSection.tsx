@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction, useState, useEffect} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
 import PaginationHeader from '@components/globals/PaginationHeader';
@@ -10,36 +10,33 @@ import Link from 'next/link';
 
 interface CategoryDetailsSectionProps {
   products: Product[];
-  pageNumber: number;
   totalProducts: number;
-  setPageNumber: Dispatch<SetStateAction<number>>;
-  pageSize: number;
-  setPageSize: Dispatch<SetStateAction<number>>;
   totalPages: number;
-  sort: string;
-  setSort: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
 }
 
 const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   products,
-  pageNumber,
-  setPageNumber,
-  pageSize,
-  setPageSize,
   totalPages,
-  sort,
-  setSort,
   isLoading,
   totalProducts
 }) => {
   const router = useRouter();
+  const {filter, size, page}: any = router.query;
 
   const [didMount, setDidMount] = useState(false);
 
   useEffect(() => {
     setDidMount(true);
   }, []);
+
+  const handleQueryUpdate = (value: string | number, queryName: string) => {
+    let updatedQuery = {...router.query, [queryName]: value};
+    router.push({
+      pathname: router.pathname,
+      query: updatedQuery
+    });
+  };
 
   return (
     <div className="flex-1">
@@ -65,8 +62,7 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           <div className="text-[#000] font-light text-xs  mb-3">
             Displaying{' '}
             <span className="font-semibold">
-              {(pageNumber - 1) * pageSize + 1} -{' '}
-              {Math.min(pageNumber * pageSize, totalProducts)}
+              {(page - 1) * size + 1} - {Math.min(page * size, totalProducts)}
             </span>{' '}
             of <span className="font-semibold">{totalProducts}</span> results
             for <span className="font-semibold"> {router.query.keywords}</span>
@@ -75,13 +71,19 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
 
         <section className="bg-white py-8 lg:py-12">
           <PaginationHeader
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
+            pageNumber={page || 1}
+            setPageNumber={(value: string | number) =>
+              handleQueryUpdate(value, 'page')
+            }
+            pageSize={size || 24}
+            setPageSize={(value: string | number) =>
+              handleQueryUpdate(value, 'size')
+            }
             totalPages={totalPages}
-            sort={sort}
-            setSort={setSort}
+            sort={filter || 'priceLowToHigh'}
+            setSort={(value: string | number) =>
+              handleQueryUpdate(value, 'filter')
+            }
           />
 
           <div>
@@ -101,13 +103,19 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
               </div>
             )}
             <PaginationHeader
-              pageNumber={pageNumber}
-              setPageNumber={setPageNumber}
-              pageSize={pageSize}
-              setPageSize={setPageSize}
+              pageNumber={page || 1}
+              setPageNumber={(value: string | number) =>
+                handleQueryUpdate(value, 'page')
+              }
+              pageSize={size || 24}
+              setPageSize={(value: string | number) =>
+                handleQueryUpdate(value, 'size')
+              }
               totalPages={totalPages}
-              sort={sort}
-              setSort={setSort}
+              sort={filter || 'priceLowToHigh'}
+              setSort={(value: string | number) =>
+                handleQueryUpdate(value, 'filter')
+              }
             />
           </div>
         </section>

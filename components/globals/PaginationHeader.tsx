@@ -12,12 +12,12 @@ const sortList = [
 
 interface PaginationHeaderProps {
   pageNumber: number;
-  setPageNumber: Dispatch<SetStateAction<number>>;
+  setPageNumber: Dispatch<SetStateAction<number>> | ((number: number) => void);
   pageSize: number;
-  setPageSize: Dispatch<SetStateAction<number>>;
+  setPageSize: Dispatch<SetStateAction<number>> | ((number: number) => void);
   totalPages: number;
   sort: string;
-  setSort: Dispatch<SetStateAction<string>>;
+  setSort: Dispatch<SetStateAction<string>> | ((str: string) => void);
 }
 
 const PaginationHeader: FC<PaginationHeaderProps> = ({
@@ -32,7 +32,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   const pagesToShow = Array.from(
     {length: totalPages},
     (_, index) => index + 1
-  ).filter(page => page >= pageNumber - 2 && page <= pageNumber + 2);
+  ).filter(page => pageNumber >= page - 2 && pageNumber <= page + 2);
   return (
     <div id="products-page" className="my-6">
       <div className="list-product">
@@ -80,7 +80,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 type="button"
                 className="item prev"
                 onClick={() => {
-                  if (pageNumber > 1) setPageNumber(prevState => prevState - 1);
+                  if (pageNumber > 1) setPageNumber(pageNumber - 1);
                 }}
               >
                 <ArrowLeftIcon className="h-4 w-4" />
@@ -92,7 +92,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     type="button"
                     onClick={() => setPageNumber(page)}
                     className={`item number ${
-                      pageNumber === page && 'is-active'
+                      pageNumber == page && 'is-active'
                     }`}
                   >
                     {page}
@@ -103,8 +103,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 type="button"
                 className="item next"
                 onClick={() => {
-                  if (pageNumber < totalPages)
-                    setPageNumber(prevState => prevState + 1);
+                  if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
                 }}
               >
                 <ArrowRightIcon className="h-4 w-4" />
