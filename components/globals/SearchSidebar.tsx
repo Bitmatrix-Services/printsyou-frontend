@@ -87,7 +87,6 @@ const SearchSidebar: FC<SidebarProps> = ({
     }
 
     const updatePriceFilters = () => {
-
       let [selectedMin, selectedMax] =
         selectedValue.match(/\d+\.\d+|\d+/g)?.map(Number) || [];
       let result = [selectedMin, selectedMax];
@@ -111,7 +110,7 @@ const SearchSidebar: FC<SidebarProps> = ({
     };
 
     if (type === 'price') {
-     // updatePriceFilters();
+      // updatePriceFilters();
     } else if (type === 'colors') {
       updateColorFilters(colors, 'colors');
     }
@@ -238,29 +237,31 @@ const SearchSidebar: FC<SidebarProps> = ({
             <AccordionDetails className="max-h-64 overflow-y-auto">
               <FormGroup>
                 {byPriceRange?.map(priceRange => {
-                  console.log(priceRange.name, isInPriceRange(priceRange.name))
-                  return <FormControlLabel
-                    key={priceRange.name}
-                    control={
-                      <Checkbox
-                        name={priceRange.name}
-                        checked={isInPriceRange(priceRange.name)}
-                        onChange={e =>
-                          handleFilterChange(e.target.name, 'price')
-                        }
-                      />
-                    }
-                    label={
-                      <div>
-                        <span>{priceRange.name}</span>
-                        <span className="text-xs font-bold text-primary ml-2">
-                          ({priceRange.count})
-                        </span>
-                      </div>
-                    }
-                    className="border-b-2"
-                  />
-                  })}
+                  console.log(priceRange.name, isInPriceRange(priceRange.name));
+                  return (
+                    <FormControlLabel
+                      key={priceRange.name}
+                      control={
+                        <Checkbox
+                          name={priceRange.name}
+                          checked={isInPriceRange(priceRange.name)}
+                          onChange={e =>
+                            handleFilterChange(e.target.name, 'price')
+                          }
+                        />
+                      }
+                      label={
+                        <div>
+                          <span>{priceRange.name}</span>
+                          <span className="text-xs font-bold text-primary ml-2">
+                            ({priceRange.count})
+                          </span>
+                        </div>
+                      }
+                      className="border-b-2"
+                    />
+                  );
+                })}
               </FormGroup>
             </AccordionDetails>
           </Accordion>
