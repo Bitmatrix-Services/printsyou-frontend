@@ -31,7 +31,7 @@ const tabSectionList = [
   {
     icon: <TestiIcon />,
     heading: 'Testimonials'
-  },
+  }
   // {
   //   icon: <BlogIcon />,
   //   heading: 'Promotional Blog'
