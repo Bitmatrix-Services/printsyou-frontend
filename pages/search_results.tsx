@@ -43,7 +43,8 @@ const CategoryDetails = () => {
     tag
   } = router.query;
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
   const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
     {
       products: [],
@@ -54,10 +55,6 @@ const CategoryDetails = () => {
       byCategory: []
     }
   );
-
-  useEffect(() => {
-    handleSearch();
-  }, [router.query]);
 
   useEffect(() => {
     handleSearch();
@@ -100,6 +97,7 @@ const CategoryDetails = () => {
     }
 
     try {
+      setIsLoading(true);
       const {data} = await http.get(queryString);
       const searchResults = {
         products: data.payload.products.content,
@@ -114,6 +112,7 @@ const CategoryDetails = () => {
       console.log('error.message', error);
     } finally {
       setIsLoading(false);
+      setIsPageLoading(false);
     }
   };
 
@@ -123,7 +122,7 @@ const CategoryDetails = () => {
       <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
-            {isLoading ? (
+            {isPageLoading ? (
               <div className="flex justify-center align-middle items-center h-[20rem] w-[100%]">
                 <CircularProgress color="warning" />
               </div>
@@ -139,6 +138,7 @@ const CategoryDetails = () => {
                   totalProducts={searchResultsData.totalProducts}
                   totalPages={searchResultsData.totalPages}
                   isLoading={isLoading}
+                  isPageLoading={isPageLoading}
                 />
               </>
             )}

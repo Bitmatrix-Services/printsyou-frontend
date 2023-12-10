@@ -13,22 +13,18 @@ interface CategoryDetailsSectionProps {
   totalProducts: number;
   totalPages: number;
   isLoading: boolean;
+  isPageLoading: boolean;
 }
 
 const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   products,
   totalPages,
   isLoading,
-  totalProducts
+  totalProducts,
+  isPageLoading
 }) => {
   const router = useRouter();
   const {filter, size, page, keywords, tag}: any = router.query;
-
-  const [didMount, setDidMount] = useState(false);
-
-  useEffect(() => {
-    setDidMount(true);
-  }, []);
 
   const handleQueryUpdate = (value: string | number, queryName: string) => {
     let updatedQuery = {...router.query, [queryName]: value};
@@ -80,8 +76,8 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           </div>
         </div>
 
-        {products.length > 0 && !isLoading ? (
-          <section className="bg-white py-8 lg:py-12">
+        <section className="bg-white py-8 lg:py-12">
+          {products.length > 0 && !isPageLoading && (
             <PaginationHeader
               pageNumber={parseInt(page) || 1}
               setPageNumber={(value: string | number) =>
@@ -97,45 +93,48 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 handleQueryUpdate(value, 'filter')
               }
             />
+          )}
 
-            <div>
-              {isLoading || !didMount ? (
-                <div className="flex justify-center align-middle items-center h-[20rem]">
-                  <CircularProgress color="warning" />
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  {products?.map(product => (
-                    <FeaturedProductCard
-                      key={product.id}
-                      isModal={true}
-                      product={product}
-                    />
-                  ))}
-                </div>
-              )}
-              <PaginationHeader
-                pageNumber={parseInt(page) || 1}
-                setPageNumber={(value: string | number) =>
-                  handleQueryUpdate(value, 'page')
-                }
-                pageSize={size || 24}
-                setPageSize={(value: string | number) =>
-                  handleQueryUpdate(value, 'size')
-                }
-                totalPages={totalPages}
-                sort={filter || 'priceLowToHigh'}
-                setSort={(value: string | number) =>
-                  handleQueryUpdate(value, 'filter')
-                }
-              />
-            </div>
-          </section>
-        ) : (
-          <div className="m-16 flex items-center justify-center">
-            <h4>No Products Found</h4>
+          <div>
+            {isLoading ? (
+              <div className="flex justify-center align-middle items-center h-[20rem]">
+                <CircularProgress color="warning" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {products?.map(product => (
+                  <FeaturedProductCard
+                    key={product.id}
+                    isModal={true}
+                    product={product}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        )}
+          {products.length > 0 && !isPageLoading && (
+            <PaginationHeader
+              pageNumber={parseInt(page) || 1}
+              setPageNumber={(value: string | number) =>
+                handleQueryUpdate(value, 'page')
+              }
+              pageSize={size || 24}
+              setPageSize={(value: string | number) =>
+                handleQueryUpdate(value, 'size')
+              }
+              totalPages={totalPages}
+              sort={filter || 'priceLowToHigh'}
+              setSort={(value: string | number) =>
+                handleQueryUpdate(value, 'filter')
+              }
+            />
+          )}
+          {products.length <= 0 && !isLoading && (
+            <div className="m-16 flex items-center justify-center">
+              <h4>No Products Found</h4>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );
