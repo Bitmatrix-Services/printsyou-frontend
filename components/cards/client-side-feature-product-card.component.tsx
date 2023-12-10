@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import {FeaturedProductCardProps, InnerFeaturedProductCard} from '@components/cards/FeaturedProductCard';
+import {FeaturedProductCardProps} from '@components/cards/FeaturedProductCard';
 
 export const ClientSideFeaturedProductCard = dynamic<FeaturedProductCardProps>(
   () =>
