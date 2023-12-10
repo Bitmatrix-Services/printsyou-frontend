@@ -30,10 +30,17 @@ type searchResultsData = {
 
 const CategoryDetails = () => {
   const router = useRouter();
-  const {keywords, page, minPrice, maxPrice, colors, category, filter, size} =
-    router.query;
-
-  console.log('router.query in search results', router.query);
+  const {
+    keywords,
+    page,
+    minPrice,
+    maxPrice,
+    colors,
+    category,
+    filter,
+    size,
+    tag
+  } = router.query;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
@@ -48,15 +55,23 @@ const CategoryDetails = () => {
   );
 
   useEffect(() => {
-    if (router.query.keywords) handleSearch();
+    handleSearch();
   }, [router.query]);
 
   const handleSearch = async () => {
     setIsLoading(true);
-    let queryString = `search-result?query=${keywords}`;
+    let queryString = `search-result?`;
+
+    if (keywords) {
+      queryString += `query=${keywords}&`;
+    }
+
+    if (tag) {
+      queryString += `tag=${tag}&`;
+    }
 
     if (page) {
-      queryString += `&page=${page}`;
+      queryString += `page=${page}`;
     }
     if (size) {
       queryString += `&size=${size}`;

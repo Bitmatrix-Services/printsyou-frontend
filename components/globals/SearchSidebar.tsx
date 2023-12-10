@@ -96,7 +96,6 @@ const SearchSidebar: FC<SidebarProps> = ({
           [minPrice, maxPrice]
         );
       }
-      console.log('result', result);
       const currentQuery = router.query;
       let updatedQuery = {
         ...currentQuery,
@@ -215,7 +214,7 @@ const SearchSidebar: FC<SidebarProps> = ({
           </h5>
         </div>
       )}
-      {byPriceRange && (
+      {byPriceRange?.length > 0 && (
         <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={priceExpanded}
@@ -237,7 +236,6 @@ const SearchSidebar: FC<SidebarProps> = ({
             <AccordionDetails className="max-h-64 overflow-y-auto">
               <FormGroup>
                 {byPriceRange?.map(priceRange => {
-                  console.log(priceRange.name, isInPriceRange(priceRange.name));
                   return (
                     <FormControlLabel
                       key={priceRange.name}
@@ -267,7 +265,7 @@ const SearchSidebar: FC<SidebarProps> = ({
           </Accordion>
         </div>
       )}
-      {byColor && (
+      {byColor?.length > 0 && (
         <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={colorExpanded}
@@ -316,7 +314,7 @@ const SearchSidebar: FC<SidebarProps> = ({
           </Accordion>
         </div>
       )}
-      {byCategory && !category && (
+      {byCategory?.length > 0 && !category && (
         <div className="lg:w-64 md:w-64 mb-8">
           <Accordion
             expanded={categoryExpanded}

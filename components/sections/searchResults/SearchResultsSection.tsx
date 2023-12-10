@@ -22,7 +22,7 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   totalProducts
 }) => {
   const router = useRouter();
-  const {filter, size, page}: any = router.query;
+  const {filter, size, page, keywords, tag}: any = router.query;
 
   const [didMount, setDidMount] = useState(false);
 
@@ -51,13 +51,20 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           </div>
         </div>
         <div className="flex justify-between flex-col md:flex-row">
-          <div className="text-[#000] font-extralight text-xl leading-[22px] mb-3">
-            Search Results for{' '}
-            <span>
-              "
-              <span className="text-[#4598ff] underline">{`${router.query.keywords}`}</span>
-              "
-            </span>
+          <div className="text-[#000] font-extralight text-xl leading-[22px] mb-3 ">
+            {(keywords || tag) && (
+              <span>
+                {' '}
+                Search Results for{' '}
+                <span>
+                  "
+                  <span className="text-[#4598ff] underline">{`${
+                    keywords || tag
+                  }`}</span>
+                  "
+                </span>
+              </span>
+            )}
           </div>
           <div className="text-[#000] font-light text-xs  mb-3">
             Displaying{' '}
@@ -69,41 +76,10 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           </div>
         </div>
 
-        <section className="bg-white py-8 lg:py-12">
-          <PaginationHeader
-            pageNumber={page || 1}
-            setPageNumber={(value: string | number) =>
-              handleQueryUpdate(value, 'page')
-            }
-            pageSize={size || 24}
-            setPageSize={(value: string | number) =>
-              handleQueryUpdate(value, 'size')
-            }
-            totalPages={totalPages}
-            sort={filter || 'priceLowToHigh'}
-            setSort={(value: string | number) =>
-              handleQueryUpdate(value, 'filter')
-            }
-          />
-
-          <div>
-            {isLoading || !didMount ? (
-              <div className="flex justify-center align-middle items-center h-[20rem]">
-                <CircularProgress color="warning" />
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                {products?.map(product => (
-                  <FeaturedProductCard
-                    key={product.id}
-                    isModal={true}
-                    product={product}
-                  />
-                ))}
-              </div>
-            )}
+        {products.length > 0 ? (
+          <section className="bg-white py-8 lg:py-12">
             <PaginationHeader
-              pageNumber={page || 1}
+              pageNumber={parseInt(page) || 1}
               setPageNumber={(value: string | number) =>
                 handleQueryUpdate(value, 'page')
               }
@@ -117,8 +93,45 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 handleQueryUpdate(value, 'filter')
               }
             />
+
+            <div>
+              {isLoading || !didMount ? (
+                <div className="flex justify-center align-middle items-center h-[20rem]">
+                  <CircularProgress color="warning" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {products?.map(product => (
+                    <FeaturedProductCard
+                      key={product.id}
+                      isModal={true}
+                      product={product}
+                    />
+                  ))}
+                </div>
+              )}
+              <PaginationHeader
+                pageNumber={parseInt(page) || 1}
+                setPageNumber={(value: string | number) =>
+                  handleQueryUpdate(value, 'page')
+                }
+                pageSize={size || 24}
+                setPageSize={(value: string | number) =>
+                  handleQueryUpdate(value, 'size')
+                }
+                totalPages={totalPages}
+                sort={filter || 'priceLowToHigh'}
+                setSort={(value: string | number) =>
+                  handleQueryUpdate(value, 'filter')
+                }
+              />
+            </div>
+          </section>
+        ) : (
+          <div className="m-16 flex items-center justify-center">
+            <h4>No Products Found</h4>
           </div>
-        </section>
+        )}
       </div>
     </div>
   );

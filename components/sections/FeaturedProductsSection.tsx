@@ -14,6 +14,7 @@ interface FeaturedSectionProps {
   subTitleColor?: string;
   products: Product[];
   navNumber?: string;
+  viewMoreLink: string;
 }
 
 const breakpoints = {
@@ -44,7 +45,8 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
   subTitleColor,
   titleColor,
   products,
-  navNumber
+  navNumber,
+  viewMoreLink
 }) => {
   const sliderRef = useRef<SwiperRef>(null);
 
@@ -82,7 +84,7 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
           </h2>
           <Link
             className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-            href="!#"
+            href={viewMoreLink}
           >
             VIEW MORE
           </Link>
