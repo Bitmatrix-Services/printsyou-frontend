@@ -8,21 +8,23 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
 import sanitizeHtml from 'sanitize-html';
-import {NextSeo} from 'next-seo';
 import {Product} from '@store/slices/product/product';
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
 import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
 import ImageWithFallback from '@components/ImageWithFallback';
+import {ClientSideFeaturedProductCard} from '@components/cards/client-side-feature-product-card.component';
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
 });
-interface FeaturedProductCardProps {
+
+export interface FeaturedProductCardProps {
   product: Product;
   isModal?: boolean;
 }
-export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
+
+export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   isModal = true,
   product
 }) => {
@@ -356,4 +358,10 @@ export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
       )}
     </>
   );
+};
+
+export const FeaturedProductCard: FC<FeaturedProductCardProps> = ({
+  ...props
+}) => {
+  return <ClientSideFeaturedProductCard {...props} />;
 };

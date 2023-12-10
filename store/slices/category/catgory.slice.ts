@@ -19,12 +19,14 @@ export const getAllCategoryList = createAsyncThunk(
   }
 );
 
+export let getAllPromotionalCategories = async () => {
+  const res = await http.get(`/category/popular`);
+  return res?.data.payload;
+};
+
 export const getPromotionalCategories = createAsyncThunk(
   'product/getPromotionalCategories',
-  async () => {
-    const res = await http.get(`/category/popular`);
-    return res?.data.payload;
-  }
+  getAllPromotionalCategories
 );
 
 export const categorySlice = createSlice({

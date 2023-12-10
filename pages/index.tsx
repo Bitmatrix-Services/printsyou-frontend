@@ -1,38 +1,36 @@
-import React, {Fragment, useEffect} from 'react';
+import React from 'react';
 import AdvantageSection from '@components/sections/AdvantageSection';
 import WhyIdentitySection from '@components/sections/WhyIdentitySection';
 import HeroSection from '@components/sections/HeroSection';
 import PromotionalCategoriesSection from '@components/sections/PromotionalCategoriesSection';
 import FeaturedProductsSection from '@components/sections/FeaturedProductsSection';
-import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  getUnderABuckProducts,
-  selectUnderABuckProducts,
-  getNewAndExclusiveProducts,
-  selectNewAndExclusiveProducts,
-  getUniqueIdeaProducts,
-  selectUniqueIdeaProducts
+  getAllNewAndExclusiveProducts,
+  getAllUnderABuckProducts,
+  getAllUniqueIdeasProducts
 } from '@store/slices/product/product.slice';
-import {getPromotionalCategories} from '@store/slices/category/catgory.slice';
+import {getAllPromotionalCategories} from '@store/slices/category/catgory.slice';
+import {GetStaticProps, NextPage} from 'next';
+import {Product} from '@store/slices/product/product';
+import {Category} from '@store/slices/category/category';
 
-export default function Home() {
-  const dispatch = useAppDispatch();
+interface IHome {
+  promotionalCategories: Category[];
+  underABuckProducts: Product[];
+  newAndExclusive: Product[];
+  allUniqueIdeas: Product[];
+}
 
-  const underABuckProducts = useAppSelector(selectUnderABuckProducts);
-  const newAndExclusiveProducts = useAppSelector(selectNewAndExclusiveProducts);
-  const uniqueIdeaProducts = useAppSelector(selectUniqueIdeaProducts);
-
-  useEffect(() => {
-    dispatch(getPromotionalCategories());
-    dispatch(getUnderABuckProducts());
-    dispatch(getNewAndExclusiveProducts());
-    dispatch(getUniqueIdeaProducts());
-  }, []);
-
+export const HomePage: NextPage<IHome> = ({
+  underABuckProducts,
+  newAndExclusive,
+  allUniqueIdeas,
+  promotionalCategories
+}) => {
   return (
-    <Fragment>
+    <>
       <HeroSection />
-      <PromotionalCategoriesSection />
+      <PromotionalCategoriesSection categories={promotionalCategories} />
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"
@@ -47,7 +45,7 @@ export default function Home() {
         navNumber="2"
         titleColor="text-red-500"
         subTitle="Ideas"
-        products={uniqueIdeaProducts}
+        products={allUniqueIdeas}
       />
       {/*New & Exclusive */}
       <FeaturedProductsSection
@@ -55,10 +53,35 @@ export default function Home() {
         navNumber="3"
         titleColor="text-primary-600"
         subTitle="& Exclusive"
-        products={newAndExclusiveProducts}
+        products={newAndExclusive}
       />
       <AdvantageSection />
       <WhyIdentitySection />
-    </Fragment>
+    </>
   );
-}
+};
+
+export const getStaticProps = (async context => {
+  const [
+    promotionalCategories,
+    underABuckProducts,
+    newAndExclusive,
+    allUniqueIdeas
+  ] = await Promise.all([
+    getAllPromotionalCategories(),
+    getAllUnderABuckProducts(),
+    getAllNewAndExclusiveProducts(),
+    getAllUniqueIdeasProducts()
+  ]);
+
+  return {
+    props: {
+      promotionalCategories,
+      underABuckProducts,
+      newAndExclusive,
+      allUniqueIdeas
+    }
+  };
+}) satisfies GetStaticProps<IHome>;
+
+export default HomePage;

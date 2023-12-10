@@ -13,28 +13,34 @@ const INITIAL_STATE: ProductInitialState = {
   uniqueIdeaProductsLoading: false
 };
 
+export const getAllUnderABuckProducts = async (): Promise<Product[]> => {
+  const res = await http.get(`/product/byTag?tag=featured`);
+  return res?.data.payload.content;
+};
+
 export const getUnderABuckProducts = createAsyncThunk(
   'product/getUnderABuckProducts',
-  async () => {
-    const res = await http.get(`/product/byTag?tag=featured`);
-    return res?.data.payload.content;
-  }
+  getAllUnderABuckProducts
 );
+
+export const getAllNewAndExclusiveProducts = async (): Promise<Product[]> => {
+  const res = await http.get(`/product/byTag?tag=newAndExclusive`);
+  return res?.data.payload.content;
+};
 
 export const getNewAndExclusiveProducts = createAsyncThunk(
   'product/newAndExclusive',
-  async () => {
-    const res = await http.get(`/product/byTag?tag=newAndExclusive`);
-    return res?.data.payload.content;
-  }
+  getAllNewAndExclusiveProducts
 );
+
+export const getAllUniqueIdeasProducts = async (): Promise<Product[]> => {
+  const res = await http.get(`/product/byTag?tag=mostPopular`);
+  return res?.data.payload.content;
+};
 
 export const getUniqueIdeaProducts = createAsyncThunk(
   'product/getUniqueIdeaProducts',
-  async () => {
-    const res = await http.get(`/product/byTag?tag=mostPopular`);
-    return res?.data.payload.content;
-  }
+  getAllUniqueIdeasProducts
 );
 
 export const productSlice = createSlice({
