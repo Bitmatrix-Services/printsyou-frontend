@@ -232,7 +232,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                             <span className="pt-[2px] block">
                               Please add{' '}
                               <span className="text-red-500">
-                                ${row.priceDiff}
+                                ${row.priceDiff.toFixed(2)}
                               </span>{' '}
                               {row.name}
                             </span>

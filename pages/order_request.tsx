@@ -1,4 +1,4 @@
-import React, {FC, Fragment, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import PageHeader from '@components/globals/PageHeader';
 import {useFormik} from 'formik';
@@ -26,8 +26,6 @@ interface ImageListProps {
   handleFileRemove: (e: number) => void;
 }
 
-type orderType = {};
-
 const shippingFormFields = [
   {name: 'shippingFullName', placeholder: 'Name*'},
   {name: 'shippingCompany', placeholder: 'Company'},
@@ -46,6 +44,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [minQuantityError, setMinQuantityError] = useState<boolean>(true);
   const [artWorkFiles, setArtWorkFiles] = useState<globalThis.File[]>([]);
+  const [apiError, setApiError] = useState<boolean>(false);
 
   const getInHandDateEst = () => {
     const currentDate = new Date();
@@ -97,7 +96,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           return;
         }
 
-        const specifications = [
+        setApiError(false);
+
+        let specifications = [
           {
             fieldName: 'Color',
             fieldValue: values.specificationsColor
@@ -105,12 +106,15 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           {
             fieldName: 'Size',
             fieldValue: values.specificationsSize
-          },
-          {
-            fieldName: 'ImprintColor',
-            fieldValue: values.specificationsImprintColor
           }
         ];
+
+        if (values.specificationsImprintColor) {
+          specifications.push({
+            fieldName: 'ImprintColor',
+            fieldValue: values.specificationsImprintColor
+          });
+        }
 
         let orderData: any = {
           ...values,
@@ -118,9 +122,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           productId: product.id
         };
 
-        if (orderData.newsLetter) {
-          // call api here
-        }
+        // if (orderData.newsLetter) {
+        //   await http.post('/news-letter', orderData.billingEmailAddress);
+        // }
 
         delete orderData.newsLetter;
         delete orderData.specificationsColor;
@@ -158,7 +162,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
         await http.post('/order', formData);
         setIsSubmitted(true);
         action.resetForm();
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
       } catch (error) {
+        setApiError(true);
         console.log('error', error);
       }
     }
@@ -241,7 +247,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                               <span className="pt-[2px] block">
                                 Please add{' '}
                                 <span className="text-red-500">
-                                  ${row.priceDiff}
+                                  ${row.priceDiff.toFixed(2)}
                                 </span>{' '}
                                 {row.name}
                               </span>
@@ -273,7 +279,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <div>
                       {!minQuantityError ? (
                         <h2 className="text-primary-500 text-2xl font-bold">
-                          ${salePriceToShow}
+                          ${salePriceToShow.toFixed(2)}
                         </h2>
                       ) : (
                         <h2 className="text-red-500 text-2xl font-bold">
@@ -437,7 +443,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         formik={formik}
                       />
                     </TootipBlack>
-                    <TootipBlack title="This is not a mandatory field.  If the item has different sizes, please enter the size/s that you are ordering.  If the item only comes in one size, you may leave this field blank.">
+                    <TootipBlack title="If the item has different sizes, please enter the size/s that you are ordering.  If the item only comes in one size, you may leave this field blank.">
                       <FormInput
                         type="text"
                         name="specificationsSize"
@@ -533,6 +539,11 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 </div>
               </div>
               <hr className="mt-12 border border-[#eceef1]" />
+              {apiError && (
+                <div className="text-red-500 text-end">
+                  something went wrong. please try again!
+                </div>
+              )}
               <div className="flex flex-wrap gap-3 justify-between">
                 <div>
                   <div className="flex items-start sm:items-center space-x-4 mt-6">
