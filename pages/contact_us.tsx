@@ -11,6 +11,7 @@ import {http} from 'services/axios.service';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [apiError, setApiError] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -26,10 +27,12 @@ function ContactUs() {
     //// By disabling validation onChange and onBlur formik will validate on submit.
     onSubmit: async (values, action) => {
       try {
+        setApiError(false);
         await http.post('/contact_us', values);
         setIsSubmitted(true);
         action.resetForm();
       } catch (error) {
+        setApiError(true);
         console.log('error', error);
       }
     }
@@ -79,7 +82,11 @@ function ContactUs() {
                   />
                 </div>
               </div>
-
+              {apiError && (
+                <div className="text-red-500">
+                  something went wrong. please try again!
+                </div>
+              )}
               <button
                 type="submit"
                 className={`w-fit mt-6 hidden md:block ${

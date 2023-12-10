@@ -18,6 +18,7 @@ interface MoreInfoProps {
 
 const MoreInfo: FC<MoreInfoProps> = ({product}) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [apiError, setApiError] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
@@ -32,10 +33,12 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
     validateOnBlur: false,
     onSubmit: async (values, action) => {
       try {
+        setApiError(false);
         await http.post('/more-info', {...values, productId: product.id});
         setIsSubmitted(true);
         action.resetForm();
       } catch (error) {
+        setApiError(true);
         console.log('error', error);
       }
     }
@@ -133,6 +136,11 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                           formik={formik}
                         />
                       </div>
+                      {apiError && (
+                        <div className="text-red-500">
+                          something went wrong. please try again!
+                        </div>
+                      )}
                       <button
                         type="submit"
                         className={`w-fit mt-6 hidden md:block ${
