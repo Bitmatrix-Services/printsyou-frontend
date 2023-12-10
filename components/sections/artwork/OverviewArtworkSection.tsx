@@ -32,10 +32,10 @@ const tabSectionList = [
     icon: <TestiIcon />,
     heading: 'Testimonials'
   },
-  {
-    icon: <BlogIcon />,
-    heading: 'Promotional Blog'
-  }
+  // {
+  //   icon: <BlogIcon />,
+  //   heading: 'Promotional Blog'
+  // }
 ];
 
 interface OverviewArtworkSectionProps {

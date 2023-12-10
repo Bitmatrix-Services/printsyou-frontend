@@ -37,7 +37,7 @@ const Breadcrumb: FC<Breadcrumb> = ({queryParams, prefixTitle}) => {
             }`}
             onClick={() => {
               if (index !== queryParams.length - 1) {
-                router.push(`/${url}`);
+                router.push(`/${queryParams.slice(0, index + 1).join('/')}`);
               }
             }}
           >
