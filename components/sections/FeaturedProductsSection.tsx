@@ -82,12 +82,14 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
               {subTitle}
             </span>
           </h2>
-          <Link
-            className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-            href={viewMoreLink}
-          >
-            VIEW MORE
-          </Link>
+          {viewMoreLink && (
+            <Link
+              className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
+              href={viewMoreLink}
+            >
+              VIEW MORE
+            </Link>
+          )}
         </div>
         <div className="featured-swiper relative">
           <button
@@ -117,12 +119,14 @@ const FeaturedSection: FC<FeaturedSectionProps> = ({
           </Swiper>
         </div>
         <div className="mt-12 mb-6 md:hidden text-center">
-          <Link
-            className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-            href="!#"
-          >
-            VIEW MORE
-          </Link>
+          {viewMoreLink && (
+            <Link
+              className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
+              href={viewMoreLink}
+            >
+              VIEW MORE
+            </Link>
+          )}
         </div>
       </Container>
     </section>

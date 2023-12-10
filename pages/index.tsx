@@ -38,7 +38,8 @@ export const HomePage: NextPage<IHome> = ({
         subTitle="a buck"
         subTitleColor="text-[#56dabf]"
         products={underABuckProducts}
-        viewMoreLink={`/search_results?filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
+        //viewMoreLink={`/search_results?filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
+        viewMoreLink={``}
       />
       {/* unique ideas section */}
       <FeaturedProductsSection

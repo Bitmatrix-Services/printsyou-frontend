@@ -7,6 +7,7 @@ import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import {CircularProgress} from '@mui/material';
 
 type searchType = {
   name: string;
@@ -42,7 +43,7 @@ const CategoryDetails = () => {
     tag
   } = router.query;
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
     {
       products: [],
@@ -58,8 +59,11 @@ const CategoryDetails = () => {
     handleSearch();
   }, [router.query]);
 
+  useEffect(() => {
+    handleSearch();
+  }, [router.query]);
+
   const handleSearch = async () => {
-    setIsLoading(true);
     let queryString = `search-result?`;
 
     if (keywords) {
@@ -119,17 +123,25 @@ const CategoryDetails = () => {
       <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
-            <SearchSidebar
-              byPriceRange={searchResultsData.byPriceRange}
-              byColor={searchResultsData.byColors}
-              byCategory={searchResultsData.byCategory}
-            />
-            <SearchResultsSection
-              products={searchResultsData.products}
-              totalProducts={searchResultsData.totalProducts}
-              totalPages={searchResultsData.totalPages}
-              isLoading={isLoading}
-            />
+            {isLoading ? (
+              <div className="flex justify-center align-middle items-center h-[20rem] w-[100%]">
+                <CircularProgress color="warning" />
+              </div>
+            ) : (
+              <>
+                <SearchSidebar
+                  byPriceRange={searchResultsData.byPriceRange}
+                  byColor={searchResultsData.byColors}
+                  byCategory={searchResultsData.byCategory}
+                />
+                <SearchResultsSection
+                  products={searchResultsData.products}
+                  totalProducts={searchResultsData.totalProducts}
+                  totalPages={searchResultsData.totalPages}
+                  isLoading={isLoading}
+                />
+              </>
+            )}
           </div>
         </Container>
       </div>

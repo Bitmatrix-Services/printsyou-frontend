@@ -58,9 +58,13 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 Search Results for{' '}
                 <span>
                   "
-                  <span className="text-[#4598ff] underline">{`${
-                    keywords || tag
-                  }`}</span>
+                  <span className="text-[#4598ff] underline">
+                    {keywords
+                      ? keywords
+                      : tag === 'newAndExclusive'
+                      ? 'New and Exclusive'
+                      : 'Most Popular'}
+                  </span>
                   "
                 </span>
               </span>
@@ -76,7 +80,7 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           </div>
         </div>
 
-        {products.length > 0 ? (
+        {products.length > 0 && !isLoading ? (
           <section className="bg-white py-8 lg:py-12">
             <PaginationHeader
               pageNumber={parseInt(page) || 1}
