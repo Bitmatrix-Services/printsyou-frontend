@@ -16,7 +16,9 @@ export const orderRequestSchema = Yup.object({
   billingAddressLineOne: Yup.string().required('Please enter address'),
   billingCity: Yup.string().required('Please enter city'),
   billingState: Yup.string().required('Please enter state'),
-  billingZipcode: Yup.number().typeError('Zip code must be a number').required('Please enter zip code'),
+  billingZipcode: Yup.number()
+    .typeError('Zip code must be a number')
+    .required('Please enter zip code'),
   billingPhoneNumber: Yup.string()
     .required('Please enter phone number')
     .matches(phoneRegExp, 'invalid format'),
