@@ -102,13 +102,15 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           {
             fieldName: 'Color',
             fieldValue: values.specificationsColor
-          },
-          {
-            fieldName: 'Size',
-            fieldValue: values.specificationsSize
           }
         ];
 
+        if (values.specificationsSize) {
+          specifications.push({
+            fieldName: 'Size',
+            fieldValue: values.specificationsSize
+          });
+        }
         if (values.specificationsImprintColor) {
           specifications.push({
             fieldName: 'ImprintColor',
@@ -345,6 +347,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     />
                     <FormInput
                       type="text"
+                      inputType="select"
                       name="billingState"
                       placeHolder="State*"
                       formik={formik}
@@ -414,6 +417,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         <FormInput
                           key={field.name}
                           type="text"
+                          inputType={
+                            field.name === 'shippingState' ? 'select' : ''
+                          }
                           name={field.name}
                           placeHolder={field.placeholder}
                           formik={formik}
@@ -447,7 +453,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="specificationsSize"
-                        placeHolder="Size*"
+                        placeHolder="Size"
                         formik={formik}
                       />
                     </TootipBlack>
