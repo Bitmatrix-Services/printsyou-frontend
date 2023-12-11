@@ -366,7 +366,7 @@
   height: 4px;
   top: 50%;
   right: 15px;
-  background: url(/assets/icon-down.png) center no-repeat;
+  /*background: url(/assets/icon-down.png) center no-repeat;*/
   background-size: contain;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
