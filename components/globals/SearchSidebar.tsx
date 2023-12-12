@@ -140,7 +140,7 @@ const SearchSidebar: FC<SidebarProps> = ({
 
   return (
     <div className="xl:w-64 mb-6 xl:mb-0">
-      {(colors || filters.price || category) && (
+      {(colors || filters.price.length > 0 || category) && (
         <div className="lg:w-64 md:w-64 border border-[#edeff2] p-2">
           <h5 className="text-sm">YOUR SELECTIONS</h5>
           {colors &&
