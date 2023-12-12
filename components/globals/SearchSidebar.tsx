@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState, Dispatch, SetStateAction} from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -10,6 +10,7 @@ import {XMarkIcon} from '@heroicons/react/24/solid';
 import RemoveIcon from '@mui/icons-material/Remove';
 import sanitize from 'sanitize-html';
 import {useRouter} from 'next/router';
+import {getMinMaxRange} from '@utils/utils';
 
 type searchType = {
   name: string;
@@ -22,19 +23,27 @@ type categoryType = {
   count: number;
 };
 
+type filterType = {
+  price: string[];
+};
+
 interface SidebarProps {
   byCategory: categoryType[];
   byColor: searchType[];
   byPriceRange: searchType[];
+  filters: filterType;
+  setFilters: Dispatch<SetStateAction<filterType>>;
 }
 
 const SearchSidebar: FC<SidebarProps> = ({
   byCategory,
   byColor,
-  byPriceRange
+  byPriceRange,
+  filters,
+  setFilters
 }) => {
   const router = useRouter();
-  const {minPrice, maxPrice, colors, category}: any = router.query;
+  const {colors, category}: any = router.query;
 
   const [priceExpanded, setPriceExpanded] = useState<boolean>(true);
   const [colorExpanded, setColorExpanded] = useState<boolean>(true);
@@ -74,34 +83,48 @@ const SearchSidebar: FC<SidebarProps> = ({
       });
     };
 
-    function findMinMaxValues(
-      array1: number[],
-      array2: number[]
-    ): [number, number] {
-      const combinedArray: number[] = [...array1, ...array2];
+    const updatePriceFilters = (
+      currentFilters: string[],
+      filterType: string
+    ) => {
+      let updatedFilters = [...currentFilters];
 
-      const min = Math.min(...combinedArray);
-      const max = Math.max(...combinedArray);
-
-      return [min, max];
-    }
-
-    const updatePriceFilters = () => {
-      let [selectedMin, selectedMax] =
-        selectedValue.match(/\d+\.\d+|\d+/g)?.map(Number) || [];
-      let result = [selectedMin, selectedMax];
-      if (minPrice && maxPrice) {
-        result = findMinMaxValues(
-          [selectedMin, selectedMax],
-          [minPrice, maxPrice]
-        );
+      if (updatedFilters.includes(selectedValue)) {
+        updatedFilters = updatedFilters.filter(item => item !== selectedValue);
+      } else {
+        updatedFilters.push(selectedValue);
       }
+
+      // update local state
+      setFilters({
+        ...filters,
+        [filterType]: updatedFilters
+      });
+
+      // update query params
       const currentQuery = router.query;
-      let updatedQuery = {
-        ...currentQuery,
-        minPrice: result[0],
-        maxPrice: result[1]
-      };
+      let updatedQuery = currentQuery;
+      if (updatedFilters && updatedFilters.length > 0) {
+        const result = getMinMaxRange(updatedFilters);
+        if (result.length) {
+          let max = Number.NEGATIVE_INFINITY;
+          let min = Number.POSITIVE_INFINITY;
+          result.forEach(item => {
+            max = Math.max(max, item.maxValue);
+            min = Math.min(min, item.minValue);
+          });
+
+          updatedQuery = {
+            ...currentQuery,
+            minPrice: `${min}`,
+            maxPrice: `${max}`,
+            page: '1'
+          };
+        }
+      } else {
+        delete updatedQuery.maxPrice;
+        delete updatedQuery.minPrice;
+      }
       router.push({
         pathname: router.pathname,
         query: updatedQuery
@@ -109,26 +132,15 @@ const SearchSidebar: FC<SidebarProps> = ({
     };
 
     if (type === 'price') {
-      // updatePriceFilters();
+      updatePriceFilters(filters.price, 'price');
     } else if (type === 'colors') {
       updateColorFilters(colors, 'colors');
     }
   };
 
-  function isInPriceRange(value: string): boolean {
-    const matches = value.match(/\d+\.\d+|\d+/g)?.map(Number);
-
-    if (matches && matches.length === 2) {
-      const [rangeMin, rangeMax] = matches;
-      return parseInt(minPrice) >= rangeMin && parseInt(maxPrice) <= rangeMax;
-    }
-
-    return false;
-  }
-
   return (
     <div className="xl:w-64 mb-6 xl:mb-0">
-      {(colors || (minPrice && maxPrice) || category) && (
+      {(colors || filters.price || category) && (
         <div className="lg:w-64 md:w-64 border border-[#edeff2] p-2">
           <h5 className="text-sm">YOUR SELECTIONS</h5>
           {colors &&
@@ -149,7 +161,7 @@ const SearchSidebar: FC<SidebarProps> = ({
               </div>
             ))}
 
-          {/* {filters.price?.map(price => (
+          {filters.price?.map(price => (
             <div key={price}>
               <div className="flex justify-between items-center mt-3 mb-2">
                 <span className="text-xs">
@@ -164,7 +176,7 @@ const SearchSidebar: FC<SidebarProps> = ({
               </div>
               <hr />
             </div>
-          ))} */}
+          ))}
           {category && (
             <div>
               <div className="flex justify-between items-center mt-3 mb-2">
@@ -235,31 +247,29 @@ const SearchSidebar: FC<SidebarProps> = ({
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
               <FormGroup>
-                {byPriceRange?.map(priceRange => {
-                  return (
-                    <FormControlLabel
-                      key={priceRange.name}
-                      control={
-                        <Checkbox
-                          name={priceRange.name}
-                          checked={isInPriceRange(priceRange.name)}
-                          onChange={e =>
-                            handleFilterChange(e.target.name, 'price')
-                          }
-                        />
-                      }
-                      label={
-                        <div>
-                          <span>{priceRange.name}</span>
-                          <span className="text-xs font-bold text-primary ml-2">
-                            ({priceRange.count})
-                          </span>
-                        </div>
-                      }
-                      className="border-b-2"
-                    />
-                  );
-                })}
+                {byPriceRange?.map(price => (
+                  <FormControlLabel
+                    key={price.name}
+                    control={
+                      <Checkbox
+                        name={price.name}
+                        checked={!!filters?.price?.includes(price.name)}
+                        onChange={e =>
+                          handleFilterChange(e.target.name, 'price')
+                        }
+                      />
+                    }
+                    label={
+                      <div>
+                        <span>{price.name}</span>
+                        <span className="text-xs font-bold text-primary ml-2">
+                          ({price.count})
+                        </span>
+                      </div>
+                    }
+                    className="border-b-2"
+                  />
+                ))}
               </FormGroup>
             </AccordionDetails>
           </Accordion>

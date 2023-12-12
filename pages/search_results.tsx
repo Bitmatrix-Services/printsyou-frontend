@@ -29,6 +29,10 @@ type searchResultsData = {
   byCategory: categoryType[];
 };
 
+type filterType = {
+  price: string[];
+};
+
 const CategoryDetails = () => {
   const router = useRouter();
   const {
@@ -45,6 +49,9 @@ const CategoryDetails = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
+  const [filters, setFilters] = useState<filterType>({
+    price: []
+  });
   const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
     {
       products: [],
@@ -132,6 +139,8 @@ const CategoryDetails = () => {
                   byPriceRange={searchResultsData.byPriceRange}
                   byColor={searchResultsData.byColors}
                   byCategory={searchResultsData.byCategory}
+                  filters={filters}
+                  setFilters={setFilters}
                 />
                 <SearchResultsSection
                   products={searchResultsData.products}
