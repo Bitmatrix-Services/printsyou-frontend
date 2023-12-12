@@ -275,9 +275,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     </div>
                   </div>
                   <div>
-                    <h4>
+                    <div>
                       <FormHeading text="Sub Total:" />
-                    </h4>
+                    </div>
                     <div>
                       {!minQuantityError ? (
                         <h2 className="text-primary-500 text-2xl font-bold">
@@ -684,7 +684,7 @@ const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
           key={index}
           className="flex justify-between items-center border w-full h-14 pl-4 pr-6 rounded-0 focus:outline-none"
         >
-          <div className="h-20 w-20 min-w-[7rem] relative">
+          <div className="h-12 w-12 min-w-[7rem] relative">
             <Image
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               fill
@@ -693,7 +693,9 @@ const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
               alt={image.name}
             />
           </div>
-          <div className="text-blue-500">{image?.name}</div>
+          <div className="text-blue-500 overflow-hidden max-w-xs truncate border p-4">
+            {image?.name}
+          </div>
           <div>{Math.ceil(image?.size / 1024).toFixed(1)} KB</div>
           <XMarkIcon
             className="h-5 w-5 cursor-pointer"
