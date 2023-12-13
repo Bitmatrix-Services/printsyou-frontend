@@ -46,7 +46,7 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
             </div>
           </div>
 
-          <div className="lg:w-64 md:w-64 mb-8">
+          {/* <div className="lg:w-64 md:w-64 mb-8">
             <Accordion className="border-b border-[#e1e1e1] shadow-none">
               <AccordionSummary
                 expandIcon={<AddIcon />}
@@ -76,7 +76,7 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
                 </ul>
               </AccordionDetails>
             </Accordion>
-          </div>
+          </div> */}
           <div className="flex justify-center">
             <Link
               href="/promotional-products"

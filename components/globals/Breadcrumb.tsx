@@ -18,7 +18,7 @@ const Breadcrumb: FC<Breadcrumb> = ({queryParams, prefixTitle}) => {
   };
 
   return (
-    <div className="flex text-sm font-medium mb-6 items-center text-[#787b82]">
+    <div className="flex flex-wrap gap-2 text-sm font-medium mb-6 items-center text-[#787b82]">
       <Link href={'/'}>
         <HomeIcon className="h-4 w-4 mr-1 text-[#febe40] " />
       </Link>

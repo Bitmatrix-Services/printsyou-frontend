@@ -72,7 +72,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
             }}
           ></div>
         </div>
-        <div className="border-t border-[#edeff2] flex">
+        <div className="border border-[#edeff2] flex">
           <div className="py-2 flex-1 flex gap-3 items-center px-5 group-hover:bg-primary-500 group-hover:text-white">
             <div className="as-low text-xs font-semibold mr-auto">
               AS LOW AS
