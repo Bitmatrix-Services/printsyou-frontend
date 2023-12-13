@@ -16,23 +16,30 @@ const Specials = () => {
   const [pageSize, setPageSize] = useState<number>(24);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [sort, setSort] = useState('priceLowToHigh');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
 
   useEffect(() => {
     getSpecialProducts();
   }, [pageNumber, pageSize, sort]);
 
   const getSpecialProducts = async () => {
-    setIsLoading(true);
-    const {data} = await http.get(
-      `/product/byTag?tag=special&page=${pageNumber}&size=${pageSize}&filter=${sort}`
-    );
+    try {
+      setIsLoading(true);
+      const {data} = await http.get(
+        `/product/byTag?tag=special&page=${pageNumber}&size=${pageSize}&filter=${sort}`
+      );
 
-    if (data.payload?.content?.length > 0) {
-      setSpecialProducts(data.payload.content);
-      setTotalPages(data.payload.totalPages);
+      if (data.payload?.content?.length > 0) {
+        setSpecialProducts(data.payload.content);
+        setTotalPages(data.payload.totalPages);
+      }
+    } catch (error) {
+      console.log('error', error);
+    } finally {
+      setIsLoading(false);
+      setIsPageLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -41,15 +48,17 @@ const Specials = () => {
       <PageHeader pageTitle={'Specials and Sales'} />
       <Container>
         <section className="bg-white py-8 lg:py-20">
-          <PaginationHeader
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            totalPages={totalPages}
-            sort={sort}
-            setSort={setSort}
-          />
+          {specialProducts?.length > 0 && !isPageLoading && (
+            <PaginationHeader
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+              totalPages={totalPages}
+              sort={sort}
+              setSort={setSort}
+            />
+          )}
           {isLoading ? (
             <div className="flex justify-center align-middle items-center h-[20rem]">
               <CircularProgress color="warning" />
@@ -65,15 +74,22 @@ const Specials = () => {
               ))}
             </div>
           )}
-          <PaginationHeader
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            totalPages={totalPages}
-            sort={sort}
-            setSort={setSort}
-          />
+          {specialProducts?.length > 0 && !isPageLoading && (
+            <PaginationHeader
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+              totalPages={totalPages}
+              sort={sort}
+              setSort={setSort}
+            />
+          )}
+          {specialProducts.length <= 0 && !isLoading && (
+            <div className="m-16 flex items-center justify-center">
+              <h4>No Products Found</h4>
+            </div>
+          )}
         </section>
       </Container>
     </>

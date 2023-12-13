@@ -110,7 +110,9 @@ const CategoryDetails = () => {
         products: data.payload.products.content,
         totalPages: data.payload.products.totalPages,
         totalProducts: data.payload.products.totalElements,
-        byPriceRange: data.payload.byPriceRange,
+        byPriceRange: data.payload.byPriceRange?.filter(
+          (item: {name: string}) => item.name !== null
+        ),
         byColors: data.payload.byColors,
         byCategory: data.payload.byCategory
       };
