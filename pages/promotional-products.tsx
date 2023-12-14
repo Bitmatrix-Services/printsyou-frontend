@@ -50,7 +50,7 @@ const ViewAllCategories = () => {
                           >
                             <span
                               dangerouslySetInnerHTML={{
-                                __html: sanitize(subCat.categoryName)
+                                __html: sanitize(subCat.categoryName).replace('SYMLINK', '')
                               }}
                             ></span>
                           </Link>
