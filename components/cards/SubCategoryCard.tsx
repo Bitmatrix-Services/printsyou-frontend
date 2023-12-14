@@ -27,7 +27,9 @@ const SubCategoryCard: FC<ProductsSubCategoryCardProps> = ({category}) => {
         <div className="xl:pr-4">
           <div
             className={`mb-1 text-center block text-body group-hover:text-primary-500 font-bold text-sm sm:text-lg capitalize`}
-            dangerouslySetInnerHTML={{__html: sanitize(category.categoryName)}}
+            dangerouslySetInnerHTML={{
+              __html: sanitize(category.categoryName).replace('SYMLINK', '')
+            }}
           ></div>
         </div>
       </div>
