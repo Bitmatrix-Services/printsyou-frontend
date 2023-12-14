@@ -35,7 +35,10 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
                       >
                         <span
                           dangerouslySetInnerHTML={{
-                            __html: sanitize(category.categoryName)
+                            __html: sanitize(category.categoryName).replace(
+                              'SYMLINK',
+                              ''
+                            )
                           }}
                         ></span>
                       </Link>
