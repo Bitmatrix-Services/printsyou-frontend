@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect} from 'react';
+import React, {FC} from 'react';
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
 import PaginationHeader from '@components/globals/PaginationHeader';

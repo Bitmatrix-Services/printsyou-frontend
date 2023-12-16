@@ -1,6 +1,5 @@
 import React, {FC, useState, useEffect} from 'react';
 import {useRouter} from 'next/router';
-import {NextSeo} from 'next-seo';
 import ProductSubCategoriesSection from './SubCategoriesSection';
 import ProductsSection from '../specials/ProductsSection';
 import {Category} from '@store/slices/category/category';

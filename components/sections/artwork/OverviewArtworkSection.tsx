@@ -9,7 +9,6 @@ import OrderingIcon from '@components/icons/OrderingIcon';
 import ShippingIcon from '@components/icons/ShippingIcon';
 import TosIcon from '@components/icons/TosIcon';
 import TestiIcon from '@components/icons/TestiIcon';
-import BlogIcon from '@components/icons/BlogIcon';
 
 const tabSectionList = [
   {

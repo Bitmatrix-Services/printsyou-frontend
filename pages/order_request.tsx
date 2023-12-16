@@ -91,6 +91,14 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
     validateOnBlur: false,
     onSubmit: async (values, action) => {
       try {
+        if (values.newsLetter) {
+          await http.post('/news-letter', {email: values.billingEmailAddress});
+        }
+      } catch (error) {
+        console.log('error news letter', error);
+      }
+
+      try {
         if (minQuantityError) {
           window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
           return;
@@ -123,10 +131,6 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           specifications: specifications,
           productId: product.id
         };
-
-        // if (orderData.newsLetter) {
-        //   await http.post('/news-letter', orderData.billingEmailAddress);
-        // }
 
         delete orderData.newsLetter;
         delete orderData.specificationsColor;
@@ -676,33 +680,35 @@ export const getServerSideProps = async (
 
 export default OrderRequest;
 
-const ImageList: FC<ImageListProps> = ({images, handleFileRemove}) => {
-  return (
-    <ul className="mt-6">
-      {images?.map((image, index) => (
-        <li
-          key={index}
-          className="flex justify-between items-center border w-full h-14 pl-4 pr-6 rounded-0 focus:outline-none"
-        >
-          <div className="h-12 w-12 min-w-[7rem] relative">
-            <Image
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              fill
-              className="object-contain"
-              src={URL.createObjectURL(image)}
-              alt={image.name}
+const ImageList: FC<ImageListProps> = React.memo(
+  ({images, handleFileRemove}) => {
+    return (
+      <ul className="mt-6">
+        {images?.map((image, index) => (
+          <li
+            key={index}
+            className="flex justify-between items-center border w-full h-14 pl-4 pr-6 rounded-0 focus:outline-none"
+          >
+            <div className="h-12 w-12 min-w-[7rem] relative">
+              <Image
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                fill
+                className="object-contain"
+                src={URL.createObjectURL(image)}
+                alt={image.name}
+              />
+            </div>
+            <div className="text-blue-500 overflow-hidden max-w-xs truncate border p-4">
+              {image?.name}
+            </div>
+            <div>{Math.ceil(image?.size / 1024).toFixed(1)} KB</div>
+            <XMarkIcon
+              className="h-5 w-5 cursor-pointer"
+              onClick={() => handleFileRemove(index)}
             />
-          </div>
-          <div className="text-blue-500 overflow-hidden max-w-xs truncate border p-4">
-            {image?.name}
-          </div>
-          <div>{Math.ceil(image?.size / 1024).toFixed(1)} KB</div>
-          <XMarkIcon
-            className="h-5 w-5 cursor-pointer"
-            onClick={() => handleFileRemove(index)}
-          />
-        </li>
-      ))}
-    </ul>
-  );
-};
+          </li>
+        ))}
+      </ul>
+    );
+  }
+);

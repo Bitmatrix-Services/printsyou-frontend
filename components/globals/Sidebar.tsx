@@ -1,12 +1,6 @@
 import React, {FC} from 'react';
 import Link from 'next/link';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AddIcon from '@mui/icons-material/Add';
 import sanitize from 'sanitize-html';
-
-import PriceRangeSection from '@components/sections/promotionalProducts/PriceRangeSection';
 import {Category} from '@store/slices/category/category';
 
 interface SidebarProps {
