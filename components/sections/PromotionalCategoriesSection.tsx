@@ -1,9 +1,6 @@
 import React, {FC} from 'react';
-
 import Container from '../globals/Container';
 import PromotionalCategoryCard from '../cards/PromotionalCategoryCard';
-import {useAppSelector} from '@store/hooks';
-import {selectPromotionalCategories} from '@store/slices/category/catgory.slice';
 import {Category} from '@store/slices/category/category';
 
 interface IPromotionalCategoriesSection {
