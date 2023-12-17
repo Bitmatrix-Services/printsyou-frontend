@@ -710,5 +710,10 @@ const ImageList: FC<ImageListProps> = React.memo(
         ))}
       </ul>
     );
+  },
+  (prevProps, nextProps) => {
+    return prevProps.images === nextProps.images;
   }
 );
+
+ImageList.displayName = 'ImageList';
