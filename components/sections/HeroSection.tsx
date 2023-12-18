@@ -1,7 +1,8 @@
-import React, {useCallback, useRef} from 'react';
+import React, {FC, useCallback, useRef} from 'react';
 import Link from 'next/link';
 import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
+import {BannerList} from '@store/slices/category/category';
 
 const slidesData = [
   {
@@ -16,20 +17,26 @@ const slidesData = [
   },
   {
     backgroundImage: '/assets/banner-2.png',
-    title: 'Sunglasses'
-  },
-  {
-    backgroundImage: '/assets/banner-3.png',
     title: 'Drinkware',
     bulletPoints: ['Bottles', 'Mugs', 'Tumblers', 'And Much More!']
   },
   {
+    backgroundImage: '/assets/banner-3.png',
+    title: 'Sunglasses',
+    bulletPoints: []
+  },
+  {
     backgroundImage: '/assets/banner-4.png',
-    title: 'Lip Balm'
+    title: 'Lip Balm',
+    bulletPoints: []
   }
 ];
 
-const HeroSection = () => {
+interface IHeroSection {
+  bannerList: BannerList[];
+}
+
+const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
   const sliderRef = useRef<SwiperRef>(null);
 
   const handlePrev = useCallback(() => {
@@ -64,30 +71,33 @@ const HeroSection = () => {
           pagination={{clickable: true}}
           className="hero-swiper"
         >
-          {slidesData.map((slide, index) => (
-            <SwiperSlide key={index}>
+          {bannerList.map((banner, index) => (
+            <SwiperSlide key={banner.id}>
               <div
                 className="slide-item bg-center"
                 style={{
-                  backgroundImage: `url(${slide.backgroundImage})`
+                  backgroundImage: `url(${banner.bannerUrl})`
                 }}
               >
                 <div className="h-[25rem] py-6 md:px-20 max-w-[40rem] flex flex-col justify-center text-center">
                   <h3 className="text-white font-bold text-2xl sm:text-3xl md:text-4xl mb-5">
-                    {slide.title}
+                    {slidesData[index]?.title ?? ''}
                   </h3>
-                  {slide.bulletPoints && slide.bulletPoints.length > 0 && (
-                    <div className="list">
-                      <ul className="text-white text-base space-y-2">
-                        {slide.bulletPoints.map((point, pointIndex) => (
-                          <li key={pointIndex}>{point}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  {slidesData[index] &&
+                    slidesData[index]?.bulletPoints?.length > 0 && (
+                      <div className="list">
+                        <ul className="text-white text-base space-y-2">
+                          {slidesData[index]?.bulletPoints?.map(
+                            (point, pointIndex) => (
+                              <li key={pointIndex}>{point}</li>
+                            )
+                          )}
+                        </ul>
+                      </div>
+                    )}
                   <div className="mt-8">
                     <Link
-                      href="!#"
+                      href={banner.bannerCategory.ucategoryName}
                       className="py-4 px-20 text-sm tracking-[3.5px] font-bold btn-primary"
                     >
                       SHOP NOW

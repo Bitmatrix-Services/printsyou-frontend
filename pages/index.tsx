@@ -9,27 +9,32 @@ import {
   getAllUnderABuckProducts,
   getAllUniqueIdeasProducts
 } from '@store/slices/product/product.slice';
-import {getAllPromotionalCategories} from '@store/slices/category/catgory.slice';
+import {
+  getAllBannerList,
+  getAllPromotionalCategories
+} from '@store/slices/category/catgory.slice';
 import {GetStaticProps, NextPage} from 'next';
 import {Product} from '@store/slices/product/product';
-import {Category} from '@store/slices/category/category';
+import {BannerList, Category} from '@store/slices/category/category';
 
 interface IHome {
   promotionalCategories: Category[];
   underABuckProducts: Product[];
   newAndExclusive: Product[];
   allUniqueIdeas: Product[];
+  bannerList: BannerList[];
 }
 
 export const HomePage: NextPage<IHome> = ({
   underABuckProducts,
   newAndExclusive,
   allUniqueIdeas,
-  promotionalCategories
+  promotionalCategories,
+  bannerList
 }) => {
   return (
     <>
-      <HeroSection />
+      <HeroSection bannerList={bannerList} />
       <PromotionalCategoriesSection categories={promotionalCategories} />
       {/* under a buck section */}
       <FeaturedProductsSection
@@ -70,12 +75,14 @@ export const getStaticProps = (async context => {
     promotionalCategories,
     underABuckProducts,
     newAndExclusive,
-    allUniqueIdeas
+    allUniqueIdeas,
+    bannerList
   ] = await Promise.all([
     getAllPromotionalCategories(),
     getAllUnderABuckProducts(),
     getAllNewAndExclusiveProducts(),
-    getAllUniqueIdeasProducts()
+    getAllUniqueIdeasProducts(),
+    getAllBannerList()
   ]);
 
   return {
@@ -83,7 +90,8 @@ export const getStaticProps = (async context => {
       promotionalCategories,
       underABuckProducts,
       newAndExclusive,
-      allUniqueIdeas
+      allUniqueIdeas,
+      bannerList
     }
   };
 }) satisfies GetStaticProps<IHome>;

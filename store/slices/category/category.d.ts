@@ -3,6 +3,8 @@ export interface CategoryInitialState {
   categoryListLoading: boolean;
   promotionalCategories: Category[];
   promotionalCategoriesLoading: boolean;
+  bannerList: BannerList[];
+  bannerListLoading: boolean;
 }
 
 export type Category = {
@@ -15,4 +17,14 @@ export type Category = {
   subCategories: Category[];
   metaTitle: string | null;
   metaDescription: string | null;
+};
+
+export type BannerList = {
+  id: string;
+  bannerUrl: string;
+  sequenceNumber: string;
+  bannerCategory: {
+    categoryId: string;
+    ucategoryName: string;
+  };
 };
