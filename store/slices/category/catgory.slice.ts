@@ -76,7 +76,10 @@ export const categorySlice = createSlice({
     [getBannerList.pending.type]: state => {
       state.bannerListLoading = true;
     },
-    [getBannerList.fulfilled.type]: (state, action: PayloadAction<BannerList[]>) => {
+    [getBannerList.fulfilled.type]: (
+      state,
+      action: PayloadAction<BannerList[]>
+    ) => {
       state.bannerList = action.payload;
       state.bannerListLoading = false;
     },
@@ -96,8 +99,7 @@ export const selectPromotionalCategories = (state: RootState) =>
 export const selectPromotionalCategoriesLoading = (state: RootState) =>
   state.category.promotionalCategoriesLoading;
 
-export const selectBannerList = (state: RootState) =>
-  state.category.bannerList;
+export const selectBannerList = (state: RootState) => state.category.bannerList;
 export const selectBannerListLoading = (state: RootState) =>
   state.category.bannerListLoading;
 
