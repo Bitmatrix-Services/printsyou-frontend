@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
@@ -6,6 +6,10 @@ import Container from './Container';
 import {ArrowLongRightIcon} from '@heroicons/react/24/solid';
 import {useAppSelector} from '@store/hooks';
 import {selectCategoryList} from '@store/slices/category/catgory.slice';
+import {http} from 'services/axios.service';
+import {useFormik} from 'formik';
+import {EmailSchema} from '@utils/validationSchemas';
+import {CircularProgress} from '@mui/material';
 
 const identityShop = [
   {name: 'All Products', url: '/'},
@@ -22,6 +26,26 @@ const customerHelp = [
 
 const Footer = () => {
   const categoryList = useAppSelector(selectCategoryList);
+  const [emailError, setEmailError] = useState('');
+
+  const formik = useFormik({
+    initialValues: {
+      email: ''
+    },
+    validationSchema: EmailSchema,
+    validateOnChange: true,
+    validateOnBlur: false,
+    onSubmit: async (values, action) => {
+      try {
+        setEmailError('');
+        await http.post('/news-letter', {email: values.email});
+        action.resetForm();
+      } catch (error) {
+        setEmailError('something went wrong. please try again later');
+      }
+    }
+  });
+
   return (
     <footer className="bg-white footer pt-10 lg:pt-15">
       <Container>
@@ -83,20 +107,34 @@ const Footer = () => {
           </div>
           <div className="flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-3 items-center gap-6 sm:gap-8">
-              <form className="relative sm:col-span-2">
+              <form
+                className="relative sm:col-span-2"
+                onSubmit={formik.handleSubmit}
+              >
                 <input
                   className="block border w-full h-16 pl-4 pr-16 rounded-sm text-sm"
                   placeholder="Enter your email to stay up to date with our promotions..."
                   type="text"
-                  required
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
                 />
 
                 <button
                   type="submit"
                   className="absolute top-1/2 -translate-y-1/2 right-4"
                 >
-                  <ArrowLongRightIcon className="h-10 w-10" />
+                  {!formik.isSubmitting ? (
+                    <ArrowLongRightIcon className="h-10 w-10" />
+                  ) : (
+                    <CircularProgress color="warning" />
+                  )}
                 </button>
+                {(formik.touched.email && formik.errors.email) || emailError ? (
+                  <p className="text-red-500">
+                    {formik.errors.email ?? emailError}
+                  </p>
+                ) : null}
               </form>
               <div className="flex gap-2">
                 <a

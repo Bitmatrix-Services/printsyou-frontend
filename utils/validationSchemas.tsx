@@ -58,3 +58,7 @@ export const orderRequestSchema = Yup.object({
 
   agreeToTerms: Yup.boolean().oneOf([true], 'You must agree to the terms')
 });
+
+export const EmailSchema = Yup.object({
+  email: Yup.string().email().required('please enter your email')
+});
