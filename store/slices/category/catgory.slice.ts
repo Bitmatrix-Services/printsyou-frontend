@@ -17,7 +17,9 @@ export const getAllCategoryList = createAsyncThunk(
   'category/getAllCategoryList',
   async () => {
     const res = await http.get(`/category/all`);
-    return res?.data.payload;
+    return res?.data.payload?.sort((a: Category, b: Category) =>
+      a.categoryName.localeCompare(b.categoryName)
+    );
   }
 );
 

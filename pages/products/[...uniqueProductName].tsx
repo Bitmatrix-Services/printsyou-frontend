@@ -142,7 +142,9 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                                     $
                                   </div>
                                   <div className="value font-semibold text-3xl font-oswald">
-                                    <span className="sale">{row.price}</span>
+                                    <span className="sale">
+                                      {row.price.toFixed(2)}
+                                    </span>
                                   </div>
                                 </div>
                               </td>
