@@ -24,7 +24,7 @@ export const getAllCategoryList = createAsyncThunk(
 );
 
 export let getAllPromotionalCategories = async () => {
-  const res = await http.get(`/category/popular`);
+  const res = await http.get(`/category/promotional`);
   return res?.data.payload;
 };
 
