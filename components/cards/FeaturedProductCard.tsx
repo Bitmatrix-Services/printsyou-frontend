@@ -97,7 +97,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <div className="deno font-semibold text-xl">$</div>
                 <div className="value font-semibold text-2xl xl:text-4xl font-oswald">
                   <span className="sale">
-                    {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0].price}
+                    {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0].price.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -164,7 +164,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                                       $
                                     </div>
                                     <div className="value font-semibold text-3xl font-oswald">
-                                      <span className="sale">{row.price}</span>
+                                      <span className="sale">{row.price.toFixed(2)}</span>
                                     </div>
                                   </div>
                                 </td>
