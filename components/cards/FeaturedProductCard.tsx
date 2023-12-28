@@ -345,9 +345,18 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                           <span className="label min-w-[300px]">
                             <b className="brown">{row.fieldName}: </b>
                           </span>
-                          <span className="flex-1 text-left">
-                            {row.fieldValue}
-                          </span>
+                          <span
+                            className="flex-1 text-left"
+                            dangerouslySetInnerHTML={{
+                              __html: sanitizeHtml(row.fieldValue ?? '', {
+                                allowedTags: ['p', 'span', 'td', 'b'],
+                                allowedAttributes: {
+                                  span: ['style'],
+                                  td: ['style']
+                                }
+                              })
+                            }}
+                          ></span>
                         </div>
                       ))}
                     </div>

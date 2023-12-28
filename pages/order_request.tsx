@@ -132,7 +132,6 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
           productId: product.id
         };
 
-        delete orderData.newsLetter;
         delete orderData.specificationsColor;
         delete orderData.specificationsSize;
         delete orderData.specificationsImprintColor;

@@ -100,7 +100,18 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   ITEM#: <span className="text-primary-500">{product.sku}</span>
                 </h6>
                 <h3 className="text-3xl my-5  font-semibold capitalize">
-                  {product.prefix} {product.productName}
+                  {product.prefix}{' '}
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(product.productName ?? '', {
+                        allowedTags: ['p', 'span', 'td', 'b'],
+                        allowedAttributes: {
+                          span: ['style'],
+                          td: ['style']
+                        }
+                      })
+                    }}
+                  ></span>
                 </h3>
               </div>
               <div className="mb-12">
@@ -240,7 +251,19 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       <span className="label min-w-[300px]">
                         <b className="brown">{row.fieldName}: </b>
                       </span>
-                      <span className="flex-1 text-left">{row.fieldValue}</span>
+
+                      <span
+                        className="flex-1 text-left"
+                        dangerouslySetInnerHTML={{
+                          __html: sanitizeHtml(row.fieldValue ?? '', {
+                            allowedTags: ['p', 'span', 'td', 'b'],
+                            allowedAttributes: {
+                              span: ['style'],
+                              td: ['style']
+                            }
+                          })
+                        }}
+                      ></span>
                     </div>
                   ))}
                 </div>
