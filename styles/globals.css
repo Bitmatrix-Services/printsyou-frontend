@@ -491,3 +491,14 @@
 .lg-outer {
   z-index: 1500;
 }
+
+.priceGridBody table {
+  border: 1px solid black;
+  background-color: #ddffd6;
+}
+
+.priceGridBody td {
+  text-align: center;
+  border: 1px solid black;
+  padding: 2px 2px 2px 2px;
+}

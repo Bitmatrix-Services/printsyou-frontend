@@ -126,87 +126,104 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   </ul>
                 )}
               </div>
-              {product?.priceGrids &&
-              [...product.priceGrids].sort(
-                (a, b) => a.countFrom - b.countFrom
-              )[0].countFrom !== 0 ? (
-                <div className="mt-4 overflow-auto">
-                  <table className="w-full">
-                    <tbody>
-                      <tr className="one">
-                        {[...product.priceGrids]
-                          .sort((a, b) => a.countFrom - b.countFrom)
-                          .map(row => (
-                            <td className="headcell" key={row.id}>
-                              {row.countFrom}
-                            </td>
-                          ))}
-                      </tr>
-                      <tr className="two">
-                        {product?.priceGrids &&
-                          [...product.priceGrids]
-                            .sort((a, b) => a.countFrom - b.countFrom)
-                            .map(row => (
-                              <td className="pricecell" key={row.id}>
-                                <div className="prive-value flex items-end justify-center gap-1">
-                                  <div className="deno font-semibold text-xl">
-                                    $
-                                  </div>
-                                  <div className="value font-semibold text-3xl font-oswald">
-                                    <span className="sale">
-                                      {row.price.toFixed(2)}
-                                    </span>
-                                  </div>
-                                </div>
-                              </td>
-                            ))}
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
+              {mount && (
                 <>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHtml(
-                        getProductPriceGridTable(product.productDescription)
-                          ?.heading?.outerHTML ?? '',
-                        {
-                          allowedTags: ['p', 'span', 'td', 'b'],
-                          allowedAttributes: {
-                            span: ['style'],
-                            td: ['style']
+                  {getProductPriceGridTable(product.productDescription)?.heading
+                    ?.outerHTML && (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(
+                          getProductPriceGridTable(product.productDescription)
+                            ?.heading?.outerHTML ?? '',
+                          {
+                            allowedTags: [
+                              'p',
+                              'span',
+                              'b',
+                              'table',
+                              'tbody',
+                              'tr',
+                              'span',
+                              'td',
+                              'br'
+                            ],
+                            allowedAttributes: {
+                              span: ['style'],
+                              td: ['style']
+                            }
                           }
-                        }
-                      )
-                    }}
-                  ></div>
-                  <div
-                    className="border"
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHtml(
-                        getProductPriceGridTable(product.productDescription)
-                          ?.priceTable?.outerHTML ?? '',
-                        {
-                          allowedTags: [
-                            'table',
-                            'tbody',
-                            'tr',
-                            'span',
-                            'td',
-                            'br',
-                            'b'
-                          ],
-                          allowedAttributes: {
-                            span: ['style'],
-                            td: ['style']
+                        )
+                      }}
+                    ></div>
+                  )}
+                  {getProductPriceGridTable(product.productDescription)
+                    ?.priceTable?.outerHTML && (
+                    <div
+                      className="priceGridBody"
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(
+                          getProductPriceGridTable(product.productDescription)
+                            ?.priceTable?.outerHTML ?? '',
+                          {
+                            allowedTags: [
+                              'table',
+                              'tbody',
+                              'tr',
+                              'span',
+                              'td',
+                              'br',
+                              'b'
+                            ],
+                            allowedAttributes: {
+                              span: ['style'],
+                              td: ['style']
+                            }
                           }
-                        }
-                      )
-                    }}
-                  ></div>
+                        )
+                      }}
+                    ></div>
+                  )}
                 </>
               )}
+              {product?.priceGrids &&
+                [...product.priceGrids].sort(
+                  (a, b) => a.countFrom - b.countFrom
+                )[0].countFrom !== 0 && (
+                  <div className="mt-4 overflow-auto">
+                    <table className="w-full">
+                      <tbody>
+                        <tr className="one">
+                          {[...product.priceGrids]
+                            .sort((a, b) => a.countFrom - b.countFrom)
+                            .map(row => (
+                              <td className="headcell" key={row.id}>
+                                {row.countFrom}
+                              </td>
+                            ))}
+                        </tr>
+                        <tr className="two">
+                          {product?.priceGrids &&
+                            [...product.priceGrids]
+                              .sort((a, b) => a.countFrom - b.countFrom)
+                              .map(row => (
+                                <td className="pricecell" key={row.id}>
+                                  <div className="prive-value flex items-end justify-center gap-1">
+                                    <div className="deno font-semibold text-xl">
+                                      $
+                                    </div>
+                                    <div className="value font-semibold text-3xl font-oswald">
+                                      <span className="sale">
+                                        {row.price.toFixed(2)}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </td>
+                              ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               <div className="mt-4 p-4 w-full bg-[#f6f7f8] rounded-xl">
                 <ul className="text-xs text-mute3 font-bold product-card__categories">
                   {product.additionalRows
