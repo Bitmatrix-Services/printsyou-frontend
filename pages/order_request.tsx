@@ -17,6 +17,7 @@ import {XMarkIcon} from '@heroicons/react/24/solid';
 import {CircularProgress} from '@mui/material';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import sanitizeHtml from 'sanitize-html';
 
 interface OrderRequest {
   product: Product;
@@ -234,7 +235,18 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 </div>
                 <div>
                   <h3 className="text-2xl mb-6 sm:text-xl md:text-xl font-bold capitalize">
-                    {product?.prefix} {product?.productName}
+                    {product?.prefix}{' '}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(product?.productName ?? '', {
+                          allowedTags: ['p', 'span', 'td', 'b'],
+                          allowedAttributes: {
+                            span: ['style'],
+                            td: ['style']
+                          }
+                        })
+                      }}
+                    ></span>
                   </h3>
 
                   <h6 className="mb-3 text-sm font-semibold text-body">

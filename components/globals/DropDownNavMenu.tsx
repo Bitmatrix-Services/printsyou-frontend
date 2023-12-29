@@ -30,7 +30,7 @@ export const DropDownNavMenu = () => {
       </button>
       <div className="megamenu-inner">
         <Container>
-          <ul className="menu-link grid grid-cols-4 xl:grid-cols-5 gap-4">
+          <ul className="menu-link columns-5 space-y-4">
             {categoryList?.map(category => (
               <li key={category.id} onClick={() => setShowList(false)}>
                 <Link

@@ -136,7 +136,18 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     <span className="text-primary-500">{product?.sku}</span>
                   </h6>
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize">
-                    {product?.prefix} {product?.productName}
+                    {product?.prefix}{' '}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(product?.productName ?? '', {
+                          allowedTags: ['p', 'span', 'td', 'b'],
+                          allowedAttributes: {
+                            span: ['style'],
+                            td: ['style']
+                          }
+                        })
+                      }}
+                    ></span>
                   </h3>
                 </div>
                 <div className="mt-4 overflow-auto">
