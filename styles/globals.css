@@ -497,6 +497,17 @@
   background-color: #ddffd6;
 }
 
+.priceGridBody ul {
+  font-size: 0.875rem;
+  padding-left: 1.25rem;
+  list-style-type: disc;
+  margin-bottom: 3rem;
+}
+
+.priceGridBody li {
+  padding: 5px 5px 5px 5px;
+}
+
 .priceGridBody td {
   text-align: center;
   border: 1px solid black;

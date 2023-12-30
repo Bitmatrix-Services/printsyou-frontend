@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import lgZoom from 'lightgallery/plugins/zoom';
 import sanitizeHtml from 'sanitize-html';
 
-import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
 import {GetServerSidePropsContext} from 'next';
 import {Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
@@ -119,72 +118,15 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   Description
                 </h4>
                 {mount && (
-                  <ul className="text-sm space-y-3 text-[#757a84] pl-5 list-disc marker:text-[#febe40] marker:text-lg">
-                    {getProductDescription(product.productDescription)?.map(
-                      row => <li key={row}>{row}</li>
-                    )}
-                  </ul>
+                  <div
+                    className="priceGridBody"
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(product.productDescription)
+                    }}
+                  ></div>
                 )}
               </div>
-              {mount && (
-                <>
-                  {getProductPriceGridTable(product.productDescription)?.heading
-                    ?.outerHTML && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: sanitizeHtml(
-                          getProductPriceGridTable(product.productDescription)
-                            ?.heading?.outerHTML ?? '',
-                          {
-                            allowedTags: [
-                              'p',
-                              'span',
-                              'b',
-                              'table',
-                              'tbody',
-                              'tr',
-                              'span',
-                              'td',
-                              'br'
-                            ],
-                            allowedAttributes: {
-                              span: ['style'],
-                              td: ['style']
-                            }
-                          }
-                        )
-                      }}
-                    ></div>
-                  )}
-                  {getProductPriceGridTable(product.productDescription)
-                    ?.priceTable?.outerHTML && (
-                    <div
-                      className="priceGridBody"
-                      dangerouslySetInnerHTML={{
-                        __html: sanitizeHtml(
-                          getProductPriceGridTable(product.productDescription)
-                            ?.priceTable?.outerHTML ?? '',
-                          {
-                            allowedTags: [
-                              'table',
-                              'tbody',
-                              'tr',
-                              'span',
-                              'td',
-                              'br',
-                              'b'
-                            ],
-                            allowedAttributes: {
-                              span: ['style'],
-                              td: ['style']
-                            }
-                          }
-                        )
-                      }}
-                    ></div>
-                  )}
-                </>
-              )}
+
               {product?.priceGrids &&
                 [...product.priceGrids].sort(
                   (a, b) => a.countFrom - b.countFrom

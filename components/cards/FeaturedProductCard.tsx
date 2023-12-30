@@ -150,90 +150,52 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     ></span>
                   </h3>
                 </div>
+                {product && (
+                  <div
+                    className="priceGridBody"
+                    dangerouslySetInnerHTML={{
+                      __html: sanitizeHtml(product.productDescription)
+                    }}
+                  ></div>
+                )}
                 <div className="mt-4 overflow-auto">
                   {product?.priceGrids &&
-                  [...product.priceGrids].sort(
-                    (a, b) => a.countFrom - b.countFrom
-                  )[0].countFrom !== 0 ? (
-                    <table className="w-full">
-                      <tbody>
-                        <tr className="one">
-                          {[...product.priceGrids]
-                            .sort((a, b) => a.countFrom - b.countFrom)
-                            .map(row => (
-                              <td className="headcell" key={row.id}>
-                                {row.countFrom}
-                              </td>
-                            ))}
-                        </tr>
-                        <tr className="two">
-                          {product?.priceGrids &&
-                            [...product.priceGrids]
+                    [...product.priceGrids].sort(
+                      (a, b) => a.countFrom - b.countFrom
+                    )[0].countFrom !== 0 && (
+                      <table className="w-full">
+                        <tbody>
+                          <tr className="one">
+                            {[...product.priceGrids]
                               .sort((a, b) => a.countFrom - b.countFrom)
                               .map(row => (
-                                <td className="pricecell" key={row.id}>
-                                  <div className="prive-value flex items-end justify-center gap-1">
-                                    <div className="deno font-semibold text-xl">
-                                      $
-                                    </div>
-                                    <div className="value font-semibold text-3xl font-oswald">
-                                      <span className="sale">
-                                        {row.price?.toFixed(2)}
-                                      </span>
-                                    </div>
-                                  </div>
+                                <td className="headcell" key={row.id}>
+                                  {row.countFrom}
                                 </td>
                               ))}
-                        </tr>
-                      </tbody>
-                    </table>
-                  ) : (
-                    product && (
-                      <>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeHtml(
-                              getProductPriceGridTable(
-                                product.productDescription
-                              )?.heading?.outerHTML ?? '',
-                              {
-                                allowedTags: ['p', 'span', 'td', 'b'],
-                                allowedAttributes: {
-                                  span: ['style'],
-                                  td: ['style']
-                                }
-                              }
-                            )
-                          }}
-                        ></div>
-                        <div
-                          className="border"
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeHtml(
-                              getProductPriceGridTable(
-                                product.productDescription
-                              )?.priceTable?.outerHTML ?? '',
-                              {
-                                allowedTags: [
-                                  'table',
-                                  'tbody',
-                                  'tr',
-                                  'span',
-                                  'td',
-                                  'br',
-                                  'b'
-                                ],
-                                allowedAttributes: {
-                                  span: ['style'],
-                                  td: ['style']
-                                }
-                              }
-                            )
-                          }}
-                        ></div>
-                      </>
-                    )
-                  )}
+                          </tr>
+                          <tr className="two">
+                            {product?.priceGrids &&
+                              [...product.priceGrids]
+                                .sort((a, b) => a.countFrom - b.countFrom)
+                                .map(row => (
+                                  <td className="pricecell" key={row.id}>
+                                    <div className="prive-value flex items-end justify-center gap-1">
+                                      <div className="deno font-semibold text-xl">
+                                        $
+                                      </div>
+                                      <div className="value font-semibold text-3xl font-oswald">
+                                        <span className="sale">
+                                          {row.price?.toFixed(2)}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                ))}
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
                 </div>
                 <div className="mt-4 w-full bg-[#f6f7f8] p-4 rounded-xl">
                   <ul className="text-xs text-mute3 font-bold product-card__categories">
