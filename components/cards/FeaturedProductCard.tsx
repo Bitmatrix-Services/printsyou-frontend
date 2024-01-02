@@ -14,6 +14,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import {getProductDescription, getProductPriceGridTable} from '@utils/utils';
 import ImageWithFallback from '@components/ImageWithFallback';
 import {ClientSideFeaturedProductCard} from '@components/cards/client-side-feature-product-card.component';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -237,7 +240,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       className="cursor-pointer"
                       data-src={
                         product?.productImages?.[0]
-                          ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
+                          ? `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${product.productImages[0].imageUrl}`
                           : ''
                       }
                     >
@@ -259,7 +262,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       <a
                         key={index}
                         className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
-                        data-src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`}
+                        data-src={`${config.publicRuntimeConfig.ASSETS_SERVER_URL}${image.imageUrl}`}
                       >
                         <span className="block relative aspect-square border border-[#eceef1]">
                           <ImageWithFallback

@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import Link from 'next/link';
 import sanitize from 'sanitize-html';
 import {Category} from '@store/slices/category/category';
+import PriceRangeSection from '@components/sections/promotionalProducts/PriceRangeSection';
 
 interface SidebarProps {
   selectedCategory: Category;
@@ -84,9 +85,9 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
           </div>
         </>
       )}
-      {/* <div className="lg:w-64 md:w-64 mb-8">
+      <div className="lg:w-64 md:w-64 mb-8">
         <PriceRangeSection />
-      </div> */}
+      </div>
     </div>
   );
 };
