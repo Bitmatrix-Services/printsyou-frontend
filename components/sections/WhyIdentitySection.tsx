@@ -54,7 +54,7 @@ const WhyIdentitySection = () => {
 
             <div className="mt-16">
               <Link
-                href="identity-links-advantage"
+                href="/identity-links-advantage"
                 className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-2"
               >
                 READ MORE

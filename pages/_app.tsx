@@ -18,6 +18,11 @@ import {setTopProgressState} from '@store/slices/progress.slice';
 import {LinearIndeterminate} from '@components/linear-inderminate.component';
 import {ThemeProvider} from '@mui/material';
 import {theme} from '@utils/theme';
+import {Resend} from 'resend';
+import getConfig from 'next/config';
+
+const config = getConfig();
+export const resend = new Resend(config.publicRuntimeConfig.RESEND_API_KEY);
 
 export const ShowLinearIndeterminateOnAll: FC = () => {
   const dispatch = useAppDispatch();

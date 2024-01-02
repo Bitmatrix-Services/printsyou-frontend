@@ -97,14 +97,6 @@ const TestimonialsSection = () => {
             </ul>
           </div>
         </div>
-        <div className="mt-12 mb-6 md:hidden text-center">
-          <Link
-            className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-            href="!#"
-          >
-            VIEW MORE
-          </Link>
-        </div>
       </Container>
     </div>
   );

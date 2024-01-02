@@ -13,6 +13,10 @@ import {useRouter} from 'next/router';
 import ImageWithFallback from '@components/ImageWithFallback';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import {resend} from 'pages/_app';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 const LightGallery = dynamic(() => import('lightgallery/react'), {
   ssr: false
@@ -37,7 +41,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
         description={product.metaDescription || ''}
         openGraph={{
           images: (product.productImages || []).map(value => ({
-            url: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${value.imageUrl}`
+            url: `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${value.imageUrl}`
           }))
         }}
       />
@@ -75,7 +79,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
                       data-src={
                         image
-                          ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image.imageUrl}`
+                          ? `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${image.imageUrl}`
                           : ''
                       }
                     >
@@ -240,15 +244,33 @@ export const getServerSideProps = async (
 ) => {
   const uniqueProductName = context.params?.uniqueProductName;
 
-  let product = {};
+  try {
+    let product = {};
 
-  if (Array.isArray(uniqueProductName)) {
-    const {data} = await http.get(
-      `product?uProductName=${uniqueProductName.join('/')}`
-    );
-    product = data.payload;
+    if (Array.isArray(uniqueProductName)) {
+      const {data} = await http.get(
+        `product?uProductName=${uniqueProductName.join('/')}`
+      );
+      product = data.payload;
+    }
+
+    return {props: {product}};
+  } catch (error) {
+    if (Array.isArray(uniqueProductName)) {
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',
+        to: [
+          'awais.tariqq@gmail.com',
+          'saimali78941@gmail.com',
+          'abdul.wahab394.aw@gmail.com'
+        ],
+        subject: 'Error in Product',
+        html: `<h3>unique name of the product</h3> 
+      <h3>${uniqueProductName.join('/')}</h3>
+      <h3>Error: ${error}</h3>`
+      });
+    }
   }
-  return {props: {product}};
 };
 
 export default ProductDetails;
