@@ -4,6 +4,7 @@ import {http} from 'services/axios.service';
 import {Product} from '@store/slices/product/product';
 import PaginationHeader from '@components/globals/PaginationHeader';
 import CircularProgress from '@mui/material/CircularProgress';
+import {useRouter} from 'next/router';
 
 interface ProductsSectionProps {
   isModal?: boolean;
@@ -16,9 +17,11 @@ const ProductsSection: FC<ProductsSectionProps> = ({
   isContainer,
   categoryId
 }) => {
+  const router = useRouter();
+  const {minPrice, maxPrice, page}: any = router.query;
+
   const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
 
-  const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(24);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [sort, setSort] = useState('priceLowToHigh');
@@ -27,14 +30,19 @@ const ProductsSection: FC<ProductsSectionProps> = ({
 
   useEffect(() => {
     if (categoryId) getProductByCategory();
-  }, [categoryId, pageNumber, pageSize, sort]);
+  }, [categoryId, pageSize, sort, minPrice, maxPrice, page]);
 
   const getProductByCategory = async () => {
     try {
       setIsLoading(true);
-      const {data} = await http.get(
-        `product/byCategory/${categoryId}?page=${pageNumber}&size=${pageSize}&filter=${sort}`
-      );
+      let query = `product/byCategory/${categoryId}?&size=${pageSize}&filter=${sort}`;
+      if (maxPrice && minPrice) {
+        query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+      }
+      if (page) {
+        query += `&page=${page}`;
+      }
+      const {data} = await http.get(query);
 
       if (data.payload.content.length > 0) {
         setProductsByCategory(data.payload.content);
@@ -48,12 +56,22 @@ const ProductsSection: FC<ProductsSectionProps> = ({
     }
   };
 
+  const handleQueryUpdate = (value: string | number, queryName: string) => {
+    let updatedQuery = {...router.query, [queryName]: value};
+    router.push({
+      pathname: router.pathname,
+      query: updatedQuery
+    });
+  };
+
   return (
     <section className="bg-white py-8 lg:py-20">
       {productsByCategory?.length > 0 && !isPageLoading && (
         <PaginationHeader
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
+          pageNumber={parseInt(page) || 1}
+          setPageNumber={(value: string | number) =>
+            handleQueryUpdate(value, 'page')
+          }
           pageSize={pageSize}
           setPageSize={setPageSize}
           totalPages={totalPages}
@@ -86,8 +104,10 @@ const ProductsSection: FC<ProductsSectionProps> = ({
         )}
         {productsByCategory?.length > 0 && !isPageLoading && (
           <PaginationHeader
-            pageNumber={pageNumber}
-            setPageNumber={setPageNumber}
+            pageNumber={parseInt(page) || 1}
+            setPageNumber={(value: string | number) =>
+              handleQueryUpdate(value, 'page')
+            }
             pageSize={pageSize}
             setPageSize={setPageSize}
             totalPages={totalPages}
