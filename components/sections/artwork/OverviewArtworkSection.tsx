@@ -1,5 +1,4 @@
 import React, {Dispatch as ReactDispatch, FC, SetStateAction} from 'react';
-
 import OverviewCard from '@components/cards/OverviewCard';
 import Container from '@components/globals/Container';
 
@@ -9,6 +8,7 @@ import OrderingIcon from '@components/icons/OrderingIcon';
 import ShippingIcon from '@components/icons/ShippingIcon';
 import TosIcon from '@components/icons/TosIcon';
 import TestiIcon from '@components/icons/TestiIcon';
+import BlogIcon from '@components/icons/BlogIcon';
 
 const tabSectionList = [
   {
@@ -30,11 +30,11 @@ const tabSectionList = [
   {
     icon: <TestiIcon />,
     heading: 'Testimonials'
+  },
+  {
+    icon: <BlogIcon />,
+    heading: 'Promotional Blog'
   }
-  // {
-  //   icon: <BlogIcon />,
-  //   heading: 'Promotional Blog'
-  // }
 ];
 
 interface OverviewArtworkSectionProps {
