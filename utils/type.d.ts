@@ -7,3 +7,10 @@ export interface queryTypes {
   colors?: string;
   category?: string;
 }
+
+type Blog = {
+  id: string;
+  sequenceNumber: number;
+  title: string;
+  content: string;
+};
