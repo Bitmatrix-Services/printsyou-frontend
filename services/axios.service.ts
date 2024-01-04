@@ -7,6 +7,7 @@ const DOMAIN_BASE_URL =
   config.publicRuntimeConfig.DOMAIN_BASE_URL || 'https://identity.the-mgi.com';
 
 
+
 export const http = axios.create({
   baseURL: DOMAIN_BASE_URL
 });
