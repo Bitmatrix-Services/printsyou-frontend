@@ -1,7 +1,6 @@
-import React, {ReactNode, SyntheticEvent, useState} from 'react';
+import React, {FC, ReactNode, useState} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
 import Container from '@components/globals/Container';
 import ArtworkSection from '@components/sections/artwork/ArtworkSection';
 import OrderingPaymentsSection from '@components/sections/artwork/OrderingPaymentsSection';
@@ -12,11 +11,17 @@ import OverviewArtworkSection from '@components/sections/artwork/OverviewArtwork
 import PageHeader from '@components/globals/PageHeader';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import PromotionalBlogs from '@components/sections/artwork/PromotionalBlogs';
+import {http} from 'services/axios.service';
+import {Blog} from '@utils/type';
 
 interface TabPanelProps {
   children?: ReactNode;
   index: number;
   value: number;
+}
+interface ArtworkProps {
+  allBlogs: Blog[];
 }
 
 const tabsList = [
@@ -25,7 +30,8 @@ const tabsList = [
   'Ordering & Payments',
   'Shipping',
   'Terms & Conditions',
-  'Testimonials'
+  'Testimonials',
+  'promotional Blogs'
 ];
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -44,12 +50,18 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-export default function Artwork() {
+const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
   const [value, setValue] = useState<number>(0);
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  const sections = [
+    {index: 0, component: <OverviewArtworkSection setTabValue={setValue} />},
+    {index: 1, component: <ArtworkSection />},
+    {index: 2, component: <OrderingPaymentsSection />},
+    {index: 3, component: <ShippingSection />},
+    {index: 4, component: <TermsSection />},
+    {index: 5, component: <TestimonialsSection />},
+    {index: 6, component: <PromotionalBlogs allBlogs={allBlogs} />}
+  ];
 
   return (
     <>
@@ -60,7 +72,7 @@ export default function Artwork() {
           <Container>
             <Tabs
               value={value}
-              onChange={handleChange}
+              onChange={(_, newValue) => setValue(newValue)}
               variant="scrollable"
               scrollButtons="auto"
               allowScrollButtonsMobile
@@ -77,26 +89,21 @@ export default function Artwork() {
           </Container>
         </div>
         <div>
-          <CustomTabPanel value={value} index={0}>
-            <OverviewArtworkSection setTabValue={setValue} />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <ArtworkSection />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
-            <OrderingPaymentsSection />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={3}>
-            <ShippingSection />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={4}>
-            <TermsSection />
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={5}>
-            <TestimonialsSection />
-          </CustomTabPanel>
+          {sections.map((section, idx) => (
+            <CustomTabPanel key={idx} value={value} index={section.index}>
+              {section.component}
+            </CustomTabPanel>
+          ))}
         </div>
       </section>
     </>
   );
-}
+};
+
+export const getServerSideProps = async () => {
+  const {data} = await http.get(`/blog/all`);
+  const allBlogs = data.payload;
+  return {props: {allBlogs}};
+};
+
+export default Artwork;

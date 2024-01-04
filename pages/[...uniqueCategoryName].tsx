@@ -50,7 +50,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const uniqueCategoryName = context.params?.uniqueCategoryName;
+  const uniqueCategoryName = context.query.uniqueCategoryName;
 
   try {
     let category = {};
@@ -65,11 +65,15 @@ export const getServerSideProps = async (
     if (Array.isArray(uniqueCategoryName)) {
       await resend.emails.send({
         from: 'onboarding@resend.dev',
-        to: ['abdul.wahab394.aw@gmail.com'],
+        to: [
+          'abdul.wahab394.aw@gmail.com',
+          'awais.tariqq@gmail.com',
+          'saimali78941@gmail.com'
+        ],
         subject: 'Error in Category',
         html: `<h3>unique name of the category</h3> 
       <h3>${uniqueCategoryName.join('/')}</h3>
-      <h3>{error}</h3>`
+      <h3>Error: ${error}</h3>`
       });
     }
   }
