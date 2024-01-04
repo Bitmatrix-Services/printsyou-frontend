@@ -7,13 +7,26 @@ import RemoveIcon from '@mui/icons-material/Remove';
 
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
+import {useRouter} from 'next/router';
 
 const PriceRangeSection = () => {
+  const router = useRouter();
   const [expanded, setExpanded] = useState<string | false>('panel1');
-  const [priceRangeFilter, setPriceRangeFilter] = useState<number[]>([0, 100]);
+  const [priceRangeFilter, setPriceRangeFilter] = useState<number[]>([0, 500]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setPriceRangeFilter(newValue as number[]);
+  };
+
+  const setPriceRange = () => {
+    let value = '/' + (router.query.uniqueCategoryName as string[]).join('/');
+    const filter = new URLSearchParams(
+      `page=1&minPrice=${priceRangeFilter[0]}&maxPrice=${priceRangeFilter[1]}`
+    );
+    value += '?' + filter.toString();
+    router.push(value, undefined, {
+      shallow: true
+    });
   };
 
   return (
@@ -59,7 +72,10 @@ const PriceRangeSection = () => {
               </div>
             </div>
             <div className="mt-4">
-              <button className="w-full  py-2 text-base font-bold  bg-primary-500 hover:bg-body text-white">
+              <button
+                onClick={() => setPriceRange()}
+                className="w-full  py-2 text-base font-bold  bg-primary-500 hover:bg-body text-white"
+              >
                 Set price range
               </button>
             </div>
