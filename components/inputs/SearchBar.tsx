@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {http} from 'services/axios.service';
 import ImageWithFallback from '@components/ImageWithFallback';
 import Link from 'next/link';
 import sanitize from 'sanitize-html';
 import {useRouter} from 'next/router';
 import {useDebounce} from 'hooks/useDeboune';
+import SearchIcon from '@components/icons/SearchIcon';
+import {Listbox, Transition} from '@headlessui/react';
+import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 
 type ItemType = {
   id: string;
@@ -17,7 +20,26 @@ interface SearchResult {
   products?: ItemType[];
 }
 
+const defaultCategories = [
+  {id: 1, name: 'All Categories'},
+  {id: 2, name: 'Accessories'},
+  {id: 3, name: 'Technology'},
+  {id: 4, name: 'Mobile phones and Tablets'},
+  {id: 5, name: 'Calendars'},
+  {id: 6, name: 'Drinkware'},
+  {id: 7, name: 'Outdoor'},
+  {id: 8, name: 'Pet Items'},
+  {id: 9, name: 'Writing'}
+];
+
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
 const SearchBar = () => {
+  const [selectedCategory, setSelectedCategory] = useState(
+    defaultCategories[0]
+  );
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState<SearchResult>();
@@ -47,12 +69,12 @@ const SearchBar = () => {
 
   return (
     <div className="w-full relative">
-      <div className="w-full flex">
+      <div className="w-full flex outline-none rounded-full">
         <input
           type="search"
           name="search"
-          className="border border-[#eceef1] outline-none rounded-none py-4 px-4 text-sm flex-1"
-          placeholder="Search entire store here..."
+          className="border border-r-0 border-gray-300 hover:border-primary-500 focus:border-primary-500 outline-none placeholder:font-normal placeholder:text-[#999] rounded-s-full py-2 pl-8 pr-4 text-sm flex-1"
+          placeholder="Search for Products..."
           value={searchQuery}
           onBlur={() =>
             setTimeout(() => {
@@ -74,18 +96,78 @@ const SearchBar = () => {
             }
           }}
         />
-        <div
+        <div className="hidden sm:block">
+          <Listbox value={selectedCategory} onChange={setSelectedCategory}>
+            {({open}) => (
+              <>
+                <div className="relative">
+                  <Listbox.Button className="relative w-full cursor-default py-3.5 pl-3 pr-10 border border-gray-300 hover:border-primary-500 text-left text-headingColor text-sm">
+                    <span className="block truncate">
+                      {selectedCategory.name}
+                    </span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="h-5 w-5 text-headingColor"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Listbox.Button>
+
+                  <Transition
+                    show={open}
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full custom-scrollbar overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {defaultCategories.map(person => (
+                        <Listbox.Option
+                          key={person.id}
+                          className={({active}) =>
+                            classNames(
+                              active
+                                ? 'bg-secondary-500 text-white'
+                                : 'text-gray-900',
+                              'relative cursor-default select-none py-2 px-4'
+                            )
+                          }
+                          value={person}
+                        >
+                          {({selected: selectedCategory}) => (
+                            <>
+                              <span
+                                className={classNames(
+                                  selectedCategory
+                                    ? 'font-semibold'
+                                    : 'font-normal',
+                                  'block truncate'
+                                )}
+                              >
+                                {person.name}
+                              </span>
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </>
+            )}
+          </Listbox>
+        </div>
+        <button
+          type="button"
           onClick={() =>
             router.push(
               `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
             )
           }
-          className="py-4 px-12 bg-primary-500 hover:bg-body text-white bg-center bg-no-repeat transition-all duration-300"
-          style={{
-            backgroundImage: 'url("/assets/icon-search-white.png")',
-            backgroundSize: '20px auto'
-          }}
-        />
+          className="py-2 px-6 sm:px-10 rounded-e-full bg-primary-500 hover:bg-black hover:text-primary-500 text-black bg-center bg-no-repeat transition-all duration-300"
+        >
+          <SearchIcon />
+        </button>
       </div>
 
       {searchQuery && showResults === 'data found' && (
