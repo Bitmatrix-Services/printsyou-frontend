@@ -256,20 +256,20 @@ export const getServerSideProps = async (
 
     return {props: {product}};
   } catch (error) {
-    if (Array.isArray(uniqueProductName)) {
-      await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: [
-          'awais.tariqq@gmail.com',
-          'saimali78941@gmail.com',
-          'abdul.wahab394.aw@gmail.com'
-        ],
-        subject: 'Error in Product',
-        html: `<h3>unique name of the product</h3> 
-      <h3>${uniqueProductName.join('/')}</h3>
-      <h3>Error: ${error}</h3>`
-      });
-    }
+    // if (Array.isArray(uniqueProductName)) {
+    //   await resend.emails.send({
+    //     from: 'onboarding@resend.dev',
+    //     to: [
+    //       'awais.tariqq@gmail.com',
+    //       'saimali78941@gmail.com',
+    //       'abdul.wahab394.aw@gmail.com'
+    //     ],
+    //     subject: 'Error in Product',
+    //     html: `<h3>unique name of the product</h3>
+    //   <h3>${uniqueProductName.join('/')}</h3>
+    //   <h3>Error: ${error}</h3>`
+    //   });
+    // }
   }
 };
 

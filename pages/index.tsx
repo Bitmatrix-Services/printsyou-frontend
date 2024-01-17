@@ -1,8 +1,5 @@
 import React from 'react';
-import AdvantageSection from '@components/sections/AdvantageSection';
-import WhyIdentitySection from '@components/sections/WhyIdentitySection';
 import HeroSection from '@components/sections/HeroSection';
-import PromotionalCategoriesSection from '@components/sections/PromotionalCategoriesSection';
 import FeaturedProductsSection from '@components/sections/FeaturedProductsSection';
 import {
   getAllNewAndExclusiveProducts,
@@ -16,6 +13,8 @@ import {
 import {GetStaticProps, NextPage} from 'next';
 import {Product} from '@store/slices/product/product';
 import {BannerList, Category} from '@store/slices/category/category';
+import FeatureSection from '@components/sections/FeatureSection';
+import ProductCategoriesSection from '@components/sections/ProductCategoriesSection';
 
 interface IHome {
   promotionalCategories: Category[];
@@ -35,7 +34,8 @@ export const HomePage: NextPage<IHome> = ({
   return (
     <>
       <HeroSection bannerList={bannerList} />
-      <PromotionalCategoriesSection categories={promotionalCategories} />
+      <FeatureSection />
+      <ProductCategoriesSection />
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"
@@ -64,8 +64,6 @@ export const HomePage: NextPage<IHome> = ({
         products={newAndExclusive}
         viewMoreLink={`/search_results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
       />
-      <AdvantageSection />
-      <WhyIdentitySection />
     </>
   );
 };
