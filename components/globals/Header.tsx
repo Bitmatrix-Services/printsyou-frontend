@@ -287,7 +287,7 @@ const Header = () => {
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-secondary-500"
                           href={`/${category.uniqueCategoryName}`}
-                          onClick={()=> setMobileMenu(false)}
+                          onClick={() => setMobileMenu(false)}
                         >
                           <span
                             dangerouslySetInnerHTML={{
