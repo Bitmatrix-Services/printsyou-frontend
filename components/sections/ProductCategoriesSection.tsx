@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Container from '@components/globals/Container';
-import ProductTabView from '@components/sections/specials/tabsData/ProductTabView';
+import ProductTabView from '@components/tabsData/ProductTabView';
 
 const ProductCategoriesSection = () => {
   const [activeTab, setActiveTab] = useState('Bags and Apparels');
