@@ -3,7 +3,6 @@ import AboutIdentitySection from '@components/sections/about/AboutIdentitySectio
 import HealineSection from '@components/sections/about/HeadlineSection';
 import IconBoxesSection from '@components/sections/about/IconBoxesSection';
 import OffersSection from '@components/sections/about/OffersSection';
-import OurPetsSection from '@components/sections/about/OurPetsSection';
 import React from 'react';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
@@ -14,7 +13,6 @@ function About() {
       <NextSeo title={`About Us | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle="About us" />
       <AboutIdentitySection />
-      {/* <OurPetsSection /> */}
       <HealineSection />
       <IconBoxesSection />
       <OffersSection />

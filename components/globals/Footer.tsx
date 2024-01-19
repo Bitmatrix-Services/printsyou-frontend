@@ -232,7 +232,7 @@ const Footer = () => {
                       {identityShop.map(linkItem => (
                         <Link
                           href={linkItem.url}
-                          className="block text-sm hover:text-primary-500 text-mute"
+                          className="block text-sm hover:text-secondary-500 text-mute"
                           key={linkItem.name}
                         >
                           {linkItem.name}
@@ -249,7 +249,7 @@ const Footer = () => {
                     {categoryList.map(category => (
                       <Link
                         href={`/${category.uniqueCategoryName}`}
-                        className="block text-sm hover:text-primary-500 text-mute"
+                        className="block text-sm hover:text-secondary-500 text-mute"
                         key={category.id}
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(category.categoryName)
@@ -266,7 +266,7 @@ const Footer = () => {
                     {customerHelp.map(linkItem => (
                       <Link
                         href={linkItem.url}
-                        className="block text-sm hover:text-primary-500 text-mute"
+                        className="block text-sm hover:text-secondary-500 text-mute"
                         key={linkItem.name}
                       >
                         {linkItem.name}
