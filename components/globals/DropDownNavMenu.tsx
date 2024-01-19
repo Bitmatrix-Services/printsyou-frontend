@@ -32,7 +32,7 @@ export const DropDownNavMenu = ({className}: {className?: any}) => {
             {categoryList?.map(category => (
               <li key={category.id} onClick={() => setShowList(false)}>
                 <Link
-                  className="flex text-sm text-mute hover:text-body transition-all duration-150 group"
+                  className="flex text-sm text-mute hover:text-secondary-500 transition-all duration-150 group"
                   href={`/${category.uniqueCategoryName}`}
                 >
                   <span

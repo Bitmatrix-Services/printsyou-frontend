@@ -285,8 +285,9 @@ const Header = () => {
                     {categoryList.map(category => (
                       <li key={category.id}>
                         <Link
-                          className="text-sm text-[#b5b8c1] hover:text-primary-500"
+                          className="text-sm text-[#b5b8c1] hover:text-secondary-500"
                           href={`/${category.uniqueCategoryName}`}
+                          onClick={()=> setMobileMenu(false)}
                         >
                           <span
                             dangerouslySetInnerHTML={{
@@ -319,7 +320,7 @@ const Header = () => {
                 <li key={`link-${index}`}>
                   <Link
                     href={link.href}
-                    className={`nav-link text-white hover:text-primary-500`}
+                    className={`nav-link text-white hover:text-secondary-500`}
                   >
                     {link.text}
                   </Link>
