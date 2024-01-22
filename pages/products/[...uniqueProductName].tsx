@@ -1,12 +1,10 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-import lgZoom from 'lightgallery/plugins/zoom';
 import sanitizeHtml from 'sanitize-html';
 
 import {GetServerSidePropsContext} from 'next';
-import {Product} from '@store/slices/product/product';
+import {PriceGrids, Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
 import Breadcrumb from '@components/globals/Breadcrumb';
 import {useRouter} from 'next/router';
@@ -15,23 +13,34 @@ import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {resend} from 'pages/_app';
 import getConfig from 'next/config';
+import {ShoppingCartIcon} from '@heroicons/react/24/outline';
 
 const config = getConfig();
-
-const LightGallery = dynamic(() => import('lightgallery/react'), {
-  ssr: false
-});
 
 interface ProductDetailsProps {
   product: Product;
 }
 
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
-  const [mount, setMount] = useState(false);
+  const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
   const router = useRouter();
-  useEffect(() => {
-    setMount(true);
-  }, []);
+
+  const countFrom: Set<PriceGrids['countFrom']> = new Set();
+  const byRowTypeObjects: Record<
+    PriceGrids['priceType'],
+    PriceGrids['price'][]
+  > = {};
+
+  product.priceGrids
+    .sort((a, b) => a.countFrom - b.countFrom)
+    .forEach(gridItem => {
+      countFrom.add(gridItem.countFrom);
+      if (!(gridItem.priceType in byRowTypeObjects)) {
+        byRowTypeObjects[gridItem.priceType] = [];
+      }
+      byRowTypeObjects[gridItem.priceType].push(gridItem.price);
+    });
+
   return (
     <>
       <NextSeo
@@ -57,181 +66,198 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               }
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <figure className="order-first ">
-              <div className="md:pt-8">
-                <ImageWithFallback
-                  sizes=""
-                  style={{position: 'relative'}}
-                  layout="resposive"
-                  width={437}
-                  height={281}
-                  className="object-contain w-[85%]"
-                  src={product?.productImages?.[0]?.imageUrl}
-                  alt="Product"
-                />
-              </div>
-              <div className="gallery-container">
-                <LightGallery mode="lg-fade" plugins={[lgZoom]}>
-                  {product.productImages?.map(image => (
+          <div className="bg-grey pt-6 px-8 pb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="flex">
+                <div className="gallery-container custom-scrollbar overflow-auto h-[95%] min-w-[15%] ">
+                  {product?.productImages?.map((image, index) => (
                     <a
-                      key={image.imageUrl}
-                      className="gallery-item cursor-pointer min-w-[6.25rem] w-[6.25rem] h-[6.25rem]"
-                      data-src={
-                        image
-                          ? `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${image.imageUrl}`
-                          : ''
+                      onMouseLeave={() => setSelectedGalleryImage('')}
+                      onMouseEnter={() =>
+                        setSelectedGalleryImage(image.imageUrl)
                       }
+                      key={index}
+                      className="gallery-item cursor-pointer min-w-[3.75rem] w-[3.75rem] h-[3.75rem]"
                     >
-                      <span className="block relative aspect-square border border-[#eceef1]">
+                      <span className="block relative min-w-[3.75rem] w-[3.75rem] h-[3.75rem] border border-[#eceef1]">
                         <ImageWithFallback
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           fill
                           className="object-contain"
-                          src={image?.imageUrl}
+                          src={image.imageUrl}
                           alt=""
                         />
                       </span>
                     </a>
                   ))}
-                </LightGallery>
-              </div>
-            </figure>
-            <figure className="pt-8">
-              <div className="mb-10">
-                <h6 className="mb-4 text-sm font-semibold text-body">
-                  ITEM#: <span className="text-primary-500">{product.sku}</span>
-                </h6>
-                <h3 className="text-3xl my-5  font-semibold capitalize">
-                  {product.prefix}{' '}
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHtml(product.productName ?? '', {
-                        allowedTags: ['p', 'span', 'td', 'b'],
-                        allowedAttributes: {
-                          span: ['style'],
-                          td: ['style']
-                        }
-                      })
-                    }}
-                  ></span>
-                </h3>
-              </div>
-              <div className="mb-12">
-                <h4 className="text-xl font-bold capitalize py-[19px]">
-                  Description
-                </h4>
-                {mount && (
-                  <div
-                    className="priceGridBody"
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHtml(product.productDescription)
-                    }}
-                  ></div>
-                )}
-              </div>
-
-              {product?.priceGrids &&
-                [...product.priceGrids].sort(
-                  (a, b) => a.countFrom - b.countFrom
-                )[0].countFrom !== 0 && (
-                  <div className="mt-4 overflow-auto">
-                    <table className="w-full">
-                      <tbody>
-                        <tr className="one">
-                          {[...product.priceGrids]
-                            .sort((a, b) => a.countFrom - b.countFrom)
-                            .map(row => (
-                              <td className="headcell" key={row.id}>
-                                {row.countFrom}
-                              </td>
-                            ))}
-                        </tr>
-                        <tr className="two">
-                          {product?.priceGrids &&
-                            [...product.priceGrids]
-                              .sort((a, b) => a.countFrom - b.countFrom)
-                              .map(row => (
-                                <td className="pricecell" key={row.id}>
-                                  <div className="prive-value flex items-end justify-center gap-1">
-                                    <div className="deno font-semibold text-xl">
-                                      $
-                                    </div>
-                                    <div className="value font-semibold text-3xl font-oswald">
-                                      <span className="sale">
-                                        {row.price.toFixed(2)}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </td>
-                              ))}
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              <div className="mt-4 p-4 w-full bg-[#f6f7f8] rounded-xl">
-                <ul className="text-xs text-mute3 font-bold product-card__categories">
-                  {product.additionalRows
-                    .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                    .map(row => (
-                      <li key={row.id}>
-                        <span className="pt-[2px] block">
-                          Please add{' '}
-                          <span className="text-red-500">
-                            ${row.priceDiff.toFixed(2)}
-                          </span>{' '}
-                          {row.name}
-                        </span>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-              <div className="mt-4 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href={`/order_request?item_id=${product.id}`}
-                  className="block w-full text-center py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold"
-                >
-                  PLACE ORDER
-                </Link>
-                <Link
-                  href={`/more_info?item_id=${product.id}`}
-                  className="block w-full text-center py-5 px-8 text-body bg-white hover:bg-body hover:text-white border border-[#eaeaec] text-sm font-bold"
-                >
-                  REQUEST MORE INFO
-                </Link>
-              </div>
-              <div className="mt-12">
-                <h4 className="text-xl font-bold capitalize py-[19px]">
-                  Additional Information
-                </h4>
-                <div className="overflow-auto">
-                  {product.additionalFieldProductValues?.map(row => (
-                    <div
-                      className="px-4 pb-4 flex flex-col md:flex-row gap-4"
-                      key={row.fieldValue}
-                    >
-                      <span className="label min-w-[300px]">
-                        <b className="brown">{row.fieldName}: </b>
-                      </span>
-
-                      <span
-                        className="flex-1 text-left"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(row.fieldValue ?? '', {
-                            allowedTags: ['p', 'span', 'td', 'b'],
-                            allowedAttributes: {
-                              span: ['style'],
-                              td: ['style']
-                            }
-                          })
-                        }}
-                      ></span>
-                    </div>
-                  ))}
+                </div>
+                <div className="block relative aspect-square cursor-pointer w-[85%]">
+                  <ImageWithFallback
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    fill
+                    className="object-contain"
+                    src={
+                      selectedGalleryImage !== ''
+                        ? selectedGalleryImage
+                        : product?.productImages?.[0]?.imageUrl
+                    }
+                    alt=""
+                  />
                 </div>
               </div>
-            </figure>
+              <div className="flex flex-col">
+                <div className="max-w-sm">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize text-[#3C4242]">
+                    <span
+                      className="line-clamp-2"
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(product?.productName ?? '', {
+                          allowedTags: ['p', 'span', 'td', 'b'],
+                          allowedAttributes: {
+                            span: ['style'],
+                            td: ['style']
+                          }
+                        })
+                      }}
+                    ></span>
+                  </h3>
+
+                  {/* Color picker */}
+                  {/* <div className="mt-4">
+                    <h2 className="mb-3 text-sm font-medium text-[#3F4646]">
+                      Colours Available{' '}
+                    </h2>
+
+                    <RadioGroup
+                      value={selectedColor}
+                      onChange={setSelectedColor}
+                      className="mt-2"
+                    >
+                      <RadioGroup.Label className="sr-only">
+                        Choose a color
+                      </RadioGroup.Label>
+                      <div className="flex items-center space-x-3">
+                        {colors.map(color => (
+                          <RadioGroup.Option
+                            key={color.name}
+                            value={color}
+                            className={({active, checked}) =>
+                              classNames(
+                                color.selectedColor,
+                                active && checked ? 'ring ring-offset-1' : '',
+                                !active && checked ? 'ring-2' : '',
+                                'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
+                              )
+                            }
+                          >
+                            <RadioGroup.Label as="span" className="sr-only">
+                              {color.name}
+                            </RadioGroup.Label>
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                color.bgColor,
+                                'w-5 h-5 rounded-full border border-black border-opacity-10'
+                              )}
+                            />
+                          </RadioGroup.Option>
+                        ))}
+                      </div>
+                    </RadioGroup>
+                  </div> */}
+                </div>
+                {product && (
+                  <div className="mt-5">
+                    <h5 className="mb-2 text-[#3C4242] text-lg capitalize">
+                      Product Description
+                    </h5>
+                    <div
+                      className="priceGridBody text-[#807D7E] marker:text-primary-500"
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtml(product.productDescription)
+                      }}
+                    ></div>
+                  </div>
+                )}
+                <div className="overflow-auto">
+                  {product?.priceGrids &&
+                    [...product.priceGrids].sort(
+                      (a, b) => a.countFrom - b.countFrom
+                    )[0].countFrom !== 0 && (
+                      <table className="w-full">
+                        <tbody>
+                          <tr className="one">
+                            <td
+                              className="headcell font-bold text-lg"
+                              colSpan={countFrom.size + 1}
+                            >
+                              Pricing
+                            </td>
+                          </tr>
+                          <tr className="one">
+                            <td className="headcell"></td>
+                            {Array.from(countFrom).map(row => (
+                              <td className="headcell" key={row}>
+                                {row} Items
+                              </td>
+                            ))}
+                          </tr>
+                          {Object.keys(byRowTypeObjects)
+                            .sort((a: string, b: string) => a.localeCompare(b))
+                            .map(row => {
+                              return (
+                                <tr key={row} className="two">
+                                  <td className="pricecell font-bold text-left">
+                                    {row ? row : '-'}
+                                  </td>
+                                  {byRowTypeObjects[row].map(cell => (
+                                    <td className="pricecell" key={cell}>
+                                      ${cell}
+                                    </td>
+                                  ))}
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    )}
+                </div>
+                <div className="pt-4 mt-auto flex flex-col sm:flex-row gap-3">
+                  <Link
+                    href={`/order_request?item_id=${product.id}`}
+                    className="flex justify-center items-center gap-2 w-full text-center py-2 px-6 btn-primary"
+                  >
+                    <ShoppingCartIcon className="h-5 w-5" />
+                    <span className="text-sm font-light capitalize">
+                      Place Order
+                    </span>
+                  </Link>
+                  <Link
+                    href={`/more_info?item_id=${product.id}`}
+                    className="block w-full text-center uppercase py-2 px-6 text-headingColor border border-headingColor hover:text-white hover:bg-black rounded"
+                  >
+                    <span className="text-sm font-semibold capitalize">
+                      More Info
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="mt-10">
+              <h4 className="mb-6 text-[1.375rem] text-[#3C4242] font-normal capitalize pl-4 border-l-2 border-primary-500">
+                Additional Information
+              </h4>
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {product.additionalFieldProductValues?.map(item => (
+                  <div key={item.fieldName} className="col">
+                    <h4 className="font-semibold mb-3">{item.fieldName}</h4>
+                    <div className="font-normal text-base">
+                      {item.fieldValue}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </Container>

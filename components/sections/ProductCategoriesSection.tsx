@@ -8,7 +8,6 @@ const ProductCategoriesSection = () => {
   const handleTabClick = (tab: React.SetStateAction<string>) => {
     setActiveTab(tab);
   };
-
   return (
     <section className="bg-grey pt-14 pb-8 lg:pb-20">
       <Container>
@@ -39,13 +38,13 @@ const ProductCategoriesSection = () => {
         </div>
 
         <div>
-          {activeTab === 'Bags and Apparels' && <ProductTabView />}
-          {activeTab === 'Calendars' && <ProductTabView />}
+          {activeTab && <ProductTabView />}
+          {/* {activeTab === 'Calendars' && <ProductTabView />}
           {activeTab === 'Pet Items' && <ProductTabView />}
           {activeTab === 'Drinkware' && <ProductTabView />}
           {activeTab === 'Outdoor' && <ProductTabView />}
           {activeTab === 'Technology and Mobile' && <ProductTabView />}
-          {activeTab === 'Writing' && <ProductTabView />}
+          {activeTab === 'Writing' && <ProductTabView />} */}
         </div>
       </Container>
     </section>
