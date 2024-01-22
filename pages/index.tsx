@@ -60,7 +60,6 @@ export const HomePage: NextPage<IHome> = ({
 
       <BenefitsSection />
       <FeatureSection />
-
     </>
   );
 };
