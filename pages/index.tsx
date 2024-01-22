@@ -30,7 +30,6 @@ export const HomePage: NextPage<IHome> = ({
   return (
     <>
       <HeroSection bannerList={bannerList} />
-      <FeatureSection />
       <ProductCategoriesSection />
       {/* under a buck section */}
       <FeaturedProductsSection
@@ -58,7 +57,10 @@ export const HomePage: NextPage<IHome> = ({
         products={newAndExclusive}
         viewMoreLink={`/search_results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
       />
+
       <BenefitsSection />
+      <FeatureSection />
+
     </>
   );
 };
