@@ -68,7 +68,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
           </div>
           <div className="bg-grey pt-6 px-8 pb-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="flex">
+              {/* <div className="flex">
                 <div className="gallery-container custom-scrollbar overflow-auto h-[95%] min-w-[15%] ">
                   {product?.productImages?.map((image, index) => (
                     <a
@@ -104,7 +104,48 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                     alt=""
                   />
                 </div>
-              </div>
+              </div> */}
+              <figure>
+                <div>
+                  <a className="cursor-pointer">
+                    <span className="block relative aspect-square">
+                      <ImageWithFallback
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        fill
+                        className="object-contain"
+                        src={
+                          selectedGalleryImage !== ''
+                            ? selectedGalleryImage
+                            : product?.productImages?.[0]?.imageUrl
+                        }
+                        alt="product gallery mega"
+                      />
+                    </span>
+                  </a>
+                </div>
+                <div className="gallery-container custom-scrollbar flex flex-wrap">
+                  {product?.productImages?.map((image, index) => (
+                    <a
+                      key={index}
+                      onMouseLeave={() => setSelectedGalleryImage('')}
+                      onMouseEnter={() =>
+                        setSelectedGalleryImage(image.imageUrl)
+                      }
+                      className="gallery-item cursor-pointer min-w-[3.75rem] w-[3.75rem] h-[3.75rem]"
+                    >
+                      <span className="block relative min-w-[3.75rem] w-[3.75rem] h-[3.75rem] border border-[#eceef1]">
+                        <ImageWithFallback
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          fill
+                          className="object-contain"
+                          src={image.imageUrl}
+                          alt="product gallery"
+                        />
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </figure>
               <div className="flex flex-col">
                 <div className="max-w-sm">
                   <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize text-[#3C4242]">
@@ -195,7 +236,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                             </td>
                           </tr>
                           <tr className="one">
-                            <td className="headcell"></td>
+                            {Object.keys(byRowTypeObjects).length === 1 &&
+                              Object.keys(byRowTypeObjects).map(
+                                item =>
+                                  item && (
+                                    <td key={item} className="headcell"></td>
+                                  )
+                              )}
                             {Array.from(countFrom).map(row => (
                               <td className="headcell" key={row}>
                                 {row} Items
@@ -207,12 +254,14 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                             .map(row => {
                               return (
                                 <tr key={row} className="two">
-                                  <td className="pricecell font-bold text-left">
-                                    {row ? row : '-'}
-                                  </td>
+                                  {row && (
+                                    <td className="pricecell font-bold text-left">
+                                      {row}
+                                    </td>
+                                  )}
                                   {byRowTypeObjects[row].map(cell => (
                                     <td className="pricecell" key={cell}>
-                                      ${cell}
+                                      {cell < 0.01 ? '-' : `$${cell}`}
                                     </td>
                                   ))}
                                 </tr>
@@ -252,7 +301,15 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   <div key={item.fieldName} className="col">
                     <h4 className="font-semibold mb-3">{item.fieldName}</h4>
                     <div className="font-normal text-base">
-                      {item.fieldValue}
+                      {item.fieldValue.includes('<table') ? (
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(item.fieldValue)
+                          }}
+                        ></span>
+                      ) : (
+                        item.fieldValue
+                      )}
                     </div>
                   </div>
                 ))}
