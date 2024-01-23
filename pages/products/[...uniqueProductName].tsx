@@ -238,7 +238,10 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                           <tr className="one">
                             {Object.keys(byRowTypeObjects).length === 1 &&
                               Object.keys(byRowTypeObjects).map(
-                                item => item && <td className="headcell"></td>
+                                item =>
+                                  item && (
+                                    <td key={item} className="headcell"></td>
+                                  )
                               )}
                             {Array.from(countFrom).map(row => (
                               <td className="headcell" key={row}>
