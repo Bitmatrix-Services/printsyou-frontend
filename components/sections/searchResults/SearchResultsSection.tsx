@@ -58,8 +58,8 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                     {keywords
                       ? keywords
                       : tag === 'newAndExclusive'
-                        ? 'New and Exclusive'
-                        : 'Most Popular'}
+                      ? 'New and Exclusive'
+                      : 'Most Popular'}
                   </span>
                   "
                 </span>
