@@ -9,27 +9,27 @@ import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {CircularProgress} from '@mui/material';
 
-type searchType = {
+type SearchType = {
   name: string;
   count: number;
 };
 
-type categoryType = {
+type CategoryType = {
   name: string;
   uCategoryName: string;
   count: number;
 };
 
-type searchResultsData = {
+type SearchResultsData = {
   products: Product[];
   totalPages: number;
   totalProducts: number;
-  byPriceRange: searchType[];
-  byColors: searchType[];
-  byCategory: categoryType[];
+  byPriceRange: SearchType[];
+  byColors: SearchType[];
+  byCategory: CategoryType[];
 };
 
-type filterType = {
+type FilterType = {
   price: string[];
 };
 
@@ -49,10 +49,10 @@ const CategoryDetails = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
-  const [filters, setFilters] = useState<filterType>({
+  const [filters, setFilters] = useState<FilterType>({
     price: []
   });
-  const [searchResultsData, setSearchResultsData] = useState<searchResultsData>(
+  const [searchResultsData, setSearchResultsData] = useState<SearchResultsData>(
     {
       products: [],
       totalPages: 0,
@@ -64,7 +64,7 @@ const CategoryDetails = () => {
   );
 
   useEffect(() => {
-    handleSearch();
+    if (keywords) handleSearch();
   }, [router.query]);
 
   const handleSearch = async () => {

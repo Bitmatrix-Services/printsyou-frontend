@@ -58,19 +58,20 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
         className="group relative bg-white cursor-pointer"
       >
         <div className="min-h-[21.40rem] border border-[#edeff2]">
-          {[...product.priceGrids].sort((a, b) => b.countFrom - a.countFrom)[0]
-            ?.salePrice > 0 && (
-            <div className="prive-value inline-block bg-secondary-500 text-white py-1 px-3 text-sm font-light">
-              <span className="deno">$</span>
-              <span className="value">
-                <span className="sale line-through">
-                  {[...product.priceGrids]
-                    .sort((a, b) => b.countFrom - a.countFrom)[0]
-                    ?.salePrice?.toFixed(2)}
+          {product?.priceGrids?.length > 0 &&
+            [...product.priceGrids].sort((a, b) => b.countFrom - a.countFrom)[0]
+              ?.salePrice > 0 && (
+              <div className="prive-value inline-block bg-secondary-500 text-white py-1 px-3 text-sm font-light">
+                <span className="deno">$</span>
+                <span className="value">
+                  <span className="sale line-through">
+                    {[...product.priceGrids]
+                      .sort((a, b) => b.countFrom - a.countFrom)[0]
+                      ?.salePrice?.toFixed(2)}
+                  </span>
                 </span>
-              </span>
-            </div>
-          )}
+              </div>
+            )}
           <div className="px-4 pb-4">
             <div className="flex gap-2 mt-4 mb-4">
               <span className="text-xs text-[#888] mr-auto">Kids Section</span>
@@ -318,7 +319,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   </div>
                 )}
                 <div className="overflow-auto">
-                  {product?.priceGrids &&
+                  {product?.priceGrids?.length > 0 &&
                     [...product.priceGrids].sort(
                       (a, b) => a.countFrom - b.countFrom
                     )[0].countFrom !== 0 && (
