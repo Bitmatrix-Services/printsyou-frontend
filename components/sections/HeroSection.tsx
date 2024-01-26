@@ -69,9 +69,7 @@ const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
                 className="slide-item bg-center bg-cover"
                 style={{
                   //   backgroundImage: `url(${banner.bannerUrl})`
-                  backgroundImage: `url(${
-                    slidesData[index]?.backgroundImage ?? ''
-                  })`
+                  backgroundImage: `url(${banner.bannerUrl})`
                 }}
               >
                 <Container>
