@@ -55,7 +55,6 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
           {!isSubmitted ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
               <div className="flex flex-col md:flex-row pt-3 gap-8 border-t-2 justify-center">
-               
                 <div className="md:px-32 pt-8">
                   <div className="mb-8">
                     <h3 className="text-3xl mt-5 mb-8  font-semibold capitalize">
@@ -67,16 +66,16 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                     </h6>
                   </div>
                   <div className="order-first ">
-                  <div className="md:pt-2 flex ">
-                    <ImageWithFallback
-                      width={300}
-                      height={100}
-                      className="object-contain "
-                      src={product?.productImages?.[0]?.imageUrl}
-                      alt="product"
-                    />
+                    <div className="md:pt-2 flex ">
+                      <ImageWithFallback
+                        width={300}
+                        height={100}
+                        className="object-contain "
+                        src={product?.productImages?.[0]?.imageUrl}
+                        alt="product"
+                      />
+                    </div>
                   </div>
-                </div>
                   {product?.additionalRows.length > 0 && (
                     <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
                       <ul className="text-xs text-mute3 font-bold product-card__categories">
