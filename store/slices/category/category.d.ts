@@ -28,3 +28,5 @@ export type BannerList = {
     ucategoryName: string;
   };
 };
+
+export declare module 'react-read-more-read-less';

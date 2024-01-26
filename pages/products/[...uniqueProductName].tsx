@@ -2,7 +2,7 @@ import React, {FC, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
-
+import ReactReadMoreReadLess from 'react-read-more-read-less';
 import {GetServerSidePropsContext} from 'next';
 import {PriceGrids, Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
@@ -121,10 +121,9 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   </div>
                 </figure>
                 <div className="flex flex-col col-span-3">
-                  <div className="max-w-sm">
+                  <div>
                     <h3 className="text-xl sm:text-2xl md:text-3xl font-bold capitalize text-[#3C4242]">
                       <span
-                        className="line-clamp-2"
                         dangerouslySetInnerHTML={{
                           __html: sanitizeHtml(product?.productName ?? '', {
                             allowedTags: ['p', 'span', 'td', 'b'],
@@ -183,7 +182,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   </div>
                   {product && (
                     <div className="mt-5">
-                      <h4 className="mb-6 text-[1.375rem] text-[#3C4242] font-normal capitalize pl-4 border-l-2 border-primary-500">
+                      <h4 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                         Product Description
                       </h4>
                       <div
@@ -269,17 +268,17 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                     </Link>
                   </div>
                   <div className="mt-10">
-                    <h4 className="mb-6 text-[1.375rem] text-[#3C4242] font-normal capitalize pl-4 border-l-2 border-primary-500">
+                    <h4 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                       Additional Information
                     </h4>
                     {/* <div className="grid grid-cols-1 gap-8 md:grid-cols-2"> */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {product.additionalFieldProductValues?.map(item => (
                         <div key={item.fieldName} className=" mt-3">
-                          <h4 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
+                          <h4 className="mb-6 text-[1.375rem] unde text-[#3C4242] font-normal capitalize pl-4 border-l-2 border-primary-500">
                             {item.fieldName}
                           </h4>
-                          <div>
+                          <div className="ml-5">
                             {item.fieldValue.includes('<table') ? (
                               <span
                                 className="font-normal text-md text-base description-table"
@@ -289,7 +288,15 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                               ></span>
                             ) : item.fieldValue ? (
                               <span className="font-normal text-md text-base text-mute2">
-                                {item.fieldValue}
+                                <ReactReadMoreReadLess
+                                  charLimit={145}
+                                  readMoreText={'Read more'}
+                                  readLessText={'Read less'}
+                                  readMoreClassName={'text-secondary-500'}
+                                  readLessClassName={'text-secondary-500'}
+                                >
+                                  {item.fieldValue}
+                                </ReactReadMoreReadLess>
                               </span>
                             ) : (
                               <span className="font-normal text-md text-base text-mute2">

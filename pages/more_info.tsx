@@ -54,19 +54,9 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
         <div className="px-8 pb-8 pt-10">
           {!isSubmitted ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-              <div className="flex flex-col md:flex-row pt-3 gap-8 border-t-2">
-                <div className="order-first ">
-                  <div className="md:pt-8 flex ">
-                    <ImageWithFallback
-                      width={156}
-                      height={100}
-                      className="object-contain "
-                      src={product?.productImages?.[0]?.imageUrl}
-                      alt="product"
-                    />
-                  </div>
-                </div>
-                <div className=" pt-8">
+              <div className="flex flex-col md:flex-row pt-3 gap-8 border-t-2 justify-center">
+               
+                <div className="md:px-32 pt-8">
                   <div className="mb-8">
                     <h3 className="text-3xl mt-5 mb-8  font-semibold capitalize">
                       {product.productName}
@@ -76,11 +66,21 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                       <span className="text-primary-500">{product.sku}</span>
                     </h6>
                   </div>
-
-                  <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
-                    <ul className="text-xs text-mute3 font-bold product-card__categories">
-                      {product?.additionalRows &&
-                        [...product.additionalRows]
+                  <div className="order-first ">
+                  <div className="md:pt-2 flex ">
+                    <ImageWithFallback
+                      width={300}
+                      height={100}
+                      className="object-contain "
+                      src={product?.productImages?.[0]?.imageUrl}
+                      alt="product"
+                    />
+                  </div>
+                </div>
+                  {product?.additionalRows.length > 0 && (
+                    <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
+                      <ul className="text-xs text-mute3 font-bold product-card__categories">
+                        {[...product.additionalRows]
                           ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                           .map(row => (
                             <li key={row.id}>
@@ -93,8 +93,9 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                               </span>
                             </li>
                           ))}
-                    </ul>
-                  </div>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="grid grid-cols-1">
