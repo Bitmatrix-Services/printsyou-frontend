@@ -98,8 +98,6 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
               ))}
           </div>
         </div>
-        <div>
-        </div>
       </Container>
     </section>
   );

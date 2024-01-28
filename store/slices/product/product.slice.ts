@@ -12,7 +12,7 @@ const INITIAL_STATE: ProductInitialState = {
   uniqueIdeaProducts: [],
   uniqueIdeaProductsLoading: false,
   homeCategoryProducts: [],
-  homeCategoryProductsLoading: false,
+  homeCategoryProductsLoading: false
 };
 
 export const getAllUnderABuckProducts = async (): Promise<Product[]> => {
@@ -45,7 +45,9 @@ export const getUniqueIdeaProducts = createAsyncThunk(
   getAllUniqueIdeasProducts
 );
 
-export const getAllHomeCategoryProducts = async (): Promise<HomeCategoryProduts[]> => {
+export const getAllHomeCategoryProducts = async (): Promise<
+  HomeCategoryProduts[]
+> => {
   const res = await http.get(`/product/homeProductsWithCategories`);
   return res?.data.payload;
 };

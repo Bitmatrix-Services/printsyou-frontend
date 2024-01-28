@@ -28,4 +28,3 @@ export type BannerList = {
     ucategoryName: string;
   };
 };
-

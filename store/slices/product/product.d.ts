@@ -5,8 +5,8 @@ export interface ProductInitialState {
   newAndExclusiveProducts: Product[];
   uniqueIdeaProductsLoading: boolean;
   uniqueIdeaProducts: Product[];
-  homeCategoryProducts: HomeCategoryProduts[],
-  homeCategoryProductsLoading: boolean
+  homeCategoryProducts: HomeCategoryProduts[];
+  homeCategoryProductsLoading: boolean;
 }
 
 export interface ProductPrice {
@@ -72,11 +72,11 @@ export interface Product {
 
 interface HomeCategoryProduts {
   categoryName: string;
-  subCategory: SubCategory[]
+  subCategory: SubCategory[];
 }
 
 interface SubCategory {
   categoryName: string;
-  uniqueCategoryName:string;
-  products:Produc[]
+  uniqueCategoryName: string;
+  products: Produc[];
 }

@@ -30,11 +30,10 @@ export const HomePage: NextPage<IHome> = ({
   bannerList,
   homeCategoryProducts
 }) => {
-
   return (
     <>
       <HeroSection bannerList={bannerList} />
-      <ProductCategoriesSection homeCategoryProducts ={homeCategoryProducts}/>
+      <ProductCategoriesSection homeCategoryProducts={homeCategoryProducts} />
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"
@@ -69,14 +68,19 @@ export const HomePage: NextPage<IHome> = ({
 };
 
 export const getStaticProps = (async context => {
-  const [underABuckProducts, newAndExclusive, allUniqueIdeas, bannerList, homeCategoryProducts] =
-    await Promise.all([
-      getAllUnderABuckProducts(),
-      getAllNewAndExclusiveProducts(),
-      getAllUniqueIdeasProducts(),
-      getAllBannerList(),
-      getAllHomeCategoryProducts()
-    ]);
+  const [
+    underABuckProducts,
+    newAndExclusive,
+    allUniqueIdeas,
+    bannerList,
+    homeCategoryProducts
+  ] = await Promise.all([
+    getAllUnderABuckProducts(),
+    getAllNewAndExclusiveProducts(),
+    getAllUniqueIdeasProducts(),
+    getAllBannerList(),
+    getAllHomeCategoryProducts()
+  ]);
 
   return {
     props: {
