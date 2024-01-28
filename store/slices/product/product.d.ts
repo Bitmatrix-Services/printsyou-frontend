@@ -70,6 +70,14 @@ export interface Product {
   additionalRows: AdditionalRows[];
 }
 
+export interface CategoryProduct {
+  productName: string;
+  uniqueProductName: string;
+  lowestPrice: number;
+  salePrice: number;
+  imageUrl: string;
+}
+
 interface HomeCategoryProduts {
   categoryName: string;
   subCategory: SubCategory[];
@@ -78,5 +86,5 @@ interface HomeCategoryProduts {
 interface SubCategory {
   categoryName: string;
   uniqueCategoryName: string;
-  products: Produc[];
+  products: CategoryProduct[];
 }

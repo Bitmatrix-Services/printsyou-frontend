@@ -20,6 +20,7 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
   const handleTabClick = (tab: React.SetStateAction<string>) => {
     setActiveTab(tab);
   };
+
   return (
     <section className="bg-grey pt-14 pb-8 lg:pb-20">
       <Container>
@@ -29,18 +30,16 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
           </h2>
           <div className="flex flex-wrap gap-5 pb-5">
             {homeCategoryProducts?.map(category => (
-              <>
-                <button
-                  key={category.categoryName}
-                  className={`tab-link ${
-                    activeTab === category.categoryName ? 'active' : ''
-                  }`}
-                  type="button"
-                  onClick={() => handleTabClick(category.categoryName)}
-                >
-                  {category.categoryName}
-                </button>
-              </>
+              <button
+                key={category.categoryName}
+                className={`tab-link ${
+                  activeTab === category.categoryName ? 'active' : ''
+                }`}
+                type="button"
+                onClick={() => handleTabClick(category.categoryName)}
+              >
+                {category.categoryName}
+              </button>
             ))}
           </div>
         </div>
@@ -52,16 +51,16 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
               .slice(0, 4)
               .map(category => (
                 <>
-                  {category?.subCategory?.map((subCategory, index) => (
-                    <div key={index} className="col">
+                  {category?.subCategory?.map(subCategory => (
+                    <div key={subCategory.uniqueCategoryName} className="col">
                       <h2 className="text-headingColor text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-3 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                         {subCategory.categoryName}
                       </h2>
                       <div className="mt-8 space-y-4">
-                        {subCategory?.products?.map((product, productIndex) => (
+                        {subCategory?.products?.map(product => (
                           <Link
-                            key={`product.uniqueProductName`}
-                            href={'product.uniqueProductName'}
+                            key={product.uniqueProductName}
+                            href={`/products/${product.uniqueProductName}`}
                             className="product-card p-4 group block rounded border-r border-[#ddd] hover:bg-white hover:shadow-md"
                           >
                             <div className="flex items-center gap-3">
@@ -70,7 +69,7 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                                 width={75}
                                 height={75}
                                 src={product.imageUrl}
-                                alt="..."
+                                alt="category product"
                               />
                               <div>
                                 <h6 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold">
