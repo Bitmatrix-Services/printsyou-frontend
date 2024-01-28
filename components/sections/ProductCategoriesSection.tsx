@@ -1,9 +1,21 @@
-import React, {useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
-import ProductTabView from '@components/tabsData/ProductTabView';
+import Link from 'next/link';
+import ImageWithFallback from '@components/ImageWithFallback';
+import {HomeCategoryProduts} from '@store/slices/product/product';
 
-const ProductCategoriesSection = () => {
-  const [activeTab, setActiveTab] = useState('Bags and Apparels');
+interface ProductCategoriesSectionProps {
+  homeCategoryProducts: HomeCategoryProduts[];
+}
+
+const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
+  homeCategoryProducts
+}) => {
+  const [activeTab, setActiveTab] = useState('');
+
+  useEffect(() => {
+    setActiveTab(homeCategoryProducts[0].categoryName);
+  }, []);
 
   const handleTabClick = (tab: React.SetStateAction<string>) => {
     setActiveTab(tab);
@@ -16,35 +28,77 @@ const ProductCategoriesSection = () => {
             PRODUCT CATEGORIES
           </h2>
           <div className="flex flex-wrap gap-5 pb-5">
-            {[
-              'Bags and Apparels',
-              'Calendars',
-              'Pet Items',
-              'Drinkware',
-              'Outdoor',
-              'Technology and Mobile',
-              'Writing'
-            ].map(tab => (
-              <button
-                key={tab}
-                className={`tab-link ${activeTab === tab ? 'active' : ''}`}
-                type="button"
-                onClick={() => handleTabClick(tab)}
-              >
-                {tab}
-              </button>
+            {homeCategoryProducts?.map(category => (
+              <>
+                <button
+                  key={category.categoryName}
+                  className={`tab-link ${
+                    activeTab === category.categoryName ? 'active' : ''
+                  }`}
+                  type="button"
+                  onClick={() => handleTabClick(category.categoryName)}
+                >
+                  {category.categoryName}
+                </button>
+              </>
             ))}
           </div>
         </div>
 
+        <div className="p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
+            {homeCategoryProducts
+              ?.filter(homeCat => homeCat.categoryName === activeTab)
+              .slice(0, 4)
+              .map(category => (
+                <>
+                  {category?.subCategory?.map((subCategory, index) => (
+                    <div key={index} className="col">
+                      <h2 className="text-headingColor text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-3 after:block after:w-1/2 after:h-1 after:bg-primary-500">
+                        {subCategory.categoryName}
+                      </h2>
+                      <div className="mt-8 space-y-4">
+                        {subCategory?.products?.map((product, productIndex) => (
+                          <Link
+                            key={`product.uniqueProductName`}
+                            href={'product.uniqueProductName'}
+                            className="product-card p-4 group block rounded border-r border-[#ddd] hover:bg-white hover:shadow-md"
+                          >
+                            <div className="flex items-center gap-3">
+                              <ImageWithFallback
+                                style={{minWidth: 75}}
+                                width={75}
+                                height={75}
+                                src={product.imageUrl}
+                                alt="..."
+                              />
+                              <div>
+                                <h6 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold">
+                                  {product.productName}
+                                </h6>
+                                <h6 className="text-sm font-semibold text-gray-600 group-hover:text-headingColor">
+                                  {product.salePrice ?? product.lowestPrice}
+                                </h6>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                        <div className="text-center">
+                          <Link
+                            href={`/${subCategory.uniqueCategoryName}`}
+                            className="py-2 px-8 text-sm font-semibold inline-flex items-center gap-1 btn-primary"
+                          >
+                            <span>View All</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ))}
+          </div>
+        </div>
         <div>
-          {activeTab && <ProductTabView />}
-          {/* {activeTab === 'Calendars' && <ProductTabView />}
-          {activeTab === 'Pet Items' && <ProductTabView />}
-          {activeTab === 'Drinkware' && <ProductTabView />}
-          {activeTab === 'Outdoor' && <ProductTabView />}
-          {activeTab === 'Technology and Mobile' && <ProductTabView />}
-          {activeTab === 'Writing' && <ProductTabView />} */}
         </div>
       </Container>
     </section>

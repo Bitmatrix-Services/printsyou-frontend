@@ -29,4 +29,3 @@ export type BannerList = {
   };
 };
 
-export declare module 'react-read-more-read-less';

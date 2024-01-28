@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 
-import {ProductInitialState, Product} from './product';
+import {ProductInitialState, Product, HomeCategoryProduts} from './product';
 import {http} from 'services/axios.service';
 import {RootState} from '@store/store';
 
@@ -10,7 +10,9 @@ const INITIAL_STATE: ProductInitialState = {
   newAndExclusiveProducts: [],
   newAndExclusiveProductsLoading: false,
   uniqueIdeaProducts: [],
-  uniqueIdeaProductsLoading: false
+  uniqueIdeaProductsLoading: false,
+  homeCategoryProducts: [],
+  homeCategoryProductsLoading: false,
 };
 
 export const getAllUnderABuckProducts = async (): Promise<Product[]> => {
@@ -41,6 +43,16 @@ export const getAllUniqueIdeasProducts = async (): Promise<Product[]> => {
 export const getUniqueIdeaProducts = createAsyncThunk(
   'product/getUniqueIdeaProducts',
   getAllUniqueIdeasProducts
+);
+
+export const getAllHomeCategoryProducts = async (): Promise<HomeCategoryProduts[]> => {
+  const res = await http.get(`/product/homeProductsWithCategories`);
+  return res?.data.payload;
+};
+
+export const getHomeCategoryProducts = createAsyncThunk(
+  'product/getHomeCaegoryProducts',
+  getAllHomeCategoryProducts
 );
 
 export const productSlice = createSlice({
@@ -88,6 +100,16 @@ export const productSlice = createSlice({
     },
     [getUniqueIdeaProducts.rejected.type]: state => {
       state.uniqueIdeaProductsLoading = false;
+    },
+    [getHomeCategoryProducts.fulfilled.type]: (
+      state,
+      action: PayloadAction<HomeCategoryProduts[]>
+    ) => {
+      state.homeCategoryProducts = action.payload;
+      state.homeCategoryProductsLoading = false;
+    },
+    [getHomeCategoryProducts.rejected.type]: state => {
+      state.homeCategoryProductsLoading = false;
     }
   }
 });

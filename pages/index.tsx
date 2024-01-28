@@ -4,11 +4,12 @@ import FeaturedProductsSection from '@components/sections/FeaturedProductsSectio
 import {
   getAllNewAndExclusiveProducts,
   getAllUnderABuckProducts,
-  getAllUniqueIdeasProducts
+  getAllUniqueIdeasProducts,
+  getAllHomeCategoryProducts
 } from '@store/slices/product/product.slice';
 import {getAllBannerList} from '@store/slices/category/catgory.slice';
 import {GetStaticProps, NextPage} from 'next';
-import {Product} from '@store/slices/product/product';
+import {HomeCategoryProduts, Product} from '@store/slices/product/product';
 import {BannerList} from '@store/slices/category/category';
 import FeatureSection from '@components/sections/FeatureSection';
 import ProductCategoriesSection from '@components/sections/ProductCategoriesSection';
@@ -19,18 +20,21 @@ interface IHome {
   newAndExclusive: Product[];
   allUniqueIdeas: Product[];
   bannerList: BannerList[];
+  homeCategoryProducts: HomeCategoryProduts[];
 }
 
 export const HomePage: NextPage<IHome> = ({
   underABuckProducts,
   newAndExclusive,
   allUniqueIdeas,
-  bannerList
+  bannerList,
+  homeCategoryProducts
 }) => {
+
   return (
     <>
       <HeroSection bannerList={bannerList} />
-      <ProductCategoriesSection />
+      <ProductCategoriesSection homeCategoryProducts ={homeCategoryProducts}/>
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"
@@ -65,12 +69,13 @@ export const HomePage: NextPage<IHome> = ({
 };
 
 export const getStaticProps = (async context => {
-  const [underABuckProducts, newAndExclusive, allUniqueIdeas, bannerList] =
+  const [underABuckProducts, newAndExclusive, allUniqueIdeas, bannerList, homeCategoryProducts] =
     await Promise.all([
       getAllUnderABuckProducts(),
       getAllNewAndExclusiveProducts(),
       getAllUniqueIdeasProducts(),
-      getAllBannerList()
+      getAllBannerList(),
+      getAllHomeCategoryProducts()
     ]);
 
   return {
@@ -78,7 +83,8 @@ export const getStaticProps = (async context => {
       underABuckProducts,
       newAndExclusive,
       allUniqueIdeas,
-      bannerList
+      bannerList,
+      homeCategoryProducts
     }
   };
 }) satisfies GetStaticProps<IHome>;
