@@ -332,7 +332,7 @@ export const getServerSideProps = async (
 
     if (Array.isArray(uniqueProductName)) {
       const {data} = await http.get(
-        `product?uProductName=${uniqueProductName.join('/')}`
+        `product?uProductName=${encodeURIComponent(uniqueProductName.join('/'))}`
       );
       product = data.payload;
     }
