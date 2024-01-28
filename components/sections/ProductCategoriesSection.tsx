@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, Fragment, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
 import ImageWithFallback from '@components/ImageWithFallback';
@@ -50,7 +50,7 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
               ?.filter(homeCat => homeCat.categoryName === activeTab)
               .slice(0, 4)
               .map(category => (
-                <>
+                <Fragment key={category.categoryName}>
                   {category?.subCategory?.map(subCategory => (
                     <div key={subCategory.uniqueCategoryName} className="col">
                       <h2 className="text-headingColor text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-3 after:block after:w-1/2 after:h-1 after:bg-primary-500">
@@ -75,9 +75,20 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                                 <h6 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold">
                                   {product.productName}
                                 </h6>
-                                <h6 className="text-sm font-semibold text-gray-600 group-hover:text-headingColor">
-                                  {product.salePrice ?? product.lowestPrice}
-                                </h6>
+                                {product.salePrice !== 0 ? (
+                                  <>
+                                    <h6 className="text-sm font-normal line-through text-gray-600 group-hover:text-headingColor">
+                                      {product.lowestPrice}
+                                    </h6>
+                                    <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
+                                      {product.salePrice}
+                                    </h6>
+                                  </>
+                                ) : (
+                                  <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
+                                    {product.lowestPrice}
+                                  </h6>
+                                )}
                               </div>
                             </div>
                           </Link>
@@ -93,7 +104,7 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                       </div>
                     </div>
                   ))}
-                </>
+                </Fragment>
               ))}
           </div>
         </div>
