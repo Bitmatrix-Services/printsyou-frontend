@@ -14,7 +14,11 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
   const [activeTab, setActiveTab] = useState('');
 
   useEffect(() => {
-    setActiveTab(homeCategoryProducts[0].categoryName);
+    if (
+      homeCategoryProducts?.length > 0 &&
+      homeCategoryProducts[0].categoryName
+    )
+      setActiveTab(homeCategoryProducts[0].categoryName);
   }, []);
 
   const handleTabClick = (tab: React.SetStateAction<string>) => {
@@ -78,15 +82,15 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                                 {product.salePrice !== 0 ? (
                                   <>
                                     <h6 className="text-sm font-normal line-through text-gray-600 group-hover:text-headingColor">
-                                      {product.lowestPrice}
+                                      ${product.lowestPrice.toFixed(2)}
                                     </h6>
                                     <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
-                                      {product.salePrice}
+                                      ${product.salePrice.toFixed(2)}
                                     </h6>
                                   </>
                                 ) : (
                                   <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
-                                    {product.lowestPrice}
+                                    ${product.lowestPrice.toFixed(2)}
                                   </h6>
                                 )}
                               </div>
