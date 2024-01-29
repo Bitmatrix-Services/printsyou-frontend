@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {http} from 'services/axios.service';
-import { DocumentCheckIcon } from '@heroicons/react/24/outline';
+import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -46,71 +46,71 @@ function ContactUs() {
         {!isSubmitted ? (
           <div className="xs:flex md:grid md:grid-cols-2 py-8 md:py-16">
             <form onSubmit={formik.handleSubmit}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-                    <FormInput
-                      type="text"
-                      name="fullName"
-                      required={true}
-                      label="Name"
-                      placeHolder="Name"
-                      formik={formik}
-                    />
-                    <FormInput
-                      type="text"
-                      label="Email"
-                      name="emailAddress"
-                      required={true}
-                      placeHolder="Email"
-                      formik={formik}
-                    />
-                    <FormInput
-                      type="text"
-                      label="Phone Number"
-                      name="phoneNumber"
-                      placeHolder="Phone"
-                      formik={formik}
-                    />
-                    <FormInput
-                      type="text"
-                      label="Subject"
-                      name="subject"
-                      required={true}
-                      placeHolder="Subject"
-                      formik={formik}
-                    />
-                    <div className=" sm:col-span-2">
-                      <FormInput
-                        inputType="textarea"
-                        type="text"
-                        label="Message"
-                        required={true}
-                        name="message"
-                        placeHolder="Message"
-                        formik={formik}
-                      />
-                    </div>
-                    {apiError && (
-                      <div className="text-red-500 sm:col-span-2">
-                        something went wrong. please try again!
-                      </div>
-                    )}
-                    <div className="sm:col-span-2">
-                      <button
-                        type="submit"
-                        className={`w-full flex text-center justify-center items-center ${
-                          formik.isSubmitting ? 'py-3' : 'py-5'
-                        } px-[9rem] py-4 btn-primary`}
-                      >
-                        <DocumentCheckIcon className="h-5 w-5 mr-2" />
-                        {formik.isSubmitting ? (
-                          <CircularProgress color="inherit" />
-                        ) : (
-                          'SUBMIT'
-                        )}
-                      </button>
-                    </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                <FormInput
+                  type="text"
+                  name="fullName"
+                  required={true}
+                  label="Name"
+                  placeHolder="Name"
+                  formik={formik}
+                />
+                <FormInput
+                  type="text"
+                  label="Email"
+                  name="emailAddress"
+                  required={true}
+                  placeHolder="Email"
+                  formik={formik}
+                />
+                <FormInput
+                  type="text"
+                  label="Phone Number"
+                  name="phoneNumber"
+                  placeHolder="Phone"
+                  formik={formik}
+                />
+                <FormInput
+                  type="text"
+                  label="Subject"
+                  name="subject"
+                  required={true}
+                  placeHolder="Subject"
+                  formik={formik}
+                />
+                <div className=" sm:col-span-2">
+                  <FormInput
+                    inputType="textarea"
+                    type="text"
+                    label="Message"
+                    required={true}
+                    name="message"
+                    placeHolder="Message"
+                    formik={formik}
+                  />
+                </div>
+                {apiError && (
+                  <div className="text-red-500 sm:col-span-2">
+                    something went wrong. please try again!
                   </div>
-                </form>
+                )}
+                <div className="sm:col-span-2">
+                  <button
+                    type="submit"
+                    className={`w-full flex text-center justify-center items-center ${
+                      formik.isSubmitting ? 'py-3' : 'py-5'
+                    } px-[9rem] py-4 btn-primary`}
+                  >
+                    <DocumentCheckIcon className="h-5 w-5 mr-2" />
+                    {formik.isSubmitting ? (
+                      <CircularProgress color="inherit" />
+                    ) : (
+                      'SUBMIT'
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
             <iframe
               className="custom-map w-full h-full pl-6"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2964.1479667071944!2d-87.78585458441495!3d42.018558064591296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fc8d799d677fb%3A0xa65daeb86f4aae92!2sIdentity-Links%20-%20Promotional%20Products!5e0!3m2!1sen!2sus!4v1624371789928!5m2!1sen!2sus"
