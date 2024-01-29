@@ -120,7 +120,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       {(product.priceGrids ?? [])
                         .sort((a, b) => a.price - b.price)[0]
                         ?.price?.toFixed(2)}
-                      /
+                      <span className="font-normal text-mute2">/</span>
                     </span>
                     <span className="text-xs text-[#222] font-light">
                       Per Item
