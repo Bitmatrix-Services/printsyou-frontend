@@ -6,7 +6,7 @@ export const aboutInfo = [
   {
     title: 'Prints You',
     text: `Welcome to PrintsYou, the fresh face in promotional products. Despite being newcomers, our passion drives us to excel in delivering innovative promotional items, executive gifts, and corporate apparel. Our commitment? Exceptional customer service, expert advice, and unbeatable prices. At PrintsYou, we're more than just a business; we're your partners in making an impactful statement. Let's embark on this journey together, creating memorable connections through quality products that resonate with your brand. Your vision, our expertise—let's make your mark in the world.`,
-    imageSrc: '/assets/about-us-main.jpeg'
+    imageSrc: '/assets/about-us-main.png'
   }
 ];
 
