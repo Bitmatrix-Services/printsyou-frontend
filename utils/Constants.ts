@@ -56,3 +56,18 @@ export const statesList = [
   'Wisconsin',
   'Wyoming'
 ];
+
+export const shippingFormFields = [
+  {name: 'shippingFullName', placeholder: 'Name', label: 'Name'},
+  {name: 'shippingCompany', placeholder: 'Company', label: 'Company'},
+  {name: 'shippingAddressLineOne', placeholder: 'Address', label: 'Address'},
+  {
+    name: 'shippingAddressLineTwo',
+    placeholder: 'Address 2',
+    label: 'Address 2'
+  },
+  {name: 'shippingCity', placeholder: 'City', label: 'City'},
+  {name: 'shippingState', placeholder: 'State', label: 'State'},
+  {name: 'shippingZipcode', placeholder: 'Zip Code', label: 'Zip Code'},
+  {name: 'shippingPhoneNumber', placeholder: 'Phone', label: 'Phone'}
+];

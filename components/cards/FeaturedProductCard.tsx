@@ -12,6 +12,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import ImageWithFallback from '@components/ImageWithFallback';
 import {ClientSideFeaturedProductCard} from '@components/cards/client-side-feature-product-card.component';
 import Image from 'next/image';
+import CartModal from '@components/globals/CartModal';
+import {useAppDispatch} from '@store/hooks';
+import {setIsCartModalOpen} from '@store/slices/cart/cart.slice';
 
 export interface FeaturedProductCardProps {
   product: Product;
@@ -29,6 +32,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   isModal = true,
   product
 }) => {
+  const dispatch = useAppDispatch();
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
 
@@ -40,7 +44,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
 
   if (product) {
     product?.priceGrids?.length > 0 &&
-      product.priceGrids
+      [...product.priceGrids]
         ?.sort((a, b) => a.countFrom - b.countFrom)
         .forEach(gridItem => {
           countFrom.add(gridItem.countFrom);
@@ -130,12 +134,16 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
               </div>
             </div>
           </div>
-          <Link
-            href={`/order_request?item_id=${product.id}`}
+          <div
+            onClick={e => {
+              e.preventDefault();
+              dispatch(setIsCartModalOpen(true));
+            }}
+            // href={`/order_request?item_id=${product.id}`}
             className="h-16 w-16 flex items-center justify-center bg-white group-hover:bg-primary-500 group-hover:border-primary-500 border-l border-[#edeff2]"
           >
             <ShoppingCartIcon className="h-7 w-7" />
-          </Link>
+          </div>
         </div>
       </Link>
       {isModal && (
@@ -341,15 +349,16 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                       )}
                   </div>
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href={`/order_request?item_id=${product.id}`}
+                    <div
+                      // href={`/order_request?item_id=${product.id}`}
                       className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 btn-primary"
+                      onClick={() => setIsCartModalOpen(true)}
                     >
                       <ShoppingCartIcon className="h-5 w-5" />
                       <span className="text-sm font-light capitalize">
-                        Place Order
+                        Add To Cart
                       </span>
-                    </Link>
+                    </div>
                     <Link
                       href={`/more_info?item_id=${product.id}`}
                       className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 text-headingColor border border-headingColor hover:text-white hover:bg-black rounded"
@@ -406,6 +415,8 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
           </div>
         </Dialog>
       )}
+
+      <CartModal product={product} addToCartText={'Add to cart'} />
     </>
   );
 };

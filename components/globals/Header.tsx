@@ -27,6 +27,8 @@ import {
 import TwitterIcon from '@components/icons/TwitterIcon';
 import YouTubeIcon from '@components/icons/YouTubeIcon';
 import InstagramIcon from '@components/icons/InstagramIcon';
+import SidebarCart from './SidebarCart';
+import {setSidebarCartOpen} from '@store/slices/cart/cart.slice';
 
 const links = [
   {color: '#dd6c99', text: 'About us', href: '/about_us'},
@@ -46,6 +48,7 @@ const Header = () => {
   const {scrollingUp, scrollValue} = useScrollingUp();
   const router = useRouter();
 
+  const cartItems = useAppSelector(state => state.cart.cartItems);
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const categoryList = useAppSelector(selectCategoryList);
@@ -139,9 +142,12 @@ const Header = () => {
                         className="hover:text-primary-500 flex items-center gap-5"
                       >
                         <span className="relative">
-                          <ShoppingCartIcon className="h-7 w-7" />
-                          <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary-500 text-headingColor text-base font-semibold">
-                            0
+                          <ShoppingCartIcon
+                            className="h-7 w-7"
+                            onClick={() => dispatch(setSidebarCartOpen(true))}
+                          />
+                          <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
+                            {cartItems.length}
                           </span>
                         </span>
                       </button>
@@ -184,14 +190,14 @@ const Header = () => {
                   </button>
                 </li>
                 <li>
-                  <button
-                    type="button"
-                    className="hover:text-primary-500 flex items-center gap-5"
-                  >
+                  <button type="button" className=" flex items-center gap-5">
                     <span className="relative">
-                      <ShoppingCartIcon className="h-7 w-7" />
-                      <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary-500 text-headingColor text-base font-semibold">
-                        0
+                      <ShoppingCartIcon
+                        className="h-7 w-7 hover:text-primary-500"
+                        onClick={() => dispatch(setSidebarCartOpen(true))}
+                      />
+                      <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
+                        {cartItems.length}
                       </span>
                     </span>
                     <span className="font-semibold text-xl">$0.00</span>
@@ -367,12 +373,13 @@ const Header = () => {
               <li>
                 <button
                   type="button"
-                  className="hover:text-primary-500 flex items-center gap-5"
+                  className=" flex items-center gap-5"
+                  onClick={() => dispatch(setSidebarCartOpen(true))}
                 >
                   <span className="relative">
-                    <ShoppingCartIcon className="h-7 w-7" />
-                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary-500 text-headingColor text-base font-semibold">
-                      0
+                    <ShoppingCartIcon className="h-7 w-7 hover:text-primary-500" />
+                    <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
+                      {cartItems.length}
                     </span>
                   </span>
                   <span className="font-semibold text-xl">$0.00</span>
@@ -382,6 +389,7 @@ const Header = () => {
           </fieldset>
         </div>
       </Drawer>
+      <SidebarCart />
     </>
   );
 };

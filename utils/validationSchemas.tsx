@@ -62,3 +62,18 @@ export const orderRequestSchema = Yup.object({
 export const EmailSchema = Yup.object({
   email: Yup.string().email().required('please enter your email')
 });
+
+export const orderCheckoutSchema = Yup.object({
+  billingFullName: Yup.string()
+    .min(2)
+    .max(25)
+    .required('Please enter your Name'),
+  billingAddressLineOne: Yup.string().required('Please enter your Address'),
+  billingCity: Yup.string().required('Please enter City'),
+  billingState: Yup.string().required('Please enter State'),
+  billingZipCode: Yup.string().required('Please enter Zip Code'),
+  billingPhoneNumber: Yup.string()
+    .required('Please enter Zip Code')
+    .matches(phoneRegExp, 'Phone number is not valid'),
+  billingEmailAddress: Yup.string().email().required('Please enter your Email')
+});

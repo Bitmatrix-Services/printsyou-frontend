@@ -159,11 +159,12 @@ const SearchBar = () => {
         </div>
         <button
           type="button"
-          onClick={() =>
-            router.push(
-              `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
-            )
-          }
+          onClick={() => {
+            if (searchQuery)
+              router.push(
+                `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
+              );
+          }}
           className="py-2 px-6 sm:px-10 rounded-e-full bg-primary-500 hover:bg-black hover:text-primary-500 text-black bg-center bg-no-repeat transition-all duration-300"
         >
           <SearchIcon />

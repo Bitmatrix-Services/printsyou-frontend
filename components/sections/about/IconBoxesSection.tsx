@@ -4,29 +4,24 @@ import AboutPageServicesCard from '@components/cards/AboutPageServicesCard';
 
 const identityitems = [
   {
-    image: '/assets/samples.svg',
-    heading: 'Free Samples',
-    text: 'Free samples for inspection, so you know exactly what you are buying.'
-  },
-  {
     image: '/assets/art.svg',
     heading: 'Art Services',
-    text: 'Just send us whatever you have. Our expert art staff will convert it to the proper format suitable for reproduction on the item(s) of your choice.'
+    text: 'Simply provide us with your materials. Our skilled art team will adapt it into the ideal format for imprinting on your selected products.'
   },
   {
     image: '/assets/rush.svg',
     heading: 'Rush Service',
-    text: 'A large percentage of our promotional products line is available for 3-day or 1-day Rush Service, at no additional charge.'
+    text: 'Many of our promotional items are eligible for 3-day or even 1-day Rush Service without any extra cost.'
   },
   {
     image: '/assets/email.svg',
     heading: 'E-Mail Order Updates',
-    text: 'We will notify you with the progress of your order upon date of entry, date due, production dates, and a final e-mail notice with your UPS tracking numbers. This way, you will not have to worry about checking on your order.'
+    text: `We'll keep you updated on your order's status, from the entry date to the due date, through production, and finally, with an email including your UPS tracking numbers. Rest assured, you won't need to follow up on your order's progress.`
   },
   {
     image: '/assets/idea.svg',
     heading: 'Idea Theme Center',
-    text: 'Our experienced sales representatives (average of 9 years in the industry) will prepare a custom Idea Presentation at no charge. Just tell us the promotional theme for your campaign and approximate budget. We will supply a full-color presentation within the hour of unique promotional products specific to your event or target market.'
+    text: `Our seasoned sales team offers personalized Idea Presentations free of charge. Simply share your campaign's theme and budget with us. Same business day, we'll deliver a vibrant, full-color presentation tailored to your event or target audience, featuring unique promotional products.`
   }
 ];
 
