@@ -131,11 +131,11 @@ const Header = () => {
                 </Link>
                 <div className="flex lg:hidden items-center gap-3">
                   <ul className="flex h-full items-center gap-3">
-                    <li>
+                    {/* <li>
                       <button type="button" className="hover:text-primary-500">
                         <HeartIcon className="h-7 w-7" />
                       </button>
-                    </li>
+                    </li> */}
                     <li>
                       <button
                         type="button"
@@ -179,7 +179,7 @@ const Header = () => {
               } pl-6`}
             >
               <ul className="flex h-full items-center gap-3 xl:gap-8">
-                <li>
+                {/* <li>
                   <button type="button" className="hover:text-primary-500">
                     <HeartIcon className="h-7 w-7" />
                   </button>
@@ -188,7 +188,7 @@ const Header = () => {
                   <button type="button" className="hover:text-primary-500">
                     <UserIcon className="h-7 w-7" />
                   </button>
-                </li>
+                </li> */}
                 <li>
                   <button type="button" className=" flex items-center gap-5">
                     <span className="relative">
@@ -230,7 +230,7 @@ const Header = () => {
                 </li>
               ))}
             </ul>
-            <Link
+            {/* <Link
               href="#"
               className="text-headingColor hover:opacity-80 text-sm font-semibold flex items-center gap-3 min-w-[10rem]"
             >
@@ -241,7 +241,7 @@ const Header = () => {
                 alt="..."
               />
               <span>Track Your Order</span>
-            </Link>
+            </Link> */}
           </div>
         </Container>
       </nav>
