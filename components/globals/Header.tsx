@@ -8,7 +8,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Bars3Icon, PhoneIcon, XMarkIcon} from '@heroicons/react/24/solid';
 import sanitizeHtml from 'sanitize-html';
-
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import SearchBar from '@components/inputs/SearchBar';
 import Container from './Container';
@@ -20,28 +19,15 @@ import {useScrollingUp} from 'hooks/useScrolllingUp';
 import {DropDownNavMenu} from './DropDownNavMenu';
 import {useRouter} from 'next/router';
 import {
-  HeartIcon,
-  ShoppingCartIcon,
-  UserIcon
+  // HeartIcon,
+  ShoppingCartIcon
+  // UserIcon
 } from '@heroicons/react/24/outline';
 import TwitterIcon from '@components/icons/TwitterIcon';
 import YouTubeIcon from '@components/icons/YouTubeIcon';
 import InstagramIcon from '@components/icons/InstagramIcon';
 import SidebarCart from './SidebarCart';
 import {setSidebarCartOpen} from '@store/slices/cart/cart.slice';
-
-const links = [
-  {color: '#dd6c99', text: 'About us', href: '/about_us'},
-  {
-    color: '#58c6f1',
-    text: 'How to order',
-    href: '/how-to-order'
-  },
-  // {color: '#8fc23f', text: 'Specials', href: '/specials'},
-  {color: '#9a605c', text: 'Faq', href: '/faq'},
-  // {color: '#1f8b95', text: 'Artwork', href: '/artwork'},
-  {color: '#b658a2', text: 'Contact us', href: '/contact_us'}
-];
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -169,10 +155,20 @@ const Header = () => {
                 <div
                   className={`ml-10 ${scrollValue > 130 ? 'block' : 'hidden'}`}
                 >
-                  <DropDownNavMenu className="py-4" />
+                  <DropDownNavMenu
+                    title="All Products"
+                    className="py-4"
+                    subCatList={categoryList}
+                  />
                 </div>
               )}
             </div>
+            <Link
+              href="/how-to-order"
+              className="hidden lg:flex justify-center items-center ml-4 text-secondary-500"
+            >
+              <div>HOW TO ORDER</div>
+            </Link>
             <div
               className={`hidden lg:block ${
                 scrollValue < 130 && 'xl:ml-10'
@@ -213,20 +209,17 @@ const Header = () => {
           <div className="flex">
             <ul className="w-full flex flex-wrap gap-8 ms-10 xl:ms-48 mr-auto">
               <li>
-                <DropDownNavMenu />
+                <DropDownNavMenu
+                  title="All Products"
+                  subCatList={categoryList}
+                />
               </li>
-              {links.map((link, index) => (
+              {categoryList.slice(0, 6).map((item, index) => (
                 <li key={`link-${index}`}>
-                  <Link
-                    href={link.href}
-                    className={`nav-link ${
-                      router.pathname === link.href
-                        ? `text-secondary-500 after:w-full`
-                        : ''
-                    } text-body hover:text-secondary-500 after:bg-secondary-500`}
-                  >
-                    {link.text}
-                  </Link>
+                  <DropDownNavMenu
+                    title={item.categoryName}
+                    subCatList={item.subCategories}
+                  />
                 </li>
               ))}
             </ul>
@@ -286,9 +279,39 @@ const Header = () => {
                 </h6>
               </AccordionSummary>
               <AccordionDetails>
-                <div>
+                <ul className="menu-link grid grid-cols-2 px-3 gap-4">
+                  {categoryList.map(category => (
+                    <li key={category.id}>
+                      <Link
+                        className="text-sm text-[#b5b8c1] hover:text-secondary-500"
+                        href={`/${category.uniqueCategoryName}`}
+                        onClick={() => setMobileMenu(false)}
+                      >
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(category.categoryName)
+                          }}
+                        ></span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </AccordionDetails>
+            </Accordion>
+          </fieldset>
+          {categoryList.slice(0, 6).map(category => (
+            <fieldset key={category.id} className="border-b border-gray-600">
+              <Accordion className="bg-[#303546] px-2 border-0">
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon className="text-white" />}
+                >
+                  <h6 className="text-white text-sm font-semibold uppercase">
+                    {category.categoryName}
+                  </h6>
+                </AccordionSummary>
+                <AccordionDetails>
                   <ul className="menu-link grid grid-cols-2 px-3 gap-4">
-                    {categoryList.map(category => (
+                    {category.subCategories.map(category => (
                       <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-secondary-500"
@@ -304,36 +327,10 @@ const Header = () => {
                       </li>
                     ))}
                   </ul>
-                  <ul className="menu-link grid grid-cols-2 gap-4 text-sm text-[#b5b8c1]">
-                    {categoryList.map(category => (
-                      <li key={category.id}>
-                        <a
-                          href={`/${category.uniqueCategoryName}`}
-                          dangerouslySetInnerHTML={{
-                            __html: sanitizeHtml(category.categoryName)
-                          }}
-                        ></a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          </fieldset>
-          <figure className="p-6">
-            <ul className="grid grid-cols-2 gap-6">
-              {links.map((link, index) => (
-                <li key={`link-${index}`}>
-                  <Link
-                    href={link.href}
-                    className={`nav-link text-white hover:text-secondary-500`}
-                  >
-                    {link.text}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </figure>
+                </AccordionDetails>
+              </Accordion>
+            </fieldset>
+          ))}
           <fieldset className="p-6">
             <div className="flex gap-1">
               <a href="tel: 8882829507" className="p-3 w-full bg-[#3f4553]">
@@ -360,7 +357,7 @@ const Header = () => {
           </fieldset>
           <fieldset className="px-6">
             <ul className="flex h-full items-center gap-3 xl:gap-8">
-              <li>
+              {/* <li>
                 <button type="button" className="hover:text-primary-500">
                   <HeartIcon className="h-7 w-7" />
                 </button>
@@ -369,7 +366,7 @@ const Header = () => {
                 <button type="button" className="hover:text-primary-500">
                   <UserIcon className="h-7 w-7" />
                 </button>
-              </li>
+              </li> */}
               <li>
                 <button
                   type="button"
