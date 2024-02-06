@@ -30,7 +30,7 @@ export const DropDownNavMenu: FC<DropDownNavMenuProps> = ({
         className="megamenu-button p-4 relative transition-all duration-300 text-secondary-500 hover:text-white after:transition-all after:duration-300 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0 after:bg-secondary-500 hover:after:h-full"
       >
         <div className="relative z-10 flex items-center">
-          <span className="text-sm font-semibold capitalize">{title}</span>
+          <span className="text-sm font-semibold uppercase">{title}</span>
           <ExpandMoreIcon className="h-6 w-6" />
         </div>
       </button>
