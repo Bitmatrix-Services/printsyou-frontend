@@ -159,11 +159,12 @@ const SearchBar = () => {
         </div>
         <button
           type="button"
-          onClick={() =>
-            router.push(
-              `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
-            )
-          }
+          onClick={() => {
+            if (searchQuery)
+              router.push(
+                `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
+              );
+          }}
           className="py-2 px-6 sm:px-10 rounded-e-full bg-primary-500 hover:bg-black hover:text-primary-500 text-black bg-center bg-no-repeat transition-all duration-300"
         >
           <SearchIcon />
@@ -190,15 +191,7 @@ const SearchBar = () => {
                         }, 500)
                       }
                     >
-                      <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
-                        <span className="block relative h-28 w-28 min-w-[7rem]">
-                          <ImageWithFallback
-                            fill
-                            className="object-contain"
-                            src={category.imageUrl}
-                            alt="category"
-                          />
-                        </span>
+                      <div className="flex gap-3 justify-between hover:bg-gray-100 p-2 border-t border-[#eee]">
                         <span className="font-normal text-xs">
                           <b
                             className="underline"
@@ -206,6 +199,14 @@ const SearchBar = () => {
                               __html: sanitize(category.name)
                             }}
                           ></b>
+                        </span>
+                        <span className="block relative h-28 w-28 min-w-[7rem]">
+                          <ImageWithFallback
+                            fill
+                            className="object-contain"
+                            src={category.imageUrl}
+                            alt="category"
+                          />
                         </span>
                       </div>
                     </Link>
@@ -230,15 +231,7 @@ const SearchBar = () => {
                         }, 500)
                       }
                     >
-                      <div className="flex gap-3 hover:bg-gray-100 p-2 border-t border-[#eee]">
-                        <span className="block relative h-12 w-12 min-w-[3rem]">
-                          <ImageWithFallback
-                            fill
-                            className="object-contain"
-                            src={product.imageUrl}
-                            alt="product"
-                          />
-                        </span>
+                      <div className="flex gap-3 justify-between hover:bg-gray-100 p-2 border-t border-[#eee]">
                         <span className="font-normal text-xs">
                           <b
                             className="underline"
@@ -246,6 +239,14 @@ const SearchBar = () => {
                               __html: sanitize(product.name)
                             }}
                           ></b>
+                        </span>
+                        <span className="block relative h-12 w-12 min-w-[3rem]">
+                          <ImageWithFallback
+                            fill
+                            className="object-contain"
+                            src={product.imageUrl}
+                            alt="product"
+                          />
                         </span>
                       </div>
                     </Link>

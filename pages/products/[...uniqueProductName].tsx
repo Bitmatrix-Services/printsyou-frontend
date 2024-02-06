@@ -17,6 +17,9 @@ import {
   ShoppingCartIcon,
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
+import CartModal from '@components/globals/CartModal';
+import {useAppDispatch} from '@store/hooks';
+import {setIsCartModalOpen} from '@store/slices/cart/cart.slice';
 
 const config = getConfig();
 
@@ -25,6 +28,7 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
+  const dispatch = useAppDispatch();
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
   const router = useRouter();
 
@@ -248,15 +252,16 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       )}
                   </div>
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                    <Link
-                      href={`/order_request?item_id=${product.id}`}
-                      className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 btn-primary"
+                    <div
+                      // href={`/order_request?item_id=${product.id}`}
+                      onClick={() => dispatch(setIsCartModalOpen(true))}
+                      className="flex justify-center items-center cursor-pointer gap-2 w-full text-center py-4 px-6 btn-primary"
                     >
                       <ShoppingCartIcon className="h-5 w-5" />
                       <span className="text-sm font-light capitalize">
-                        Place Order
+                        Add To Cart
                       </span>
-                    </Link>
+                    </div>
                     <Link
                       href={`/more_info?item_id=${product.id}`}
                       className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 text-headingColor border border-headingColor hover:text-white hover:bg-black rounded"
@@ -318,6 +323,13 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
           </div>
         )}
       </Container>
+      {/* {isCartModalOpen && product && ( */}
+      <CartModal
+        product={product}
+        addToCartText="Add to cart"
+        shouldDisplayDatails={false}
+      />
+      {/* )} */}
     </>
   );
 };

@@ -1,15 +1,23 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Container from './Container';
-import {useAppSelector} from '@store/hooks';
-import {selectCategoryList} from '@store/slices/category/catgory.slice';
+import {Category} from '@store/slices/category/category';
 
-export const DropDownNavMenu = ({className}: {className?: any}) => {
-  const categoryList = useAppSelector(selectCategoryList);
-  const [showList, setShowList] = useState(false);
+interface DropDownNavMenuProps {
+  subCatList: Category[];
+  className?: string;
+  title: string;
+}
+
+export const DropDownNavMenu: FC<DropDownNavMenuProps> = ({
+  title,
+  className,
+  subCatList
+}) => {
+  const [showList, setShowList] = useState<boolean>(false);
 
   return (
     <div
@@ -21,15 +29,15 @@ export const DropDownNavMenu = ({className}: {className?: any}) => {
         onMouseEnter={() => setShowList(true)}
         className="megamenu-button p-4 relative transition-all duration-300 text-secondary-500 hover:text-white after:transition-all after:duration-300 after:absolute after:left-0 after:bottom-0 after:w-full after:h-0 after:bg-secondary-500 hover:after:h-full"
       >
-        <div className="relative z-10 flex items-center gap-3">
-          <span className="text-sm font-semibold capitalize">All Products</span>
+        <div className="relative z-10 flex items-center">
+          <span className="text-sm font-semibold capitalize">{title}</span>
           <ExpandMoreIcon className="h-6 w-6" />
         </div>
       </button>
       <div className="megamenu-inner">
         <Container>
           <ul className="menu-link columns-5 space-y-4">
-            {categoryList?.map(category => (
+            {subCatList?.map(category => (
               <li key={category.id} onClick={() => setShowList(false)}>
                 <Link
                   className="flex text-sm text-mute hover:text-secondary-500 transition-all duration-150 group"

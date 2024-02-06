@@ -16,7 +16,7 @@ import TootipBlack from '@components/globals/TootipBlack';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {CircularProgress} from '@mui/material';
 import {NextSeo} from 'next-seo';
-import {metaConstants} from '@utils/Constants';
+import {metaConstants, shippingFormFields} from '@utils/Constants';
 import sanitizeHtml from 'sanitize-html';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 
@@ -27,21 +27,6 @@ interface ImageListProps {
   images: File[];
   handleFileRemove: (e: number) => void;
 }
-
-const shippingFormFields = [
-  {name: 'shippingFullName', placeholder: 'Name', label: 'Name'},
-  {name: 'shippingCompany', placeholder: 'Company', label: 'Company'},
-  {name: 'shippingAddressLineOne', placeholder: 'Address', label: 'Address'},
-  {
-    name: 'shippingAddressLineTwo',
-    placeholder: 'Address 2',
-    label: 'Address 2'
-  },
-  {name: 'shippingCity', placeholder: 'City', label: 'City'},
-  {name: 'shippingState', placeholder: 'State', label: 'State'},
-  {name: 'shippingZipcode', placeholder: 'Zip Code', label: 'Zip Code'},
-  {name: 'shippingPhoneNumber', placeholder: 'Phone', label: 'Phone'}
-];
 
 const OrderRequest: FC<OrderRequest> = ({product}) => {
   const [minQuantity, setMinQuantity] = useState<number>(0);
