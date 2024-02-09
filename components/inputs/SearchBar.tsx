@@ -172,7 +172,7 @@ const SearchBar = () => {
       </div>
 
       {searchQuery && showResults === 'data found' && (
-        <div className="search-menu absolute z-20 w-full overflow-auto top-14 left-0 bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
+        <div className="search-menu absolute z-20 w-[77%] overflow-auto top-14 left-[1.3rem] bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
           <div className="space-y-3">
             {searchResult?.categories && (
               <fieldset>
