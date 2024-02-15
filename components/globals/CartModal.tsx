@@ -230,7 +230,6 @@ const CartModal: FC<AddToCartModalProps> = ({
       }
       return cartId;
     } catch (error) {}
-    
   };
 
   const handleAddToCart = async () => {

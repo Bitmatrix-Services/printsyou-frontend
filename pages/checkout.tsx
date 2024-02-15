@@ -105,7 +105,6 @@ const Checkout: FC = () => {
 
   const handleRemoveItem = async (item: CartItem) => {
     try {
-     
       await http.put(`/cart/remove`, undefined, {
         params: {cartItemId: item.product.id, cartId: getCartId()}
       });
