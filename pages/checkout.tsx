@@ -17,6 +17,8 @@ import {orderCheckoutSchema} from '@utils/validationSchemas';
 import sanitizeHtml from 'sanitize-html';
 import {useRouter} from 'next/router';
 import {shippingFormFields} from '@utils/Constants';
+import {CartItem} from '@store/slices/cart/cart';
+import {http} from 'services/axios.service';
 
 const Checkout: FC = () => {
   const cartItems = useAppSelector(state => state.cart.cartItems);
@@ -93,6 +95,24 @@ const Checkout: FC = () => {
     router.back();
   };
 
+  const getCartId = () => {
+    let cartId;
+    try {
+      cartId = localStorage.getItem('cartId');
+    } catch (error) {}
+    return cartId;
+  };
+
+  const handleRemoveItem = async (item: CartItem) => {
+    try {
+     
+      await http.put(`/cart/remove`, undefined, {
+        params: {cartItemId: item.product.id, cartId: getCartId()}
+      });
+      dispatch(removefromcart({productId: item.product.id}));
+    } catch {}
+  };
+
   return (
     <div>
       <div className="px-8 lg:px-16 pt-8">
@@ -167,11 +187,7 @@ const Checkout: FC = () => {
                             ${item.totalPrice}
                           </div>
                           <div
-                            onClick={() =>
-                              dispatch(
-                                removefromcart({productId: item.product.id})
-                              )
-                            }
+                            onClick={() => handleRemoveItem(item)}
                             className="text-red-500 cursor-pointer"
                           >
                             <CloseIcon className="w-6 h-6" />

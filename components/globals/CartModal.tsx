@@ -3,7 +3,7 @@ import Image from 'next/image';
 import {Dialog} from '@mui/material';
 import sanitizeHtml from 'sanitize-html';
 import CloseIcon from '@mui/icons-material/Close';
-
+import {v4 as uuidv4} from 'uuid';
 import {Product} from '@store/slices/product/product';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
@@ -16,15 +16,15 @@ import FormDescription from '@components/Form/FormDescription';
 import TootipBlack from '@components/globals/TootipBlack';
 //   import PriceGrid from '@components/globals/PriceGrid';
 import {CartItem} from '@store/slices/cart/cart';
+import {http} from 'services/axios.service';
 
 interface AddToCartModalProps {
   product: Product;
   addToCartText: string;
   shouldDisplayDatails?: boolean;
 }
-interface File {
+interface ArtFile {
   fileName: string;
-  fileType: string;
   fileUrl: string;
 }
 
@@ -41,6 +41,7 @@ const CartModal: FC<AddToCartModalProps> = ({
 }) => {
   const [itemsQuantity, setItemsQuantity] = useState<number>(0);
   const [minQuantityError, setMinQuantityError] = useState('');
+  const [itemColorError, setItemColorError] = useState('');
   const [specifications, setSpecicification] = useState([
     {
       fieldName: 'Item Color',
@@ -55,7 +56,7 @@ const CartModal: FC<AddToCartModalProps> = ({
       fieldValue: ''
     }
   ]);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [artWorkFiles, setArtWorkFiles] = useState<ArtFile[]>([]);
 
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(state => state.cart.cartItems);
@@ -92,9 +93,9 @@ const CartModal: FC<AddToCartModalProps> = ({
     }
 
     if (specificProduct && specificProduct.artWorkFiles) {
-      setUploadedFiles([...specificProduct.artWorkFiles]);
+      setArtWorkFiles([...specificProduct.artWorkFiles]);
     } else {
-      setUploadedFiles([]);
+      setArtWorkFiles([]);
     }
 
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -140,6 +141,11 @@ const CartModal: FC<AddToCartModalProps> = ({
   ).toFixed(2);
 
   const handleSpecificationChange = (fieldName: string, value: string) => {
+    if (fieldName === 'Item Color' && value) {
+      setItemColorError('');
+    } else {
+      setItemColorError('Item color is required');
+    }
     setSpecicification(prevSpecifications =>
       prevSpecifications.map(spec => {
         if (spec.fieldName === fieldName) {
@@ -150,19 +156,29 @@ const CartModal: FC<AddToCartModalProps> = ({
     );
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (file: File) => {
+    let data = {
+      type: 'cart',
+      fileName: file.name
+    };
+    try {
+      const res = await http.get('/signedUrl', {params: data});
+      console.log('res', res);
+      return 'res.payload?.url';
+    } catch (error) {}
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
     if (selectedFiles && selectedFiles.length > 0) {
-      const fileArray = Array.from(selectedFiles);
-      const newFiles = fileArray.map(file => ({
-        fileName: file.name,
-        fileType: file.type.split('/').pop() || '',
-        fileUrl: URL.createObjectURL(file)
-      }));
-      setUploadedFiles(prevUploadedFiles => [
-        ...prevUploadedFiles,
-        ...newFiles
-      ]);
+      const fileUrl = await handleFileUpload(selectedFiles[0]);
+      if (fileUrl) {
+        const newFiles = {
+          fileName: selectedFiles[0].name,
+          fileUrl: fileUrl
+        };
+        setArtWorkFiles(prevArtWorkFiles => [...prevArtWorkFiles, newFiles]);
+      }
     }
   };
 
@@ -188,8 +204,8 @@ const CartModal: FC<AddToCartModalProps> = ({
         });
   
         Promise.all(newFiles).then(files => {
-          setUploadedFiles((prevUploadedFiles: File[]) => [
-            ...prevUploadedFiles,
+          setArtWorkFiles((prevArtWorkFiles: File[]) => [
+            ...prevArtWorkFiles,
             ...files
           ]);
         });
@@ -197,35 +213,63 @@ const CartModal: FC<AddToCartModalProps> = ({
     };  */
 
   const handleFileRemove = (index: number) => {
-    setUploadedFiles(prevUploadedFiles => {
-      const updatedFiles = [...prevUploadedFiles];
+    setArtWorkFiles(prevArtWorkFiles => {
+      const updatedFiles = [...prevArtWorkFiles];
       updatedFiles.splice(index, 1);
       return updatedFiles;
     });
   };
 
-  const handleAddToCart = () => {
-    if (itemsQuantity >= sortedPriceGrids[0].countFrom) {
-      dispatch(
-        addtocart({
-          product,
-          itemsQuantity,
-          calculatePriceForQuantity: calculatePriceForQuantity(itemsQuantity),
-          totalPrice,
-          specifications: specifications,
-          artWorkFiles: uploadedFiles
-        })
-      );
-      setMinQuantityError('');
-      dispatch(setIsCartModalOpen(false));
-    }
+  const getCartId = () => {
+    let cartId;
+    try {
+      cartId = localStorage.getItem('cartId');
+      if (!cartId) {
+        cartId = uuidv4();
+        localStorage.setItem('cartId', uuidv4());
+      }
+      return cartId;
+    } catch (error) {}
+    
+  };
+
+  const handleAddToCart = async () => {
     if (itemsQuantity < sortedPriceGrids[0].countFrom) {
       setMinQuantityError(
         `Please add Min Qty is ${sortedPriceGrids[0].countFrom} to add item into cart`
       );
-      if (isCartModalOpen) {
-        dispatch(setIsCartModalOpen(true));
-      }
+    } else {
+      setMinQuantityError('');
+    }
+    if (!specifications[0].fieldValue) {
+      setItemColorError('Item color is required');
+    } else {
+      setItemColorError('');
+    }
+    if (
+      itemsQuantity >= sortedPriceGrids[0].countFrom &&
+      specifications[0].fieldValue
+    ) {
+      try {
+        const cartData = {
+          productId: product.id,
+          qtyRequested: itemsQuantity,
+          specs: specifications,
+          files: artWorkFiles
+        };
+        await http.post(`/cart/add?cartId=${getCartId()}`, cartData);
+        dispatch(
+          addtocart({
+            product,
+            itemsQuantity,
+            calculatePriceForQuantity: calculatePriceForQuantity(itemsQuantity),
+            totalPrice,
+            specifications: specifications,
+            artWorkFiles: artWorkFiles
+          })
+        );
+        dispatch(setIsCartModalOpen(false));
+      } catch (error) {}
     }
   };
 
@@ -261,7 +305,7 @@ const CartModal: FC<AddToCartModalProps> = ({
         fieldValue: ''
       }
     ]);
-    setUploadedFiles([]);
+    setArtWorkFiles([]);
   };
 
   return (
@@ -274,7 +318,7 @@ const CartModal: FC<AddToCartModalProps> = ({
             ? 'rounded-none min-w-[95%] xl:min-w-[62.5rem]'
             : 'rounded-none min-w-[45%] xl:min-w-[45rem]'
         }}
-        disableScrollLock
+        sx={{'& .MuiBackdrop-root': {backgroundColor: 'grey'}}}
         disableRestoreFocus
       >
         <>
@@ -362,7 +406,9 @@ const CartModal: FC<AddToCartModalProps> = ({
                               <input
                                 type="text"
                                 className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500 ${
-                                  false && 'border-red-500'
+                                  spec.fieldName === 'Item Color' &&
+                                  !spec.fieldValue &&
+                                  'border-red-500'
                                 } peer`}
                                 placeholder={spec.fieldName}
                                 value={spec.fieldValue}
@@ -373,16 +419,6 @@ const CartModal: FC<AddToCartModalProps> = ({
                                   )
                                 }
                               />
-                              <label
-                                className={`absolute text-sm ${
-                                  false ? 'text-red-500' : 'text-gray-500'
-                                } duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-secondary-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-[55%] peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1`}
-                              >
-                                {spec.fieldName}
-                                {spec.fieldName === 'Item Color' && (
-                                  <span className="text-red-500">*</span>
-                                )}
-                              </label>
                             </div>
                           </TootipBlack>
                         </div>
@@ -415,12 +451,12 @@ const CartModal: FC<AddToCartModalProps> = ({
                     />
                   </label>
                   <ul>
-                    {uploadedFiles.map((file, index) => (
+                    {artWorkFiles.map((file, index) => (
                       <li
                         key={index}
                         className="flex items-center pt-4 rounded-lg"
                       >
-                        <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
+                        {/* <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
                           <Image
                             src={file.fileUrl}
                             width={100}
@@ -428,7 +464,7 @@ const CartModal: FC<AddToCartModalProps> = ({
                             alt={file.fileName}
                             className="object-cover w-full h-full rounded-sm"
                           />
-                        </div>
+                        </div> */}
                         <div className="flex-grow pl-4">
                           <span className="text-sm lg:text-base font-semibold break-all">
                             {file.fileName}
@@ -442,7 +478,8 @@ const CartModal: FC<AddToCartModalProps> = ({
                     ))}
                   </ul>
                 </div>
-                <div className="text-red-700 pt-4">{minQuantityError}</div>
+                <div className="text-red-500 pt-4">{minQuantityError}</div>
+                <div className="text-red-500 pt-4">{itemColorError}</div>
                 <div className="flex flex-col pt-4 ">
                   <div
                     className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold cursor-pointer"

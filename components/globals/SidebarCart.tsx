@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, SetStateAction} from 'react';
+import React from 'react';
 import sanitizeHtml from 'sanitize-html';
 import {Drawer} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
@@ -11,6 +11,8 @@ import {
   setSidebarCartOpen
 } from '@store/slices/cart/cart.slice';
 import {useRouter} from 'next/router';
+import {http} from 'services/axios.service';
+import {CartItem} from '@store/slices/cart/cart';
 
 const SidebarCart = () => {
   const router = useRouter();
@@ -30,6 +32,25 @@ const SidebarCart = () => {
       totalPrice += Number(item.totalPrice);
     });
     return totalPrice.toFixed(2);
+  };
+
+  const getCartId = () => {
+    let cartId;
+    try {
+      cartId = localStorage.getItem('cartId');
+      return cartId;
+    } catch (error) {}
+  };
+
+  const handleRemoveItem = async (item: CartItem) => {
+    try {
+      const cartData = {
+        cartItemId: item.product.id,
+        cartId: getCartId()
+      };
+      await http.put(`/cart/remove`, {params: cartData});
+      dispatch(removefromcart({productId: item.product.id}));
+    } catch {}
   };
 
   return (
@@ -82,9 +103,7 @@ const SidebarCart = () => {
               <div className="cursor-pointer">
                 <CloseIcon
                   className="w-6 h-6 text-red-500"
-                  onClick={() =>
-                    dispatch(removefromcart({productId: item.product.id}))
-                  }
+                  onClick={() => handleRemoveItem(item)}
                 />
               </div>
             </div>
