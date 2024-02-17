@@ -5,6 +5,8 @@ export interface ProductInitialState {
   newAndExclusiveProducts: Product[];
   uniqueIdeaProductsLoading: boolean;
   uniqueIdeaProducts: Product[];
+  homeCategoryProducts: HomeCategoryProduts[];
+  homeCategoryProductsLoading: boolean;
 }
 
 export interface ProductPrice {
@@ -33,6 +35,7 @@ export interface PriceGrids {
   countFrom: number;
   price: number;
   salePrice: number;
+  priceType: string;
 }
 export interface AdditionalRows {
   id: string;
@@ -65,4 +68,23 @@ export interface Product {
   productImages?: ProductImages[];
   additionalFieldProductValues: AdditionalFieldProductValues[];
   additionalRows: AdditionalRows[];
+}
+
+export interface CategoryProduct {
+  productName: string;
+  uniqueProductName: string;
+  lowestPrice: number;
+  salePrice: number;
+  imageUrl: string;
+}
+
+interface HomeCategoryProduts {
+  categoryName: string;
+  subCategory: SubCategory[];
+}
+
+interface SubCategory {
+  categoryName: string;
+  uniqueCategoryName: string;
+  products: CategoryProduct[];
 }

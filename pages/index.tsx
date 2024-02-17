@@ -1,41 +1,39 @@
 import React from 'react';
-import AdvantageSection from '@components/sections/AdvantageSection';
-import WhyIdentitySection from '@components/sections/WhyIdentitySection';
 import HeroSection from '@components/sections/HeroSection';
-import PromotionalCategoriesSection from '@components/sections/PromotionalCategoriesSection';
 import FeaturedProductsSection from '@components/sections/FeaturedProductsSection';
 import {
   getAllNewAndExclusiveProducts,
   getAllUnderABuckProducts,
-  getAllUniqueIdeasProducts
+  getAllUniqueIdeasProducts,
+  getAllHomeCategoryProducts
 } from '@store/slices/product/product.slice';
-import {
-  getAllBannerList,
-  getAllPromotionalCategories
-} from '@store/slices/category/catgory.slice';
+import {getAllBannerList} from '@store/slices/category/catgory.slice';
 import {GetStaticProps, NextPage} from 'next';
-import {Product} from '@store/slices/product/product';
-import {BannerList, Category} from '@store/slices/category/category';
+import {HomeCategoryProduts, Product} from '@store/slices/product/product';
+import {BannerList} from '@store/slices/category/category';
+import FeatureSection from '@components/sections/FeatureSection';
+import ProductCategoriesSection from '@components/sections/ProductCategoriesSection';
+import BenefitsSection from '@components/sections/BenefitsSection';
 
 interface IHome {
-  promotionalCategories: Category[];
   underABuckProducts: Product[];
   newAndExclusive: Product[];
   allUniqueIdeas: Product[];
   bannerList: BannerList[];
+  homeCategoryProducts: HomeCategoryProduts[];
 }
 
 export const HomePage: NextPage<IHome> = ({
   underABuckProducts,
   newAndExclusive,
   allUniqueIdeas,
-  promotionalCategories,
-  bannerList
+  bannerList,
+  homeCategoryProducts
 }) => {
   return (
     <>
       <HeroSection bannerList={bannerList} />
-      <PromotionalCategoriesSection categories={promotionalCategories} />
+      <ProductCategoriesSection homeCategoryProducts={homeCategoryProducts} />
       {/* under a buck section */}
       <FeaturedProductsSection
         title="Under"
@@ -43,14 +41,12 @@ export const HomePage: NextPage<IHome> = ({
         subTitle="a buck"
         subTitleColor="text-[#56dabf]"
         products={underABuckProducts}
-        //viewMoreLink={`/search_results?filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
-        viewMoreLink={``}
+        viewMoreLink={`/search_results?filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
       />
       {/* unique ideas section */}
       <FeaturedProductsSection
         title="Unique"
         navNumber="2"
-        titleColor="text-red-500"
         subTitle="Ideas"
         products={allUniqueIdeas}
         viewMoreLink={`/search_results?tag=mostPopular&filter=priceHighToLow&page=1&size=24`}
@@ -64,34 +60,35 @@ export const HomePage: NextPage<IHome> = ({
         products={newAndExclusive}
         viewMoreLink={`/search_results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
       />
-      <AdvantageSection />
-      <WhyIdentitySection />
+
+      <BenefitsSection />
+      <FeatureSection />
     </>
   );
 };
 
 export const getStaticProps = (async context => {
   const [
-    promotionalCategories,
     underABuckProducts,
     newAndExclusive,
     allUniqueIdeas,
-    bannerList
+    bannerList,
+    homeCategoryProducts
   ] = await Promise.all([
-    getAllPromotionalCategories(),
     getAllUnderABuckProducts(),
     getAllNewAndExclusiveProducts(),
     getAllUniqueIdeasProducts(),
-    getAllBannerList()
+    getAllBannerList(),
+    getAllHomeCategoryProducts()
   ]);
 
   return {
     props: {
-      promotionalCategories,
       underABuckProducts,
       newAndExclusive,
       allUniqueIdeas,
-      bannerList
+      bannerList,
+      homeCategoryProducts
     }
   };
 }) satisfies GetStaticProps<IHome>;

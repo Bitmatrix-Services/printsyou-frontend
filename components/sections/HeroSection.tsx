@@ -1,34 +1,46 @@
-import React, {FC, useCallback, useRef} from 'react';
+import React, {FC, useRef} from 'react';
 import Link from 'next/link';
 import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
 import {BannerList} from '@store/slices/category/category';
+import ArrowRightIcon from '@components/icons/ArrowRightIcon';
+import Container from '@components/globals/Container';
 
 const slidesData = [
   {
-    backgroundImage: '/assets/banner-1.png',
-    title: 'Made In the USA Promotional Products',
-    bulletPoints: [
-      'Made In the USA Promotional Products',
-      'Support Our Country',
-      'Hundreds of Items To Choose From',
-      'All Proudly Made In the USA'
-    ]
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Favorite Items up to',
+    off: '35% OFF'
   },
   {
-    backgroundImage: '/assets/banner-2.png',
-    title: 'Drinkware',
-    bulletPoints: ['Bottles', 'Mugs', 'Tumblers', 'And Much More!']
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Favorite Items up to',
+    off: '35% OFF'
   },
   {
-    backgroundImage: '/assets/banner-3.png',
-    title: 'Sunglasses',
-    bulletPoints: []
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Favorite Items up to',
+    off: '35% OFF'
   },
   {
-    backgroundImage: '/assets/banner-4.png',
-    title: 'Lip Balm',
-    bulletPoints: []
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Items up to',
+    off: '50% OFF'
+  },
+  {
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Favorite Items up to',
+    off: '35% OFF'
+  },
+  {
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Favorite Items up to',
+    off: '35% OFF'
+  },
+  {
+    backgroundImage: '/assets/hero-banner-1.png',
+    title: 'All Your Favorite Items up to',
+    off: '35% OFF'
   }
 ];
 
@@ -39,29 +51,9 @@ interface IHeroSection {
 const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
   const sliderRef = useRef<SwiperRef>(null);
 
-  const handlePrev = useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slidePrev();
-  }, []);
-
-  const handleNext = useCallback(() => {
-    if (!sliderRef.current) return;
-    sliderRef.current.swiper.slideNext();
-  }, []);
-
   return (
-    <section className="bg-grey pt-8 lg:pt-20">
-      <div className="max-w-[120rem] mx-auto px-4 md:px-8 xl:px-24 relative">
-        <button
-          type="button"
-          className="swiper-button-prev"
-          onClick={handlePrev}
-        />
-        <button
-          type="button"
-          className="swiper-button-next"
-          onClick={handleNext}
-        />
+    <section className="bg-grey">
+      <div className="relative">
         <Swiper
           ref={sliderRef}
           loop
@@ -74,36 +66,32 @@ const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
           {bannerList.map((banner, index) => (
             <SwiperSlide key={banner.id}>
               <div
-                className="slide-item bg-center"
+                className="slide-item bg-center bg-cover"
                 style={{
+                  //   backgroundImage: `url(${banner.bannerUrl})`
                   backgroundImage: `url(${banner.bannerUrl})`
                 }}
               >
-                <div className="h-[25rem] py-6 md:px-20 max-w-[40rem] flex flex-col justify-center text-center">
-                  <h3 className="text-white font-bold text-2xl sm:text-3xl md:text-4xl mb-5">
-                    {slidesData[index]?.title ?? ''}
-                  </h3>
-                  {slidesData[index] &&
-                    slidesData[index]?.bulletPoints?.length > 0 && (
-                      <div className="list">
-                        <ul className="text-white text-base space-y-2">
-                          {slidesData[index]?.bulletPoints?.map(
-                            (point, pointIndex) => (
-                              <li key={pointIndex}>{point}</li>
-                            )
-                          )}
-                        </ul>
-                      </div>
-                    )}
-                  <div className="mt-8">
-                    <Link
-                      href={banner.bannerCategory.ucategoryName}
-                      className="py-4 px-20 text-sm tracking-[3.5px] font-bold btn-primary"
-                    >
-                      SHOP NOW
-                    </Link>
+                <Container>
+                  <div className="py-14 lg:py-20 min-h-[16rem] md:min-h-[28rem] max-w-[35rem] flex flex-col justify-center">
+                    <h3 className="font-poppins text-headingColor font-extralight uppercase text-4xl sm:text-6xl xl:text-7xl mb-5">
+                      {slidesData[index]?.title ?? ''}
+                      <span className="ml-2 text-secondary-500 font-bold">
+                        {slidesData[index]?.off ?? ''}
+                      </span>
+                    </h3>
+
+                    <div>
+                      <Link
+                        href={banner.bannerCategory.ucategoryName}
+                        className="py-3 px-16 text-base font-light inline-flex items-center gap-1 btn-primary"
+                      >
+                        <span>Shop Now</span>
+                        <ArrowRightIcon />
+                      </Link>
+                    </div>
                   </div>
-                </div>
+                </Container>
               </div>
             </SwiperSlide>
           ))}

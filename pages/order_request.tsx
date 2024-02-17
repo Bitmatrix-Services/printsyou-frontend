@@ -16,8 +16,9 @@ import TootipBlack from '@components/globals/TootipBlack';
 import {XMarkIcon} from '@heroicons/react/24/solid';
 import {CircularProgress} from '@mui/material';
 import {NextSeo} from 'next-seo';
-import {metaConstants} from '@utils/Constants';
+import {metaConstants, shippingFormFields} from '@utils/Constants';
 import sanitizeHtml from 'sanitize-html';
+import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 
 interface OrderRequest {
   product: Product;
@@ -26,17 +27,6 @@ interface ImageListProps {
   images: File[];
   handleFileRemove: (e: number) => void;
 }
-
-const shippingFormFields = [
-  {name: 'shippingFullName', placeholder: 'Name*'},
-  {name: 'shippingCompany', placeholder: 'Company'},
-  {name: 'shippingAddressLineOne', placeholder: 'Address*'},
-  {name: 'shippingAddressLineTwo', placeholder: 'Address 2'},
-  {name: 'shippingCity', placeholder: 'City*'},
-  {name: 'shippingState', placeholder: 'State*'},
-  {name: 'shippingZipcode', placeholder: 'Zip Code*'},
-  {name: 'shippingPhoneNumber', placeholder: 'Phone*'}
-];
 
 const OrderRequest: FC<OrderRequest> = ({product}) => {
   const [minQuantity, setMinQuantity] = useState<number>(0);
@@ -254,7 +244,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <span className="text-primary-500">{product?.sku}</span>
                   </h6>
 
-                  <div className="mt-4 w-full bg-[#f6f7f8] p-3 rounded-xl">
+                  {/* <div className="mt-4 w-full bg-[#f6f7f8] p-3 rounded-xl">
                     <ul className="text-xs text-mute3 font-bold product-card__categories">
                       {product?.additionalRows &&
                         [...product.additionalRows]
@@ -271,17 +261,19 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                             </li>
                           ))}
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div>
                 <div className="flex flex-wrap gap-2 justify-between items-center">
                   <div>
-                    <FormHeading text="Quantity:" />
+                    <FormHeading text="Quantity" />
                     <div className="flex items-center">
                       <FormInput
                         type="number"
                         name="quantityOrdered"
+                        label="Quantity"
+                        required={true}
                         placeHolder="Quantity"
                         formik={formik}
                         handleOnBlur={() => calculatePrices()}
@@ -291,7 +283,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                   </div>
                   <div>
                     <div>
-                      <FormHeading text="Sub Total:" />
+                      <FormHeading text="Sub Total" />
                     </div>
                     <div>
                       {!minQuantityError ? (
@@ -327,13 +319,16 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <FormInput
                       type="text"
                       name="billingFullName"
-                      placeHolder="Name*"
+                      required={true}
+                      placeHolder="Name"
+                      label="Name"
                       formik={formik}
                     />
                     <FormInput
                       type="text"
                       name="billingCompany"
                       placeHolder="Company"
+                      label="Company"
                       formik={formik}
                     />
 
@@ -341,7 +336,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="billingAddressLineOne"
-                        placeHolder="Address*"
+                        required={true}
+                        placeHolder="Address"
+                        label="Address"
                         formik={formik}
                       />
                     </div>
@@ -350,6 +347,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         type="text"
                         name="billingAddressLineTwo"
                         placeHolder="Address 2"
+                        label="Address 2"
                         formik={formik}
                       />
                     </div>
@@ -357,27 +355,35 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <FormInput
                       type="text"
                       name="billingCity"
-                      placeHolder="City*"
+                      placeHolder="City"
+                      label="City"
+                      required={true}
                       formik={formik}
                     />
                     <FormInput
                       type="text"
                       inputType="select"
                       name="billingState"
-                      placeHolder="State*"
+                      placeHolder="State"
+                      label="State"
+                      required={true}
                       formik={formik}
                     />
 
                     <FormInput
                       type="text"
                       name="billingZipcode"
-                      placeHolder="Zip Code*"
+                      placeHolder="Zip Code"
+                      label="Zip Code"
+                      required={true}
                       formik={formik}
                     />
                     <FormInput
                       type="text"
                       name="billingPhoneNumber"
-                      placeHolder="Phone*"
+                      placeHolder="Phone"
+                      label="Phone"
+                      required={true}
                       formik={formik}
                     />
 
@@ -385,13 +391,15 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       <FormInput
                         type="text"
                         name="billingEmailAddress"
-                        placeHolder="Email*"
+                        placeHolder="Email"
+                        label="Email"
+                        required={true}
                         formik={formik}
                       />
                     </TootipBlack>
                   </div>
                   <FormHeading text="Shipping Information" />
-                  <div className="flex flex-wrap justify-between gap-4 mt-6">
+                  <div className="flex flex-wrap justify-between gap-4">
                     <div className="flex items-center">
                       <input
                         type="checkbox"
@@ -437,6 +445,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                           }
                           name={field.name}
                           placeHolder={field.placeholder}
+                          label={field.label}
                           formik={formik}
                         />
                       ))}
@@ -455,12 +464,14 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 {/* 2nd column */}
                 <div>
                   <FormHeading text="Product Details" />
-                  <div className="grid md:grid-cols-2 gap-6 mt-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <TootipBlack title="Please type the color/s of the item you are ordering.  If the item does not have a color code, or it is a full color item, you may enter N/A.">
                       <FormInput
                         type="text"
                         name="specificationsColor"
-                        placeHolder="Item Colors*"
+                        placeHolder="Item Colors"
+                        label="Item Colors"
+                        required={true}
                         formik={formik}
                       />
                     </TootipBlack>
@@ -469,6 +480,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         type="text"
                         name="specificationsSize"
                         placeHolder="Size"
+                        label="Size"
                         formik={formik}
                       />
                     </TootipBlack>
@@ -478,6 +490,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         type="text"
                         name="specificationsImprintColor"
                         placeHolder="Imprint Color"
+                        label="Imprint Color"
                         formik={formik}
                       />
                     </TootipBlack>
@@ -489,8 +502,8 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       `We will send a digital artwork proof for approval once the order is received.`
                     ]}
                   />
-                  <label className="w-fit flex group text-sm font-bold bg-[rgb(88,190,170)] hover:bg-primary-500 text-white cursor-pointer">
-                    <span className="group-hover:bg-primary-600 bg-[#49c8ae] text-center px-5 py-5 ">
+                  <label className="w-fit flex group text-sm font-bold bg-secondary-500 hover:bg-primary-500 text-white cursor-pointer">
+                    <span className="group-hover:bg-primary-600 bg-secondary-600 text-center px-5 py-5 ">
                       <Image
                         height={15}
                         width={15}
@@ -528,12 +541,13 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     />
                   )}
                   <FormHeading text="Additional Information" />
-                  <div className="grid md:grid-cols-2 gap-6 mt-6">
+                  <div className="grid md:grid-cols-2 gap-6">
                     <TootipBlack title="Use this field to let us know the date you need the order in your hands.   If you do not have a deadline, you may leave this blank.">
                       <FormInput
                         type="date"
                         name="inHandDate"
                         placeHolder="Delivery Date"
+                        label="Delivery Date"
                         formik={formik}
                       />
                     </TootipBlack>
@@ -542,6 +556,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                         type="text"
                         name="saleRepName"
                         placeHolder="Sales Rep"
+                        label="Sales Rep"
                         formik={formik}
                       />
                     </TootipBlack>
@@ -551,6 +566,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                           inputType="textarea"
                           type="text"
                           name="additionalInformation"
+                          label="Additional Information"
                           placeHolder="Additional Information"
                           formik={formik}
                         />
@@ -581,7 +597,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                       newsletters now.
                     </label>
                   </div>
-                  <div className="flex items-start sm:items-center space-x-4 mt-6">
+                  <div className="flex items-start sm:items-center space-x-4 my-6">
                     <input
                       type="checkbox"
                       id="agreeToTerms"
@@ -611,8 +627,9 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                 <div className="mt-6">
                   <button
                     type="submit"
-                    className="w-fit flex py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-body text-white"
+                    className="w-fit flex py-5 px-32 btn-primary"
                   >
+                    <DocumentCheckIcon className="h-5 w-5 mr-2" />
                     {formik.isSubmitting ? (
                       <CircularProgress color="inherit" />
                     ) : (

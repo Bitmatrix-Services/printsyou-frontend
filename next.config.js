@@ -8,9 +8,9 @@ const nextConfig = {
   },
   images: {
     domains: [
-      'www.identity-links.com',
+      'http://localhost:8090',
       'media.nextopia.net',
-      'identitylinks-assets-test.s3.amazonaws.com'
+      'printsyouassets.s3.amazonaws.com'
     ]
   }
 };

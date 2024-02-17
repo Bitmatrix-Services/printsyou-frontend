@@ -8,6 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {http} from 'services/axios.service';
+import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -43,62 +44,72 @@ function ContactUs() {
       <PageHeader pageTitle="Contact Us" />
       <Container>
         {!isSubmitted ? (
-          <div className="xs:flex md:grid md:grid-cols-2 pt-8">
-            <form className="w-full pr-6" onSubmit={formik.handleSubmit}>
-              <div className="w-full space-y-6">
+          <div className="xs:flex md:grid md:grid-cols-2 py-8 md:py-16">
+            <form onSubmit={formik.handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                 <FormInput
                   type="text"
                   name="fullName"
-                  placeHolder="Full Name*"
+                  required={true}
+                  label="Name"
+                  placeHolder="Name"
                   formik={formik}
                 />
-                <div className="flex flex-col md:flex-row justify-between md:space-x-4">
-                  <FormInput
-                    type="text"
-                    name="emailAddress"
-                    placeHolder="Email*"
-                    formik={formik}
-                  />
-                  <FormInput
-                    type="text"
-                    name="phoneNumber"
-                    placeHolder="Phone"
-                    formik={formik}
-                  />
-                </div>
                 <FormInput
                   type="text"
-                  name="subject"
-                  placeHolder="Subject*"
+                  label="Email"
+                  name="emailAddress"
+                  required={true}
+                  placeHolder="Email"
                   formik={formik}
                 />
-                <div className="my-6">
+                <FormInput
+                  type="text"
+                  label="Phone Number"
+                  name="phoneNumber"
+                  placeHolder="Phone"
+                  formik={formik}
+                />
+                <FormInput
+                  type="text"
+                  label="Subject"
+                  name="subject"
+                  required={true}
+                  placeHolder="Subject"
+                  formik={formik}
+                />
+                <div className=" sm:col-span-2">
                   <FormInput
                     inputType="textarea"
                     type="text"
+                    label="Message"
+                    required={true}
                     name="message"
-                    placeHolder="Message*"
+                    placeHolder="Message"
                     formik={formik}
                   />
                 </div>
-              </div>
-              {apiError && (
-                <div className="text-red-500">
-                  something went wrong. please try again!
-                </div>
-              )}
-              <button
-                type="submit"
-                className={`w-fit mt-6 hidden md:block ${
-                  formik.isSubmitting ? 'py-3' : 'py-5'
-                } px-[9rem] text-sm  font-bold  bg-primary-500 hover:bg-body text-white`}
-              >
-                {formik.isSubmitting ? (
-                  <CircularProgress color="inherit" />
-                ) : (
-                  'SUBMIT'
+                {apiError && (
+                  <div className="text-red-500 sm:col-span-2">
+                    something went wrong. please try again!
+                  </div>
                 )}
-              </button>
+                <div className="sm:col-span-2">
+                  <button
+                    type="submit"
+                    className={`w-full flex text-center justify-center items-center ${
+                      formik.isSubmitting ? 'py-3' : 'py-5'
+                    } px-[9rem] py-4 btn-primary`}
+                  >
+                    <DocumentCheckIcon className="h-5 w-5 mr-2" />
+                    {formik.isSubmitting ? (
+                      <CircularProgress color="inherit" />
+                    ) : (
+                      'SUBMIT'
+                    )}
+                  </button>
+                </div>
+              </div>
             </form>
             <iframe
               className="custom-map w-full h-full pl-6"

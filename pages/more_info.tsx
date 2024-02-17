@@ -11,6 +11,7 @@ import PageHeader from '@components/globals/PageHeader';
 import {CircularProgress} from '@mui/material';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 
 interface MoreInfoProps {
   product: Product;
@@ -51,22 +52,11 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
       />
       <PageHeader pageTitle={'More Info'} />
       <Container>
-        <div className="px-8 pb-8 pt-10">
+        <div className="px-8 pb-8 pt-10 ">
           {!isSubmitted ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-              <div className="flex flex-col md:flex-row pt-3 gap-8 border-t-2">
-                <div className="order-first ">
-                  <div className="md:pt-8 flex ">
-                    <ImageWithFallback
-                      width={156}
-                      height={100}
-                      className="object-contain "
-                      src={product?.productImages?.[0]?.imageUrl}
-                      alt="product"
-                    />
-                  </div>
-                </div>
-                <div className=" pt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t-2 mt-10">
+              <div className="flex flex-col md:flex-row pt-3 gap-8 justify-center">
+                <div className="md:px-32 ">
                   <div className="mb-8">
                     <h3 className="text-3xl mt-5 mb-8  font-semibold capitalize">
                       {product.productName}
@@ -76,11 +66,21 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                       <span className="text-primary-500">{product.sku}</span>
                     </h6>
                   </div>
-
-                  <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
-                    <ul className="text-xs text-mute3 font-bold product-card__categories">
-                      {product?.additionalRows &&
-                        [...product.additionalRows]
+                  <div className="order-first ">
+                    <div className="md:pt-2 flex ">
+                      <ImageWithFallback
+                        width={300}
+                        height={100}
+                        className="object-contain "
+                        src={product?.productImages?.[0]?.imageUrl}
+                        alt="product"
+                      />
+                    </div>
+                  </div>
+                  {product?.additionalRows.length > 0 && (
+                    <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
+                      <ul className="text-xs text-mute3 font-bold product-card__categories">
+                        {[...product.additionalRows]
                           ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                           .map(row => (
                             <li key={row.id}>
@@ -93,60 +93,69 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                               </span>
                             </li>
                           ))}
-                    </ul>
-                  </div>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="grid grid-cols-1">
-                <div className="xs:flex md:grid ">
-                  <form onSubmit={formik.handleSubmit}>
-                    <div className="w-full space-y-6">
+              <div className="pt-[2rem]">
+                <form onSubmit={formik.handleSubmit}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                    <FormInput
+                      type="text"
+                      name="fullName"
+                      required={true}
+                      label="Name"
+                      placeHolder="Name"
+                      formik={formik}
+                    />
+                    <FormInput
+                      type="text"
+                      label="Email"
+                      name="emailAddress"
+                      required={true}
+                      placeHolder="Email"
+                      formik={formik}
+                    />
+                    <FormInput
+                      type="text"
+                      label="Phone Number"
+                      name="phoneNumber"
+                      placeHolder="Phone"
+                      formik={formik}
+                    />
+                    <FormInput
+                      type="text"
+                      label="Subject"
+                      name="subject"
+                      required={true}
+                      placeHolder="Subject"
+                      formik={formik}
+                    />
+                    <div className=" sm:col-span-2">
                       <FormInput
+                        inputType="textarea"
                         type="text"
-                        name="fullName"
-                        placeHolder="Name*"
+                        label="Message"
+                        required={true}
+                        name="message"
+                        placeHolder="Message"
                         formik={formik}
                       />
-                      <div className="flex flex-col md:flex-row justify-between md:space-x-4">
-                        <FormInput
-                          type="text"
-                          name="emailAddress"
-                          placeHolder="Email*"
-                          formik={formik}
-                        />
-                        <FormInput
-                          type="text"
-                          name="phoneNumber"
-                          placeHolder="Phone"
-                          formik={formik}
-                        />
+                    </div>
+                    {apiError && (
+                      <div className="text-red-500 sm:col-span-2">
+                        something went wrong. please try again!
                       </div>
-                      <FormInput
-                        type="text"
-                        name="subject"
-                        placeHolder="Subject*"
-                        formik={formik}
-                      />
-                      <div className="my-6">
-                        <FormInput
-                          inputType="textarea"
-                          type="text"
-                          name="message"
-                          placeHolder="Message*"
-                          formik={formik}
-                        />
-                      </div>
-                      {apiError && (
-                        <div className="text-red-500">
-                          something went wrong. please try again!
-                        </div>
-                      )}
+                    )}
+                    <div className="sm:col-span-2">
                       <button
                         type="submit"
-                        className={`w-fit mt-6 hidden md:block ${
+                        className={`w-full flex text-center justify-center items-center ${
                           formik.isSubmitting ? 'py-3' : 'py-5'
-                        } px-[9rem] text-sm  font-bold  bg-primary-500 hover:bg-body text-white`}
+                        } px-[9rem] py-4 btn-primary`}
                       >
+                        <DocumentCheckIcon className="h-5 w-5 mr-2" />
                         {formik.isSubmitting ? (
                           <CircularProgress color="inherit" />
                         ) : (
@@ -154,8 +163,8 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                         )}
                       </button>
                     </div>
-                  </form>
-                </div>
+                  </div>
+                </form>
               </div>
             </div>
           ) : (

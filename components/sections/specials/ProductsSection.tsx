@@ -35,7 +35,7 @@ const ProductsSection: FC<ProductsSectionProps> = ({
   const getProductByCategory = async () => {
     try {
       setIsLoading(true);
-      let query = `product/byCategory/${categoryId}?&size=${pageSize}&filter=${sort}`;
+      let query = `product/byCategory/${categoryId}?&size=${pageSize}&filter=${sort}&minPrice=0&maxPrice=10000`;
       if (maxPrice && minPrice) {
         query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
       }

@@ -4,9 +4,9 @@ import Image from 'next/image';
 
 export const aboutInfo = [
   {
-    title: 'Identity Links',
-    text: 'A family-operated promotional products company has been in business since 1971. We are importers and distributors of low cost promotional items, executive logo gifts, and corporate apparel. As veterans in the corporate imprinted gift industry, we know what it takes to attract and keep valued clients. Prompt customer service, a knowledgeable and friendly sales staff, and the lowest prices on the web are what keep our clients coming back.',
-    imageSrc: '/assets/image-1.png'
+    title: 'Prints You',
+    text: `Welcome to PrintsYou, the fresh face in promotional products. Despite being newcomers, our passion drives us to excel in delivering innovative promotional items, executive gifts, and corporate apparel. Our commitment? Exceptional customer service, expert advice, and unbeatable prices. At PrintsYou, we're more than just a business; we're your partners in making an impactful statement. Let's embark on this journey together, creating memorable connections through quality products that resonate with your brand. Your vision, our expertise—let's make your mark in the world.`,
+    imageSrc: '/assets/about-us-main.png'
   }
 ];
 
@@ -35,7 +35,7 @@ const AboutIdentitySection = () => {
                     height={354}
                     className="object-contain w-[85%]"
                     src={about.imageSrc}
-                    alt="..."
+                    alt="about us"
                   />
                 </div>
               </>
