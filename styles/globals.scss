@@ -383,9 +383,6 @@
 #products-page .list-product .sort-show .select-sort .select select {
   border: none;
   background: transparent;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   font-size: 14px;
   display: block;
   width: 100%;
@@ -552,4 +549,32 @@
 
 ::-webkit-scrollbar-thumb:horizontal {
   background-color: rgb(254 190 64);
+}
+
+.category-title-desc {
+  color: #686d79;
+  padding-top: 1rem;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: normal;
+
+  h1 {
+    color: #303541;
+    font-weight: 300;
+    font-size: 32px;
+    line-height: 41.6px;
+    margin-bottom: 0.75rem;
+  }
+
+  h2,
+  h3,
+  h4,
+  p,
+  span {
+    color: #686d79;
+    padding-top: 1rem;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: normal;
+  }
 }

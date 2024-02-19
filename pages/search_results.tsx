@@ -64,7 +64,7 @@ const CategoryDetails = () => {
   );
 
   useEffect(() => {
-    if (keywords) handleSearch();
+    if (keywords || tag) handleSearch();
   }, [router.query]);
 
   const handleSearch = async () => {

@@ -21,7 +21,7 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
                 >
                   ITEM CATEGORIES
                 </div>
-                <ul className="text-sm  product-card__categories">
+                <ul className="text-sm grid grid-cols-2 md:grid-cols-1  product-card__categories">
                   {selectedCategory.subCategories.map((category, index) => (
                     <li key={index} className=" mb-2">
                       <Link

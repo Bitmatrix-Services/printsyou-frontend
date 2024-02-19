@@ -10,7 +10,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
-import '@styles/globals.css';
+import '@styles/globals.scss';
 import {useAppDispatch} from '@store/hooks';
 import {useRouter} from 'next/router';
 import {FC, useEffect} from 'react';

@@ -61,7 +61,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
         href={`products/${product.uniqueProductName}`}
         className="group relative bg-white cursor-pointer"
       >
-        <div className="min-h-[21.40rem] border border-[#edeff2]">
+        <div className="min-h-[18rem] border border-[#edeff2]">
           {product?.priceGrids?.length > 0 &&
             [...product.priceGrids].sort((a, b) => b.countFrom - a.countFrom)[0]
               ?.salePrice > 0 && (
@@ -77,8 +77,8 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
               </div>
             )}
           <div className="px-4 pb-4">
-            <div className="flex gap-2 mt-4 mb-4">
-              <span className="text-xs text-[#888] mr-auto">Kids Section</span>
+            <div className="flex my-4 justify-end">
+              {/* <span className="text-xs text-[#888] mr-auto">Kids Section</span> */}
               {isModal && (
                 <button
                   type="button"
@@ -140,7 +140,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
               dispatch(setIsCartModalOpen(true));
             }}
             // href={`/order_request?item_id=${product.id}`}
-            className="h-16 w-16 flex items-center justify-center bg-white group-hover:bg-primary-500 group-hover:border-primary-500 border-l border-[#edeff2]"
+            className="h-16 w-8 md:w-16 flex items-center justify-center bg-white group-hover:bg-primary-500 group-hover:border-primary-500 border-l border-[#edeff2]"
           >
             <ShoppingCartIcon className="h-7 w-7" />
           </div>

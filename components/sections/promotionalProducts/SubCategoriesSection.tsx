@@ -11,9 +11,9 @@ const SubCategoriesSection: FC<SubCategoriesSectionProps> = ({
   subCategoryList
 }) => {
   return (
-    <ul className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 xl:gap-4 2xl:gap-10">
+    <ul className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 2xl:gap-10">
       {subCategoryList.map(category => (
-        <li key={category.id} className="mt-16 sm:mt-0">
+        <li key={category.id}>
           <SubCategoryCard category={category} />
         </li>
       ))}

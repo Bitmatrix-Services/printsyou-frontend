@@ -10,7 +10,9 @@ interface CategoryDetailsSectionProps {
   category: Category;
 }
 
-const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
+const CategoryDetailsSection: FC<CategoryDetailsSectionProps> = ({
+  category
+}) => {
   const router = useRouter();
 
   const [mount, setMount] = useState(false);
@@ -36,22 +38,12 @@ const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
           {mount && category?.categoryDescription && (
             <div className="flex gap-2">
               <div className="pt-2 pb-8 mb-2">
-                <div className="text-[#303541] font-light text-[32px] leading-[41.6px] mb-3">
-                  {
-                    getCateoryTitleAndDescription(category.categoryDescription)
-                      ?.title
-                  }
-                </div>
-                {getCateoryTitleAndDescription(
-                  category.categoryDescription
-                )?.descriptionList?.map(text => (
-                  <p
-                    key={text}
-                    className=" font-normal text-mute3  text-[16px] py-2 font-poppins"
-                  >
-                    {text}
-                  </p>
-                ))}
+                <div
+                  className="category-title-desc"
+                  dangerouslySetInnerHTML={{
+                    __html: category.categoryDescription
+                  }}
+                ></div>
               </div>
             </div>
           )}
@@ -71,4 +63,4 @@ const CateoryDetailsSection: FC<CategoryDetailsSectionProps> = ({category}) => {
   );
 };
 
-export default CateoryDetailsSection;
+export default CategoryDetailsSection;
