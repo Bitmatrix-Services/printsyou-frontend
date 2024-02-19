@@ -39,7 +39,7 @@ const FeaturedProductSection: FC<FeaturedSectionProps> = ({
             </Link>
           )}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 xl:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 xl:gap-8">
           {products?.slice(0, 5).map(product => (
             <div className="col" key={product.id}>
               <FeaturedProductCard product={product} />

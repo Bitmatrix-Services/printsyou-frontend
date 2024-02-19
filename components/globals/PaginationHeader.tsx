@@ -41,7 +41,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
             <div className="select-sort flex flex-col sm:flex-row gap-4">
               <div className="item sort-by">
                 <div className="name">Sort by</div>
-                <div className="select">
+                <div className="select pr-1">
                   <select
                     name="theme4"
                     value={sort}
@@ -58,7 +58,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
               </div>
               <div className="item show">
                 <div className="name">Show</div>
-                <div className="select">
+                <div className="select pr-1">
                   <select
                     name="theme5"
                     className="custom_theme5 outline-none"

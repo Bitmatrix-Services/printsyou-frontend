@@ -101,7 +101,7 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 <CircularProgress color="warning" />
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {products?.map(product => (
                   <FeaturedProductCard
                     key={product.id}
