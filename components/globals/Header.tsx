@@ -17,7 +17,6 @@ import {
 } from '@store/slices/category/catgory.slice';
 import {useScrollingUp} from 'hooks/useScrolllingUp';
 import {DropDownNavMenu} from './DropDownNavMenu';
-import {useRouter} from 'next/router';
 import {
   // HeartIcon,
   ShoppingCartIcon
@@ -32,7 +31,6 @@ import {setSidebarCartOpen} from '@store/slices/cart/cart.slice';
 const Header = () => {
   const dispatch = useAppDispatch();
   const {scrollingUp, scrollValue} = useScrollingUp();
-  const router = useRouter();
 
   const cartItems = useAppSelector(state => state.cart.cartItems);
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -243,7 +241,14 @@ const Header = () => {
       <Drawer
         open={mobileMenu}
         onClose={handleClose}
-        classes={{paper: 'bg-[#303546] text-white w-full max-w-[25rem]'}}
+        PaperProps={{
+          style: {
+            backgroundColor: '#303546',
+            color: 'white',
+            width: 'full',
+            maxWidth: '25rem'
+          }
+        }}
       >
         <div>
           <fieldset>
@@ -270,7 +275,10 @@ const Header = () => {
             </div>
           </fieldset>
           <fieldset className="border-b border-gray-600">
-            <Accordion className="bg-[#303546] px-2 border-0">
+            <Accordion
+              sx={{backgroundColor: '#303546'}}
+              className=" px-2 border-0"
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon className="text-white" />}
               >
@@ -301,7 +309,10 @@ const Header = () => {
           </fieldset>
           {categoryList.slice(0, 6).map(category => (
             <fieldset key={category.id} className="border-b border-gray-600">
-              <Accordion className="bg-[#303546] px-2 border-0">
+              <Accordion
+                style={{backgroundColor: '#303546'}}
+                className=" px-2 border-0"
+              >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon className="text-white" />}
                 >

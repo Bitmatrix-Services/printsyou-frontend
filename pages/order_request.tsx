@@ -609,7 +609,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     <label className="ml-2" htmlFor="agreeToTerms">
                       I have Read & Agree To Identity-Links{' '}
                       <Link
-                        href="/artwork/all"
+                        href="/aditional_information/artwork"
                         target="blank"
                         className="text-blue-500"
                       >

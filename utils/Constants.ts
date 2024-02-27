@@ -4,6 +4,26 @@ export const metaConstants = {
     'Custom Printed Promotional Products with your logo or custom imprinted message. Thousands of promotional items to choose from. Logo merch for trade shows, conventions, or hand outs. Promotional swag for the office or home.'
 };
 
+export const tabsList = [
+  'Overview',
+  'Artwork',
+  'Ordering & Payments',
+  'Shipping',
+  'Terms & Conditions',
+  'Testimonials',
+  'promotional Blogs'
+];
+
+export const tabUrls = [
+  'overview',
+  'artwork',
+  'ordering_and_payments',
+  'shipping',
+  'terms_and_conditions',
+  'testimonials',
+  'blogs'
+];
+
 export const statesList = [
   'Alabama',
   'Alaska',

@@ -28,11 +28,7 @@ const CategoryDetailsSection: FC<CategoryDetailsSectionProps> = ({
           <div>
             <Breadcrumb
               prefixTitle="Promotional Products"
-              queryParams={
-                Array.isArray(router.query?.uniqueCategoryName)
-                  ? router.query?.uniqueCategoryName
-                  : []
-              }
+              list={category.crumbs}
             />
           </div>
           {mount && category?.categoryDescription && (

@@ -55,7 +55,6 @@ const OverviewArtworkSection: FC<OverviewArtworkSectionProps> = ({
                 index={index}
                 icon={items.icon}
                 heading={items.heading}
-                setTabValue={setTabValue}
               />
             );
           })}

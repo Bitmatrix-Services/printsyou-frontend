@@ -1,4 +1,4 @@
-import React, {FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode, useEffect, useState} from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Container from '@components/globals/Container';
@@ -10,10 +10,11 @@ import TestimonialsSection from '@components/sections/artwork/TestimonialsSectio
 import OverviewArtworkSection from '@components/sections/artwork/OverviewArtworkSection';
 import PageHeader from '@components/globals/PageHeader';
 import {NextSeo} from 'next-seo';
-import {metaConstants} from '@utils/Constants';
+import {metaConstants, tabUrls, tabsList} from '@utils/Constants';
 import PromotionalBlogs from '@components/sections/artwork/PromotionalBlogs';
 import {http} from 'services/axios.service';
 import {Blog} from '@utils/type';
+import {useRouter} from 'next/router';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -23,16 +24,6 @@ interface TabPanelProps {
 interface ArtworkProps {
   allBlogs: Blog[];
 }
-
-const tabsList = [
-  'Overview',
-  'Artwork',
-  'Ordering & Payments',
-  'Shipping',
-  'Terms & Conditions',
-  'Testimonials',
-  'promotional Blogs'
-];
 
 function CustomTabPanel(props: TabPanelProps) {
   const {children, value, index, ...other} = props;
@@ -51,7 +42,22 @@ function CustomTabPanel(props: TabPanelProps) {
 }
 
 const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
+  const router = useRouter();
+
   const [value, setValue] = useState<number>(0);
+
+  useEffect(() => {
+    if (router.query.pageName?.[0]) {
+      let index = tabUrls.indexOf(router.query.pageName?.[0]);
+      if (index === -1) {
+        setValue(0);
+      } else {
+        setValue(index);
+      }
+    } else {
+      setValue(0);
+    }
+  }, [router]);
 
   const sections = [
     {index: 0, component: <OverviewArtworkSection setTabValue={setValue} />},
@@ -72,7 +78,14 @@ const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
           <Container>
             <Tabs
               value={value}
-              onChange={(_, newValue) => setValue(newValue)}
+              onChange={(_, newValue) => {
+                // setValue(newValue);
+                router.push(
+                  `/aditional_information/${tabUrls[newValue]
+                    .toLowerCase()
+                    .replace(/\s+/g, '_')}`
+                );
+              }}
               variant="scrollable"
               scrollButtons="auto"
               allowScrollButtonsMobile
@@ -101,9 +114,13 @@ const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
 };
 
 export const getServerSideProps = async () => {
-  const {data} = await http.get(`/blog/all`);
-  const allBlogs = data.payload;
-  return {props: {allBlogs}};
+  try {
+    const {data} = await http.get(`/blog/all`);
+    const allBlogs = data.payload;
+    return {props: {allBlogs}};
+  } catch (error) {
+    return {props: {allBlogs: []}};
+  }
 };
 
 export default Artwork;

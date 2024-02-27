@@ -1,21 +1,16 @@
 import {ChevronRightIcon, HomeIcon} from '@heroicons/react/24/solid';
+import {Crumbs} from '@store/slices/category/category';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import React, {FC} from 'react';
 
 interface Breadcrumb {
-  queryParams: string[];
+  list: Crumbs[];
   prefixTitle?: string;
 }
 
-const Breadcrumb: FC<Breadcrumb> = ({queryParams, prefixTitle}) => {
+const Breadcrumb: FC<Breadcrumb> = ({list, prefixTitle}) => {
   const router = useRouter();
-
-  const removeHyphensAndCapitalize = (text: string) => {
-    return text.replace(/-/g, ' ').replace(/(?:^|\s)\S/g, a => {
-      return a.toUpperCase();
-    });
-  };
 
   return (
     <div className="flex flex-wrap gap-2 text-sm font-medium mb-6 items-center text-[#787b82]">
@@ -26,25 +21,30 @@ const Breadcrumb: FC<Breadcrumb> = ({queryParams, prefixTitle}) => {
         <ChevronRightIcon className="h-3 w-3 mr-1 " />
       </div>
       {prefixTitle && <div className=" mr-1 ">{prefixTitle}</div>}
-      {queryParams?.map((url, index) => (
-        <React.Fragment key={url}>
-          <div>
-            <ChevronRightIcon className="h-3 w-3 mr-1 " />
-          </div>
-          <div
-            className={`text-[#303541] ${
-              index !== queryParams.length - 1 && 'hover:cursor-pointer'
-            }`}
-            onClick={() => {
-              if (index !== queryParams.length - 1) {
-                router.push(`/${queryParams.slice(0, index + 1).join('/')}`);
-              }
-            }}
-          >
-            {removeHyphensAndCapitalize(url)}
-          </div>
-        </React.Fragment>
-      ))}
+      {list.length > 0 &&
+        [...list]
+          ?.sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+          .map((listItem, index) => (
+            <React.Fragment key={listItem.id}>
+              <div>
+                <ChevronRightIcon className="h-3 w-3 mr-1 " />
+              </div>
+              <div
+                className={`${
+                  index !== list.length - 1
+                    ? 'hover:cursor-pointer text-mute2 hover:text-secondary-500'
+                    : 'font-semibold text-[#303541]'
+                }`}
+                onClick={() => {
+                  if (index !== list.length - 1) {
+                    router.push(`/${listItem.uniqueCategoryName}`);
+                  }
+                }}
+              >
+                {listItem.name}
+              </div>
+            </React.Fragment>
+          ))}
     </div>
   );
 };

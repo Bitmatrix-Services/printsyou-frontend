@@ -1,27 +1,25 @@
-import React, {
-  FC,
-  ReactNode,
-  Dispatch as ReactDispatch,
-  SetStateAction
-} from 'react';
+import React, {FC, ReactNode} from 'react';
+import {tabUrls} from '@utils/Constants';
+import {useRouter} from 'next/router';
 
 interface OverviewCardProps {
   icon: ReactNode;
   heading: string;
-  setTabValue: ReactDispatch<SetStateAction<number>>;
   index: number;
 }
 
-const OverviewCard: FC<OverviewCardProps> = ({
-  icon,
-  heading,
-  setTabValue,
-  index
-}) => {
+const OverviewCard: FC<OverviewCardProps> = ({icon, heading, index}) => {
+  const router = useRouter();
   return (
     <div
       className="group bg-white hover:bg-primary-500 text-body hover:text-white px-7 py-10 xl:py-12 2xl:py-20 border-b-2 border-b-black hover:cursor-pointer"
-      onClick={() => setTabValue(index + 1)}
+      onClick={() => {
+        router.push(
+          `/aditional_information/${tabUrls[index + 1]
+            .toLowerCase()
+            .replace(/\s+/g, '_')}`
+        );
+      }}
     >
       <div className="flex flex-col justify-center items-center text-center">
         <div className="h-24 w-24 min-w-[6rem] relative mb-4">

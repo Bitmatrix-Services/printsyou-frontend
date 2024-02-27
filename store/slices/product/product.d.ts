@@ -68,6 +68,7 @@ export interface Product {
   productImages?: ProductImages[];
   additionalFieldProductValues: AdditionalFieldProductValues[];
   additionalRows: AdditionalRows[];
+  crumbs: Crumbs[];
 }
 
 export interface CategoryProduct {

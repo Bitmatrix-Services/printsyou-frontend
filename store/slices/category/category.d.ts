@@ -17,6 +17,7 @@ export type Category = {
   subCategories: Category[];
   metaTitle: string | null;
   metaDescription: string | null;
+  crumbs: Crumbs[];
 };
 
 export type BannerList = {
@@ -27,4 +28,11 @@ export type BannerList = {
     categoryId: string;
     ucategoryName: string;
   };
+};
+
+export type Crumbs = {
+  id: string;
+  name: string;
+  sequenceNumber: number;
+  uniqueCategoryName: string;
 };

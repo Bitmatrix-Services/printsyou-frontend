@@ -418,7 +418,7 @@ const Checkout: FC = () => {
                     <label className="ml-2" htmlFor="agreeToTerms">
                       I have Read & Agree To Identity-Links{' '}
                       <Link
-                        href="/artwork/all"
+                        href="/aditional_information/terms_and_conditions"
                         target="blank"
                         className="text-blue-500"
                       >

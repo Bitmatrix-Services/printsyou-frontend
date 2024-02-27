@@ -96,7 +96,7 @@ const SearchBar = () => {
             }
           }}
         />
-        <div className="hidden sm:block">
+        {/* <div className="hidden sm:block">
           <Listbox value={selectedCategory} onChange={setSelectedCategory}>
             {({open}) => (
               <>
@@ -156,7 +156,7 @@ const SearchBar = () => {
               </>
             )}
           </Listbox>
-        </div>
+        </div> */}
         <button
           type="button"
           onClick={() => {
@@ -172,7 +172,7 @@ const SearchBar = () => {
       </div>
 
       {searchQuery && showResults === 'data found' && (
-        <div className="search-menu absolute z-20 w-[77%] overflow-auto top-14 left-[1.3rem] bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
+        <div className="search-menu absolute z-20 w-[92.2%] overflow-auto top-14 left-[1.3rem] bg-white border border-[#ddd] shadow-md p-2 rounded-b-md">
           <div className="space-y-3">
             {searchResult?.categories && (
               <fieldset>

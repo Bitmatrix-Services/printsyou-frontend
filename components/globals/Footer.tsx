@@ -13,14 +13,14 @@ import {CircularProgress} from '@mui/material';
 const identityShop = [
   {name: 'All Products', url: '/'},
   {name: 'About Us', url: '/about_us'},
-  {name: 'Testimonials', url: '/'},
+  {name: 'Testimonials', url: '/aditional_information/testimonials'},
   {name: 'Contact Us', url: '/contact_us'}
 ];
 const customerHelp = [
-  {name: 'Artwork', url: '/artwork'},
+  {name: 'Artwork', url: '/aditional_information/artwork'},
   {name: 'How To Order', url: '/how-to-order'},
   {name: 'FAQs', url: '/faq'},
-  {name: 'Additional Information', url: '/'}
+  {name: 'Additional Information', url: '/aditional_information/overview'}
 ];
 
 const social = [
