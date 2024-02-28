@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../../globals/Container';
 import Image from 'next/image';
 
-const identityitems = [
+const printsYouItems = [
   {
     image: '/assets/art-service.svg',
     heading: 'Art Services',
@@ -31,7 +31,7 @@ const IconBoxesSection = () => {
       <Container>
         <div className="lg:flex justify-center items-center gap-12 text-center lg:text-left">
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {identityitems.map(item => (
+            {printsYouItems.map(item => (
               <div
                 key={item.heading}
                 className="flex flex-col justify-center items-center text-center pt-2 pb-2 px-7 "

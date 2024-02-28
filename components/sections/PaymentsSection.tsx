@@ -20,8 +20,8 @@ const PaymentsSection = () => {
           <div className="mt-10 md:mt-0">
             <h3 className="text-white font-bold mb-5 ">Purchase Orders</h3>
             <p className="text-mute font-semibold">
-              Identity-Links may accept Purchase Orders. Please contact us to
-              see if you are eligible for this payment option.
+              PrintsYou may accept Purchase Orders. Please contact us to see if
+              you are eligible for this payment option.
             </p>
           </div>
         </div>
@@ -29,7 +29,7 @@ const PaymentsSection = () => {
           <h3 className="text-white font-bold mb-5">Credit Cards</h3>
           <p className="text-mute font-semibold">
             The majority of our customers prefer to pay for their orders by
-            credit card. Identity-Links accepts Visa, MasterCard, and American
+            credit card. PrintsYou accepts Visa, MasterCard, and American
             Express. We do not recommend submitting your credit card information
             via email. You can call in or fax your card information to us. When
             providing credit card information, please include your order number,
@@ -44,7 +44,7 @@ const PaymentsSection = () => {
             business days of order shipment (See terms and conditions).
             Information regarding account number and expiration dates as well as
             authorized signatures will be held entirely confidential by
-            Identity-Links and its representatives.
+            PrintsYou and its representatives.
           </p>
         </div>
       </div>

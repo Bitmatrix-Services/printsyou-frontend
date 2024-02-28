@@ -10,13 +10,14 @@ import {useFormik} from 'formik';
 import {EmailSchema} from '@utils/validationSchemas';
 import {CircularProgress} from '@mui/material';
 
-const identityShop = [
+const quickLinks = [
   {name: 'All Products', url: '/'},
   {name: 'About Us', url: '/about_us'},
   {name: 'Testimonials', url: '/aditional_information/testimonials'},
   {name: 'Contact Us', url: '/contact_us'}
 ];
-const customerHelp = [
+
+const customerCareLink = [
   {name: 'Artwork', url: '/aditional_information/artwork'},
   {name: 'How To Order', url: '/how-to-order'},
   {name: 'FAQs', url: '/faq'},
@@ -229,7 +230,7 @@ const Footer = () => {
                       Quick Links
                     </h3>
                     <div className="space-y-4">
-                      {identityShop.map(linkItem => (
+                      {quickLinks.map(linkItem => (
                         <Link
                           href={linkItem.url}
                           className="block text-sm hover:text-secondary-500 text-mute"
@@ -263,7 +264,7 @@ const Footer = () => {
                     Customer Care
                   </h3>
                   <div className="space-y-4">
-                    {customerHelp.map(linkItem => (
+                    {customerCareLink.map(linkItem => (
                       <Link
                         href={linkItem.url}
                         className="block text-sm hover:text-secondary-500 text-mute"

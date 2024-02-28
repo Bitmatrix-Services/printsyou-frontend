@@ -173,8 +173,8 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                 Thank You For Contacting Us!
               </h3>
               <h6>
-                An Identity Links sales rep will be contacting you shortly to
-                answer any questions and to provide more information.
+                A PrintsYou sales rep will be contacting you shortly to answer
+                any questions and to provide more information.
               </h6>
               <h6>
                 If you need immediate assistance, you may contact us toll free

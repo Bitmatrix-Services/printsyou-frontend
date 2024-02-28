@@ -1,5 +1,5 @@
 import PageHeader from '@components/globals/PageHeader';
-import AboutIdentitySection from '@components/sections/about/AboutIdentitySection';
+import AboutPrintsYouSection from '@components/sections/about/AboutPrintsYouSection';
 import HealineSection from '@components/sections/about/HeadlineSection';
 import IconBoxesSection from '@components/sections/about/IconBoxesSection';
 import OffersSection from '@components/sections/about/OffersSection';
@@ -12,7 +12,7 @@ function About() {
     <>
       <NextSeo title={`About Us | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle="About us" />
-      <AboutIdentitySection />
+      <AboutPrintsYouSection />
       <HealineSection />
       <IconBoxesSection />
       <OffersSection />

@@ -9,8 +9,7 @@ const AdvantageSection = () => {
       <Container>
         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-6">
           <h2 className="text-3xl lg:text-4xl font-normal capitalize text-center md:text-left md:mr-auto">
-            The <strong className="font-extrabold">Identity-Links</strong>{' '}
-            Advantage
+            The <strong className="font-extrabold">PrintsYou</strong> Advantage
           </h2>
           <Link
             className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
@@ -25,9 +24,9 @@ const AdvantageSection = () => {
             <li>
               <div className="text-base text-mute2 space-y-4">
                 <p>
-                  With over 40 years of experience, the Identity Links family
-                  has proven time and again that we should be your first and
-                  only choice for promotional products.
+                  With over 40 years of experience, the PrintsYou family has
+                  proven time and again that we should be your first and only
+                  choice for promotional products.
                 </p>
                 <p>
                   <strong className="text-body font-semibold">
@@ -55,7 +54,7 @@ const AdvantageSection = () => {
                 </div>
                 <div className="space-y-3 text-mute2">
                   <p>
-                    Think bigger means better? Not at Identity Links. As a
+                    Think bigger means better? Not at PrintsYou. As a
                     family-owned company, everyone takes pride in our excellent
                     customer service and competitive pricing. In fact, our sales
                     representatives do not receive a commission, which means
@@ -63,7 +62,7 @@ const AdvantageSection = () => {
                     pricing in the industry!
                   </p>
                   <p>
-                    When you choose Identity Links as your promotional products
+                    When you choose PrintsYou as your promotional products
                     source, you will get a personal dedicated sales
                     representative who will help you with all of your orders.
                     Whether you are ordering 100 pieces or 10,000 pieces, you
@@ -93,9 +92,9 @@ const AdvantageSection = () => {
                     No matter what type of marketing campaign you are planning,
                     we have the promotional goods you need to make it
                     successful. With over 32,000 promotional products to choose
-                    from on the Identity Links website, it is easy to find not
-                    just one but several products that best represent your
-                    company and customers.
+                    from on the PrintsYou website, it is easy to find not just
+                    one but several products that best represent your company
+                    and customers.
                   </p>
                   <p>
                     Not sure where to start? Just ask one of our experienced
@@ -130,9 +129,9 @@ const AdvantageSection = () => {
                   <div className="space-y-3 text-mute2">
                     <p>
                       When it comes to promotional products, our customers trust
-                      Identity Links for providing them with the products they
-                      need, when they need them, at a cost that will not break
-                      your budget. We offer hundreds of items that can be rush
+                      PrintsYou for providing them with the products they need,
+                      when they need them, at a cost that will not break your
+                      budget. We offer hundreds of items that can be rush
                       ordered, some of which can be printed and shipped out on
                       the same day! Once you place an order with us you can rest
                       assured that it will arrive on time. In fact, we offer a
@@ -172,13 +171,13 @@ const AdvantageSection = () => {
                         our testimonials page
                       </Link>{' '}
                       to see what satisfied customers have written about their
-                      experience with Identity Links
+                      experience with PrintsYou
                     </p>
                     <p>
                       While we are doing a little bragging, we should probably
-                      go ahead and tell you that Identity Links has been honored
-                      with multiple awards, including the Gold Pyramid Award and
-                      the ASI Award for Top 40 Fastest Growing Distributor.
+                      go ahead and tell you that PrintsYou has been honored with
+                      multiple awards, including the Gold Pyramid Award and the
+                      ASI Award for Top 40 Fastest Growing Distributor.
                     </p>
                   </div>
                 </div>
@@ -186,14 +185,14 @@ const AdvantageSection = () => {
               <li>
                 <div className="text-base text-mute2 space-y-4">
                   <p>
-                    With over 40 years of experience, the Identity Links family
-                    has proven time and again that we should be your first and
-                    only choice for promotional products.
+                    With over 40 years of experience, the PrintsYou family has
+                    proven time and again that we should be your first and only
+                    choice for promotional products.
                   </p>
                   <p>
                     <strong className="text-body font-semibold">
-                      Thank you for considering Identity Links as your go-to
-                      provider for premiere promotional products.
+                      Thank you for considering PrintsYou as your go-to provider
+                      for premiere promotional products.
                     </strong>
                   </p>
                 </div>

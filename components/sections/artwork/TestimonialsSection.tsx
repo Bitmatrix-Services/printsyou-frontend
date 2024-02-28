@@ -18,24 +18,24 @@ const testimonials = [
     company: 'CGI Federal'
   },
   {
-    text: 'I used Identity Links for a promotional baby bib order and had the pleasure of working with Bart. Bart was timely, professional and asked all the right questions. Our business will definitely use Identity Links again for their quality work and professionalism.',
+    text: 'I used PrintsYou for a promotional baby bib order and had the pleasure of working with Bart. Bart was timely, professional and asked all the right questions. Our business will definitely use PrintsYou again for their quality work and professionalism.',
     name: 'J.B.',
     company: ''
   },
 
   {
-    text: 'Identity-Links has done it again. Our shirts were at the hotel in Vegas when we arrived, just as promised. Keep up the good work. I have also passed your name on to our H.R. department. They should be using Identity-Links as well.',
+    text: 'PrintsYou has done it again. Our shirts were at the hotel in Vegas when we arrived, just as promised. Keep up the good work. I have also passed your name on to our H.R. department. They should be using PrintsYou as well.',
     name: 'Steve H.',
     company: ' Woodhaven Rx'
   },
 
   {
-    text: 'Your customer service is top notch. I am hoping this letter reaches the owner or president, and that he or she gives a special Pat on the Back to Danny Siegel. He was extremely patient and courteous throughout the whole ordering process, and called me the day after I received my shipment in order to be sure I was pleased with the product. I have used other promo product vendors in the past, but am now a loyal Identity-Links customer.',
+    text: 'Your customer service is top notch. I am hoping this letter reaches the owner or president, and that he or she gives a special Pat on the Back to Danny Siegel. He was extremely patient and courteous throughout the whole ordering process, and called me the day after I received my shipment in order to be sure I was pleased with the product. I have used other promo product vendors in the past, but am now a loyal PrintsYou customer.',
     name: 'Steve H.',
     company: ' Woodhaven Rx'
   },
   {
-    text: 'The laser pointers arrived today and look great! We are really, really happy with how our logo printed on the pointers. Thank you so much for all of your help and assistance! The next time we are interested in promotional items, we will definitely be contacting Identity-Links!',
+    text: 'The laser pointers arrived today and look great! We are really, really happy with how our logo printed on the pointers. Thank you so much for all of your help and assistance! The next time we are interested in promotional items, we will definitely be contacting PrintsYou!',
     name: 'Dee L. ',
     company: 'Blair, Church & Flynn'
   }

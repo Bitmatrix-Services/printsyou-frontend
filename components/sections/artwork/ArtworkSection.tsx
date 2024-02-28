@@ -4,7 +4,7 @@ import Container from '@components/globals/Container';
 
 export const aboutInfo = [
   {
-    title: 'Identity Links',
+    title: 'PrintsYou',
     text: 'A family-operated promotional products company has been in business since 1971. We are importers and distributors of low cost promotional items, executive logo gifts, and corporate apparel. As veterans in the corporate imprinted gift industry, we know what it takes to attract and keep valued clients. Prompt customer service, a knowledgeable and friendly sales staff, and the lowest prices on the web are what keep our clients coming back.',
     imageSrc: '/assets/image-1.png'
   }
@@ -79,7 +79,7 @@ const ArtworkSection = () => {
             Depending on the complexity of your artwork and the format in which
             it is sent to us, your proof will take anywhere from 1 hour to 24
             hours. In most cases, you will receive your proof within a few hours
-            of emailing it to us at info@identity-links.com. It is important to
+            of emailing it to us at info@printsyou.com. It is important to
             remember that we will not place any order without approval of the
             artwork. This ensures that you are completely satisfied with the
             proof before we send it to production. If you are in a rush, please

@@ -354,7 +354,7 @@ const Checkout: FC = () => {
               <FormHeading text="Payment Information" />
               <FormDescription
                 textArray={[
-                  'After submitting your order, Identity Links will follow up with any questions, a confirmation, and an artwork proof. The confirmation will include shipping charges, any applicable taxes, and any additional charges that may be required based on your artwork.',
+                  'After submitting your order, PrintsYou will follow up with any questions, a confirmation, and an artwork proof. The confirmation will include shipping charges, any applicable taxes, and any additional charges that may be required based on your artwork.',
                   'You have nothing to worry about by submitting your order. The order is not firm until your artwork proof along with the pricing breakdown has been approved and we begin production. The order may be canceled any time before that.',
                   "We do not request payment until we receive approvals, so if you're nervous about placing your order with us, don't be . There will be plenty of communication before we begin production"
                 ]}
@@ -370,7 +370,7 @@ const Checkout: FC = () => {
                     formik={formik}
                   />
                 </TootipBlack>
-                <TootipBlack title="If there was an Identity Links sales rep who helped you with the order, you may enter their name here.  If not, you may leave this field blank.">
+                <TootipBlack title="If there was an PrintsYou sales rep who helped you with the order, you may enter their name here.  If not, you may leave this field blank.">
                   <FormInput
                     type="text"
                     name="saleRepName"
@@ -419,7 +419,7 @@ const Checkout: FC = () => {
                       onChange={formik.handleChange}
                     />
                     <label className="ml-2" htmlFor="agreeToTerms">
-                      I have Read & Agree To Identity-Links{' '}
+                      I have Read & Agree To PrintsYou{' '}
                       <Link
                         href="/aditional_information/terms_and_conditions"
                         target="blank"

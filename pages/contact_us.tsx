@@ -120,8 +120,8 @@ function ContactUs() {
           <div className="flex flex-col space-y-4 mt-6 mb-16">
             <h3 className="text-xl font-bold">Thank You For Contacting Us!</h3>
             <h6>
-              An Identity Links sales rep will be contacting you shortly to
-              answer any questions and to provide more information.
+              An PrintsYou sales rep will be contacting you shortly to answer
+              any questions and to provide more information.
             </h6>
             <h6>
               If you need immediate assistance, you may contact us toll free at

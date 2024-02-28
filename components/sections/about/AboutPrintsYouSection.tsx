@@ -10,7 +10,7 @@ export const aboutInfo = [
   }
 ];
 
-const AboutIdentitySection = () => {
+const AboutPrintsYouSection = () => {
   return (
     <>
       <section className="bg-greyLight pt-20 pb-16 lg:pb-20">
@@ -47,4 +47,4 @@ const AboutIdentitySection = () => {
   );
 };
 
-export default AboutIdentitySection;
+export default AboutPrintsYouSection;
