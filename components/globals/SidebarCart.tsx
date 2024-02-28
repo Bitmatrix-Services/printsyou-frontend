@@ -48,7 +48,9 @@ const SidebarCart = () => {
         cartItemId: item.product.id,
         cartId: getCartId()
       };
-      await http.put(`/cart/remove`, {params: cartData});
+      await http.put(`/cart/remove`, undefined, {
+        params: {cartItemId: cartData.cartItemId, cartId: cartData.cartId}
+      });
       dispatch(removefromcart({productId: item.product.id}));
     } catch {}
   };

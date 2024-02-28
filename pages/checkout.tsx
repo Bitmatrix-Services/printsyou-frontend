@@ -186,8 +186,11 @@ const Checkout: FC = () => {
                             ${item.totalPrice}
                           </div>
                           <div
-                            onClick={() => handleRemoveItem(item)}
-                            className="text-red-500 cursor-pointer"
+                            onClick={e => {
+                              handleRemoveItem(item);
+                              e.stopPropagation();
+                            }}
+                            className="text-red-500 cursor-pointer hover:text-red-600"
                           >
                             <CloseIcon className="w-6 h-6" />
                           </div>
