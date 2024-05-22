@@ -4,11 +4,11 @@ import Container from '@components/globals/Container';
 import {useFormik} from 'formik';
 import {ContactUsSchema} from '@utils/validationSchemas';
 import FormInput from '@components/Form/FormInput';
-import CircularProgress from '@mui/material/CircularProgress';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {http} from 'services/axios.service';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
+import {CircularLoader} from "@components/globals/CircularLoader";
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -103,7 +103,7 @@ function ContactUs() {
                   >
                     <DocumentCheckIcon className="h-5 w-5 mr-2" />
                     {formik.isSubmitting ? (
-                      <CircularProgress color="inherit" />
+                        <CircularLoader/>
                     ) : (
                       'SUBMIT'
                     )}

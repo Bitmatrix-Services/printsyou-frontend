@@ -8,7 +8,7 @@ import {selectCategoryList} from '@store/slices/category/catgory.slice';
 import {http} from 'services/axios.service';
 import {useFormik} from 'formik';
 import {EmailSchema} from '@utils/validationSchemas';
-import {CircularProgress} from '@mui/material';
+import {CircularLoader} from "@components/globals/CircularLoader";
 
 const quickLinks = [
   {name: 'All Products', url: '/'},
@@ -160,7 +160,7 @@ const Footer = () => {
                     ) : (
                       <div className="flex items-center gap-2">
                         Subscribe
-                        <CircularProgress size={20} color="primary" />
+                        <CircularLoader size={24} />
                       </div>
                     )}
                   </button>

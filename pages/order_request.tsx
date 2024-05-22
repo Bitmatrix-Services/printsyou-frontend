@@ -14,11 +14,11 @@ import {Product} from '@store/slices/product/product';
 import ImageWithFallback from '@components/ImageWithFallback';
 import TootipBlack from '@components/globals/TootipBlack';
 import {XMarkIcon} from '@heroicons/react/24/solid';
-import {CircularProgress} from '@mui/material';
 import {NextSeo} from 'next-seo';
 import {metaConstants, shippingFormFields} from '@utils/Constants';
 import sanitizeHtml from 'sanitize-html';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
+import {CircularLoader} from "@components/globals/CircularLoader";
 
 interface OrderRequest {
   product: Product;
@@ -631,7 +631,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                   >
                     <DocumentCheckIcon className="h-5 w-5 mr-2" />
                     {formik.isSubmitting ? (
-                      <CircularProgress color="inherit" />
+                      <CircularLoader />
                     ) : (
                       'SUBMIT'
                     )}

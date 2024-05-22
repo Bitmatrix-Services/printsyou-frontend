@@ -8,10 +8,10 @@ import {http} from 'services/axios.service';
 import {Product} from '@store/slices/product/product';
 import ImageWithFallback from '@components/ImageWithFallback';
 import PageHeader from '@components/globals/PageHeader';
-import {CircularProgress} from '@mui/material';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
+import {CircularLoader} from "@components/globals/CircularLoader";
 
 interface MoreInfoProps {
   product: Product;
@@ -157,7 +157,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                       >
                         <DocumentCheckIcon className="h-5 w-5 mr-2" />
                         {formik.isSubmitting ? (
-                          <CircularProgress color="inherit" />
+                          <CircularLoader />
                         ) : (
                           'SUBMIT'
                         )}

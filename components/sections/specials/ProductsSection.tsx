@@ -3,8 +3,8 @@ import {FeaturedProductCard} from '../../cards/FeaturedProductCard';
 import {http} from 'services/axios.service';
 import {Product} from '@store/slices/product/product';
 import PaginationHeader from '@components/globals/PaginationHeader';
-import CircularProgress from '@mui/material/CircularProgress';
 import {useRouter} from 'next/router';
+import {CircularLoader} from "@components/globals/CircularLoader";
 
 interface ProductsSectionProps {
   isModal?: boolean;
@@ -89,7 +89,7 @@ const ProductsSection: FC<ProductsSectionProps> = ({
       >
         {isLoading ? (
           <div className="flex justify-center align-middle items-center h-[20rem]">
-            <CircularProgress color="warning" />
+            <CircularLoader/>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
