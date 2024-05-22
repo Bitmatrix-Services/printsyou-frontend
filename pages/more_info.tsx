@@ -11,7 +11,7 @@ import PageHeader from '@components/globals/PageHeader';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
-import {CircularLoader} from "@components/globals/CircularLoader";
+import {CircularLoader} from '@components/globals/CircularLoader';
 
 interface MoreInfoProps {
   product: Product;
@@ -156,11 +156,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                         } px-[9rem] py-4 btn-primary`}
                       >
                         <DocumentCheckIcon className="h-5 w-5 mr-2" />
-                        {formik.isSubmitting ? (
-                          <CircularLoader />
-                        ) : (
-                          'SUBMIT'
-                        )}
+                        {formik.isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                       </button>
                     </div>
                   </div>

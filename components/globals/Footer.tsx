@@ -8,7 +8,7 @@ import {selectCategoryList} from '@store/slices/category/catgory.slice';
 import {http} from 'services/axios.service';
 import {useFormik} from 'formik';
 import {EmailSchema} from '@utils/validationSchemas';
-import {CircularLoader} from "@components/globals/CircularLoader";
+import {CircularLoader} from '@components/globals/CircularLoader';
 
 const quickLinks = [
   {name: 'All Products', url: '/'},

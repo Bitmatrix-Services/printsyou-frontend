@@ -8,7 +8,7 @@ import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {http} from 'services/axios.service';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
-import {CircularLoader} from "@components/globals/CircularLoader";
+import {CircularLoader} from '@components/globals/CircularLoader';
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -102,11 +102,7 @@ function ContactUs() {
                     } px-[9rem] py-4 btn-primary`}
                   >
                     <DocumentCheckIcon className="h-5 w-5 mr-2" />
-                    {formik.isSubmitting ? (
-                        <CircularLoader/>
-                    ) : (
-                      'SUBMIT'
-                    )}
+                    {formik.isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                   </button>
                 </div>
               </div>

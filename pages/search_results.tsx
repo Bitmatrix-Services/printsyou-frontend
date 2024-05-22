@@ -7,7 +7,7 @@ import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
-import {CircularLoader} from "@components/globals/CircularLoader";
+import {CircularLoader} from '@components/globals/CircularLoader';
 
 type SearchType = {
   name: string;
@@ -133,7 +133,7 @@ const CategoryDetails = () => {
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
             {isPageLoading ? (
               <div className="flex justify-center align-middle items-center h-[20rem] w-[100%]">
-                <CircularLoader/>
+                <CircularLoader />
               </div>
             ) : (
               <>

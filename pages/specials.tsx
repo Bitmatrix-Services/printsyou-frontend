@@ -8,7 +8,7 @@ import {Product} from '@store/slices/product/product';
 import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
-import {CircularLoader} from "@components/globals/CircularLoader";
+import {CircularLoader} from '@components/globals/CircularLoader';
 
 const Specials = () => {
   const [specialProducts, setSpecialProducts] = useState<Product[]>([]);
@@ -61,7 +61,7 @@ const Specials = () => {
           )}
           {isLoading ? (
             <div className="flex justify-center align-middle items-center h-[20rem]">
-              <CircularLoader/>
+              <CircularLoader />
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">

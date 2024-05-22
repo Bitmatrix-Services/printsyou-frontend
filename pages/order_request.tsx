@@ -18,7 +18,7 @@ import {NextSeo} from 'next-seo';
 import {metaConstants, shippingFormFields} from '@utils/Constants';
 import sanitizeHtml from 'sanitize-html';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
-import {CircularLoader} from "@components/globals/CircularLoader";
+import {CircularLoader} from '@components/globals/CircularLoader';
 
 interface OrderRequest {
   product: Product;
@@ -630,11 +630,7 @@ const OrderRequest: FC<OrderRequest> = ({product}) => {
                     className="w-fit flex py-5 px-32 btn-primary"
                   >
                     <DocumentCheckIcon className="h-5 w-5 mr-2" />
-                    {formik.isSubmitting ? (
-                      <CircularLoader />
-                    ) : (
-                      'SUBMIT'
-                    )}
+                    {formik.isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                   </button>
                 </div>
               </div>
