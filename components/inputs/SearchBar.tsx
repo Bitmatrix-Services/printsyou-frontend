@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {http} from 'services/axios.service';
 import ImageWithFallback from '@components/ImageWithFallback';
 import Link from 'next/link';
@@ -6,8 +6,6 @@ import sanitize from 'sanitize-html';
 import {useRouter} from 'next/router';
 import {useDebounce} from 'hooks/useDeboune';
 import SearchIcon from '@components/icons/SearchIcon';
-import {Listbox, Transition} from '@headlessui/react';
-import {ChevronUpDownIcon} from '@heroicons/react/20/solid';
 
 type ItemType = {
   id: string;
@@ -15,31 +13,17 @@ type ItemType = {
   name: string;
   uniqueName: string;
 };
+
 interface SearchResult {
   categories?: ItemType[];
   products?: ItemType[];
 }
 
-const defaultCategories = [
-  {id: 1, name: 'All Categories'},
-  {id: 2, name: 'Accessories'},
-  {id: 3, name: 'Technology'},
-  {id: 4, name: 'Mobile phones and Tablets'},
-  {id: 5, name: 'Calendars'},
-  {id: 6, name: 'Drinkware'},
-  {id: 7, name: 'Outdoor'},
-  {id: 8, name: 'Pet Items'},
-  {id: 9, name: 'Writing'}
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ');
-}
+// const defaultCategories = [
+//   {id: 1, name: 'All Categories'},
+// ];
 
 const SearchBar = () => {
-  const [selectedCategory, setSelectedCategory] = useState(
-    defaultCategories[0]
-  );
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResult, setSearchResult] = useState<SearchResult>();
@@ -183,7 +167,7 @@ const SearchBar = () => {
                   {searchResult.categories.map(category => (
                     <Link
                       className="hover:cursor-pointer"
-                      href={category.uniqueName}
+                      href={`/categories/${category.uniqueName}`}
                       key={category.id}
                       onClick={() =>
                         setTimeout(() => {

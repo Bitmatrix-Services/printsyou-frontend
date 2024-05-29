@@ -37,7 +37,7 @@ const Breadcrumb: FC<Breadcrumb> = ({list, prefixTitle}) => {
                 }`}
                 onClick={() => {
                   if (index !== list.length - 1) {
-                    router.push(`/${listItem.uniqueCategoryName}`);
+                    router.push(`/categories/${listItem.uniqueCategoryName}`);
                   }
                 }}
               >

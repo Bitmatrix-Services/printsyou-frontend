@@ -58,7 +58,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   return (
     <>
       <Link
-        href={`products/${product.uniqueProductName}`}
+        href={`/products/${product.uniqueProductName}`}
         className="group relative bg-white cursor-pointer"
       >
         <div className="min-h-[18rem] border border-[#edeff2]">

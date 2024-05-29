@@ -6,7 +6,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Container from './Container';
 import {Category} from '@store/slices/category/category';
 import Image from 'next/image';
-import ImageWithFallback from '@components/ImageWithFallback';
 
 interface DropDownNavMenuProps {
   subCatList: Category[];
@@ -49,7 +48,7 @@ export const DropDownNavMenu: FC<DropDownNavMenuProps> = ({
                 >
                   <Link
                     className="flex text-sm text-mute hover:text-secondary-500 transition-all duration-150 group"
-                    href={`/${category.uniqueCategoryName}`}
+                    href={`/categories/${category.uniqueCategoryName}`}
                   >
                     <span
                       dangerouslySetInnerHTML={{

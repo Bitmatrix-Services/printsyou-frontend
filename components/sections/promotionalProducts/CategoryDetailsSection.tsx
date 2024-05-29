@@ -1,9 +1,7 @@
 import React, {FC, useState, useEffect} from 'react';
-import {useRouter} from 'next/router';
 import ProductSubCategoriesSection from './SubCategoriesSection';
 import ProductsSection from '../specials/ProductsSection';
 import {Category} from '@store/slices/category/category';
-import {getCateoryTitleAndDescription} from '@utils/utils';
 import Breadcrumb from '@components/globals/Breadcrumb';
 
 interface CategoryDetailsSectionProps {
@@ -13,8 +11,6 @@ interface CategoryDetailsSectionProps {
 const CategoryDetailsSection: FC<CategoryDetailsSectionProps> = ({
   category
 }) => {
-  const router = useRouter();
-
   const [mount, setMount] = useState(false);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ export interface CategoryInitialState {
   promotionalCategoriesLoading: boolean;
   bannerList: BannerList[];
   bannerListLoading: boolean;
+  siblingCategories: Category[];
 }
 
 export type Category = {

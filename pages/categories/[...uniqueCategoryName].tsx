@@ -1,15 +1,14 @@
 import React, {FC} from 'react';
-
-import CateoryDetailsSection from '@components/sections/promotionalProducts/CateoryDetailsSection';
+import CategoryDetailsSection from '@components/sections/promotionalProducts/CategoryDetailsSection';
 import Container from '@components/globals/Container';
 import Sidebar from '@components/globals/Sidebar';
 import {Category} from '@store/slices/category/category';
 import {GetServerSidePropsContext} from 'next';
-import {http} from 'services/axios.service';
+import {http} from '../../services/axios.service';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
-import {resend} from './_app';
 import getConfig from 'next/config';
+import {AxiosError} from 'axios';
 
 const config = getConfig();
 
@@ -39,7 +38,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
             <Sidebar selectedCategory={category} />
-            <CateoryDetailsSection category={category} />
+            <CategoryDetailsSection category={category} />
           </div>
         </Container>
       </div>
@@ -61,22 +60,44 @@ export const getServerSideProps = async (
       category = data.payload;
     }
     return {props: {category}};
-  } catch (error) {
-    // if (Array.isArray(uniqueCategoryName)) {
-    //   await resend.emails.send({
-    //     from: 'onboarding@resend.dev',
-    //     to: [
-    //       'abdul.wahab394.aw@gmail.com',
-    //       'awais.tariqq@gmail.com',
-    //       'saimali78941@gmail.com'
-    //     ],
-    //     subject: 'Error in Category',
-    //     html: `<h3>unique name of the category</h3>
-    //   <h3>${uniqueCategoryName.join('/')}</h3>
-    //   <h3>Error: ${error}</h3>`
-    //   });
-    // }
+  } catch (error: any) {
+    if ('response' in error) {
+      const err = error as AxiosError;
+      const response = err.response;
+      if (response && response.status == 302) {
+        return {
+          redirect: {
+            permanent: false,
+            destination:
+              '/categories/' + (response.data as any).payload.redirectTo
+          }
+        };
+      }
+      if (
+        response &&
+        response.status === 404 &&
+        Array.isArray(uniqueCategoryName)
+      ) {
+        const response = await http.get(
+          `product/validate?uniqueProductName=${uniqueCategoryName.join('/')}`
+        );
+        if (response && response.data && response.data.payload) {
+          return {
+            redirect: {
+              permanent: false,
+              destination: '/products/' + uniqueCategoryName.join('/')
+            }
+          };
+        }
+      }
+    }
   }
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/404'
+    }
+  };
 };
 
 export default CategoryDetails;
