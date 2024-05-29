@@ -129,8 +129,8 @@
 }
 
 .box-bottom-link:hover:after {
-  left: 0%;
-  right: 0%;
+  left: 0;
+  right: 0;
 }
 
 .tp-product {
@@ -175,7 +175,6 @@
 }
 
 .product-card__categories li {
-  background: url(/assets/icon-bullet-orange.png) left 6px no-repeat;
   padding: 0 0 0.4375rem 0.75rem;
 }
 

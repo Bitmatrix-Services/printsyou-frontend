@@ -10,7 +10,8 @@ const INITIAL_STATE: CategoryInitialState = {
   promotionalCategories: [],
   promotionalCategoriesLoading: false,
   bannerList: [],
-  bannerListLoading: false
+  bannerListLoading: false,
+  siblingCategories: []
 };
 
 export const getAllCategoryList = createAsyncThunk(
@@ -35,6 +36,13 @@ export const getAllBannerList = async (): Promise<BannerList[]> => {
   return res?.data.payload;
 };
 
+export const getAllSiblingCategories = async (
+  parentCategoryId: string
+): Promise<Category[]> => {
+  const res = await http.get(`/category/subCategories/${parentCategoryId}`);
+  return res?.data.payload;
+};
+
 export const getPromotionalCategories = createAsyncThunk(
   'product/getPromotionalCategories',
   getAllPromotionalCategories
@@ -45,15 +53,17 @@ export const getBannerList = createAsyncThunk(
   getAllBannerList
 );
 
+export const getSiblingCategories = createAsyncThunk(
+  'category/getSiblingCategories',
+  getAllSiblingCategories
+);
+
 export const categorySlice = createSlice({
   name: 'category',
   initialState: INITIAL_STATE,
   reducers: {},
   extraReducers: {
-    [getAllCategoryList.pending.type]: (
-      state,
-      action: PayloadAction<Category[]>
-    ) => {
+    [getAllCategoryList.pending.type]: state => {
       state.categoryListLoading = true;
     },
     [getAllCategoryList.fulfilled.type]: (
@@ -89,6 +99,13 @@ export const categorySlice = createSlice({
     },
     [getBannerList.rejected.type]: state => {
       state.bannerListLoading = false;
+    },
+
+    [getSiblingCategories.fulfilled.type]: (
+      state,
+      action: PayloadAction<Category[]>
+    ) => {
+      state.siblingCategories = action.payload;
     }
   }
 });
@@ -106,5 +123,8 @@ export const selectPromotionalCategoriesLoading = (state: RootState) =>
 export const selectBannerList = (state: RootState) => state.category.bannerList;
 export const selectBannerListLoading = (state: RootState) =>
   state.category.bannerListLoading;
+
+export const selectSiblingCategories = (state: RootState) =>
+  state.category.siblingCategories;
 
 export const categoryReducer = categorySlice.reducer;

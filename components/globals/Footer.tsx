@@ -249,7 +249,7 @@ const Footer = () => {
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6">
                     {categoryList.map(category => (
                       <Link
-                        href={`/${category.uniqueCategoryName}`}
+                        href={`/categories/${category.uniqueCategoryName}`}
                         className="block text-sm hover:text-secondary-500 text-mute"
                         key={category.id}
                         dangerouslySetInnerHTML={{

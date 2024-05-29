@@ -12,11 +12,15 @@ const SubCategoriesSection: FC<SubCategoriesSectionProps> = ({
 }) => {
   return (
     <ul className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 2xl:gap-10">
-      {subCategoryList.map(category => (
-        <li key={category.id}>
-          <SubCategoryCard category={category} />
-        </li>
-      ))}
+      {subCategoryList
+        .sort((a: Category, b: Category) =>
+          a.categoryName.localeCompare(b.categoryName)
+        )
+        .map(category => (
+          <li key={category.id}>
+            <SubCategoryCard category={category} />
+          </li>
+        ))}
     </ul>
   );
 };
