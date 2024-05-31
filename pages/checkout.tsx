@@ -22,6 +22,7 @@ import {CartItemUpdated, CartRoot} from '@store/slices/cart/cart';
 import {http} from 'services/axios.service';
 import {Product} from '@store/slices/product/product';
 import {AxiosResponse} from 'axios';
+import {v4 as uuidv4} from 'uuid';
 
 const Checkout: FC = () => {
   const dispatch = useAppDispatch();
@@ -112,7 +113,7 @@ const Checkout: FC = () => {
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
         dispatch(
           setCartState({
-            id: cartRoot?.id ?? '',
+            id: uuidv4(),
             totalCartPrice: 0,
             cartItems: [],
             additionalCartPrice: 0
