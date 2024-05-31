@@ -78,18 +78,19 @@ export const statesList = [
 ];
 
 export const shippingFormFields = [
-  {name: 'shippingFullName', placeholder: 'Name', label: 'Name'},
-  {name: 'shippingCompany', placeholder: 'Company', label: 'Company'},
-  {name: 'shippingAddressLineOne', placeholder: 'Address', label: 'Address'},
+  {name: 'shippingAddress.fullName', placeholder: 'Name', label: 'Name', required: true},
+  {name: 'shippingAddress.company', placeholder: 'Company', label: 'Company', required: false},
+  {name: 'shippingAddress.addressLineOne', placeholder: 'Address', label: 'Address' ,required: true},
   {
-    name: 'shippingAddressLineTwo',
+    name: 'shippingAddress.addressLineTwo',
     placeholder: 'Address 2',
-    label: 'Address 2'
+    label: 'Address 2',
+    required: false
   },
-  {name: 'shippingCity', placeholder: 'City', label: 'City'},
-  {name: 'shippingState', placeholder: 'State', label: 'State'},
-  {name: 'shippingZipcode', placeholder: 'Zip Code', label: 'Zip Code'},
-  {name: 'shippingPhoneNumber', placeholder: 'Phone', label: 'Phone'}
+  {name: 'shippingAddress.city', placeholder: 'City', label: 'City',required: true},
+  {name: 'shippingAddress.state', placeholder: 'State', label: 'State',required: true},
+  {name: 'shippingAddress.zipCode', placeholder: 'Zip Code', label: 'Zip Code',required: true},
+  {name: 'shippingAddress.phoneNumber', placeholder: 'Phone', label: 'Phone',required: true},
 ];
 
 export const aosGlobalSetting: any = {

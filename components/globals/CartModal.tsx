@@ -29,7 +29,7 @@ import {
   File as CartItemFile
 } from '@store/slices/cart/cart';
 import {http} from 'services/axios.service';
-import {AxiosResponse} from 'axios';
+import axios, {AxiosResponse} from 'axios';
 import getConfig from 'next/config';
 
 interface AddToCartModalProps {
@@ -172,9 +172,7 @@ const CartModal: FC<AddToCartModalProps> = ({
 
     try {
       const res = await http.get('/s3/signedUrl', {params: data});
-      const formData = new FormData();
-      formData.append('file', file);
-      await http.put(res.data.payload.url, formData);
+      await axios.put(res.data.payload.url, file);
       return res;
     } catch (error) {}
   };

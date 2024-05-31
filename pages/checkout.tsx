@@ -56,30 +56,33 @@ const Checkout: FC = () => {
   };
 
   const initialValues = {
-    billingFullName: '',
-    billingCompany: '',
-    billingAddressLineOne: '',
-    billingAddressLineTwo: '',
-    billingCity: '',
-    billingState: '',
-    billingZipcode: '',
-    billingPhoneNumber: '',
-    billingEmailAddress: '',
+    billingAddress: {
+      fullname: '',
+      company: '',
+      addressLineOne: '',
+      addressLineTwo: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      phoneNumber: ''
+    },
+    shippingAddress: {
+      fullname: '',
+      company: '',
+      addressLineOne: '',
+      addressLineTwo: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      phoneNumber: ''
+    },
+    emailAddress: '',
 
     shippingAddressSame: true,
     diffBillingAddress: false,
 
-    shippingFullName: '',
-    shippingCompany: '',
-    shippingAddressLineOne: '',
-    shippingAddressLineTwo: '',
-    shippingCity: '',
-    shippingState: '',
-    shippingZipcode: '',
-    shippingPhoneNumber: '',
-
     inHandDate: getInHandDateEst(),
-    saleRepName: '',
+    salesRep: '',
     additionalInformation: '',
 
     newsLetter: false,
@@ -97,17 +100,24 @@ const Checkout: FC = () => {
         ...values,
         cartId: cartRoot?.id
       };
-      const formData = new FormData();
 
-      Object.entries(orderData).forEach(([key, value]) => {
-        formData.append(key, String(value));
-      });
+      delete orderData.diffBillingAddress;
+      delete orderData.newsLetter;
+      delete orderData.termsAndConditions;
 
       try {
-        await http.post('/order', formData);
+        await http.post('/cart/create-order', orderData);
         setIsSubmitted(true);
         action.resetForm();
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+        dispatch(
+          setCartState({
+            id: cartRoot?.id ?? '',
+            totalCartPrice: 0,
+            cartItems: [],
+            additionalCartPrice: 0
+          })
+        );
       } catch (error) {
         setApiError(true);
         console.log('error', error);
@@ -118,8 +128,6 @@ const Checkout: FC = () => {
   const handleBackButtonClick = () => {
     router.back();
   };
-
-  console.log('error', formik.errors);
 
   const getCartId = () => {
     let cartId;
@@ -259,14 +267,15 @@ const Checkout: FC = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <FormInput
                   type="text"
-                  name="billingFullName"
+                  name="billingAddress.fullname"
                   label="Name"
                   placeHolder="Name"
+                  required={true}
                   formik={formik}
                 />
                 <FormInput
                   type="text"
-                  name="billingCompany"
+                  name="billingAddress.company"
                   label="Company"
                   placeHolder="Company"
                   formik={formik}
@@ -275,16 +284,17 @@ const Checkout: FC = () => {
                 <div className="md:col-span-2">
                   <FormInput
                     type="text"
-                    name="billingAddressLineOne"
+                    name="billingAddress.addressLineOne"
                     label="Address"
                     placeHolder="Address"
+                    required={true}
                     formik={formik}
                   />
                 </div>
                 <div className="md:col-span-2">
                   <FormInput
                     type="text"
-                    name="billingAddressLineTwo"
+                    name="billingAddress.addressLineTwo"
                     label="Address 2"
                     placeHolder="Address 2"
                     formik={formik}
@@ -293,40 +303,45 @@ const Checkout: FC = () => {
 
                 <FormInput
                   type="text"
-                  name="billingCity"
+                  name="billingAddress.city"
                   label="City"
                   placeHolder="City"
+                  required={true}
                   formik={formik}
                 />
                 <FormInput
                   type="text"
-                  name="billingState"
+                  name="billingAddress.state"
                   label="State"
                   placeHolder="State"
+                  required={true}
                   formik={formik}
                 />
 
                 <FormInput
                   type="text"
-                  name="billingZipcode"
+                  name="billingAddress.zipCode"
                   label="Zip Code"
                   placeHolder="Zip Code"
+                  required={true}
                   formik={formik}
                 />
                 <FormInput
                   type="text"
-                  name="billingPhoneNumber"
+                  name="billingAddress.phoneNumber"
                   label="Phone"
                   placeHolder="Phone"
+                  required={true}
                   formik={formik}
                 />
 
                 <TootipBlack title="Please type the email address you would like us to use for all correspondance for the order process.  This will be where your sales confirmation and artwork proof will be sent to.">
                   <FormInput
                     type="text"
-                    name="billingEmailAddress"
+                    name="emailAddress"
                     label="Email"
                     placeHolder="Email"
+                    required={true}
                     formik={formik}
                   />
                 </TootipBlack>
@@ -374,6 +389,7 @@ const Checkout: FC = () => {
                       type="text"
                       name={field.name}
                       label={field.label}
+                      required={field.required}
                       placeHolder={field.placeholder}
                       formik={formik}
                     />
@@ -458,6 +474,12 @@ const Checkout: FC = () => {
                       </Link>
                     </label>
                   </div>
+                  {formik.touched['termsAndConditions'] &&
+                  formik.errors['termsAndConditions'] ? (
+                    <p className="text-red-500 text-sm font-normal mt-1">
+                      {formik.errors['termsAndConditions']}
+                    </p>
+                  ) : null}
                 </div>
               </div>
               <div className="my-6 flex w-full justify-center items-center">
