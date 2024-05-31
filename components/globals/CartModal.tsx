@@ -172,9 +172,9 @@ const CartModal: FC<AddToCartModalProps> = ({
 
     try {
       const res = await http.get('/s3/signedUrl', {params: data});
-      const formData = new FormData()
-      formData.append("file", file)
-      await http.put(res.data.payload.url,  formData);
+      const formData = new FormData();
+      formData.append('file', file);
+      await http.put(res.data.payload.url, formData);
       return res;
     } catch (error) {}
   };
