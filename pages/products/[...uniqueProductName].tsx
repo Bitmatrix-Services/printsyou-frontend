@@ -7,11 +7,9 @@ import {GetServerSidePropsContext} from 'next';
 import {PriceGrids, Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
 import Breadcrumb from '@components/globals/Breadcrumb';
-import {useRouter} from 'next/router';
 import ImageWithFallback from '@components/ImageWithFallback';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
-import {resend} from 'pages/_app';
 import getConfig from 'next/config';
 import {
   ShoppingCartIcon,
@@ -20,6 +18,7 @@ import {
 import CartModal from '@components/globals/CartModal';
 import {useAppDispatch} from '@store/hooks';
 import {setIsCartModalOpen} from '@store/slices/cart/cart.slice';
+import {CartItemUpdated} from '@store/slices/cart/cart';
 
 const config = getConfig();
 
@@ -30,7 +29,9 @@ interface ProductDetailsProps {
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   const dispatch = useAppDispatch();
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
-  const router = useRouter();
+  const [selectedItem, setSelectedItem] = useState<CartItemUpdated | null>(
+    null
+  );
 
   const countFrom: Set<PriceGrids['countFrom']> = new Set();
   const byRowTypeObjects: Record<
@@ -324,6 +325,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
         product={product}
         addToCartText="Add to cart"
         shouldDisplayDatails={false}
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
       />
       {/* )} */}
     </>

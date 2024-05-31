@@ -18,8 +18,42 @@ interface CartItem {
   artWorkFiles: artWorkFilesProps[];
 }
 
+export interface Spec {
+  fieldValue: string;
+  fieldName: any;
+}
+
+export interface File {
+  fileKey: any;
+  filename: any;
+  fileType: string;
+}
+
+export interface CartItemUpdated {
+  id: string;
+  itemTotalPrice: number;
+  qtyRequested: number;
+  convertToOrder: boolean;
+  priceQuotedPerItem: number;
+  spec: Spec[];
+  files: File[];
+  sku: string;
+  uniqueProductName: string;
+  imageUrl: any;
+  productName: string;
+  productId: string;
+}
+
+export interface CartRoot {
+  id: string;
+  totalCartPrice: number;
+  cartItems: CartItemUpdated[];
+  additionalCartPrice: number;
+}
+
 export interface CartInitialState {
   cartItems: CartItem[];
   sidebarCartOpen: boolean;
   isCartModalOpen: boolean;
+  cart: CartRoot | null;
 }
