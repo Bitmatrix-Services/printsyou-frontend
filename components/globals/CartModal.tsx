@@ -167,7 +167,7 @@ const CartModal: FC<AddToCartModalProps> = ({
     let data = {
       type: 'CART',
       fileName: file.name,
-      id: cartRoot?.id
+      id: cartRoot?.id ?? localStorage.getItem('cartId')
     };
 
     try {
