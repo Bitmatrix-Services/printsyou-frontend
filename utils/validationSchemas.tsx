@@ -63,17 +63,53 @@ export const EmailSchema = Yup.object({
   email: Yup.string().email().required('please enter your email')
 });
 
-export const orderCheckoutSchema = Yup.object({
-  billingFullName: Yup.string()
-    .min(2)
-    .max(25)
-    .required('Please enter your Name'),
-  billingAddressLineOne: Yup.string().required('Please enter your Address'),
-  billingCity: Yup.string().required('Please enter City'),
-  billingState: Yup.string().required('Please enter State'),
-  billingZipcode: Yup.string().required('Please enter Zip Code'),
-  billingPhoneNumber: Yup.string()
-    .required('Please enter Zip Code')
-    .matches(phoneRegExp, 'Phone number is not valid'),
-  billingEmailAddress: Yup.string().email().required('Please enter your Email')
+export const orderCheckoutSchema = Yup.object().shape({
+  billingAddress: Yup.object().shape({
+    fullname: Yup.string()
+      .min(2, 'Name must be at least 2 characters')
+      .max(25, 'Name must be at most 25 characters')
+      .required('Please enter your Name'),
+    addressLineOne: Yup.string().required('Please enter your address'),
+    city: Yup.string().required('Please enter city'),
+    state: Yup.string().required('Please enter state'),
+    zipCode: Yup.string().required('Please enter zip code'),
+    phoneNumber: Yup.string()
+      .required('Please enter your phone number')
+      .matches(phoneRegExp, 'Phone number is not valid')
+  }),
+
+  shippingAddress: Yup.object().shape({
+    fullname: Yup.string().when('diffBillingAddress', {
+      is: true,
+      then: schema => schema.required('Please enter name')
+    }),
+    addressLineOne: Yup.string().when('diffBillingAddress', {
+      is: true,
+      then: schema => schema.required('Please enter address')
+    }),
+    city: Yup.string().when('diffBillingAddress', {
+      is: true,
+      then: schema => schema.required('Please enter city')
+    }),
+    state: Yup.string().when('diffBillingAddress', {
+      is: true,
+      then: schema => schema.required('Please enter state')
+    }),
+    zipCode: Yup.string().when('diffBillingAddress', {
+      is: true,
+      then: schema => schema.required('Please enter zip code')
+    }),
+    phoneNumber: Yup.string().when('diffBillingAddress', {
+      is: true,
+      then: schema =>
+        schema
+          .required('Please enter phone number')
+          .matches(phoneRegExp, 'invalid format')
+    })
+  }),
+
+  emailAddress: Yup.string()
+    .email('Email is not valid')
+    .required('Please enter your email'),
+  termsAndConditions: Yup.boolean().oneOf([true], 'You must agree to the terms')
 });
