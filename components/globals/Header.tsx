@@ -26,13 +26,16 @@ import TwitterIcon from '@components/icons/TwitterIcon';
 import YouTubeIcon from '@components/icons/YouTubeIcon';
 import InstagramIcon from '@components/icons/InstagramIcon';
 import SidebarCart from './SidebarCart';
-import {setSidebarCartOpen} from '@store/slices/cart/cart.slice';
+import {
+  getCartRootState,
+  setSidebarCartOpen
+} from '@store/slices/cart/cart.slice';
 
 const Header = () => {
   const dispatch = useAppDispatch();
   const {scrollingUp, scrollValue} = useScrollingUp();
 
-  const cartItems = useAppSelector(state => state.cart.cartItems);
+  const cartRoot = useAppSelector(getCartRootState);
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const categoryList = useAppSelector(selectCategoryList);
@@ -131,7 +134,7 @@ const Header = () => {
                             onClick={() => dispatch(setSidebarCartOpen(true))}
                           />
                           <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
-                            {cartItems.length}
+                            {cartRoot?.cartItems?.length ?? 0}
                           </span>
                         </span>
                       </button>
@@ -191,7 +194,7 @@ const Header = () => {
                         onClick={() => dispatch(setSidebarCartOpen(true))}
                       />
                       <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
-                        {cartItems.length}
+                        {cartRoot?.cartItems?.length ?? 0}
                       </span>
                     </span>
                     <span className="font-semibold text-xl">$0.00</span>
@@ -387,7 +390,7 @@ const Header = () => {
                   <span className="relative">
                     <ShoppingCartIcon className="h-7 w-7 hover:text-primary-500" />
                     <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
-                      {cartItems.length}
+                      {cartRoot?.cartItems?.length ?? 0}
                     </span>
                   </span>
                   <span className="font-semibold text-xl">$0.00</span>

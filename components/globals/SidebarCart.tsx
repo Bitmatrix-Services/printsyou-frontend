@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import sanitizeHtml from 'sanitize-html';
 import {Drawer} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
@@ -6,33 +6,54 @@ import CloseIcon from '@mui/icons-material/Close';
 import ImageWithFallback from '@components/ImageWithFallback';
 import Image from 'next/image';
 import {
-  removefromcart,
+  getCartRootState,
   selectSidebarCartOpen,
+  setCartState,
   setSidebarCartOpen
 } from '@store/slices/cart/cart.slice';
 import {useRouter} from 'next/router';
 import {http} from 'services/axios.service';
-import {CartItem} from '@store/slices/cart/cart';
+import {CartItemUpdated, CartRoot} from '@store/slices/cart/cart';
+import {AxiosResponse} from 'axios';
 
 const SidebarCart = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const cartItems = useAppSelector(state => state.cart.cartItems);
+  const cartRoot = useAppSelector(getCartRootState);
   const sidebarCartOpen = useAppSelector(selectSidebarCartOpen);
+
+  useEffect(() => {
+    getCartData();
+  }, []);
 
   const handleCheckout = () => {
     dispatch(setSidebarCartOpen(false));
     router.push('/checkout');
   };
 
-  const calculateTotalCartPrice = () => {
-    let totalPrice = 0;
-    cartItems.forEach(item => {
-      totalPrice += Number(item.totalPrice);
-    });
-    return totalPrice.toFixed(2);
-  };
+  const handleRemoveItem = useCallback(
+    async (item: CartItemUpdated) => {
+      const cartId = getCartId();
+      try {
+        http
+          .put(`/cart/remove`, undefined, {
+            params: {
+              cartId: cartRoot?.id,
+              cartItemId: item.id
+            }
+          })
+          .then(() => http.get(`/cart/${cartId}`))
+          .then((response: AxiosResponse) => {
+            dispatch(setCartState(response.data.payload as CartRoot));
+          })
+          .catch(() => {
+            dispatch(setCartState(null));
+          });
+      } catch {}
+    },
+    [cartRoot]
+  );
 
   const getCartId = () => {
     let cartId;
@@ -42,17 +63,20 @@ const SidebarCart = () => {
     } catch (error) {}
   };
 
-  const handleRemoveItem = async (item: CartItem) => {
+  const getCartData = async () => {
+    const cartId = getCartId();
+
     try {
-      const cartData = {
-        cartItemId: item.product.id,
-        cartId: getCartId()
-      };
-      await http.put(`/cart/remove`, undefined, {
-        params: {cartItemId: cartData.cartItemId, cartId: cartData.cartId}
-      });
-      dispatch(removefromcart({productId: item.product.id}));
-    } catch {}
+      http
+        .get(`/cart/${cartId}`)
+        .then((response: AxiosResponse) => {
+          dispatch(setCartState(response.data.payload as CartRoot));
+        })
+        .catch(() => {
+          dispatch(setCartState(null));
+        });
+      // setCartData(res.data.payload);
+    } catch (error) {}
   };
 
   return (
@@ -77,11 +101,11 @@ const SidebarCart = () => {
           />
         </div>
 
-        {cartItems.map(item => (
-          <div key={item.product.id} className="px-2 py-2 text-xs">
+        {cartRoot?.cartItems?.map(item => (
+          <div key={item.id} className="px-2 py-2 text-xs">
             <div className="py-2 text-sm text-yellow-500">
               <span className="text-black">Item#:</span>
-              {item.product.sku}
+              {item.sku}
             </div>
             <div className="flex items-center justify-between p-3">
               <div className="flex items-center space-x-4">
@@ -91,14 +115,14 @@ const SidebarCart = () => {
                     width={80}
                     height={80}
                     className="object-cover w-full h-full rounded-sm"
-                    src={item?.product.productImages?.[0]?.imageUrl}
+                    src={item?.imageUrl}
                     alt="Product"
                   />
                 </div>
                 <h3
                   className="text-sm font-bold"
                   dangerouslySetInnerHTML={{
-                    __html: sanitizeHtml(item.product.productName)
+                    __html: sanitizeHtml(item.productName)
                   }}
                 ></h3>
               </div>
@@ -113,20 +137,20 @@ const SidebarCart = () => {
               <div className="flex items-center">
                 <div className="flex items-center">
                   <h2 className="text-sm font-semibold">
-                    Qty: {item.itemsQuantity || 0}
+                    Qty: {item.qtyRequested || 0}
                   </h2>
                 </div>
                 <div className="flex items-center space-x-2">
                   <h2 className="text-sm font-semibold">
                     <CloseIcon className="w-4 h-4" />$
-                    {item.calculatePriceForQuantity}
+                    <CloseIcon className="w-4 h-4" />${item.priceQuotedPerItem}
                   </h2>
                 </div>
               </div>
               <div>
                 <h2>
                   <span className="text-sm font-semibold">
-                    ${item.totalPrice}
+                    ${item.itemTotalPrice}
                   </span>
                 </h2>
               </div>
@@ -137,7 +161,7 @@ const SidebarCart = () => {
         <div className="flex flex-col pt-2 pb-2">
           <div className="flex justify-between px-2 py-2">
             <h2>Total Price:</h2>
-            <h2 className="font-bold"> ${calculateTotalCartPrice()}</h2>
+            <h2 className="font-bold"> ${cartRoot?.totalCartPrice || 0}</h2>
           </div>
           <div className="text-xs max-w-[25rem] my-4">
             *Final total including shipping and any additional charges will be
@@ -146,11 +170,11 @@ const SidebarCart = () => {
           <div className="">
             <button
               className={`block w-full text-center uppercase py-2 px-4 text-white ${
-                cartItems?.length === 0
+                cartRoot?.cartItems?.length === 0
                   ? 'bg-gray-300'
                   : 'cursor-pointer bg-primary-500 hover:bg-body border-[#eaeaec] '
               } border text-sm font-bold`}
-              disabled={cartItems?.length === 0}
+              disabled={cartRoot?.cartItems?.length === 0}
               onClick={() => handleCheckout()}
             >
               Checkout

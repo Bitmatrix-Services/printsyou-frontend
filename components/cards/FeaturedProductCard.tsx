@@ -15,6 +15,7 @@ import Image from 'next/image';
 import CartModal from '@components/globals/CartModal';
 import {useAppDispatch} from '@store/hooks';
 import {setIsCartModalOpen} from '@store/slices/cart/cart.slice';
+import {CartItemUpdated} from '@store/slices/cart/cart';
 
 export interface FeaturedProductCardProps {
   product: Product;
@@ -35,7 +36,9 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   const dispatch = useAppDispatch();
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
-
+  const [selectedItem, setSelectedItem] = useState<CartItemUpdated | null>(
+    null
+  );
   const countFrom: Set<PriceGrids['countFrom']> = new Set();
   const byRowTypeObjects: Record<
     PriceGrids['priceType'],
@@ -350,9 +353,8 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   </div>
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <div
-                      // href={`/order_request?item_id=${product.id}`}
-                      className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 btn-primary"
-                      onClick={() => setIsCartModalOpen(true)}
+                      className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 btn-primary hover:cursor-pointer"
+                      onClick={() => dispatch(setIsCartModalOpen(true))}
                     >
                       <ShoppingCartIcon className="h-5 w-5" />
                       <span className="text-sm font-light capitalize">
@@ -416,7 +418,12 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
         </Dialog>
       )}
 
-      <CartModal product={product} addToCartText={'Add to cart'} />
+      <CartModal
+        product={product}
+        addToCartText={'Add to cart'}
+        selectedItem={selectedItem}
+        setSelectedItem={setSelectedItem}
+      />
     </>
   );
 };

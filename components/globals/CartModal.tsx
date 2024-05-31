@@ -1,4 +1,11 @@
-import {ChangeEvent, FC, useEffect, useState} from 'react';
+import {
+  ChangeEvent,
+  Dispatch as ReactDispatch,
+  FC,
+  SetStateAction,
+  useEffect,
+  useState
+} from 'react';
 import Image from 'next/image';
 import {Dialog} from '@mui/material';
 import sanitizeHtml from 'sanitize-html';
@@ -7,25 +14,34 @@ import {v4 as uuidv4} from 'uuid';
 import {Product} from '@store/slices/product/product';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  addtocart,
+  getCartRootState,
   selectCartModalOpen,
+  setCartState,
   setIsCartModalOpen
 } from '@store/slices/cart/cart.slice';
 import FormHeading from '@components/Form/FormHeading';
 import FormDescription from '@components/Form/FormDescription';
 import TootipBlack from '@components/globals/TootipBlack';
 //   import PriceGrid from '@components/globals/PriceGrid';
-import {CartItem} from '@store/slices/cart/cart';
+import {
+  CartItemUpdated,
+  CartRoot,
+  File as CartItemFile
+} from '@store/slices/cart/cart';
 import {http} from 'services/axios.service';
+import {AxiosResponse} from 'axios';
 
 interface AddToCartModalProps {
   product: Product;
   addToCartText: string;
   shouldDisplayDatails?: boolean;
+  selectedItem: CartItemUpdated | null;
+  setSelectedItem: ReactDispatch<SetStateAction<CartItemUpdated | null>>;
 }
-interface ArtFile {
-  fileName: string;
-  fileUrl: string;
+
+interface UploadedFileType {
+  url: string;
+  objectKey: string;
 }
 
 const title = [
@@ -37,7 +53,9 @@ const title = [
 const CartModal: FC<AddToCartModalProps> = ({
   product,
   addToCartText,
-  shouldDisplayDatails = true
+  shouldDisplayDatails = true,
+  setSelectedItem,
+  selectedItem
 }) => {
   const [itemsQuantity, setItemsQuantity] = useState<number>(0);
   const [minQuantityError, setMinQuantityError] = useState('');
@@ -56,50 +74,38 @@ const CartModal: FC<AddToCartModalProps> = ({
       fieldValue: ''
     }
   ]);
-  const [artWorkFiles, setArtWorkFiles] = useState<ArtFile[]>([]);
+  const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
 
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(state => state.cart.cartItems);
   const isCartModalOpen = useAppSelector(selectCartModalOpen);
+  const cartRoot = useAppSelector(getCartRootState);
 
   useEffect(() => {
-    const cartItemsFromLocalStorage = JSON.parse(
-      localStorage.getItem('cartItems') || '[]'
-    );
-    cartItemsFromLocalStorage.forEach((cartItem: CartItem) => {
-      dispatch(addtocart(cartItem));
-    });
-  }, [dispatch]);
+    if (selectedItem) {
+      if (selectedItem.qtyRequested) {
+        setItemsQuantity(selectedItem.qtyRequested);
+      } else {
+        setItemsQuantity(0);
+      }
 
-  useEffect(() => {
-    const specificProduct = cartItems.find(
-      item => item.product.id === product.id
-    );
+      if (selectedItem.spec.length > 0) {
+        selectedItem.spec.forEach(spec => {
+          handleSpecificationChange(spec.fieldName, spec.fieldValue);
+        });
+      } else {
+        setSpecicification(prevSpecs =>
+          prevSpecs.map(spec => ({...spec, fieldValue: ''}))
+        );
+      }
 
-    if (specificProduct && specificProduct.itemsQuantity) {
-      setItemsQuantity(specificProduct.itemsQuantity);
-    } else {
-      setItemsQuantity(0);
+      if (selectedItem.files) {
+        setArtWorkFiles([...selectedItem.files]);
+      } else {
+        setArtWorkFiles([]);
+      }
     }
-
-    if (specificProduct && specificProduct.specifications) {
-      specificProduct.specifications.forEach(spec => {
-        handleSpecificationChange(spec.fieldName, spec.fieldValue);
-      });
-    } else {
-      setSpecicification(prevSpecs =>
-        prevSpecs.map(spec => ({...spec, fieldValue: ''}))
-      );
-    }
-
-    if (specificProduct && specificProduct.artWorkFiles) {
-      setArtWorkFiles([...specificProduct.artWorkFiles]);
-    } else {
-      setArtWorkFiles([]);
-    }
-
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems, product, isCartModalOpen]);
+  }, [selectedItem]);
 
   const sortedPriceGrids = [...product.priceGrids].sort(
     (a, b) => a.countFrom - b.countFrom
@@ -141,10 +147,9 @@ const CartModal: FC<AddToCartModalProps> = ({
   ).toFixed(2);
 
   const handleSpecificationChange = (fieldName: string, value: string) => {
-    if (fieldName === 'Item Color' && value) {
-      setItemColorError('');
-    } else {
-      setItemColorError('Item color is required');
+    if (fieldName === 'Item Color') {
+      if (value) setItemColorError('');
+      else setItemColorError('Item color is required');
     }
     setSpecicification(prevSpecifications =>
       prevSpecifications.map(spec => {
@@ -164,53 +169,25 @@ const CartModal: FC<AddToCartModalProps> = ({
     try {
       const res = await http.get('/signedUrl', {params: data});
       console.log('res', res);
-      return 'res.payload?.url';
+      return res;
     } catch (error) {}
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
     if (selectedFiles && selectedFiles.length > 0) {
-      const fileUrl = await handleFileUpload(selectedFiles[0]);
-      if (fileUrl) {
+      const uploadedFile = (await handleFileUpload(selectedFiles[0]))?.data
+        .payload as UploadedFileType;
+      if (uploadedFile && uploadedFile.url && uploadedFile.objectKey) {
         const newFiles = {
-          fileName: selectedFiles[0].name,
-          fileUrl: fileUrl
+          filename: selectedFiles[0].name,
+          fileType: selectedFiles[0].type.split('/').pop() || '',
+          fileKey: uploadedFile.objectKey
         };
         setArtWorkFiles(prevArtWorkFiles => [...prevArtWorkFiles, newFiles]);
       }
     }
   };
-
-  /*  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const selectedFiles = e.target?.files;
-  
-      if (selectedFiles && selectedFiles.length > 0) {
-        const fileArray = Array.from(selectedFiles);
-  
-        const newFiles = fileArray.map(async file => {
-          return new Promise<File>(resolve => {
-            const reader = new FileReader();
-            reader.onload = event => {
-              const base64Data = (event?.target?.result || '') as string;
-              resolve({
-                fileName: file.name,
-                fileType: file.type.split('/').pop() || '',
-                fileUrl: base64Data
-              });
-            };
-            reader.readAsDataURL(file);
-          });
-        });
-  
-        Promise.all(newFiles).then(files => {
-          setArtWorkFiles((prevArtWorkFiles: File[]) => [
-            ...prevArtWorkFiles,
-            ...files
-          ]);
-        });
-      }
-    };  */
 
   const handleFileRemove = (index: number) => {
     setArtWorkFiles(prevArtWorkFiles => {
@@ -226,11 +203,15 @@ const CartModal: FC<AddToCartModalProps> = ({
       cartId = localStorage.getItem('cartId');
       if (!cartId) {
         cartId = uuidv4();
-        localStorage.setItem('cartId', uuidv4());
+        localStorage.setItem('cartId', cartId);
       }
       return cartId;
     } catch (error) {}
   };
+
+  useEffect(() => {
+    getCartId();
+  }, []);
 
   const handleAddToCart = async () => {
     if (itemsQuantity < sortedPriceGrids[0].countFrom) {
@@ -250,24 +231,45 @@ const CartModal: FC<AddToCartModalProps> = ({
       specifications[0].fieldValue
     ) {
       try {
+        const cartId = getCartId();
         const cartData = {
           productId: product.id,
           qtyRequested: itemsQuantity,
           specs: specifications,
           files: artWorkFiles
         };
-        await http.post(`/cart/add?cartId=${getCartId()}`, cartData);
-        dispatch(
-          addtocart({
-            product,
-            itemsQuantity,
-            calculatePriceForQuantity: calculatePriceForQuantity(itemsQuantity),
-            totalPrice,
-            specifications: specifications,
-            artWorkFiles: artWorkFiles
-          })
-        );
-        dispatch(setIsCartModalOpen(false));
+        if (selectedItem) {
+          http
+            .put(
+              `/cart/update-item?cartId=${cartId}&cartItemId=${selectedItem.id}`,
+              cartData
+            )
+            .then(() => http.get(`/cart/${cartId}`))
+            .then((response: AxiosResponse) => {
+              dispatch(setCartState(response.data.payload as CartRoot));
+            })
+            .catch(() => {
+              dispatch(setCartState(null));
+            })
+            .finally(() => {
+              dispatch(setIsCartModalOpen(false));
+              setSelectedItem(null);
+            });
+        } else {
+          http
+            .post(`/cart/add?cartId=${cartId}`, cartData)
+            .then(() => http.get(`/cart/${cartId}`))
+            .then((response: AxiosResponse) => {
+              dispatch(setCartState(response.data.payload as CartRoot));
+            })
+            .catch(() => {
+              dispatch(setCartState(null));
+            })
+            .finally(() => {
+              dispatch(setIsCartModalOpen(false));
+              setSelectedItem(null);
+            });
+        }
       } catch (error) {}
     }
   };
@@ -305,6 +307,7 @@ const CartModal: FC<AddToCartModalProps> = ({
       }
     ]);
     setArtWorkFiles([]);
+    setSelectedItem(null);
   };
 
   return (
@@ -316,7 +319,7 @@ const CartModal: FC<AddToCartModalProps> = ({
           ? 'rounded-none min-w-[95%] xl:min-w-[62.5rem]'
           : 'rounded-none min-w-[45%] xl:min-w-[45rem]'
       }}
-      sx={{'& .MuiBackdrop-root': {backgroundColor: 'grey'}}}
+      sx={{'& .MuiBackdrop-root': {backgroundColor: 'lightgray'}}}
       disableRestoreFocus
     >
       <>
@@ -405,7 +408,7 @@ const CartModal: FC<AddToCartModalProps> = ({
                               type="text"
                               className={`block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500 ${
                                 spec.fieldName === 'Item Color' &&
-                                !spec.fieldValue &&
+                                itemColorError &&
                                 'border-red-500'
                               } peer`}
                               placeholder={spec.fieldName}
@@ -436,7 +439,7 @@ const CartModal: FC<AddToCartModalProps> = ({
                       height={15}
                       width={15}
                       src="/assets/icon-upload-white.png"
-                      alt="..."
+                      alt="artwork upload"
                     />
                   </span>
                   <span className="pr-5 pl-3 py-5">ADD FILES...</span>
@@ -465,11 +468,14 @@ const CartModal: FC<AddToCartModalProps> = ({
                         </div> */}
                       <div className="flex-grow pl-4">
                         <span className="text-sm lg:text-base font-semibold break-all">
-                          {file.fileName}
+                          {file.filename}
                         </span>
                       </div>
                       <CloseIcon
-                        onClick={() => handleFileRemove(index)}
+                        onClick={e => {
+                          handleFileRemove(index);
+                          e.stopPropagation();
+                        }}
                         className="text-red-600 w-6 h-6 cursor-pointer"
                       />
                     </li>
@@ -481,7 +487,7 @@ const CartModal: FC<AddToCartModalProps> = ({
               <div className="flex flex-col pt-4 ">
                 <div
                   className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold cursor-pointer"
-                  onClick={handleAddToCart}
+                  onClick={() => handleAddToCart()}
                 >
                   {addToCartText}
                 </div>

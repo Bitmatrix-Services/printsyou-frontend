@@ -56,7 +56,7 @@ export const orderRequestSchema = Yup.object({
   specificationsSize: Yup.string(),
   specificationsImprintColor: Yup.string(),
 
-  agreeToTerms: Yup.boolean().oneOf([true], 'You must agree to the terms')
+  termsAndConditions: Yup.boolean().oneOf([true], 'You must agree to the terms')
 });
 
 export const EmailSchema = Yup.object({
@@ -71,7 +71,7 @@ export const orderCheckoutSchema = Yup.object({
   billingAddressLineOne: Yup.string().required('Please enter your Address'),
   billingCity: Yup.string().required('Please enter City'),
   billingState: Yup.string().required('Please enter State'),
-  billingZipCode: Yup.string().required('Please enter Zip Code'),
+  billingZipcode: Yup.string().required('Please enter Zip Code'),
   billingPhoneNumber: Yup.string()
     .required('Please enter Zip Code')
     .matches(phoneRegExp, 'Phone number is not valid'),

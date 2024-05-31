@@ -2,7 +2,8 @@ import ImageWithFallback from '@components/ImageWithFallback';
 import CartModal from '@components/globals/CartModal';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  removefromcart,
+  getCartRootState,
+  setCartState,
   setIsCartModalOpen
 } from '@store/slices/cart/cart.slice';
 import React, {FC, useState} from 'react';
@@ -17,30 +18,41 @@ import {orderCheckoutSchema} from '@utils/validationSchemas';
 import sanitizeHtml from 'sanitize-html';
 import {useRouter} from 'next/router';
 import {shippingFormFields} from '@utils/Constants';
-import {CartItem} from '@store/slices/cart/cart';
+import {CartItemUpdated, CartRoot} from '@store/slices/cart/cart';
 import {http} from 'services/axios.service';
+import {Product} from '@store/slices/product/product';
+import {AxiosResponse} from 'axios';
 
 const Checkout: FC = () => {
-  const cartItems = useAppSelector(state => state.cart.cartItems);
-  const [openModalForItem, setOpenModalForItem] = useState<string | null>(null);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const findProduct = cartItems.find(
-    item => item.product.id === openModalForItem
-  )?.product;
-  const openModal = (productId: string) => {
-    setOpenModalForItem(productId);
+  const cartRoot = useAppSelector(getCartRootState);
+
+  const [openModalForItem, setOpenModalForItem] = useState<Product | null>(
+    null
+  );
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<CartItemUpdated | null>(
+    null
+  );
+  const [apiError, setApiError] = useState<boolean>(false);
+
+  const openModal = (cartItem: CartItemUpdated) => {
+    http
+      .get(`/product/${cartItem.productId}`)
+      .then((response: AxiosResponse) => {
+        const productDetails = response.data.payload as Product;
+        setOpenModalForItem(productDetails);
+      });
+    setSelectedItem(cartItem);
+
     dispatch(setIsCartModalOpen(true));
   };
 
-  const calculateTotalCartPrice = () => {
-    let totalPrice = 0;
-    cartItems.forEach(item => {
-      totalPrice += Number(item.totalPrice);
-    });
-    return totalPrice.toFixed(2);
+  const getInHandDateEst = () => {
+    const currentDay = new Date();
+    return currentDay.toISOString().split('T')[0];
   };
 
   const initialValues = {
@@ -50,7 +62,7 @@ const Checkout: FC = () => {
     billingAddressLineTwo: '',
     billingCity: '',
     billingState: '',
-    billingZipCode: '',
+    billingZipcode: '',
     billingPhoneNumber: '',
     billingEmailAddress: '',
 
@@ -66,12 +78,12 @@ const Checkout: FC = () => {
     shippingZipcode: '',
     shippingPhoneNumber: '',
 
-    inHandDate: new Date(),
+    inHandDate: getInHandDateEst(),
     saleRepName: '',
     additionalInformation: '',
 
     newsLetter: false,
-    agreeToTerms: false
+    termsAndConditions: false
   };
 
   const formik = useFormik({
@@ -80,12 +92,24 @@ const Checkout: FC = () => {
     validateOnChange: true,
     validateOnBlur: false,
     onSubmit: async (values, action) => {
+      setApiError(false);
+      let orderData: any = {
+        ...values,
+        cartId: cartRoot?.id
+      };
+      const formData = new FormData();
+
+      Object.entries(orderData).forEach(([key, value]) => {
+        formData.append(key, String(value));
+      });
+
       try {
-        // await http.post('/order', {...values, productId: product.id});
-        console.log('values', {...values});
+        await http.post('/order', formData);
         setIsSubmitted(true);
         action.resetForm();
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
       } catch (error) {
+        setApiError(true);
         console.log('error', error);
       }
     }
@@ -95,6 +119,8 @@ const Checkout: FC = () => {
     router.back();
   };
 
+  console.log('error', formik.errors);
+
   const getCartId = () => {
     let cartId;
     try {
@@ -103,12 +129,17 @@ const Checkout: FC = () => {
     return cartId;
   };
 
-  const handleRemoveItem = async (item: CartItem) => {
+  const handleRemoveItem = async (item: CartItemUpdated) => {
+    const cartId = getCartId();
     try {
-      await http.put(`/cart/remove`, undefined, {
-        params: {cartItemId: item.product.id, cartId: getCartId()}
-      });
-      dispatch(removefromcart({productId: item.product.id}));
+      http
+        .put(`/cart/remove`, undefined, {
+          params: {cartItemId: item.id, cartId: cartId}
+        })
+        .then(() => http.get(`/cart/${cartId}`))
+        .then((response: AxiosResponse) => {
+          dispatch(setCartState(response.data.payload as CartRoot));
+        });
     } catch {}
   };
 
@@ -124,27 +155,25 @@ const Checkout: FC = () => {
       </div>
       <div
         className={
-          cartItems.length > 0
+          (cartRoot?.cartItems ?? []).length > 0
             ? ' flex-col grid md:grid-cols-2 lg:flex-row w-full justify-between px-8 lg:px-16 py-0 gap-6 lg:gap-4'
             : 'grid grid-cols-1 px-8 lg:px-16 py-0 gap-6 lg:gap-4'
         }
       >
         <div>
-          {cartItems.length > 0 ? (
+          {(cartRoot?.cartItems ?? []).length > 0 ? (
             <div className="px-4">
               <FormHeading text="Products in Cart" />
-              {cartItems.map(item => (
-                <div key={item.product.id}>
+              {(cartRoot?.cartItems ?? []).map(item => (
+                <div key={item.productId}>
                   <div
-                    onClick={() => openModal(item.product.id)}
+                    onClick={() => openModal(item)}
                     className="cursor-pointer py-4"
                   >
                     <TootipBlack title="Modify Item in Cart">
                       <div className="text-black mb-2">
                         Item#:
-                        <span className="text-yellow-500">
-                          {item.product.sku}
-                        </span>
+                        <span className="text-yellow-500">{item.sku}</span>
                       </div>
                       <div className="flex items-center px-4 py-2 shadow-sm hover:bg-[#fbfbfb] hover:shadow-md transition-all duration-100">
                         <div>
@@ -159,7 +188,7 @@ const Checkout: FC = () => {
                             }}
                             width={100}
                             height={100}
-                            src={item?.product.productImages?.[0]?.imageUrl}
+                            src={item?.imageUrl}
                             alt="Product"
                           />
                         </div>
@@ -168,22 +197,22 @@ const Checkout: FC = () => {
                           <h3
                             className="text-sm lg:text-base font-semibold"
                             dangerouslySetInnerHTML={{
-                              __html: sanitizeHtml(item.product.productName)
+                              __html: sanitizeHtml(item.productName)
                             }}
                           ></h3>
                           <div className="flex items-center justify-between mt-2 text-sm min-w-max">
                             <div className="flex items-center">
                               <span className="">
-                                Qty: {item.itemsQuantity || 0}
+                                Qty: {item.qtyRequested || 0}
                               </span>
                               <CloseIcon className="w-4 h-4" />
-                              <span>${item.calculatePriceForQuantity}</span>
+                              <span>${item.priceQuotedPerItem}</span>
                             </div>
                           </div>
                         </div>
                         <div className="flex items-center">
                           <div className="font-semibold mr-4 text-sm lg:text-base">
-                            ${item.totalPrice}
+                            ${item.priceQuotedPerItem}
                           </div>
                           <div
                             onClick={e => {
@@ -205,7 +234,7 @@ const Checkout: FC = () => {
                 <div className="flex justify-between items-center px-2 py-2">
                   <h2 className="text-lg">Total Price:</h2>
                   <h2 className="text-lg font-bold">
-                    ${calculateTotalCartPrice()}
+                    ${cartRoot?.totalCartPrice}
                   </h2>
                 </div>
                 <div className="text-xs my-4">
@@ -223,7 +252,7 @@ const Checkout: FC = () => {
           )}
         </div>
         {/* Form */}
-        {cartItems.length > 0 && (
+        {(cartRoot?.cartItems ?? []).length > 0 && (
           <div className="w-full px-4">
             <form onSubmit={formik.handleSubmit}>
               <FormHeading text="Billing Information" />
@@ -279,7 +308,7 @@ const Checkout: FC = () => {
 
                 <FormInput
                   type="text"
-                  name="billingZipCode"
+                  name="billingZipcode"
                   label="Zip Code"
                   placeHolder="Zip Code"
                   formik={formik}
@@ -412,13 +441,13 @@ const Checkout: FC = () => {
                   <div className="flex space-x-4 mt-6">
                     <input
                       type="checkbox"
-                      id="agreeToTerms"
-                      name="agreeToTerms"
+                      id="termsAndConditions"
+                      name="termsAndConditions"
                       className="accent-[#f8ab11] rounded-0"
-                      checked={formik.values.agreeToTerms}
+                      checked={formik.values.termsAndConditions}
                       onChange={formik.handleChange}
                     />
-                    <label className="ml-2" htmlFor="agreeToTerms">
+                    <label className="ml-2" htmlFor="termsAndConditions">
                       I have Read & Agree To PrintsYou{' '}
                       <Link
                         href="/aditional_information/terms_and_conditions"
@@ -443,9 +472,14 @@ const Checkout: FC = () => {
           </div>
         )}
 
-        {openModalForItem && findProduct && (
-          <CartModal product={findProduct} addToCartText="Update" />
-        )}
+        {openModalForItem != null ? (
+          <CartModal
+            product={openModalForItem}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            addToCartText="Update"
+          />
+        ) : null}
       </div>
     </div>
   );
