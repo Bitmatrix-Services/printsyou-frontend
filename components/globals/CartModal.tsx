@@ -30,6 +30,7 @@ import {
 } from '@store/slices/cart/cart';
 import {http} from 'services/axios.service';
 import {AxiosResponse} from 'axios';
+import getConfig from 'next/config';
 
 interface AddToCartModalProps {
   product: Product;
@@ -49,6 +50,7 @@ const title = [
   'This is not a mandatory field. If the item has different Imprint Colors, please enter the colors/s that you are ordering. If the item only comes in one color, you may leave this field blank.',
   'This is not a mandatory field. If the item has different sizes, please enter the size/s that you are ordering. If the item only comes in one size, you may leave this field blank.'
 ];
+const config = getConfig();
 
 const CartModal: FC<AddToCartModalProps> = ({
   product,
@@ -163,28 +165,40 @@ const CartModal: FC<AddToCartModalProps> = ({
 
   const handleFileUpload = async (file: File) => {
     let data = {
-      type: 'cart',
-      fileName: file.name
+      type: 'CART',
+      fileName: file.name,
+      id: cartRoot?.id
     };
+
     try {
-      const res = await http.get('/signedUrl', {params: data});
-      console.log('res', res);
+      const res = await http.get('/s3/signedUrl', {params: data});
+      const formData = new FormData()
+      formData.append("file", file)
+      await http.put(res.data.payload.url,  formData);
       return res;
     } catch (error) {}
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
+
     if (selectedFiles && selectedFiles.length > 0) {
-      const uploadedFile = (await handleFileUpload(selectedFiles[0]))?.data
-        .payload as UploadedFileType;
-      if (uploadedFile && uploadedFile.url && uploadedFile.objectKey) {
-        const newFiles = {
-          filename: selectedFiles[0].name,
-          fileType: selectedFiles[0].type.split('/').pop() || '',
-          fileKey: uploadedFile.objectKey
-        };
-        setArtWorkFiles(prevArtWorkFiles => [...prevArtWorkFiles, newFiles]);
+      try {
+        const uploadedFileResponse = await handleFileUpload(selectedFiles[0]);
+        const uploadedFile = uploadedFileResponse?.data
+          .payload as UploadedFileType;
+
+        if (uploadedFile?.url && uploadedFile?.objectKey) {
+          const newFile = {
+            filename: selectedFiles[0].name,
+            fileType: selectedFiles[0].type.split('/').pop() || '',
+            fileKey: uploadedFile.objectKey
+          };
+
+          setArtWorkFiles(prevArtWorkFiles => [...prevArtWorkFiles, newFile]);
+        }
+      } catch (error) {
+        console.error('Error handling file upload:', error);
       }
     }
   };
@@ -457,15 +471,15 @@ const CartModal: FC<AddToCartModalProps> = ({
                       key={index}
                       className="flex items-center pt-4 rounded-lg"
                     >
-                      {/* <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
-                          <Image
-                            src={file.fileUrl}
-                            width={100}
-                            height={100}
-                            alt={file.fileName}
-                            className="object-cover w-full h-full rounded-sm"
-                          />
-                        </div> */}
+                      <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
+                        <Image
+                          className="object-cover w-full h-full rounded-sm"
+                          width={100}
+                          height={100}
+                          src={`${config.publicRuntimeConfig.ASSETS_SERVER_URL}${file.fileKey}`}
+                          alt={file.filename}
+                        />
+                      </div>
                       <div className="flex-grow pl-4">
                         <span className="text-sm lg:text-base font-semibold break-all">
                           {file.filename}
