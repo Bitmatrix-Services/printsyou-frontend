@@ -112,9 +112,11 @@ const Checkout: FC = () => {
         setIsSubmitted(true);
         action.resetForm();
         window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+        let newRandId = uuidv4();
+        localStorage.setItem('cartId', newRandId);
         dispatch(
           setCartState({
-            id: uuidv4(),
+            id: newRandId,
             totalCartPrice: 0,
             cartItems: [],
             additionalCartPrice: 0
