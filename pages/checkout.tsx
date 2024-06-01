@@ -124,7 +124,6 @@ const Checkout: FC = () => {
         );
       } catch (error) {
         setApiError(true);
-        console.log('error', error);
       }
     }
   });
@@ -489,6 +488,11 @@ const Checkout: FC = () => {
                       ) : null}
                     </div>
                   </div>
+                  {apiError ? (
+                    <div className="text-red-500 pt-4 text-center">
+                      Something went wrong, Please try again!
+                    </div>
+                  ) : null}
                   <div className="my-6 flex w-full justify-center items-center">
                     <button
                       type="submit"
