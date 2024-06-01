@@ -4,11 +4,13 @@ interface specificationsProps {
   fieldName: string;
   fieldValue: string;
 }
+
 interface artWorkFilesProps {
   fileName: string;
   fileType: string;
   fileUrl: string;
 }
+
 interface CartItem {
   product: Product;
   itemsQuantity: number;
@@ -56,4 +58,9 @@ export interface CartInitialState {
   sidebarCartOpen: boolean;
   isCartModalOpen: boolean;
   cart: CartRoot | null;
+  cartState: {
+    open: boolean;
+    selectedProduct?: Product | null;
+    selectedItem?: CartItemUpdated | null;
+  };
 }

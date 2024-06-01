@@ -13,13 +13,14 @@ import 'lightgallery/css/lg-zoom.css';
 import '@styles/globals.scss';
 import {useAppDispatch} from '@store/hooks';
 import {useRouter} from 'next/router';
-import {FC, useEffect} from 'react';
+import React, {FC, useEffect} from 'react';
 import {setTopProgressState} from '@store/slices/progress.slice';
-import {LinearIndeterminate} from '@components/linear-inderminate.component';
+import {LinearIndeterminate} from '@components/LinearIndeterminate';
 import {ThemeProvider} from '@mui/material';
 import {theme} from '@utils/theme';
 import {Resend} from 'resend';
 import getConfig from 'next/config';
+import dynamic from 'next/dynamic';
 
 const config = getConfig();
 export const resend = new Resend(config.publicRuntimeConfig.RESEND_API_KEY);
@@ -52,6 +53,17 @@ export const ShowLinearIndeterminateOnAll: FC = () => {
   return null;
 };
 
+const UpdatedCartModalClientSide = dynamic(
+  () =>
+    import('@components/UpdateCartModal').then(
+      file => file.UpdateCartComponent
+    ),
+  {
+    ssr: false,
+    loading: () => null
+  }
+);
+
 export default function App({Component, pageProps}: AppProps) {
   return (
     <Provider store={store}>
@@ -75,6 +87,7 @@ export default function App({Component, pageProps}: AppProps) {
         <Header />
         <main>
           <Component {...pageProps} />
+          <UpdatedCartModalClientSide />
         </main>
         <Footer />
       </ThemeProvider>

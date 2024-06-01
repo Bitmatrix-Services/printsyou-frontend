@@ -321,14 +321,14 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
         )}
       </Container>
       {/* {isCartModalOpen && product && ( */}
-      <CartModal
-        product={product}
-        addToCartText="Add to cart"
-        shouldDisplayDatails={false}
-        selectedItem={selectedItem}
-        setSelectedItem={setSelectedItem}
-      />
-      {/* )} */}
+      {/*<CartModal*/}
+      {/*  product={product}*/}
+      {/*  addToCartText="Add to cart"*/}
+      {/*  shouldDisplayDatails={false}*/}
+      {/*  selectedItem={selectedItem}*/}
+      {/*  setSelectedItem={setSelectedItem}*/}
+      {/*/>*/}
+      {/*/!* )} *!/*/}
     </>
   );
 };

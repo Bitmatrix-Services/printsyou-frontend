@@ -12,10 +12,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import ImageWithFallback from '@components/ImageWithFallback';
 import {ClientSideFeaturedProductCard} from '@components/cards/client-side-feature-product-card.component';
 import Image from 'next/image';
-import CartModal from '@components/globals/CartModal';
 import {useAppDispatch} from '@store/hooks';
-import {setIsCartModalOpen} from '@store/slices/cart/cart.slice';
-import {CartItemUpdated} from '@store/slices/cart/cart';
+import {setCartStateForModal} from '@store/slices/cart/cart.slice';
 
 export interface FeaturedProductCardProps {
   product: Product;
@@ -36,9 +34,6 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   const dispatch = useAppDispatch();
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
-  const [selectedItem, setSelectedItem] = useState<CartItemUpdated | null>(
-    null
-  );
   const countFrom: Set<PriceGrids['countFrom']> = new Set();
   const byRowTypeObjects: Record<
     PriceGrids['priceType'],
@@ -140,7 +135,13 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
           <div
             onClick={e => {
               e.preventDefault();
-              dispatch(setIsCartModalOpen(true));
+              dispatch(
+                setCartStateForModal({
+                  selectedProduct: structuredClone(product),
+                  open: true,
+                  selectedItem: null
+                })
+              );
             }}
             // href={`/order_request?item_id=${product.id}`}
             className="h-16 w-8 md:w-16 flex items-center justify-center bg-white group-hover:bg-primary-500 group-hover:border-primary-500 border-l border-[#edeff2]"
@@ -354,7 +355,15 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <div
                       className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 btn-primary hover:cursor-pointer"
-                      onClick={() => dispatch(setIsCartModalOpen(true))}
+                      onClick={() =>
+                        dispatch(
+                          setCartStateForModal({
+                            selectedProduct: structuredClone(product),
+                            open: true,
+                            selectedItem: null
+                          })
+                        )
+                      }
                     >
                       <ShoppingCartIcon className="h-5 w-5" />
                       <span className="text-sm font-light capitalize">
@@ -417,13 +426,6 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
           </div>
         </Dialog>
       )}
-
-      <CartModal
-        product={product}
-        addToCartText={'Add to cart'}
-        selectedItem={selectedItem}
-        setSelectedItem={setSelectedItem}
-      />
     </>
   );
 };

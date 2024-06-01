@@ -6,7 +6,12 @@ const INITIAL_STATE: CartInitialState = {
   cartItems: [],
   sidebarCartOpen: false,
   isCartModalOpen: false,
-  cart: null
+  cart: null,
+  cartState: {
+    open: false,
+    selectedItem: null,
+    selectedProduct: null
+  }
 };
 
 export const cartSlice = createSlice({
@@ -51,26 +56,29 @@ export const cartSlice = createSlice({
     },
     setCartState: (state, action: PayloadAction<CartRoot | null>) => {
       state.cart = action.payload;
+    },
+    setCartStateForModal: (state, action: PayloadAction<CartInitialState["cartState"]>) => {
+      state.cartState = action.payload;
     }
   }
 });
+
 export const {
   addtocart,
-  removefromcart,
+  setCartStateForModal,
   setSidebarCartOpen,
   setIsCartModalOpen,
   setCartState
 } = cartSlice.actions;
+
 export const cartReducer = cartSlice.reducer;
 
 export const selectCartModalOpen = (state: RootState) =>
   state.cart.isCartModalOpen;
-
+export const selectCartState = (state: RootState) => state.cart.cartState;
 export const selectSidebarCartOpen = (state: RootState) =>
   state.cart.sidebarCartOpen;
-
-export const getCartRootState = (state: RootState) => state.cart.cart;
-
+export const selectCartRootState = (state: RootState) => state.cart.cart;
 const updateLocalStorage = (cartItemsFromLocalStorage: any) => {
   localStorage.setItem('cartItems', JSON.stringify(cartItemsFromLocalStorage));
 };
