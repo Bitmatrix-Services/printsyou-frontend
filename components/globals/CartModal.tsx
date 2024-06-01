@@ -31,6 +31,7 @@ import {
 import {http} from 'services/axios.service';
 import axios, {AxiosResponse} from 'axios';
 import getConfig from 'next/config';
+import LinearProgressWithLabel from '@components/globals/LinearProgressWithLabel';
 
 interface AddToCartModalProps {
   product: Product;
@@ -62,6 +63,8 @@ const CartModal: FC<AddToCartModalProps> = ({
   const [itemsQuantity, setItemsQuantity] = useState<number>(0);
   const [minQuantityError, setMinQuantityError] = useState('');
   const [itemColorError, setItemColorError] = useState('');
+  const [isImageUploading, setIsImageLoading] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
   const [specifications, setSpecicification] = useState([
     {
       fieldName: 'Item Color',
@@ -164,6 +167,7 @@ const CartModal: FC<AddToCartModalProps> = ({
   };
 
   const handleFileUpload = async (file: File) => {
+    setIsImageLoading(true);
     let data = {
       type: 'CART',
       fileName: file.name,
@@ -172,9 +176,21 @@ const CartModal: FC<AddToCartModalProps> = ({
 
     try {
       const res = await http.get('/s3/signedUrl', {params: data});
-      await axios.put(res.data.payload.url, file);
+      await axios.put(res.data.payload.url, file, {
+        onUploadProgress: event => {
+          const percent = Math.floor(
+            (event.loaded / (event.total as number)) * 100
+          );
+          setProgress(percent);
+          if (percent === 100) {
+            setTimeout(() => setProgress(0), 2000);
+          }
+        }
+      });
       return res;
-    } catch (error) {}
+    } catch (error) {
+      setIsImageLoading(false);
+    }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,6 +213,8 @@ const CartModal: FC<AddToCartModalProps> = ({
         }
       } catch (error) {
         console.error('Error handling file upload:', error);
+      } finally {
+        setIsImageLoading(false);
       }
     }
   };
@@ -493,9 +511,16 @@ const CartModal: FC<AddToCartModalProps> = ({
                     </li>
                   ))}
                 </ul>
+                {isImageUploading && (
+                  <LinearProgressWithLabel progress={progress} />
+                )}
               </div>
-              <div className="text-red-500 pt-4">{minQuantityError}</div>
-              <div className="text-red-500 pt-4">{itemColorError}</div>
+              {minQuantityError ? (
+                <div className="text-red-500 pt-4">{minQuantityError}</div>
+              ) : null}
+              {itemColorError ? (
+                <div className="text-red-500 pt-4">{itemColorError}</div>
+              ) : null}
               <div className="flex flex-col pt-4 ">
                 <div
                   className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold cursor-pointer"
