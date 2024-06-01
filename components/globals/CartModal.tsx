@@ -14,7 +14,7 @@ import {v4 as uuidv4} from 'uuid';
 import {Product} from '@store/slices/product/product';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  getCartRootState,
+  selectCartRootState,
   selectCartModalOpen,
   setCartState,
   setIsCartModalOpen
@@ -84,7 +84,7 @@ const CartModal: FC<AddToCartModalProps> = ({
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(state => state.cart.cartItems);
   const isCartModalOpen = useAppSelector(selectCartModalOpen);
-  const cartRoot = useAppSelector(getCartRootState);
+  const cartRoot = useAppSelector(selectCartRootState);
 
   useEffect(() => {
     if (selectedItem) {
@@ -193,7 +193,7 @@ const CartModal: FC<AddToCartModalProps> = ({
     }
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
 
     if (selectedFiles && selectedFiles.length > 0) {

@@ -2,7 +2,7 @@ import ImageWithFallback from '@components/ImageWithFallback';
 import CartModal from '@components/globals/CartModal';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  getCartRootState,
+  selectCartRootState,
   setCartState,
   setIsCartModalOpen
 } from '@store/slices/cart/cart.slice';
@@ -29,7 +29,7 @@ const Checkout: FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const cartRoot = useAppSelector(getCartRootState);
+  const cartRoot = useAppSelector(selectCartRootState);
 
   const [openModalForItem, setOpenModalForItem] = useState<Product | null>(
     null
@@ -562,14 +562,14 @@ const Checkout: FC = () => {
           </div>
         </div>
       )}
-      {openModalForItem != null ? (
-        <CartModal
-          product={openModalForItem}
-          selectedItem={selectedItem}
-          setSelectedItem={setSelectedItem}
-          addToCartText="Update"
-        />
-      ) : null}
+      {/*{openModalForItem != null ? (*/}
+      {/*  <CartModal*/}
+      {/*    product={openModalForItem}*/}
+      {/*    selectedItem={selectedItem}*/}
+      {/*    setSelectedItem={setSelectedItem}*/}
+      {/*    addToCartText="Update"*/}
+      {/*  />*/}
+      {/*) : null}*/}
     </div>
   );
 };

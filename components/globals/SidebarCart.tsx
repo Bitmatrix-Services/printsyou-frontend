@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ImageWithFallback from '@components/ImageWithFallback';
 import Image from 'next/image';
 import {
-  getCartRootState,
+  selectCartRootState,
   selectSidebarCartOpen,
   setCartState,
   setSidebarCartOpen
@@ -20,7 +20,7 @@ const SidebarCart = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const cartRoot = useAppSelector(getCartRootState);
+  const cartRoot = useAppSelector(selectCartRootState);
   const sidebarCartOpen = useAppSelector(selectSidebarCartOpen);
 
   useEffect(() => {

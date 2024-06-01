@@ -27,7 +27,7 @@ import YouTubeIcon from '@components/icons/YouTubeIcon';
 import InstagramIcon from '@components/icons/InstagramIcon';
 import SidebarCart from './SidebarCart';
 import {
-  getCartRootState,
+  selectCartRootState,
   setSidebarCartOpen
 } from '@store/slices/cart/cart.slice';
 
@@ -35,7 +35,7 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const {scrollingUp, scrollValue} = useScrollingUp();
 
-  const cartRoot = useAppSelector(getCartRootState);
+  const cartRoot = useAppSelector(selectCartRootState);
   const [mobileMenu, setMobileMenu] = useState(false);
 
   const categoryList = useAppSelector(selectCategoryList);
