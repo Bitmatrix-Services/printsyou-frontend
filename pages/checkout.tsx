@@ -451,7 +451,7 @@ const Checkout: FC = () => {
                           type="checkbox"
                           id="newsLetter"
                           name="newsLetter"
-                          className="accent-[#f8ab11] rounded-0"
+                          className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
                           checked={formik.values.newsLetter}
                           onChange={formik.handleChange}
                         />
@@ -465,7 +465,7 @@ const Checkout: FC = () => {
                           type="checkbox"
                           id="termsAndConditions"
                           name="termsAndConditions"
-                          className="accent-[#f8ab11] rounded-0"
+                          className="accent-[#f8ab11] rounded-0 min-w-[1.25rem] h-5 w-5"
                           checked={formik.values.termsAndConditions}
                           onChange={formik.handleChange}
                         />
