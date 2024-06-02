@@ -1,7 +1,7 @@
 import React, {FC, Fragment, useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 import {HomeCategoryProduts} from '@store/slices/product/product';
 
 interface ProductCategoriesSectionProps {

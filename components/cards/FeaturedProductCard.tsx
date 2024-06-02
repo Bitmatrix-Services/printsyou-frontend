@@ -9,7 +9,7 @@ import {
   ShoppingCartIcon
 } from '@heroicons/react/24/outline';
 import CloseIcon from '@mui/icons-material/Close';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 import {ClientSideFeaturedProductCard} from '@components/cards/client-side-feature-product-card.component';
 import Image from 'next/image';
 import {useAppDispatch} from '@store/hooks';
@@ -32,7 +32,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   product
 }) => {
   const dispatch = useAppDispatch();
-  const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
+  const [isQuickViewModalOpen, setIsQuickViewModalOpen] = useState(false);
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
   const countFrom: Set<PriceGrids['countFrom']> = new Set();
   const byRowTypeObjects: Record<
@@ -81,7 +81,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 <button
                   type="button"
                   onClick={e => {
-                    setIsViewProductModalOpen(true);
+                    setIsQuickViewModalOpen(true);
                     e.preventDefault();
                   }}
                   className="text-xs font-semibold text-secondary-500 hover:text-secondary-600"
@@ -144,7 +144,6 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 })
               );
             }}
-            // href={`/order_request?item_id=${product.id}`}
             className="h-16 w-8 md:w-16 flex items-center justify-center bg-white group-hover:bg-primary-500 group-hover:border-primary-500 border-l border-[#edeff2]"
           >
             <ShoppingCartIcon className="h-7 w-7" />
@@ -153,8 +152,8 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
       </Link>
       {isModal && (
         <Dialog
-          open={isViewProductModalOpen}
-          onClose={() => setIsViewProductModalOpen(false)}
+          open={isQuickViewModalOpen}
+          onClose={() => setIsQuickViewModalOpen(false)}
           classes={{paper: 'rounded-none min-w-[95%] xl:min-w-[62.5rem]'}}
         >
           <div className="sticky top-15 z-10 bg-white border-b border-[#ddd] py-3 px-6">
@@ -173,7 +172,7 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
               </div>
               <button
                 type="button"
-                onClick={() => setIsViewProductModalOpen(false)}
+                onClick={() => setIsQuickViewModalOpen(false)}
                 className="text-[#A5A5A5]"
               >
                 <CloseIcon />

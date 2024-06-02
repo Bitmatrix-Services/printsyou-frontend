@@ -10,7 +10,7 @@ import {deepPurple} from '@mui/material/colors';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {convertDateFormat} from '@utils/utils';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 
 interface BlogDetailPage {
   blog: Blog;

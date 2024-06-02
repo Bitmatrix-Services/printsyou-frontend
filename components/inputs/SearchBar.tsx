@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {http} from 'services/axios.service';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 import Link from 'next/link';
 import sanitize from 'sanitize-html';
 import {useRouter} from 'next/router';

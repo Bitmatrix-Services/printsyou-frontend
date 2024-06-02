@@ -1,4 +1,4 @@
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
   selectCartRootState,

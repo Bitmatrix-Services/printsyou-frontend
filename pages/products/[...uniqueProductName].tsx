@@ -7,7 +7,7 @@ import {GetServerSidePropsContext} from 'next';
 import {PriceGrids, Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
 import Breadcrumb from '@components/globals/Breadcrumb';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import getConfig from 'next/config';
@@ -17,7 +17,6 @@ import {
 } from '@heroicons/react/24/outline';
 import {useAppDispatch} from '@store/hooks';
 import {setCartStateForModal} from '@store/slices/cart/cart.slice';
-import {CartItemUpdated} from '@store/slices/cart/cart';
 
 const config = getConfig();
 

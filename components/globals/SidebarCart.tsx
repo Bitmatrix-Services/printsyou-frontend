@@ -3,7 +3,7 @@ import sanitizeHtml from 'sanitize-html';
 import {Drawer} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import CloseIcon from '@mui/icons-material/Close';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 import Image from 'next/image';
 import {
   selectCartRootState,

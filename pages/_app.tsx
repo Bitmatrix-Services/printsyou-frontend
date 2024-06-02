@@ -15,7 +15,7 @@ import {useAppDispatch} from '@store/hooks';
 import {useRouter} from 'next/router';
 import React, {FC, useEffect} from 'react';
 import {setTopProgressState} from '@store/slices/progress.slice';
-import {LinearIndeterminate} from '@components/LinearIndeterminate';
+import {LinearIndeterminate} from '@components/globals/LinearIndeterminate';
 import {ThemeProvider} from '@mui/material';
 import {theme} from '@utils/theme';
 import {Resend} from 'resend';
@@ -55,7 +55,7 @@ export const ShowLinearIndeterminateOnAll: FC = () => {
 
 const UpdatedCartModalClientSide = dynamic(
   () =>
-    import('@components/UpdateCartModal').then(
+    import('@components/globals/CartModal').then(
       file => file.UpdateCartComponent
     ),
   {

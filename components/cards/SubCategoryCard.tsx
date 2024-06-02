@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import Link from 'next/link';
 import {Category} from '@store/slices/category/category';
 import sanitize from 'sanitize-html';
-import ImageWithFallback from '@components/ImageWithFallback';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 
 interface ProductsSubCategoryCardProps {
   category: Category;
