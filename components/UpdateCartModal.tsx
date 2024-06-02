@@ -1,8 +1,14 @@
-import React, {ChangeEvent, FC, useEffect, useMemo, useState} from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import Dialog from '@mui/material/Dialog';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
-  selectCartRootState,
   selectCartState,
   setCartState,
   setCartStateForModal
@@ -52,7 +58,7 @@ export type LocalCartState = InferType<typeof cartModalSchema>;
 
 export const UpdateCartComponent: FC = () => {
   const dispatch = useAppDispatch();
-  const cartRoot = useAppSelector(selectCartRootState);
+  const ref = useRef<HTMLFormElement>(null);
   const cartState = useAppSelector(selectCartState);
 
   const formik = useFormik<LocalCartState>({
@@ -66,7 +72,7 @@ export const UpdateCartComponent: FC = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: data => {
-      console.log({data});
+      handleAddToCart();
     }
   });
 
@@ -270,7 +276,7 @@ export const UpdateCartComponent: FC = () => {
       }}
       sx={{'& .MuiBackdrop-root': {backgroundColor: 'lightgray'}}}
     >
-      <form onSubmit={formik.handleSubmit}>
+      <form ref={ref} onSubmit={formik.handleSubmit}>
         <div className="p-3 mb-3 text-end">
           <button type="button" onClick={handleCartModalClose}>
             <CloseIcon />
@@ -448,14 +454,14 @@ export const UpdateCartComponent: FC = () => {
                 <div className="text-red-500 pt-4">Failed To Add</div>
               ) : null}
               <div className="flex flex-col pt-4 ">
-                <div
+                <button
+                  type="submit"
                   className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold cursor-pointer"
-                  onClick={() => handleAddToCart()}
                 >
                   {cartState.cartMode === 'update'
                     ? 'Update Cart Item'
                     : 'Add to Cart'}
-                </div>
+                </button>
               </div>
             </figure>
           </div>
