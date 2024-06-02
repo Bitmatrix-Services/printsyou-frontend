@@ -1,10 +1,9 @@
 import ImageWithFallback from '@components/ImageWithFallback';
-import CartModal from '@components/globals/CartModal';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
   selectCartRootState,
   setCartState,
-  setIsCartModalOpen
+  setCartStateForModal,
 } from '@store/slices/cart/cart.slice';
 import React, {FC, useState} from 'react';
 import CloseIcon from '@mui/icons-material/Close';
@@ -20,7 +19,6 @@ import {useRouter} from 'next/router';
 import {shippingFormFields} from '@utils/Constants';
 import {CartItemUpdated, CartRoot} from '@store/slices/cart/cart';
 import {http} from 'services/axios.service';
-import {Product} from '@store/slices/product/product';
 import {AxiosResponse} from 'axios';
 import {v4 as uuidv4} from 'uuid';
 import {CircularLoader} from '@components/globals/CircularLoader';
@@ -31,26 +29,8 @@ const Checkout: FC = () => {
 
   const cartRoot = useAppSelector(selectCartRootState);
 
-  const [openModalForItem, setOpenModalForItem] = useState<Product | null>(
-    null
-  );
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<CartItemUpdated | null>(
-    null
-  );
   const [apiError, setApiError] = useState<boolean>(false);
-
-  const openModal = (cartItem: CartItemUpdated) => {
-    http
-      .get(`/product/${cartItem.productId}`)
-      .then((response: AxiosResponse) => {
-        const productDetails = response.data.payload as Product;
-        setOpenModalForItem(productDetails);
-      });
-    setSelectedItem(cartItem);
-
-    dispatch(setIsCartModalOpen(true));
-  };
 
   const getInHandDateEst = () => {
     const currentDay = new Date();
@@ -180,7 +160,22 @@ const Checkout: FC = () => {
                   {(cartRoot?.cartItems ?? []).map(item => (
                     <div key={item.productId}>
                       <div
-                        onClick={() => openModal(item)}
+                        onClick={async () => {
+                          try {
+                            const {data} = await http.get(
+                                `/product/${item.productId}`
+                            );
+                            const selectedProduct  = data.payload;
+                            dispatch(
+                                setCartStateForModal({
+                                  selectedProduct: structuredClone(selectedProduct),
+                                  open: true,
+                                  selectedItem: item,
+                                  cartMode: 'update'
+                                })
+                            );
+                          }catch (e){}
+                        }}
                         className="cursor-pointer py-4"
                       >
                         <TootipBlack title="Modify Item in Cart">

@@ -139,7 +139,8 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 setCartStateForModal({
                   selectedProduct: structuredClone(product),
                   open: true,
-                  selectedItem: null
+                  selectedItem: null,
+                  cartMode: 'new'
                 })
               );
             }}
@@ -360,7 +361,8 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                           setCartStateForModal({
                             selectedProduct: structuredClone(product),
                             open: true,
-                            selectedItem: null
+                            selectedItem: null,
+                            cartMode: 'new'
                           })
                         )
                       }

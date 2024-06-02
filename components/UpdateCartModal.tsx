@@ -79,19 +79,22 @@ export const UpdateCartComponent: FC = () => {
     priceGrids: [],
     sortedPrices: []
   });
+  const [addToCartError, setAddToCartError] = useState<boolean>(false);
 
   useEffect(() => {
-    if (cartState.selectedItem) {
-      setProduct({
-        id: '',
-        sku: cartState.selectedItem.sku,
-        productName: cartState.selectedItem.productName,
-        priceGrids: [],
-        sortedPrices: []
+    const selectedCartItem = cartState.selectedItem;
+    if (selectedCartItem) {
+      setArtWorkFiles(selectedCartItem.files);
+      formik.setValues({
+        itemQty: selectedCartItem.qtyRequested,
+        itemColor: selectedCartItem.spec[0].fieldValue,
+        imprintColor: selectedCartItem.spec[1].fieldValue,
+        size: selectedCartItem.spec[2].fieldValue
       });
-    } else if (cartState.selectedProduct) {
+    }
+    if (cartState.selectedProduct) {
       const productState = {
-        id: '',
+        id: cartState.selectedProduct.id,
         sku: cartState.selectedProduct.sku,
         productName: cartState.selectedProduct.productName,
         priceGrids: cartState.selectedProduct.priceGrids,
@@ -101,7 +104,6 @@ export const UpdateCartComponent: FC = () => {
       };
       setProduct(productState);
       formik.setFieldValue('minQty', productState.sortedPrices[0].countFrom);
-    } else {
     }
   }, [cartState.open]);
 
@@ -131,7 +133,8 @@ export const UpdateCartComponent: FC = () => {
       setCartStateForModal({
         open: false,
         selectedItem: null,
-        selectedProduct: null
+        selectedProduct: null,
+        cartMode:'new'
       })
     );
   };
@@ -208,38 +211,54 @@ export const UpdateCartComponent: FC = () => {
     } catch (error) {}
   };
 
-  const handleAddToCart = async () => {
-    try {
-      const cartId = getCartId();
-      const cartData = {
-        productId: product.id,
-        qtyRequested: formik.values.itemQty,
-        specs: [],
-        files: artWorkFiles
-      };
-      if (cartState.selectedItem) {
-        http
-          .put(
-            `/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`,
-            cartData
-          )
-          .then(() => http.get(`/cart/${cartId}`))
-          .then((response: AxiosResponse) => {
-            dispatch(setCartState(response.data.payload as CartRoot));
-          })
-          .catch(() => {})
-          .finally(() => handleCartModalClose());
-      } else {
-        http
-          .post(`/cart/add?cartId=${cartId}`, cartData)
-          .then(() => http.get(`/cart/${cartId}`))
-          .then((response: AxiosResponse) => {
-            dispatch(setCartState(response.data.payload as CartRoot));
-          })
-          .catch(() => {})
-          .finally(() => handleCartModalClose());
-      }
-    } catch (error) {}
+  const handleAddToCart = () => {
+    setAddToCartError(false)
+    const cartId = getCartId();
+    const cartData = {
+      productId: product.id,
+      qtyRequested: formik.values.itemQty,
+      specs: [
+        {
+          fieldName: 'Item Color',
+          fieldValue: formik.values.itemColor
+        },
+        {
+          fieldName: 'Imprint Colors',
+          fieldValue: formik.values.imprintColor
+        },
+        {
+          fieldName: 'Size',
+          fieldValue: formik.values.size
+        }
+      ],
+      files: artWorkFiles
+    };
+    if (cartState.cartMode === 'update' && cartState.selectedItem) {
+      http
+        .put(
+          `/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`,
+          cartData
+        )
+        .then(() => http.get(`/cart/${cartId}`))
+        .then((response: AxiosResponse) => {
+          dispatch(setCartState(response.data.payload as CartRoot));
+          handleCartModalClose();
+        })
+        .catch(() => {
+          setAddToCartError(true);
+        });
+    } else {
+      http
+        .post(`/cart/add?cartId=${cartId}`, cartData)
+        .then(() => http.get(`/cart/${cartId}`))
+        .then((response: AxiosResponse) => {
+          dispatch(setCartState(response.data.payload as CartRoot));
+          handleCartModalClose();
+        })
+        .catch(() => {
+          setAddToCartError(true);
+        });
+    }
   };
 
   return product.sku ? (
@@ -424,12 +443,14 @@ export const UpdateCartComponent: FC = () => {
                   {formik.errors['itemColor']}
                 </div>
               ) : null}
+
+              {addToCartError ? <div className="text-red-500 pt-4">Failed To Add</div>: null}
               <div className="flex flex-col pt-4 ">
                 <div
                   className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold cursor-pointer"
                   onClick={() => handleAddToCart()}
                 >
-                  {cartState.selectedItem ? 'Update Cart Item' : 'Add to Cart'}
+                  {cartState.cartMode === 'update' ? 'Update Cart Item' : 'Add to Cart'}
                 </div>
               </div>
             </figure>

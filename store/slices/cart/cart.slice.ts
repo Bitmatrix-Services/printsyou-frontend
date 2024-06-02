@@ -10,7 +10,8 @@ const INITIAL_STATE: CartInitialState = {
   cartState: {
     open: false,
     selectedItem: null,
-    selectedProduct: null
+    selectedProduct: null,
+    cartMode:''
   }
 };
 

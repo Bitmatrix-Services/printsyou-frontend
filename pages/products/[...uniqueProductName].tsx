@@ -15,9 +15,10 @@ import {
   ShoppingCartIcon,
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
-import CartModal from '@components/globals/CartModal';
 import {useAppDispatch} from '@store/hooks';
-import {setIsCartModalOpen} from '@store/slices/cart/cart.slice';
+import {
+  setCartStateForModal,
+} from '@store/slices/cart/cart.slice';
 import {CartItemUpdated} from '@store/slices/cart/cart';
 
 const config = getConfig();
@@ -29,9 +30,6 @@ interface ProductDetailsProps {
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   const dispatch = useAppDispatch();
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
-  const [selectedItem, setSelectedItem] = useState<CartItemUpdated | null>(
-    null
-  );
 
   const countFrom: Set<PriceGrids['countFrom']> = new Set();
   const byRowTypeObjects: Record<
@@ -251,7 +249,16 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <div
                       // href={`/order_request?item_id=${product.id}`}
-                      onClick={() => dispatch(setIsCartModalOpen(true))}
+                      onClick={() =>
+                        dispatch(
+                          setCartStateForModal({
+                            selectedProduct: structuredClone(product),
+                            open: true,
+                            selectedItem: null,
+                            cartMode:'new'
+                          })
+                        )
+                      }
                       className="flex justify-center items-center cursor-pointer gap-2 w-full text-center py-4 px-6 btn-primary"
                     >
                       <ShoppingCartIcon className="h-5 w-5" />

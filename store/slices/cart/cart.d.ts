@@ -62,5 +62,6 @@ export interface CartInitialState {
     open: boolean;
     selectedProduct?: Product | null;
     selectedItem?: CartItemUpdated | null;
+    cartMode:string;
   };
 }
