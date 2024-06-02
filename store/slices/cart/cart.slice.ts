@@ -11,7 +11,7 @@ const INITIAL_STATE: CartInitialState = {
     open: false,
     selectedItem: null,
     selectedProduct: null,
-    cartMode:''
+    cartMode: ''
   }
 };
 
@@ -58,7 +58,10 @@ export const cartSlice = createSlice({
     setCartState: (state, action: PayloadAction<CartRoot | null>) => {
       state.cart = action.payload;
     },
-    setCartStateForModal: (state, action: PayloadAction<CartInitialState["cartState"]>) => {
+    setCartStateForModal: (
+      state,
+      action: PayloadAction<CartInitialState['cartState']>
+    ) => {
       state.cartState = action.payload;
     }
   }

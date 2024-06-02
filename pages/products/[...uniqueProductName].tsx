@@ -16,9 +16,7 @@ import {
   InformationCircleIcon
 } from '@heroicons/react/24/outline';
 import {useAppDispatch} from '@store/hooks';
-import {
-  setCartStateForModal,
-} from '@store/slices/cart/cart.slice';
+import {setCartStateForModal} from '@store/slices/cart/cart.slice';
 import {CartItemUpdated} from '@store/slices/cart/cart';
 
 const config = getConfig();
@@ -255,7 +253,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                             selectedProduct: structuredClone(product),
                             open: true,
                             selectedItem: null,
-                            cartMode:'new'
+                            cartMode: 'new'
                           })
                         )
                       }

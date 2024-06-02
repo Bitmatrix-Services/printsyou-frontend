@@ -3,7 +3,7 @@ import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
   selectCartRootState,
   setCartState,
-  setCartStateForModal,
+  setCartStateForModal
 } from '@store/slices/cart/cart.slice';
 import React, {FC, useState} from 'react';
 import CloseIcon from '@mui/icons-material/Close';
@@ -163,18 +163,19 @@ const Checkout: FC = () => {
                         onClick={async () => {
                           try {
                             const {data} = await http.get(
-                                `/product/${item.productId}`
+                              `/product/${item.productId}`
                             );
-                            const selectedProduct  = data.payload;
+                            const selectedProduct = data.payload;
                             dispatch(
-                                setCartStateForModal({
-                                  selectedProduct: structuredClone(selectedProduct),
-                                  open: true,
-                                  selectedItem: item,
-                                  cartMode: 'update'
-                                })
+                              setCartStateForModal({
+                                selectedProduct:
+                                  structuredClone(selectedProduct),
+                                open: true,
+                                selectedItem: item,
+                                cartMode: 'update'
+                              })
                             );
-                          }catch (e){}
+                          } catch (e) {}
                         }}
                         className="cursor-pointer py-4"
                       >

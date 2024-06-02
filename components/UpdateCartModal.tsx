@@ -134,7 +134,7 @@ export const UpdateCartComponent: FC = () => {
         open: false,
         selectedItem: null,
         selectedProduct: null,
-        cartMode:'new'
+        cartMode: 'new'
       })
     );
   };
@@ -212,7 +212,7 @@ export const UpdateCartComponent: FC = () => {
   };
 
   const handleAddToCart = () => {
-    setAddToCartError(false)
+    setAddToCartError(false);
     const cartId = getCartId();
     const cartData = {
       productId: product.id,
@@ -444,13 +444,17 @@ export const UpdateCartComponent: FC = () => {
                 </div>
               ) : null}
 
-              {addToCartError ? <div className="text-red-500 pt-4">Failed To Add</div>: null}
+              {addToCartError ? (
+                <div className="text-red-500 pt-4">Failed To Add</div>
+              ) : null}
               <div className="flex flex-col pt-4 ">
                 <div
                   className="block w-full text-center uppercase py-5 px-8 text-white bg-primary-500 hover:bg-body border border-[#eaeaec] text-sm font-bold cursor-pointer"
                   onClick={() => handleAddToCart()}
                 >
-                  {cartState.cartMode === 'update' ? 'Update Cart Item' : 'Add to Cart'}
+                  {cartState.cartMode === 'update'
+                    ? 'Update Cart Item'
+                    : 'Add to Cart'}
                 </div>
               </div>
             </figure>
