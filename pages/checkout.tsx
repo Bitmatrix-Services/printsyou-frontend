@@ -466,9 +466,9 @@ const Checkout: FC = () => {
                           onChange={formik.handleChange}
                         />
                         <label className="ml-2" htmlFor="termsAndConditions">
-                          I have Read & Agree To PrintsYou{' '}
+                          I have read & agree to PrintsYou{' '}
                           <Link
-                            href="/aditional_information/terms_and_conditions"
+                            href="/terms-and-conditions"
                             target="blank"
                             className="text-blue-500"
                           >

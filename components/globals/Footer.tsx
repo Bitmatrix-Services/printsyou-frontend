@@ -11,17 +11,18 @@ import {EmailSchema} from '@utils/validationSchemas';
 import {CircularLoader} from '@components/globals/CircularLoader';
 
 const quickLinks = [
-  {name: 'All Products', url: '/'},
+  // {name: 'All Products', url: '/'},
   {name: 'About Us', url: '/about_us'},
-  {name: 'Testimonials', url: '/aditional_information/testimonials'},
-  {name: 'Contact Us', url: '/contact_us'}
+  // {name: 'Testimonials', url: '/aditional_information/testimonials'},
+  {name: 'Contact Us', url: '/contact_us'},
+  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
 ];
 
 const customerCareLink = [
-  {name: 'Artwork', url: '/aditional_information/artwork'},
-  {name: 'How To Order', url: '/how-to-order'},
-  {name: 'FAQs', url: '/faq'},
-  {name: 'Additional Information', url: '/aditional_information/overview'}
+  // {name: 'Artwork', url: '/aditional_information/artwork'},
+  {name: 'How To Order', url: '/how-to-order'}
+  // {name: 'FAQs', url: '/faq'},
+  // {name: 'Additional Information', url: '/aditional_information/overview'}
 ];
 
 const social = [
