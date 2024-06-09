@@ -76,11 +76,11 @@ const TermsAndConditions = () => {
             <div className="text-3xl font-bold mb-6">Terms and Conditions</div>
             {termsList.map((item, index) => (
               <div key={index} className="pb-2">
-                {item.title && (
+                {item.title ? (
                   <div className="text-xl mt-2 mb-1 font-bold">
                     {item.title}
                   </div>
-                )}
+                ) : null}
                 <p className="font-medium text-mute3 text-[16px] leading-[30px] font-poppins">
                   {item.body}
                 </p>
