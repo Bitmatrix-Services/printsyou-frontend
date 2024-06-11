@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import Container from '@components/globals/Container';
 import {NextSeo} from 'next-seo';
 import {aosGlobalSetting, metaConstants} from '@utils/Constants';
@@ -14,29 +14,29 @@ const orderSteps = [
       "Click the 'Add to Cart' button on any product page to select items with no immediate payment required. This action requests a quote without any obligation."
   },
   {
-    title: 'Connect with a Sales Rep',
+    title: 'Know What You’re Getting',
     description:
-      'Once you submit your order with all details and artwork, a dedicated sales representative will be assigned to you. They will assist with any questions and guide you through the next steps.'
+      'Enter the necessary details for each product you select. This could include size, color, quantity, or any other specific preferences along with artwork files. Ensure everything is just how you like it!'
   },
   {
-    title: 'Review and Confirm',
+    title: 'Sneak Peek of Cart, Ready, Set, Checkout!',
     description:
-      "We'll clarify any questions regarding your order and provide a sales confirmation along with an artwork proof for your approval. This document includes a detailed breakdown of all charges, such as shipping, taxes, and setup fees."
+      'As you shop, keep an eye on your sidebar where your cart summary is displayed. It’s a quick way to see all the goodies you’ve picked up without leaving your current page. Head to the checkout page where every item you picked is listed. This is where you finalize your order.'
   },
   {
-    title: 'Customize Your Design',
+    title: 'Update product specification? No Problem!',
     description:
-      'Adjust the artwork proof freely until you are satisfied with the design.'
+      'Need to adjust your selections? Easily update product details or quantities directly from the checkout page. Make sure everything is perfect before you proceed!'
   },
   {
-    title: 'Finalize Your Order',
+    title: 'Where’s It Going?',
     description:
-      "Upon approving the artwork and sales confirmation, we will send an invoice with a secure payment link. There's no commitment until you decide to proceed with production, with the option to cancel anytime before production begins."
+      'Fill in your shipping information so your products can find their way to you. You can have different billing and shipping addresses Double-check your address to avoid any delivery mishaps'
   },
   {
-    title: 'Production and Payment',
+    title: 'Click to Complete',
     description:
-      "After payment is received, we'll initiate the production process. We ensure open communication throughout, allowing for a smooth transition to production when you are ready."
+      "Add expected delivery date and addition information about your order and you're done. Review all your details and when everything looks good, hit the submit button. Your order is now on its way!"
   }
 ];
 
@@ -58,63 +58,62 @@ const HowToOrderPage = () => {
             dedicated to assisting and navigating you through every step.
           </p>
         </div>
-        <div className="space-y-12 relative scroll-container py-12">
-          {[0, 2, 4].map((order, index) => (
-            <>
-              <figure className="scroll-step-1 top-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-                <div className="col lg:col-span-3 hidden lg:block">
-                  <div className="h-full w-full border-l-4 border-primary-500">
-                    <Image
-                      data-aos="fade-down-right"
-                      className="object-cover"
-                      height={800}
-                      width={800}
-                      src={`/assets/h-step-1.svg`}
-                      alt="..."
-                    />
+        <div className="space-y-12 relative scroll-container py-12 md:ml-[6rem]">
+          {orderSteps.map((order, index) => (
+            <Fragment key={order.title}>
+              {index % 2 === 0 ? (
+                <figure className="scroll-step-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:space-x-52">
+                  <div className="col self-center" data-aos="zoom-in-up">
+                    <h6 className="sub-title tetx-xl text-primary-500 mb-3">
+                      Step {index + 1}
+                    </h6>
+                    <h3 className="title text-3xl font-semibold mb-4">
+                      {order.title}
+                    </h3>
+                    <p className="text-mute3 text-lg">{order.description}</p>
                   </div>
-                </div>
-                <div
-                  className="col self-center lg:col-span-2"
-                  data-aos="zoom-in-up"
-                >
-                  <h6 className="sub-title text-xl text-primary-500 mb-3">
-                    Step {order + 1}
-                  </h6>
-                  <h3 className="title text-3xl font-semibold mb-4">
-                    {orderSteps[index].title}
-                  </h3>
-                  <p className="text-mute3 text-lg">
-                    {orderSteps[index].description}
-                  </p>
-                </div>
-              </figure>
-              <figure className="scroll-step-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                <div className="col self-center" data-aos="zoom-in-up">
-                  <h6 className="sub-title tetx-xl text-primary-500 mb-3">
-                    Step {order + 2}
-                  </h6>
-                  <h3 className="title text-3xl font-semibold mb-4">
-                    {orderSteps[index + 1].title}
-                  </h3>
-                  <p className="text-mute3 text-lg">
-                    {orderSteps[index + 1].description}
-                  </p>
-                </div>
-                <div className="col lg:col-span-2 hidden lg:block">
-                  <div className="h-full w-full border-r-4 border-primary-500">
-                    <Image
-                      data-aos="fade-down-left"
-                      className="object-cover"
-                      height={800}
-                      width={800}
-                      src={`/assets/h-step-2.svg`}
-                      alt="..."
-                    />
+                  <div className="col lg:col-span-2 hidden lg:block">
+                    <div className="h-full w-[47%] border-r-4 border-primary-500">
+                      <Image
+                        data-aos="fade-down-left"
+                        className="object-cover"
+                        height={500}
+                        width={500}
+                        src={`/assets/o-step-${index + 1}.png`}
+                        alt="order"
+                      />
+                    </div>
                   </div>
-                </div>
-              </figure>
-            </>
+                </figure>
+              ) : (
+                <figure className="scroll-step-1 top-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 md:space-x-52">
+                  <div className="col lg:col-span-2 hidden lg:block">
+                    <div className="h-full w-full border-l-4 border-primary-500">
+                      <Image
+                        data-aos="fade-down-right"
+                        className="object-cover"
+                        height={500}
+                        width={500}
+                        src={`/assets/o-step-${index + 1}.png`}
+                        alt="order"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="col self-center lg:col-span-2"
+                    data-aos="zoom-in-up"
+                  >
+                    <h6 className="sub-title text-xl text-primary-500 mb-3">
+                      Step {index + 1}
+                    </h6>
+                    <h3 className="title text-3xl font-semibold mb-4">
+                      {order.title}
+                    </h3>
+                    <p className="text-mute3 text-lg">{order.description}</p>
+                  </div>
+                </figure>
+              )}
+            </Fragment>
           ))}
         </div>
       </Container>
