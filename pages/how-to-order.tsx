@@ -33,9 +33,9 @@ const orderSteps = [
     imageUrl: '/assets/o-step-4.png'
   },
   {
-    title: 'Where’s It Going?',
+    title: "Where It's Going?",
     description:
-      'Fill in your shipping information so your products can find their way to you. You can have different billing and shipping addresses Double-check your address to avoid any delivery mishaps',
+      'Fill in your shipping information so your products can find their way to you. You can have different billing and shipping addresses. Double-check your address to avoid any delivery mishaps.',
     imageUrl: '/assets/o-step-5.png'
   },
   {
