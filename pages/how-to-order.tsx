@@ -11,32 +11,38 @@ const orderSteps = [
   {
     title: 'Start Your Order',
     description:
-      "Click the 'Add to Cart' button on any product page to select items with no immediate payment required. This action requests a quote without any obligation."
+      "Click the 'Add to Cart' button on any product page to select items with no immediate payment required. This action requests a quote without any obligation.",
+    imageUrl: '/assets/o-step-1.png'
   },
   {
     title: 'Know What You’re Getting',
     description:
-      'Enter the necessary details for each product you select. This could include size, color, quantity, or any other specific preferences along with artwork files. Ensure everything is just how you like it!'
+      'Enter the necessary details for each product you select. This could include size, color, quantity, or any other specific preferences along with artwork files. Ensure everything is just how you like it!',
+    imageUrl: '/assets/o-step-2.png'
   },
   {
     title: 'Sneak Peek of Cart, Ready, Set, Checkout!',
     description:
-      'As you shop, keep an eye on your sidebar where your cart summary is displayed. It’s a quick way to see all the goodies you’ve picked up without leaving your current page. Head to the checkout page where every item you picked is listed. This is where you finalize your order.'
+      'As you shop, keep an eye on your sidebar where your cart summary is displayed. It’s a quick way to see all the goodies you’ve picked up without leaving your current page. Head to the checkout page where every item you picked is listed. This is where you finalize your order.',
+    imageUrl: '/assets/o-step-3.png'
   },
   {
     title: 'Update product specification? No Problem!',
     description:
-      'Need to adjust your selections? Easily update product details or quantities directly from the checkout page. Make sure everything is perfect before you proceed!'
+      'Need to adjust your selections? Easily update product details or quantities directly from the checkout page. Make sure everything is perfect before you proceed!',
+    imageUrl: '/assets/o-step-4.png'
   },
   {
     title: 'Where’s It Going?',
     description:
-      'Fill in your shipping information so your products can find their way to you. You can have different billing and shipping addresses Double-check your address to avoid any delivery mishaps'
+      'Fill in your shipping information so your products can find their way to you. You can have different billing and shipping addresses Double-check your address to avoid any delivery mishaps',
+    imageUrl: '/assets/o-step-5.png'
   },
   {
     title: 'Click to Complete',
     description:
-      "Add expected delivery date and addition information about your order and you're done. Review all your details and when everything looks good, hit the submit button. Your order is now on its way!"
+      "Add expected delivery date and addition information about your order and you're done. Review all your details and when everything looks good, hit the submit button. Your order is now on its way!",
+    imageUrl: '/assets/o-step-6.png'
   }
 ];
 
@@ -79,7 +85,7 @@ const HowToOrderPage = () => {
                         className="object-cover"
                         height={500}
                         width={500}
-                        src={`/assets/o-step-${index + 1}.png`}
+                        src={order.imageUrl}
                         alt="order"
                       />
                     </div>
@@ -94,7 +100,7 @@ const HowToOrderPage = () => {
                         className="object-cover"
                         height={500}
                         width={500}
-                        src={`/assets/o-step-${index + 1}.png`}
+                        src={order.imageUrl}
                         alt="order"
                       />
                     </div>
