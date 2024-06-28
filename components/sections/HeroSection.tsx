@@ -49,7 +49,7 @@ const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
                     ></div>
                     <div className="mt-8">
                       <Link
-                        href={`/${banner.bannerCategory.ucategoryName}`}
+                        href={`/categories/${banner.bannerCategory.ucategoryName}`}
                         className="py-4 px-20 text-sm tracking-[3.5px] font-bold btn-primary"
                       >
                         SHOP NOW
