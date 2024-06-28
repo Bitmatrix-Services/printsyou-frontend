@@ -3,46 +3,10 @@ import Link from 'next/link';
 import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
 import {BannerList} from '@store/slices/category/category';
-import ArrowRightIcon from '@components/icons/ArrowRightIcon';
-import Container from '@components/globals/Container';
+import Image from 'next/image';
+import getConfig from "next/config";
 
-const slidesData = [
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Favorite Items up to',
-    off: '35% OFF'
-  },
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Favorite Items up to',
-    off: '35% OFF'
-  },
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Favorite Items up to',
-    off: '35% OFF'
-  },
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Items up to',
-    off: '50% OFF'
-  },
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Favorite Items up to',
-    off: '35% OFF'
-  },
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Favorite Items up to',
-    off: '35% OFF'
-  },
-  {
-    backgroundImage: '/assets/hero-banner-1.png',
-    title: 'All Your Favorite Items up to',
-    off: '35% OFF'
-  }
-];
+const config = getConfig();
 
 interface IHeroSection {
   bannerList: BannerList[];
@@ -65,33 +29,34 @@ const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
         >
           {bannerList.map((banner, index) => (
             <SwiperSlide key={banner.id}>
-              <div
-                className="slide-item bg-center bg-cover"
-                style={{
-                  //   backgroundImage: `url(${banner.bannerUrl})`
-                  backgroundImage: `url(${banner.bannerUrl})`
-                }}
-              >
-                <Container>
-                  <div className="py-14 lg:py-20 min-h-[16rem] md:min-h-[28rem] max-w-[35rem] flex flex-col justify-center">
-                    <h3 className="font-poppins text-headingColor font-extralight uppercase text-4xl sm:text-6xl xl:text-7xl mb-5">
-                      {slidesData[index]?.title ?? ''}
-                      <span className="ml-2 text-secondary-500 font-bold">
-                        {slidesData[index]?.off ?? ''}
-                      </span>
-                    </h3>
-
-                    <div>
+              <div className="relative">
+                <Image
+                  className="absolute top-0 left-0"
+                  src={`${config.publicRuntimeConfig.ASSETS_SERVER_URL}${banner.bannerUrl}`}
+                  alt="banner"
+                  fill
+                  objectFit="cover"
+                />
+                <div className="relative z-10">
+                  <div className="h-[25rem] px-6 py-6 md:px-20 max-w-[40rem] flex flex-col justify-center text-center">
+                    <h3
+                      className="text-white font-bold text-2xl sm:text-3xl md:text-4xl mb-5"
+                      dangerouslySetInnerHTML={{__html: banner.heading}}
+                    ></h3>
+                    <div
+                      className="text-white text-base space-y-2"
+                      dangerouslySetInnerHTML={{__html: banner.tagLines}}
+                    ></div>
+                    <div className="mt-8">
                       <Link
-                        href={banner.bannerCategory.ucategoryName}
-                        className="py-3 px-16 text-base font-light inline-flex items-center gap-1 btn-primary"
+                        href={`/${banner.bannerCategory.ucategoryName}`}
+                        className="py-4 px-20 text-sm tracking-[3.5px] font-bold btn-primary"
                       >
-                        <span>Shop Now</span>
-                        <ArrowRightIcon />
+                        SHOP NOW
                       </Link>
                     </div>
                   </div>
-                </Container>
+                </div>
               </div>
             </SwiperSlide>
           ))}

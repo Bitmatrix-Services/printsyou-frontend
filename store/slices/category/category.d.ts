@@ -25,6 +25,8 @@ export type BannerList = {
   id: string;
   bannerUrl: string;
   sequenceNumber: string;
+  heading: string;
+  tagLines: string;
   bannerCategory: {
     categoryId: string;
     ucategoryName: string;

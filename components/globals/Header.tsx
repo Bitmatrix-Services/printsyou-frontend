@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {Drawer} from '@mui/material';
@@ -17,11 +17,7 @@ import {
 } from '@store/slices/category/catgory.slice';
 import {useScrollingUp} from 'hooks/useScrolllingUp';
 import {DropDownNavMenu} from './DropDownNavMenu';
-import {
-  // HeartIcon,
-  ShoppingCartIcon
-  // UserIcon
-} from '@heroicons/react/24/outline';
+import {ShoppingCartIcon} from '@heroicons/react/24/outline';
 import TwitterIcon from '@components/icons/TwitterIcon';
 import YouTubeIcon from '@components/icons/YouTubeIcon';
 import InstagramIcon from '@components/icons/InstagramIcon';
@@ -215,14 +211,23 @@ const Header = () => {
                   subCatList={categoryList}
                 />
               </li>
-              {categoryList.slice(0, 6).map((item, index) => (
-                <li key={`link-${index}`}>
-                  <DropDownNavMenu
-                    title={item.categoryName}
-                    subCatList={item.subCategories}
-                  />
-                </li>
-              ))}
+              {categoryList
+                .filter(
+                  item =>
+                    !(
+                      item.categoryName.indexOf('ADMINTS') > -1 ||
+                      item.categoryName.indexOf('AWS COLLECTION') > -1
+                    )
+                )
+                .slice(0, 6)
+                .map((item, index) => (
+                  <li key={`link-${index}`}>
+                    <DropDownNavMenu
+                      title={item.categoryName}
+                      subCatList={item.subCategories}
+                    />
+                  </li>
+                ))}
             </ul>
             {/* <Link
               href="#"
