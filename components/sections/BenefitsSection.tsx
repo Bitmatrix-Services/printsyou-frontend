@@ -1,27 +1,24 @@
 import Container from '@components/globals/Container';
-import {ArrowRightIcon} from '@heroicons/react/24/solid';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 
 const cardsList = [
   {
     imageSrc: '/assets/b-icon-1.png',
-    title: 'Thousands of stores',
-    description: 'Lorem Ipsum dollar sit smit ameda lorem ipsum Lorem Ipsum',
+    title: 'Thousands of vendors',
+    description: `A large number of retail establishments, potentially ranging from small local shops to large chain stores. These stores could offer a variety of products and services, catering to diverse customer needs. The phrase highlights the vastness and diversity of the retail landscape, suggesting extensive shopping options available to consumers.`,
     linkHref: '#'
   },
   {
     imageSrc: '/assets/b-icon-2.png',
-    title: '100% trusted by customers and store owners',
-    description:
-      'Lorem Ipsum dollar sit smit ameda lorem ipsum Lorem Ipsum dollar sit smit ameda lorem ipsum',
+    title: '100% Trusted by customers and store owners',
+    description: `Trusted by customers and store owners, our products consistently deliver quality and reliability. With a proven track record, we prioritize satisfaction and build long term relationships. Our commitment to excellence ensures that every purchase meets the highest standards.`,
     linkHref: '#'
   },
   {
     imageSrc: '/assets/b-icon-3.png',
     title: 'Easy Checkout & payment system',
-    description: 'Hire remote teams that work in the same time zone as you.',
+    description: `Streamlined platform designed to simplify and expedite the online shopping experience. It offers quick, secure transactions with minimal steps, enhancing customer satisfaction. Its user-friendly interface supports multiple payment options, ensuring convenience and flexibility for all users.`,
     linkHref: '#'
   }
 ];
@@ -62,15 +59,15 @@ const BenefitsSection = () => {
                 <p className="mt-2 text-[#666] font-normal line-clamp-3">
                   {card.description}
                 </p>
-                <div className="mt-auto pt-4">
-                  <Link
-                    href={card.linkHref}
-                    className="flex items-center gap-2 font-semibold text-primary-500 group-hover:text-headingColor hover:opacity-80"
-                  >
-                    <span>Learn more</span>
-                    <ArrowRightIcon className="h-4 w-4" />
-                  </Link>
-                </div>
+                {/*<div className="mt-auto pt-4">*/}
+                {/*  <Link*/}
+                {/*    href={card.linkHref}*/}
+                {/*    className="flex items-center gap-2 font-semibold text-primary-500 group-hover:text-headingColor hover:opacity-80"*/}
+                {/*  >*/}
+                {/*    <span>Learn more</span>*/}
+                {/*    <ArrowRightIcon className="h-4 w-4" />*/}
+                {/*  </Link>*/}
+                {/*</div>*/}
               </div>
             </div>
           ))}
