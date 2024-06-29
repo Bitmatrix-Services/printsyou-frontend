@@ -44,8 +44,9 @@ function ContactUs() {
       <PageHeader pageTitle="Contact Us" />
       <Container>
         {!isSubmitted ? (
-          <div className="xs:flex md:grid md:grid-cols-2 py-8 md:py-16">
-            <form onSubmit={formik.handleSubmit}>
+          <div className="xs:flex md:grid md:grid-cols-4 py-8 md:py-16">
+            <div></div>
+            <form onSubmit={formik.handleSubmit} className="col-span-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                 <FormInput
                   type="text"
@@ -107,10 +108,10 @@ function ContactUs() {
                 </div>
               </div>
             </form>
-            <iframe
-              className="custom-map w-full h-full pl-6"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2964.1479667071944!2d-87.78585458441495!3d42.018558064591296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fc8d799d677fb%3A0xa65daeb86f4aae92!2sIdentity-Links%20-%20Promotional%20Products!5e0!3m2!1sen!2sus!4v1624371789928!5m2!1sen!2sus"
-            />
+            {/*<iframe*/}
+            {/*  className="custom-map w-full h-full pl-6"*/}
+            {/*  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2964.1479667071944!2d-87.78585458441495!3d42.018558064591296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880fc8d799d677fb%3A0xa65daeb86f4aae92!2sIdentity-Links%20-%20Promotional%20Products!5e0!3m2!1sen!2sus!4v1624371789928!5m2!1sen!2sus"*/}
+            {/*/>*/}
           </div>
         ) : (
           <div className="flex flex-col space-y-4 mt-6 mb-16">

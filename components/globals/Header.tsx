@@ -6,7 +6,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Bars3Icon, PhoneIcon, XMarkIcon} from '@heroicons/react/24/solid';
+import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/solid';
 import sanitizeHtml from 'sanitize-html';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import SearchBar from '@components/inputs/SearchBar';
@@ -18,14 +18,12 @@ import {
 import {useScrollingUp} from 'hooks/useScrolllingUp';
 import {DropDownNavMenu} from './DropDownNavMenu';
 import {ShoppingCartIcon} from '@heroicons/react/24/outline';
-import TwitterIcon from '@components/icons/TwitterIcon';
-import YouTubeIcon from '@components/icons/YouTubeIcon';
-import InstagramIcon from '@components/icons/InstagramIcon';
 import SidebarCart from './SidebarCart';
 import {
   selectCartRootState,
   setSidebarCartOpen
 } from '@store/slices/cart/cart.slice';
+import {social} from '@components/globals/Footer';
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -52,40 +50,18 @@ const Header = () => {
       <div className="py-3 bg-body">
         <Container>
           <div className="flex items-center gap-4">
-            <div className="mr-auto">
-              <a
-                href="tel:+16147952435"
-                className="text-sm text-white hover:text-primary-500 flex items-center gap-2"
-              >
-                <PhoneIcon className="h-5 w-5" />
-                <span>+1 614 795-2435</span>
-              </a>
-            </div>
+            <div className="mr-auto"></div>
             <div className="flex items-center gap-3">
-              <a
-                className="text-white hover:text-primary-500"
-                href="http://www.twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <TwitterIcon />
-              </a>
-              <a
-                className="text-white hover:text-primary-500"
-                href="http://www.youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <YouTubeIcon />
-              </a>
-              <a
-                className="text-white hover:text-primary-500"
-                href="http://www.instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <InstagramIcon />
-              </a>
+              {social.map(item => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <span className="sr-only">{item.name}</span>
+                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                </Link>
+              ))}
             </div>
           </div>
         </Container>

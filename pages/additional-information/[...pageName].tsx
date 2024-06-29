@@ -81,7 +81,7 @@ const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
               onChange={(_, newValue) => {
                 // setValue(newValue);
                 router.push(
-                  `/aditional_information/${tabUrls[newValue]
+                  `/additional-information/${tabUrls[newValue]
                     .toLowerCase()
                     .replace(/\s+/g, '_')}`
                 );

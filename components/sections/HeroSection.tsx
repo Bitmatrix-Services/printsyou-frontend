@@ -4,7 +4,7 @@ import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
 import {BannerList} from '@store/slices/category/category';
 import Image from 'next/image';
-import getConfig from "next/config";
+import getConfig from 'next/config';
 
 const config = getConfig();
 
@@ -27,7 +27,7 @@ const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
           pagination={{clickable: true}}
           className="hero-swiper"
         >
-          {bannerList.map((banner, index) => (
+          {bannerList.map(banner => (
             <SwiperSlide key={banner.id}>
               <div className="relative">
                 <Image

@@ -15,7 +15,7 @@ const OverviewCard: FC<OverviewCardProps> = ({icon, heading, index}) => {
       className="group bg-white hover:bg-primary-500 text-body hover:text-white px-7 py-10 xl:py-12 2xl:py-20 border-b-2 border-b-black hover:cursor-pointer"
       onClick={() => {
         router.push(
-          `/aditional_information/${tabUrls[index + 1]
+          `/additional-information/${tabUrls[index + 1]
             .toLowerCase()
             .replace(/\s+/g, '_')}`
         );

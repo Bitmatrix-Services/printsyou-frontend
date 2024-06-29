@@ -89,7 +89,8 @@ export const getStaticProps = (async context => {
       allUniqueIdeas,
       bannerList,
       homeCategoryProducts
-    }
+    },
+    revalidate: 60
   };
 }) satisfies GetStaticProps<IHome>;
 
