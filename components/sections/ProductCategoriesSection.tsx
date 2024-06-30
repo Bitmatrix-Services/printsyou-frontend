@@ -82,15 +82,15 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                                 {product.salePrice !== 0 ? (
                                   <>
                                     <h6 className="text-sm font-normal line-through text-gray-600 group-hover:text-headingColor">
-                                      ${product.lowestPrice.toFixed(2)}
+                                      ${product.lowestPrice?.toFixed(2)}
                                     </h6>
                                     <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
-                                      ${product.salePrice.toFixed(2)}
+                                      ${product.salePrice?.toFixed(2)}
                                     </h6>
                                   </>
                                 ) : (
                                   <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
-                                    ${product.lowestPrice.toFixed(2)}
+                                    ${product.lowestPrice?.toFixed(2)}
                                   </h6>
                                 )}
                               </div>
