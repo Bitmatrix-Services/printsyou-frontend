@@ -5,7 +5,7 @@ import sanitizeHtml from 'sanitize-html';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Container from './Container';
 import {Category} from '@store/slices/category/category';
-import Image from 'next/image';
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 
 interface DropDownNavMenuProps {
   subCatList: Category[];
@@ -20,6 +20,7 @@ export const DropDownNavMenu: FC<DropDownNavMenuProps> = ({
 }) => {
   const [showList, setShowList] = useState<boolean>(false);
   const [catImage, setCatImage] = useState<string>('');
+
   return (
     <div
       className={`megamenu ${className} ${showList && 'show'} hidden md:block`}
@@ -64,10 +65,10 @@ export const DropDownNavMenu: FC<DropDownNavMenuProps> = ({
             </ul>
 
             <div className="category-image">
-              <Image
+              <ImageWithFallback
                 height={400}
                 width={400}
-                src="/assets/image-1.png"
+                src={catImage}
                 alt="category"
               />
             </div>

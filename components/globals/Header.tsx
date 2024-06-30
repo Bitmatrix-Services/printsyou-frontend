@@ -24,6 +24,7 @@ import {
   setSidebarCartOpen
 } from '@store/slices/cart/cart.slice';
 import {social} from '@components/globals/Footer';
+import EmailIcon from '@mui/icons-material/Email';
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -276,7 +277,7 @@ const Header = () => {
                     <li key={category.id}>
                       <Link
                         className="text-sm text-[#b5b8c1] hover:text-secondary-500"
-                        href={`/${category.uniqueCategoryName}`}
+                        href={`/categories/${category.uniqueCategoryName}`}
                         onClick={() => setMobileMenu(false)}
                       >
                         <span
@@ -310,7 +311,7 @@ const Header = () => {
                       <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-secondary-500"
-                          href={`/${category.uniqueCategoryName}`}
+                          href={`/categories/${category.uniqueCategoryName}`}
                           onClick={() => setMobileMenu(false)}
                         >
                           <span
@@ -328,24 +329,12 @@ const Header = () => {
           ))}
           <fieldset className="p-6">
             <div className="flex gap-1">
-              <a href="tel: 8882829507" className="p-3 w-full bg-[#3f4553]">
+              <a
+                href="mailto: info@printsyou.com"
+                className="p-3 w-full bg-[#3f4553]"
+              >
                 <div className="w-6 h-6 mx-auto relative">
-                  <Image
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    fill
-                    src="/assets/icon-chat.png"
-                    alt="..."
-                  />
-                </div>
-              </a>
-              <a href="tel: 8882829507" className="p-3 w-full bg-[#3f4553]">
-                <div className="w-6 h-6 mx-auto relative">
-                  <Image
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    fill
-                    src="/assets/icon-phone.png"
-                    alt="..."
-                  />
+                  <EmailIcon />
                 </div>
               </a>
             </div>
@@ -362,21 +351,6 @@ const Header = () => {
                   <UserIcon className="h-7 w-7" />
                 </button>
               </li> */}
-              <li>
-                <button
-                  type="button"
-                  className=" flex items-center gap-5"
-                  onClick={() => dispatch(setSidebarCartOpen(true))}
-                >
-                  <span className="relative">
-                    <ShoppingCartIcon className="h-7 w-7 hover:text-primary-500" />
-                    <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary-500 text-headingColor text-sm font-semibold">
-                      {cartRoot?.cartItems?.length ?? 0}
-                    </span>
-                  </span>
-                  <span className="font-semibold text-xl">$0.00</span>
-                </button>
-              </li>
             </ul>
           </fieldset>
         </div>

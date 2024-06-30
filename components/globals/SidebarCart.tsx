@@ -142,7 +142,6 @@ const SidebarCart = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <h2 className="text-sm font-semibold">
-                    <CloseIcon className="w-4 h-4" />$
                     <CloseIcon className="w-4 h-4" />${item.priceQuotedPerItem}
                   </h2>
                 </div>

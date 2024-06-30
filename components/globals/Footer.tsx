@@ -166,10 +166,10 @@ const Footer = () => {
               {/*    Got Questions ? Call us 24/7!*/}
               {/*  </span>*/}
               {/*  <a*/}
-              {/*    href="tel:+16147952435"*/}
+              {/*    href="tel:"*/}
               {/*    className="block text-headingColor text-[1.375rem] hover:text-opacity-80"*/}
               {/*  >*/}
-              {/*    +1 614 795-2435*/}
+              {/*    */}
               {/*  </a>*/}
               {/*</div>*/}
               {/*<div>*/}
