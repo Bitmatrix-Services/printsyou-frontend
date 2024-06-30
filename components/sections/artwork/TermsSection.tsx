@@ -104,12 +104,12 @@ const TermsSection = () => {
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
             PrintsYou strongly advises buyers to open all merchandise to check
             for quality and satisfaction. If any problems arise with an order,
-            the buyer must contact at info@printsyou.com with the
-            order number immediately or within 15 days of receipt at the very
-            latest. After this time, PrintsYou will be unable to go back to
-            suppliers for credit. If necessary, PrintsYou will issue an RMA
-            (Return Material Authorization) Number and provide the buyer with a
-            special shipping address.
+            the buyer must contact at info@printsyou.com with the order number
+            immediately or within 15 days of receipt at the very latest. After
+            this time, PrintsYou will be unable to go back to suppliers for
+            credit. If necessary, PrintsYou will issue an RMA (Return Material
+            Authorization) Number and provide the buyer with a special shipping
+            address.
           </p>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
             In the case that the buyer believes receipt of a product or order to

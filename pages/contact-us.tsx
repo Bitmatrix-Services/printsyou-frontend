@@ -121,7 +121,8 @@ function ContactUs() {
               any questions and to provide more information.
             </h6>
             <h6>
-              If you need immediate assistance, you may contact us at info@printsyou.com
+              If you need immediate assistance, you may contact us at
+              info@printsyou.com
             </h6>
           </div>
         )}

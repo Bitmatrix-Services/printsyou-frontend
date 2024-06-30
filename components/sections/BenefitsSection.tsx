@@ -31,9 +31,7 @@ const BenefitsSection = () => {
           <h1 className="mb-4 font-light text-headingColor text-4xl leading-tight lg:text-[2.625rem] lg:leading-tight">
             Benefits of Choosing <b className="font-semibold">Printsyou</b>
           </h1>
-          <p className="text-[#666] font-normal">
-
-          </p>
+          <p className="text-[#666] font-normal"></p>
         </div>
         <div className="flex flex-wrap">
           {cardsList.map((card, index) => (
