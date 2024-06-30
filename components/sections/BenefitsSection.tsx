@@ -32,9 +32,7 @@ const BenefitsSection = () => {
             Benefits of Choosing <b className="font-semibold">Printsyou</b>
           </h1>
           <p className="text-[#666] font-normal">
-            Lorem Ipsum dollar sit smit ameda lorem ipsum Lorem Ipsum dollar sit
-            smit ameda lorem ipsumLorem Ipsum dollar sit smit ameda lorem
-            ipsumLorem Ipsum dollar sit smit ameda lorem ipsum
+
           </p>
         </div>
         <div className="flex flex-wrap">

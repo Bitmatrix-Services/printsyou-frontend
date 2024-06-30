@@ -9,12 +9,12 @@ export const sectionDetials = [
       'This is the fastest and easiest way to place an order with PrintsYou. Simply click on the "Place Order" button under the product to get started. You can fill out all of your information, including shipping, billing, product details and artwork submission. Once you submit this form, your information will be sent to a sales associate. You will then receive an email or phone call regarding your order, as well as a proof of your artwork with the product information that you provide us. We will also provide you with a sales quote regarding your order. Once you approve the order and artwork proof, we will collect your credit card information send your order to production.',
     imageSrc: '/assets/anh1.png'
   },
-  {
-    title: 'Phone',
-    description:
-      "Do you prefer to speak with an actual human being when placing your order? We completely understand! That is why you can reach us from Monday to Friday 8 A.M. to 5 P.M. One of our experienced sales associates will walk you through the order process. To make the ordering process a little easier, write down the product you are interested in, the color you would like and the size when applicable. We know that some orders might be more complicated than others so don/'t hesitate to give us a call regarding your order at 888-282-9507.",
-    imageSrc: '/assets/anh2.png'
-  },
+  // {
+  //   title: 'Phone',
+  //   description:
+  //     "Do you prefer to speak with an actual human being when placing your order? We completely understand! That is why you can reach us from Monday to Friday 8 A.M. to 5 P.M. One of our experienced sales associates will walk you through the order process. To make the ordering process a little easier, write down the product you are interested in, the color you would like and the size when applicable. We know that some orders might be more complicated than others so don/'t hesitate to give us a call regarding your order at info@printsyou.com.",
+  //   imageSrc: '/assets/anh2.png'
+  // },
   {
     title: 'Email',
     description:

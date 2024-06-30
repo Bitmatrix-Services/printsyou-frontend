@@ -104,7 +104,7 @@ const TermsSection = () => {
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">
             PrintsYou strongly advises buyers to open all merchandise to check
             for quality and satisfaction. If any problems arise with an order,
-            the buyer must contact customer service at 888-282-9507 with the
+            the buyer must contact at info@printsyou.com with the
             order number immediately or within 15 days of receipt at the very
             latest. After this time, PrintsYou will be unable to go back to
             suppliers for credit. If necessary, PrintsYou will issue an RMA

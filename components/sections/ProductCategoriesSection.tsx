@@ -99,7 +99,7 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                         ))}
                         <div className="text-center">
                           <Link
-                            href={`/${subCategory.uniqueCategoryName}`}
+                            href={`categories/${subCategory.uniqueCategoryName}`}
                             className="py-2 px-8 text-sm font-semibold inline-flex items-center gap-1 btn-primary"
                           >
                             <span>View All</span>

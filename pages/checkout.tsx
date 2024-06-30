@@ -548,8 +548,7 @@ const Checkout: FC = () => {
 
               <p>
                 Please do not hesitate to contact us with any questions that you
-                have during the order process by email or toll-free at
-                888-282-9507.
+                have during the order process by email at info@printsyou.com
               </p>
             </div>
 

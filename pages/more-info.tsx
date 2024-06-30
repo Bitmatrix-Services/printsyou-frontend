@@ -174,7 +174,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
               </h6>
               <h6>
                 If you need immediate assistance, you may contact us toll free
-                at 1-888-282-9507 (Monday-Friday, 8:00 AM - 5:00 PM, CST).
+                at info@printsyou.com.
               </h6>
             </div>
           )}

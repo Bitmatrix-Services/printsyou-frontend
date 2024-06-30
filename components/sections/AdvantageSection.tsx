@@ -13,7 +13,7 @@ const AdvantageSection = () => {
           </h2>
           <Link
             className="hidden md:block py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-            href="/identity-links-advantage"
+            href="/printsyou-advantage"
           >
             VIEW MORE
           </Link>
@@ -203,7 +203,7 @@ const AdvantageSection = () => {
         <div className="mt-12 mb-6 md:hidden text-center">
           <Link
             className="py-6 px-20 text-xs tracking-[3.5px] font-bold btn-outline-1"
-            href="/identity-links-advantage"
+            href="/printsyou-advantage"
           >
             VIEW MORE
           </Link>

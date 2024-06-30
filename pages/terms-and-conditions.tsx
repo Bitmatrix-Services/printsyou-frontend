@@ -27,7 +27,7 @@ const termsList = [
   },
   {
     title: `Claims, Adjustments, and Returns`,
-    body: `No returns of imprinted goods are accepted. If problems arise with an order, the buyer must contact customer service at 888-282-9507 within 15 days of receipt. Unauthorized returns will be discarded at PrintsYou's discretion.`
+     body: `No returns of imprinted goods are accepted. If problems arise with an order, the buyer must contact customer service at info@printsyou.com within 15 days of receipt. Unauthorized returns will be discarded at PrintsYou's discretion.`
   },
   {
     title: `Overages and Shortages`,
