@@ -4,7 +4,7 @@ import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
 import ReactReadMoreReadLess from 'react-read-more-read-less';
 import {GetServerSidePropsContext} from 'next';
-import {PriceGrids, Product} from '@store/slices/product/product';
+import {Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
 import Breadcrumb from '@components/globals/Breadcrumb';
 import ImageWithFallback from '@components/globals/ImageWithFallback';
@@ -17,6 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import {useAppDispatch} from '@store/hooks';
 import {setCartStateForModal} from '@store/slices/cart/cart.slice';
+import {PricingTable} from '@components/globals/PricingTable';
 
 const config = getConfig();
 
@@ -27,25 +28,6 @@ interface ProductDetailsProps {
 const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
   const dispatch = useAppDispatch();
   const [selectedGalleryImage, setSelectedGalleryImage] = useState('');
-
-  const countFrom: Set<PriceGrids['countFrom']> = new Set();
-  const byRowTypeObjects: Record<
-    PriceGrids['priceType'],
-    PriceGrids['price'][]
-  > = {};
-
-  if (product) {
-    product?.priceGrids?.length > 0 &&
-      product.priceGrids
-        ?.sort((a, b) => a.countFrom - b.countFrom)
-        .forEach(gridItem => {
-          countFrom.add(gridItem.countFrom);
-          if (!(gridItem.priceType in byRowTypeObjects)) {
-            byRowTypeObjects[gridItem.priceType] = [];
-          }
-          byRowTypeObjects[gridItem.priceType].push(gridItem.price);
-        });
-  }
 
   return (
     <>
@@ -189,60 +171,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       ></div>
                     </div>
                   )}
-                  <div className="overflow-auto">
-                    {product?.priceGrids?.length > 0 &&
-                      [...product.priceGrids].sort(
-                        (a, b) => a.countFrom - b.countFrom
-                      )[0].countFrom !== 0 && (
-                        <table className="w-full">
-                          <tbody>
-                            <tr className="one">
-                              <td
-                                className="headcell font-bold text-lg"
-                                colSpan={countFrom.size + 1}
-                              >
-                                Pricing
-                              </td>
-                            </tr>
-                            <tr className="one">
-                              {Object.keys(byRowTypeObjects).length === 1 &&
-                                Object.keys(byRowTypeObjects).map(
-                                  item =>
-                                    item &&
-                                    item != 'null' && (
-                                      <td key={item} className="headcell"></td>
-                                    )
-                                )}
-                              {Array.from(countFrom).map(row => (
-                                <td className="headcell" key={row}>
-                                  {row} Items
-                                </td>
-                              ))}
-                            </tr>
-                            {Object.keys(byRowTypeObjects)
-                              .sort((a: string, b: string) =>
-                                a.localeCompare(b)
-                              )
-                              .map(row => {
-                                return (
-                                  <tr key={row} className="two">
-                                    {row && row != 'null' && (
-                                      <td className="pricecell font-bold text-left">
-                                        {row}
-                                      </td>
-                                    )}
-                                    {byRowTypeObjects[row].map(cell => (
-                                      <td className="pricecell" key={cell}>
-                                        {cell < 0.01 ? '-' : `$${cell}`}
-                                      </td>
-                                    ))}
-                                  </tr>
-                                );
-                              })}
-                          </tbody>
-                        </table>
-                      )}
-                  </div>
+                  <PricingTable product={product} />
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <div
                       // href={`/order_request?item_id=${product.id}`}

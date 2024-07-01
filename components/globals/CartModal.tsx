@@ -44,9 +44,9 @@ interface UploadedFileType {
 }
 
 export const cartModalSchema = object({
-  imprintColor: string(),
+  imprintColor: string().notRequired(),
   itemColor: string().required('Item Color is required'),
-  size: string(),
+  size: string().notRequired(),
   itemQty: number()
     .transform((_, value) => (value === '' ? 0 : +value))
     .required()
@@ -93,9 +93,9 @@ export const UpdateCartComponent: FC = () => {
       setArtWorkFiles(selectedCartItem.files);
       formik.setValues({
         itemQty: selectedCartItem.qtyRequested,
-        itemColor: selectedCartItem.spec[0].fieldValue,
-        imprintColor: selectedCartItem.spec[1].fieldValue,
-        size: selectedCartItem.spec[2].fieldValue
+        itemColor: selectedCartItem.spec[0]?.fieldValue,
+        imprintColor: selectedCartItem.spec[1]?.fieldValue ?? '',
+        size: selectedCartItem.spec[2]?.fieldValue ?? ''
       });
     }
     if (cartState.selectedProduct) {
@@ -135,6 +135,7 @@ export const UpdateCartComponent: FC = () => {
 
   const handleCartModalClose = () => {
     formik.resetForm();
+    setArtWorkFiles([]);
     dispatch(
       setCartStateForModal({
         open: false,
@@ -239,6 +240,19 @@ export const UpdateCartComponent: FC = () => {
       ],
       files: artWorkFiles
     };
+
+    cartData.specs = cartData.specs
+      .filter(
+        spec =>
+          spec.fieldValue !== '' &&
+          spec.fieldValue !== null &&
+          spec.fieldValue !== undefined
+      )
+      .map(spec => ({
+        fieldName: spec.fieldName,
+        fieldValue: spec.fieldValue
+      }));
+
     if (cartState.cartMode === 'update' && cartState.selectedItem) {
       http
         .put(
@@ -274,7 +288,6 @@ export const UpdateCartComponent: FC = () => {
       classes={{
         paper: 'rounded-none min-w-[95%] xl:min-w-[62.5rem]'
       }}
-      sx={{'& .MuiBackdrop-root': {backgroundColor: 'lightgray'}}}
     >
       <form ref={ref} onSubmit={formik.handleSubmit}>
         <div className="p-3 mb-3 text-end">
@@ -364,7 +377,7 @@ export const UpdateCartComponent: FC = () => {
                         className="block peer px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500"
                         placeholder="Imprint Color"
                         name="imprintColor"
-                        value={formik.values.imprintColor}
+                        value={formik.values.imprintColor ?? ''}
                         onChange={formik.handleChange}
                       />
                     </div>
@@ -374,7 +387,7 @@ export const UpdateCartComponent: FC = () => {
                         className="block peer px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500"
                         placeholder="Size"
                         name="size"
-                        value={formik.values.size}
+                        value={formik.values.size ?? ''}
                         onChange={formik.handleChange}
                       />
                     </div>
