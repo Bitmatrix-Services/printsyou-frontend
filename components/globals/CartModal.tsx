@@ -144,6 +144,7 @@ export const UpdateCartComponent: FC = () => {
         cartMode: 'new'
       })
     );
+    setAddToCartError(false);
   };
 
   const handleFileUpload = async (file: File) => {
