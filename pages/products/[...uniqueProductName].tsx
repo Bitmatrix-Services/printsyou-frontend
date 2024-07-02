@@ -2,7 +2,6 @@ import React, {FC, useState} from 'react';
 import Container from '@components/globals/Container';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
 import {GetServerSidePropsContext} from 'next';
 import {Product} from '@store/slices/product/product';
 import {http} from 'services/axios.service';
@@ -12,8 +11,8 @@ import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import getConfig from 'next/config';
 import {
-  ShoppingCartIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  ShoppingCartIcon
 } from '@heroicons/react/24/outline';
 import {useAppDispatch} from '@store/hooks';
 import {setCartStateForModal} from '@store/slices/cart/cart.slice';
@@ -222,17 +221,12 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                                 }}
                               ></span>
                             ) : item.fieldValue ? (
-                              <span className="font-normal text-md text-base text-mute2">
-                                <ReactReadMoreReadLess
-                                  charLimit={145}
-                                  readMoreText={'Read more'}
-                                  readLessText={'Read less'}
-                                  readMoreClassName={'text-secondary-500'}
-                                  readLessClassName={'text-secondary-500'}
-                                >
-                                  {item.fieldValue}
-                                </ReactReadMoreReadLess>
-                              </span>
+                              <span
+                                className="font-normal text-md text-base text-mute2"
+                                dangerouslySetInnerHTML={{
+                                  __html: item.fieldValue
+                                }}
+                              />
                             ) : (
                               <span className="font-normal text-md text-base text-mute2">
                                 N/A

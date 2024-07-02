@@ -15,14 +15,8 @@ const quickLinks = [
   {name: 'About Us', url: '/about-us'},
   // {name: 'Testimonials', url: '/additional-information/testimonials'},
   {name: 'Contact Us', url: '/contact-us'},
-  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
-];
-
-const customerCareLink = [
-  // {name: 'Artwork', url: '/additional-information/artwork'},
+  {name: 'Terms & Conditions', url: '/terms-and-conditions'},
   {name: 'How To Order', url: '/how-to-order'}
-  // {name: 'FAQs', url: '/faq'},
-  // {name: 'Additional Information', url: '/additional-information/overview'}
 ];
 
 export const social = [
@@ -107,7 +101,7 @@ const Footer = () => {
               />
               <p className="text-headingColor text-lg font-light">
                 Subscribe to Our Newsletter ...and receive{' '}
-                <b className="font-semibold">$20 coupon for first shopping</b>
+                <b className="font-semibold">latest offers</b>
               </p>
             </div>
             <div className="flex-1">
@@ -227,22 +221,6 @@ const Footer = () => {
                           __html: sanitizeHtml(category.categoryName)
                         }}
                       ></Link>
-                    ))}
-                  </div>
-                </div>
-                <div className="col order-2 lg:order-3">
-                  <h3 className="mb-8 text-base font-semibold text-headingColor">
-                    Customer Care
-                  </h3>
-                  <div className="space-y-4">
-                    {customerCareLink.map(linkItem => (
-                      <Link
-                        href={linkItem.url}
-                        className="block text-sm hover:text-secondary-500 text-mute"
-                        key={linkItem.name}
-                      >
-                        {linkItem.name}
-                      </Link>
                     ))}
                   </div>
                 </div>

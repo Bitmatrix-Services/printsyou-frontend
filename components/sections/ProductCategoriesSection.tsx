@@ -76,10 +76,13 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                                 alt="category product"
                               />
                               <div>
-                                <h6 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold">
-                                  {product.productName}
-                                </h6>
-                                {product.salePrice !== 0 ? (
+                                <div className="line-clamp-2">
+                                  <h6 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold min-h-[2.5rem] md:min-h-[2.7rem]">
+                                    {product.productName}
+                                  </h6>
+                                </div>
+                                {product.salePrice &&
+                                product.salePrice !== 0 ? (
                                   <>
                                     <h6 className="text-sm font-normal line-through text-gray-600 group-hover:text-headingColor">
                                       ${product.lowestPrice?.toFixed(2)}
