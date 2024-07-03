@@ -192,7 +192,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       </span>
                     </div>
                     <Link
-                      href={`/more_info?item_id=${product.id}`}
+                      href={`/more-info?item_id=${product.id}`}
                       className="flex justify-center items-center gap-2 w-full text-center py-4 px-6 text-headingColor border border-headingColor hover:text-white hover:bg-black rounded"
                     >
                       <InformationCircleIcon className="h-5 w-5" />
