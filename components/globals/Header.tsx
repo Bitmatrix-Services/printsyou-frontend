@@ -170,7 +170,9 @@ const Header = () => {
                         {cartRoot?.cartItems?.length ?? 0}
                       </span>
                     </span>
-                    <span className="font-semibold text-xl">$0.00</span>
+                    <span className="font-semibold text-xl">
+                      ${cartRoot?.totalCartPrice || 0.0}
+                    </span>
                   </button>
                 </li>
               </ul>
