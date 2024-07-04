@@ -388,7 +388,7 @@ export const UpdateCartComponent: FC = () => {
                         <select
                           name="selectedPriceType"
                           id="price-type"
-                          className="block placeholder:text-[#303541] border w-[10rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                          className="block placeholder:text-[#303541] border w-fit h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
                           value={formik.values.selectedPriceType as string}
                           onChange={formik.handleChange}
                         >
