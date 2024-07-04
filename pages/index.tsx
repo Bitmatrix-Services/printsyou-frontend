@@ -41,7 +41,7 @@ export const HomePage: NextPage<IHome> = ({
         subTitle="a buck"
         subTitleColor="text-[#56dabf]"
         products={underABuckProducts}
-        viewMoreLink={`/search_results?filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
+        viewMoreLink={`/search-results?filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
       />
       {/* unique ideas section */}
       <FeaturedProductsSection
@@ -49,7 +49,7 @@ export const HomePage: NextPage<IHome> = ({
         navNumber="2"
         subTitle="Ideas"
         products={allUniqueIdeas}
-        viewMoreLink={`/search_results?tag=mostPopular&filter=priceHighToLow&page=1&size=24`}
+        viewMoreLink={`/search-results?tag=mostPopular&filter=priceHighToLow&page=1&size=24`}
       />
       {/*New & Exclusive */}
       <FeaturedProductsSection
@@ -58,7 +58,7 @@ export const HomePage: NextPage<IHome> = ({
         titleColor="text-primary-600"
         subTitle="& Exclusive"
         products={newAndExclusive}
-        viewMoreLink={`/search_results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
+        viewMoreLink={`/search-results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
       />
 
       <BenefitsSection />

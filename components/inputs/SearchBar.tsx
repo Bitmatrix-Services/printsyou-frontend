@@ -74,7 +74,7 @@ const SearchBar = () => {
           onKeyDown={({key}) => {
             if (key === 'Enter' && searchQuery) {
               router.push(
-                `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
+                `/search-results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
               );
               setShowResults('');
             }
@@ -146,7 +146,7 @@ const SearchBar = () => {
           onClick={() => {
             if (searchQuery)
               router.push(
-                `/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
+                `/search-results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`
               );
           }}
           className="py-2 px-2 md:px-6 rounded-e-full bg-primary-500 hover:bg-black hover:text-primary-500 text-black bg-center bg-no-repeat transition-all duration-300"
