@@ -44,14 +44,14 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                 {'' in byRowTypeObjects || 'null' in byRowTypeObjects ? null : (
                   <td className="headcell"></td>
                 )}
-                {Object.keys(byRowTypeObjects).length === 1 &&
-                  Object.keys(byRowTypeObjects).map(
-                    item =>
-                      item &&
-                      item != 'null' && (
-                        <td key={item} className="headcell"></td>
-                      )
-                  )}
+                {/*{Object.keys(byRowTypeObjects).length === 1 &&*/}
+                {/*  Object.keys(byRowTypeObjects).map(*/}
+                {/*    item =>*/}
+                {/*      item &&*/}
+                {/*      item != 'null' && (*/}
+                {/*        null*/}
+                {/*      )*/}
+                {/*  )}*/}
                 {Array.from(countFrom).map(row => (
                   <td className="headcell" key={row}>
                     {row} Items
