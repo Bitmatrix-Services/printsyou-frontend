@@ -44,6 +44,7 @@ export interface CartItemUpdated {
   imageUrl: any;
   productName: string;
   productId: string;
+  priceType?: string | null;
 }
 
 export interface CartRoot {

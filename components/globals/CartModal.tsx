@@ -36,6 +36,8 @@ interface CustomProduct {
   productName: string;
   priceGrids: PriceGrids[];
   sortedPrices: PriceGrids[];
+  groupedByPricing: Record<string, PriceGrids[]>;
+  priceTypeExists: boolean;
 }
 
 interface UploadedFileType {
@@ -51,7 +53,8 @@ export const cartModalSchema = object({
     .transform((_, value) => (value === '' ? 0 : +value))
     .required()
     .positive()
-    .min(ref('minQty'), 'Specified Qty must be greater than Min Qty')
+    .min(ref('minQty'), 'Specified Qty must be greater than Min Qty'),
+  selectedPriceType: string().notRequired()
 });
 
 export type LocalCartState = InferType<typeof cartModalSchema>;
@@ -66,7 +69,8 @@ export const UpdateCartComponent: FC = () => {
       itemQty: 0,
       imprintColor: undefined,
       itemColor: '',
-      size: undefined
+      size: undefined,
+      selectedPriceType: null
     },
     validationSchema: cartModalSchema,
     validateOnBlur: false,
@@ -83,22 +87,63 @@ export const UpdateCartComponent: FC = () => {
     sku: '',
     productName: '',
     priceGrids: [],
-    sortedPrices: []
+    sortedPrices: [],
+    groupedByPricing: {},
+    priceTypeExists: false
   });
   const [addToCartError, setAddToCartError] = useState<boolean>(false);
+  const [priceTypes, setPriceTypes] = useState<string[]>([]);
+
+  useEffect(() => {
+    const strings: string[] = [];
+    product.priceGrids.forEach(item => {
+      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null) {
+        strings.push(item.priceType);
+      }
+    });
+    setPriceTypes(strings);
+    if (strings.length > 0) {
+      formik.setFieldValue(
+        'selectedPriceType',
+        cartState.selectedItem ? cartState.selectedItem.priceType : strings[0]
+      );
+    }
+  }, [product.priceGrids, cartState.selectedItem]);
 
   useEffect(() => {
     const selectedCartItem = cartState.selectedItem;
+    // if cart item already exists => updating item
     if (selectedCartItem) {
       setArtWorkFiles(selectedCartItem.files);
       formik.setValues({
         itemQty: selectedCartItem.qtyRequested,
         itemColor: selectedCartItem.spec[0]?.fieldValue,
         imprintColor: selectedCartItem.spec[1]?.fieldValue ?? '',
-        size: selectedCartItem.spec[2]?.fieldValue ?? ''
+        size: selectedCartItem.spec[2]?.fieldValue ?? '',
+        selectedPriceType: selectedCartItem.priceType
       });
     }
     if (cartState.selectedProduct) {
+      // adding a new item to the cart
+      const priceTypeExists = cartState.selectedProduct.priceGrids.some(
+        item => item.priceType
+      );
+      const priceTypesGroups: Record<string, PriceGrids[]> = {};
+      if (priceTypeExists) {
+        cartState.selectedProduct.priceGrids.forEach(item => {
+          if (!(item.priceType in priceTypesGroups)) {
+            priceTypesGroups[item.priceType] = [];
+          }
+          priceTypesGroups[item.priceType].push(item);
+        });
+
+        Object.keys(priceTypesGroups).forEach(itemKey => {
+          priceTypesGroups[itemKey] = priceTypesGroups[itemKey].sort(
+            (a, b) => a.countFrom - b.countFrom
+          );
+        });
+      }
+
       const productState = {
         id: cartState.selectedProduct.id,
         sku: cartState.selectedProduct.sku,
@@ -106,7 +151,9 @@ export const UpdateCartComponent: FC = () => {
         priceGrids: cartState.selectedProduct.priceGrids,
         sortedPrices: [...cartState.selectedProduct.priceGrids].sort(
           (a, b) => a.countFrom - b.countFrom
-        )
+        ),
+        groupedByPricing: priceTypesGroups,
+        priceTypeExists
       };
       setProduct(productState);
       formik.setFieldValue('minQty', productState.sortedPrices[0].countFrom);
@@ -119,11 +166,15 @@ export const UpdateCartComponent: FC = () => {
       return 0;
     }
 
-    const priceGrid = product.sortedPrices.find(
+    const priceGridsFinalSelected = product.priceTypeExists
+      ? product.groupedByPricing[formik.values.selectedPriceType as string]
+      : product.sortedPrices;
+
+    const priceGrid = priceGridsFinalSelected.find(
       (grid, index) =>
         quantity >= grid.countFrom &&
-        (index === product.sortedPrices.length - 1 ||
-          quantity < product.sortedPrices[index + 1].countFrom)
+        (index === priceGridsFinalSelected.length - 1 ||
+          quantity < priceGridsFinalSelected[index + 1].countFrom)
     );
 
     return priceGrid
@@ -131,7 +182,12 @@ export const UpdateCartComponent: FC = () => {
         ? priceGrid.salePrice
         : priceGrid.price
       : 0;
-  }, [formik.values.itemQty]);
+  }, [
+    formik.values.itemQty,
+    formik.values.selectedPriceType,
+    product,
+    priceTypes
+  ]);
 
   const handleCartModalClose = () => {
     formik.resetForm();
@@ -225,6 +281,7 @@ export const UpdateCartComponent: FC = () => {
     const cartData = {
       productId: product.id,
       qtyRequested: formik.values.itemQty,
+      priceType: formik.values.selectedPriceType,
       specs: [
         {
           fieldName: 'Item Color',
@@ -318,11 +375,35 @@ export const UpdateCartComponent: FC = () => {
                   <FormHeading text="Sub Total:" />
                 </div>
                 <div className="flex justify-between space-x-4 w-full">
-                  <div className="flex items-center flex-1">
+                  <div className="flex justify-between items-center gap-4">
+                    {Object.keys(priceTypes).length > 0 ? (
+                      <div className="flex items-center gap-2">
+                        <label
+                          className="font-semibold text-xs"
+                          htmlFor="price-type"
+                        >
+                          Item Type
+                        </label>
+
+                        <select
+                          name="selectedPriceType"
+                          id="price-type"
+                          className="block placeholder:text-[#303541] border w-[10rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                          value={formik.values.selectedPriceType as string}
+                          onChange={formik.handleChange}
+                        >
+                          {priceTypes.map(row => (
+                            <option key={row} value={row}>
+                              {row}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ) : null}
                     <input
                       type="number"
                       placeholder="Quantity"
-                      className="block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+                      className="flex-1 block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
                       value={formik.values.itemQty}
                       name="itemQty"
                       onChange={formik.handleChange}
