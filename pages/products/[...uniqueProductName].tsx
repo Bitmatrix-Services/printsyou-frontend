@@ -162,12 +162,14 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                       <h4 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                         Product Description
                       </h4>
-                      <div
-                        className="priceGridBody text-[#807D7E] marker:text-primary-500"
-                        dangerouslySetInnerHTML={{
-                          __html: sanitizeHtml(product.productDescription)
-                        }}
-                      ></div>
+                      <div className="leading-8 my-5">
+                        <div
+                          className="priceGridBody text-[#807D7E] marker:text-primary-500"
+                          dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(product.productDescription)
+                          }}
+                        />
+                      </div>
                     </div>
                   )}
                   <PricingTable product={product} />
