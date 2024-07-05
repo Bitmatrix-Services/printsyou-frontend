@@ -33,7 +33,7 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
             PRODUCT CATEGORIES
           </h2>
           <div className="flex flex-wrap gap-5 pb-5">
-            {homeCategoryProducts?.map(category => (
+            {homeCategoryProducts?.slice(0, 7).map(category => (
               <button
                 key={category.categoryName}
                 className={`tab-link ${
@@ -52,16 +52,15 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8">
             {homeCategoryProducts
               ?.filter(homeCat => homeCat.categoryName === activeTab)
-              .slice(0, 4)
               .map(category => (
                 <Fragment key={category.categoryName}>
-                  {category?.subCategory?.map(subCategory => (
+                  {category?.subCategory?.slice(0, 4).map(subCategory => (
                     <div key={subCategory.uniqueCategoryName} className="col">
                       <h2 className="text-headingColor text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-3 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                         {subCategory.categoryName}
                       </h2>
                       <div className="mt-8 space-y-4">
-                        {subCategory?.products?.map(product => (
+                        {subCategory?.products?.slice(0, 4).map(product => (
                           <Link
                             key={product.uniqueProductName}
                             href={`/products/${product.uniqueProductName}`}
