@@ -19,7 +19,7 @@ type searchType = {
 
 type categoryType = {
   name: string;
-  uCategoryName: string;
+  ucategoryName: string;
   count: number;
 };
 
@@ -184,7 +184,7 @@ const SearchSidebar: FC<SidebarProps> = ({
                   Category:{' '}
                   <strong>
                     {
-                      byCategory.find(item => item.uCategoryName === category)
+                      byCategory.find(item => item.ucategoryName === category)
                         ?.name
                     }
                   </strong>
@@ -344,15 +344,15 @@ const SearchSidebar: FC<SidebarProps> = ({
             </AccordionSummary>
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
-              {byCategory?.map(category => (
+              {byCategory?.map(catItem => (
                 <div
-                  key={category.uCategoryName}
+                  key={catItem.ucategoryName}
                   className="block border-b-2 font-normal mb-2 cursor-pointer"
                   onClick={() => {
                     const currentQuery = router.query;
                     let updatedQuery = {
                       ...currentQuery,
-                      category: category.uCategoryName,
+                      category: catItem.ucategoryName,
                       page: '1'
                     };
 
@@ -363,10 +363,10 @@ const SearchSidebar: FC<SidebarProps> = ({
                   }}
                 >
                   <span
-                    dangerouslySetInnerHTML={{__html: sanitize(category.name)}}
+                    dangerouslySetInnerHTML={{__html: sanitize(catItem.name)}}
                   ></span>
                   <span className="text-xs font-bold text-primary ml-2">
-                    ({category.count})
+                    {catItem.count}
                   </span>
                 </div>
               ))}
