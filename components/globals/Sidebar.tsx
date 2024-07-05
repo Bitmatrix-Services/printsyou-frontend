@@ -2,7 +2,6 @@ import React, {FC, useEffect, useState} from 'react';
 import Link from 'next/link';
 import sanitize from 'sanitize-html';
 import {Category} from '@store/slices/category/category';
-import PriceRangeSection from '@components/sections/promotionalProducts/PriceRangeSection';
 import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {
   getSiblingCategories,
@@ -153,9 +152,7 @@ const Sidebar: FC<SidebarProps> = ({selectedCategory}) => {
         }}
       />
 
-      <div className="lg:w-64 md:w-64 mb-8">
-        {/*<PriceRangeSection />*/}
-      </div>
+      <div className="lg:w-64 md:w-64 mb-8">{/*<PriceRangeSection />*/}</div>
     </div>
   );
 };

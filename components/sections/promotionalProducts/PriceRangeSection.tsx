@@ -19,7 +19,8 @@ const PriceRangeSection = () => {
   };
 
   const setPriceRange = () => {
-    let value = '/categories/' + (router.query.uniqueCategoryName as string[]).join('/');
+    let value =
+      '/categories/' + (router.query.uniqueCategoryName as string[]).join('/');
     const filter = new URLSearchParams(
       `page=1&minPrice=${priceRangeFilter[0]}&maxPrice=${priceRangeFilter[1]}`
     );
