@@ -102,7 +102,9 @@ function ContactUs() {
                       formik.isSubmitting ? 'py-3' : 'py-5'
                     } px-[9rem] py-4 btn-primary`}
                   >
-                    <DocumentCheckIcon className="h-5 w-5 mr-2" />
+                    {!formik.isSubmitting ? (
+                      <DocumentCheckIcon className="h-5 w-5 mr-2" />
+                    ) : null}
                     {formik.isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                   </button>
                 </div>

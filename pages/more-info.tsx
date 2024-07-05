@@ -155,7 +155,9 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                           formik.isSubmitting ? 'py-3' : 'py-5'
                         } px-[9rem] py-4 btn-primary`}
                       >
-                        <DocumentCheckIcon className="h-5 w-5 mr-2" />
+                        {!formik.isSubmitting ? (
+                          <DocumentCheckIcon className="h-5 w-5 mr-2" />
+                        ) : null}
                         {formik.isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                       </button>
                     </div>
@@ -173,8 +175,8 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
                 any questions and to provide more information.
               </h6>
               <h6>
-                If you need immediate assistance, you may contact us toll free
-                at info@printsyou.com.
+                If you need immediate assistance, you may contact us at
+                info@printsyou.com.
               </h6>
             </div>
           )}

@@ -145,7 +145,7 @@ const TermsSection = () => {
             to remit use taxes. Buyers are encouraged to consult a tax advisor
             if more specific information is needed. Companies, individuals, and
             organizations exempt from sales tax must provide PrintsYou with a
-            copy of the resale certificate by email or fax to 847-329-9797.
+            copy of the resale certificate by emailing at info@printsyou.com
           </p>
           <div className="text-2xl mb-5 font-bold">Shipping Policy</div>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins pb-6">

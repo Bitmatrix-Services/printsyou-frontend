@@ -22,7 +22,7 @@ const quickLinks = [
 export const social = [
   {
     name: 'Facebook',
-    href: '#',
+    href: 'https://www.facebook.com/',
     icon: (
       props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
     ) => (
@@ -37,7 +37,7 @@ export const social = [
   },
   {
     name: 'Instagram',
-    href: '#',
+    href: 'https://www.instagram.com/',
     icon: (
       props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
     ) => (
@@ -52,7 +52,7 @@ export const social = [
   },
   {
     name: 'X',
-    href: '#',
+    href: 'https://twitter.com/',
     icon: (
       props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>
     ) => (
@@ -175,14 +175,15 @@ const Footer = () => {
               {/*  </p>*/}
               <div className="mt-6 flex space-x-6">
                 {social.map(item => (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.href}
+                    target="_blank"
                     className="text-gray-400 hover:text-gray-500"
                   >
                     <span className="sr-only">{item.name}</span>
                     <item.icon className="h-6 w-6" aria-hidden="true" />
-                  </a>
+                  </Link>
                 ))}
               </div>
               {/*</div>*/}

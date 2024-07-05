@@ -548,7 +548,8 @@ const Checkout: FC = () => {
 
               <p>
                 Please do not hesitate to contact us with any questions that you
-                have during the order process by email at info@printsyou.com
+                have during the order process by emailing us at
+                info@printsyou.com
               </p>
             </div>
 

@@ -2,7 +2,6 @@ import React, {FC, useState} from 'react';
 import Link from 'next/link';
 import Dialog from '@mui/material/Dialog';
 import sanitizeHtml from 'sanitize-html';
-import ReactReadMoreReadLess from 'react-read-more-read-less';
 import {Product} from '@store/slices/product/product';
 import {
   InformationCircleIcon,
@@ -330,17 +329,12 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                                 }}
                               ></span>
                             ) : item.fieldValue ? (
-                              <span className="font-normal text-md text-base text-mute2">
-                                <ReactReadMoreReadLess
-                                  charLimit={145}
-                                  readMoreText={'Read more'}
-                                  readLessText={'Read less'}
-                                  readMoreClassName={'text-secondary-500'}
-                                  readLessClassName={'text-secondary-500'}
-                                >
-                                  {item.fieldValue}
-                                </ReactReadMoreReadLess>
-                              </span>
+                              <span
+                                className="font-normal text-md text-base text-mute2"
+                                dangerouslySetInnerHTML={{
+                                  __html: item.fieldValue
+                                }}
+                              />
                             ) : (
                               <span className="font-normal text-md text-base text-mute2">
                                 N/A

@@ -57,6 +57,7 @@ const Header = () => {
                 <Link
                   key={item.name}
                   href={item.href}
+                  target="_blank"
                   className="text-gray-400 hover:text-gray-500"
                 >
                   <span className="sr-only">{item.name}</span>

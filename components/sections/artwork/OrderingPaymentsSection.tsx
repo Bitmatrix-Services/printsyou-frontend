@@ -24,7 +24,7 @@ export const sectionDetials = [
   {
     title: 'Fax',
     description:
-      'Do you love combining the technology of the internet with the fax machine? We find it to be pretty useful as well. Go ahead and print off this order form and fill it out. You can send it back to us via fax at 847-329-9797. We will process your order and respond to your request by the end of the business day. You will also find the fax useful for sending us your credit card authorization form and approval of your proof.',
+      'Do you love combining the technology of the internet with the fax machine? We find it to be pretty useful as well. Go ahead and print off this order form and fill it out. You can send it back to us via email at info@printsyou.com. We will process your order and respond to your request by the end of the business day. You will also find the fax useful for sending us your credit card authorization form and approval of your proof.',
     imageSrc: '/assets/anh4.png'
   }
 ];
@@ -36,10 +36,10 @@ const OrderingPaymentsSection = () => {
         <div className="pt-2 pb-8 mb-10">
           <div className="text-2xl mb-5 font-bold">Ordering</div>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
-            There are four ways by which you can place an order with PrintsYou :
-            online, over the phone, by email or by fax. No matter how you place
-            your order, our sales associates are ready to make the process as
-            easy and quick as possible.
+            There are two ways by which you can place an order with PrintsYou :
+            online and by email. No matter how you place your order, our sales
+            associates are ready to make the process as easy and quick as
+            possible.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8 2xl:gap-20 items-center justify-center">
