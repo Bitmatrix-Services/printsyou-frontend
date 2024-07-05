@@ -17,7 +17,7 @@ type searchType = {
   count: number;
 };
 
-type categoryType = {
+export type CategoryType = {
   name: string;
   ucategoryName: string;
   count: number;
@@ -28,7 +28,7 @@ type filterType = {
 };
 
 interface SidebarProps {
-  byCategory: categoryType[];
+  byCategory: CategoryType[];
   byColor: searchType[];
   byPriceRange: searchType[];
   filters: filterType;

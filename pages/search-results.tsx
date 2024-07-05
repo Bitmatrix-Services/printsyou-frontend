@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Container from '@components/globals/Container';
 import {http} from 'services/axios.service';
-import SearchSidebar from '@components/globals/SearchSidebar';
+import SearchSidebar, {CategoryType} from '@components/globals/SearchSidebar';
 import SearchResultsSection from '@components/sections/searchResults/SearchResultsSection';
 import {useRouter} from 'next/router';
 import {Product} from '@store/slices/product/product';
@@ -11,12 +11,6 @@ import {CircularLoader} from '@components/globals/CircularLoader';
 
 type SearchType = {
   name: string;
-  count: number;
-};
-
-type CategoryType = {
-  name: string;
-  uCategoryName: string;
   count: number;
 };
 
