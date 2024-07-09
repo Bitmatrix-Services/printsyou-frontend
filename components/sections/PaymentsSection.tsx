@@ -4,7 +4,7 @@ const PaymentsSection = () => {
   return (
     <div className=" bg-[#323a4d]">
       <div className="max-w-[100rem] mx-auto px-4 md:px-8 xl:px-24 py-8 xl:py-14 relative">
-        <h1 className="font-bold text-primary-500 text-2xl mb-4">Payments</h1>
+        <h2 className="font-bold text-primary-500 text-2xl mb-4">Payments</h2>
         <div className="mb-10 border-[0] border-t border-solid border-mute3" />
         <div className="flex md:flex-row sm:flex-col max-sm:flex-col  md:space-x-4">
           <div className="">

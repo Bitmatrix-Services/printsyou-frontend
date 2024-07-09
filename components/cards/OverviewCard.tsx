@@ -27,7 +27,7 @@ const OverviewCard: FC<OverviewCardProps> = ({icon, heading, index}) => {
             {icon}
           </span>
         </div>
-        <h6 className="mt-4 font-medium text-2xl">{heading}</h6>
+        <h2 className="mt-4 font-medium text-2xl my-0">{heading}</h2>
       </div>
     </div>
   );

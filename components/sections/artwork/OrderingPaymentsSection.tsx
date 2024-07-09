@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Container from '@components/globals/Container';
 
-export const sectionDetials = [
+export const sectionDetails = [
   {
     title: 'Online',
     description:
@@ -43,7 +43,7 @@ const OrderingPaymentsSection = () => {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xl:gap-8 2xl:gap-20 items-center justify-center">
-          {sectionDetials.map((detail, index) => (
+          {sectionDetails.map((detail, index) => (
             <>
               {index % 2 === 0 ? ( // If the index is even, render the title first and then the image
                 <>

@@ -58,9 +58,9 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
               <div className="flex flex-col md:flex-row pt-3 gap-8 justify-center">
                 <div className="md:px-32 ">
                   <div className="mb-8">
-                    <h3 className="text-3xl mt-5 mb-8  font-semibold capitalize">
+                    <h2 className="text-2xl mt-5 mb-8  font-semibold capitalize">
                       {product.productName}
-                    </h3>
+                    </h2>
                     <h6 className="text-sm font-semibold text-body">
                       ITEM#:{' '}
                       <span className="text-primary-500">{product.sku}</span>

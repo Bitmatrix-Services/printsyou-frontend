@@ -16,7 +16,7 @@ const HeadlineCard: FC<HeadlineCardProps> = ({text}) => {
         alt="..."
       />
       <div className="flex flex-wrap items-center gap-3 px-5 md:px-14 justify-center md:justify-center basis-[100%]">
-        <h1 className="text-white font-normal text-2xl  italic">{text}</h1>
+        <h2 className="text-white font-normal text-2xl  italic">{text}</h2>
       </div>
     </div>
   );

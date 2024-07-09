@@ -31,13 +31,13 @@ const ViewAllCategories = () => {
                     id={`${category.id}-header`}
                   >
                     <div className="flex my-1 md:pr-6 items-center">
-                      <h4 className="text-[16px] text-[#303541] font-bold capitalize">
+                      <h2 className="text-[16px] text-[#303541] font-bold capitalize">
                         <span
                           dangerouslySetInnerHTML={{
                             __html: sanitize(category.categoryName)
                           }}
                         ></span>
-                      </h4>
+                      </h2>
                     </div>
                   </AccordionSummary>
                   <AccordionDetails>

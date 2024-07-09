@@ -71,8 +71,12 @@ const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
 
   return (
     <>
-      <NextSeo title={`Artworks | ${metaConstants.SITE_NAME}`} />
-      <PageHeader pageTitle="Additional information" />
+      <NextSeo
+        title={`${value === 0 ? 'Additional Information' : tabsList[value]} | ${
+          metaConstants.SITE_NAME
+        }`}
+      />
+      <PageHeader pageTitle={`Additional Information | ${tabsList[value]}`} />
       <section className="bg-grey">
         <div className="bg-white border-t border-b py-4">
           <Container>

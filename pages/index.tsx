@@ -14,6 +14,8 @@ import {BannerList} from '@store/slices/category/category';
 import FeatureSection from '@components/sections/FeatureSection';
 import ProductCategoriesSection from '@components/sections/ProductCategoriesSection';
 import BenefitsSection from '@components/sections/BenefitsSection';
+import {NextSeo} from 'next-seo';
+import {metaConstants} from '@utils/Constants';
 
 interface IHome {
   underABuckProducts: Product[];
@@ -32,6 +34,7 @@ export const HomePage: NextPage<IHome> = ({
 }) => {
   return (
     <>
+      <NextSeo title={metaConstants.SITE_NAME} />
       <HeroSection bannerList={bannerList} />
       <ProductCategoriesSection homeCategoryProducts={homeCategoryProducts} />
       {/* under a buck section */}

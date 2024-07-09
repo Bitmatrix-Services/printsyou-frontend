@@ -72,13 +72,13 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 </button>
               )}
             </div>
-            <div
+            <h2
               title={product?.productName}
               className="line-clamp-2 mb-6 text-lg leading-snug font-semibold text-[#303541] text-center"
               dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(product?.productName)
               }}
-            ></div>
+            ></h2>
             <div className="block relative">
               <ImageWithFallback
                 width={155}

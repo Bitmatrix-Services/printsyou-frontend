@@ -255,9 +255,9 @@ const Checkout: FC = () => {
                 </div>
               ) : (
                 <div className="flex justify-center w-full items-center my-8">
-                  <h1 className="my-4 font-bold text-3xl text-primary">
+                  <h2 className="my-4 font-bold text-3xl text-primary">
                     No product Found!
-                  </h1>
+                  </h2>
                 </div>
               )}
             </div>

@@ -56,9 +56,7 @@ const HowToOrderPage = () => {
       <NextSeo title={`How to Order | ${metaConstants.SITE_NAME}`} />
       <Container>
         <div className="py-12">
-          <div className="text-2xl mb-5 font-bold text-center">
-            How To Order
-          </div>
+          <h2 className="text-2xl mb-5 font-bold text-center">How To Order</h2>
           <p className="text-mute text-xl font-medium text-center">
             Understanding that custom ordering might seem daunting, we're
             dedicated to assisting and navigating you through every step.

@@ -60,9 +60,9 @@ const Faqs: FC<FaqsProps> = ({faqs}) => {
                             </p>
                           </div>
                         </div>
-                        <h4 className="text-[16px] text-[#303541] font-bold capitalize">
+                        <h2 className="text-[16px] text-[#303541] font-bold capitalize">
                           {faq.question}
-                        </h4>
+                        </h2>
                       </div>
                     </AccordionSummary>
                     <AccordionDetails>

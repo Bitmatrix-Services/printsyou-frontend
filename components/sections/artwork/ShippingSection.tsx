@@ -7,7 +7,7 @@ const ShippingSection = () => {
     <div className="bg-white py-8">
       <Container>
         <div className="pt-2 pb-11 ">
-          <div className="text-2xl mb-5 font-bold">Shipping Information</div>
+          <h2 className="text-2xl mb-5 font-bold">Shipping Information</h2>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] font-poppins">
             We make best efforts to ship your products to your desired
             destination in the most economical way possible given your specified

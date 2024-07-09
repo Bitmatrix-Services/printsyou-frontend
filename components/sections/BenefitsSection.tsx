@@ -28,9 +28,9 @@ const BenefitsSection = () => {
     <section className="bg-white py-10 lg:pt-20 pb-10">
       <Container>
         <div className="mb-8 max-w-[38.5625rem] mx-auto text-center">
-          <h1 className="mb-4 font-light text-headingColor text-4xl leading-tight lg:text-[2.625rem] lg:leading-tight">
+          <h2 className="mb-4 font-light text-headingColor text-4xl leading-tight lg:text-[2.625rem] lg:leading-tight">
             Benefits of Choosing <b className="font-semibold">Printsyou</b>
-          </h1>
+          </h2>
           <p className="text-[#666] font-normal"></p>
         </div>
         <div className="flex flex-wrap">

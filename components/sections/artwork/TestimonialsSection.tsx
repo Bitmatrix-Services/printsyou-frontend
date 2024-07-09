@@ -58,10 +58,10 @@ const TestimonialsSection = () => {
                   </div>
                   <div className="text-base text-lime-950ute mt-4">
                     <span className="text-[14px] flex align-middle font-poppins content-center items-center">
-                      <span className="text-xl  font-bold capitalize mr-2">
+                      <h2 className="text-xl font-bold capitalize mr-2">
                         <span className="mr-2">-</span>
                         {testimonial.name}
-                      </span>{' '}
+                      </h2>{' '}
                       <span className="text-2xl font-normal mr-2">/</span>
                       <span className="text-lg font-normal ">
                         {testimonial.company}

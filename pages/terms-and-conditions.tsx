@@ -73,7 +73,7 @@ const TermsAndConditions = () => {
       <div className="bg-white py-8">
         <Container>
           <div className="pt-2 pb-11">
-            <div className="text-3xl font-bold mb-6">Terms and Conditions</div>
+            <h2 className="text-3xl font-bold mb-6">Terms and Conditions</h2>
             {termsList.map((item, index) => (
               <div key={index} className="pb-2">
                 {item.title ? (

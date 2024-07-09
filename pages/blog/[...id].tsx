@@ -17,14 +17,12 @@ interface BlogDetailPage {
 }
 
 const BlogDetailPage: FC<BlogDetailPage> = ({blog}) => {
-  console.log('blog', blog);
-
   return (
     <div className="bg-white py-12">
       <NextSeo title={`Blog | ${blog?.title} | ${metaConstants.SITE_NAME}`} />
       <Container>
         <Grid className="px-3">
-          <Typography className="mb-10" variant="h5">
+          <Typography className="mb-10" variant="h1">
             {blog?.title}
           </Typography>
           <Typography className="mb-6" variant="body1">

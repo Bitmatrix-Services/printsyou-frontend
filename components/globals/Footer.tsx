@@ -11,7 +11,7 @@ import {EmailSchema} from '@utils/validationSchemas';
 import {CircularLoader} from '@components/globals/CircularLoader';
 
 const quickLinks = [
-  // {name: 'All Products', url: '/'},
+  {name: 'Promotional Categories', url: '/promotional-products'},
   {name: 'About Us', url: '/about-us'},
   // {name: 'Testimonials', url: '/additional-information/testimonials'},
   {name: 'Contact Us', url: '/contact-us'},

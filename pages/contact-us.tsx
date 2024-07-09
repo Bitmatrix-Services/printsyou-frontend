@@ -43,6 +43,7 @@ function ContactUs() {
       <NextSeo title={`Contact Us | ${metaConstants.SITE_NAME}`} />
       <PageHeader pageTitle="Contact Us" />
       <Container>
+        <h2 className="text-xl mb-0 font-bold">Reach Out To Us</h2>
         {!isSubmitted ? (
           <div className="xs:flex md:grid md:grid-cols-4 py-8 md:py-16">
             <div></div>

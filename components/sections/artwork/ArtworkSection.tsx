@@ -15,9 +15,9 @@ const ArtworkSection = () => {
     <div className="bg-white py-8">
       <Container>
         <div className="pt-2 pb-8">
-          <div className="text-2xl mb-5 font-bold">
+          <h2 className="text-2xl mb-5 font-bold">
             Help! I don't have a logo or artwork!
-          </div>
+          </h2>
           <p className="font-medium text-mute3  text-[16px] leading-[30px] ">
             Don't have a fancy logo? No problem! We can imprint a simple text
             message on your item at no additional cost. Many people choose to
@@ -32,10 +32,10 @@ const ArtworkSection = () => {
           </p>
         </div>
         <div className="pt-2 pb-8">
-          <div className="text-2xl mb-5 font-bold">
+          <h2 className="text-2xl mb-5 font-bold">
             Help! I have a logo from our website/letterhead/business card; can I
             use this as my artwork?
-          </div>
+          </h2>
           <p className="font-medium text-mute3  text-[16px] leading-[30px]">
             We can work with just about any image that you send us. However, we
             want your logo to show clearly on our promotional products, which is
@@ -56,9 +56,9 @@ const ArtworkSection = () => {
           </p>
         </div>
         <div className="pt-2 pb-8">
-          <div className="text-2xl mb-5 font-bold">
+          <h2 className="text-2xl mb-5 font-bold">
             Help! What is a proof and why do I need one?
-          </div>
+          </h2>
           <p className="font-medium text-mute3  text-[16px] leading-[30px]">
             To ensure that you are completely happy with your promotional
             product, we provide you with a proof before the item even goes to
@@ -74,7 +74,7 @@ const ArtworkSection = () => {
           </p>
         </div>
         <div className="pt-2 pb-8">
-          <div className="text-2xl mb-5 font-bold">Time Frame for Proofs</div>
+          <h2 className="text-2xl mb-5 font-bold">Time Frame for Proofs</h2>
           <p className="font-medium text-mute3  text-[16px] leading-[30px]">
             Depending on the complexity of your artwork and the format in which
             it is sent to us, your proof will take anywhere from 1 hour to 24
