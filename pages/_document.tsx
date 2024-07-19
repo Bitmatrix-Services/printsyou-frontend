@@ -8,6 +8,7 @@ class AppDocument extends Document {
       <Html lang="en">
         <Head>
           <Script
+            strategy="beforeInteractive"
             src="https://www.googletagmanager.com/gtag/js?id=G-P54L18DJYN"
           />
 
