@@ -1,3 +1,5 @@
+import {http} from "../services/axios.service";
+
 export const getProductDescription = (productDescription: string) => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = productDescription;
@@ -88,4 +90,22 @@ export const convertDateFormat = (timestamp: number): string => {
   const year = date.getFullYear();
 
   return `${month} ${day}, ${year}`;
+};
+
+export const getSitemapStuff = async (
+  sitemapPath: string,
+  queryParams: Record<string, string> = {}
+) => {
+  const apiKey = process.env.API_KEY;
+  const apikeySecret = process.env.API_KEY_SECRET;
+
+  return (
+    await http.get(`/sitemap/${sitemapPath}`, {
+      headers: {
+        'X-API-KEY': apiKey,
+        'X-API-SECRET': apikeySecret
+      },
+      params: queryParams
+    })
+  ).data.payload;
 };
