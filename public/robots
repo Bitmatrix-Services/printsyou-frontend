@@ -1,0 +1,4 @@
+sitemap: https://printsyou.com/sitemap.xml
+
+user-agent: *
+Disallow: /order_request
