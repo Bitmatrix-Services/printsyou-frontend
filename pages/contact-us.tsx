@@ -92,9 +92,9 @@ function ContactUs() {
                   />
                 </div>
                 {apiError && (
-                  <div className="text-red-500 sm:col-span-2">
+                  <h3 className="text-red-500 sm:col-span-2">
                     something went wrong. please try again!
-                  </div>
+                  </h3>
                 )}
                 <div className="sm:col-span-2">
                   <button
@@ -119,14 +119,14 @@ function ContactUs() {
         ) : (
           <div className="flex flex-col space-y-4 mt-6 mb-16">
             <h3 className="text-xl font-bold">Thank You For Contacting Us!</h3>
-            <h6>
+            <h4>
               An PrintsYou sales rep will be contacting you shortly to answer
               any questions and to provide more information.
-            </h6>
-            <h6>
+            </h4>
+            <h4>
               If you need immediate assistance, you may contact us at
               info@printsyou.com
-            </h6>
+            </h4>
           </div>
         )}
       </Container>

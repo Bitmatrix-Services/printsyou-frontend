@@ -48,14 +48,14 @@ const ViewAllCategories = () => {
                             className={`capitalize text-mute3`}
                             href={subCat.uniqueCategoryName}
                           >
-                            <span
+                            <h3
                               dangerouslySetInnerHTML={{
                                 __html: sanitize(subCat.categoryName).replace(
                                   'SYMLINK',
                                   ''
                                 )
                               }}
-                            ></span>
+                            ></h3>
                           </Link>
                         </li>
                       ))}

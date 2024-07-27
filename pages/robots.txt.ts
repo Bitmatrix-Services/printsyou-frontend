@@ -7,9 +7,7 @@ const RobotsTxt: NextPage = () => {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const {res} = context;
 
-  const sitemap = await (
-    await fetch(`${process.env.FE_URL}/robots`)
-  ).text();
+  const sitemap = await (await fetch(`${process.env.FE_URL}/robots`)).text();
 
   res.setHeader('Content-Type', 'text/plain');
   res.setHeader(

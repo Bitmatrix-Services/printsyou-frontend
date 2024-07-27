@@ -39,10 +39,10 @@ const HeroSection: FC<IHeroSection> = ({bannerList = []}) => {
                 />
                 <div className="relative z-10">
                   <div className="h-[25rem] px-6 py-6 md:px-20 max-w-[40rem] flex flex-col justify-center text-center">
-                    <h3
+                    <h2
                       className="text-white font-bold text-2xl sm:text-3xl md:text-4xl mb-5"
                       dangerouslySetInnerHTML={{__html: banner.heading}}
-                    ></h3>
+                    ></h2>
                     <div
                       className="text-white text-base space-y-2"
                       dangerouslySetInnerHTML={{__html: banner.tagLines}}

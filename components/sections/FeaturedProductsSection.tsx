@@ -24,12 +24,12 @@ const FeaturedProductSection: FC<FeaturedSectionProps> = ({
     <section className="bg-white pt-8 lg:pt-20">
       <Container>
         <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start mb-6">
-          <h2
+          <h3
             className={`text-3xl lg:text-4xl font-normal text-headingColor text-center md:text-left md:mr-auto after:mt-3 lg:after:mt-5 after:block atfer:w-full after:h-1 after:bg-primary-500`}
           >
             <span className="mr-2">{title}</span>
             <span>{subTitle}</span>
-          </h2>
+          </h3>
           {viewMoreLink && (
             <Link
               className="hidden md:block py-2 px-8 text-sm font-semibold btn-outline-1"

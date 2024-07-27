@@ -1,4 +1,4 @@
-import {http} from "../services/axios.service";
+import {http} from '../services/axios.service';
 
 export const getProductDescription = (productDescription: string) => {
   const tempDiv = document.createElement('div');

@@ -76,24 +76,24 @@ const ProductCategoriesSection: FC<ProductCategoriesSectionProps> = ({
                               />
                               <div>
                                 <div className="line-clamp-2">
-                                  <h6 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold min-h-[2.5rem] md:min-h-[2.7rem]">
+                                  <h3 className="mb-2 text-mute group-hover:text-headingColor text-sm font-semibold min-h-[2.5rem] md:min-h-[2.7rem]">
                                     {product.productName}
-                                  </h6>
+                                  </h3>
                                 </div>
                                 {product.salePrice &&
                                 product.salePrice !== 0 ? (
                                   <>
-                                    <h6 className="text-sm font-normal line-through text-gray-600 group-hover:text-headingColor">
+                                    <h3 className="text-sm font-normal line-through text-gray-600 group-hover:text-headingColor">
                                       ${product.lowestPrice?.toFixed(2)}
-                                    </h6>
-                                    <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
+                                    </h3>
+                                    <h3 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
                                       ${product.salePrice?.toFixed(2)}
-                                    </h6>
+                                    </h3>
                                   </>
                                 ) : (
-                                  <h6 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
+                                  <h3 className="text-md font-semibold text-gray-600 group-hover:text-headingColor">
                                     ${product.lowestPrice?.toFixed(2)}
-                                  </h6>
+                                  </h3>
                                 )}
                               </div>
                             </div>

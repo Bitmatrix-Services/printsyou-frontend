@@ -6,6 +6,7 @@ import Image from 'next/image';
 import AOS from 'aos';
 
 import 'aos/dist/aos.css';
+import PageHeader from '@components/globals/PageHeader';
 
 const orderSteps = [
   {
@@ -54,6 +55,7 @@ const HowToOrderPage = () => {
   return (
     <section className="bg-white pt-3 pb-10 lg:py-5">
       <NextSeo title={`How to Order | ${metaConstants.SITE_NAME}`} />
+      <PageHeader pageTitle="Contact Us" />
       <Container>
         <div className="py-12">
           <h2 className="text-2xl mb-5 font-bold text-center">How To Order</h2>
@@ -68,12 +70,12 @@ const HowToOrderPage = () => {
               {index % 2 === 0 ? (
                 <figure className="scroll-step-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:space-x-52">
                   <div className="col self-center" data-aos="zoom-in-up">
-                    <h6 className="sub-title tetx-xl text-primary-500 mb-3">
+                    <h3 className="sub-title tetx-xl text-primary-500 mb-3">
                       Step {index + 1}
-                    </h6>
-                    <h3 className="title text-3xl font-semibold mb-4">
-                      {order.title}
                     </h3>
+                    <h4 className="title text-3xl font-semibold mb-4">
+                      {order.title}
+                    </h4>
                     <p className="text-mute3 text-lg">{order.description}</p>
                   </div>
                   <div className="col lg:col-span-2 hidden lg:block">
@@ -107,12 +109,12 @@ const HowToOrderPage = () => {
                     className="col self-center lg:col-span-2"
                     data-aos="zoom-in-up"
                   >
-                    <h6 className="sub-title text-xl text-primary-500 mb-3">
+                    <h3 className="sub-title text-xl text-primary-500 mb-3">
                       Step {index + 1}
-                    </h6>
-                    <h3 className="title text-3xl font-semibold mb-4">
-                      {order.title}
                     </h3>
+                    <h4 className="title text-3xl font-semibold mb-4">
+                      {order.title}
+                    </h4>
                     <p className="text-mute3 text-lg">{order.description}</p>
                   </div>
                 </figure>

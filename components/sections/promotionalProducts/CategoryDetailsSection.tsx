@@ -42,10 +42,12 @@ const CategoryDetailsSection: FC<CategoryDetailsSectionProps> = ({
           {category.subCategories.length > 0 && (
             <ProductSubCategoriesSection
               subCategoryList={category.subCategories}
+              categoryName={category.categoryName}
             />
           )}
           <ProductsSection
             categoryId={category.id}
+            categoryName={category.categoryName}
             isModal={true}
             isContainer={false}
           />

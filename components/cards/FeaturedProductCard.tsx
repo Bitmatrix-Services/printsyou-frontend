@@ -72,13 +72,13 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                 </button>
               )}
             </div>
-            <h2
+            <h3
               title={product?.productName}
               className="line-clamp-2 mb-6 text-lg leading-snug font-semibold text-[#303541] text-center"
               dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(product?.productName)
               }}
-            ></h2>
+            ></h3>
             <div className="block relative">
               <ImageWithFallback
                 width={155}
@@ -269,9 +269,9 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                   </div>
                   {product && (
                     <div className="mt-5">
-                      <h4 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
+                      <h3 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                         Product Description
-                      </h4>
+                      </h3>
                       <div
                         className="priceGridBody text-[#807D7E] marker:text-primary-500"
                         dangerouslySetInnerHTML={{
@@ -311,9 +311,9 @@ export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
                     </Link>
                   </div>
                   <div className="mt-10">
-                    <h4 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
+                    <h3 className="text-headingColor mb-3 text-lg font-normal capitalize inline-block border-b border-[#ddd] after:mt-1 after:block after:w-1/2 after:h-1 after:bg-primary-500">
                       Additional Information
-                    </h4>
+                    </h3>
                     <div className="grid grid-cols-1  gap-2">
                       {product.additionalFieldProductValues?.map(item => (
                         <div key={item.fieldName} className=" mt-3">

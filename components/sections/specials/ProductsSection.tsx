@@ -10,12 +10,14 @@ interface ProductsSectionProps {
   isModal?: boolean;
   isContainer: boolean;
   categoryId: string;
+  categoryName: string;
 }
 
 const ProductsSection: FC<ProductsSectionProps> = ({
   isModal,
   isContainer,
-  categoryId
+  categoryId,
+  categoryName
 }) => {
   const router = useRouter();
   const {minPrice, maxPrice, page}: any = router.query;
@@ -66,6 +68,11 @@ const ProductsSection: FC<ProductsSectionProps> = ({
 
   return (
     <section className="bg-white py-8 lg:py-20">
+      {categoryName ? (
+        <h2 className="text-xl mb-0 font-bold capitalize">
+          {categoryName} Products
+        </h2>
+      ) : null}
       {productsByCategory?.length > 0 && !isPageLoading && (
         <PaginationHeader
           pageNumber={parseInt(page) || 1}

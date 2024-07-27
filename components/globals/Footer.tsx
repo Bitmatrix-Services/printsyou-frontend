@@ -192,9 +192,9 @@ const Footer = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8 mt-6 sm:mt-8">
                 <div className="col order-1">
                   <div>
-                    <h3 className="mb-8 text-base font-semibold text-headingColor">
+                    <h6 className="mb-8 text-base font-semibold text-headingColor">
                       Quick Links
-                    </h3>
+                    </h6>
                     <div className="space-y-4">
                       {quickLinks.map(linkItem => (
                         <Link
@@ -209,9 +209,9 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="col order-3 lg:order-2 sm:col-span-2 lg:col-span-3">
-                  <h3 className="mb-8 text-base font-semibold text-headingColor">
+                  <h6 className="mb-8 text-base font-semibold text-headingColor">
                     Find It Fast
-                  </h3>
+                  </h6>
                   <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6">
                     {categoryList.map(category => (
                       <Link
