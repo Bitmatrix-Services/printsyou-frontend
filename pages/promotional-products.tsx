@@ -12,12 +12,18 @@ import {selectCategoryList} from '@store/slices/category/catgory.slice';
 import sanitize from 'sanitize-html';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 const ViewAllCategories = () => {
   const categoryList = useAppSelector(selectCategoryList);
   return (
     <>
-      <NextSeo title={`Categories | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Categories | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}promotional-products`}
+      />
       <PageHeader pageTitle={'Promotional Products Categories'} />
       <Container>
         <div className="py-12">

@@ -12,6 +12,9 @@ import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 import {CircularLoader} from '@components/globals/CircularLoader';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 interface MoreInfoProps {
   product: Product;
@@ -49,6 +52,7 @@ const MoreInfo: FC<MoreInfoProps> = ({product}) => {
     <>
       <NextSeo
         title={`Request Info | ${product.productName} | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}more-info`}
       />
       <PageHeader pageTitle={'More Info'} />
       <Container>

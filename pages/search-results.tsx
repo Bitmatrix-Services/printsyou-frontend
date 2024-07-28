@@ -7,6 +7,9 @@ import {useRouter} from 'next/router';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {CircularLoader} from '@components/globals/CircularLoader';
+import getConfig from "next/config";
+
+const config = getConfig();
 
 type SearchType = {
   name: string;
@@ -132,7 +135,10 @@ const CategoryDetails = () => {
 
   return (
     <>
-      <NextSeo title={`Search | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Search | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}search-results`}
+      />
       <div className="bg-white footer pt-8">
         <Container>
           <div className="flex flex-col md:flex-row gap-3 lg:gap-8">

@@ -3,6 +3,7 @@ import React, {Fragment} from 'react';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import PageHeader from '@components/globals/PageHeader';
+import getConfig from "next/config";
 
 const termsList = [
   {
@@ -65,10 +66,16 @@ const termsList = [
     body: `This revised content maintains the essential information while reducing redundancy and extraneous details.`
   }
 ];
+
+const config = getConfig();
+
 const TermsAndConditions = () => {
   return (
     <>
-      <NextSeo title={`Terms and Conditions | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Terms and Conditions | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}terms-and-conditions`}
+      />
       <PageHeader pageTitle="Terms and Conditions" />
       <div className="bg-white py-8">
         <Container>

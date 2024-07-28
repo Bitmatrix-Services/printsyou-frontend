@@ -10,17 +10,19 @@ import TestimonialsSection from '@components/sections/artwork/TestimonialsSectio
 import OverviewArtworkSection from '@components/sections/artwork/OverviewArtworkSection';
 import PageHeader from '@components/globals/PageHeader';
 import {NextSeo} from 'next-seo';
-import {metaConstants, tabUrls, tabsList} from '@utils/Constants';
+import {metaConstants, tabsList, tabUrls} from '@utils/Constants';
 import PromotionalBlogs from '@components/sections/artwork/PromotionalBlogs';
 import {http} from 'services/axios.service';
 import {Blog} from '@utils/type';
 import {useRouter} from 'next/router';
+import getConfig from 'next/config';
 
 interface TabPanelProps {
   children?: ReactNode;
   index: number;
   value: number;
 }
+
 interface ArtworkProps {
   allBlogs: Blog[];
 }
@@ -40,6 +42,8 @@ function CustomTabPanel(props: TabPanelProps) {
     </div>
   );
 }
+
+const config = getConfig();
 
 const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
   const router = useRouter();
@@ -75,6 +79,7 @@ const Artwork: FC<ArtworkProps> = ({allBlogs}) => {
         title={`${value === 0 ? 'Additional Information' : tabsList[value]} | ${
           metaConstants.SITE_NAME
         }`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}additional-information/${tabUrls[value]}`}
       />
       <PageHeader pageTitle={`Additional Information | ${tabsList[value]}`} />
       <section className="bg-grey">

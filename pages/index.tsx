@@ -2,10 +2,10 @@ import React from 'react';
 import HeroSection from '@components/sections/HeroSection';
 import FeaturedProductsSection from '@components/sections/FeaturedProductsSection';
 import {
+  getAllHomeCategoryProducts,
   getAllNewAndExclusiveProducts,
   getAllUnderABuckProducts,
-  getAllUniqueIdeasProducts,
-  getAllHomeCategoryProducts
+  getAllUniqueIdeasProducts
 } from '@store/slices/product/product.slice';
 import {getAllBannerList} from '@store/slices/category/catgory.slice';
 import {GetStaticProps, NextPage} from 'next';
@@ -16,6 +16,9 @@ import ProductCategoriesSection from '@components/sections/ProductCategoriesSect
 import BenefitsSection from '@components/sections/BenefitsSection';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 interface IHome {
   underABuckProducts: Product[];
@@ -34,7 +37,10 @@ export const HomePage: NextPage<IHome> = ({
 }) => {
   return (
     <>
-      <NextSeo title={metaConstants.SITE_NAME} />
+      <NextSeo
+        title={metaConstants.SITE_NAME}
+        canonical={`${config.publicRuntimeConfig.FE_URL}`}
+      />
       <HeroSection bannerList={bannerList} />
       <ProductCategoriesSection homeCategoryProducts={homeCategoryProducts} />
       {/* under a buck section */}

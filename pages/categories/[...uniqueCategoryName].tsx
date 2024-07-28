@@ -33,6 +33,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
               ]
             : []
         }}
+        canonical={`${config.publicRuntimeConfig.FE_URL}categories/${category.uniqueCategoryName}`}
       />
       <div className="bg-white footer pt-8">
         <Container>

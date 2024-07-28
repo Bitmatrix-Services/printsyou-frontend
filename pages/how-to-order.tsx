@@ -7,6 +7,9 @@ import AOS from 'aos';
 
 import 'aos/dist/aos.css';
 import PageHeader from '@components/globals/PageHeader';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 const orderSteps = [
   {
@@ -54,7 +57,10 @@ const HowToOrderPage = () => {
 
   return (
     <section className="bg-white pt-3 pb-10 lg:py-5">
-      <NextSeo title={`How to Order | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`How to Order | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}how-to-order`}
+      />
       <PageHeader pageTitle="Contact Us" />
       <Container>
         <div className="py-12">

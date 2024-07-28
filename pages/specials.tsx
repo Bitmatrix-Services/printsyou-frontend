@@ -9,6 +9,9 @@ import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {CircularLoader} from '@components/globals/CircularLoader';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 const Specials = () => {
   const [specialProducts, setSpecialProducts] = useState<Product[]>([]);
@@ -44,7 +47,10 @@ const Specials = () => {
 
   return (
     <>
-      <NextSeo title={`Special Products | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Special Products | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}specials`}
+      />
       <PageHeader pageTitle={'Specials and Sales'} />
       <Container>
         <section className="bg-white py-8 lg:py-20">

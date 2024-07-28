@@ -9,6 +9,9 @@ import {http} from 'services/axios.service';
 import sanitize from 'sanitize-html';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 type Faqs = {
   id: string;
@@ -26,6 +29,7 @@ const Faqs: FC<FaqsProps> = ({faqs}) => {
     <>
       <NextSeo
         title={`Frequently Asked Questions | FAQ | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}faq`}
       />
       <PageHeader pageTitle={'Frequently Asked Questions'} />
       <Container>

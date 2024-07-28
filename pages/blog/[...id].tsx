@@ -11,6 +11,9 @@ import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {convertDateFormat} from '@utils/utils';
 import ImageWithFallback from '@components/globals/ImageWithFallback';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 interface BlogDetailPage {
   blog: Blog;
@@ -19,7 +22,10 @@ interface BlogDetailPage {
 const BlogDetailPage: FC<BlogDetailPage> = ({blog}) => {
   return (
     <div className="bg-white py-12">
-      <NextSeo title={`Blog | ${blog?.title} | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Blog | ${blog?.title} | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}blog/${blog.uniqueId}`}
+      />
       <Container>
         <Grid className="px-3">
           <Typography className="mb-10" variant="h1">

@@ -41,6 +41,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
               url: `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${value.imageUrl}`
             }))
           }}
+          canonical={`${config.publicRuntimeConfig.FE_URL}products/${product.uniqueProductName}`}
         />
       )}
       <Container>

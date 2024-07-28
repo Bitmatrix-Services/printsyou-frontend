@@ -9,6 +9,9 @@ import {metaConstants} from '@utils/Constants';
 import {http} from 'services/axios.service';
 import {DocumentCheckIcon} from '@heroicons/react/24/outline';
 import {CircularLoader} from '@components/globals/CircularLoader';
+import getConfig from 'next/config';
+
+const config = getConfig();
 
 function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -40,7 +43,10 @@ function ContactUs() {
   });
   return (
     <>
-      <NextSeo title={`Contact Us | ${metaConstants.SITE_NAME}`} />
+      <NextSeo
+        title={`Contact Us | ${metaConstants.SITE_NAME}`}
+        canonical={`${config.publicRuntimeConfig.FE_URL}contact-us`}
+      />
       <PageHeader pageTitle="Contact Us" />
       <Container>
         <h2 className="text-xl mb-0 font-bold">Reach Out To Us</h2>
