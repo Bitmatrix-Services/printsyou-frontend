@@ -27,6 +27,20 @@ export interface FeaturedProductCardProps {
 //   {name: 'black', bgColor: 'bg-[#333333]', selectedColor: 'ring-[#333333]'}
 // ];
 
+interface EnclosureProduct {
+  productId: string;
+  productName: string;
+  minPrice: number;
+  maxPrice: number;
+  priorityOrder: number;
+  uniqueProductName: string;
+  imageUrl: string;
+}
+
+export interface IProductCardForSearch {
+  product: EnclosureProduct;
+}
+
 export const InnerFeaturedProductCard: FC<FeaturedProductCardProps> = ({
   isModal = true,
   product

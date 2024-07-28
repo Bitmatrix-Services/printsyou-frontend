@@ -7,9 +7,20 @@ import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {HomeIcon} from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import {CircularLoader} from '@components/globals/CircularLoader';
+import {ProductCardForSearch} from "@components/cards/ProductCardForSearch";
+
+interface EnclosureProduct {
+  productId: string;
+  productName: string;
+  minPrice: number;
+  maxPrice: number;
+  priorityOrder: number;
+  uniqueProductName: string;
+  imageUrl: string;
+}
 
 interface CategoryDetailsSectionProps {
-  products: Product[];
+  products: EnclosureProduct[];
   totalProducts: number;
   totalPages: number;
   isLoading: boolean;
@@ -103,9 +114,8 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {products?.map(product => (
-                  <FeaturedProductCard
-                    key={product.id}
-                    isModal={true}
+                  <ProductCardForSearch
+                    key={product.productId}
                     product={product}
                   />
                 ))}

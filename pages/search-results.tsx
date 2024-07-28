@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '@components/globals/Container';
 import {http} from 'services/axios.service';
 import SearchSidebar, {CategoryType} from '@components/globals/SearchSidebar';
 import SearchResultsSection from '@components/sections/searchResults/SearchResultsSection';
 import {useRouter} from 'next/router';
-import {Product} from '@store/slices/product/product';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {CircularLoader} from '@components/globals/CircularLoader';
@@ -14,14 +13,26 @@ type SearchType = {
   count: number;
 };
 
-type SearchResultsData = {
-  products: Product[];
-  totalPages: number;
-  totalProducts: number;
-  byPriceRange: SearchType[];
+interface EnclosureProduct {
+  productId: string;
+  productName: string;
+  minPrice: number;
+  maxPrice: number;
+  priorityOrder: number;
+  uniqueProductName: string;
+  imageUrl: string;
+}
+
+interface SearchEnclosure {
+  products: EnclosureProduct[];
+  byPrice: SearchType[];
   byColors: SearchType[];
+  totalElements: number;
+  size: number;
+  pageNumber: number;
+  totalPages: number;
   byCategory: CategoryType[];
-};
+}
 
 type FilterType = {
   price: string[];
@@ -46,16 +57,17 @@ const CategoryDetails = () => {
   const [filters, setFilters] = useState<FilterType>({
     price: []
   });
-  const [searchResultsData, setSearchResultsData] = useState<SearchResultsData>(
-    {
+  const [updatedSearchResults, setUpdatedSearchResults] =
+    useState<SearchEnclosure>({
       products: [],
-      totalPages: 0,
-      totalProducts: 0,
-      byPriceRange: [],
       byColors: [],
+      byPrice: [],
+      totalPages: 0,
+      size: 0,
+      pageNumber: 0,
+      totalElements: 0,
       byCategory: []
-    }
-  );
+    });
 
   useEffect(() => {
     if (keywords || tag) handleSearch();
@@ -100,17 +112,16 @@ const CategoryDetails = () => {
     try {
       setIsLoading(true);
       const {data} = await http.get(queryString);
-      const searchResults = {
-        products: data.payload.products.content,
-        totalPages: data.payload.products.totalPages,
-        totalProducts: data.payload.products.totalElements,
-        byPriceRange: data.payload.byPriceRange?.filter(
-          (item: {name: string}) => item.name !== null
-        ),
+      setUpdatedSearchResults({
+        products: data.payload.products,
+        totalPages: data.payload.totalPages,
+        totalElements: data.payload.totalElements,
+        byPrice: data.payload.byPrice,
+        size: data.payload.size,
+        pageNumber: data.payload.pageNumber,
         byColors: data.payload.byColors,
         byCategory: data.payload.byCategory
-      };
-      setSearchResultsData(searchResults);
+      });
     } catch (error) {
       console.log('error.message', error);
     } finally {
@@ -132,16 +143,16 @@ const CategoryDetails = () => {
             ) : (
               <>
                 <SearchSidebar
-                  byPriceRange={searchResultsData.byPriceRange}
-                  byColor={searchResultsData.byColors}
-                  byCategory={searchResultsData.byCategory}
+                  byPriceRange={updatedSearchResults.byPrice}
+                  byColor={updatedSearchResults.byColors}
+                  byCategory={updatedSearchResults.byCategory}
                   filters={filters}
                   setFilters={setFilters}
                 />
                 <SearchResultsSection
-                  products={searchResultsData.products}
-                  totalProducts={searchResultsData.totalProducts}
-                  totalPages={searchResultsData.totalPages}
+                  products={updatedSearchResults.products}
+                  totalProducts={updatedSearchResults.totalElements}
+                  totalPages={updatedSearchResults.totalPages}
                   isLoading={isLoading}
                   isPageLoading={isPageLoading}
                 />
