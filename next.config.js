@@ -4,7 +4,8 @@ const nextConfig = {
   publicRuntimeConfig: {
     DOMAIN_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     ASSETS_SERVER_URL: process.env.NEXT_PUBLIC_ASSETS_SERVER_URL,
-    RESEND_API_KEY: process.env.RESEND_API_KEY
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
+    FE_URL: process.env.FE_URL
   },
   images: {
     domains: [
