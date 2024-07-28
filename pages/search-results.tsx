@@ -62,7 +62,7 @@ const CategoryDetails = () => {
   }, [router.query]);
 
   const handleSearch = async () => {
-    let queryString = `search-result?`;
+    let queryString = `updated-search?`;
 
     if (keywords) {
       queryString += `query=${keywords}&`;
