@@ -17,6 +17,7 @@ export interface ProductPrice {
 export interface ProductImage {
   imageUrl: string;
   sequenceNumber: number;
+  altText?: string | null;
 }
 
 export interface AdditionalRow {

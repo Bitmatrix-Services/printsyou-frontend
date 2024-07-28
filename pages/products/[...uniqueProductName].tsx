@@ -37,9 +37,12 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
           }`}
           description={product.metaDescription || ''}
           openGraph={{
-            images: (product.productImages || []).map(value => ({
-              url: `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${value.imageUrl}`
-            }))
+            images: (product.productImages || []).map((value, index) => ({
+              url: `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${value.imageUrl}`,
+              alt: value.altText ?? `${product.productName} ${index + 1}`
+            })),
+            description: product.metaDescription ?? '',
+            title: product.productName
           }}
           canonical={`${config.publicRuntimeConfig.FE_URL}products/${product.uniqueProductName}`}
         />

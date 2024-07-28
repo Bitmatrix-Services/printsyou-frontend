@@ -31,7 +31,9 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({category}) => {
                   url: `${config.publicRuntimeConfig.ASSETS_SERVER_URL}${category.imageUrl}`
                 }
               ]
-            : []
+            : [],
+          description: category.metaDescription ?? '',
+          title: category.categoryName
         }}
         canonical={`${config.publicRuntimeConfig.FE_URL}categories/${category.uniqueCategoryName}`}
       />
