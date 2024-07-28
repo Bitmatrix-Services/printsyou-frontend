@@ -4,5 +4,6 @@ module.exports = {
   generateIndexSitemap: false,
   siteUrl: process.env.FE_URL,
   changefreq: 'monthly',
-  generateRobotsTxt: false
+  generateRobotsTxt: false,
+  exclude: ['/sitemap.xml', '/sitemap_*', '/robots.txt', '/api/*']
 };
