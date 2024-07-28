@@ -93,7 +93,10 @@ const ProductDetails: FC<ProductDetailsProps> = ({product}) => {
                                 fill
                                 className="object-contain"
                                 src={image.imageUrl}
-                                alt="product gallery"
+                                alt={
+                                  image.altText ??
+                                  `${product.productName} ${index + 1}`
+                                }
                               />
                             </span>
                           </a>

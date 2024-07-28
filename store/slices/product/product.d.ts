@@ -44,10 +44,6 @@ export interface AdditionalRows {
   priceDiff: number;
   sequenceNumber: number;
 }
-export interface ProductImages {
-  imageUrl: string;
-  sequenceNumber: number;
-}
 
 export interface Product {
   id: string;
@@ -66,7 +62,6 @@ export interface Product {
   metaDescription: string | null;
   additionalRow: AdditionalRow[];
   priceGrids: PriceGrids[];
-  productImages?: ProductImages[];
   additionalFieldProductValues: AdditionalFieldProductValues[];
   additionalRows: AdditionalRows[];
   crumbs: Crumbs[];
