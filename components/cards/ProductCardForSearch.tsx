@@ -3,7 +3,7 @@ import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
 import {ShoppingBagIcon} from '@heroicons/react/24/outline';
 import {IProductCardForSearch} from '@components/cards/FeaturedProductCard';
-import ImageWithFallback from "@components/globals/ImageWithFallback";
+import ImageWithFallback from '@components/globals/ImageWithFallback';
 
 export const ProductCardForSearch: FC<IProductCardForSearch> = ({product}) => {
   return (

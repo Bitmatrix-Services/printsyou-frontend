@@ -21,7 +21,7 @@ import {theme} from '@utils/theme';
 import {Resend} from 'resend';
 import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
-import {SpeedInsights} from "@vercel/speed-insights/next";
+import {SpeedInsights} from '@vercel/speed-insights/next';
 
 const config = getConfig();
 export const resend = new Resend(config.publicRuntimeConfig.RESEND_API_KEY);

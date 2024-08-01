@@ -5,22 +5,22 @@ import Image from 'next/image';
 const printsYouItems = [
   {
     image: '/assets/art-service.svg',
-    heading: 'Art Services',
+    heading: 'Creative Solutions',
     text: 'Simply provide us with your materials. Our skilled art team will adapt it into the ideal format for imprinting on your selected products.'
   },
   {
     image: '/assets/rush-service.svg',
-    heading: 'Rush Service',
+    heading: 'Fast-Track Service',
     text: 'Many of our promotional items are eligible for 3-day or even 1-day Rush Service without any extra cost.'
   },
   {
     image: '/assets/email-service.svg',
-    heading: 'E-Mail Order Updates',
+    heading: 'Order Progress Emails',
     text: `We'll keep you updated on your order's status, from the entry date to the due date, through production, and finally, with an email including your UPS tracking numbers. Rest assured, you won't need to follow up on your order's progress.`
   },
   {
     image: '/assets/idea-theme-center.svg',
-    heading: 'Idea Theme Center',
+    heading: 'Innovation Center',
     text: `Our seasoned sales team offers personalized Idea Presentations free of charge. Simply share your campaign's theme and budget with us. Same business day, we'll deliver a vibrant, full-color presentation tailored to your event or target audience, featuring unique promotional products.`
   }
 ];

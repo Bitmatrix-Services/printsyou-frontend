@@ -3,17 +3,13 @@ import Container from '../../globals/Container';
 import Image from 'next/image';
 
 const pricingList = [
-  `In-house silk screening, embroidery, and engraving - all for faster lead times and lower costs.`,
-  `Huge inventory of blank goods, such as promotional pens, promotional calculators, promotional desk clocks and more.`,
+  `In-house services for silk screening, embroidery, and engraving - ensuring quick lead times and lower expenses.`,
+  `Diverse inventory of blank items, from promotional pens to calculators, desk clocks, and beyond.`,
   `We will begin by clarifying any information or questions we may have regarding your order or artwork. We will then send you a sales confirmation, along with an artwork proof showing how your artwork or logo will look on the item.`,
   `The sales confirmation will include all charges, including shipping, taxes, setup fees, or any additional charges that may be required based on your artwork.`,
   `The artwork proof can be changed as often as you'd like until you're satisfied with the layout or design.`,
-  `
-  In-house graphic artist to help with layouts, logo designs, and color choices.
-
-`,
-  `
-  There's no commitment to placing the order online. You can cancel the order at any time before production begins. There will be plenty of communication before we begin production, and we'll work closely with you until you're ready.`
+  `On-staff graphic artist to assist with layouts, logo creation, and color choices.Get professional design support for your branding needs.Ensure your visuals are polished and appealing.`,
+  `There's no commitment to placing the order online. You can cancel the order at any time before production begins. There will be plenty of communication before we begin production, and we'll work closely with you until you're ready.`
 ];
 const headingText =
   "“We're here to make your purchasing experience an easy and enjoyable one. Here are some of the ways we do it.”";
@@ -50,9 +46,11 @@ const OffersSection = () => {
     </section>
   );
 };
+
 interface PricingCardProps {
   description: string;
 }
+
 const PricingCard: FC<PricingCardProps> = ({description}) => {
   return (
     <div className="flex my-6 md:pr-6">

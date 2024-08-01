@@ -3,7 +3,7 @@ import React, {Fragment} from 'react';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import PageHeader from '@components/globals/PageHeader';
-import getConfig from "next/config";
+import getConfig from 'next/config';
 
 const termsList = [
   {

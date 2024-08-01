@@ -1,13 +1,11 @@
 import React, {FC} from 'react';
 import {useRouter} from 'next/router';
-import {Product} from '@store/slices/product/product';
 import PaginationHeader from '@components/globals/PaginationHeader';
-import {FeaturedProductCard} from '@components/cards/FeaturedProductCard';
 import {ChevronRightIcon} from '@heroicons/react/24/outline';
 import {HomeIcon} from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import {CircularLoader} from '@components/globals/CircularLoader';
-import {ProductCardForSearch} from "@components/cards/ProductCardForSearch";
+import {ProductCardForSearch} from '@components/cards/ProductCardForSearch';
 
 interface EnclosureProduct {
   productId: string;
@@ -83,7 +81,7 @@ const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
               {(page - 1) * size + 1} - {Math.min(page * size, totalProducts)}
             </span>{' '}
             of <span className="font-semibold">{totalProducts}</span> results
-            for <span className="font-semibold"> {router.query.keywords}</span>
+            for <span className="font-semibold">{router.query.keywords}</span>
           </div>
         </div>
 

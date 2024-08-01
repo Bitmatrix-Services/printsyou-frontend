@@ -7,7 +7,7 @@ import {useRouter} from 'next/router';
 import {NextSeo} from 'next-seo';
 import {metaConstants} from '@utils/Constants';
 import {CircularLoader} from '@components/globals/CircularLoader';
-import getConfig from "next/config";
+import getConfig from 'next/config';
 
 const config = getConfig();
 
