@@ -16,7 +16,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   });
 
   const sitemap = `<sitemapindex
-        xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <sitemap>
             <loc>${feUrl}sitemap_blogs.xml</loc>
         </sitemap>
