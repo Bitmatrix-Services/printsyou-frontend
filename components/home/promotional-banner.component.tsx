@@ -1,24 +1,31 @@
 import Image from 'next/image';
 import {FC} from 'react';
+import Link from 'next/link';
 
 interface IPromotionalBannerProps {
+  link?: string;
   imageUrl: string;
+  title?: string;
+  description?: string;
 }
 
-export const PromotionalBanner: FC<IPromotionalBannerProps> = ({imageUrl}) => {
+export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
+  title = 'Wear Your Creativity',
+  description = 'Discover our range of customizable apparel. personalize your wardrobe with PrintsYou.',
+  imageUrl,
+  link = '/categories/awards'
+}) => {
   return (
     <div className="py-60 relative">
       <Image fill objectFit="cover" src={imageUrl} alt={'promotions'} />
       <div className="absolute z-10 h-full w-full left-0 top-0 flex items-end justify-start pl-2 pb-2 ">
         <div className="bg-white py-5 px-5 rounded-2xl max-w-md text-start">
-          <h2 className="text-primary-500 font-bold text-xl mb-1">Wear Your Creativity</h2>
-          <p className="text-black text-base">
-            Discover our range of customizable apparel. personalize your wardrobe with PrintsYou.
-          </p>
+          <h2 className="text-primary-500 font-bold text-xl mb-1 capitalize">{title}</h2>
+          <p className="text-black text-base">{description}</p>
           <div className="mt-3 flex flex-wrap justify-start">
-            <button type="button" className="px-4 py-1 text-white bg-primary-500 text-sm rounded-full">
+            <Link href={link} className="px-4 py-1 text-white bg-primary-500 text-sm rounded-full">
               Explore Products
-            </button>
+            </Link>
           </div>
         </div>
       </div>

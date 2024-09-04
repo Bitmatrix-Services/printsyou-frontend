@@ -1,15 +1,15 @@
 import {Metadata} from 'next';
 import {metaConstants} from '@utils/constants';
 import {SearchResult} from '@components/search-result.components';
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
 const SearchResultPage = () => {
   return <SearchResult />;
 };
 
 const NoSSRSearchResultPage = dynamic(() => Promise.resolve(SearchResultPage), {
-    ssr: false,
-})
+  ssr: false
+});
 
 export default NoSSRSearchResultPage;
 

@@ -5,7 +5,7 @@ import {Breadcrumb} from '@components/globals/breadcrumb.component';
 const TermsAndConditions = () => {
   return (
     <>
-      <Breadcrumb list={[]} prefixTitle='Terms and Conditions' />
+      <Breadcrumb list={[]} prefixTitle="Terms and Conditions" />
       <div className="bg-white py-8">
         <Container>
           <div className="pt-2 pb-11">

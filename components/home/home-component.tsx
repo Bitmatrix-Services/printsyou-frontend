@@ -40,12 +40,12 @@ const HomeComponent: FC<IHome> = ({
           showAllUrl={`/search-results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
         />
       </Container>
-      <div className="py-4 my-16 border-y border-primary-500">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <PromotionalBanner imageUrl="/assets/posters.png" />
-          <PromotionalBanner imageUrl="/assets/stress-reliver.png" />
-        </div>
-      </div>
+      {/*<div className="py-4 my-16 border-y border-primary-500">*/}
+      {/*  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">*/}
+      {/*    <PromotionalBanner imageUrl="/assets/posters.png" />*/}
+      {/*    <PromotionalBanner imageUrl="/assets/flyers.png" />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       <Container>
         <ProductSliderSection
@@ -65,12 +65,12 @@ const HomeComponent: FC<IHome> = ({
       {/*  imageHeight={380}*/}
       {/*/>*/}
 
-      <div className="py-4 my-16 border-y border-primary-500">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <PromotionalBanner imageUrl="/assets/banners.png" />
-          <PromotionalBanner imageUrl="/assets/cards.png" />
-        </div>
-      </div>
+      {/*<div className="py-4 my-16 border-y border-primary-500">*/}
+      {/*  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">*/}
+      {/*    <PromotionalBanner imageUrl="/assets/banners.png" />*/}
+      {/*    <PromotionalBanner imageUrl="/assets/cards.png" />*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       <Container>
         <ProductSliderSection
@@ -83,8 +83,18 @@ const HomeComponent: FC<IHome> = ({
 
       <div className="py-4 my-16 border-y border-primary-500">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <PromotionalBanner imageUrl="/assets/flyers.png" />
-          <PromotionalBanner imageUrl="/assets/office-supplies.png" />
+          <PromotionalBanner
+            link="/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers"
+            imageUrl="/assets/stress-reliver.png"
+            title="fidget toys & stress relievers"
+            description="Discover our range of fidget toys and stress relievers to boost focus and reduce anxiety. Perfect for all ages! Shop now for a calmer mind."
+          />
+          <PromotionalBanner
+            link="/categories/desk-amp-office"
+            imageUrl="/assets/office-supplies.png"
+            title="desk & office"
+            description="Discover stylish and functional desk and office solutions to enhance productivity and comfort in your workspace. Shop now!"
+          />
         </div>
       </div>
 
@@ -94,8 +104,18 @@ const HomeComponent: FC<IHome> = ({
 
       <div className="py-4 my-16 border-y border-primary-500">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <PromotionalBanner imageUrl="/assets/awards.png" />
-          <PromotionalBanner imageUrl="/assets/bags.png" />
+          <PromotionalBanner
+            link="/categories/awards"
+            imageUrl="/assets/awards.png"
+            title="awards"
+            description="Explore our prestigious awards showcasing excellence and innovation. Discover winners and celebrate achievements in various fields."
+          />
+          <PromotionalBanner
+            link="/categories/bags-duffels-amp-accessories"
+            imageUrl="/assets/bags.png"
+            title="bags, duffels & accessories"
+            description="Discover stylish bags, duffels, and accessories for every occasion. Shop now for quality and versatility to elevate your travel game!"
+          />
         </div>
       </div>
 

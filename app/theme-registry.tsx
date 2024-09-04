@@ -5,7 +5,7 @@ import createCache from '@emotion/cache';
 import {useServerInsertedHTML} from 'next/navigation';
 import {CacheProvider} from '@emotion/react';
 import {CssBaseline, CssVarsProvider} from '@mui/joy';
-import {theme} from "@utils/theme";
+import {theme} from '@utils/theme';
 
 interface IThemeRegistry {
   options: {key: string};
