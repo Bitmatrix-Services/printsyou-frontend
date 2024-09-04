@@ -1,10 +1,5 @@
-import {createTheme} from '@mui/material';
-import cssVariables from '../styles/variables.module.scss';
+import {extendTheme} from '@mui/joy';
 
-export const theme = createTheme({
-  palette: {
-    primary: {
-      main: cssVariables.primaryColor
-    }
-  }
+export const theme = extendTheme({
+  components: {}
 });

@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -16,13 +15,19 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
-      "@store/*": ["store/*"],
+      "@state/*": ["state/*"],
       "@lib/*": ["lib/*"],
       "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
+      "@svg-components/*": ["svg-components/*"],
       "@styles/*": ["styles/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
-  "typeRoots": ["../@types"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

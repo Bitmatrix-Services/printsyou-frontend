@@ -1,56 +1,14 @@
-import {http} from '../services/axios.service';
-
-export const getProductDescription = (productDescription: string) => {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = productDescription;
-
-  const liElements = tempDiv.querySelector('ul')?.querySelectorAll('li');
-
-  const textArray: string[] = [];
-
-  liElements?.forEach(li => {
-    if (li.textContent) textArray.push(li.textContent.trim());
-  });
-
-  return textArray;
-};
-
-export const getProductPriceGridTable = (productDescription: string) => {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = productDescription;
-
-  const heading = tempDiv.querySelector('p');
-  const priceTable = tempDiv.querySelector('table');
-
-  return {heading, priceTable};
-};
-
-export const getCateoryTitleAndDescription = (cateoryDescription: string) => {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = cateoryDescription;
-
-  const title = tempDiv.querySelector('h1')?.textContent;
-  const pElements = tempDiv.querySelectorAll('p');
-
-  const descriptionList: string[] = [];
-
-  pElements?.forEach(p => {
-    if (p.textContent) descriptionList.push(p.textContent.trim());
-  });
-
-  return {title, descriptionList};
-};
+import axios from 'axios';
 
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
   return input.map((value: string) => {
     let minValue: number = 0;
     let maxValue: number = -1;
-    if (~value.toLowerCase().indexOf('under'))
-      maxValue = +value.toLowerCase().replaceAll('under $', '');
+    if (~value.toLowerCase().indexOf('under')) maxValue = +value.toLowerCase().replaceAll('under $', '');
     else if (~value.toLowerCase().indexOf('over')) {
       minValue = 50;
-      maxValue = Number.MAX_SAFE_INTEGER;
+      maxValue = 9999;
     } else {
       const matchValue = value.match(regex);
       if (matchValue) {
@@ -59,8 +17,7 @@ export const getMinMaxRange = (input: string[]) => {
       }
     }
 
-    if (maxValue === -1)
-      throw Error('Invalid calculations of min and max values');
+    if (maxValue === -1) throw Error('Invalid calculations of min and max values');
 
     return {
       minValue: minValue,
@@ -92,15 +49,12 @@ export const convertDateFormat = (timestamp: number): string => {
   return `${month} ${day}, ${year}`;
 };
 
-export const getSitemapStuff = async (
-  sitemapPath: string,
-  queryParams: Record<string, string> = {}
-) => {
+export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<string, string> = {}) => {
   const apiKey = process.env.API_KEY;
   const apikeySecret = process.env.API_KEY_SECRET;
 
   return (
-    await http.get(`/sitemap/${sitemapPath}`, {
+    await axios.get(`/sitemap/${sitemapPath}`, {
       headers: {
         'X-API-KEY': apiKey,
         'X-API-SECRET': apikeySecret

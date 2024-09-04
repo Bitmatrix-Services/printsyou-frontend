@@ -11,7 +11,7 @@ interface artWorkFilesProps {
   fileUrl: string;
 }
 
-interface CartItem {
+export interface CartItem {
   product: Product;
   itemsQuantity: number;
   calculatePriceForQuantity: number;

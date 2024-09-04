@@ -14,16 +14,16 @@ const config: Config = {
       },
       colors: {
         primary: {
-          DEFAULT: '#FFCE05',
-          50: '#FFF2BD',
-          100: '#FFEEA8',
-          200: '#FFE67F',
-          300: '#FFDE57',
-          400: '#FFD62E',
-          500: '#FFCE05',
-          600: '#CCA400',
-          700: '#947700',
-          800: '#5C4A00',
+          DEFAULT: 'rgba(219,4,129,0.5)',
+          50: 'rgba(219,4,129,0.1)',
+          100: 'rgba(219,4,129,0.15)',
+          200: 'rgba(219,4,129,0.25)',
+          300: 'rgba(219,4,129,0.35)',
+          400: 'rgba(219,4,129,0.46)',
+          500: '#DB0481',
+          600: 'rgba(219,4,129,0.65)',
+          700: '#DB0481',
+          800: '#b9016c',
           900: '#241D00',
           950: '#080600'
         },
@@ -41,22 +41,27 @@ const config: Config = {
           900: '#000000',
           950: '#000000'
         },
+        contactButtonColor: '#219EBC',
         headingColor: '#333',
-        mute: '#787878',
-        mute2: '#787b82',
+        subHeading: '#373636',
+        mute: '#74768F',
+        mute2: '#5F6C72',
         mute3: '#686d79',
-        greyLight: '#FFFFFF',
+        mute4: '#9A9C9D',
+        mute5: '#F2F4F5',
+        lightGray: '#EEF1F7',
         grey: '#FAFAFA',
-        light: '#d0d5df',
-        body: '#2A344D'
+        light: '#d0d5df'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         wave: 'url(/assets/bg-wave.png)',
-        'black-top':
-          'url(/assets/bg-line-top-banner.jpg) left top repeat-x #303541'
+        'black-top': 'url(/assets/bg-line-top-banner.jpg) left top repeat-x #303541'
+      },
+      boxShadow: {
+        category: '0px 4px 4px 0px #00000040',
+        pricingTableShadow: '0px 1px 2px 0px rgba(142, 150, 185, 0.25)'
       }
     }
   },
