@@ -450,16 +450,20 @@ export const AddToCartModal: FC = () => {
 
                 {addToCartError ? <div className="text-red-500 pt-4">Failed To Add</div> : null}
                 <div className="flex flex-col md:flex-row pt-4 gap-4">
-                  <button className="py-2 px-6 flex items-center justify-center  rounded-md border-2 border-primary-500 text-primary-500 w-full lg:w-auto capitalize">
+                  <label
+                    htmlFor="fileInput"
+                    className="py-2 px-6 flex items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 w-full lg:w-auto capitalize"
+                  >
                     <input
+                      id="fileInput"
                       type="file"
                       name="fileInput"
                       multiple
                       onChange={e => handleFileChange(e)}
-                      style={{display: 'none'}}
+                      hidden
                     />
                     Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
-                  </button>
+                  </label>
                   <button
                     type="submit"
                     className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
