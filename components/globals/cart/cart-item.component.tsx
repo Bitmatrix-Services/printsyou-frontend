@@ -17,7 +17,7 @@ export const CartItemComponent: FC<ICartItem> = ({cartItem, handleRemoveItem}) =
           <div className="text-black">Item#:</div>
           <div className="text-secondary-500"> {cartItem.sku}</div>
         </div>
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-3 mb-3 relative">
           <ImageWithFallback
             width={50}
             height={20}

@@ -73,7 +73,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
             <div className="flex flex-col md:flex-row pt-3 gap-8 justify-center">
               <div className="md:px-32 ">
                 <div className="order-first ">
-                  <div className="md:pt-2 flex justify-center">
+                  <div className="md:pt-2 flex justify-center relative">
                     <ImageWithFallback
                       width={400}
                       height={100}
