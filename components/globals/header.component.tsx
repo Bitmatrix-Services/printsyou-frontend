@@ -3,7 +3,6 @@ import {MdEmail} from 'react-icons/md';
 import Link from 'next/link';
 import Image from 'next/image';
 import {RiShoppingBagFill} from 'react-icons/ri';
-import {FaRegHeart} from 'react-icons/fa6';
 import {Searchbar} from '@components/globals/searchbar.component';
 import {Container} from '@components/globals/container.component';
 import {NavComponent} from '@components/globals/cart/nav-component';
@@ -52,11 +51,11 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               {/*  mobile menu view */}
               <div className="lg:hidden">
                 <ul className="flex h-full items-center gap-5 ">
-                  <li>
-                    <Link href="/wishlist">
-                      <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
-                    </Link>
-                  </li>
+                  {/*<li>*/}
+                  {/*  <Link href="/wishlist">*/}
+                  {/*    <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
+                  {/*  </Link>*/}
+                  {/*</li>*/}
                   <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
                     <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
                     <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-secondary-500 text-white text-sm font-semibold">
@@ -85,11 +84,11 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           </Link>
           <div className={`hidden lg:block pl-6 items-center`}>
             <ul className="flex h-full items-center gap-3 xl:gap-8">
-              <li>
-                <Link href="/wishlist">
-                  <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
-                </Link>
-              </li>
+              {/*<li>*/}
+              {/*  <Link href="/wishlist">*/}
+              {/*    <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
+              {/*  </Link>*/}
+              {/*</li>*/}
               <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
                 <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
                 <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-secondary-500 text-white text-sm font-semibold">

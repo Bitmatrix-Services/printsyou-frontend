@@ -1,5 +1,4 @@
 'use client';
-import {FaRegHeart} from 'react-icons/fa6';
 import {IoCloseCircle} from 'react-icons/io5';
 import React, {FC} from 'react';
 import {CartItemUpdated} from '../../../store/slices/cart/cart';
@@ -31,7 +30,7 @@ export const CartItemComponent: FC<ICartItem> = ({cartItem, handleRemoveItem}) =
           </div>
 
           <div className="flex items-center gap-4">
-            <FaRegHeart className="h-5 w-5 text-primary-500 cursor-pointer hover:text-primary-700" />
+            {/*<FaRegHeart className="h-5 w-5 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
             <IoCloseCircle
               className="h-6 w-6 text-mute cursor-pointer hover:text-primary-700"
               onClick={() => handleRemoveItem(cartItem)}

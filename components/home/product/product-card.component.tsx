@@ -1,6 +1,5 @@
 'use client';
 import React, {FC, useState} from 'react';
-import {FaRegHeart} from 'react-icons/fa6';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
@@ -37,9 +36,9 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
             </div>
             <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-4">
               <div className="h-full flex flex-col">
-                <button type="button" className="ml-auto">
-                  <FaRegHeart className="h-7 w-7 text-primary-500" />
-                </button>
+                {/*<button type="button" className="ml-auto">*/}
+                {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
+                {/*</button>*/}
                 <div className="mt-auto mb-2 flex gap-3">
                   <button
                     type="button"

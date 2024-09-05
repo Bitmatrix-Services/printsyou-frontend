@@ -3,7 +3,6 @@ import React from 'react';
 import {DialogContent, Drawer} from '@mui/joy';
 import Image from 'next/image';
 import {CartSection} from '@components/globals/cart/cart-section.component';
-import {WishlistSection} from '@components/globals/cart/wishlist-section.component';
 import {selectSidebarCartOpen, setSidebarCartOpen} from '../../../store/slices/cart/cart.slice';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 
@@ -21,7 +20,7 @@ export const SidebarCart = () => {
           <div className="mt-8">
             <CartSection />
 
-            <WishlistSection />
+            {/*<WishlistSection />*/}
           </div>
         </DialogContent>
       </div>
