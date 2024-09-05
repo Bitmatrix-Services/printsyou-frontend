@@ -12,6 +12,7 @@ import {getAllCategories} from '@components/home/home-apis';
 import {ReduxProvider} from './redux-provider';
 import dynamic from 'next/dynamic';
 import {metaConstants} from '@utils/constants';
+import {NotificationComponent} from '@components/notification/notification.component';
 
 export const metadata: Metadata = {
   title: metaConstants.SITE_NAME,
@@ -37,6 +38,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             <link href="https://fonts.cdnfonts.com/css/graphik-trial" rel="stylesheet" />
           </head>
           <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
+            <NotificationComponent />
             <Header categories={categoriesData.payload} />
             {children}
             <Footer categories={categoriesData.payload.slice(0, 6)} />

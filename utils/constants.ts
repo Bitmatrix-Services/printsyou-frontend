@@ -1,4 +1,5 @@
 import {AdditionalFieldProductValues} from '@components/home/product/product.types';
+import {Sortable} from '../store/slices/notification/notification.slice';
 
 export const metaConstants = {
   SITE_NAME: 'Prints You',
@@ -222,4 +223,8 @@ export const extractColors = (additionalFields: AdditionalFieldProductValues[]):
       .map(color => color.replace(/\s+/g, '').trim());
   }
   return colorArray;
+};
+
+export const sortSortable = <T extends Sortable>(list: T[]): T[] => {
+  return list.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 };

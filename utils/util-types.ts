@@ -35,3 +35,18 @@ export interface PagedData<T> {
   pageable: Pageable;
   sort: Sort;
 }
+
+export interface Notification extends Sortable {
+  id: string;
+  backgroundColor?: string;
+  notificationMessage: string;
+  active: boolean;
+  createdAt: string;
+  createdBy: string;
+  modifiedAt: string;
+  modifiedBy: any;
+}
+
+export interface Sortable {
+  sequenceNumber: number;
+}

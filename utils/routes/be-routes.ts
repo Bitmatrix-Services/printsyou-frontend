@@ -31,3 +31,7 @@ export const ContactUsRoutes = Object.freeze({
 export const MoreInfoRoutes = Object.freeze({
   moreInfo: `/more-info`
 });
+
+export const NotificationRoutes = Object.freeze({
+  allNotifications: `/notification/all`
+});
