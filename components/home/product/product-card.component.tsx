@@ -18,7 +18,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
 
   return (
     <div className="group relative bg-white">
-      <div className="border border-mute4 hover:border-primary-500 hover:border-2 group rounded-2xl">
+      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl">
         <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
           <div className=" min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback

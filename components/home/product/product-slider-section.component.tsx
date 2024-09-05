@@ -46,6 +46,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
           }}
           ref={sliderRef}
           breakpoints={breakpoints}
+          className="p-1"
         >
           {productList?.map(product => (
             <SwiperSlide key={uuidv4()}>
