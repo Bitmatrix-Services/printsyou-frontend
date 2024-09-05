@@ -1,5 +1,5 @@
 import {AdditionalFieldProductValues} from '@components/home/product/product.types';
-import {Sortable} from '../store/slices/notification/notification.slice';
+import {Sortable} from '@utils/util-types';
 
 export const metaConstants = {
   SITE_NAME: 'Prints You',
