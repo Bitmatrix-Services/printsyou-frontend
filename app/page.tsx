@@ -1,9 +1,11 @@
 import HomeComponent from '@components/home/home-component';
-import {getAllCategories, getBannersList, getFaqsList, getNewAndExclusiveProducts} from '@components/home/home-apis';
+import {getAllCategories, getBannersList, getFaqsList, getProductsByTag} from '@components/home/home-apis';
 
 export default async function HomePage() {
   const categoriesData = await getAllCategories();
-  const newAndExclusiveData = await getNewAndExclusiveProducts();
+  const newAndExclusiveData = await getProductsByTag('newAndExclusive');
+  const underABuck = await getProductsByTag('featured');
+  const innovativeIdea = await getProductsByTag('mostPopular');
   const bannersList = await getBannersList();
   const faqsList = await getFaqsList();
 
@@ -11,9 +13,10 @@ export default async function HomePage() {
     <HomeComponent
       bannersList={bannersList.payload}
       categories={categoriesData.payload}
-      underABuckProducts={newAndExclusiveData.payload.content}
       newAndExclusive={newAndExclusiveData.payload.content}
-      allUniqueIdeas={newAndExclusiveData.payload.content}
+      underABuck={underABuck.payload.content}
+      innovativeIdea={innovativeIdea.payload.content}
+      deals={newAndExclusiveData.payload.content}
       faqsList={faqsList.payload}
     />
   );

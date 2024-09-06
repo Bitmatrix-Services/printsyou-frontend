@@ -13,18 +13,20 @@ import {Product} from '@components/home/product/product.types';
 
 interface IHome {
   categories: Category[];
-  underABuckProducts: Product[];
+  underABuck: Product[];
   newAndExclusive: Product[];
-  allUniqueIdeas: Product[];
+  innovativeIdea: Product[];
+  deals: Product[];
   bannersList: BannerList[];
   faqsList: Faq[];
 }
 
 const HomeComponent: FC<IHome> = ({
   categories,
-  underABuckProducts,
+  underABuck,
   newAndExclusive,
-  allUniqueIdeas,
+  innovativeIdea,
+  deals,
   bannersList,
   faqsList
 }) => {
@@ -50,7 +52,7 @@ const HomeComponent: FC<IHome> = ({
       <Container>
         <ProductSliderSection
           title="just a buck"
-          productList={underABuckProducts}
+          productList={underABuck}
           navNumber={3}
           showAllUrl={`/search-results?tag=featured&filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
         />
@@ -75,7 +77,7 @@ const HomeComponent: FC<IHome> = ({
       <Container>
         <ProductSliderSection
           title="innovative idea"
-          productList={allUniqueIdeas}
+          productList={innovativeIdea}
           navNumber={4}
           showAllUrl={`/search-results?tag=mostPopular&filter=priceHighToLow&page=1&size=24`}
         />
@@ -99,7 +101,7 @@ const HomeComponent: FC<IHome> = ({
       </div>
 
       <Container>
-        <ProductSliderSection title="deals" productList={allUniqueIdeas} navNumber={5} />
+        <ProductSliderSection title="deals" productList={deals} navNumber={5} />
       </Container>
 
       <div className="py-4 my-16 border-y border-primary-500">

@@ -29,10 +29,10 @@ export const getBannersList = async (): Promise<ApiResponse<BannerList[]>> => {
   }
 };
 
-export const getNewAndExclusiveProducts = async (): Promise<ApiResponse<PagedData<Product>>> => {
+export const getProductsByTag = async (tag: string): Promise<ApiResponse<PagedData<Product>>> => {
   try {
     const response = await axios.get<ApiResponse<PagedData<Product>>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${HomePageRoutes.NewAndExclusive}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/byTag?tag=${tag}`
     );
     return response.data;
   } catch (error) {
@@ -40,6 +40,7 @@ export const getNewAndExclusiveProducts = async (): Promise<ApiResponse<PagedDat
     throw error;
   }
 };
+
 export const getFaqsList = async (): Promise<ApiResponse<Faq[]>> => {
   try {
     const response = await axios.get<ApiResponse<Faq[]>>(
