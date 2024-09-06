@@ -110,7 +110,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
             <PaginationHeader
               pageNumber={(page && parseInt(page)) || 1}
               setPageNumber={(value: number) => handleQueryUpdate(value, 'page')}
-              pageSize={(size && parseInt(size)) || 24}
+              pageSize={(size && parseInt(size)) || 20}
               setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
               totalPages={totalPages}
               sort={filter || 'priceLowToHigh'}
@@ -124,7 +124,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 <CircularLoader />
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                 {products?.map(product => <SearchProductCard key={product.productId} product={product} />)}
               </div>
             )}
@@ -133,7 +133,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
             <PaginationHeader
               pageNumber={(page && parseInt(page)) || 1}
               setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
-              pageSize={(size && parseInt(size)) || 24}
+              pageSize={(size && parseInt(size)) || 20}
               setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
               totalPages={totalPages}
               sort={filter || 'priceLowToHigh'}

@@ -64,7 +64,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     value={pageSize}
                     onChange={e => setPageSize(parseInt(e.target.value))}
                   >
-                    {[24, 48].map(item => (
+                    {[20, 40].map(item => (
                       <option key={item} value={item}>
                         {item}
                       </option>

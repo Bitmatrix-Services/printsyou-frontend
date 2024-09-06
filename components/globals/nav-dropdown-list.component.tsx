@@ -164,8 +164,10 @@ const MenuItem = forwardRef(
               }
             }}
           >
-            <Link href={`/categories/${data.uniqueCategoryName}`} className="font-light capitalize"
-            onClick={() => setAnchorEl(null)}
+            <Link
+              href={`/categories/${data.uniqueCategoryName}`}
+              className="font-light capitalize"
+              onClick={() => setAnchorEl(null)}
             >
               {data.categoryName}
             </Link>

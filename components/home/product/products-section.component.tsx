@@ -22,7 +22,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
   const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
 
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(24);
+  const [pageSize, setPageSize] = useState<number>(20);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [sort, setSort] = useState('priceLowToHigh');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -77,7 +77,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
             <CircularLoader />
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
             {productsByCategory?.map(product => (
               <ProductCard key={product.id} showModal={showModal} product={product} />
             ))}
