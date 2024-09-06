@@ -17,7 +17,12 @@ import {CSPostHogProvider} from './provider';
 
 export const metadata: Metadata = {
   title: metaConstants.SITE_NAME,
-  description: metaConstants.DESCRIPTION
+  description: metaConstants.DESCRIPTION,
+  openGraph: {
+    images: '/favicon.ico',
+    title: metaConstants.SITE_NAME,
+    description: metaConstants.DESCRIPTION
+  }
 };
 
 const AddToCartModalClientSide = dynamic(

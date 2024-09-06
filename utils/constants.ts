@@ -213,8 +213,6 @@ export const extractColors = (additionalFields: AdditionalFieldProductValues[]):
     }
   }
 
-  console.log('colors', colors);
-
   if (colors) {
     colorArray = colors
       .replace(' or ', ', ')

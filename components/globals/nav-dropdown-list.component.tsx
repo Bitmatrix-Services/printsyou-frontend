@@ -164,7 +164,11 @@ const MenuItem = forwardRef(
               }
             }}
           >
-            <span className="font-light capitalize">{data.categoryName}</span>
+            <Link href={`/categories/${data.uniqueCategoryName}`} className="font-light capitalize"
+            onClick={() => setAnchorEl(null)}
+            >
+              {data.categoryName}
+            </Link>
           </ListItemButton>
           <Popper
             id={id}

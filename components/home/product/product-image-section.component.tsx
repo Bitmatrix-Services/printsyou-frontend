@@ -36,7 +36,12 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
                   fill
                   className="object-contain"
                   src={image.imageUrl}
-                  alt={image.altText ?? `${product.productName} ${index + 1}`}
+                  alt={
+                    image?.altText ??
+                    (product.productName.startsWith('.')
+                      ? `${product.productName.substring(1)} ${index + 1}`
+                      : `${product.productName} ${index + 1}`)
+                  }
                 />
               </div>
             </SwiperSlide>

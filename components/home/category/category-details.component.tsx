@@ -39,7 +39,6 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
           <div className="md:grid md:grid-cols-12 flex flex-col">
             <div className="md:col-span-9  py-9">
               <h2 className="mb-3 text-black font-semibold text-3xl capitalize">{category.categoryName}</h2>
-
               <span
                 className="text-base font-normal text-mute"
                 dangerouslySetInnerHTML={{
