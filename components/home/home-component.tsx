@@ -49,15 +49,6 @@ const HomeComponent: FC<IHome> = ({
       {/*  </div>*/}
       {/*</div>*/}
 
-      <Container>
-        <ProductSliderSection
-          title="just a buck"
-          productList={underABuck}
-          navNumber={3}
-          showAllUrl={`/search-results?tag=featured&filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
-        />
-      </Container>
-
       {/*<OffersSection*/}
       {/*  title="Gifts"*/}
       {/*  subtitle="Share the Love"*/}
@@ -99,6 +90,15 @@ const HomeComponent: FC<IHome> = ({
           />
         </div>
       </div>
+
+      <Container>
+        <ProductSliderSection
+          title="just a buck"
+          productList={underABuck}
+          navNumber={3}
+          showAllUrl={`/search-results?tag=featured&filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
+        />
+      </Container>
 
       {/*<Container>*/}
       {/*  <ProductSliderSection title="deals" productList={deals} navNumber={5} />*/}
