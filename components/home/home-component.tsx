@@ -100,9 +100,9 @@ const HomeComponent: FC<IHome> = ({
         </div>
       </div>
 
-      <Container>
-        <ProductSliderSection title="deals" productList={deals} navNumber={5} />
-      </Container>
+      {/*<Container>*/}
+      {/*  <ProductSliderSection title="deals" productList={deals} navNumber={5} />*/}
+      {/*</Container>*/}
 
       <div className="py-4 my-16 border-y border-primary-500">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
