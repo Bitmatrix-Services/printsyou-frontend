@@ -47,12 +47,16 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                       {byRowTypeObjects[row].map(cell => (
                         <td className="pricecell" key={cell.price}>
                           {cell.salePrice ? (
-                            <div className="flex justify-evenly">
-                              <span className="line-through">{cell.price < 0.01 ? '-' : `$${cell.price}`}</span>
-                              <span>{cell.salePrice < 0.01 ? '-' : `$${cell.salePrice}`}</span>
+                            <div className="flex justify-evenly flex-col">
+                              <span className="line-through font-bold text-xl">
+                                {cell.price < 0.01 ? '-' : `$${cell.price}`}
+                              </span>
+                              <span className="font-bold text-2xl">
+                                {cell.salePrice < 0.01 ? '-' : `$${cell.salePrice}`}
+                              </span>
                             </div>
                           ) : (
-                            <span>{cell.price < 0.01 ? '-' : `$${cell.price}`}</span>
+                            <span className="font-bold text-2xl">{cell.price < 0.01 ? '-' : `$${cell.price}`}</span>
                           )}
                         </td>
                       ))}

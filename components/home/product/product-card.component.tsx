@@ -42,7 +42,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
                 <div className="mt-auto mb-2 flex gap-3">
                   <button
                     type="button"
-                    className="w-full md:w-1/2 py-2 px-3 bg-primary-500 text-white font-semibold text-xs uppercase"
+                    className="w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"
                     onClick={e => {
                       dispatch(
                         setCartStateForModal({
@@ -60,7 +60,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
                   {showModal ? (
                     <button
                       type="button"
-                      className="hidden md:block w-1/2 py-2 px-3 bg-secondary-500 text-white font-semibold text-xs uppercase"
+                      className="hidden md:block w-1/2 py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
                       onClick={e => {
                         setQuickViewModal(true);
                         e.preventDefault();
