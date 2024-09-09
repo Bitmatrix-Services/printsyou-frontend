@@ -184,9 +184,11 @@ export const colorNameToHex = (colorName: string): string => {
   document.body.appendChild(tempElement);
 
   const computedColor = getComputedStyle(tempElement).color;
-
   document.body.removeChild(tempElement);
 
+  if (computedColor === 'rgb(0, 0, 0)' && colorName.toLowerCase() !== 'black') {
+    return '';
+  }
   const rgbToHex = (rgb: string): string => {
     const matches = rgb.match(/\d+/g);
     if (!matches) return '';

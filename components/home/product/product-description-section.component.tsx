@@ -17,8 +17,9 @@ interface ProductDescriptionComponent {
 export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({product, handleScroll}) => {
   const dispatch = useAppDispatch();
 
-  const colorsAvailable = useMemo(() => {
-    return extractColors(product.additionalFieldProductValues);
+  const colorsArray = useMemo(() => {
+    const availableColors = extractColors(product.additionalFieldProductValues);
+    return availableColors?.filter(color => colorNameToHex(color));
   }, [product.additionalFieldProductValues]);
 
   return (
@@ -68,15 +69,15 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
         See Details
       </h3>
 
-      {colorsAvailable.length > 0 ? (
+      {colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
           <div className="text-mute text-sm font-normal">Colors:</div>
           <div className="flex flex-wrap gap-3">
-            {colorsAvailable?.map(color => (
+            {colorsArray?.map(color => (
               <div
                 key={color}
                 style={{
-                  backgroundColor: colorNameToHex(color),
+                  backgroundColor: color,
                   width: 25,
                   height: 25,
                   borderRadius: '50%',
