@@ -8,7 +8,7 @@ interface IPricingTableProps {
 
 export const PricingTable: FC<IPricingTableProps> = ({product}) => {
   const countFrom: Set<PriceGrids['countFrom']> = new Set();
-  const byRowTypeObjects: Record<PriceGrids['priceType'], PriceGrids['price'][]> = {};
+  const byRowTypeObjects: Record<PriceGrids['priceType'], {price: number; salePrice: number}[]> = {};
 
   if (product) {
     product?.priceGrids?.length > 0 &&
@@ -19,7 +19,7 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
           if (!(gridItem.priceType in byRowTypeObjects)) {
             byRowTypeObjects[gridItem.priceType] = [];
           }
-          byRowTypeObjects[gridItem.priceType].push(gridItem.price);
+          byRowTypeObjects[gridItem.priceType].push({price: gridItem.price, salePrice: gridItem.salePrice});
         });
   }
 
@@ -45,8 +45,15 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                     <tr key={row} className="two">
                       {row && row != 'null' && <td className="pricecell font-bold text-left">{row}</td>}
                       {byRowTypeObjects[row].map(cell => (
-                        <td className="pricecell" key={cell}>
-                          {cell < 0.01 ? '-' : `$${cell}`}
+                        <td className="pricecell" key={cell.price}>
+                          {cell.salePrice ? (
+                            <div className="flex justify-evenly">
+                              <span className="line-through">{cell.price < 0.01 ? '-' : `$${cell.price}`}</span>
+                              <span>{cell.salePrice < 0.01 ? '-' : `$${cell.salePrice}`}</span>
+                            </div>
+                          ) : (
+                            <span>{cell.price < 0.01 ? '-' : `$${cell.price}`}</span>
+                          )}
                         </td>
                       ))}
                     </tr>

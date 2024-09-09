@@ -83,7 +83,7 @@
 
 .headcell,
 .pricecell {
-  @apply py-3 px-3 text-center text-sm font-light text-headingColor border border-[#eceef1];
+  @apply py-3 px-3 text-center text-base text-mute2 font-normal border border-[#eceef1] font-poppins;
 }
 
 .description-table th {
