@@ -83,12 +83,9 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
                   {product.additionalFieldProductValues?.map(item => (
                     <Fragment key={item.fieldName}>
                       <div>
-                        <ul>
-                          <li className="list-disc product-additional-info-heading">
-                            {' '}
-                            <strong>{item.fieldName}:</strong>
-                          </li>
-                        </ul>
+                        <div className=" product-additional-info-heading">
+                          <strong>{item.fieldName}:</strong>
+                        </div>
                         <ul className="">
                           <li className="text-mute2">
                             {item.fieldValue.includes('<table') ? (

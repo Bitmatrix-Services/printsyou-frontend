@@ -7,7 +7,7 @@ export const Benefits = () => {
     <section>
       <Container>
         <SectionHeading title="Benefits of Choosing PrintsYou" />
-        <div className="py-8 lg:py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 xl:gap-20">
+        <div className="py-6 lg:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 xl:gap-20">
           <div className="col sm:col-span-2 lg:col-span-1 text-center">
             <Image
               width={102}

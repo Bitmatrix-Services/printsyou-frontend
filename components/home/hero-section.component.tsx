@@ -12,7 +12,7 @@ interface IHeroSection {
 
 export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
   return (
-    <SwiperSlider dataList={bannersList}>
+    <SwiperSlider dataList={bannersList.sort((a, b) => a.sequenceNumber - b.sequenceNumber)}>
       {banner => (
         <div className="relative">
           <Image

@@ -290,11 +290,16 @@ export const AddToCartModal: FC = () => {
 
   return product.sku ? (
     <Modal open={cartState.open} onClose={handleCartModalClose}>
-      <ModalDialog>
+      <ModalDialog
+        sx={{
+          maxHeight: '80vh',
+          overflowY: 'auto'
+        }}
+      >
         <ModalClose />
 
         <form ref={ref} onSubmit={formik.handleSubmit}>
-          <div className="px-8 pb-4">
+          <div className="lg:px-8 pb-4">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-1">
               <figure>
                 <div className="max-w-fit">

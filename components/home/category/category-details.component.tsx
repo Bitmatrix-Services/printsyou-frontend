@@ -38,7 +38,11 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
         <Container>
           <div className="md:grid md:grid-cols-12 flex flex-col">
             <div className="md:col-span-9  py-9">
-              <h2 className="mb-3 text-black font-semibold text-3xl capitalize">{category.categoryName}</h2>
+              <h2 className="mb-3 text-black font-semibold text-3xl capitalize">
+                {category.prefix && <span>{category.prefix}</span>}
+                {category.categoryName}
+                {category.suffix && <span>{category.suffix}</span>}
+              </h2>
               <span
                 className="text-base font-normal text-mute"
                 dangerouslySetInnerHTML={{
@@ -116,7 +120,12 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
       {/*        </div>*/}
       {/*    </Container>*/}
       {/*</section>*/}
-      <ProductsSection categoryId={category.id} categoryName={category.categoryName} />
+      <ProductsSection
+        categoryId={category.id}
+        categoryName={category.categoryName}
+        prefix={category.prefix}
+        suffix={category.suffix}
+      />
     </div>
   );
 };

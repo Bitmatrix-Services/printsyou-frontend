@@ -121,6 +121,15 @@ const HomeComponent: FC<IHome> = ({
         </div>
       </div>
 
+      <Container>
+        <ProductSliderSection
+          title="deals"
+          productList={deals}
+          navNumber={4}
+          showAllUrl={`/search-results?tag=deals&filter=priceHighToLow&size=24&page=1`}
+        />
+      </Container>
+
       {/*<OffersSection*/}
       {/*    tagLine="Check Our Upcoming Product Inventory"*/}
       {/*    title="Upcoming Product"*/}

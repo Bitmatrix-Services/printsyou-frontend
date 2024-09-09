@@ -24,7 +24,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
   return (
     <div className="col flex flex-col">
       <div className="text-sm mb-2 flex items-center flex-wrap">
-        <span className="text-mute4 mr-2">Category:</span>
+        <span className="text-mute4 mr-1">Category:</span>
         {product.allCategoryNameAndIds.map((productCategory, index) => (
           <Fragment key={productCategory.id}>
             {index !== 0 ? (
@@ -37,6 +37,10 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
             </span>
           </Fragment>
         ))}
+      </div>
+      <div className="text-sm mb-2 flex items-center flex-wrap">
+        <span className="text-mute4 mr-1 capitalize">sku:</span>
+        <span className="font-semibold text-primary-500">{product.sku}</span>
       </div>
       <h2 className=" text-xl md:text-2xl font-bold capitalize">
         <span
@@ -112,6 +116,23 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
       <div className="text-mute border-t border mt-6" />
 
       <PricingTable product={product} />
+
+      {product?.additionalRows.length > 0 && (
+        <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
+          <ul className="text-xs text-mute3">
+            {[...product.additionalRows]
+              ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+              .map(row => (
+                <li key={row.id}>
+                  <span className="pt-[2px] block">
+                    <span className="text-mute3 font-base">{row.name}</span>
+                    <span className="text-primary-500 ml-2 font-semibold">${row.priceDiff.toFixed(2)}</span>
+                  </span>
+                </li>
+              ))}
+          </ul>
+        </div>
+      )}
 
       {/* Size Selection */}
       {/*<div className="flex flex-row gap-2 items-center capitalize">*/}

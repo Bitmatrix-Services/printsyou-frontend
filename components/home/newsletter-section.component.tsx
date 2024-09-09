@@ -18,6 +18,7 @@ export const Newsletter = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
   const {
     control,
+    reset,
     handleSubmit,
     formState: {errors, isLoading}
   } = useForm<NewsletterFormSchemaType>({
@@ -29,7 +30,10 @@ export const Newsletter = () => {
     mutationFn: (data: NewsletterFormSchemaType) => {
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${NewsletterRoutes.subscribe}`, data);
     },
-    onSuccess: () => setIsSuccessModalOpen(true),
+    onSuccess: () => {
+      setIsSuccessModalOpen(true);
+      reset();
+    },
     onError: error => {
       console.error('Subscription failed', error);
     }

@@ -4,6 +4,8 @@ export type Category = {
   categoryDescription: string;
   imageUrl: string;
   level: string;
+  prefix: string;
+  suffix: string;
   uniqueCategoryName: string;
   subCategories: Category[];
   metaTitle: string | null;
@@ -21,7 +23,7 @@ export type Crumbs = {
 export type BannerList = {
   id: string;
   bannerUrl: string;
-  sequenceNumber: string;
+  sequenceNumber: number;
   heading: string;
   tagLines: string;
   bannerCategory: {

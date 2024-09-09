@@ -4,8 +4,8 @@ import {Navigation, Thumbs} from 'swiper/modules';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {breakpoints} from '@utils/constants';
 import * as React from 'react';
-import {Product} from '@components/home/product/product.types';
 import {FC, useState} from 'react';
+import {Product} from '@components/home/product/product.types';
 
 interface IProductImageSection {
   product: Product;
@@ -24,6 +24,7 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
         className="mySwiper2 border border-gray-200 rounded"
       >
         {product?.productImages
+          .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
           ?.filter(item => !item.imageUrl.includes('/small/'))
           .map((image, index) => (
             <SwiperSlide key={index}>

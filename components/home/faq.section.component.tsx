@@ -7,6 +7,7 @@ import {IoIosAdd} from 'react-icons/io';
 import {Container} from '@components/globals/container.component';
 import {Faq} from '@components/home/home.types';
 import {FC} from 'react';
+import {SectionHeading} from '@components/home/section-heading.component';
 
 interface FaqSectionComponentProps {
   faqsList: Faq[];
@@ -15,7 +16,7 @@ export const FaqSectionComponent: FC<FaqSectionComponentProps> = ({faqsList}) =>
   return (
     <div className="py-2">
       <Container>
-        <h2 className="text-xl lg:text-2xl xl:text-3xl font-bold capitalize">frequently asked questions</h2>
+        <SectionHeading title="frequently asked questions" />
 
         <div className="flex justify-center items-center ">
           <AccordionGroup

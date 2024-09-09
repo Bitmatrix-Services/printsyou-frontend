@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {PriceGrids, Product} from '@components/home/product/product.types';
+import dayjs from 'dayjs';
 
 interface IPricingTableProps {
   product: Product;
@@ -51,6 +52,13 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                     </tr>
                   );
                 })}
+              {product.saleEndDate && Date.parse(product.saleEndDate) > new Date().getTime() && (
+                <tr className=" h-[3rem] px-3 text-center text-base border border-[#eceef1]">
+                  <td colSpan={product.priceGrids.length + 1}>
+                    Sale Ends: {dayjs(product.saleEndDate).format('MM/DD/YYYY')}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         )}

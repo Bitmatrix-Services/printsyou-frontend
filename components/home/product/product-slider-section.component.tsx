@@ -7,10 +7,11 @@ import {breakpoints} from '@utils/constants';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {v4 as uuidv4} from 'uuid';
+import {Product} from '@components/home/product/product.types';
 
 interface IProductSection {
   title: string;
-  productList: any[];
+  productList: Product[];
   navNumber: number;
   showAllUrl?: string;
 }
@@ -30,31 +31,35 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
 
   return (
     <>
-      <SectionHeading title={title} showAllUrl={showAllUrl} />
-      <div className="featured-swiper relative">
-        <button type="button" className={`swiper-button-prev swiper-nav-prev-${navNumber}`} onClick={handlePrev}>
-          <IoIosArrowBack />
-        </button>
-        <button type="button" className={`swiper-button-next swiper-nav-next-${navNumber}`} onClick={handleNext}>
-          <IoIosArrowForward />
-        </button>
-        <Swiper
-          modules={[Navigation]}
-          navigation={{
-            nextEl: `.swiper-nav-next-${navNumber}`,
-            prevEl: `.swiper-nav-prev-${navNumber}`
-          }}
-          ref={sliderRef}
-          breakpoints={breakpoints}
-          className="p-1"
-        >
-          {productList?.map(product => (
-            <SwiperSlide key={uuidv4()}>
-              <ProductCard product={product} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      {productList.length > 0 ? (
+        <>
+          <SectionHeading title={title} showAllUrl={showAllUrl} />
+          <div className="featured-swiper relative">
+            <button type="button" className={`swiper-button-prev swiper-nav-prev-${navNumber}`} onClick={handlePrev}>
+              <IoIosArrowBack />
+            </button>
+            <button type="button" className={`swiper-button-next swiper-nav-next-${navNumber}`} onClick={handleNext}>
+              <IoIosArrowForward />
+            </button>
+            <Swiper
+              modules={[Navigation]}
+              navigation={{
+                nextEl: `.swiper-nav-next-${navNumber}`,
+                prevEl: `.swiper-nav-prev-${navNumber}`
+              }}
+              ref={sliderRef}
+              breakpoints={breakpoints}
+              className="p-1"
+            >
+              {productList?.map(product => (
+                <SwiperSlide key={uuidv4()}>
+                  <ProductCard product={product} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

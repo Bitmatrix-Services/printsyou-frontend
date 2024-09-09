@@ -59,6 +59,7 @@ export interface Product {
   metaDescription: string | null;
   additionalRow: AdditionalRow[];
   priceGrids: PriceGrids[];
+  saleEndDate: string | null;
   additionalFieldProductValues: AdditionalFieldProductValues[];
   additionalRows: AdditionalRows[];
   crumbs: Crumbs[];

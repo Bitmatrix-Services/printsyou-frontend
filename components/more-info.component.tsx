@@ -85,13 +85,14 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                 </div>
                 {product?.additionalRows.length > 0 && (
                   <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
-                    <ul className="text-xs text-mute3 font-bold product-card__categories">
+                    <ul className="text-xs text-mute3">
                       {[...product.additionalRows]
                         ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                         .map(row => (
                           <li key={row.id}>
                             <span className="pt-[2px] block">
-                              Please add <span className="text-red-500">${row.priceDiff.toFixed(2)}</span> {row.name}
+                              <span className="text-mute3 font-base">{row.name}</span>
+                              <span className="text-primary-500 ml-2 font-semibold">${row.priceDiff.toFixed(2)}</span>
                             </span>
                           </li>
                         ))}

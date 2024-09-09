@@ -13,9 +13,11 @@ interface ProductsSectionProps {
   showModal?: boolean;
   categoryId: string;
   categoryName: string;
+  prefix?: string;
+  suffix?: string;
 }
 
-export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId, categoryName}) => {
+export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId, categoryName, prefix, suffix}) => {
   const searchParams = useSearchParams();
   const minPrice = searchParams.get('minPrice');
   const maxPrice = searchParams.get('maxPrice');
@@ -59,7 +61,13 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
   return (
     <Container>
       <section className="bg-white py-8 lg:py-20">
-        {categoryName ? <h2 className="text-xl mb-0 font-bold capitalize">{categoryName} Products</h2> : null}
+        {categoryName ? (
+          <h2 className="text-xl mb-0 font-bold capitalize">
+            {prefix && <span>{prefix}</span>}
+            {categoryName} Products
+            {suffix && <span>{suffix}</span>}
+          </h2>
+        ) : null}
         {productsByCategory?.length > 0 && !isPageLoading && (
           <PaginationHeader
             pageNumber={page || 1}

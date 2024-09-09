@@ -6,6 +6,7 @@ export default async function HomePage() {
   const newAndExclusiveData = await getProductsByTag('newAndExclusive');
   const underABuck = await getProductsByTag('featured');
   const innovativeIdea = await getProductsByTag('mostPopular');
+  const deals = await getProductsByTag('deals');
   const bannersList = await getBannersList();
   const faqsList = await getFaqsList();
 
@@ -16,7 +17,7 @@ export default async function HomePage() {
       newAndExclusive={newAndExclusiveData.payload.content}
       underABuck={underABuck.payload.content}
       innovativeIdea={innovativeIdea.payload.content}
-      deals={newAndExclusiveData.payload.content}
+      deals={deals.payload.content}
       faqsList={faqsList.payload}
     />
   );
