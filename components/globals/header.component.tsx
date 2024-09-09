@@ -23,10 +23,22 @@ interface IHeaderProps {
   categories: Category[];
 }
 
+const links = [
+  {name: 'how to order', url: '/how-to-order'},
+  {name: 'Contact Us', url: '/contact-us'},
+  {name: 'About Us', url: '/about-us'},
+  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
+];
+
 export const Header: FC<IHeaderProps> = ({categories}) => {
   const dispatch = useAppDispatch();
   const cartRoot = useAppSelector(selectCartRootState);
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
+
+  const handleMenuClose = () => {
+    setMobileMenu(false);
+  };
+
   return (
     <>
       <div className="bg-primary-500 bg-opacity-[12%]">
@@ -104,7 +116,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
 
       {/* mobile view  */}
       {mobileMenu ? (
-        <Drawer open={mobileMenu} onClose={() => setMobileMenu(false)} size="lg">
+        <Drawer open={mobileMenu} onClose={handleMenuClose} size="lg">
           <Sheet
             sx={{
               bgcolor: '#303546',
@@ -125,7 +137,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                     alt="logo-mobile"
                   />
                 </Link>
-                <button onClick={() => setMobileMenu(false)} type="button" className="text-white">
+                <button onClick={handleMenuClose} type="button" className="text-white">
                   <IoClose className="h-7 w-7 text-white" />
                 </button>
               </div>
@@ -133,12 +145,43 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             <fieldset className="border-b border-gray-600">
               <Accordion sx={{backgroundColor: '#303546'}} className=" px-2 border-0">
                 <AccordionSummary>
-                  <h6 className="text-white text-sm font-semibold uppercase">all categories</h6>
+                  <h6 className="text-white text-sm font-semibold uppercase focus:bg-[#303546]">all categories</h6>
                 </AccordionSummary>
-                <AccordionDetails>
-                  <h1>fffff</h1>
+                <AccordionDetails sx={{color: 'white'}}>
+                  <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4">
+                    {categories.slice(0, 6).map(category => (
+                      <li key={category.id}>
+                        <Link
+                          className="text-sm text-[#b5b8c1] hover:text-primary-500"
+                          href={`/categories/${category.uniqueCategoryName}`}
+                          onClick={handleMenuClose}
+                        >
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: category.categoryName
+                            }}
+                          ></span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </AccordionDetails>
               </Accordion>
+            </fieldset>
+            <fieldset className="p-6">
+              <ul className="grid grid-cols-2 gap-6">
+                {links.map((link, index) => (
+                  <li key={`link-${index}`}>
+                    <Link
+                      href={link.url}
+                      onClick={handleMenuClose}
+                      className={`nav-link text-white hover:text-primary-500`}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </fieldset>
             <fieldset className="p-6">
               <div className="flex gap-1">

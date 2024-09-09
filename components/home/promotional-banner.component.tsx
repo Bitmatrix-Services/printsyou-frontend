@@ -18,7 +18,7 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
   return (
     <div className="py-60 relative">
       <Image fill objectFit="cover" src={imageUrl} alt={'promotions'} />
-      <div className="absolute z-10 h-full w-full left-0 top-0 flex items-end justify-start pl-2 pb-2 ">
+      <div className="absolute z-10 h-full w-full left-0 top-0 flex items-end justify-start px-2 pb-2 ">
         <div className="bg-white py-5 px-5 rounded-2xl max-w-md text-start">
           <h2 className="text-primary-500 font-bold text-xl mb-1 capitalize">{title}</h2>
           <p className="text-black text-base">{description}</p>
