@@ -202,7 +202,7 @@ export const extractColors = (additionalFields: AdditionalFieldProductValues[]):
   let colorArray: string[] = [];
 
   let colors = additionalFields.find(
-    item => item.fieldName === 'COLORS AVAILABLE' || item.fieldName === 'COLOR AVAILABLE'
+    item => item.fieldName.toLowerCase() === 'colors available' || item.fieldName.toLowerCase() === 'color available'
   )?.fieldValue;
 
   // parsing if colors string is HTML element

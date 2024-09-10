@@ -46,7 +46,9 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                       {row && row != 'null' && <td className="pricecell font-bold text-left">{row}</td>}
                       {byRowTypeObjects[row].map(cell => (
                         <td className="pricecell" key={cell.price}>
-                          {cell.salePrice ? (
+                          {product.saleEndDate &&
+                          Date.parse(product.saleEndDate) > new Date().getTime() &&
+                          cell.salePrice ? (
                             <div className="flex justify-evenly flex-col">
                               <span className="line-through font-bold text-xl">
                                 {cell.price < 0.01 ? '-' : `$${cell.price}`}
@@ -66,7 +68,8 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
               {product.saleEndDate && Date.parse(product.saleEndDate) > new Date().getTime() && (
                 <tr className=" h-[3rem] px-3 text-center text-base border border-[#eceef1]">
                   <td colSpan={product.priceGrids.length + 1}>
-                    Sale Ends: {dayjs(product.saleEndDate).format('MM/DD/YYYY')}
+                    Sale Ends:{' '}
+                    <span className="text-lg font-semibold">{dayjs(product.saleEndDate).format('MM/DD/YYYY')}</span>
                   </td>
                 </tr>
               )}
