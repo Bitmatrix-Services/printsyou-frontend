@@ -53,7 +53,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
         </div>
       </div>
       <Container>
-        <header className="flex mt-4 items-center">
+        <header className="flex my-4 items-center">
           <div className={`flex flex-col lg:flex-row lg:items-center gap-3 flex-1`}>
             <div className="flex">
               <Link href="/" className="block relative mr-auto">
@@ -112,7 +112,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
         </header>
       </Container>
 
-      <NavComponent categories={categories} />
+      <NavComponent categories={categories.slice(0, 10)} />
 
       {/* mobile view  */}
       {mobileMenu ? (
