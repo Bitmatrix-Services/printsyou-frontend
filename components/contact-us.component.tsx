@@ -1,6 +1,5 @@
 'use client';
 import React, {useState} from 'react';
-import {IoCallOutline} from 'react-icons/io5';
 import {AiOutlineMail} from 'react-icons/ai';
 import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
