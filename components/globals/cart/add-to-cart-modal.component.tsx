@@ -35,6 +35,9 @@ export const cartModalSchema = object({
 
 export type LocalCartState = InferType<typeof cartModalSchema>;
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
+
 export const AddToCartModal: FC = () => {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLFormElement>(null);
@@ -168,7 +171,7 @@ export const AddToCartModal: FC = () => {
     };
 
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/s3/signedUrl`, {params: data});
+      const res = await axios.get(`${API_BASE_URL}/s3/signedUrl`, {params: data});
       await axios.put(res.data.payload.url, file, {
         onUploadProgress: event => {
           const percent = Math.floor((event.loaded / (event.total as number)) * 100);
@@ -262,11 +265,8 @@ export const AddToCartModal: FC = () => {
 
     if (cartState.cartMode === 'update' && cartState.selectedItem) {
       axios
-        .put(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`,
-          cartData
-        )
-        .then(() => axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartId}`))
+        .put(`${API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`, cartData)
+        .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
           handleCartModalClose();
@@ -276,8 +276,8 @@ export const AddToCartModal: FC = () => {
         });
     } else {
       axios
-        .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/add?cartId=${cartId}`, cartData)
-        .then(() => axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartId}`))
+        .post(`${API_BASE_URL}/cart/add?cartId=${cartId}`, cartData)
+        .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
           handleCartModalClose();
@@ -429,7 +429,7 @@ export const AddToCartModal: FC = () => {
                             className="object-cover w-full h-full rounded-sm"
                             width={100}
                             height={100}
-                            src={`${process.env.ASSETS_SERVER_URL}${file.fileKey}`}
+                            src={`${ASSETS_SERVER_URL}${file.fileKey}`}
                             alt={file.filename}
                           />
                         </div>

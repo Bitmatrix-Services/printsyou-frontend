@@ -433,15 +433,6 @@ export const CheckoutComponent: FC = () => {
                               <DatePicker
                                 value={value ? dayjs(value) : null}
                                 onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
-                                slotProps={{
-                                  textField: {
-                                    // Add padding to the input component
-                                    sx: {
-                                      paddingY: '10px',
-                                      paddingX: '10px'
-                                    }
-                                  }
-                                }}
                               />
                             </LocalizationProvider>
                           )}
