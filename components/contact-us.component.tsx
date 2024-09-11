@@ -57,16 +57,16 @@ export const ContactUsComponent = () => {
       <Container>
         <div className="flex md:flex-row lg:flex-row my-6 md:gap-8 lg:gap-x-32 flex-col-reverse gap-y-4">
           <div className="sm:w-full md:w-[18rem] lg:w-[18rem] h-[22rem] p-6 gap-8 border-2">
-            <div className="grid gap-y-4">
-              <div className="flex gap-2 items-center capitalize">
-                <div className="bg-contactButtonColor p-2 rounded-full">
-                  <IoCallOutline className="text-white" />
-                </div>
-                <h2 className="font-medium">Call to us</h2>
-              </div>
-              <p className="text-sm">We are available 24/7, 7 days a week.</p>
-              <h3 className="text-sm">Phone: +00000000000</h3>
-            </div>
+            {/*<div className="grid gap-y-4">*/}
+            {/*  <div className="flex gap-2 items-center capitalize">*/}
+            {/*    <div className="bg-contactButtonColor p-2 rounded-full">*/}
+            {/*      <IoCallOutline className="text-white" />*/}
+            {/*    </div>*/}
+            {/*    <h2 className="font-medium">Call to us</h2>*/}
+            {/*  </div>*/}
+            {/*  <p className="text-sm">We are available 24/7, 7 days a week.</p>*/}
+            {/*  <h3 className="text-sm">Phone: +00000000000</h3>*/}
+            {/*</div>*/}
 
             <div className="text-mute border-t border my-6" />
 
@@ -78,7 +78,7 @@ export const ContactUsComponent = () => {
                 <h2 className="font-medium">Write to us</h2>
               </div>
               <p className="text-sm">Fill out our form and we will contact you within 24 hours.</p>
-              <h3 className="text-sm">Emails: PrintsYou.com</h3>
+              <h3 className="text-sm">Emails: info@printsyou.com</h3>
             </div>
           </div>
 
