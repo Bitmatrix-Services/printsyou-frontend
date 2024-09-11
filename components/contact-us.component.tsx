@@ -16,13 +16,13 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 
 export const ContactUsComponent = () => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
 
   const {
     control,
     reset,
     handleSubmit,
-    formState: {errors, isLoading}
+    formState: {errors, isSubmitting}
   } = useForm<ContactUsFormSchemaType>({
     resolver: yupResolver(contactUsSchema),
     defaultValues: {
@@ -39,11 +39,11 @@ export const ContactUsComponent = () => {
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${ContactUsRoutes.contactUs}`, data);
     },
     onSuccess: () => {
-      setIsSuccessModalOpen(true);
+      setIsSuccessModalOpen('success');
       reset();
     },
-    onError: error => {
-      console.error('Subscription failed', error);
+    onError: () => {
+      setIsSuccessModalOpen('error');
     }
   });
 
@@ -96,35 +96,39 @@ export const ContactUsComponent = () => {
                   <FormControlInput
                     label="Your Name"
                     name="fullName"
-                    disabled={isLoading}
+                    isRequired={true}
+                    disabled={isSubmitting}
                     control={control}
                     errors={errors}
                   />
                   <FormControlInput
                     label="Email Address"
                     name="emailAddress"
-                    disabled={isLoading}
+                    isRequired={true}
+                    disabled={isSubmitting}
                     control={control}
                     errors={errors}
                   />
                   <FormControlInput
                     label="Phone Number"
                     name="phoneNumber"
-                    disabled={isLoading}
+                    disabled={isSubmitting}
                     control={control}
                     errors={errors}
                   />
                   <FormControlInput
                     label="Subject"
                     name="subject"
-                    disabled={isLoading}
+                    isRequired={true}
+                    disabled={isSubmitting}
                     control={control}
                     errors={errors}
                   />
                   <FormControlInput
                     label="Message"
                     name="message"
-                    disabled={isLoading}
+                    isRequired={true}
+                    disabled={isSubmitting}
                     control={control}
                     inputType="textarea"
                     errors={errors}
@@ -132,7 +136,7 @@ export const ContactUsComponent = () => {
 
                   <div className="my-6">
                     <button className="rounded-[4px] py-2 px-14 text-white font-normal bg-primary-500">
-                      {isLoading ? <CircularLoader /> : 'Submit'}
+                      {isSubmitting ? <CircularLoader /> : 'Submit'}
                     </button>
                   </div>
                 </div>
@@ -144,7 +148,7 @@ export const ContactUsComponent = () => {
       <SuccessModal
         open={isSuccessModalOpen}
         onClose={setIsSuccessModalOpen}
-        title="Thank You for Reaching Out!"
+        title={'Thank You for Reaching Out!'}
         note={`Thank you for subscribing to our newsletter! We're excited to have you with us.`}
       />
     </>
