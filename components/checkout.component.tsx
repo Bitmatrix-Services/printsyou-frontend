@@ -48,7 +48,7 @@ export const CheckoutComponent: FC = () => {
     control,
     reset,
     handleSubmit,
-    formState: {errors, isSubmitting, defaultValues},
+    formState: {errors, isSubmitting},
     watch
   } = useForm<OrderFormSchemaType>({
     resolver: yupResolver(orderCheckoutSchema),
@@ -113,7 +113,7 @@ export const CheckoutComponent: FC = () => {
       );
       reset();
     },
-    onError: error => {
+    onError: () => {
       setIsSuccessModalOpen('success');
       setApiError(true);
     }
