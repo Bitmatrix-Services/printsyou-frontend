@@ -77,7 +77,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
               onChange={onChange}
             />
           ) : null}
-          {isRequired && errors[name]?.message ? (
+          {errors[name]?.message ? (
             <div className="flex justify-start mt-2">
               <p className="text-red-600">{errors[name]?.message}</p>
             </div>

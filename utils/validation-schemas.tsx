@@ -5,11 +5,11 @@ const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const contactUsSchema = Yup.object({
-  fullName: Yup.string().required('Please enter your Name'),
-  emailAddress: Yup.string().email().required('Please enter your Email'),
+  fullName: Yup.string().required('Please enter your n'),
+  emailAddress: Yup.string().email().required('Please enter your email address'),
   phoneNumber: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  subject: Yup.string().required('Please enter Subject'),
-  message: Yup.string().required('Please enter Message')
+  subject: Yup.string().required('Please enter subject'),
+  message: Yup.string().required('Please enter message')
 });
 
 export const orderRequestSchema = Yup.object({
@@ -19,7 +19,7 @@ export const orderRequestSchema = Yup.object({
   billingState: Yup.string().required('Please enter state'),
   billingZipcode: Yup.number().typeError('Zip code must be a number').required('Please enter zip code'),
   billingPhoneNumber: Yup.string().required('Please enter phone number').matches(phoneRegExp, 'invalid format'),
-  billingEmailAddress: Yup.string().email().required('Please enter email'),
+  billingEmailAddress: Yup.string().email().required('Please enter email address'),
   diffBillingAddress: Yup.boolean(),
 
   shippingFullName: Yup.string().when('diffBillingAddress', {
@@ -54,7 +54,7 @@ export const orderRequestSchema = Yup.object({
 });
 
 export const newsletterSchema = Yup.object({
-  email: Yup.string().email().required('please enter your email')
+  email: Yup.string().email().required('please enter your email address')
 });
 
 export const orderCheckoutSchema = Yup.object().shape({
@@ -108,7 +108,7 @@ export const orderCheckoutSchema = Yup.object().shape({
   salesRep: Yup.string().optional(),
   additionalInformation: Yup.string().optional(),
   newsLetter: Yup.boolean().optional(),
-  emailAddress: Yup.string().email('Email is not valid').required('Please enter your email'),
+  emailAddress: Yup.string().email('Email is not valid').required('Please enter your email address'),
   termsAndConditions: Yup.boolean().oneOf([true], 'You must agree to the terms')
 });
 

@@ -15,12 +15,13 @@ import {NewsletterFormSchemaType, newsletterSchema} from '@utils/validation-sche
 import {CircularLoader} from '@components/globals/circular-loader.component';
 
 export const Newsletter = () => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+
   const {
     control,
     reset,
     handleSubmit,
-    formState: {errors, isLoading}
+    formState: {errors, isSubmitting}
   } = useForm<NewsletterFormSchemaType>({
     resolver: yupResolver(newsletterSchema),
     defaultValues: {email: ''}
@@ -31,11 +32,11 @@ export const Newsletter = () => {
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${NewsletterRoutes.subscribe}`, data);
     },
     onSuccess: () => {
-      setIsSuccessModalOpen(true);
+      setIsSuccessModalOpen('success');
       reset();
     },
     onError: error => {
-      console.error('Subscription failed', error);
+      setIsSuccessModalOpen('error');
     }
   });
 
@@ -76,7 +77,7 @@ export const Newsletter = () => {
                       }}
                       placeholder="Enter your email..."
                       variant="outlined"
-                      disabled={isLoading}
+                      disabled={isSubmitting}
                       value={value}
                       onChange={onChange}
                     />
@@ -95,10 +96,10 @@ export const Newsletter = () => {
                       bgcolor: '#DB0497D9'
                     }
                   }}
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                 >
-                  {isLoading ? <CircularLoader /> : 'Subscribe'}
-                  {!isLoading ? (
+                  {isSubmitting ? <CircularLoader /> : 'Subscribe'}
+                  {!isSubmitting ? (
                     <span className="ml-2">
                       <FaArrowRight />
                     </span>
