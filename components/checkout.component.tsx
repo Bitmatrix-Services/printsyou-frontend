@@ -27,6 +27,8 @@ import {useAppDispatch, useAppSelector} from '../store/hooks';
 import {selectCartRootState, setCartState, setCartStateForModal} from '../store/slices/cart/cart.slice';
 import {CartItemUpdated, CartRoot} from '../store/slices/cart/cart';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
+import {Breadcrumb} from '@components/globals/breadcrumb.component';
+import dayjs from 'dayjs';
 
 export const CheckoutComponent: FC = () => {
   const dispatch = useAppDispatch();
@@ -34,7 +36,7 @@ export const CheckoutComponent: FC = () => {
 
   const cartRoot = useAppSelector(selectCartRootState);
 
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
   const [apiError, setApiError] = useState<boolean>(false);
 
   const getInHandDateEst = () => {
@@ -46,7 +48,7 @@ export const CheckoutComponent: FC = () => {
     control,
     reset,
     handleSubmit,
-    formState: {errors, isLoading},
+    formState: {errors, isSubmitting, defaultValues},
     watch
   } = useForm<OrderFormSchemaType>({
     resolver: yupResolver(orderCheckoutSchema),
@@ -98,7 +100,7 @@ export const CheckoutComponent: FC = () => {
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/create-order`, orderData);
     },
     onSuccess: () => {
-      setIsSuccessModalOpen(true);
+      setIsSuccessModalOpen('success');
       let newRandId = uuidv4();
       localStorage.setItem('cartId', newRandId);
       dispatch(
@@ -112,7 +114,7 @@ export const CheckoutComponent: FC = () => {
       reset();
     },
     onError: error => {
-      console.log('error', error);
+      setIsSuccessModalOpen('success');
       setApiError(true);
     }
   });
@@ -164,10 +166,11 @@ export const CheckoutComponent: FC = () => {
 
   return (
     <>
+      <Breadcrumb list={[]} prefixTitle="Checkout" />
       <Container>
         <div className="pt-8">
           <button
-            className="block py-4 text-xs tracking-[3.5px] font-bold w-fit text-secondary-500"
+            className="block py-4 text-base tracking-[3.5px] font-bold w-fit text-secondary-500"
             onClick={handleBackButtonClick}
           >
             Back Continue Shopping
@@ -192,14 +195,14 @@ export const CheckoutComponent: FC = () => {
                         label="Your Name"
                         name="billingAddress.fullname"
                         isRequired={true}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         control={control}
                         errors={errors}
                       />
                       <FormControlInput
                         label="Company"
                         name="billingAddress.company"
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         control={control}
                       />
 
@@ -208,7 +211,7 @@ export const CheckoutComponent: FC = () => {
                           name="billingAddress.addressLineOne"
                           label="Address"
                           isRequired={true}
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           control={control}
                           errors={errors}
                         />
@@ -217,7 +220,7 @@ export const CheckoutComponent: FC = () => {
                         <FormControlInput
                           name="billingAddress.addressLineTwo"
                           label="Address 2"
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           control={control}
                         />
                       </div>
@@ -225,7 +228,7 @@ export const CheckoutComponent: FC = () => {
                         name="billingAddress.city"
                         label="City"
                         isRequired={true}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         control={control}
                         errors={errors}
                       />
@@ -234,7 +237,7 @@ export const CheckoutComponent: FC = () => {
                         name="billingAddress.state"
                         label="State"
                         isRequired={true}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         control={control}
                         errors={errors}
                       />
@@ -243,7 +246,7 @@ export const CheckoutComponent: FC = () => {
                         name="billingAddress.zipCode"
                         label="Zip Code"
                         isRequired={true}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         control={control}
                         errors={errors}
                       />
@@ -252,7 +255,7 @@ export const CheckoutComponent: FC = () => {
                         name="billingAddress.phoneNumber"
                         label="Phone"
                         isRequired={true}
-                        disabled={isLoading}
+                        disabled={isSubmitting}
                         control={control}
                         errors={errors}
                       />
@@ -261,7 +264,7 @@ export const CheckoutComponent: FC = () => {
                           name="emailAddress"
                           label="Email"
                           isRequired={true}
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           control={control}
                           errors={errors}
                         />
@@ -300,7 +303,7 @@ export const CheckoutComponent: FC = () => {
                               name={field.name}
                               label={field.label}
                               isRequired={field.required}
-                              disabled={isLoading}
+                              disabled={isSubmitting}
                               control={control}
                               errors={errors}
                             />
@@ -310,7 +313,7 @@ export const CheckoutComponent: FC = () => {
                               name={field.name}
                               label={field.label}
                               isRequired={true}
-                              disabled={isLoading}
+                              disabled={isSubmitting}
                               control={control}
                               errors={errors}
                             />
@@ -342,7 +345,7 @@ export const CheckoutComponent: FC = () => {
                       {(cartRoot?.cartItems ?? []).map(item => (
                         <div key={uuidv4()}>
                           <div className="flex items-center p-4">
-                            <div>
+                            <div className="relative">
                               <ImageWithFallback
                                 style={{
                                   position: 'relative',
@@ -422,14 +425,32 @@ export const CheckoutComponent: FC = () => {
                     <div className="p-4 border-2">
                       <FormHeading text="Additional Information" />
                       <div className="grid md:grid-cols-2 gap-6">
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker />
-                        </LocalizationProvider>
+                        <Controller
+                          name="inHandDate"
+                          control={control}
+                          render={({field: {onChange, value}}) => (
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                value={value ? dayjs(value) : null}
+                                onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
+                                slotProps={{
+                                  textField: {
+                                    // Add padding to the input component
+                                    sx: {
+                                      paddingY: '10px',
+                                      paddingX: '10px'
+                                    }
+                                  }
+                                }}
+                              />
+                            </LocalizationProvider>
+                          )}
+                        />
 
                         <FormControlInput
                           name="salesRep"
                           placeholder="Sales Rep Name"
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           control={control}
                         />
 
@@ -438,7 +459,7 @@ export const CheckoutComponent: FC = () => {
                             inputType="textarea"
                             name="additionalInformation"
                             placeholder="Additional Information"
-                            disabled={isLoading}
+                            disabled={isSubmitting}
                             control={control}
                           />
                         </div>
@@ -449,7 +470,7 @@ export const CheckoutComponent: FC = () => {
                           name="newsLetter"
                           label="Be up to date with our promotions, sign up for our email newsletters
                                                 now."
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           control={control}
                         />
                         <FormControlCheckbox
@@ -463,7 +484,7 @@ export const CheckoutComponent: FC = () => {
                             </Fragment>
                           }
                           isRequired={true}
-                          disabled={isLoading}
+                          disabled={isSubmitting}
                           control={control}
                           errors={errors}
                         />
@@ -476,7 +497,7 @@ export const CheckoutComponent: FC = () => {
                           type="submit"
                           className="w-full py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-secondary-500 text-white"
                         >
-                          {isLoading ? <CircularLoader /> : 'SUBMIT'}
+                          {isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                         </button>
                       </div>
                     </div>
@@ -495,7 +516,8 @@ export const CheckoutComponent: FC = () => {
           open={isSuccessModalOpen}
           onClose={() => {
             handleBackButtonClick();
-            setIsSuccessModalOpen(false);
+            setIsSuccessModalOpen('');
+            setApiError(false);
           }}
           title="Thank you for placing an order with PrintsYou!"
           note={` Your order will not be finalized until you have approved the
