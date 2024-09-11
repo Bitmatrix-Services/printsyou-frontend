@@ -1,11 +1,11 @@
-import {getSitemapStuff} from "../../utils/utils";
+import {getSitemapStuff} from '../../utils/utils';
 
 export async function GET() {
-    const sitemap = (await getSitemapStuff('category')).xml;
+  const sitemap = (await getSitemapStuff('category')).xml;
 
-    return new Response(sitemap, {
-        headers: {
-            'Content-Type': 'application/xml'
-        }
-    });
+  return new Response(sitemap, {
+    headers: {
+      'Content-Type': 'application/xml'
+    }
+  });
 }

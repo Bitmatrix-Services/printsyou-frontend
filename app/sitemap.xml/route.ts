@@ -1,16 +1,16 @@
-import {getSitemapStuff} from "@utils/utils";
+import {getSitemapStuff} from '@utils/utils';
 
 export async function GET() {
-    const feUrl = process.env.FE_URL;
+  const feUrl = process.env.FE_URL;
 
-    const productChunks: number = await getSitemapStuff('product-chunks');
+  const productChunks: number = await getSitemapStuff('product-chunks');
 
-    let map: string = '';
-    Array.from({length: productChunks}).forEach((_, index) => {
-        map += `<sitemap><loc>${feUrl}sitemap_products.xml/${index}</loc></sitemap>`;
-    });
+  let map: string = '';
+  Array.from({length: productChunks}).forEach((_, index) => {
+    map += `<sitemap><loc>${feUrl}sitemap_products.xml/${index}</loc></sitemap>`;
+  });
 
-    const sitemap = `<sitemapindex
+  const sitemap = `<sitemapindex
         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <sitemap>
             <loc>${feUrl}sitemap_blogs.xml</loc>
@@ -24,9 +24,9 @@ export async function GET() {
         </sitemap>
     </sitemapindex>`;
 
-    return new Response(sitemap, {
-        headers: {
-            "Content-Type": "application/xml",
-        },
-    });
+  return new Response(sitemap, {
+    headers: {
+      'Content-Type': 'application/xml'
+    }
+  });
 }

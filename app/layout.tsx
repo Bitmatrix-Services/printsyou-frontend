@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {CSPostHogProvider} from './provider';
+import Head from 'next/head';
 
 export const metadata: Metadata = {
   title: metaConstants.SITE_NAME,
@@ -41,9 +42,9 @@ export default async function RootLayout({children}: PropsWithChildren) {
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
-            <head>
+            <Head>
               <link href="https://fonts.cdnfonts.com/css/graphik-trial" rel="stylesheet" />
-            </head>
+            </Head>
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
               <NotificationComponent />
               <Header categories={categoriesData.payload} />
