@@ -35,7 +35,7 @@ export const Newsletter = () => {
       setIsSuccessModalOpen('success');
       reset();
     },
-    onError: error => {
+    onError: () => {
       setIsSuccessModalOpen('error');
     }
   });
