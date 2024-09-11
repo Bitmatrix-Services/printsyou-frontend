@@ -21,13 +21,13 @@ interface IMoreInfoComponent {
 }
 
 export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
 
   const {
     control,
     reset,
     handleSubmit,
-    formState: {errors, isLoading}
+    formState: {errors, isSubmitting}
   } = useForm<ContactUsFormSchemaType>({
     resolver: yupResolver(contactUsSchema),
     defaultValues: {
@@ -41,14 +41,17 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
 
   const {mutate} = useMutation({
     mutationFn: (data: ContactUsFormSchemaType) => {
-      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${MoreInfoRoutes.moreInfo}`, {...data});
+      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${MoreInfoRoutes.moreInfo}`, {
+        ...data,
+        productId: product?.id
+      });
     },
     onSuccess: () => {
-      setIsSuccessModalOpen(true);
+      setIsSuccessModalOpen('success');
       reset();
     },
-    onError: error => {
-      console.error('Subscription failed', error);
+    onError: () => {
+      setIsSuccessModalOpen('error');
     }
   });
 
@@ -108,28 +111,31 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                     <FormControlInput
                       label="Your Name"
                       name="fullName"
-                      disabled={isLoading}
+                      disabled={isSubmitting}
+                      isRequired={true}
                       control={control}
                       errors={errors}
                     />
                     <FormControlInput
                       label="Email Address"
                       name="emailAddress"
-                      disabled={isLoading}
+                      isRequired={true}
+                      disabled={isSubmitting}
                       control={control}
                       errors={errors}
                     />
                     <FormControlInput
                       label="Phone Number"
                       name="phoneNumber"
-                      disabled={isLoading}
+                      disabled={isSubmitting}
                       control={control}
                       errors={errors}
                     />
                     <FormControlInput
                       label="Subject"
                       name="subject"
-                      disabled={isLoading}
+                      isRequired={true}
+                      disabled={isSubmitting}
                       control={control}
                       errors={errors}
                     />
@@ -138,7 +144,8 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                       <FormControlInput
                         label="Message"
                         name="message"
-                        disabled={isLoading}
+                        isRequired={true}
+                        disabled={isSubmitting}
                         control={control}
                         inputType="textarea"
                         errors={errors}
@@ -146,7 +153,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                     </div>
                     <div>
                       <button className="rounded-[4px] py-2 px-14 text-white font-normal bg-primary-500">
-                        {isLoading ? <CircularLoader /> : 'Submit'}
+                        {isSubmitting ? <CircularLoader /> : 'Submit'}
                       </button>
                     </div>
                   </div>
@@ -160,7 +167,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
         open={isSuccessModalOpen}
         onClose={setIsSuccessModalOpen}
         title="Thank You for Reaching Out!"
-        note={`Thank you for subscribing to our newsletter! We're excited to have you with us.`}
+        note={`Thank you for taking interest! Our team will review your query and get back to you shortly.`}
       />
     </>
   );
