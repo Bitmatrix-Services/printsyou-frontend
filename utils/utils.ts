@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
   return input.map((value: string) => {
