@@ -19,53 +19,50 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product}) => {
       >
         <div className="group relative bg-white">
           <div className="border border-mute4 group rounded-2xl">
-            <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
-              <div className="min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative">
-                <ImageWithFallback
-                  className="object-contain rounded-2xl"
-                  fill
-                  src={product?.imageUrl}
-                  alt={product.productName}
-                />
-                <div className="absolute top-0 left-0 w-[4vw] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
-                  {/*<span className="flex items-center justify-center px-3 bg-primary-500 text-white font-medium capitalize">*/}
-                  {/*  new*/}
-                  {/*</span>*/}
-                  {product.salePrice ? (
-                    <span className="flex items-center justify-center px-3 bg-blue-500 text-white font-medium capitalize">
-                      sale
-                    </span>
-                  ) : null}
-                </div>
-                <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-4">
-                  <div className="h-full flex flex-col">
-                    {/*<button type="button" className="ml-auto">*/}
-                    {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
-                    {/*</button>*/}
-                    <div className="mt-auto mb-2 flex gap-3">
-                      <button
-                        type="button"
-                        className="w-full md:w-full py-2 px-3 bg-primary-500 text-white font-semibold text-xs uppercase"
-                        onClick={e => {
-                          dispatch(
-                            setCartStateForModal({
-                              selectedProduct: structuredClone(product),
-                              open: true,
-                              selectedItem: null,
-                              cartMode: 'new'
-                            })
-                          );
-                          e.preventDefault();
-                        }}
-                      >
-                        add to cart
-                      </button>
-                    </div>
+            <div className="min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative">
+              <ImageWithFallback
+                className="object-contain rounded-2xl"
+                fill
+                src={product?.imageUrl}
+                alt={product.productName}
+              />
+              <div className="absolute top-0 left-0 w-[4vw] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
+                {/*<span className="flex items-center justify-center px-3 bg-primary-500 text-white font-medium capitalize">*/}
+                {/*  new*/}
+                {/*</span>*/}
+                {product.salePrice ? (
+                  <span className="flex items-center justify-center px-3 bg-blue-500 text-white font-medium capitalize">
+                    sale
+                  </span>
+                ) : null}
+              </div>
+              <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-4">
+                <div className="h-full flex flex-col">
+                  {/*<button type="button" className="ml-auto">*/}
+                  {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
+                  {/*</button>*/}
+                  <div className="mt-auto mb-2 flex gap-3">
+                    <button
+                      type="button"
+                      className="w-full md:w-full py-2 px-3 bg-primary-500 text-white font-semibold text-xs uppercase"
+                      onClick={e => {
+                        dispatch(
+                          setCartStateForModal({
+                            selectedProduct: structuredClone(product),
+                            open: true,
+                            selectedItem: null,
+                            cartMode: 'new'
+                          })
+                        );
+                        e.preventDefault();
+                      }}
+                    >
+                      add to cart
+                    </button>
                   </div>
                 </div>
               </div>
-            </Link>
-
+            </div>
             <div className="py-2 px-4">
               {/*<div className="flex gap-3">*/}
               {/*  {['black', 'red', 'white', 'green'].map(color => (*/}
