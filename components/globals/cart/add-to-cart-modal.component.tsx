@@ -38,6 +38,12 @@ export type LocalCartState = InferType<typeof cartModalSchema>;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 
+const specsFields: Record<string, any> = {
+  'Imprint Colors': 'imprintColor',
+  'Item Color': 'itemColor',
+  Size: 'size'
+};
+
 export const AddToCartModal: FC = () => {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLFormElement>(null);
@@ -90,13 +96,19 @@ export const AddToCartModal: FC = () => {
     const selectedCartItem = cartState.selectedItem;
     // if cart item already exists => updating item
     if (selectedCartItem) {
+      const specsData = (selectedCartItem.spec ?? []).reduce(
+        (acc, current) => {
+          const key = specsFields[current.fieldName];
+          acc[key] = current.fieldValue;
+          return acc;
+        },
+        {} as Record<string, any>
+      );
       setArtWorkFiles(selectedCartItem.files);
       formik.setValues({
         itemQty: selectedCartItem.qtyRequested,
-        itemColor: selectedCartItem.spec[0]?.fieldValue,
-        imprintColor: selectedCartItem.spec[1]?.fieldValue ?? '',
-        size: selectedCartItem.spec[2]?.fieldValue ?? '',
-        selectedPriceType: selectedCartItem.priceType
+        selectedPriceType: selectedCartItem.priceType,
+        ...(specsData as any)
       });
     }
     if (cartState.selectedProduct) {

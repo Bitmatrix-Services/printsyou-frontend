@@ -6,6 +6,7 @@ import {useRouter} from 'next/navigation';
 import {CartItemUpdated, CartRoot} from '../../../store/slices/cart/cart';
 import axios, {AxiosResponse} from 'axios';
 import {v4 as uuidv4} from 'uuid';
+import Link from 'next/link';
 
 export const CartSection = () => {
   const router = useRouter();
@@ -79,9 +80,15 @@ export const CartSection = () => {
             <CartItemComponent key={uuidv4()} cartItem={item} handleRemoveItem={handleRemoveItem} />
           ))}
 
-          <div className="flex justify-evenly">
-            <h4 className="text-black text-base font-normal">Subtotal</h4>
-            <p className="text-lg font-semibold text-secondary-300"> ${cartRoot?.totalCartPrice || 0}</p>
+          <div>
+            <div className="flex justify-evenly">
+              <h4 className="text-black text-base font-normal">Subtotal</h4>
+              <p className="text-lg font-semibold text-secondary-300"> ${cartRoot?.totalCartPrice || 0}</p>
+            </div>
+            <div className="text-xs mt-3">
+              *Final total including shipping and any additional charges will be sent with the artwork proof after the
+              order is placed.
+            </div>
           </div>
 
           <div className="text-mute border-t border my-6" />
@@ -100,9 +107,13 @@ export const CartSection = () => {
             {`Looks like you haven't added any items to your cart yet.`}
           </h3>
           <div className="flex justify-center items-center mt-6">
-            <div className="text-center border border-primary-700 py-2 px-6 rounded-full cursor-pointer hover:bg-primary-500 hover:text-white text-primary-700 hover:border-primary-500">
+            <Link
+              href="/"
+              className="text-center border border-primary-700 py-2 px-6 rounded-full cursor-pointer hover:bg-primary-500 hover:text-white text-primary-700 hover:border-primary-500"
+              onClick={_ => dispatch(setSidebarCartOpen(false))}
+            >
               <div className="capitalize">shop now</div>
-            </div>
+            </Link>
           </div>
         </div>
       )}
