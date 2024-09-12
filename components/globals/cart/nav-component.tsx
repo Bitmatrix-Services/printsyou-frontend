@@ -67,23 +67,30 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                         <div className=" absolute z-50 inset-x-0 top-full text-sm text-gray-500 transition-opacity duration-500 ease-out">
                           {/* Presentational element used to render the bottom shadow */}
                           <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow" />
-                          <div className="relative bg-white">
+                          <div className="relative bg-white min-h-[22rem] max-h-[22rem]">
                             <div className="mx-auto max-w-7xl">
                               <div className="flex flex-row gap-x-4 justify-between py-11">
-                                <div className="w-[80%] flex flex-wrap gap-y-4 text-sm mb-auto">
+                                <div
+                                  className="w-[80%] text-sm max-h-[16rem]"
+                                  style={{columnCount: '3', columnFill: 'auto'}}
+                                >
                                   {category.subCategories
                                     .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
+                                    .slice(0, 36)
                                     .map(subCategory => (
-                                      <Link
-                                        href={`/categories/${subCategory.uniqueCategoryName}`}
-                                        key={subCategory.id}
-                                        onClick={() => setHoveredCategory(null)}
-                                        className="w-[25%] pr-6"
-                                      >
-                                        <span className="font-base text-mute2 capitalize hover:text-primary-500">
-                                          {subCategory.categoryName}
-                                        </span>
-                                      </Link>
+                                      <>
+                                        <Link
+                                          href={`/categories/${subCategory.uniqueCategoryName}`}
+                                          key={subCategory.id}
+                                          onClick={() => setHoveredCategory(null)}
+                                          className="w-full pr-6 mb-2"
+                                        >
+                                          <span className="font-base text-mute2 capitalize hover:text-primary-500">
+                                            {subCategory.categoryName}
+                                          </span>
+                                        </Link>
+                                        <br />
+                                      </>
                                     ))}
                                 </div>
                                 <div className="w-[20%]">
