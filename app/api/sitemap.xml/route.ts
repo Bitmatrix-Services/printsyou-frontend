@@ -6,20 +6,20 @@ export async function GET(request: Request) {
   const response: number = await getSitemapStuff('product-chunks');
   let map: string = '';
   Array.from({length: response}).forEach((_, index) => {
-    map += `<sitemap><loc>${feUrl}sitemap_products.xml?chunk=${index}</loc></sitemap>`;
+    map += `<sitemap><loc>${feUrl}sitemap_products/sitemap/${index}.xml</loc></sitemap>`;
   });
 
   const sitemap = `<sitemapindex
         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <sitemap>
-            <loc>${feUrl}sitemap_blogs.xml</loc>
+            <loc>${feUrl}sitemap_blogs/sitemap.xml</loc>
         </sitemap>
         <sitemap>
-            <loc>${feUrl}sitemap_categories.xml</loc>
+            <loc>${feUrl}sitemap_categories/sitemap.xml</loc>
         </sitemap>
         ${map}
         <sitemap>
-            <loc>${feUrl}sitemap_static.xml</loc>
+            <loc>${feUrl}sitemap_static/sitemap.xml</loc>
         </sitemap>
     </sitemapindex>`;
 
