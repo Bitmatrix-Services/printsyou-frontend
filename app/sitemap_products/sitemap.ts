@@ -5,6 +5,9 @@ const feUrl = process.env.FE_URL;
 
 interface ISitemapProduct {
   loc: string;
+  lastModified?: string;
+  image?: string | null;
+  caption?: string | null;
 }
 
 export async function generateSitemaps() {
@@ -21,8 +24,9 @@ export default async function sitemap({id}: {id: number}): Promise<MetadataRoute
 
   return products.map(product => ({
     url: `${feUrl}products/${product.loc}`,
-    lastModified: new Date(),
+    lastModified: product.lastModified,
     changeFrequency: 'monthly',
-    priority: 0.5
+    priority: 0.5,
+    images: product.image ? [`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.image}`] : []
   }));
 }
