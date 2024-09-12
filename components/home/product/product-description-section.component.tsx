@@ -7,7 +7,6 @@ import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {useAppDispatch} from '../../../store/hooks';
-import {colorNameToHex, extractColors} from '@utils/constants';
 
 interface ProductDescriptionComponent {
   product: Product;
@@ -18,8 +17,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
   const dispatch = useAppDispatch();
 
   const colorsArray = useMemo(() => {
-    const availableColors = extractColors(product.additionalFieldProductValues);
-    return availableColors?.filter(color => colorNameToHex(color));
+    return [];
   }, [product.additionalFieldProductValues]);
 
   return (

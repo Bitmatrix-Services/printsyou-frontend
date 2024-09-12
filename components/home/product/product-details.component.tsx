@@ -13,9 +13,7 @@ interface IProductDetails {
   relatedProducts?: Product[];
 }
 
-export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) => {
-  console.log('relatedProducts', relatedProducts);
-
+export const ProductDetails: FC<IProductDetails> = ({product}) => {
   if (!product) notFound();
 
   const productDescriptionRef = useRef<HTMLDivElement>(null);
@@ -24,6 +22,7 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
       productDescriptionRef.current.scrollIntoView({behavior: 'smooth'});
     }
   };
+
   return (
     <>
       <Head>

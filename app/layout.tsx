@@ -17,10 +17,11 @@ import {CSPostHogProvider} from './provider';
 import Head from 'next/head';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.FE_URL as string),
   title: metaConstants.SITE_NAME,
   description: metaConstants.DESCRIPTION,
   openGraph: {
-    images: '/favicon.png',
+    images: '/assets/logo-full.png',
     title: metaConstants.SITE_NAME,
     description: metaConstants.DESCRIPTION
   }

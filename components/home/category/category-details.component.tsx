@@ -20,16 +20,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
     setIsExpanded(prevState => !prevState);
   };
 
-  const truncateHtmlContent = (html: string, length: number) => {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    const text = tempDiv.textContent || '';
-    return text.length > length ? text.substring(0, length) + '...' : text;
-  };
-
   if (!category) notFound();
-
-  const truncatedContent = truncateHtmlContent(category.categoryDescription, MAX_LENGTH);
 
   return (
     <div>
@@ -46,7 +37,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
               <span
                 className="text-base font-normal text-mute"
                 dangerouslySetInnerHTML={{
-                  __html: isExpanded ? category.categoryDescription : truncatedContent
+                  __html: category.categoryDescription
                 }}
               ></span>
               <span onClick={handleToggle} className="text-blue-500 text-sm font-medium cursor-pointer">
