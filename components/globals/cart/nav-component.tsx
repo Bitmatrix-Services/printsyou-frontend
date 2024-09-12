@@ -83,7 +83,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                           href={`/categories/${subCategory.uniqueCategoryName}`}
                                           key={subCategory.id}
                                           onClick={() => setHoveredCategory(null)}
-                                          className="w-full pr-6 mb-2"
+                                          className="pr-6"
                                         >
                                           <span className="font-base text-mute2 capitalize hover:text-primary-500">
                                             {subCategory.categoryName}

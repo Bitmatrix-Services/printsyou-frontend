@@ -26,12 +26,17 @@
   display: none;
 }
 
-@media screen and (min-width: 800px) {
-  .swiper-button-prev,
-  .swiper-button-next {
+.swiper-button-prev,
+.swiper-button-next {
     transform: translateY(-60%);
-  }
 }
+
+// @media screen and (min-width: 800px) {
+//   .swiper-button-prev,
+//   .swiper-button-next {
+//     transform: translateY(-60%);
+//   }
+// }
 
 /* @media screen and (min-width: 1200px) {
   .swiper-slide {
