@@ -6,6 +6,7 @@ import {useRouter} from 'next/navigation';
 import {CartItemUpdated, CartRoot} from '../../../store/slices/cart/cart';
 import axios, {AxiosResponse} from 'axios';
 import {v4 as uuidv4} from 'uuid';
+import Link from 'next/link';
 
 export const CartSection = () => {
   const router = useRouter();
@@ -100,9 +101,13 @@ export const CartSection = () => {
             {`Looks like you haven't added any items to your cart yet.`}
           </h3>
           <div className="flex justify-center items-center mt-6">
-            <div className="text-center border border-primary-700 py-2 px-6 rounded-full cursor-pointer hover:bg-primary-500 hover:text-white text-primary-700 hover:border-primary-500">
+            <Link
+              href="/"
+              className="text-center border border-primary-700 py-2 px-6 rounded-full cursor-pointer hover:bg-primary-500 hover:text-white text-primary-700 hover:border-primary-500"
+              onClick={(_) => dispatch(setSidebarCartOpen(false))}
+            >
               <div className="capitalize">shop now</div>
-            </div>
+            </Link>
           </div>
         </div>
       )}
