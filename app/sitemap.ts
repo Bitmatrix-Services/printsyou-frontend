@@ -10,7 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap | any> {
 
   const productSitemap = Array.from({length: productChunks}).map((_, index) => {
     return {
-      url: `${feUrl}sitemap_products/sitemap.xml/${index}`,
+      url: `${feUrl}sitemap_products/sitemap/${index}.xml`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5
