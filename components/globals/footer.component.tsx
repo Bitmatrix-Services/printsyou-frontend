@@ -61,7 +61,7 @@ export const Footer: FC<IFooter> = ({categories}) => {
               list={categories?.map(category => {
                 return {
                   name: category.categoryName,
-                  url: category.uniqueCategoryName
+                  url: `/categories/${category.uniqueCategoryName}`
                 };
               })}
             />
