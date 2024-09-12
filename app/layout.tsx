@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: metaConstants.SITE_NAME,
   description: metaConstants.DESCRIPTION,
   openGraph: {
-    images: '/favicon.ico',
+    images: '/favicon.png',
     title: metaConstants.SITE_NAME,
     description: metaConstants.DESCRIPTION
   }
