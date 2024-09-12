@@ -1,3 +1,4 @@
+'use client';
 import {getSitemapStuff} from '../../utils/utils';
 
 export async function GET() {
