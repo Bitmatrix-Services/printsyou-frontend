@@ -20,7 +20,7 @@ export default async function sitemap({id}: {id: number}): Promise<MetadataRoute
   const products: ISitemapProduct[] = await getSitemapStuff('product', {chunk: id.toString()});
 
   return products.map(product => ({
-    url: `${feUrl}product/${product.loc}`,
+    url: `${feUrl}products/${product.loc}`,
     lastModified: new Date(),
     changeFrequency: 'monthly',
     priority: 0.5
