@@ -49,7 +49,6 @@ export const CartItemComponent: FC<ICartItem> = ({cartItem, handleRemoveItem}) =
             Total Price:{' '}
             <b className="text-black ml-1">
               {' '}
-              ${cartItem.priceQuotedPerItem} X {cartItem.qtyRequested} :{' '}
               <span className="font-bold">${cartItem.itemTotalPrice}</span>
             </b>
           </p>
