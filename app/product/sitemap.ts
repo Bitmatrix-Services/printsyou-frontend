@@ -3,9 +3,12 @@ import {MetadataRoute} from 'next';
 
 const feUrl = process.env.FE_URL;
 
+interface ISitemapProduct {
+  loc: string;
+}
+
 export async function generateSitemaps() {
   const productChunks: number = await getSitemapStuff('product-chunks');
-  console.log('productChunks', productChunks);
   return Array.from({length: productChunks}).map((_, index) => {
     return {
       id: index
@@ -14,11 +17,11 @@ export async function generateSitemaps() {
 }
 
 export default async function sitemap({id}: {id: number}): Promise<MetadataRoute.Sitemap> {
-  const products = await getSitemapStuff('product', {chunk: id.toString()});
+  const products: ISitemapProduct[] = await getSitemapStuff('product', {chunk: id.toString()});
 
   return products.map(product => ({
-    url: `${feUrl}/product/${product.uniqueProductName}`,
-    lastModified: product.date,
+    url: `${feUrl}product/${product.loc}`,
+    lastModified: new Date(),
     changeFrequency: 'monthly',
     priority: 0.5
   }));
