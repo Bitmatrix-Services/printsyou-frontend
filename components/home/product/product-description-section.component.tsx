@@ -24,18 +24,22 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
     <div className="col flex flex-col">
       <div className="text-sm mb-2 flex items-center flex-wrap">
         <span className="text-mute4 mr-1">Category:</span>
-        {product.allCategoryNameAndIds.map((productCategory, index) => (
-          <Fragment key={productCategory.id}>
-            {index !== 0 ? (
-              <span className="mx-2">
-                <MdArrowForward className=" h-5 w-6" />
-              </span>
-            ) : null}
-            <span key={productCategory.id} className="font-semibold capitalize ">
-              {productCategory.name}
-            </span>
-          </Fragment>
-        ))}
+        {[...product.crumbs]
+          .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+          .map((productCategory, index) => (
+            <Fragment key={productCategory.id}>
+              {index !== 0 && index < product.crumbs.length - 1 ? (
+                <span className="mx-2">
+                  <MdArrowForward className=" h-5 w-6" />
+                </span>
+              ) : null}
+              {index < product.crumbs.length - 1 ? (
+                <span key={productCategory.id} className="font-semibold capitalize ">
+                  {productCategory.name}
+                </span>
+              ) : null}
+            </Fragment>
+          ))}
       </div>
       <div className="text-sm mb-2 flex items-center flex-wrap">
         <span className="text-mute4 mr-1 capitalize">sku:</span>
