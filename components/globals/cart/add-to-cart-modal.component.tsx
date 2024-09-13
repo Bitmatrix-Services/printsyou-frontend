@@ -3,37 +3,17 @@ import React, {ChangeEvent, FC, useEffect, useMemo, useRef, useState} from 'reac
 import {Modal, ModalDialog} from '@mui/joy';
 import Image from 'next/image';
 import {useFormik} from 'formik';
-import {InferType, number, object, ref, string} from 'yup';
 import axios, {AxiosResponse} from 'axios';
 import {CartRoot, File as CartItemFile} from '../../../store/slices/cart/cart';
 import {v4 as uuidv4} from 'uuid';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {selectCartState, setCartState, setCartStateForModal} from '../../../store/slices/cart/cart.slice';
-import {
-  CustomProduct,
-  FormDescription,
-  FormHeading,
-  UploadedFileType
-} from '@components/globals/cart/update-cart-modal.component';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
 import {PriceGrids} from '@components/home/product/product.types';
 import ModalClose from '@mui/joy/ModalClose';
 import {IoBagCheckOutline, IoClose} from 'react-icons/io5';
 import {MdOutlineFileDownload} from 'react-icons/md';
-
-export const cartModalSchema = object({
-  imprintColor: string().notRequired(),
-  itemColor: string().required('Item Color is required'),
-  size: string().notRequired(),
-  itemQty: number()
-    .transform((_, value) => (value === '' ? 0 : +value))
-    .required()
-    .positive()
-    .min(ref('minQty'), 'Specified Qty must be greater than Min Qty'),
-  selectedPriceType: string().notRequired()
-});
-
-export type LocalCartState = InferType<typeof cartModalSchema>;
+import {cartModalSchema, CustomProduct, LocalCartState, UploadedFileType} from '@components/globals/cart/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -496,4 +476,24 @@ export const AddToCartModal: FC = () => {
       </ModalDialog>
     </Modal>
   ) : null;
+};
+
+interface IFormHeadingProps {
+  text: string;
+}
+
+export const FormHeading: FC<IFormHeadingProps> = ({text}) => {
+  return <h4 className=" my-3 text-lg font-semibold capitalize inline-block ">{text}</h4>;
+};
+
+interface IFormDescriptionProps {
+  textArray: string[];
+}
+
+export const FormDescription: FC<IFormDescriptionProps> = ({textArray}) => {
+  return textArray?.map(item => (
+    <p key={item} className="text-mute text-sm mb-2">
+      {item}
+    </p>
+  ));
 };
