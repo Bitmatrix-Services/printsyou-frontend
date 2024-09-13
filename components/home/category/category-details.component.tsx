@@ -27,8 +27,8 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
       <Breadcrumb prefixTitle="Promotional Category" list={category.crumbs} />
       <section className="bg-secondary-300 bg-opacity-[12%]">
         <Container>
-          <div className="md:grid md:grid-cols-12 flex flex-col">
-            <div className="md:col-span-9  py-9">
+          <div className="md:grid md:grid-cols-12 flex flex-col gap-4 lg:gap-6">
+            <div className="md:col-span-9 py-9">
               <h1 className="mb-3 text-black font-semibold text-3xl capitalize">
                 {category.prefix && <span>{category.prefix}</span>}
                 {category.categoryName}
@@ -45,12 +45,12 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
               </span>
             </div>
             {category?.imageUrl && (
-              <div className="min-h-50 h-50 max-h-50  relative md:col-span-3 ">
+              <div className="h-[12rem] md:h-[20rem] lg:h-[20rem] xl:h-[35rem] relative md:col-span-3 ">
                 <ImageWithFallback
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={category?.imageUrl}
                   alt={category.uniqueCategoryName}
-                  className="object-contain py-3"
+                  className="object-contain"
                   fill
                 />
               </div>

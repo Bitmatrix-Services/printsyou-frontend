@@ -45,7 +45,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
             <div className="flex pt-6">
               {/* Flyout menus */}
               <div className="hidden lg:block w-full">
-                <div className="flex h-full justify-between">
+                <div className="flex h-full">
                   {displayedCategories?.map(category => (
                     <div
                       key={uuidv4()}
@@ -69,29 +69,25 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                           {/* Presentational element used to render the bottom shadow */}
                           <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow" />
                           <div className="relative bg-white min-h-[22rem] max-h-[22rem]">
-                            <div className="mx-auto max-w-7xl">
-                              <div className="flex flex-row gap-x-4 justify-between py-11">
-                                <div
-                                  className="w-[80%] text-sm max-h-[16rem]"
-                                  style={{columnCount: '3', columnFill: 'auto'}}
-                                >
+                            <Container>
+                              <div className="flex flex-row gap-x-4 ml-3 justify-between py-11">
+                                <div className="text-sm max-h-[16rem]" style={{columnCount: '3', columnFill: 'auto'}}>
                                   {category.subCategories
                                     .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
                                     .slice(0, 36)
                                     .map(subCategory => (
-                                      <>
+                                      <div className="py-1">
                                         <Link
                                           href={`/categories/${subCategory.uniqueCategoryName}`}
                                           key={uuidv4()}
                                           onClick={() => setHoveredCategory(null)}
-                                          className="pr-6"
                                         >
                                           <span className="font-base text-mute2 capitalize hover:text-primary-500">
                                             {subCategory.categoryName}
                                           </span>
                                         </Link>
                                         <br />
-                                      </>
+                                      </div>
                                     ))}
                                 </div>
                                 <div className="w-[20%]">
@@ -106,7 +102,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            </Container>
                           </div>
                         </div>
                       )}
