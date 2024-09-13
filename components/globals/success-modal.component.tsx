@@ -33,10 +33,10 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note}) =>
               <BiSolidErrorCircle className="w-10 h-10 text-red-600" />
             ) : null}
           </div>
-          <h2 className="text-lg font-semibold">In the meantime, you can</h2>
-          <p className="text-sm text-center font-light">
-            Check our <u>Help Center</u> for FAQs and tutorials
-          </p>
+          {/*<h2 className="text-lg font-semibold">In the meantime, you can</h2>*/}
+          {/*<p className="text-sm text-center font-light">*/}
+          {/*  Check our <u>Help Center</u> for FAQs and tutorials*/}
+          {/*</p>*/}
           <button
             className="px-8 py-2 text-sm bg-primary-500 text-white font-bold rounded-full"
             onClick={handleModalClose}
