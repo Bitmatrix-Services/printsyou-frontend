@@ -24,7 +24,7 @@ export default async function sitemap({id}: {id: number}): Promise<MetadataRoute
 
   return products.map(product => ({
     url: `${feUrl}products/${product.loc}`,
-    lastModified: product.lastModified,
+    lastModified: product.lastModified ? new Date(product.lastModified).toISOString() : undefined,
     changeFrequency: 'monthly',
     priority: 0.5,
     images: product.image ? [`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.image}`] : []
