@@ -164,6 +164,10 @@ export const CheckoutComponent: FC = () => {
     } catch (e) {}
   };
 
+  if (cartRoot && cartRoot?.cartItems?.length <= 0) {
+    router.push('/');
+  }
+
   return (
     <>
       <Breadcrumb list={[]} prefixTitle="Checkout" />
@@ -380,7 +384,9 @@ export const CheckoutComponent: FC = () => {
                                     <IoClose className="w-4 h-4" />
                                     <span>${item.priceQuotedPerItem}</span>
                                   </div>
-                                  <div className="font-semibold text-sm lg:text-base">${item.itemTotalPrice}</div>
+                                  <div className="font-semibold text-sm lg:text-base">
+                                    ${item.itemTotalPrice.toFixed(2)}
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -412,7 +418,7 @@ export const CheckoutComponent: FC = () => {
                         <hr className="my-4 border border-black-100" />
                         <div className="flex justify-evenly items-center">
                           <h2 className="text-lg">Total Price:</h2>
-                          <h2 className="text-lg font-bold">${cartRoot?.totalCartPrice}</h2>
+                          <h2 className="text-lg font-bold">${cartRoot?.totalCartPrice.toFixed(2)}</h2>
                         </div>
                         <div className="text-xs mt-3">
                           *Final total including shipping and any additional charges will be sent with the artwork proof
