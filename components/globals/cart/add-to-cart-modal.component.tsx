@@ -13,7 +13,7 @@ import {PriceGrids} from '@components/home/product/product.types';
 import ModalClose from '@mui/joy/ModalClose';
 import {IoBagCheckOutline, IoClose} from 'react-icons/io5';
 import {MdOutlineFileDownload} from 'react-icons/md';
-import {cartModalSchema, CustomProduct, LocalCartState, UploadedFileType} from '@components/globals/cart/types';
+import {cartModalSchema, CustomProduct, LocalCartState, UploadedFileType} from '@components/globals/cart/cart-types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
