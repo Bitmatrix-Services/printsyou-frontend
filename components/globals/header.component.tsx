@@ -28,7 +28,8 @@ const links = [
   {name: 'how to order', url: '/how-to-order'},
   {name: 'Contact Us', url: '/contact-us'},
   {name: 'About Us', url: '/about-us'},
-  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
+  {name: 'Terms & Conditions', url: '/terms-and-conditions'},
+  {name: 'blogs', url: '/blog'}
 ];
 
 export const Header: FC<IHeaderProps> = ({categories}) => {
@@ -176,7 +177,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                     <Link
                       href={link.url}
                       onClick={handleMenuClose}
-                      className={`nav-link text-white hover:text-primary-500`}
+                      className={`nav-link text-white hover:text-primary-500 capitalize`}
                     >
                       {link.name}
                     </Link>

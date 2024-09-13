@@ -13,7 +13,10 @@ type listType = {
   url: string;
 };
 
-const helpList: listType[] = [{name: 'how to order', url: '/how-to-order'}];
+const helpList: listType[] = [
+  {name: 'how to order', url: '/how-to-order'},
+  {name: 'blogs', url: '/blog'}
+];
 const companyList: listType[] = [
   {name: 'Contact Us', url: '/contact-us'},
   {name: 'About Us', url: '/about-us'},
