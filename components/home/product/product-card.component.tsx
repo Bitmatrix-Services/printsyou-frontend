@@ -22,7 +22,8 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
         <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
           <div className=" min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback
-              className="object-contain rounded-2xl"
+              className="object-contain"
+              skeletonRounded={true}
               fill
               src={product?.productImages?.[0]?.imageUrl}
               alt={product.productName}
@@ -34,7 +35,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
                 </span>
               ) : null}
             </div>
-            <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-4">
+            <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-3">
               <div className="h-full flex flex-col">
                 {/*<button type="button" className="ml-auto">*/}
                 {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}

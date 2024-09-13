@@ -13,15 +13,13 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product}) => {
   const dispatch = useAppDispatch();
   return (
     <>
-      <Link
-        href={`/products/${product.uniqueProductName}`}
-        className="tp-product group relative bg-white cursor-pointer"
-      >
+      <Link href={`/products/${product.uniqueProductName}`} className="group relative bg-white cursor-pointer">
         <div className="group relative bg-white">
           <div className="border border-mute4 group rounded-2xl">
             <div className="min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative">
               <ImageWithFallback
-                className="object-contain rounded-2xl"
+                className="object-contain"
+                skeletonRounded={true}
                 fill
                 src={product?.imageUrl}
                 alt={product.productName}
