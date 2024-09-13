@@ -5,7 +5,6 @@ import {useRouter} from 'next/navigation';
 import axios, {AxiosResponse} from 'axios';
 import {v4 as uuidv4} from 'uuid';
 import {orderCheckoutSchema, OrderFormSchemaType} from '@utils/validation-schemas';
-import {FormHeading} from '@components/globals/cart/update-cart-modal.component';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {shippingFormFields} from '@utils/constants';
 import {RadioGroup} from '@mui/joy';
@@ -29,6 +28,7 @@ import {CartItemUpdated, CartRoot} from '../store/slices/cart/cart';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import dayjs from 'dayjs';
+import {FormHeading} from '@components/globals/cart/add-to-cart-modal.component';
 
 export const CheckoutComponent: FC = () => {
   const dispatch = useAppDispatch();

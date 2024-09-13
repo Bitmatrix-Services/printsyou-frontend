@@ -1,5 +1,5 @@
 'use client';
-import React, {FC, useState, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Container} from '@components/globals/container.component';
 import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
@@ -76,10 +76,9 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                     .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
                                     .slice(0, 36)
                                     .map(subCategory => (
-                                      <div className="py-1">
+                                      <div className="py-1" key={uuidv4()}>
                                         <Link
                                           href={`/categories/${subCategory.uniqueCategoryName}`}
-                                          key={uuidv4()}
                                           onClick={() => setHoveredCategory(null)}
                                         >
                                           <span className="font-base text-mute2 capitalize hover:text-primary-500">
