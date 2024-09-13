@@ -6,6 +6,7 @@ import {Container} from '@components/globals/container.component';
 import {Crumbs} from '@components/home/home.types';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
+import {v4 as uuidv4} from 'uuid';
 
 interface IBreadcrumb {
   list: Crumbs[];
@@ -33,7 +34,7 @@ export const Breadcrumb: FC<IBreadcrumb> = ({list, prefixTitle}) => {
             [...list]
               ?.sort((a, b) => b.sequenceNumber - a.sequenceNumber)
               .map((listItem, index) => (
-                <Fragment key={listItem.id}>
+                <Fragment key={uuidv4()}>
                   <div>
                     <MdOutlineChevronRight className="h-5 w-5 mr-1" />
                   </div>

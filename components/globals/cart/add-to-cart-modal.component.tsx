@@ -328,7 +328,7 @@ export const AddToCartModal: FC = () => {
                             onChange={formik.handleChange}
                           >
                             {priceTypes.map(row => (
-                              <option key={row} value={row}>
+                              <option key={uuidv4()} value={row}>
                                 {row}
                               </option>
                             ))}
@@ -415,7 +415,7 @@ export const AddToCartModal: FC = () => {
                   />
                   <ul>
                     {artWorkFiles.map((file, index) => (
-                      <li key={index} className="flex items-center pt-4 rounded-lg">
+                      <li key={uuidv4()} className="flex items-center pt-4 rounded-lg">
                         <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
                           <Image
                             className="object-cover w-full h-full rounded-sm"
@@ -492,7 +492,7 @@ interface IFormDescriptionProps {
 
 export const FormDescription: FC<IFormDescriptionProps> = ({textArray}) => {
   return textArray?.map(item => (
-    <p key={item} className="text-mute text-sm mb-2">
+    <p key={uuidv4()} className="text-mute text-sm mb-2">
       {item}
     </p>
   ));

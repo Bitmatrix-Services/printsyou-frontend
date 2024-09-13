@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {getIn} from 'formik';
 import {statesList} from '@utils/constants';
-import Option from '@mui/joy/Option';
+import {v4 as uuidv4} from 'uuid';
 
 interface FormInputProps {
   name: string;
@@ -15,17 +15,7 @@ interface FormInputProps {
   handleOnChange?: (_: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FormInput: FC<FormInputProps> = ({
-  name,
-  label,
-  placeHolder,
-  type,
-  inputType,
-  formik,
-  required,
-  handleOnBlur,
-  handleOnChange
-}) => {
+const FormInput: FC<FormInputProps> = ({name, placeHolder, type, inputType, formik, handleOnBlur, handleOnChange}) => {
   const isError = getIn(formik.errors, name);
   const isTouched = getIn(formik.touched, name);
   const value = getIn(formik.values, name);
@@ -59,7 +49,7 @@ const FormInput: FC<FormInputProps> = ({
           >
             {/* {!value && <option value="choose a state" className='text-gray-500'>Choose a State</option>} */}
             {statesList.map(state => (
-              <option key={state.value} value={state.value}>
+              <option key={uuidv4()} value={state.value}>
                 {state.name}
               </option>
             ))}

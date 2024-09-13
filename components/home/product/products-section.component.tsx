@@ -8,6 +8,7 @@ import {Product} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {CircularLoader} from '@components/globals/circular-loader.component';
+import {v4 as uuidv4} from 'uuid';
 
 interface ProductsSectionProps {
   showModal?: boolean;
@@ -86,9 +87,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
-            {productsByCategory?.map(product => (
-              <ProductCard key={product.id} showModal={showModal} product={product} />
-            ))}
+            {productsByCategory?.map(product => <ProductCard key={uuidv4()} showModal={showModal} product={product} />)}
           </div>
         )}
         {productsByCategory?.length > 0 && !isPageLoading && (

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import Image from 'next/image';
 import {Container} from '@components/globals/container.component';
+import {v4 as uuidv4} from 'uuid';
 
 export const aboutInfo = [
   {
@@ -16,17 +17,17 @@ export const AboutPrintsYouSection = () => {
       <section className="bg-greyLight pt-20 pb-16 lg:pb-20">
         <Container>
           <div className="grid md:grid-cols-2 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20 items-center justify-center">
-            {aboutInfo.map((about, index) => (
-              <>
-                <div key={index} className="mt-16 sm:mt-0">
-                  <h2 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
+            {aboutInfo.map(about => (
+              <Fragment key={uuidv4()}>
+                <div className="mt-16 sm:mt-0">
+                  <h1 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                     {about.title}
-                  </h2>
+                  </h1>
                   <div className="text-[16px] leading-[30px] text-mute3 space-y-4">
                     <p> {about.text}</p>
                   </div>
                 </div>
-                <div key={index} className="mt-16 sm:mt-0">
+                <div className="mt-16 sm:mt-0">
                   <Image
                     sizes=""
                     style={{position: 'relative'}}
@@ -38,7 +39,7 @@ export const AboutPrintsYouSection = () => {
                     alt="about us"
                   />
                 </div>
-              </>
+              </Fragment>
             ))}
           </div>
         </Container>

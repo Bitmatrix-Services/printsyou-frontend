@@ -91,7 +91,7 @@ const FooterLinks: FC<FooterLinksProps> = ({title, list}) => {
         <h6 className="mb-4 text-lg lg:text-base font-bold text-headingColor capitalize">{title}</h6>
         <div className="space-y-4">
           {(list ?? []).map(linkItem => (
-            <Link href={linkItem.url} className="block text-sm hover:text-primary-500" key={linkItem.name}>
+            <Link href={linkItem.url} className="block text-sm hover:text-primary-500" key={uuidv4()}>
               <span className="capitalize">{linkItem.name}</span>
             </Link>
           ))}

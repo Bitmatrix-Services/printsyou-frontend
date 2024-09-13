@@ -8,6 +8,7 @@ import ListItemButton from '@mui/joy/ListItemButton';
 import Link from 'next/link';
 import Image from 'next/image';
 import {Category} from '@components/home/home.types';
+import {v4 as uuidv4} from 'uuid';
 
 type Options = {
   initialActiveIndex: null | number;
@@ -206,7 +207,7 @@ const MenuItem = forwardRef(
                 <div className="flex gap-4">
                   <div className="flex-1 columns-2 xl:columns-6 space-y-8">
                     {(data.subCategories ?? []).map(subCategory => (
-                      <div key={subCategory.id}>
+                      <div key={uuidv4()}>
                         <Link
                           href={`/categories/${subCategory.uniqueCategoryName}`}
                           className="block text-sm text-mute hover:text-secondary-500 transition-all duration-150 capitalize"

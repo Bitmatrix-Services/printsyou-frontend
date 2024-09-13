@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import {Container} from '@components/globals/container.component';
+import {v4 as uuidv4} from 'uuid';
 
 const printsYouItems = [
   {
@@ -32,7 +33,7 @@ export const IconBoxesSection = () => {
         <div className="lg:flex justify-center items-center gap-12 text-center lg:text-left">
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             {printsYouItems.map(item => (
-              <div key={item.heading} className="flex flex-col justify-center items-center text-center pt-2 pb-2 px-7 ">
+              <div key={uuidv4()} className="flex flex-col justify-center items-center text-center pt-2 pb-2 px-7 ">
                 <div className="h-40 w-40 min-w-[10rem] relative  mb-5">
                   <Image
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw "

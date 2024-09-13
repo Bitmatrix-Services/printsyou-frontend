@@ -4,6 +4,7 @@ import {Container} from '@components/globals/container.component';
 import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
+import {v4 as uuidv4} from 'uuid';
 
 interface INavComponentProps {
   categories: Category[];
@@ -47,7 +48,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                 <div className="flex h-full justify-between">
                   {displayedCategories?.map(category => (
                     <div
-                      key={category.id}
+                      key={uuidv4()}
                       onMouseEnter={() => setHoveredCategory(category.id)}
                       onMouseLeave={() => setHoveredCategory(null)}
                     >
@@ -81,7 +82,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                       <>
                                         <Link
                                           href={`/categories/${subCategory.uniqueCategoryName}`}
-                                          key={subCategory.id}
+                                          key={uuidv4()}
                                           onClick={() => setHoveredCategory(null)}
                                           className="pr-6"
                                         >

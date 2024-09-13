@@ -6,6 +6,7 @@ import {SearchProductCard} from '@components/search/search-product-card';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {allowableSearchParams} from '@utils/constants';
 import {CircularLoader} from '@components/globals/circular-loader.component';
+import {v4 as uuidv4} from 'uuid';
 
 interface CategoryDetailsSectionProps {
   products: EnclosureProduct[];
@@ -66,7 +67,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
     <div className="flex-1">
       <div className="grid grid-cols-1 items-center">
         <div className="flex justify-between flex-col mt-10">
-          <div className="text-[#000] font-normal text-xl leading-[22px] mb-3 ">
+          <h1 className="text-[#000] font-normal text-xl leading-[22px] mb-3 ">
             {(keywords || tag) && (
               <span>
                 Search Results for{' '}
@@ -85,7 +86,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 </span>
               </span>
             )}
-          </div>
+          </h1>
           <div className="text-[#000] font-light text-xs  mb-3">
             Displaying &nbsp;
             {page && size && totalPages ? (
@@ -125,7 +126,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                {products?.map(product => <SearchProductCard key={product.productId} product={product} />)}
+                {products?.map(product => <SearchProductCard key={uuidv4()} product={product} />)}
               </div>
             )}
           </div>

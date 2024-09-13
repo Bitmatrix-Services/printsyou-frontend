@@ -7,6 +7,7 @@ import {ProductImageComponent} from '@components/home/product/product-image-sect
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import {notFound} from 'next/navigation';
 import Head from 'next/head';
+import {v4 as uuidv4} from 'uuid';
 
 interface IProductDetails {
   product: Product | null;
@@ -80,7 +81,7 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
 
                 <div className="space-y-2">
                   {product.additionalFieldProductValues?.map(item => (
-                    <Fragment key={item.fieldName}>
+                    <Fragment key={uuidv4()}>
                       <div>
                         <div className=" product-additional-info-heading">
                           <strong>{item.fieldName}:</strong>

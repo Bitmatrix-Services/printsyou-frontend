@@ -6,6 +6,7 @@ import 'aos/dist/aos.css';
 import {Container} from '@components/globals/container.component';
 import {aosGlobalSetting} from '@utils/constants';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
+import {v4 as uuidv4} from 'uuid';
 
 export const HowToOrderComponent = () => {
   useEffect(() => {
@@ -14,18 +15,18 @@ export const HowToOrderComponent = () => {
 
   return (
     <section className="bg-white pt-3 pb-10 lg:py-5">
-      <Breadcrumb list={[]} />
+      <Breadcrumb list={[]} prefixTitle="How to Order" />
       <Container>
         <div className="py-12">
-          <h2 className="text-xl lg:text-2xl xl:text-3xl text-center font-bold mr-auto capitalize">how to order</h2>
-          <p className="text-mute text-xl font-medium text-center mt-4">
+          <h1 className="text-xl lg:text-2xl xl:text-3xl text-center font-bold mr-auto capitalize">how to order</h1>
+          <h2 className="text-mute text-xl font-medium text-center mt-4">
             Understanding that custom ordering might seem daunting, we are dedicated to assisting and navigating you
             through every step.
-          </p>
+          </h2>
         </div>
         <div className="space-y-12 relative scroll-container py-12 md:ml-[6rem]">
           {orderSteps.map((order, index) => (
-            <Fragment key={order.title}>
+            <Fragment key={uuidv4()}>
               {index % 2 === 0 ? (
                 <figure className="scroll-step-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:space-x-52">
                   <div className="col self-center" data-aos="zoom-in-up">

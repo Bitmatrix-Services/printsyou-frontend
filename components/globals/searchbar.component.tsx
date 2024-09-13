@@ -11,6 +11,7 @@ import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {useRouter} from 'next/navigation';
 import {MdArrowForward, MdSearch} from 'react-icons/md';
 import * as React from 'react';
+import {v4 as uuidv4} from 'uuid';
 
 type ItemType = {
   id: string;
@@ -118,7 +119,7 @@ export const Searchbar = () => {
                         <Link
                           className="hover:cursor-pointer"
                           href={`/categories/${category.uniqueName}`}
-                          key={category.id}
+                          key={uuidv4()}
                           onClick={() =>
                             setTimeout(() => {
                               handleClickAway();
@@ -156,7 +157,7 @@ export const Searchbar = () => {
                         <Link
                           className="hover:cursor-pointer"
                           href={`/products/${product.uniqueName}`}
-                          key={product.id}
+                          key={uuidv4()}
                           onClick={() =>
                             setTimeout(() => {
                               handleClickAway();

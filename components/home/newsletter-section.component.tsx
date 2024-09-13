@@ -48,7 +48,7 @@ export const Newsletter = () => {
     <div className="bg-lightGray py-4 mt-6">
       <Container>
         <div className="flex flex-col items-center justify-between gap-7 py-10 md:py-16 text-center">
-          <h3 className="font-black text-2xl md:text-4xl lg:text-5xl xl:text-6xl">Create Your Masterpiece</h3>
+          <h4 className="font-black text-2xl md:text-4xl lg:text-5xl xl:text-6xl">Create Your Masterpiece</h4>
           <h5 className="font-normal text-xl md:text-xl w-[23rem] md:w-[38rem]">
             Transform your vision into reality with our custom printing services. Anything you imagine, we can print.
           </h5>

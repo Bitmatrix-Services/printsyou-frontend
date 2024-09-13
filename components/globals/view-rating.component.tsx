@@ -1,5 +1,6 @@
 import {IoMdStar, IoMdStarHalf, IoMdStarOutline} from 'react-icons/io';
 import {FC} from 'react';
+import {v4 as uuidv4} from 'uuid';
 
 interface IViewRating {
   rating: number;
@@ -14,12 +15,12 @@ export const ViewRating: FC<IViewRating> = ({rating, totalReviews}) => {
   return (
     <>
       <div className="flex gap-1">
-        {[...Array(fullStars)].map((_, index) => (
-          <IoMdStar key={index} className="text-primary-500 w-6 h-6" />
+        {[...Array(fullStars)].map(_ => (
+          <IoMdStar key={uuidv4()} className="text-primary-500 w-6 h-6" />
         ))}
         {hasHalfStar && <IoMdStarHalf className="text-primary-500 w-6 h-6" />}
-        {[...Array(totalStars - fullStars - (hasHalfStar ? 1 : 0))].map((_, index) => (
-          <IoMdStarOutline key={index} className="text-primary-500 w-6 h-6" />
+        {[...Array(totalStars - fullStars - (hasHalfStar ? 1 : 0))].map(_ => (
+          <IoMdStarOutline key={uuidv4()} className="text-primary-500 w-6 h-6" />
         ))}
       </div>
       {totalReviews && (

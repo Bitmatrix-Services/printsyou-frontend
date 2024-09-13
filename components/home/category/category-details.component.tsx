@@ -7,12 +7,12 @@ import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
 import {ProductsSection} from '@components/home/product/products-section.component';
 import {notFound} from 'next/navigation';
+import {v4 as uuidv4} from 'uuid';
 
 interface ICategoryDetails {
   category: Category | null;
 }
 
-const MAX_LENGTH = 500;
 export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -29,11 +29,11 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
         <Container>
           <div className="md:grid md:grid-cols-12 flex flex-col">
             <div className="md:col-span-9  py-9">
-              <h2 className="mb-3 text-black font-semibold text-3xl capitalize">
+              <h1 className="mb-3 text-black font-semibold text-3xl capitalize">
                 {category.prefix && <span>{category.prefix}</span>}
                 {category.categoryName}
                 {category.suffix && <span>{category.suffix}</span>}
-              </h2>
+              </h1>
               <span
                 className="text-base font-normal text-mute"
                 dangerouslySetInnerHTML={{
@@ -67,7 +67,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
             <Link
               href={`/categories/${subCategory.uniqueCategoryName}`}
               className="flex flex-col border p-2"
-              key={subCategory.id}
+              key={uuidv4()}
             >
               <div className="min-h-56 h-56 max-h-56  relative">
                 <ImageWithFallback

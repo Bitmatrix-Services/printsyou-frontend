@@ -7,6 +7,7 @@ import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {useAppDispatch} from '../../../store/hooks';
+import {v4 as uuidv4} from 'uuid';
 
 interface ProductDescriptionComponent {
   product: Product;
@@ -27,14 +28,14 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
         {[...product.crumbs]
           .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
           .map((productCategory, index) => (
-            <Fragment key={productCategory.id}>
+            <Fragment key={uuidv4()}>
               {index !== 0 && index < product.crumbs.length - 1 ? (
                 <span className="mx-2">
                   <MdArrowForward className=" h-5 w-6" />
                 </span>
               ) : null}
               {index < product.crumbs.length - 1 ? (
-                <span key={productCategory.id} className="font-semibold capitalize ">
+                <span key={uuidv4()} className="font-semibold capitalize ">
                   {productCategory.name}
                 </span>
               ) : null}
@@ -45,13 +46,13 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
         <span className="text-mute4 mr-1 capitalize">sku:</span>
         <span className="font-semibold text-primary-500">{product.sku}</span>
       </div>
-      <h2 className=" text-xl md:text-2xl font-bold capitalize">
+      <h1 className=" text-xl md:text-2xl font-bold capitalize">
         <span
           dangerouslySetInnerHTML={{
             __html: product?.productName ?? ''
           }}
         ></span>
-      </h2>
+      </h1>
 
       {/*<div className=" lg:flex md:flex-row flex-col items-center gap-5">*/}
       {/*  <div className="flex gap-x-2 items-center">*/}
@@ -77,7 +78,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
           <div className="flex flex-wrap gap-3">
             {colorsArray?.map(color => (
               <div
-                key={color}
+                key={uuidv4()}
                 style={{
                   backgroundColor: color,
                   width: 25,
@@ -126,7 +127,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
             {[...product.additionalRows]
               ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map(row => (
-                <li key={row.id}>
+                <li key={uuidv4()}>
                   <span className="pt-[2px] block">
                     <span className="text-mute3 font-base">{row.name}</span>
                     <span className="text-primary-500 ml-2 font-semibold">${row.priceDiff.toFixed(2)}</span>
@@ -142,7 +143,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
       {/*  <h3 className="text-xl font-bold">Size:</h3>*/}
       {/*  {['XS', 'S', 'M', 'L', 'XL'].map(size => (*/}
       {/*    <button*/}
-      {/*      key={size}*/}
+      {/*      key={uuidv4()}*/}
       {/*      className="sm:px-3 sm:py-2 lg:px-4 lg:py-2 text-sm font-semibold text-gray-700 border rounded hover:bg-gray-100"*/}
       {/*    >*/}
       {/*      {size}*/}
@@ -155,7 +156,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
       {/*    <h4>share product : </h4>*/}
       {/*    <div className=" flex space-x-3">*/}
       {/*      {social.map(item => (*/}
-      {/*        <Link key={item.name} href={item.href} target="_blank">*/}
+      {/*        <Link key={uuidv4()} href={item.href} target="_blank">*/}
       {/*          <span className="sr-only">{item.name}</span>*/}
       {/*          <item.icon className="h-6 w-6" aria-hidden="true" />*/}
       {/*        </Link>*/}
