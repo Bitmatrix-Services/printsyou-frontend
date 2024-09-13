@@ -3,8 +3,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {Container} from '@components/globals/container.component';
 import {Newsletter} from '@components/home/newsletter-section.component';
-import {Category} from '@components/home/home.types';
+import {Category, Faq} from '@components/home/home.types';
 import {v4 as uuidv4} from 'uuid';
+import {FaqSectionComponent} from '@components/home/faq.section.component';
+import {getFaqsList} from '@components/home/home-apis';
 
 type listType = {
   name: string;
@@ -23,9 +25,14 @@ interface IFooter {
   categories: Category[];
 }
 
-export const Footer: FC<IFooter> = ({categories}) => {
+export const Footer: FC<IFooter> = async ({categories}) => {
+  const response = await getFaqsList();
+  let faqsList: Faq[] = [];
+  if (response?.payload) faqsList = response.payload;
+
   return (
     <>
+      <FaqSectionComponent faqsList={faqsList} />
       <Newsletter />
       <footer className="bg-secondary-100/50 py-4">
         <Container>

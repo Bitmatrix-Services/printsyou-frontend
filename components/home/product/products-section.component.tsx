@@ -60,7 +60,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
 
   return (
     <Container>
-      <section className="bg-white py-8 lg:py-20">
+      <section className="bg-white pt-8 md:pt-10 lg:pt-16">
         {categoryName ? (
           <h2 className="text-xl mb-0 font-bold capitalize">
             {prefix && <span>{prefix}</span>}

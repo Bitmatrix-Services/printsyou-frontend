@@ -1,5 +1,5 @@
 import HomeComponent from '@components/home/home-component';
-import {getAllCategories, getBannersList, getFaqsList, getProductsByTag} from '@components/home/home-apis';
+import {getAllCategories, getBannersList, getProductsByTag} from '@components/home/home-apis';
 
 export default async function HomePage() {
   const categoriesData = await getAllCategories();
@@ -8,7 +8,6 @@ export default async function HomePage() {
   const innovativeIdea = await getProductsByTag('mostPopular');
   const deals = await getProductsByTag('deals');
   const bannersList = await getBannersList();
-  const faqsList = await getFaqsList();
 
   return (
     <HomeComponent
@@ -18,7 +17,6 @@ export default async function HomePage() {
       underABuck={underABuck.payload.content}
       innovativeIdea={innovativeIdea.payload.content}
       deals={deals.payload.content}
-      faqsList={faqsList.payload}
     />
   );
 }

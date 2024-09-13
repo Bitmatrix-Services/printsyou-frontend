@@ -41,14 +41,13 @@ export const getProductsByTag = async (tag: string): Promise<ApiResponse<PagedDa
   }
 };
 
-export const getFaqsList = async (): Promise<ApiResponse<Faq[]>> => {
+export const getFaqsList = async (): Promise<ApiResponse<Faq[]> | null> => {
   try {
     const response = await axios.get<ApiResponse<Faq[]>>(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}${HomePageRoutes.Faqs}`
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
+    return null;
   }
 };

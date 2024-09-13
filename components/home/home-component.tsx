@@ -5,10 +5,9 @@ import {ProductSliderSection} from '@components/home/product/product-slider-sect
 import {Benefits} from '@components/home/benefits-sections.component';
 import {PromotionalBanner} from '@components/home/promotional-banner.component';
 import {CategorySection} from '@components/home/category/category-section.component';
-import {BannerList, Category, Faq} from '@components/home/home.types';
+import {BannerList, Category} from '@components/home/home.types';
 import {FC} from 'react';
 import {FeatureSection} from '@components/home/feature-section.component';
-import {FaqSectionComponent} from '@components/home/faq.section.component';
 import {Product} from '@components/home/product/product.types';
 
 interface IHome {
@@ -18,18 +17,9 @@ interface IHome {
   innovativeIdea: Product[];
   deals: Product[];
   bannersList: BannerList[];
-  faqsList: Faq[];
 }
 
-const HomeComponent: FC<IHome> = ({
-  categories,
-  underABuck,
-  newAndExclusive,
-  innovativeIdea,
-  deals,
-  bannersList,
-  faqsList
-}) => {
+const HomeComponent: FC<IHome> = ({categories, underABuck, newAndExclusive, innovativeIdea, deals, bannersList}) => {
   return (
     <main>
       <HeroSection bannersList={bannersList} />
@@ -139,7 +129,6 @@ const HomeComponent: FC<IHome> = ({
       {/*/>*/}
       <Benefits />
       <FeatureSection />
-      <FaqSectionComponent faqsList={faqsList} />
     </main>
   );
 };

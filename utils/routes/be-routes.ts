@@ -35,3 +35,8 @@ export const MoreInfoRoutes = Object.freeze({
 export const NotificationRoutes = Object.freeze({
   allNotifications: `/notification/all`
 });
+
+export const BlogRoutes = Object.freeze({
+  allBlogs: `/blog/all`,
+  blogById: `/blog`
+});
