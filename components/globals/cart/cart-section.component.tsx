@@ -83,7 +83,7 @@ export const CartSection = () => {
           <div>
             <div className="flex justify-evenly">
               <h4 className="text-black text-base font-normal">Subtotal</h4>
-              <p className="text-lg font-semibold text-secondary-300"> ${cartRoot?.totalCartPrice || 0}</p>
+              <p className="text-lg font-semibold text-secondary-300"> ${cartRoot?.totalCartPrice.toFixed(2) || 0}</p>
             </div>
             <div className="text-xs mt-3">
               *Final total including shipping and any additional charges will be sent with the artwork proof after the

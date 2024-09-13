@@ -49,7 +49,7 @@ export const CartItemComponent: FC<ICartItem> = ({cartItem, handleRemoveItem}) =
             Total Price:{' '}
             <b className="text-black ml-1">
               {' '}
-              <span className="font-bold">${cartItem.itemTotalPrice}</span>
+              <span className="font-bold">${cartItem.itemTotalPrice.toFixed(2)}</span>
             </b>
           </p>
         </div>

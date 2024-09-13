@@ -52,14 +52,16 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                           cell.salePrice ? (
                             <div className="flex justify-evenly flex-col">
                               <span className="line-through font-bold text-xl">
-                                {cell.price < 0.01 ? '-' : `$${cell.price}`}
+                                {cell.price < 0.01 ? '-' : `$${cell.price.toFixed(2)}`}
                               </span>
                               <span className="font-bold text-2xl">
-                                {cell.salePrice < 0.01 ? '-' : `$${cell.salePrice}`}
+                                {cell.salePrice < 0.01 ? '-' : `$${cell.salePrice.toFixed(2)}`}
                               </span>
                             </div>
                           ) : (
-                            <span className="font-bold text-2xl">{cell.price < 0.01 ? '-' : `$${cell.price}`}</span>
+                            <span className="font-bold text-2xl">
+                              {cell.price < 0.01 ? '-' : `$${cell.price.toFixed(2)}`}
+                            </span>
                           )}
                         </td>
                       ))}
