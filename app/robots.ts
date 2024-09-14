@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/more-info'
     },
-    sitemap: 'https://printsyou.com/sitemap.xml'
+    sitemap: 'https://printsyou.com/api/sitemap.xml'
   };
 }
