@@ -4,7 +4,7 @@ import {Sortable} from '@utils/util-types';
 export const metaConstants = {
   SITE_NAME: 'Prints You',
   DESCRIPTION:
-    'Discover top-quality custom printed promotional products at PrintsYou.com. Choose from thousands of items to showcase your logo or message. Perfect for trade shows, conventions, office swag, or home use. Elevate your brand with unique promotional merchandise today!'
+    'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!'
 };
 
 export const breakpoints = {
