@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {useAppDispatch} from '../../../store/hooks';
 import {v4 as uuidv4} from 'uuid';
+import {PiShoppingCartSimple} from 'react-icons/pi';
 
 interface ProductDescriptionComponent {
   product: Product;
@@ -107,7 +108,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
             e.stopPropagation();
           }}
         >
-          Add to cart <MdShoppingBag className=" ml-3 h-5 w-5" />
+          Add to cart <PiShoppingCartSimple className=" ml-3 h-5 w-5" />
         </button>
         <Link
           className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary-500 text-primary-500 w-full lg:w-auto"

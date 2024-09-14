@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import {IoCloseCircle} from 'react-icons/io5';
 import React from 'react';
+import {PiShoppingCartSimple} from 'react-icons/pi';
 
 export const WishListItem = () => {
   return (
@@ -15,7 +16,7 @@ export const WishListItem = () => {
               <div className="text-center text-xs py-1 px-3 rounded-full cursor-pointer text-secondary-500 bg-secondary-100/25 hover:text-white hover:bg-primary-500">
                 <div className="capitalize font-bold">add to cart</div>
               </div>
-              <IoCloseCircle className="h-6 w-6 text-mute cursor-pointer hover:text-primary-700" />
+              <PiShoppingCartSimple className="h-6 w-6 text-mute cursor-pointer hover:text-primary-700" />
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import {CiCircleRemove} from 'react-icons/ci';
 import Image from 'next/image';
 import {v4 as uuidv4} from 'uuid';
 import {MdShoppingBag} from 'react-icons/md';
+import {PiShoppingCartSimple} from 'react-icons/pi';
 
 export const WishListComponent = () => {
   return (
@@ -56,7 +57,7 @@ export const WishListComponent = () => {
                     <td className="px-6 py-3 text-right">
                       <div className="flex items-center justify-end gap-3">
                         <button className="py-2 px-4 flex items-center bg-primary-500 text-white hover:bg-primary-600 rounded-md">
-                          Add to Cart <MdShoppingBag className="ml-2 h-5 w-5" />
+                          Add to Cart <PiShoppingCartSimple className="ml-2 h-5 w-5" />
                         </button>
                         <CiCircleRemove className="text-xl sm:text-2xl md:text-3xl text-gray-500 cursor-pointer hover:text-red-800" />
                       </div>
