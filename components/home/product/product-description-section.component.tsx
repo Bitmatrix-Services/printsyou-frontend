@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import {FC, Fragment, useMemo} from 'react';
-import {MdArrowForward, MdInfo, MdShoppingBag} from 'react-icons/md';
+import {MdArrowForward, MdInfo} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import Link from 'next/link';

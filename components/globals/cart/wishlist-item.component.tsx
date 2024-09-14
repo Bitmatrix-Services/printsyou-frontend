@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import {IoCloseCircle} from 'react-icons/io5';
 import React from 'react';
 import {PiShoppingCartSimple} from 'react-icons/pi';
 

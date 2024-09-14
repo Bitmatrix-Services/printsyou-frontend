@@ -4,7 +4,6 @@ import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {CiCircleRemove} from 'react-icons/ci';
 import Image from 'next/image';
 import {v4 as uuidv4} from 'uuid';
-import {MdShoppingBag} from 'react-icons/md';
 import {PiShoppingCartSimple} from 'react-icons/pi';
 
 export const WishListComponent = () => {
