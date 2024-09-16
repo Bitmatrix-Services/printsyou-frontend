@@ -14,6 +14,9 @@ import ModalClose from '@mui/joy/ModalClose';
 import {IoBagCheckOutline, IoClose} from 'react-icons/io5';
 import {MdOutlineFileDownload} from 'react-icons/md';
 import {cartModalSchema, CustomProduct, LocalCartState, UploadedFileType} from '@components/globals/cart/cart-types';
+import {PiShoppingCartSimple} from 'react-icons/pi';
+import {useRouter} from 'next/navigation';
+import {CircularLoader} from '@components/globals/circular-loader.component';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -25,6 +28,7 @@ const specsFields: Record<string, any> = {
 };
 
 export const AddToCartModal: FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLFormElement>(null);
   const cartState = useAppSelector(selectCartState);
@@ -40,10 +44,17 @@ export const AddToCartModal: FC = () => {
     validationSchema: cartModalSchema,
     validateOnBlur: false,
     validateOnChange: false,
-    onSubmit: () => {
-      handleAddToCart();
-    }
+    onSubmit: () => {}
   });
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const buttonName = (event.nativeEvent as any).submitter.name;
+
+    formik.handleSubmit();
+
+    setTimeout(() => handleAddToCart(buttonName), 500);
+  };
 
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
   const [progress, setProgress] = useState<number>(0);
@@ -141,7 +152,7 @@ export const AddToCartModal: FC = () => {
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
   }, [formik.values.itemQty, formik.values.selectedPriceType, product, priceTypes]);
 
-  const handleCartModalClose = () => {
+  const handleCartModalClose = (submitType: string) => {
     formik.resetForm();
     setArtWorkFiles([]);
     dispatch(
@@ -153,6 +164,7 @@ export const AddToCartModal: FC = () => {
       })
     );
     setAddToCartError(false);
+    if (submitType === 'checkout') router.push('/checkout');
   };
 
   const handleFileUpload = async (file: File) => {
@@ -224,7 +236,7 @@ export const AddToCartModal: FC = () => {
     } catch (error) {}
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (submitType: string) => {
     setAddToCartError(false);
     const cartId = getCartId();
     const cartData = {
@@ -255,24 +267,24 @@ export const AddToCartModal: FC = () => {
         fieldValue: spec.fieldValue
       }));
 
-    if (cartState.cartMode === 'update' && cartState.selectedItem) {
+    if (cartState.cartMode === 'update' && cartState.selectedItem && !Object.keys(formik.errors).length) {
       axios
         .put(`${API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`, cartData)
         .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
-          handleCartModalClose();
+          handleCartModalClose(submitType);
         })
         .catch(() => {
           setAddToCartError(true);
         });
-    } else {
+    } else if (!Object.keys(formik.errors).length) {
       axios
         .post(`${API_BASE_URL}/cart/add?cartId=${cartId}`, cartData)
         .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
-          handleCartModalClose();
+          handleCartModalClose(submitType);
         })
         .catch(() => {
           setAddToCartError(true);
@@ -290,7 +302,7 @@ export const AddToCartModal: FC = () => {
       >
         <ModalClose />
 
-        <form ref={ref} onSubmit={formik.handleSubmit}>
+        <form ref={ref} onSubmit={handleSubmit}>
           <div className="lg:px-8 pb-4">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-1">
               <figure>
@@ -445,29 +457,57 @@ export const AddToCartModal: FC = () => {
                   <div className="text-red-500 pt-4">{formik.errors['itemColor']}</div>
                 ) : null}
 
-                {addToCartError ? <div className="text-red-500 pt-4">Failed To Add</div> : null}
-                <div className="flex flex-col md:flex-row pt-4 gap-4">
-                  <label
-                    htmlFor="fileInput"
-                    className="py-2 px-6 flex items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 w-full lg:w-auto capitalize"
-                  >
-                    <input
-                      id="fileInput"
-                      type="file"
-                      name="fileInput"
-                      multiple
-                      onChange={e => handleFileChange(e)}
-                      hidden
-                    />
-                    Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
-                  </label>
-                  <button
-                    type="submit"
-                    className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
-                  >
-                    {cartState.cartMode === 'update' ? 'Update Cart Item' : 'Add to Cart'}
-                    <IoBagCheckOutline className="w-6 h-6 ml-3" />
-                  </button>
+                {(!formik.errors['itemQty'] || formik.errors['itemColor']) && addToCartError ? (
+                  <div className="text-red-500 pt-4">Failed To Add</div>
+                ) : null}
+                <div className="flex flex-col md:flex-row md:justify-between pt-4 gap-4">
+                  <div>
+                    <label
+                      htmlFor="fileInput"
+                      className="py-2 px-6 flex items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 w-full lg:w-auto capitalize"
+                    >
+                      <input
+                        id="fileInput"
+                        type="file"
+                        name="fileInput"
+                        multiple
+                        onChange={e => handleFileChange(e)}
+                        hidden
+                      />
+                      Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
+                    </label>
+                  </div>
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      name="cart"
+                      disabled={formik.isSubmitting}
+                      className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
+                    >
+                      {formik.isSubmitting ? (
+                        <CircularLoader />
+                      ) : (
+                        <div className="flex">
+                          {cartState.cartMode === 'update' ? 'Update Cart Item' : 'Add to Cart'}
+                          <PiShoppingCartSimple className="w-6 h-6 ml-3" />
+                        </div>
+                      )}
+                    </button>
+                    <button
+                      type="submit"
+                      name="checkout"
+                      disabled={formik.isSubmitting}
+                      className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
+                    >
+                      {formik.isSubmitting ? (
+                        <CircularLoader />
+                      ) : (
+                        <div className="flex">
+                          Checkout <IoBagCheckOutline className="w-6 h-6 ml-3" />
+                        </div>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </figure>
             </div>
