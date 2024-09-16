@@ -18,16 +18,16 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
     const handleResize = () => {
       if (window.innerWidth >= 1900) {
         setDisplayedCategories(categories.slice(0, 10));
-      } else if (window.innerWidth >= 1800) {
+      } else if (window.innerWidth >= 1770) {
         setDisplayedCategories(categories.slice(0, 9));
-      } else if (window.innerWidth >= 1550) {
+      } else if (window.innerWidth >= 1520) {
         setDisplayedCategories(categories.slice(0, 8));
       } else if (window.innerWidth >= 1200) {
         setDisplayedCategories(categories.slice(0, 7));
-      } else if (window.innerWidth >= 1080) {
-        setDisplayedCategories(categories.slice(0, 5));
+      } else if (window.innerWidth >= 1150) {
+        setDisplayedCategories(categories.slice(0, 6));
       } else {
-        setDisplayedCategories(categories.slice(0, 5));
+        setDisplayedCategories(categories.slice(0, 6));
       }
     };
 
@@ -54,7 +54,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                     >
                       <Link
                         href={`/categories/${category.uniqueCategoryName}`}
-                        className={`capitalize relative whitespace-nowrap px-2 xl:px-4 z-10 pb-4 flex items-center border-b-2 text-sm font-normal text-mute3 transition-colors duration-200 ease-out ${
+                        className={`capitalize relative whitespace-nowrap px-3 lg:4 xl:px-5 z-10 pb-4 flex items-center border-b-2 text-sm font-normal text-mute3 transition-colors duration-200 ease-out ${
                           hoveredCategory === category.id
                             ? 'text-primary-500 border-primary-500'
                             : 'hover:text-gray-800 border-transparent'
