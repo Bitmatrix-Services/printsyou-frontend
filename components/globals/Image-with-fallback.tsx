@@ -30,7 +30,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
       )}
       <Image
         alt={alt}
-        src={src ? imgSrc : "/assets/logo-full.png"}
+        src={src ? imgSrc : '/assets/logo-full.png'}
         priority
         onError={() => setImgSrc(fallbackSrc)}
         onLoad={() => setLoading(false)}
