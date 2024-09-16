@@ -5,6 +5,7 @@ import {MdOutlineKeyboardArrowDown} from 'react-icons/md';
 import {statesList} from '@utils/constants';
 import Option from '@mui/joy/Option';
 import {v4 as uuidv4} from 'uuid';
+import {deepFind} from '@utils/utils';
 
 interface IFormControlSelect {
   label?: string;
@@ -69,9 +70,9 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
             ))}
           </Select>
 
-          {isRequired && errors[name]?.message ? (
+          {isRequired && deepFind(errors ?? {}, name)?.message ? (
             <div className="flex justify-start mt-2">
-              <p className="text-red-600">{errors[name]?.message}</p>
+              <p className="text-red-600">{deepFind(errors ?? {}, name)?.message}</p>
             </div>
           ) : null}
         </div>

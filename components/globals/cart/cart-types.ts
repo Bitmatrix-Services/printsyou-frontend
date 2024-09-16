@@ -12,7 +12,7 @@ export interface CustomProduct {
 }
 export const cartModalSchema = object({
   imprintColor: string().notRequired(),
-  itemColor: string().required('Item Color is required'),
+  itemColor: string().notRequired(),
   size: string().notRequired(),
   itemQty: number()
     .transform((_, value) => (value === '' ? 0 : +value))

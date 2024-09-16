@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
   return input.map((value: string) => {
@@ -23,6 +24,20 @@ export const getMinMaxRange = (input: string[]) => {
       maxValue: maxValue
     };
   });
+};
+
+export const deepFind = (obj: Record<string, any>, path: string): {message: string} => {
+  const paths = path.split('.');
+  let current = structuredClone(obj);
+
+  for (let i = 0; i < paths.length; ++i) {
+    if (current[paths[i]] == undefined) {
+      return {message: ''};
+    } else {
+      current = current[paths[i]];
+    }
+  }
+  return current as any;
 };
 
 export const convertDateFormat = (timestamp: number): string => {

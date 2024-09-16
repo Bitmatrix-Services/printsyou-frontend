@@ -2,6 +2,7 @@ import {Controller} from 'react-hook-form';
 import React, {FC} from 'react';
 import Input from '@mui/joy/Input';
 import Textarea from '@mui/joy/Textarea';
+import {deepFind} from '@utils/utils';
 
 interface IFormControlInput {
   label?: string;
@@ -77,9 +78,9 @@ export const FormControlInput: FC<IFormControlInput> = ({
               onChange={onChange}
             />
           ) : null}
-          {errors && errors[name]?.message ? (
+          {isRequired && deepFind(errors ?? {}, name)?.message ? (
             <div className="flex justify-start mt-2">
-              <p className="text-red-600">{errors[name]?.message}</p>
+              <p className="text-red-600">{deepFind(errors ?? {}, name)?.message}</p>
             </div>
           ) : null}
         </div>
