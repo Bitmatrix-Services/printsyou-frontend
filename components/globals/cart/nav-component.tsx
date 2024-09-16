@@ -5,6 +5,9 @@ import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
 import {v4 as uuidv4} from 'uuid';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import {aosGlobalSetting} from '@utils/constants';
 
 interface INavComponentProps {
   categories: Category[];
@@ -36,6 +39,10 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [categories]);
+
+  useEffect(() => {
+    AOS.init(aosGlobalSetting);
+  }, []);
 
   return (
     <div className="bg-white">
@@ -71,7 +78,11 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                           <div className="relative bg-white min-h-[22rem] max-h-[22rem]">
                             <Container>
                               <div className="flex flex-row gap-x-4 ml-3 justify-between py-11">
-                                <div className="text-sm max-h-[16rem]" style={{columnCount: '3', columnFill: 'auto'}}>
+                                <div
+                                  data-aos="fade-down"
+                                  className="text-sm max-h-[16rem]"
+                                  style={{columnCount: '3', columnFill: 'auto'}}
+                                >
                                   {category.subCategories
                                     .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
                                     .slice(0, 36)
