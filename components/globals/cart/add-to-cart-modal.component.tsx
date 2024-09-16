@@ -37,7 +37,7 @@ export const AddToCartModal: FC = () => {
     initialValues: {
       itemQty: 0,
       imprintColor: undefined,
-      itemColor: '',
+      itemColor: undefined,
       size: undefined,
       selectedPriceType: null
     },
@@ -392,7 +392,7 @@ export const AddToCartModal: FC = () => {
                           }`}
                           placeholder="Item Color"
                           name="itemColor"
-                          value={formik.values.itemColor}
+                          value={formik.values.itemColor ?? ''}
                           onChange={formik.handleChange}
                         />
                       </div>
