@@ -35,7 +35,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
                 {category.suffix && <span>{category.suffix}</span>}
               </h1>
               <span
-                className="text-base font-normal text-mute"
+                className={`text-base font-normal text-mute ${isExpanded ? '' : 'see-less-more'}`}
                 dangerouslySetInnerHTML={{
                   __html: category.categoryDescription
                 }}
@@ -45,9 +45,8 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
               </span>
             </div>
             {category?.imageUrl && (
-              <div className="h-[12rem] md:h-[20rem] lg:h-[20rem] xl:h-[35rem] relative md:col-span-3 ">
+              <div className={`relative md:col-span-3 ${isExpanded ? 'h-full' : 'max-h-[14rem] my-10'}`}>
                 <ImageWithFallback
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   src={category?.imageUrl}
                   alt={category.uniqueCategoryName}
                   className="object-contain"

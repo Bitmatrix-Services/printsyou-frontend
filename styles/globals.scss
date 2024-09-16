@@ -304,3 +304,11 @@
 .MuiAccordionDetails-content {
   overflow-y: auto;
 }
+
+.see-less-more {
+  display: -webkit-box;
+  -webkit-line-clamp: 6 !important;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
