@@ -2,7 +2,7 @@ import {getCategoryDetailsByUniqueName} from '@components/home/category/category
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
 import {metaConstants} from '@utils/constants';
-import Head from "next/head";
+import Head from 'next/head';
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
@@ -27,6 +27,23 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
                 name: category?.categoryName,
                 url: `${process.env.FE_URL}${category?.uniqueCategoryName}`
               }
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: (category?.crumbs ?? [])
+                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                .map(item => ({
+                  '@type': 'ListItem',
+                  position: item.sequenceNumber + 1,
+                  name: item.name,
+                  item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
+                }))
             })
           }}
         />
