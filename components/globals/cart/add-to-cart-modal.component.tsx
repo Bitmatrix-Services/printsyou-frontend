@@ -296,8 +296,15 @@ export const AddToCartModal: FC = () => {
     <Modal open={cartState.open} onClose={handleCartModalClose}>
       <ModalDialog
         sx={{
-          maxHeight: '80vh',
-          overflowY: 'auto'
+          height: 'auto',
+          width: '90%',
+          maxWidth: '60rem',
+          margin: 'auto',
+          overflowY: 'auto',
+          '@media (max-width: 600px)': {
+            width: '95%',
+            maxWidth: '95%'
+          }
         }}
       >
         <ModalClose />
@@ -453,11 +460,8 @@ export const AddToCartModal: FC = () => {
                   {progress > 0 ? <LinearProgressWithLabel progress={progress} /> : null}
                 </div>
                 {formik.errors['itemQty'] ? <div className="text-red-500 pt-4">{formik.errors['itemQty']}</div> : null}
-                {formik.errors['itemColor'] ? (
-                  <div className="text-red-500 pt-4">{formik.errors['itemColor']}</div>
-                ) : null}
 
-                {(!formik.errors['itemQty'] || formik.errors['itemColor']) && addToCartError ? (
+                {!formik.errors['itemQty'] && addToCartError ? (
                   <div className="text-red-500 pt-4">Failed To Add</div>
                 ) : null}
                 <div className="flex flex-col md:flex-row md:justify-between pt-4 gap-4">
@@ -477,7 +481,7 @@ export const AddToCartModal: FC = () => {
                       Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
                     </label>
                   </div>
-                  <div className="flex gap-4">
+                  <div className="flex flex-1 flex-col md:flex-row md:justify-end gap-4">
                     <button
                       type="submit"
                       name="cart"
