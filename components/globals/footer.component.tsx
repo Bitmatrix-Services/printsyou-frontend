@@ -7,6 +7,7 @@ import {Category, Faq} from '@components/home/home.types';
 import {v4 as uuidv4} from 'uuid';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import {getFaqsList} from '@components/home/home-apis';
+import Head from "next/head";
 
 type listType = {
   name: string;
@@ -35,6 +36,37 @@ export const Footer: FC<IFooter> = async ({categories}) => {
 
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'http://schema.org',
+              '@type': 'LocalBusiness',
+              name: 'Prints You',
+              description:
+                'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
+              telephone: '877-934-1874',
+              email: 'info@printsyou.com',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Rowlett',
+                addressRegion: 'TX',
+                streetAddress: '8602 Royal Star Road',
+                postalCode: '75089'
+              },
+              sameAs: [
+                [
+                  "https://www.facebook.com/PrintsYouPromotional",
+                  "https://www.linkedin.com/company/printsyou"
+                ]
+              ],
+              url: 'https://printsyou.com',
+              image: 'https://printsyou.com/assets/logo-full.png'
+            })
+          }}
+        />
+      </Head>
       <FaqSectionComponent faqsList={faqsList} />
       <Newsletter />
       <footer className="bg-secondary-100/50 py-4">
