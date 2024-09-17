@@ -2,6 +2,7 @@ import {getCategoryDetailsByUniqueName} from '@components/home/category/category
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
 import {metaConstants} from '@utils/constants';
+import Head from "next/head";
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
@@ -10,7 +11,29 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
 
   if (response?.payload) category = response.payload;
 
-  return <CategoryDetails category={category} />;
+  return (
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'http://schema.org',
+              '@type': 'WebPage',
+              url: `${process.env.FE_URL}${category?.uniqueCategoryName}`,
+              mainEntity: {
+                '@context': 'http://schema.org',
+                '@type': 'OfferCatalog',
+                name: category?.categoryName,
+                url: `${process.env.FE_URL}${category?.uniqueCategoryName}`
+              }
+            })
+          }}
+        />
+      </Head>
+      <CategoryDetails category={category} />
+    </>
+  );
 };
 
 export default CategoryPage;
