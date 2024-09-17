@@ -26,29 +26,6 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
 
   return (
     <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org/',
-              '@type': 'Product',
-              name: product.productName,
-              image: (product.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-              description: (product.description ?? '').replace(/<[^>]+>/g, ''),
-              sku: product.sku,
-              offers: {
-                '@type': 'Offer',
-                url: `${process.env.FE_URL}${product.uniqueProductName}`,
-                itemCondition: 'https://schema.org/NewCondition',
-                availability: 'https://schema.org/InStock',
-                priceCurrency: 'USD',
-                price: [...(product.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price
-              }
-            })
-          }}
-        />
-      </Head>
       {product ? (
         <>
           <Breadcrumb prefixTitle="Promotional Products" list={product.crumbs} />
