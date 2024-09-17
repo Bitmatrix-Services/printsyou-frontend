@@ -26,7 +26,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
     <div className="col flex flex-col">
       <div className="text-sm mb-2 flex items-center flex-wrap">
         <span className="text-mute4 mr-1">Category:</span>
-        {[...product.crumbs]
+        {[...(product.crumbs ?? [])]
           .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
           .map((productCategory, index) => (
             <Fragment key={uuidv4()}>

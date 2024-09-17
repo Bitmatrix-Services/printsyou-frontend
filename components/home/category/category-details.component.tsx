@@ -24,7 +24,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
 
   return (
     <div>
-      <Breadcrumb prefixTitle="Promotional Category" list={category.crumbs} />
+      <Breadcrumb prefixTitle="Promotional Category" list={category.crumbs ?? []} />
       <section className="bg-secondary-300 bg-opacity-[12%]">
         <Container>
           <div className="md:grid md:grid-cols-12 flex flex-col gap-4 lg:gap-6">
