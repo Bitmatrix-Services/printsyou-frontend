@@ -35,6 +35,23 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             })
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: (product?.crumbs ?? [])
+                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                .map(item => ({
+                  '@type': 'ListItem',
+                  position: item.sequenceNumber + 1,
+                  name: item.name,
+                  item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
+                }))
+            })
+          }}
+        />
       </Head>
       <ProductDetails product={product} />
     </>
