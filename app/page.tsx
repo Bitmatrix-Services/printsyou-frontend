@@ -18,7 +18,7 @@ export default async function HomePage() {
           __html: JSON.stringify({
             '@context': 'http://schema.org',
             '@type': 'Organization',
-            name: 'PrintsYou',
+            name: 'Prints You',
             description:
               'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
             email: 'info@printsyou.com',
