@@ -17,23 +17,22 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'http://schema.org',
-            '@type': 'LocalBusiness',
+            '@type': 'Organization',
             name: 'Prints You',
             description:
               'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
-            telephone: '877-934-1874',
             email: 'info@printsyou.com',
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: 'Rowlett',
-              addressRegion: 'TX',
-              streetAddress: '8602 Royal Star Road',
-              postalCode: '75089',
-              addressCountry: 'US'
-            },
-            sameAs: [['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou']],
-            url: 'https://printsyou.com',
-            image: 'https://printsyou.com/assets/logo-full.png'
+            url: 'https://printsYou.com',
+            logo: 'https://printsyou.com/assets/logo-full.png',
+            sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
+            image: 'https://printsyou.com/assets/logo-full.png',
+            contactPoint: {
+              '@type': 'ContactPoint',
+              telephone: '+1-877-934-1874',
+              contactType: 'Customer Support',
+              areaServed: 'US',
+              availableLanguage: ['English']
+            }
           })
         }}
       />
