@@ -15,7 +15,8 @@ export const CartSection = () => {
   const cartRoot = useAppSelector(selectCartRootState);
 
   useEffect(() => {
-    getCartData();
+    const cartId = getCartId();
+    if (cartId) getCartData(cartId);
   }, []);
 
   const handleCheckout = () => {
@@ -54,9 +55,7 @@ export const CartSection = () => {
     [cartRoot]
   );
 
-  const getCartData = async () => {
-    const cartId = getCartId();
-
+  const getCartData = async (cartId: string) => {
     try {
       axios
         .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartId}`)
