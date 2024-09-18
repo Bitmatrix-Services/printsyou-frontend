@@ -1,8 +1,7 @@
-import {AdditionalFieldProductValues} from '@components/home/product/product.types';
 import {Sortable} from '@utils/util-types';
 
 export const metaConstants = {
-  SITE_NAME: 'Prints You',
+  SITE_NAME: 'PrintsYou - Custom Printed Products',
   DESCRIPTION:
     'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!'
 };
