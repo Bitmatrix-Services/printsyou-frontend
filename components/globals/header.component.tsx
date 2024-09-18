@@ -114,7 +114,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
         </header>
       </Container>
 
-      <NavComponent categories={categories.slice(0, 10)} />
+      <NavComponent categories={categories.slice(0, 8)} />
 
       {/* mobile view  */}
       {mobileMenu ? (

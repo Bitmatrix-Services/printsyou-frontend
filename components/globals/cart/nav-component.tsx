@@ -52,16 +52,17 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
             <div className="flex pt-6">
               {/* Flyout menus */}
               <div className="hidden lg:block w-full">
-                <div className="flex h-full">
-                  {displayedCategories?.map(category => (
+                <div className="flex h-full justify-between items-center">
+                  {categories?.map(category => (
                     <div
                       key={uuidv4()}
                       onMouseEnter={() => setHoveredCategory(category.id)}
                       onMouseLeave={() => setHoveredCategory(null)}
+                      className="inline-block text-center flex-1"
                     >
                       <Link
                         href={`/categories/${category.uniqueCategoryName}`}
-                        className={`capitalize relative whitespace-nowrap px-3 lg:4 xl:px-5 z-10 pb-4 flex items-center border-b-2 text-sm font-normal text-mute3 transition-colors duration-200 ease-out ${
+                        className={`capitalize relative whitespace-break-spaces 2xl:whitespace-nowrap z-10 border-b-2 text-sm font-normal text-mute3 transition-colors duration-200 ease-out ${
                           hoveredCategory === category.id
                             ? 'text-primary-500 border-primary-500'
                             : 'hover:text-gray-800 border-transparent'
@@ -87,7 +88,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                     .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
                                     .slice(0, 36)
                                     .map(subCategory => (
-                                      <div className="py-1" key={uuidv4()}>
+                                      <div className="py-1 text-left" key={uuidv4()}>
                                         <Link
                                           href={`/categories/${subCategory.uniqueCategoryName}`}
                                           onClick={() => setHoveredCategory(null)}
