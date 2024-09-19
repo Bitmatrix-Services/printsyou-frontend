@@ -1,9 +1,10 @@
-import {getCategoryDetailsByUniqueName} from '@components/home/category/category.apis';
+import {getCategoryDetailsByUniqueName, getProductsLdForCategoryPage} from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
+  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
 
   let category: Category | null = null;
 
@@ -44,6 +45,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
           })
         }}
       />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
       <CategoryDetails category={category} />
     </>
   );

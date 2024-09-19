@@ -76,3 +76,5 @@ export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<s
     })
   ).data.payload;
 };
+
+export const formatString = (str: string, ...args: any[]) => str.replace(/{(\d+)}/g, (_, index) => args[index] || '');

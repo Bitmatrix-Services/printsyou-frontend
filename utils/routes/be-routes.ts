@@ -6,13 +6,14 @@ export const HomePageRoutes = Object.freeze({
   UnderABuck: '/product/byTag?tag=featured',
   innovativeIdea: '/product/byTag?tag=featured',
   Deals: '/product/byTag?tag=featured',
-  Faqs: `/faqs/all`
+  Faqs: `/faqs/all`,
 });
 
 export const ProductRoutes = Object.freeze({
   ProductById: `/product`,
   ProductByUniqueName: `/product?uProductName`,
-  ProductByCategoryId: `/product/byCategory`
+  ProductByCategoryId: `/product/byCategory`,
+  Ld: '/product/ld-products/{0}'
 });
 
 export const CategoryRoutes = Object.freeze({
