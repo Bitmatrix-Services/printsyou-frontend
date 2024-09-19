@@ -1,7 +1,6 @@
 import {getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {Product} from '@components/home/product/product.types';
-import {metaConstants} from '@utils/constants';
 import React from 'react';
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
@@ -65,7 +64,7 @@ export async function generateMetadata({params}: {params: {uniqueProductName: st
   if (response?.payload) product = response.payload;
 
   return {
-    title: `${product?.metaTitle || product?.productName} | ${metaConstants.SITE_NAME}`,
+    title: `${product?.metaTitle || product?.productName}`,
     description: product?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`

@@ -1,7 +1,6 @@
 import {getCategoryDetailsByUniqueName} from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
-import {metaConstants} from '@utils/constants';
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
@@ -60,7 +59,7 @@ export async function generateMetadata({params}: {params: {uniqueCategoryName: s
   if (response?.payload) category = response.payload;
 
   return {
-    title: `${category?.metaTitle || category?.categoryName} | ${metaConstants.SITE_NAME}`,
+    title: `${category?.metaTitle || category?.categoryName}`,
     description: category?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`
