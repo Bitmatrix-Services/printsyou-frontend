@@ -47,6 +47,18 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
                     minValue: 1,
                     maxValue: 7,
                     unitCode: 'DAY'
+                  },
+                  cutOffTime: '23:30:00-05:00',
+                  businessDays: {
+                    '@type': 'OpeningHoursSpecification',
+                    dayOfWeek: [
+                      'https://schema.org/Monday',
+                      'https://schema.org/Tuesday',
+                      'https://schema.org/Wednesday',
+                      'https://schema.org/Thursday',
+                      'https://schema.org/Friday',
+                      'https://schema.org/Saturday',
+                    ]
                   }
                 }
               }
