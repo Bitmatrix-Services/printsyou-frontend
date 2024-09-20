@@ -1,15 +1,36 @@
 import {getCategoryDetailsByUniqueName, getProductsLdForCategoryPage} from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
-import * as process from "node:process";
+import {permanentRedirect, RedirectType} from "next/navigation";
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
-  const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
+  let uniqueName = params.uniqueCategoryName.join('/');
+
+  const finalUrl = uniqueName
+    .replaceAll('---', '-')
+    .replaceAll('--', '-')
+    .replaceAll("'", '')
+    .replaceAll('™', '')
+    .replaceAll('®', '')
+    .replaceAll('½', '')
+    .replaceAll('"', '')
+    .replaceAll('.', '-')
+    .replaceAll('%', '')
+    .replaceAll('”', '')
+    .replaceAll('+', '')
+    .replaceAll('’', '')
+    .replaceAll('&', 'amp');
+
+  if (uniqueName !== finalUrl) {
+    permanentRedirect(`/categories/${finalUrl}`, RedirectType.replace);
+  }
+
+  const response = await getCategoryDetailsByUniqueName(uniqueName);
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
 
   if (ld?.payload) {
-    ld.payload['name'] = response?.payload.categoryName
-    ld.payload['url'] = `${process.env.FE_URL}categories/${response?.payload.uniqueCategoryName}`
+    ld.payload['name'] = response?.payload.categoryName;
+    ld.payload['url'] = `${process.env.FE_URL}categories/${response?.payload.uniqueCategoryName}`;
   }
 
   let category: Category | null = null;

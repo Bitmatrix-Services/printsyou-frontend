@@ -3,9 +3,31 @@ import {getProductDetailsByUniqueName} from '@components/home/product/product-ap
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {Product} from '@components/home/product/product.types';
 import moment from 'moment';
+import {permanentRedirect, RedirectType} from "next/navigation";
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
-  const response = await getProductDetailsByUniqueName(params.uniqueProductName.join('/'));
+  let uniqueName = params.uniqueProductName.join('/');
+
+  const finalUrl = uniqueName
+    .replaceAll('---', '-')
+    .replaceAll('--', '-')
+    .replaceAll("'", '')
+    .replaceAll('™', '')
+    .replaceAll('®', '')
+    .replaceAll('½', '')
+    .replaceAll('"', '')
+    .replaceAll('.', '-')
+    .replaceAll('%', '')
+    .replaceAll('”', '')
+    .replaceAll('+', '')
+    .replaceAll('’', '')
+    .replaceAll('&', 'amp');
+
+  if (uniqueName !== finalUrl) {
+    permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
+  }
+
+  const response = await getProductDetailsByUniqueName(uniqueName);
   let product: Product | null = null;
 
   if (response?.payload) product = response.payload;
