@@ -915,6 +915,11 @@ const nextConfig = {
       destination: '/categories/ceramic-mugs/tumblers-8-oz-11-oz-',
       source: '/categories/ceramic-mugs/tumblers8-oz-11-oz-',
       permanent: true
+    },
+    {
+      destination: '/search-results',
+      source: '/search_results',
+      permanent: true
     }
   ],
   rewrites: () => [
