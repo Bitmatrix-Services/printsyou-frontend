@@ -18,7 +18,6 @@ import {Sheet} from '@mui/joy';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectCartRootState, setSidebarCartOpen} from '../../store/slices/cart/cart.slice';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
-import {v4 as uuidv4} from 'uuid';
 
 interface IHeaderProps {
   categories: Category[];
@@ -152,7 +151,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                 <AccordionDetails sx={{color: 'white'}}>
                   <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4">
                     {categories.slice(0, 6).map(category => (
-                      <li key={uuidv4()}>
+                      <li key={category.id}>
                         <Link
                           className="text-sm text-[#b5b8c1] hover:text-primary-500"
                           href={`/categories/${category.uniqueCategoryName}`}
@@ -173,7 +172,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             <fieldset className="p-6">
               <ul className="grid grid-cols-2 gap-6">
                 {links.map(link => (
-                  <li key={uuidv4()}>
+                  <li key={link.name}>
                     <Link
                       href={link.url}
                       onClick={handleMenuClose}

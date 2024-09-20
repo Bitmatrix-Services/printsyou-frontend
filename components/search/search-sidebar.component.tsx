@@ -9,7 +9,6 @@ import {Checkbox, FormControl, FormLabel, Stack} from '@mui/joy';
 import {IoRemove} from 'react-icons/io5';
 import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
-import {v4 as uuidv4} from 'uuid';
 
 type searchType = {
   name: string;
@@ -299,7 +298,7 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
               {byCategory?.map(catItem => (
-                <FormControl key={uuidv4()} className="block border-b-2 font-normal">
+                <FormControl key={catItem.ucategoryName} className="block border-b-2 font-normal">
                   <Stack direction="row" alignItems="center" spacing={1} marginTop={1} marginBottom={1}>
                     <div
                       className="block font-normal cursor-pointer"

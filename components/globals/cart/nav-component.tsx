@@ -4,7 +4,6 @@ import {Container} from '@components/globals/container.component';
 import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
-import {v4 as uuidv4} from 'uuid';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {aosGlobalSetting} from '@utils/constants';
@@ -55,7 +54,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                 <ul className="flex h-full justify-between items-stretch border-b border-gray-200">
                   {categories?.map(category => (
                     <div
-                      key={uuidv4()}
+                      key={category.id}
                       onMouseEnter={() => setHoveredCategory(category.id)}
                       onMouseLeave={() => setHoveredCategory(null)}
                       className={`inline-block flex-grow list-none text-center cursor-pointer pb-4`}
@@ -86,7 +85,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                     .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
                                     .slice(0, 36)
                                     .map(subCategory => (
-                                      <div className="py-1 text-left" key={uuidv4()}>
+                                      <div className="py-1 text-left" key={subCategory.id}>
                                         <Link
                                           href={`/categories/${subCategory.uniqueCategoryName}`}
                                           onClick={() => setHoveredCategory(null)}
