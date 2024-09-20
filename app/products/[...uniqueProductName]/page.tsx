@@ -1,7 +1,8 @@
+import React from 'react';
 import {getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {Product} from '@components/home/product/product.types';
-import React from 'react';
+import moment from 'moment';
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
   const response = await getProductDetailsByUniqueName(params.uniqueProductName.join('/'));
@@ -19,7 +20,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'Product',
             name: product?.productName,
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-            description: (product?.metaDescription ?? ''),
+            description: product?.metaDescription ?? '',
             sku: product?.sku,
             offers: {
               '@type': 'Offer',
@@ -27,8 +28,44 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
               itemCondition: 'https://schema.org/NewCondition',
               availability: 'https://schema.org/InStock',
               priceCurrency: 'USD',
-              price: [...(product?.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price
+              priceValidUntil: product?.saleEndDate
+                ? moment(product?.saleEndDate, 'MMMM DD, YYYY').format('YYYY-MM-DD')
+                : null,
+              price: [...(product?.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price,
+              shippingDetails: {
+                '@type': 'OfferShippingDetails',
+                deliveryTime: {
+                  '@type': 'ShippingDeliveryTime',
+                  handlingTime: {
+                    '@type': 'QuantitativeValue',
+                    minValue: 0,
+                    maxValue: 3,
+                    unitCode: 'DAY'
+                  },
+                  transitTime: {
+                    '@type': 'QuantitativeValue',
+                    minValue: 1,
+                    maxValue: 7,
+                    unitCode: 'DAY'
+                  }
+                }
+              }
             }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ImageGallery',
+            url: `${process.env.FE_URL}${product?.uniqueProductName}`,
+            associatedMedia: (product?.productImages ?? []).map((image, index) => ({
+              '@type': 'ImageObject',
+              contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,
+              text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`
+            }))
           })
         }}
       />
