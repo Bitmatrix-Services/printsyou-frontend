@@ -47,25 +47,23 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
   return (
     <div className="bg-white">
       <Container>
-        <nav aria-label="Top">
-          <div className="border-b border-gray-200">
-            <div className="flex pt-6">
-              {/* Flyout menus */}
-              <div className="hidden lg:block w-full">
-                <div className="flex h-full justify-between items-center">
+        <div aria-label="Top">
+          <div className="flex pt-6">
+            {/* Flyout menus */}
+            <div className="hidden lg:block w-full">
+              <nav className="flex flex-col justify-center">
+                <ul className="flex h-full justify-between items-stretch border-b border-gray-200">
                   {categories?.map(category => (
                     <div
                       key={uuidv4()}
                       onMouseEnter={() => setHoveredCategory(category.id)}
                       onMouseLeave={() => setHoveredCategory(null)}
-                      className="inline-block text-center flex-1"
+                      className={`inline-block flex-grow list-none text-center cursor-pointer pb-4`}
                     >
                       <Link
                         href={`/categories/${category.uniqueCategoryName}`}
-                        className={`capitalize relative whitespace-break-spaces 2xl:whitespace-nowrap z-10 border-b-2 text-sm font-normal text-mute3 transition-colors duration-200 ease-out ${
-                          hoveredCategory === category.id
-                            ? 'text-primary-500 border-primary-500'
-                            : 'hover:text-gray-800 border-transparent'
+                        className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-sm font-normal text-mute3 ${
+                          hoveredCategory === category.id ? 'text-primary-500 border-primary-500' : 'border-transparent'
                         }`}
                         onClick={() => setHoveredCategory(null)}
                       >
@@ -119,11 +117,11 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                       )}
                     </div>
                   ))}
-                </div>
-              </div>
+                </ul>
+              </nav>
             </div>
           </div>
-        </nav>
+        </div>
       </Container>
     </div>
   );
