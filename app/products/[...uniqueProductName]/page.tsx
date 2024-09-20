@@ -16,7 +16,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
     .replaceAll('®', '')
     .replaceAll('½', '')
     .replaceAll('"', '')
-    .replaceAll('.', '-')
+    .replaceAll('.', '')
     .replaceAll('%', '')
     .replaceAll('”', '')
     .replaceAll('+', '')
