@@ -1,6 +1,7 @@
 import {getCategoryDetailsByUniqueName, getProductsLdForCategoryPage} from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
+import * as process from "node:process";
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
@@ -8,7 +9,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
 
   if (ld?.payload) {
     ld.payload['name'] = response?.payload.categoryName
-    ld.payload['url'] = response?.payload.uniqueCategoryName
+    ld.payload['url'] = `${process.env.FE_URL}categories/${response?.payload.uniqueCategoryName}`
   }
 
   let category: Category | null = null;
