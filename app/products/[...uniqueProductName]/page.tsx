@@ -136,7 +136,7 @@ export async function generateMetadata({params}: {params: {uniqueProductName: st
   if (response?.payload) product = response.payload;
 
   return {
-    title: `${product?.metaTitle || product?.productName}`,
+    title: `${product?.metaTitle || product?.productName} | PrintsYou`,
     description: product?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`
