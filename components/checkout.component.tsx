@@ -164,10 +164,6 @@ export const CheckoutComponent: FC = () => {
     } catch (e) {}
   };
 
-  if (cartRoot && cartRoot?.cartItems?.length <= 0) {
-    router.push('/');
-  }
-
   return (
     <>
       <Breadcrumb list={[]} prefixTitle="Checkout" />
@@ -501,8 +497,14 @@ export const CheckoutComponent: FC = () => {
                   </div>
                 </>
               ) : (
-                <div className="flex justify-center w-full items-center my-8">
-                  <h2 className="my-4 font-bold text-3xl text-primary">No product Found!</h2>
+                <div className="flex flex-col justify-center w-full items-center my-8">
+                  <h2 className="my-4 font-bold text-3xl text-primary">Your Cart is Empty!</h2>
+                  <div className=" text-xl">Looks like you haven't added any items to your cart yet.</div>
+                  <div className="my-4">
+                    <Link href="/" className="underline text-blue-500">
+                      Shop more...
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>
