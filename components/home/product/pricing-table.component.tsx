@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {PriceGrids, Product} from '@components/home/product/product.types';
 import dayjs from 'dayjs';
-import {v4 as uuidv4} from 'uuid';
 
 interface IPricingTableProps {
   product: Product;
@@ -46,7 +45,7 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
                     <tr key={row} className="two">
                       {row && row != 'null' && <td className="pricecell font-bold text-left">{row}</td>}
                       {byRowTypeObjects[row].map(cell => (
-                        <td className="pricecell" key={uuidv4()}>
+                        <td className="pricecell" key={cell.price}>
                           {product.saleEndDate &&
                           Date.parse(product.saleEndDate) > new Date().getTime() &&
                           cell.salePrice ? (

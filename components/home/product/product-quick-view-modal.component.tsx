@@ -13,7 +13,6 @@ import {Product} from '@components/home/product/product.types';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import sanitizeHtml from 'sanitize-html';
-import {v4 as uuidv4} from 'uuid';
 
 interface IProductQuickViewModal {
   open: boolean;
@@ -76,7 +75,7 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
               <AccordionDetails>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {product.additionalFieldProductValues?.map(item => (
-                    <Fragment key={uuidv4()}>
+                    <Fragment key={item.fieldName}>
                       <div className="flex gap-2">
                         <div className="flex-1">
                           <h6 className="text-[13px] font-bold my-2">{item.fieldName}</h6>

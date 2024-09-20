@@ -6,7 +6,6 @@ import {breakpoints} from '@utils/constants';
 import * as React from 'react';
 import {FC, useState} from 'react';
 import {Product} from '@components/home/product/product.types';
-import {v4 as uuidv4} from 'uuid';
 
 interface IProductImageSection {
   product: Product;
@@ -28,7 +27,7 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
           .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
           ?.filter(item => !item.imageUrl.includes('/small/'))
           .map((image, index) => (
-            <SwiperSlide key={uuidv4()}>
+            <SwiperSlide key={`${image.imageUrl}${image.altText}`}>
               <div
                 className="relative w-full aspect-[16/9] cursor-pointer"
                 onClick={() => setThumbsSwiper(image.imageUrl)}
@@ -65,7 +64,10 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
         {product?.productImages
           ?.filter(item => !item.imageUrl.includes('/small/'))
           .map((image, index) => (
-            <SwiperSlide key={uuidv4()} className="w-20 h-20 border border-gray-200 rounded">
+            <SwiperSlide
+              key={`${image.imageUrl}${image.sequenceNumber}`}
+              className="w-20 h-20 border border-gray-200 rounded"
+            >
               <div
                 className="relative w-full h-full cursor-pointer flex justify-center items-center"
                 onClick={() => setThumbsSwiper(image.imageUrl)}

@@ -7,7 +7,6 @@ import {SectionHeading} from '@components/home/section-heading.component';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {CategoryCard} from '@components/home/category/category-card.component';
 import {Category} from '@components/home/home.types';
-import {v4 as uuidv4} from 'uuid';
 
 interface ICategorySection {
   categoryList: Category[];
@@ -47,7 +46,7 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
           slidesPerView="auto"
         >
           {categoryList?.map(category => (
-            <SwiperSlide key={uuidv4()} className="w-44">
+            <SwiperSlide key={category.id} className="w-44">
               <CategoryCard category={category} />
             </SwiperSlide>
           ))}

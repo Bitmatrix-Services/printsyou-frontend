@@ -152,7 +152,7 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
           <h5 className="text-sm">YOUR SELECTIONS</h5>
           {colors &&
             colors.split(',')?.map((color: any) => (
-              <div key={uuidv4()}>
+              <div key={color.name}>
                 <div className="flex justify-between items-center mt-3 mb-2">
                   <span className="text-xs">
                     Color Family: <strong className="capitalize">{color}</strong>
@@ -169,7 +169,7 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
             ))}
 
           {filters.price?.map(price => (
-            <div key={uuidv4()}>
+            <div key={price}>
               <div className="flex justify-between items-center mt-3 mb-2">
                 <span className="text-xs">
                   Price: <strong>{price}</strong>
@@ -228,7 +228,7 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
               {byPriceRange?.map(price => (
-                <FormControl className="block border-b-2 font-normal" key={uuidv4()}>
+                <FormControl className="block border-b-2 font-normal" key={`${price.name}${price.count}`}>
                   <Stack direction="row" alignItems="center" spacing={1} marginTop={1} marginBottom={1}>
                     <Checkbox
                       size="md"
@@ -264,7 +264,7 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
               {byColor?.map(color => (
-                <FormControl key={uuidv4()} className="block border-b-2 font-normal">
+                <FormControl key={color.count} className="block border-b-2 font-normal">
                   <Stack direction="row" alignItems="center" spacing={1} marginTop={1} marginBottom={1}>
                     <Checkbox
                       name={color.name}

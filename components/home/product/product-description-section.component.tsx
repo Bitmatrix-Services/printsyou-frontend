@@ -29,16 +29,14 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
         {[...(product.crumbs ?? [])]
           .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
           .map((productCategory, index) => (
-            <Fragment key={uuidv4()}>
+            <Fragment key={productCategory.id}>
               {index !== 0 && index < product.crumbs.length - 1 ? (
                 <span className="mx-2">
                   <MdArrowForward className=" h-5 w-6" />
                 </span>
               ) : null}
               {index < product.crumbs.length - 1 ? (
-                <span key={uuidv4()} className="font-semibold capitalize ">
-                  {productCategory.name}
-                </span>
+                <span className="font-semibold capitalize ">{productCategory.name}</span>
               ) : null}
             </Fragment>
           ))}
@@ -79,7 +77,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
           <div className="flex flex-wrap gap-3">
             {colorsArray?.map(color => (
               <div
-                key={uuidv4()}
+                key={color}
                 style={{
                   backgroundColor: color,
                   width: 25,

@@ -4,7 +4,6 @@ import {Select, selectClasses} from '@mui/joy';
 import {MdOutlineKeyboardArrowDown} from 'react-icons/md';
 import {statesList} from '@utils/constants';
 import Option from '@mui/joy/Option';
-import {v4 as uuidv4} from 'uuid';
 import {deepFind} from '@utils/utils';
 
 interface IFormControlSelect {
@@ -64,7 +63,7 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
             onChange={(event, value) => onChange(value)}
           >
             {statesList.map(state => (
-              <Option key={uuidv4()} value={state.value}>
+              <Option key={state.name} value={state.value}>
                 {state.name}
               </Option>
             ))}

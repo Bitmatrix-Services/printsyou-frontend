@@ -56,7 +56,7 @@ export const Footer: FC<IFooter> = async ({categories}) => {
               </div>
               <div className="mt-6 flex space-x-6">
                 {social.map(item => (
-                  <Link key={uuidv4()} href={item.href} target="_blank">
+                  <Link key={item.name} href={item.href} target="_blank">
                     <span className="sr-only">{item.name}</span>
                     <item.icon className="h-6 w-6" aria-hidden="true" />
                   </Link>
