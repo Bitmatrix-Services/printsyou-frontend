@@ -19,7 +19,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'Product',
             name: product?.productName,
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-            description: (product?.description ?? '').replace(/<[^>]+>/g, ''),
+            description: (product?.metaDescription ?? ''),
             sku: product?.sku,
             offers: {
               '@type': 'Offer',
