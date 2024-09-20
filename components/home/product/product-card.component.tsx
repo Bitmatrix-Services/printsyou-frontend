@@ -10,9 +10,10 @@ import {ProductQuickViewModal} from '@components/home/product/product-quick-view
 export interface IProductCardProps {
   product: Product;
   showModal?: boolean;
+  imagePriority?: boolean;
 }
 
-export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) => {
+export const ProductCard: FC<IProductCardProps> = ({product, imagePriority, showModal = true}) => {
   const dispatch = useAppDispatch();
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
@@ -25,6 +26,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
               className="object-contain"
               skeletonRounded={true}
               fill
+              priority={imagePriority}
               src={product?.productImages?.[0]?.imageUrl}
               alt={product.productName}
             />

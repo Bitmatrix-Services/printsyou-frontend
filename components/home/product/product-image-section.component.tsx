@@ -74,6 +74,7 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
                   className="object-contain size-16"
                   height={96}
                   width={96}
+                  priority={index < 5}
                   src={image.imageUrl}
                   alt={image.altText ?? `${product.productName} ${index + 1}`}
                 />

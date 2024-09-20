@@ -87,7 +87,9 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
-            {productsByCategory?.map(product => <ProductCard key={uuidv4()} showModal={showModal} product={product} />)}
+            {productsByCategory?.map((product, index) => (
+              <ProductCard key={product.id} imagePriority={index < 10} showModal={showModal} product={product} />
+            ))}
           </div>
         )}
         {productsByCategory?.length > 0 && !isPageLoading && (
