@@ -1,7 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import {Container} from '@components/globals/container.component';
-import {v4 as uuidv4} from 'uuid';
 
 interface ServicesData {
   id: number;
@@ -49,7 +48,7 @@ export const FeatureSection = () => {
       <Container>
         <div className="border border-[#ddd] lg:divide-x divide-[#ddd] p-4 flex lg:justify-between flex-wrap">
           {servicesData.map(item => (
-            <div key={uuidv4()} className="p-4 py-6">
+            <div key={item.id} className="p-4 py-6">
               <div className="flex items-center gap-4">
                 <Image width={36} height={36} src={item.iconSrc} alt={item.title} />
                 <div>

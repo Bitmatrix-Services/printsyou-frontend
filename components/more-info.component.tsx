@@ -15,7 +15,6 @@ import {Product} from '@components/home/product/product.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {notFound} from 'next/navigation';
-import {v4 as uuidv4} from 'uuid';
 
 interface IMoreInfoComponent {
   product: Product | null;
@@ -93,7 +92,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                       {[...product.additionalRows]
                         ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
                         .map(row => (
-                          <li key={uuidv4()}>
+                          <li key={row.id}>
                             <span className="pt-[2px] block">
                               <span className="text-mute3 font-base">{row.name}</span>
                               <span className="text-primary-500 ml-2 font-semibold">${row.priceDiff.toFixed(2)}</span>

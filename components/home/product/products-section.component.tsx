@@ -8,7 +8,6 @@ import {Product} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {CircularLoader} from '@components/globals/circular-loader.component';
-import {v4 as uuidv4} from 'uuid';
 
 interface ProductsSectionProps {
   showModal?: boolean;

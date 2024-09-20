@@ -5,7 +5,6 @@ import {notFound} from 'next/navigation';
 import {Container} from '@components/globals/container.component';
 import {Avatar, AvatarGroup, CardContent, Grid, Stack} from '@mui/joy';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
-import {v4 as uuidv4} from 'uuid';
 
 interface IBlogDetailsComponent {
   blog: Blog | null;
@@ -24,14 +23,14 @@ export const BlogDetailsComponent: FC<IBlogDetailsComponent> = ({blog}) => {
           <Stack className="mb-6" direction="row" spacing={1}>
             <AvatarGroup>
               {blog?.usersInvolved?.map(user => (
-                <Avatar key={uuidv4()} sx={{bgcolor: 'rgba(219,4,129,0.5)'}}>
+                <Avatar key={user.name} sx={{bgcolor: 'rgba(219,4,129,0.5)'}}>
                   {user.name.charAt(0)}
                 </Avatar>
               ))}
             </AvatarGroup>
 
             {blog?.usersInvolved?.map((user, index) => (
-              <AvatarGroup key={uuidv4()}>
+              <AvatarGroup key={user.name}>
                 <h6 className={'text-center'}>
                   {index > 0 && '|'} {user.name}{' '}
                 </h6>

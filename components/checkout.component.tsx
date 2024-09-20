@@ -299,7 +299,7 @@ export const CheckoutComponent: FC = () => {
                         {shippingFormFields.map(field =>
                           field.label === 'State' ? (
                             <FormControlSelect
-                              key={uuidv4()}
+                              key={field.name}
                               name={field.name}
                               label={field.label}
                               isRequired={field.required}
@@ -309,7 +309,7 @@ export const CheckoutComponent: FC = () => {
                             />
                           ) : (
                             <FormControlInput
-                              key={uuidv4()}
+                              key={field.name}
                               name={field.name}
                               label={field.label}
                               isRequired={true}
@@ -343,7 +343,7 @@ export const CheckoutComponent: FC = () => {
                     <div className="p-4 border-2">
                       <FormHeading text="Products in Cart" />
                       {(cartRoot?.cartItems ?? []).map(item => (
-                        <div key={uuidv4()}>
+                        <div key={item.id}>
                           <div className="flex items-center p-4">
                             <div className="relative">
                               <ImageWithFallback

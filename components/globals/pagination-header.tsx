@@ -49,7 +49,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     onChange={e => setSort(e.target.value)}
                   >
                     {sortList.map(item => (
-                      <option key={uuidv4()} value={item.value}>
+                      <option key={item.label} value={item.value}>
                         {item.label}
                       </option>
                     ))}

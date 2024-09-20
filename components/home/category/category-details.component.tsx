@@ -7,7 +7,6 @@ import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
 import {ProductsSection} from '@components/home/product/products-section.component';
 import {notFound} from 'next/navigation';
-import {v4 as uuidv4} from 'uuid';
 
 interface ICategoryDetails {
   category: Category | null;
@@ -66,7 +65,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category}) => {
             <Link
               href={`/categories/${subCategory.uniqueCategoryName}`}
               className="flex flex-col border p-2"
-              key={uuidv4()}
+              key={subCategory.id}
             >
               <div className="min-h-56 h-56 max-h-56  relative">
                 <ImageWithFallback

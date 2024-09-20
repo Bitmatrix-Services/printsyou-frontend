@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import Image from 'next/image';
 import {Container} from '@components/globals/container.component';
-import {v4 as uuidv4} from 'uuid';
 
 const pricingList = [
   `In-house services for silk screening, embroidery, and engraving - ensuring quick lead times and lower expenses.`,
@@ -30,7 +29,7 @@ export const OffersSection = () => {
           <div className="py-2 md:w-[90%] m-auto ">
             <div className="md:grid md:grid-cols-2">
               {pricingList.map(item => (
-                <PricingCard key={uuidv4()} description={item} />
+                <PricingCard key={item} description={item} />
               ))}
             </div>
           </div>
