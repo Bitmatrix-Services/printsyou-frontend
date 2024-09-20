@@ -4,7 +4,6 @@ import Link from 'next/link';
 import {Container} from '@components/globals/container.component';
 import {Newsletter} from '@components/home/newsletter-section.component';
 import {Category, Faq} from '@components/home/home.types';
-import {v4 as uuidv4} from 'uuid';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import {getFaqsList} from '@components/home/home-apis';
 
@@ -115,7 +114,7 @@ const FooterLinks: FC<FooterLinksProps> = ({title, list}) => {
         <h6 className="mb-4 text-lg lg:text-base font-bold text-headingColor capitalize">{title}</h6>
         <div className="space-y-4">
           {(list ?? []).map(linkItem => (
-            <Link href={linkItem.url} className="block text-sm hover:text-primary-500" key={uuidv4()}>
+            <Link href={linkItem.url} className="block text-sm hover:text-primary-500" key={linkItem.url}>
               <span className="capitalize">{linkItem.name}</span>
             </Link>
           ))}

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Box, IconButton} from '@mui/joy';
 import {IoMdStar, IoMdStarOutline} from 'react-icons/io';
-import {v4 as uuidv4} from 'uuid';
 
 interface RatingStarProps {
   value?: number;
@@ -31,7 +30,7 @@ const RatingStar: React.FC<RatingStarProps> = ({value = 0, onChange, max = 5, si
     <Box display="flex">
       {[...Array(max)].map((_, index) => (
         <IconButton
-          key={uuidv4()}
+          key={index}
           variant="plain"
           onClick={() => handleClick(index)}
           onMouseEnter={() => handleMouseEnter(index)}

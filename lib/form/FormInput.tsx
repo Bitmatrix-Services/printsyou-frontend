@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {getIn} from 'formik';
 import {statesList} from '@utils/constants';
-import {v4 as uuidv4} from 'uuid';
 
 interface FormInputProps {
   name: string;
@@ -49,7 +48,7 @@ const FormInput: FC<FormInputProps> = ({name, placeHolder, type, inputType, form
           >
             {/* {!value && <option value="choose a state" className='text-gray-500'>Choose a State</option>} */}
             {statesList.map(state => (
-              <option key={uuidv4()} value={state.value}>
+              <option key={`${state.name}${state.value}`} value={state.value}>
                 {state.name}
               </option>
             ))}
