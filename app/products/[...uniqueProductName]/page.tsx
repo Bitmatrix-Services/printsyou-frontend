@@ -19,7 +19,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'Product',
             name: product?.productName,
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-            description: (product?.metaDescription ?? ''),
+            description: product?.metaDescription ?? '',
             sku: product?.sku,
             offers: {
               '@type': 'Offer',
@@ -64,7 +64,7 @@ export async function generateMetadata({params}: {params: {uniqueProductName: st
   if (response?.payload) product = response.payload;
 
   return {
-    title: `${product?.metaTitle || product?.productName}`,
+    title: `${product?.metaTitle || product?.productName} | PrintsYou`,
     description: product?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`

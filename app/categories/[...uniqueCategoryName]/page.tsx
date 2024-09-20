@@ -7,8 +7,8 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
 
   if (ld?.payload) {
-    ld.payload['name'] = response?.payload.categoryName
-    ld.payload['url'] = response?.payload.uniqueCategoryName
+    ld.payload['name'] = response?.payload.categoryName;
+    ld.payload['url'] = response?.payload.uniqueCategoryName;
   }
 
   let category: Category | null = null;
@@ -66,7 +66,7 @@ export async function generateMetadata({params}: {params: {uniqueCategoryName: s
   if (response?.payload) category = response.payload;
 
   return {
-    title: `${category?.metaTitle || category?.categoryName}`,
+    title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
     description: category?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`
