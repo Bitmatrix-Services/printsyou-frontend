@@ -6,6 +6,11 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
 
+  if (ld?.payload) {
+    ld.payload['name'] = response?.payload.categoryName
+    ld.payload['url'] = response?.payload.uniqueCategoryName
+  }
+
   let category: Category | null = null;
 
   if (response?.payload) category = response.payload;
