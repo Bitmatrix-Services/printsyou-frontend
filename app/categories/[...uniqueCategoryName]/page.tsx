@@ -6,7 +6,7 @@ import {permanentRedirect, RedirectType} from "next/navigation";
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   let uniqueName = params.uniqueCategoryName.join('/');
 
-  const finalUrl = uniqueName
+  const finalUrl = decodeURIComponent(uniqueName)
     .replaceAll('---', '-')
     .replaceAll('--', '-')
     .replaceAll("'", '')
