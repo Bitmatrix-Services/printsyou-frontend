@@ -1,7 +1,7 @@
 import {getCategoryDetailsByUniqueName, getProductsLdForCategoryPage} from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
-import {permanentRedirect, RedirectType} from "next/navigation";
+import {permanentRedirect, RedirectType} from 'next/navigation';
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   let uniqueName = params.uniqueCategoryName.join('/');

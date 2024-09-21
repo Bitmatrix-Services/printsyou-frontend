@@ -499,7 +499,7 @@ export const CheckoutComponent: FC = () => {
               ) : (
                 <div className="flex flex-col justify-center w-full items-center my-8">
                   <h2 className="my-4 font-bold text-3xl text-primary">Your Cart is Empty!</h2>
-                  <div className=" text-xl">Looks like you haven't added any items to your cart yet.</div>
+                  <div className=" text-xl">Looks like you have not added any items to your cart yet.</div>
                   <div className="my-4">
                     <Link href="/" className="underline text-blue-500">
                       Shop more...
