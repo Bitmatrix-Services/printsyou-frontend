@@ -3,12 +3,12 @@ import {getProductDetailsByUniqueName} from '@components/home/product/product-ap
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {Product} from '@components/home/product/product.types';
 import moment from 'moment';
-import {permanentRedirect, RedirectType} from "next/navigation";
+import {permanentRedirect, RedirectType} from 'next/navigation';
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
   let uniqueName = params.uniqueProductName.join('/');
 
-  const finalUrl = decodeURIComponent(uniqueName.replaceAll('%2B', ''))
+  const finalUrl = decodeURIComponent(uniqueName)
     .replaceAll('---', '-')
     .replaceAll('--', '-')
     .replaceAll("'", '')
@@ -21,7 +21,8 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
     .replaceAll('”', '')
     .replaceAll('+', '')
     .replaceAll('’', '')
-    .replaceAll('&', 'amp');
+    .replaceAll('&', 'amp')
+    .replaceAll(' ', '');
 
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
@@ -79,7 +80,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
                       'https://schema.org/Wednesday',
                       'https://schema.org/Thursday',
                       'https://schema.org/Friday',
-                      'https://schema.org/Saturday',
+                      'https://schema.org/Saturday'
                     ]
                   }
                 }
