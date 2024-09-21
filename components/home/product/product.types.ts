@@ -74,4 +74,5 @@ export interface EnclosureProduct {
   priorityOrder: number;
   uniqueProductName: string;
   imageUrl: string;
+  priceGrids: PriceGrids[];
 }
