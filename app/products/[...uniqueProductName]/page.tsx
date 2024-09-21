@@ -23,8 +23,8 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
     .replaceAll('’', '')
     .replaceAll('&', 'amp');
 
-  if (uniqueName !== encodeURIComponent(finalUrl)) {
-    permanentRedirect(`/products/${encodeURIComponent(finalUrl)}`, RedirectType.replace);
+  if (uniqueName !== finalUrl) {
+    permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
   }
 
   const response = await getProductDetailsByUniqueName(uniqueName);
