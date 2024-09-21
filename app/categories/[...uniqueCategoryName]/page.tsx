@@ -89,7 +89,7 @@ export async function generateMetadata({params}: {params: {uniqueCategoryName: s
   if (response?.payload) category = response.payload;
 
   return {
-    title: `${category?.metaTitle || category?.categoryName}`,
+    title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
     description: category?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`
