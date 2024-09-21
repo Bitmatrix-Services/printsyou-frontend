@@ -19,7 +19,8 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
     .replaceAll('”', '')
     .replaceAll('+', '')
     .replaceAll('’', '')
-    .replaceAll('&', 'amp');
+    .replaceAll('&', 'amp')
+    .replaceAll(' ', '');
 
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/categories/${finalUrl}`, RedirectType.replace);
