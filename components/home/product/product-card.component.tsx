@@ -125,7 +125,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, imagePriority, show
         </div>
       </div>
       {quickViewModalOpen ? (
-        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} product={product} />
+        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} productId={product.id} />
       ) : null}
     </div>
   );
