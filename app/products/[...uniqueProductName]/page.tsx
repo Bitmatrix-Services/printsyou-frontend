@@ -8,7 +8,7 @@ import {permanentRedirect, RedirectType} from "next/navigation";
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
   let uniqueName = params.uniqueProductName.join('/');
 
-  const finalUrl = decodeURIComponent(uniqueName)
+  const finalUrl = decodeURIComponent(uniqueName.replaceAll('%2B', ''))
     .replaceAll('---', '-')
     .replaceAll('--', '-')
     .replaceAll("'", '')
