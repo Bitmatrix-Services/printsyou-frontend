@@ -69,11 +69,12 @@ export const AddToCartModal: FC = () => {
   });
   const [addToCartError, setAddToCartError] = useState<boolean>(false);
   const [priceTypes, setPriceTypes] = useState<string[]>([]);
+  const [formSubmitting, setFormSubmitting] = useState<string>('');
 
   useEffect(() => {
     const strings: string[] = [];
     product.priceGrids.forEach(item => {
-      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null) {
+      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null && item.priceType !== '') {
         strings.push(item.priceType);
       }
     });
@@ -120,7 +121,7 @@ export const AddToCartModal: FC = () => {
       }
 
       const productState = {
-        id: cartState.selectedProduct.id,
+        id: cartState.selectedProduct.productId,
         sku: cartState.selectedProduct.sku,
         productName: cartState.selectedProduct.productName,
         priceGrids: cartState.selectedProduct.priceGrids,
@@ -164,6 +165,7 @@ export const AddToCartModal: FC = () => {
       })
     );
     setAddToCartError(false);
+    setFormSubmitting('');
     if (submitType === 'checkout') router.push('/checkout');
   };
 
@@ -238,6 +240,8 @@ export const AddToCartModal: FC = () => {
 
   const handleAddToCart = (submitType: string) => {
     setAddToCartError(false);
+    setFormSubmitting(submitType);
+
     const cartId = getCartId();
     const cartData = {
       productId: product.id,
@@ -277,6 +281,7 @@ export const AddToCartModal: FC = () => {
         })
         .catch(() => {
           setAddToCartError(true);
+          setFormSubmitting('');
         });
     } else if (!Object.keys(formik.errors).length) {
       axios
@@ -288,6 +293,7 @@ export const AddToCartModal: FC = () => {
         })
         .catch(() => {
           setAddToCartError(true);
+          setFormSubmitting('');
         });
     }
   };
@@ -333,7 +339,7 @@ export const AddToCartModal: FC = () => {
                   </div>
                   <div className="flex justify-between space-x-4 w-full">
                     <div className="flex justify-between items-center gap-4">
-                      {Object.keys(priceTypes).length > 0 ? (
+                      {priceTypes.length > 0 ? (
                         <div className="flex items-center gap-2">
                           <label className="font-semibold text-xs" htmlFor="price-type">
                             Item Type
@@ -488,7 +494,7 @@ export const AddToCartModal: FC = () => {
                       disabled={formik.isSubmitting}
                       className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
                     >
-                      {formik.isSubmitting ? (
+                      {formik.isSubmitting && formSubmitting === 'cart' ? (
                         <CircularLoader />
                       ) : (
                         <div className="flex">
@@ -503,7 +509,7 @@ export const AddToCartModal: FC = () => {
                       disabled={formik.isSubmitting}
                       className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
                     >
-                      {formik.isSubmitting ? (
+                      {formik.isSubmitting && formSubmitting === 'checkout' ? (
                         <CircularLoader />
                       ) : (
                         <div className="flex">
