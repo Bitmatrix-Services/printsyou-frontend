@@ -3,25 +3,24 @@ import React, {FC, useEffect, useState} from 'react';
 import {useSearchParams} from 'next/navigation';
 import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
-import {ProductCard} from '@components/home/product/product-card.component';
-import {Product} from '@components/home/product/product.types';
+import {EnclosureProduct} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {CircularLoader} from '@components/globals/circular-loader.component';
+import {SearchProductCard} from '@components/search/search-product-card';
 
 interface ProductsSectionProps {
-  showModal?: boolean;
   categoryId: string;
   categoryName: string;
   prefix?: string;
   suffix?: string;
 }
 
-export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId, categoryName, prefix, suffix}) => {
+export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryName, prefix, suffix}) => {
   const searchParams = useSearchParams();
   const minPrice = searchParams.get('minPrice');
   const maxPrice = searchParams.get('maxPrice');
-  const [productsByCategory, setProductsByCategory] = useState<Product[]>([]);
+  const [productsByCategory, setProductsByCategory] = useState<EnclosureProduct[]>([]);
 
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(20);
@@ -87,7 +86,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({showModal, categoryId
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
             {productsByCategory?.map((product, index) => (
-              <ProductCard key={product.id} imagePriority={index < 10} showModal={showModal} product={product} />
+              <SearchProductCard imagePriority={index < 10} key={product.productId} product={product} />
             ))}
           </div>
         )}
