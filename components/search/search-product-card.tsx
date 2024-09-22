@@ -17,7 +17,7 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
 
   return (
     <div className="group relative bg-white">
-      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl">
+      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl px-3">
         <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
           <div className=" min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback

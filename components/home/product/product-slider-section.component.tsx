@@ -4,13 +4,13 @@ import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {SectionHeading} from '@components/home/section-heading.component';
 import {Navigation} from 'swiper/modules';
 import {breakpoints} from '@utils/constants';
-import {ProductCard} from '@components/home/product/product-card.component';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
-import {Product} from '@components/home/product/product.types';
+import {EnclosureProduct} from '@components/home/product/product.types';
+import {SearchProductCard} from '@components/search/search-product-card';
 
 interface IProductSection {
   title: string;
-  productList: Product[];
+  productList: EnclosureProduct[];
   navNumber: number;
   showAllUrl?: string;
 }
@@ -51,8 +51,8 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
               className="p-1"
             >
               {productList?.map(product => (
-                <SwiperSlide key={product.id}>
-                  <ProductCard product={product} />
+                <SwiperSlide key={product.productId}>
+                  <SearchProductCard product={product} />
                 </SwiperSlide>
               ))}
             </Swiper>

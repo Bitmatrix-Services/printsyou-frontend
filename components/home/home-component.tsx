@@ -8,14 +8,14 @@ import {CategorySection} from '@components/home/category/category-section.compon
 import {BannerList, Category} from '@components/home/home.types';
 import {FC} from 'react';
 import {FeatureSection} from '@components/home/feature-section.component';
-import {Product} from '@components/home/product/product.types';
+import {EnclosureProduct} from '@components/home/product/product.types';
 
 interface IHome {
   categories: Category[];
-  underABuck: Product[];
-  newAndExclusive: Product[];
-  innovativeIdea: Product[];
-  deals: Product[];
+  underABuck: EnclosureProduct[];
+  newAndExclusive: EnclosureProduct[];
+  innovativeIdea: EnclosureProduct[];
+  deals: EnclosureProduct[];
   bannersList: BannerList[];
 }
 
