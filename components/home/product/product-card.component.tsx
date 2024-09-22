@@ -8,6 +8,7 @@ import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import {useAppDispatch} from '../../../store/hooks';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
 import {FaRegHeart} from 'react-icons/fa';
+import {addToWishlist} from '../../../store/slices/wishlist/wishlist.slice';
 import {useAppSelector} from '../../../store/hooks';
 import {selectWishlistId} from 'store/slices/wishlist/wishlist.slice';
 
@@ -22,6 +23,8 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
   const handleAddToWishlist = async () => {
+    dispatch(addToWishlist({product}));
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/add-item?wishlistId=${wishlistId}`,

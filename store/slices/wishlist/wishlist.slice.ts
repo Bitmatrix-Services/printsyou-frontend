@@ -63,12 +63,16 @@ export const wishlistSlice = createSlice({
     },
     setWishlistId: (state, action: PayloadAction<string>) => {
       state.wishlistId = action.payload;
-      localStorage.setItem('wishlistId', action.payload);  
+      localStorage.setItem('wishlistId', action.payload);
+    },
+    setWishlistItems: (state, action: PayloadAction<WishlistItem[]>) => {
+      state.wishlistItems = action.payload;
+      updateWishlistLocalStorage(state.wishlistItems);
     }
   }
 });
 
-export const { addToWishlist, removeFromWishlist, setWishlistStateForModal, setWishlistState, setWishlistId } = wishlistSlice.actions;
+export const { addToWishlist, removeFromWishlist, setWishlistStateForModal, setWishlistState, setWishlistId, setWishlistItems } = wishlistSlice.actions;
 
 export const wishlistReducer = wishlistSlice.reducer;
 

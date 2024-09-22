@@ -1,11 +1,33 @@
 import {WishListItem} from '@components/globals/cart/wishlist-item.component';
-import React from 'react';
-import {useAppSelector} from 'store/hooks';
-import {selectWishlistItems, selectWishlistId} from 'store/slices/wishlist/wishlist.slice';
+import {useEffect} from 'react';
+import axios from 'axios';
+import {useAppDispatch, useAppSelector} from 'store/hooks';
+import {selectWishlistItems, selectWishlistId, setWishlistItems} from 'store/slices/wishlist/wishlist.slice';
 
 export const WishlistSection = () => {
+  const dispatch = useAppDispatch();
   const wishlistItems = useAppSelector(selectWishlistItems);
   const wishlistId = useAppSelector(selectWishlistId);
+
+  const getWishlistData = async (wishlistId: string) => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/${wishlistId}`);
+
+      if (response.data && !response.data.hasError) {
+        dispatch(setWishlistItems(response.data.payload.wishlistItems));
+      } else {
+        console.error('Error fetching wishlist data:', response.data);
+      }
+    } catch (error) {
+      console.error('Error making GET request:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (wishlistId) {
+      getWishlistData(wishlistId);
+    }
+  }, [wishlistId]);
 
   return (
     <>
