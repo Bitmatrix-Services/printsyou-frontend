@@ -1,15 +1,17 @@
 import {WishListItem} from '@components/globals/cart/wishlist-item.component';
 import React from 'react';
-import {v4 as uuidv4} from 'uuid';
+import {useAppSelector} from 'store/hooks';
+import {selectWishlistItems, selectWishlistId} from 'store/slices/wishlist/wishlist.slice';
 
 export const WishlistSection = () => {
-  let isEmpty = false;
+  const wishlistItems = useAppSelector(selectWishlistItems);
+  const wishlistId = useAppSelector(selectWishlistId);
 
   return (
     <>
       <div className="text-mute border-t border my-6" />
 
-      {isEmpty ? (
+      {wishlistItems.length === 0 ? (
         <div className="flex flex-col justify-center items-center gap-2 ">
           <h2 className="text-black text-xl text-center font-semibold capitalize">Your Wish List is Empty!</h2>
           <h3 className="text-base text-black  font-normal text-center">Start adding your favorite items here.</h3>
@@ -24,8 +26,8 @@ export const WishlistSection = () => {
           <h2 className="text-black text-xl font-semibold">Wish List</h2>
           <div className="text-mute border-t border my-6" />
 
-          {new Array(2).fill(0).map(_ => (
-            <WishListItem key={uuidv4()} />
+          {wishlistItems.map((item, i): any => (
+            <WishListItem key={i} product={item.product} />
           ))}
 
           <div className="mt-auto mb-6"></div>

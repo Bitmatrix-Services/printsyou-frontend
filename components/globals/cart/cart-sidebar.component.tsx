@@ -5,6 +5,7 @@ import Image from 'next/image';
 import {CartSection} from '@components/globals/cart/cart-section.component';
 import {selectSidebarCartOpen, setSidebarCartOpen} from '../../../store/slices/cart/cart.slice';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
+import {WishlistSection} from './wishlist-section.component';
 
 export const SidebarCart = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +21,7 @@ export const SidebarCart = () => {
           <div className="mt-8">
             <CartSection />
 
-            {/*<WishlistSection />*/}
+            <WishlistSection />
           </div>
         </DialogContent>
       </div>

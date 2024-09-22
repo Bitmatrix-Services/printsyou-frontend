@@ -1,11 +1,15 @@
 'use client';
 import React, {FC, useState} from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 import {Product} from '@components/home/product/product.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import {useAppDispatch} from '../../../store/hooks';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
+import {FaRegHeart} from 'react-icons/fa';
+import {useAppSelector} from '../../../store/hooks';
+import {selectWishlistId} from 'store/slices/wishlist/wishlist.slice';
 
 export interface IProductCardProps {
   product: Product;
@@ -13,8 +17,26 @@ export interface IProductCardProps {
 }
 
 export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) => {
+  const wishlistId = useAppSelector(selectWishlistId);
   const dispatch = useAppDispatch();
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
+
+  const handleAddToWishlist = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/wishlist/add-item?wishlistId=${wishlistId}`,
+        {productId: product.id}
+      );
+
+      if (response.data && !response.data.hasError) {
+        // console.log('Product successfully added to the wishlist:', response.data.payload);
+      } else {
+        console.error('Error adding product to the wishlist:', response.data);
+      }
+    } catch (error) {
+      console.error('Error making POST request:', error);
+    }
+  };
 
   return (
     <div className="group relative bg-white">
@@ -37,9 +59,9 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
             </div>
             <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-3">
               <div className="h-full flex flex-col">
-                {/*<button type="button" className="ml-auto">*/}
-                {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
-                {/*</button>*/}
+                <button onClick={handleAddToWishlist} type="button" className="ml-auto relative z-30">
+                  <FaRegHeart className="h-7 w-7 text-primary-500 hover:text-black" />
+                </button>
                 <div className="mt-auto mb-2 flex gap-3">
                   <button
                     type="button"
@@ -107,7 +129,6 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
                   <span className="line-through text-lg font-semibold">
                     ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.price?.toFixed(2)}
                   </span>
-
                   <span>—</span>
                   <span className="text-2xl font-semibold text-primary-500">
                     ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice?.toFixed(2)}
