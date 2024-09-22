@@ -4,10 +4,15 @@ import {Modal, ModalDialog} from '@mui/joy';
 import Image from 'next/image';
 import {useFormik} from 'formik';
 import axios, {AxiosResponse} from 'axios';
-import {CartRoot, File as CartItemFile} from '../../../store/slices/cart/cart';
+import {CartItemUpdated, CartRoot, File as CartItemFile} from '../../../store/slices/cart/cart';
 import {v4 as uuidv4} from 'uuid';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
-import {selectCartState, setCartState, setCartStateForModal} from '../../../store/slices/cart/cart.slice';
+import {
+  selectCartRootState,
+  selectCartState,
+  setCartState,
+  setCartStateForModal
+} from '../../../store/slices/cart/cart.slice';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
 import {PriceGrids} from '@components/home/product/product.types';
 import ModalClose from '@mui/joy/ModalClose';
@@ -30,8 +35,11 @@ const specsFields: Record<string, any> = {
 export const AddToCartModal: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const ref = useRef<HTMLFormElement>(null);
+
   const cartState = useAppSelector(selectCartState);
+  const cartRoot = useAppSelector(selectCartRootState);
 
   const formik = useFormik<LocalCartState>({
     initialValues: {
@@ -53,7 +61,7 @@ export const AddToCartModal: FC = () => {
 
     formik.handleSubmit();
 
-    setTimeout(() => handleAddToCart(buttonName), 500);
+    setTimeout(() => handleAddToCart(buttonName, cartRoot?.cartItems), 500);
   };
 
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
@@ -121,7 +129,7 @@ export const AddToCartModal: FC = () => {
       }
 
       const productState = {
-        id: cartState.selectedProduct.productId || cartState.selectedProduct.id,
+        id: cartState.selectedProduct.id,
         sku: cartState.selectedProduct.sku,
         productName: cartState.selectedProduct.productName,
         priceGrids: cartState.selectedProduct.priceGrids,
@@ -238,14 +246,18 @@ export const AddToCartModal: FC = () => {
     } catch (error) {}
   };
 
-  const handleAddToCart = (submitType: string) => {
+  const handleAddToCart = (submitType: string, cartItems: CartItemUpdated[] | undefined) => {
     setAddToCartError(false);
     setFormSubmitting(submitType);
 
     const cartId = getCartId();
+
+    // adding an item which is already added in cart
+    const alreadyAddedProduct = cartItems?.find(cartItem => cartItem.productId === product.id);
+
     const cartData = {
       productId: product.id,
-      qtyRequested: formik.values.itemQty,
+      qtyRequested: (alreadyAddedProduct?.qtyRequested || 0) + formik.values.itemQty,
       priceType: formik.values.selectedPriceType,
       specs: [
         {
@@ -271,9 +283,14 @@ export const AddToCartModal: FC = () => {
         fieldValue: spec.fieldValue
       }));
 
-    if (cartState.cartMode === 'update' && cartState.selectedItem && !Object.keys(formik.errors).length) {
+    if (
+      alreadyAddedProduct ||
+      (cartState.cartMode === 'update' && cartState.selectedItem && !Object.keys(formik.errors).length)
+    ) {
+      const cartItemId = alreadyAddedProduct ? alreadyAddedProduct.id : cartState.selectedItem?.id;
+
       axios
-        .put(`${API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`, cartData)
+        .put(`${API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartItemId}`, cartData)
         .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
