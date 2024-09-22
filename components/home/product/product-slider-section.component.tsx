@@ -51,7 +51,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
               className="p-1"
             >
               {productList?.map(product => (
-                <SwiperSlide key={product.productId}>
+                <SwiperSlide key={product.id}>
                   <SearchProductCard product={product} />
                 </SwiperSlide>
               ))}

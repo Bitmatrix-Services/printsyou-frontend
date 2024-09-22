@@ -121,7 +121,7 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
         </div>
       </div>
       {quickViewModalOpen ? (
-        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} productId={product.productId} />
+        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} productId={product.id} />
       ) : null}
     </div>
   );

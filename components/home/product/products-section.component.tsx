@@ -86,7 +86,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
             {productsByCategory?.map((product, index) => (
-              <SearchProductCard imagePriority={index < 10} key={product.productId} product={product} />
+              <SearchProductCard imagePriority={index < 10} key={product.id} product={product} />
             ))}
           </div>
         )}
