@@ -6,8 +6,10 @@ import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
+
   let uniqueName = params.uniqueProductName.join('/');
 
+  console.log("before cleaning url..: " + uniqueName)
   const finalUrl = decodeURIComponent(uniqueName)
     .replaceAll(',000', 'k')
     .replaceAll('½', '')
@@ -35,7 +37,10 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
     .replaceAll('°', '')
     .replaceAll('‘', '');
 
-  if (uniqueName !== finalUrl) {
+    console.log("after cleaning url: " + finalUrl)
+
+
+    if (uniqueName !== finalUrl) {
     permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
   }
 
