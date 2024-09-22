@@ -121,7 +121,7 @@ export const AddToCartModal: FC = () => {
       }
 
       const productState = {
-        id: cartState.selectedProduct.productId,
+        id: cartState.selectedProduct.productId || cartState.selectedProduct.id,
         sku: cartState.selectedProduct.sku,
         productName: cartState.selectedProduct.productName,
         priceGrids: cartState.selectedProduct.priceGrids,
