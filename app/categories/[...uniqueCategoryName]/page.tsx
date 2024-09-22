@@ -73,7 +73,9 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
           })
         }}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
+      {ld?.payload.itemListElement.length > 0 ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
+      ) : null}
       <CategoryDetails category={category} />
     </>
   );

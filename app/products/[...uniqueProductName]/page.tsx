@@ -9,12 +9,16 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
   let uniqueName = params.uniqueProductName.join('/');
 
   const finalUrl = decodeURIComponent(uniqueName)
+    .replaceAll(',000', 'k')
+    .replaceAll('½', '')
+    .replaceAll('¼', '')
+    .replaceAll('½/', '')
     .replaceAll('---', '-')
+    .replaceAll('-–-', '-')
     .replaceAll('--', '-')
     .replaceAll("'", '')
     .replaceAll('™', '')
     .replaceAll('®', '')
-    .replaceAll('½', '')
     .replaceAll('"', '')
     .replaceAll('.', '')
     .replaceAll('%', '')
@@ -22,7 +26,14 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
     .replaceAll('+', '')
     .replaceAll('’', '')
     .replaceAll('&', 'amp')
-    .replaceAll(' ', '');
+    .replaceAll(' ', '')
+    .replaceAll('è', 'e')
+    .replaceAll('©', '')
+    .replaceAll('ü', 'u')
+    .replaceAll(':', '')
+    .replaceAll(',', '')
+    .replaceAll('°', '')
+    .replaceAll('‘', '');
 
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
@@ -57,6 +68,16 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
               price: [...(product?.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price,
               shippingDetails: {
                 '@type': 'OfferShippingDetails',
+                shippingRate: {
+                  '@type': 'MonetaryAmount',
+                  minValue: 3.49,
+                  maxValue: 50.0,
+                  currency: 'USD'
+                },
+                shippingDestination: {
+                  '@type': 'DefinedRegion',
+                  addressCountry: 'US'
+                },
                 deliveryTime: {
                   '@type': 'ShippingDeliveryTime',
                   handlingTime: {
