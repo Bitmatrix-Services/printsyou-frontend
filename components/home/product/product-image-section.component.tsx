@@ -25,8 +25,7 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
       >
         {product?.productImages
           .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-          ?.filter(item => !item.imageUrl.includes('/small/'))
-          .map((image, index) => (
+          ?.map((image, index) => (
             <SwiperSlide key={`${image.imageUrl}${image.altText}`}>
               <div
                 className="relative w-full aspect-[16/9] cursor-pointer"
@@ -37,6 +36,7 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
                   fill
                   className="object-contain"
                   src={image.imageUrl}
+                  priority={index < 5}
                   alt={
                     image?.altText ??
                     (product.productName.startsWith('.')
@@ -62,8 +62,7 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
         slidesPerView="auto"
       >
         {product?.productImages
-          ?.filter(item => !item.imageUrl.includes('/small/'))
-          .map((image, index) => (
+          ?.map((image, index) => (
             <SwiperSlide
               key={`${image.imageUrl}${image.sequenceNumber}`}
               className="w-20 h-20 border border-gray-200 rounded"
