@@ -38,7 +38,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
           {label ? (
             <div className="flex">
               <h4 className="text-sm text-mute4 font-normal mb-2">{label}</h4>
-              {isRequired && <span className="text-red-600">*</span>}
+              {isRequired && label !== 'Phone Number' ? <span className="text-red-600">*</span> : null}
             </div>
           ) : null}
           {inputType === 'textField' ? (

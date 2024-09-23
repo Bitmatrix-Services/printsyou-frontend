@@ -116,6 +116,7 @@ export const ContactUsComponent = () => {
                   <FormControlInput
                     label="Phone Number"
                     name="phoneNumber"
+                    isRequired={true}
                     disabled={isSubmitting}
                     control={control}
                     errors={errors}
