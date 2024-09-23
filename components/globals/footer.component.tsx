@@ -34,30 +34,30 @@ export const Footer: FC<IFooter> = async ({categories}) => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: [
-              [...faqsList]
-                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                .map(item => ({
-                  '@type': 'Question',
-                  name: item.question,
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: item.answer
-                  }
-                }))
-            ]
-          })
-        }}
-      />
       <FaqSectionComponent faqsList={faqsList} />
       <Newsletter />
       <footer className="bg-secondary-100/50 py-4">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: [
+                [...faqsList]
+                  .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                  .map(item => ({
+                    '@type': 'Question',
+                    name: item.question,
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: item.answer
+                    }
+                  }))
+              ]
+            })
+          }}
+        />
         <Container>
           <div className="grid lg:grid-cols-12 gap-6 md:grid-cols-2">
             <div className="lg:col-span-4 md:col-span-2">
