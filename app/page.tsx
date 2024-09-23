@@ -11,12 +11,12 @@ export default async function HomePage() {
   const bannersList = await getBannersList();
 
   return (
-    <>
+    <section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'http://schema.org',
+            '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'Prints You',
             description:
@@ -79,6 +79,6 @@ export default async function HomePage() {
         innovativeIdea={innovativeIdea.payload.content}
         deals={deals.payload.content}
       />
-    </>
+    </section>
   );
 }

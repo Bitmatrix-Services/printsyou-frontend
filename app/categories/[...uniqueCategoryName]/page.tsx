@@ -39,16 +39,16 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   if (response?.payload) category = response.payload;
 
   return (
-    <>
+    <section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'http://schema.org',
+            '@context': 'https://schema.org',
             '@type': 'WebPage',
             url: `${process.env.FE_URL}${category?.uniqueCategoryName}`,
             mainEntity: {
-              '@context': 'http://schema.org',
+              '@context': 'https://schema.org',
               '@type': 'OfferCatalog',
               name: category?.categoryName,
               url: `${process.env.FE_URL}${category?.uniqueCategoryName}`
@@ -77,7 +77,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
       ) : null}
       <CategoryDetails category={category} />
-    </>
+    </section>
   );
 };
 

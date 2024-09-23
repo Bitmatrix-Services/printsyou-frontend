@@ -45,7 +45,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
   if (response?.payload) product = response.payload;
 
   return (
-    <>
+    <section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -143,7 +143,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
         }}
       />
       <ProductDetails product={product} />
-    </>
+    </section>
   );
 };
 
