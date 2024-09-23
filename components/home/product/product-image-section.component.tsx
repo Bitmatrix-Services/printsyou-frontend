@@ -61,27 +61,26 @@ export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
         className="slider-swipper-2 mt-6"
         slidesPerView="auto"
       >
-        {product?.productImages
-          ?.map((image, index) => (
-            <SwiperSlide
-              key={`${image.imageUrl}${image.sequenceNumber}`}
-              className="w-20 h-20 border border-gray-200 rounded"
+        {product?.productImages?.map((image, index) => (
+          <SwiperSlide
+            key={`${image.imageUrl}${image.sequenceNumber}`}
+            className="w-20 h-20 border border-gray-200 rounded"
+          >
+            <div
+              className="relative w-full h-full cursor-pointer flex justify-center items-center"
+              onClick={() => setThumbsSwiper(image.imageUrl)}
             >
-              <div
-                className="relative w-full h-full cursor-pointer flex justify-center items-center"
-                onClick={() => setThumbsSwiper(image.imageUrl)}
-              >
-                <ImageWithFallback
-                  className="object-contain size-16"
-                  height={96}
-                  width={96}
-                  priority={index < 5}
-                  src={image.imageUrl}
-                  alt={image.altText ?? `${product.productName} ${index + 1}`}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
+              <ImageWithFallback
+                className="object-contain size-16"
+                height={96}
+                width={96}
+                priority={index < 5}
+                src={image.imageUrl}
+                alt={image.altText ?? `${product.productName} ${index + 1}`}
+              />
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );
