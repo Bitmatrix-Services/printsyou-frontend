@@ -45,13 +45,7 @@ export const CheckoutComponent: FC = () => {
     return currentDay.toISOString().split('T')[0];
   };
 
-  const {
-    control,
-    reset,
-    handleSubmit,
-    formState: {errors, isSubmitting},
-    watch
-  } = useForm<OrderFormSchemaType>({
+  const methods = useForm<OrderFormSchemaType>({
     resolver: yupResolver(orderCheckoutSchema),
     defaultValues: {
       billingAddress: {
@@ -72,10 +66,10 @@ export const CheckoutComponent: FC = () => {
         city: '',
         state: '',
         zipCode: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        shippingAddressSame: true
       },
       emailAddress: '',
-      shippingAddressSame: true,
       inHandDate: getInHandDateEst(),
       salesRep: '',
       additionalInformation: '',
@@ -84,18 +78,25 @@ export const CheckoutComponent: FC = () => {
     }
   });
 
-  console.log('errors', errors);
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+    watch
+  } = methods;
 
   const {mutate} = useMutation({
     mutationFn: (data: OrderFormSchemaType) => {
       setApiError(false);
       let orderData: any = {
         ...data,
-        shippingAddressSame: data.shippingAddressSame,
+        shippingAddressSame: data.shippingAddress.shippingAddressSame,
         cartId: cartRoot?.id
       };
 
       delete orderData.newsLetter;
+      delete orderData.shippingAddress.shippingAddressSame;
       delete orderData.termsAndConditions;
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/create-order`, orderData);
     },
@@ -253,7 +254,7 @@ export const CheckoutComponent: FC = () => {
                       <MaskInput
                         name="billingAddress.phoneNumber"
                         label="Phone"
-                        isRequired={true}
+                        isRequired={false}
                         disabled={isSubmitting}
                         control={control}
                         errors={errors}
@@ -272,10 +273,10 @@ export const CheckoutComponent: FC = () => {
                     <FormHeading text="Shipping Information" />
                     <div className="flex flex-col gap-2">
                       <Controller
-                        name="shippingAddressSame"
+                        name="shippingAddress.shippingAddressSame"
                         control={control}
-                        render={({field: {onChange, value}}) => (
-                          <RadioGroup value={value} onChange={e => onChange(e.target.value === 'true')}>
+                        render={({field: {onChange, value, ...otherProps}}) => (
+                          <RadioGroup value={value} {...otherProps} onChange={e => onChange(e.target.value === 'true')}>
                             <Radio
                               value="true"
                               label="Same as my billing address"
@@ -292,7 +293,7 @@ export const CheckoutComponent: FC = () => {
                         )}
                       />
                     </div>
-                    {!watch('shippingAddressSame') && (
+                    {!watch('shippingAddress.shippingAddressSame') && (
                       <div className="grid md:grid-cols-2 gap-6 mt-6">
                         {shippingFormFields.map(field =>
                           field.label === 'State' ? (

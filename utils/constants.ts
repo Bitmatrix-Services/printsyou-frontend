@@ -92,7 +92,7 @@ export const shippingFormFields = [
   {
     name: 'shippingAddress.phoneNumber',
     label: 'Phone',
-    required: true
+    required: false
   }
 ];
 
