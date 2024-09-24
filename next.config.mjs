@@ -920,6 +920,26 @@ const nextConfig = {
       destination: '/search-results',
       source: '/search_results',
       permanent: true
+    },
+    {
+      destination: '/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      source: '/drinkware/brumate/12by16-oz-brumate-hopsulator-trio',
+      permanent: true
+    },
+    {
+      destination: '/leisure-amp-outdoor/beverage-coolers-amp-holders-12by16-oz-brumate-hopsulator-trio',
+      source: '/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      permanent: true
+    },
+    {
+      destination: '/full-color-retail-boxes/custom-box-stock-designs/custom-retail-box',
+      source: '/full-color-retail-boxes/custom-box-stock-designs/custom-full-color-box',
+      permanent: true
+    },
+    {
+      destination: '/coolers/cooler-lunch-bags/café-cooler-bag',
+      source: '/coolers/cooler-lunch-bags/cafe-cooler-bag',
+      permanent: true
     }
   ],
   rewrites: () => [
