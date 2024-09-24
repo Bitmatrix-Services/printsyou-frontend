@@ -15,6 +15,7 @@ import {Product} from '@components/home/product/product.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {notFound} from 'next/navigation';
+import {MaskInput} from '@lib/form/mask-input.component';
 
 interface IMoreInfoComponent {
   product: Product | null;
@@ -124,7 +125,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                       control={control}
                       errors={errors}
                     />
-                    <FormControlInput
+                    <MaskInput
                       label="Phone Number"
                       name="phoneNumber"
                       isRequired={true}
@@ -132,6 +133,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                       control={control}
                       errors={errors}
                     />
+
                     <FormControlInput
                       label="Subject"
                       name="subject"

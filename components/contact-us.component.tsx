@@ -13,6 +13,7 @@ import {ContactUsFormSchemaType, contactUsSchema} from '@utils/validation-schema
 import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
+import {MaskInput} from '@lib/form/mask-input.component';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
@@ -113,7 +114,7 @@ export const ContactUsComponent = () => {
                     control={control}
                     errors={errors}
                   />
-                  <FormControlInput
+                  <MaskInput
                     label="Phone Number"
                     name="phoneNumber"
                     isRequired={true}
