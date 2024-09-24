@@ -54,6 +54,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   borderColor: '#DB0481'
                 }
               }}
+              name={name}
               placeholder={placeholder}
               disabled={disabled}
               value={value}
@@ -71,6 +72,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   borderColor: '#DB0481'
                 }
               }}
+              name={name}
               minRows={6}
               placeholder={placeholder}
               disabled={disabled}

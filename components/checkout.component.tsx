@@ -29,6 +29,7 @@ import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import dayjs from 'dayjs';
 import {FormHeading} from '@components/globals/cart/add-to-cart-modal.component';
+import {MaskInput} from '@lib/form/mask-input.component';
 
 export const CheckoutComponent: FC = () => {
   const dispatch = useAppDispatch();
@@ -74,24 +75,23 @@ export const CheckoutComponent: FC = () => {
         phoneNumber: ''
       },
       emailAddress: '',
-
-      shippingAddressSame: 'shippingAddressSame',
-
+      shippingAddressSame: true,
       inHandDate: getInHandDateEst(),
       salesRep: '',
       additionalInformation: '',
-
       newsLetter: false,
       termsAndConditions: false
     }
   });
+
+  console.log('errors', errors);
 
   const {mutate} = useMutation({
     mutationFn: (data: OrderFormSchemaType) => {
       setApiError(false);
       let orderData: any = {
         ...data,
-        shippingAddressSame: data.shippingAddressSame === 'shippingAddressSame',
+        shippingAddressSame: data.shippingAddressSame,
         cartId: cartRoot?.id
       };
 
@@ -250,8 +250,7 @@ export const CheckoutComponent: FC = () => {
                         control={control}
                         errors={errors}
                       />
-
-                      <FormControlInput
+                      <MaskInput
                         name="billingAddress.phoneNumber"
                         label="Phone"
                         isRequired={true}
@@ -276,25 +275,24 @@ export const CheckoutComponent: FC = () => {
                         name="shippingAddressSame"
                         control={control}
                         render={({field: {onChange, value}}) => (
-                          <RadioGroup value={value} onChange={onChange}>
+                          <RadioGroup value={value} onChange={e => onChange(e.target.value === 'true')}>
                             <Radio
-                              value="shippingAddressSame"
+                              value="true"
                               label="Same as my billing address"
                               variant="outlined"
-                              checked={value === 'shippingAddressSame'}
+                              checked={value === true}
                             />
-
                             <Radio
-                              value="diffBillingAddress"
+                              value="false"
                               label="Different shipping address"
                               variant="outlined"
-                              checked={value === 'diffBillingAddress'}
+                              checked={value === false}
                             />
                           </RadioGroup>
                         )}
                       />
                     </div>
-                    {watch('shippingAddressSame') === 'diffBillingAddress' && (
+                    {!watch('shippingAddressSame') && (
                       <div className="grid md:grid-cols-2 gap-6 mt-6">
                         {shippingFormFields.map(field =>
                           field.label === 'State' ? (
@@ -312,7 +310,7 @@ export const CheckoutComponent: FC = () => {
                               key={field.name}
                               name={field.name}
                               label={field.label}
-                              isRequired={true}
+                              isRequired={field.required}
                               disabled={isSubmitting}
                               control={control}
                               errors={errors}

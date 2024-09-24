@@ -55,7 +55,7 @@ export const aosGlobalSetting: any = {
 
 export const shippingFormFields = [
   {
-    name: 'shippingAddress.fullName',
+    name: 'shippingAddress.fullname',
     label: 'Name',
     required: true
   },

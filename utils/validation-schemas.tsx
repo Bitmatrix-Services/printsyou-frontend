@@ -11,47 +11,6 @@ export const contactUsSchema = Yup.object({
   message: Yup.string().required('Please enter message')
 });
 
-export const orderRequestSchema = Yup.object({
-  billingFullName: Yup.string().required('Please enter name'),
-  billingAddressLineOne: Yup.string().required('Please enter address'),
-  billingCity: Yup.string().required('Please enter city'),
-  billingState: Yup.string().required('Please enter state'),
-  billingZipcode: Yup.number().typeError('Zip code must be a number').required('Please enter zip code'),
-  billingPhoneNumber: Yup.string().required('Please enter phone number').matches(phoneRegExp, 'invalid format'),
-  billingEmailAddress: Yup.string().email().required('Please enter email address'),
-  diffBillingAddress: Yup.boolean(),
-
-  shippingFullName: Yup.string().when('diffBillingAddress', {
-    is: true,
-    then: schema => schema.required('Please enter name')
-  }),
-  shippingAddressLineOne: Yup.string().when('diffBillingAddress', {
-    is: true,
-    then: schema => schema.required('Please enter address')
-  }),
-  shippingCity: Yup.string().when('diffBillingAddress', {
-    is: true,
-    then: schema => schema.required('Please enter city')
-  }),
-  shippingState: Yup.string().when('diffBillingAddress', {
-    is: true,
-    then: schema => schema.required('Please enter state')
-  }),
-  shippingZipcode: Yup.string().when('diffBillingAddress', {
-    is: true,
-    then: schema => schema.required('Please enter zip code')
-  }),
-  shippingPhoneNumber: Yup.string().when('diffBillingAddress', {
-    is: true,
-    then: schema => schema.required('Please enter phone number').matches(phoneRegExp, 'invalid format')
-  }),
-  specificationsColor: Yup.string().required('Please enter color'),
-  specificationsSize: Yup.string(),
-  specificationsImprintColor: Yup.string(),
-
-  termsAndConditions: Yup.boolean().oneOf([true], 'You must agree to the terms')
-});
-
 export const newsletterSchema = Yup.object({
   email: Yup.string().email().required('please enter your email address')
 });
@@ -74,35 +33,40 @@ export const orderCheckoutSchema = Yup.object().shape({
   }),
 
   shippingAddress: Yup.object().shape({
-    fullname: Yup.string().when('diffBillingAddress', {
-      is: true,
-      then: schema => schema.required('Please enter name')
+    fullname: Yup.string().when('shippingAddressSame', {
+      is: false,
+      then: schema => schema.required('Please enter name'),
+      otherwise: schema => schema.nullable()
     }),
     company: Yup.string().optional(),
-    addressLineOne: Yup.string().when('diffBillingAddress', {
-      is: true,
-      then: schema => schema.required('Please enter address')
+    addressLineOne: Yup.string().when('shippingAddressSame', {
+      is: false,
+      then: schema => schema.required('Please enter address'),
+      otherwise: schema => schema.nullable()
     }),
     addressLineTwo: Yup.string().optional(),
-    city: Yup.string().when('diffBillingAddress', {
-      is: true,
-      then: schema => schema.required('Please enter city')
+    city: Yup.string().when('shippingAddressSame', {
+      is: false,
+      then: schema => schema.required('Please enter city'),
+      otherwise: schema => schema.nullable()
     }),
-    state: Yup.string().when('diffBillingAddress', {
-      is: true,
+    state: Yup.string().when('shippingAddressSame', {
+      is: false,
       then: schema => schema.required('Please enter state')
+      // otherwise: schema => schema.nullable()
     }),
-    zipCode: Yup.string().when('diffBillingAddress', {
-      is: true,
-      then: schema => schema.required('Please enter zip code')
+    zipCode: Yup.string().when('shippingAddressSame', {
+      is: false,
+      then: schema => schema.required('Please enter zip code'),
+      otherwise: schema => schema.nullable()
     }),
-    phoneNumber: Yup.string().when('diffBillingAddress', {
-      is: true,
-      then: schema => schema.required('Please enter phone number').matches(phoneRegExp, 'invalid format')
+    phoneNumber: Yup.string().when('shippingAddressSame', {
+      is: false,
+      then: schema => schema.required('Please enter phone number').matches(phoneRegExp, 'invalid format'),
+      otherwise: schema => schema.nullable()
     })
   }),
-  shippingAddressSame: Yup.string(),
-  diffBillingAddress: Yup.boolean().optional(),
+  shippingAddressSame: Yup.boolean(),
   inHandDate: Yup.string().optional(),
   salesRep: Yup.string().optional(),
   additionalInformation: Yup.string().optional(),
