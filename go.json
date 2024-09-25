@@ -1,49 +1,44 @@
 {
-  "@context": "https:\/\/schema.org",
+  "@context": "https://schema.org",
   "@type": "WebPage",
   "name": "Printed Paper Products",
   "about": "",
-  "copyrightHolder": "https:\/\/www.gopromotional.co.uk\/#gopromotional-organisation",
+  "copyrightHolder": "https://www.gopromotional.co.uk/#gopromotional-organisation",
   "copyrightYear": "2019",
-  "primaryImageOfPage": "https:\/\/assets.gopromotional.co.uk\/images\/GoPromotional-logo.jpg",
+  "primaryImageOfPage": "https://assets.gopromotional.co.uk/images/GoPromotional-logo.jpg",
   "dateCreated": "2018-10-15",
   "dateModified": "2024-09-22",
   "author": {
-    "@context": "https:\/\/schema.org",
+    "@context": "https://schema.org",
     "@type": "Person",
     "name": "Gareth Parkin",
     "givenName": "Gareth",
     "familyName": "Parkin",
     "jobTitle": "Product Marketing Director",
-    "image": "https:\/\/assets.gopromotional.co.uk\/images\/user-images\/45.jpg",
+    "image": "https://assets.gopromotional.co.uk/images/user-images/45.jpg",
     "description": "As the founder of GoPromotional, Gareth has developed an enviable reputation as an expert in the promotional products industry with over 25 years experience. As an active member of the BPMA, ASI and Forbes Business Council, he regularly shares his wealth of industry knowledge and perspective   in order to drive the branded merchandise sector forwards. With an entrepreneurial mind, Gareth has his finger on the pulse of our UK and international operations. Responsible for marketing and technical operations, he continually motivates the team with his vision, enthusiasm and desire to be the very best.",
     "brand": {
-      "@id": "https:\/\/www.gopromotional.co.uk\/#gopromotional-organisation"
+      "@id": "https://www.gopromotional.co.uk/#gopromotional-organisation"
     },
     "worksFor": {
-      "@id": "https:\/\/www.gopromotional.co.uk\/#gopromotional-organisation"
+      "@id": "https://www.gopromotional.co.uk/#gopromotional-organisation"
     },
     "sameAs": [
-      "https:\/\/uk.linkedin.com\/in\/garethparkin",
-      "https:\/\/twitter.com\/gopromotional",
-      "https:\/\/www.facebook.com\/gopromotional\/"
+      "https://uk.linkedin.com/in/garethparkin",
+      "https://twitter.com/gopromotional",
+      "https://www.facebook.com/gopromotional/"
     ],
-    "knowsAbout": [
-      "Promotional merchandise",
-      "Product Pricing",
-      "Corporate Branding",
-      "Product Management"
-    ]
+    "knowsAbout": ["Promotional merchandise", "Product Pricing", "Corporate Branding", "Product Management"]
   },
   "breadcrumb": {
-    "@context": "http:\/\/schema.org",
+    "@context": "http://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
       {
         "@type": "ListItem",
         "position": 1,
         "item": {
-          "@id": "https:\/\/www.gopromotional.co.uk\/",
+          "@id": "https://www.gopromotional.co.uk/",
           "name": "Home"
         }
       },
@@ -51,7 +46,7 @@
         "@type": "ListItem",
         "position": 2,
         "item": {
-          "@id": "https:\/\/www.gopromotional.co.uk\/branded-products\/pads-paper-items",
+          "@id": "https://www.gopromotional.co.uk/branded-products/pads-paper-items",
           "name": "Promotional Paper Products"
         }
       }
