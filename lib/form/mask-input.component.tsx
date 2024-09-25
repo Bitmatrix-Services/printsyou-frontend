@@ -14,13 +14,7 @@ interface IMaskInput {
   errors?: any;
 }
 
-export const MaskInput: FC<IMaskInput> = ({
-  label,
-  name,
-  control,
-  isRequired = false,
-  errors
-}) => {
+export const MaskInput: FC<IMaskInput> = ({label, name, control, isRequired = false, errors}) => {
   return (
     <Controller
       name={name}
@@ -33,7 +27,7 @@ export const MaskInput: FC<IMaskInput> = ({
           {label ? (
             <div className="flex">
               <h4 className="text-sm text-mute4 font-normal mb-2">{label}</h4>
-              {isRequired && label !== 'Phone Number' ? <span className="text-red-600">*</span> : null}
+              {isRequired ? <span className="text-red-600">*</span> : null}
             </div>
           ) : null}
 

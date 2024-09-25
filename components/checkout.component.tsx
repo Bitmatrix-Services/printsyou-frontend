@@ -7,7 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {orderCheckoutSchema, OrderFormSchemaType} from '@utils/validation-schemas';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {shippingFormFields} from '@utils/constants';
-import {RadioGroup} from '@mui/joy';
+import {Radio, RadioGroup} from '@mui/joy';
 import {IoClose} from 'react-icons/io5';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
@@ -16,7 +16,6 @@ import {useMutation} from '@tanstack/react-query';
 import {FormControlInput} from '@lib/form/form-control-input';
 import {Container} from '@components/globals/container.component';
 import {FormControlCheckbox} from '@lib/form/form-control-checkbox';
-import Radio from '@mui/joy/Radio';
 import {MdClose, MdModeEdit} from 'react-icons/md';
 import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
@@ -83,7 +82,8 @@ export const CheckoutComponent: FC = () => {
     reset,
     handleSubmit,
     formState: {errors, isSubmitting},
-    watch
+    watch,
+    setValue
   } = methods;
 
   const {mutate} = useMutation({
@@ -276,7 +276,26 @@ export const CheckoutComponent: FC = () => {
                         name="shippingAddress.shippingAddressSame"
                         control={control}
                         render={({field: {onChange, value, ...otherProps}}) => (
-                          <RadioGroup value={value} {...otherProps} onChange={e => onChange(e.target.value === 'true')}>
+                          <RadioGroup
+                            value={value}
+                            {...otherProps}
+                            onChange={e => {
+                              onChange(e.target.value === 'true');
+                              if (e.target.value === 'true') {
+                                setValue('shippingAddress', {
+                                  fullname: '',
+                                  company: '',
+                                  addressLineOne: '',
+                                  addressLineTwo: '',
+                                  city: '',
+                                  state: '',
+                                  zipCode: '',
+                                  phoneNumber: '',
+                                  shippingAddressSame: true
+                                });
+                              }
+                            }}
+                          >
                             <Radio
                               value="true"
                               label="Same as my billing address"
@@ -298,6 +317,16 @@ export const CheckoutComponent: FC = () => {
                         {shippingFormFields.map(field =>
                           field.label === 'State' ? (
                             <FormControlSelect
+                              key={field.name}
+                              name={field.name}
+                              label={field.label}
+                              isRequired={field.required}
+                              disabled={isSubmitting}
+                              control={control}
+                              errors={errors}
+                            />
+                          ) : field.label === 'Phone' ? (
+                            <MaskInput
                               key={field.name}
                               name={field.name}
                               label={field.label}
@@ -432,6 +461,7 @@ export const CheckoutComponent: FC = () => {
                           render={({field: {onChange, value}}) => (
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DatePicker
+                                name="inHandDate"
                                 value={value ? dayjs(value) : null}
                                 onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
                               />
