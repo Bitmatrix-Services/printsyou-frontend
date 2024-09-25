@@ -6,6 +6,7 @@ import {Container} from '@components/globals/container.component';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import {notFound} from 'next/navigation';
+import sanitizeHtml from 'sanitize-html';
 
 interface IProductDetails {
   product: Product | null;
@@ -21,6 +22,8 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
       productDescriptionRef.current.scrollIntoView({behavior: 'smooth'});
     }
   };
+
+  console.log("product.productDescription", product.productDescription)
 
   return (
     <>
@@ -42,7 +45,7 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
                 <div
                   className="product-description"
                   dangerouslySetInnerHTML={{
-                    __html: product.productDescription
+                    __html: sanitizeHtml(product.productDescription)
                   }}
                 ></div>
               </div>
@@ -58,8 +61,8 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
                   {product.additionalFieldProductValues?.map(item => (
                     <Fragment key={item.fieldValue}>
                       <div>
-                        <div className=" product-additional-info-heading">
-                          <strong>{item.fieldName}:</strong>
+                        <div className="product-additional-info-heading capitalize">
+                          <strong>{item.fieldName.toLowerCase()}:</strong>
                         </div>
                         <ul>
                           <li className="text-mute2">
