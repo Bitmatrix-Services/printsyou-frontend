@@ -68,7 +68,7 @@ const termsList = [
   },
   {
     title: 'Additional Data Collection',
-    body: ' We may collect screen recordings of your interactions with our website or application. This information is used to improve our product, analyze user behavior, and provide better customer support. You consent to the collection and use of screen recordings by using our services.'
+    body: ' We may collect your interactions with our website or application. This information is used to improve our product, analyze user behavior, and provide better customer support. You consent to the collection and use of screen recordings by using our services.'
   },
   {
     title: `Transfer of Ownership`,
