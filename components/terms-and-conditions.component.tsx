@@ -67,6 +67,10 @@ const termsList = [
     body: `PrintsYou is not accountable for delays caused by Acts of God or other circumstances beyond its control. Factory shipment or delivery dates are the best estimates of suppliers, and PrintsYou shall not be liable for any damages arising from any delay in delivery.`
   },
   {
+    title: 'Additional Data Collection',
+    body: ' We may collect screen recordings of your interactions with our website or application. This information is used to improve our product, analyze user behavior, and provide better customer support. You consent to the collection and use of screen recordings by using our services.'
+  },
+  {
     title: `Transfer of Ownership`,
     body: `All goods become the property of the buyer when accepted from the carrier.`
   },
