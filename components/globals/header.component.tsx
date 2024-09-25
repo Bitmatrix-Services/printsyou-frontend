@@ -146,14 +146,14 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             <fieldset className="border-b border-gray-600">
               <Accordion sx={{backgroundColor: '#303546'}} className=" px-2 border-0">
                 <AccordionSummary>
-                  <h6 className="text-white text-sm font-semibold uppercase focus:bg-[#303546]">all categories</h6>
+                  <h6 className="text-white text-base font-semibold capitalize">all categories</h6>
                 </AccordionSummary>
                 <AccordionDetails sx={{color: 'white'}}>
                   <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4">
                     {categories.slice(0, 6).map(category => (
                       <li key={category.id}>
                         <Link
-                          className="text-sm text-[#b5b8c1] hover:text-primary-500"
+                          className="text-white hover:text-primary-500 capitalize"
                           href={`/categories/${category.uniqueCategoryName}`}
                           onClick={handleMenuClose}
                         >
