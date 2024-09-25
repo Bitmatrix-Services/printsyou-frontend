@@ -96,13 +96,21 @@ export const extractColorsArray = (additionalFields: AdditionalFieldProductValue
   let colorsHtml = additionalFields.find(
     item => item.fieldName.toLowerCase() === 'colors available' || item.fieldName.toLowerCase() === 'color available'
   )?.fieldValue;
-  const colors = colorsHtml?.replace(/<\/?[^>]+(>|$)/g, '');
-  if (colors) {
-    colorArray = colors
-      .replace(' or ', ', ')
-      .replace('.', '')
-      .split(', ')
-      .map(color => color.replace(/\s+/g, '').trim());
+
+  if (colorsHtml) {
+    const colors = containsHTML(colorsHtml) ? colorsHtml?.replace(/<\/?[^>]+(>|$)/g, '') : colorsHtml;
+    if (colors) {
+      colorArray = colors
+        .replace(' or ', ', ')
+        .replace('.', '')
+        .split(', ')
+        .map(color => color.replace(/\s+/g, '').trim());
+    }
   }
   return colorArray;
+};
+
+export const containsHTML = (input: string): boolean => {
+  const htmlTagPattern = /<[^>]*>/;
+  return htmlTagPattern.test(input);
 };
