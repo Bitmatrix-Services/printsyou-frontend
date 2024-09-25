@@ -64,7 +64,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
 
   return (
     <>
-      <Breadcrumb list={[]} prefixTitle="Contact Us" />
+      <Breadcrumb list={[]} prefixTitle="More Info" />
       <Container>
         <div className="px-8 pb-8 pt-10 ">
           <div className="flex flex-col  md:px-32">
