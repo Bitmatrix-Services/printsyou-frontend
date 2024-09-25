@@ -28,7 +28,7 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
               src={product?.imageUrl}
               alt={product.productName}
             />
-            <div className="absolute top-0 left-0 w-[4vw] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
+            <div className="absolute top-0 left-0 w-[4rem] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
               {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice > 0 ? (
                 <span className="flex items-center justify-center px-3 bg-blue-500 text-white font-medium capitalize">
                   sale
