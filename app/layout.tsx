@@ -46,19 +46,19 @@ export default async function RootLayout({children}: PropsWithChildren) {
           <html lang="en">
             <Head>
               <link href="https://fonts.cdnfonts.com/css/graphik-trial" rel="stylesheet" />
-              <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
-              <Script
-                id="google-tag-manager"
-                strategy="afterInteractive"
-                dangerouslySetInnerHTML={{
-                  __html: `window.dataLayer = window.dataLayer || [];
+            </Head>
+            <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script
+              id="google-tag-manager"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
                                 function gtag(){dataLayer.push(arguments);}
                                 gtag('js', new Date());
                                 
                                 gtag('config', 'AW-16709127988');`
-                }}
-              />
-            </Head>
+              }}
+            />
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
               <NotificationComponent />
               <Header categories={categoriesData.payload} />
