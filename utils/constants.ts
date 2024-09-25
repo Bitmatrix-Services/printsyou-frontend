@@ -177,53 +177,6 @@ export const allowableSearchParams = [
   'tag'
 ];
 
-// export const colorNameToHex = (colorName: string): string => {
-//   const tempElement = document.createElement('div');
-//   tempElement.style.color = colorName;
-//   document.body.appendChild(tempElement);
-//
-//   const computedColor = getComputedStyle(tempElement).color;
-//   document.body.removeChild(tempElement);
-//
-//   if (computedColor === 'rgb(0, 0, 0)' && colorName.toLowerCase() !== 'black') {
-//     return '';
-//   }
-//   const rgbToHex = (rgb: string): string => {
-//     const matches = rgb.match(/\d+/g);
-//     if (!matches) return '';
-//     return `#${matches.map(x => Number(x).toString(16).padStart(2, '0')).join('')}`;
-//   };
-//
-//   return rgbToHex(computedColor);
-// };
-
-// export const extractColors = (additionalFields: AdditionalFieldProductValues[]): string[] => {
-//   let colorArray: string[] = [];
-//
-//   let colors = additionalFields.find(
-//     item => item.fieldName.toLowerCase() === 'colors available' || item.fieldName.toLowerCase() === 'color available'
-//   )?.fieldValue;
-//
-//   // parsing if colors string is HTML element
-//   if (colors) {
-//     const temp = document.createElement('div');
-//     temp.innerHTML = colors;
-//
-//     if (temp.firstChild && temp.firstChild.nodeType === 1) {
-//       colors = temp.textContent || '';
-//     }
-//   }
-//
-//   if (colors) {
-//     colorArray = colors
-//       .replace(' or ', ', ')
-//       .replace('.', '')
-//       .split(', ')
-//       .map(color => color.replace(/\s+/g, '').trim());
-//   }
-//   return colorArray;
-// };
-
 export const sortSortable = <T extends Sortable>(list: T[]): T[] => {
   return list.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 };

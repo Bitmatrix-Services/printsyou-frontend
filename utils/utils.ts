@@ -1,4 +1,7 @@
 import axios from 'axios';
+import {AdditionalFieldProductValues} from '@components/home/product/product.types';
+import chroma from 'chroma-js';
+
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
   return input.map((value: string) => {
@@ -78,3 +81,28 @@ export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<s
 };
 
 export const formatString = (str: string, ...args: any[]) => str.replace(/{(\d+)}/g, (_, index) => args[index] || '');
+
+export const colorNameToHex = (colorName: string): string => {
+  try {
+    return chroma(colorName).hex();
+  } catch (e) {
+    return '';
+  }
+};
+
+export const extractColorsArray = (additionalFields: AdditionalFieldProductValues[]): string[] => {
+  let colorArray: string[] = [];
+
+  let colorsHtml = additionalFields.find(
+    item => item.fieldName.toLowerCase() === 'colors available' || item.fieldName.toLowerCase() === 'color available'
+  )?.fieldValue;
+  const colors = colorsHtml?.replace(/<\/?[^>]+(>|$)/g, '');
+  if (colors) {
+    colorArray = colors
+      .replace(' or ', ', ')
+      .replace('.', '')
+      .split(', ')
+      .map(color => color.replace(/\s+/g, '').trim());
+  }
+  return colorArray;
+};

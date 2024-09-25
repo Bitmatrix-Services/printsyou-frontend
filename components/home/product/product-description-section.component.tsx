@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {useAppDispatch} from '../../../store/hooks';
 import {PiShoppingCartSimple} from 'react-icons/pi';
+import {colorNameToHex, extractColorsArray} from '@utils/utils';
 
 interface ProductDescriptionComponent {
   product: Product;
@@ -18,7 +19,8 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
   const dispatch = useAppDispatch();
 
   const colorsArray = useMemo(() => {
-    return [];
+    const availableColors = extractColorsArray(product.additionalFieldProductValues);
+    return availableColors?.filter(color => colorNameToHex(color));
   }, [product.additionalFieldProductValues]);
 
   return (
@@ -63,13 +65,11 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
       <div className="mt-2 flex flex-col sm:flex-row gap-3">
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
-      <h3
-        className="text-sm mt-1 underline cursor-pointer hover:text-primary-500"
-        onClick={handleScroll && handleScroll}
-      >
-        See Details
-      </h3>
-
+      {handleScroll && (
+        <h3 className="text-sm mt-1 underline cursor-pointer hover:text-primary-500" onClick={handleScroll}>
+          See Details
+        </h3>
+      )}
       {colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
           <div className="text-mute text-sm font-normal">Colors:</div>
