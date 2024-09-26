@@ -3,8 +3,8 @@ import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
-import {useAppDispatch} from "../../../store/hooks";
-import {setCartStateForModal} from "../../../store/slices/cart/cart.slice";
+import {useAppDispatch} from '../../../store/hooks';
+import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 
 interface IProductCard {
   product: EnclosureProduct;

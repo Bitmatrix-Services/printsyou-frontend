@@ -101,7 +101,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
           <CircularLoader />
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
           {productsByCategory?.map((product, index) => (
             <ProductCard imagePriority={index < 10} key={product.id} product={product} />
           ))}
