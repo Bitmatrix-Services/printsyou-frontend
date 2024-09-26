@@ -1,5 +1,5 @@
 import {PriceGrids} from '@components/home/product/product.types';
-import {InferType, object, ref, string} from 'yup';
+import {InferType, number, object, ref, string} from 'yup';
 
 export interface CustomProduct {
   id: string;
@@ -14,9 +14,10 @@ export const cartModalSchema = object({
   imprintColor: string().notRequired(),
   itemColor: string().notRequired(),
   size: string().notRequired(),
-  itemQty: string()
+  itemQty: number()
     .transform((_, value) => (value === '' ? 0 : +value))
     .required()
+    .positive()
     .min(ref('minQty'), 'Specified Qty must be greater than Min Qty'),
   selectedPriceType: string().notRequired()
 });

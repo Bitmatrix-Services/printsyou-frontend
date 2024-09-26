@@ -117,7 +117,7 @@ export const SearchResult = () => {
   return (
     <div className="bg-white footer pt-8">
       <Breadcrumb list={[]} prefixTitle="Search Result" />
-      <div className="w-full max-w-[120rem] mx-auto px-6 md:px-[3rem] tablet:px-[4rem] lg:px-[4rem] xl:px-[8rem] 2xl:px-[10rem] relative">
+      <div className="w-full max-w-[120rem] mx-auto px-3 md:px-[3rem] tablet:px-[4rem] lg:px-[4rem] xl:px-[8rem] 2xl:px-[10rem] relative">
         <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
           {isPageLoading ? (
             <div className="flex justify-center align-middle items-center h-[20rem] w-[100%]">
@@ -125,13 +125,15 @@ export const SearchResult = () => {
             </div>
           ) : (
             <>
-              <SearchSidebar
-                byPriceRange={updatedSearchResults.byPrice}
-                byColor={updatedSearchResults.byColors}
-                byCategory={updatedSearchResults.byCategory}
-                filters={filters}
-                setFilters={setFilters}
-              />
+              <div className="hidden md:block">
+                <SearchSidebar
+                  byPriceRange={updatedSearchResults.byPrice}
+                  byColor={updatedSearchResults.byColors}
+                  byCategory={updatedSearchResults.byCategory}
+                  filters={filters}
+                  setFilters={setFilters}
+                />
+              </div>
               <SearchResultsSection
                 products={updatedSearchResults.products}
                 totalProducts={updatedSearchResults.totalElements}
@@ -139,6 +141,15 @@ export const SearchResult = () => {
                 isLoading={isLoading}
                 isPageLoading={isPageLoading}
               />
+              <div className="md:hidden block">
+                <SearchSidebar
+                  byPriceRange={updatedSearchResults.byPrice}
+                  byColor={updatedSearchResults.byColors}
+                  byCategory={updatedSearchResults.byCategory}
+                  filters={filters}
+                  setFilters={setFilters}
+                />
+              </div>
             </>
           )}
         </div>

@@ -43,7 +43,7 @@ export const AddToCartModal: FC = () => {
 
   const formik = useFormik<LocalCartState>({
     initialValues: {
-      itemQty: '',
+      itemQty: 0,
       imprintColor: undefined,
       itemColor: undefined,
       size: undefined,
@@ -144,7 +144,7 @@ export const AddToCartModal: FC = () => {
 
   const calculatedPrice = useMemo(() => {
     const quantity = formik.values.itemQty;
-    if (quantity === '' || !product?.priceGrids || !product.sortedPrices) {
+    if (quantity === 0 || !product?.priceGrids || !product.sortedPrices) {
       return 0;
     }
 
@@ -154,9 +154,8 @@ export const AddToCartModal: FC = () => {
 
     const priceGrid = priceGridsFinalSelected.find(
       (grid, index) =>
-        parseInt(quantity) >= grid.countFrom &&
-        (index === priceGridsFinalSelected.length - 1 ||
-          parseInt(quantity) < priceGridsFinalSelected[index + 1].countFrom)
+        quantity >= grid.countFrom &&
+        (index === priceGridsFinalSelected.length - 1 || quantity < priceGridsFinalSelected[index + 1].countFrom)
     );
 
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
@@ -351,23 +350,69 @@ export const AddToCartModal: FC = () => {
               </figure>
               <figure>
                 <div>
-                <div className='hidden md:block'>
-                  <div className="flex justify-between">
-                    <FormHeading text="Quantity" />
-                    <FormHeading text="Sub Total" />
-                  </div>
-                  <div className="flex justify-between space-x-4 w-full">
-                    <div className="flex justify-between items-center gap-4">
-                      {priceTypes.length > 0 ? (
-                        <div className="flex items-center gap-2">
-                          <label className="font-semibold text-xs" htmlFor="price-type">
-                            Item Type
-                          </label>
+                  <div className="hidden md:block">
+                    <div className="flex justify-between">
+                      <FormHeading text="Quantity" />
+                      <FormHeading text="Sub Total" />
+                    </div>
+                    <div className="flex justify-between space-x-4 w-full">
+                      <div className="flex justify-between items-center gap-4">
+                        {priceTypes.length > 0 ? (
+                          <div className="flex items-center gap-2">
+                            <label className="font-semibold text-xs" htmlFor="price-type">
+                              Item Type
+                            </label>
 
+                            <select
+                              name="selectedPriceType"
+                              id="price-type"
+                              className="block placeholder:text-[#303541] border md:max-w-[12rem] lg:max-w-[15rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                              value={formik.values.selectedPriceType as string}
+                              onChange={formik.handleChange}
+                            >
+                              {priceTypes.map((row, index) => (
+                                <option key={`${row}${index}`} value={row}>
+                                  {row}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        ) : null}
+                        <input
+                          type="number"
+                          placeholder="Quantity"
+                          className="flex-1 block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+                          value={formik.values.itemQty}
+                          name="itemQty"
+                          onChange={formik.handleChange}
+                          onBlur={() => formik.validateField('itemQty')}
+                        />
+                      </div>
+                      <div className="ml-5 flex items-center">x $ {calculatedPrice}</div>
+                      <div className="flex items-center flex-1 justify-end">
+                        {formik.values.itemQty < product.sortedPrices[0].countFrom ? (
+                          <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
+                            Min Qty is {product.sortedPrices[0].countFrom}
+                          </h2>
+                        ) : (
+                          <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
+                            ${(formik.values.itemQty ? formik.values.itemQty * calculatedPrice : 0).toFixed(2)}
+                          </h2>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/*  quantity pricing mobile view*/}
+                  <div className="md:hidden sm:flex flex-col">
+                    <div>
+                      {priceTypes.length > 0 ? (
+                        <div className="flex justify-between gap-2 mb-5">
+                          <h4 className="my-3 text-lg font-semibold capitalize ">Item Type</h4>
                           <select
                             name="selectedPriceType"
                             id="price-type"
-                            className="block placeholder:text-[#303541] border md:max-w-[12rem] lg:max-w-[15rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                            className="block placeholder:text-[#303541] max-w-[16rem] border h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
                             value={formik.values.selectedPriceType as string}
                             onChange={formik.handleChange}
                           >
@@ -379,29 +424,36 @@ export const AddToCartModal: FC = () => {
                           </select>
                         </div>
                       ) : null}
+                    </div>
+                    <div className="flex justify-between gap-2 mb-3">
+                      <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
                       <input
-                        type="text"
+                        type="number"
+                        min={0}
                         placeholder="Quantity"
-                        className="flex-1 block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+                        className="flex-1 block placeholder:text-[#303541] max-w-[16rem] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
                         value={formik.values.itemQty}
                         name="itemQty"
                         onChange={formik.handleChange}
                         onBlur={() => formik.validateField('itemQty')}
                       />
                     </div>
-                    <div className="ml-5 flex items-center">x $ {calculatedPrice}</div>
-                    <div className="flex items-center flex-1 justify-end">
-                      {parseInt(formik.values.itemQty) < product.sortedPrices[0].countFrom ? (
-                        <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
-                          Min Qty is {product.sortedPrices[0].countFrom}
-                        </h2>
-                      ) : (
-                        <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                          ${(formik.values.itemQty ? parseInt(formik.values.itemQty) * calculatedPrice : 0).toFixed(2)}
-                        </h2>
-                      )}
+                    <div className="flex justify-between items-center gap-2">
+                      <h4 className="my-3 text-lg font-semibold capitalize ">Sub Total</h4>
+                      <div className="">
+                        {formik.values.itemQty < product.sortedPrices[0].countFrom ? (
+                          <h5 className="text-red-500 text-lg lg:text-2xl font-bold">
+                            Min Qty is {product.sortedPrices[0].countFrom}
+                          </h5>
+                        ) : (
+                          <h5 className="text-primary-500 text-2xl font-bold">
+                            ${(formik.values.itemQty ? formik.values.itemQty * calculatedPrice : 0).toFixed(2)}
+                          </h5>
+                        )}
+                      </div>
                     </div>
                   </div>
+
                   <div className="flex flex-col md:flex-row gap-2 justify-between mt-4">
                     {formik.errors['itemQty'] ? (
                       <div className="text-red-500 text-xs font-semibold">
@@ -413,7 +465,7 @@ export const AddToCartModal: FC = () => {
                       after the order is placed.
                     </div>
                   </div>
-                </div>
+
                   <div>
                     <FormHeading text="Product Details" />
                     <div className="grid md:grid-cols-2 gap-6 ">
