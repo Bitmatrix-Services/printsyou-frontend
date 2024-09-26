@@ -14,10 +14,9 @@ export const cartModalSchema = object({
   imprintColor: string().notRequired(),
   itemColor: string().notRequired(),
   size: string().notRequired(),
-  itemQty: number()
+  itemQty: string()
     .transform((_, value) => (value === '' ? 0 : +value))
     .required()
-    .positive()
     .min(ref('minQty'), 'Specified Qty must be greater than Min Qty'),
   selectedPriceType: string().notRequired()
 });

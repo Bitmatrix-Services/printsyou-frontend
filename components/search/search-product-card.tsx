@@ -6,10 +6,10 @@ import {ProductQuickViewModal} from '@components/home/product/product-quick-view
 
 interface ISearchProductCard {
   product: EnclosureProduct;
-    imagePriority?: boolean;
+  imagePriority?: boolean;
 }
 
-export const SearchProductCard: FC<ISearchProductCard> = ({product,imagePriority}) => {
+export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriority}) => {
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
   return (

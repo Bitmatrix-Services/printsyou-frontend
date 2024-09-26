@@ -43,7 +43,7 @@ export const AddToCartModal: FC = () => {
 
   const formik = useFormik<LocalCartState>({
     initialValues: {
-      itemQty: 0,
+      itemQty: '',
       imprintColor: undefined,
       itemColor: undefined,
       size: undefined,
@@ -144,7 +144,7 @@ export const AddToCartModal: FC = () => {
 
   const calculatedPrice = useMemo(() => {
     const quantity = formik.values.itemQty;
-    if (quantity === 0 || !product?.priceGrids || !product.sortedPrices) {
+    if (quantity === '' || !product?.priceGrids || !product.sortedPrices) {
       return 0;
     }
 
@@ -154,8 +154,9 @@ export const AddToCartModal: FC = () => {
 
     const priceGrid = priceGridsFinalSelected.find(
       (grid, index) =>
-        quantity >= grid.countFrom &&
-        (index === priceGridsFinalSelected.length - 1 || quantity < priceGridsFinalSelected[index + 1].countFrom)
+        parseInt(quantity) >= grid.countFrom &&
+        (index === priceGridsFinalSelected.length - 1 ||
+          parseInt(quantity) < priceGridsFinalSelected[index + 1].countFrom)
     );
 
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
@@ -334,7 +335,7 @@ export const AddToCartModal: FC = () => {
 
         <form ref={ref} onSubmit={handleSubmit}>
           <div className="lg:px-8 pb-4">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-1">
+            <div className="grid grid-cols-1 md:gap-8 lg:grid-cols-1">
               <figure>
                 <div className="max-w-fit">
                   <h6 className="mb-2 text-sm font-semibold text-body">
@@ -365,7 +366,7 @@ export const AddToCartModal: FC = () => {
                           <select
                             name="selectedPriceType"
                             id="price-type"
-                            className="block placeholder:text-[#303541] border w-fit h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                            className="block placeholder:text-[#303541] border max-w-[15rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
                             value={formik.values.selectedPriceType as string}
                             onChange={formik.handleChange}
                           >
@@ -378,7 +379,7 @@ export const AddToCartModal: FC = () => {
                         </div>
                       ) : null}
                       <input
-                        type="number"
+                        type="text"
                         placeholder="Quantity"
                         className="flex-1 block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
                         value={formik.values.itemQty}
@@ -389,13 +390,13 @@ export const AddToCartModal: FC = () => {
                     </div>
                     <div className="ml-5 flex items-center">x $ {calculatedPrice}</div>
                     <div className="flex items-center flex-1 justify-end">
-                      {formik.values.itemQty < product.sortedPrices[0].countFrom ? (
+                      {parseInt(formik.values.itemQty) < product.sortedPrices[0].countFrom ? (
                         <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
                           Min Qty is {product.sortedPrices[0].countFrom}
                         </h2>
                       ) : (
                         <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                          ${(formik.values.itemQty * calculatedPrice).toFixed(2)}
+                          ${(formik.values.itemQty ? parseInt(formik.values.itemQty) * calculatedPrice : 0).toFixed(2)}
                         </h2>
                       )}
                     </div>
