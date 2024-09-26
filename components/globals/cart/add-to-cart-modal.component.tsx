@@ -351,6 +351,7 @@ export const AddToCartModal: FC = () => {
               </figure>
               <figure>
                 <div>
+                <div className='hidden md:block'>
                   <div className="flex justify-between">
                     <FormHeading text="Quantity" />
                     <FormHeading text="Sub Total" />
@@ -366,7 +367,7 @@ export const AddToCartModal: FC = () => {
                           <select
                             name="selectedPriceType"
                             id="price-type"
-                            className="block placeholder:text-[#303541] border max-w-[15rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                            className="block placeholder:text-[#303541] border md:max-w-[12rem] lg:max-w-[15rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
                             value={formik.values.selectedPriceType as string}
                             onChange={formik.handleChange}
                           >
@@ -412,6 +413,7 @@ export const AddToCartModal: FC = () => {
                       after the order is placed.
                     </div>
                   </div>
+                </div>
                   <div>
                     <FormHeading text="Product Details" />
                     <div className="grid md:grid-cols-2 gap-6 ">
