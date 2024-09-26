@@ -1,6 +1,5 @@
 'use client';
 import React, {FC, useState} from 'react';
-import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
@@ -26,7 +25,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category, siblingCategori
   return (
     <div>
       <Breadcrumb prefixTitle="Promotional Category" list={category.crumbs ?? []} />
-      <Container>
+      <div className="w-full max-w-[120rem] mx-auto px-6 md:px-[3rem] tablet:px-[4rem] lg:px-[4rem] xl:px-[8rem] 2xl:px-[10rem] relative">
         <div className="flex flex-col md:flex-row mt-10">
           <div className="hidden lg:block">
             <CategoriesSidebar selectedCategory={category} siblingCategories={siblingCategories} />
@@ -126,7 +125,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category, siblingCategori
         <div className=" lg:hidden block ">
           <CategoriesSidebar selectedCategory={category} siblingCategories={siblingCategories} />
         </div>
-      </Container>
+      </div>
     </div>
   );
 };
