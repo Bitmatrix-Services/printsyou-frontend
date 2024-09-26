@@ -6,7 +6,7 @@ import {Navigation} from 'swiper/modules';
 import {breakpoints} from '@utils/constants';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {EnclosureProduct} from '@components/home/product/product.types';
-import {SearchProductCard} from '@components/search/search-product-card';
+import {ProductCard} from '@components/home/product/product-card.component';
 
 interface IProductSection {
   title: string;
@@ -52,7 +52,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
             >
               {productList?.map(product => (
                 <SwiperSlide key={product.id}>
-                  <SearchProductCard product={product} />
+                  <ProductCard product={product} />
                 </SwiperSlide>
               ))}
             </Swiper>

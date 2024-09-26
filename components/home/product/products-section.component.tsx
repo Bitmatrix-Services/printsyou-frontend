@@ -6,9 +6,9 @@ import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {CircularLoader} from '@components/globals/circular-loader.component';
-import {SearchProductCard} from '@components/search/search-product-card';
 import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
+import {ProductCard} from '@components/home/product/product-card.component';
 
 interface ProductsSectionProps {
   categoryId: string;
@@ -103,7 +103,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
           {productsByCategory?.map((product, index) => (
-            <SearchProductCard imagePriority={index < 10} key={product.id} product={product} />
+            <ProductCard imagePriority={index < 10} key={product.id} product={product} />
           ))}
         </div>
       )}
