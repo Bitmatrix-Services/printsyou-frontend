@@ -23,7 +23,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
     <div className="bg-white">
       <Container>
         <div aria-label="Top">
-          <div className="flex pt-6">
+          <div className="hidden lg:flex pt-6">
             {/* Flyout menus */}
             <div className="hidden lg:block w-full">
               <nav className="flex flex-col justify-center">

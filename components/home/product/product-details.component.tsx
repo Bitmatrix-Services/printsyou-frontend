@@ -22,9 +22,6 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
       productDescriptionRef.current.scrollIntoView({behavior: 'smooth'});
     }
   };
-
-  console.log("product.productDescription", product.productDescription)
-
   return (
     <>
       {product ? (
