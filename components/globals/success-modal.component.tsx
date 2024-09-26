@@ -7,21 +7,37 @@ interface ISuccessModal {
   open: string;
   onClose: Dispatch<SetStateAction<'success' | 'error' | ''>>;
   title: string;
-  note: String;
+  note?: String;
+  htmlNote?: string;
 }
 
-export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note}) => {
+export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htmlNote}) => {
   const handleModalClose = () => {
     onClose('');
   };
   return (
     <Modal open={!!open} onClose={handleModalClose}>
-      <ModalDialog>
+      <ModalDialog
+        sx={{
+          height: 'auto',
+          width: '90%',
+          maxWidth: '60rem',
+          margin: 'auto',
+          overflowY: 'auto',
+          '@media (max-width: 600px)': {
+            width: '95%',
+            maxWidth: '95%'
+          }
+        }}
+      >
         <div className="flex flex-col justify-center items-center gap-4">
           {open === 'success' ? (
             <>
               <h2 className="text-xl text-center font-bold">{title}</h2>
-              <p className="text-base font-light text-center max-w-sm ">{note}</p>
+              {note ? <p className="text-base font-light text-center max-w-sm ">{note}</p> : null}
+              {htmlNote ? (
+                <p className="text-base font-light text-left " dangerouslySetInnerHTML={{__html: htmlNote}}></p>
+              ) : null}
             </>
           ) : open === 'error' ? (
             <h2>something went wrong , please try again later</h2>

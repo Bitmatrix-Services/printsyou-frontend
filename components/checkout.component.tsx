@@ -115,7 +115,7 @@ export const CheckoutComponent: FC = () => {
       reset();
     },
     onError: () => {
-      setIsSuccessModalOpen('success');
+      setIsSuccessModalOpen('error');
       setApiError(true);
     }
   });
@@ -548,13 +548,13 @@ export const CheckoutComponent: FC = () => {
             setApiError(false);
           }}
           title="Thank you for placing an order with PrintsYou!"
-          note={` Your order will not be finalized until you have approved the
-                  artwork and sales order confirmation. Once you have approved
-                  both, we will email you a credit card authorization form.
-                  Simply fill it out and email/fax it back to us at your
-                  convenience. The sooner you complete all of these steps the
-                  faster we can place your order and begin production of your
-                  promotional products.`}
+          htmlNote={`<p>If you submit a request during our business hours (Monday to Friday, 9 AM - 5 PM CST), you'll hear back from a sales associate within 24 hours. Requests placed outside of these hours will be processed the next business day.</p>
+<br/>
+<p>To complete your order, we need your artwork. If it wasn't attached to your request, simply reply to the email with your artwork. A sales associate will review it and send a digital proof along with your order confirmation.</p>
+<br/>
+<p>Once you approve the artwork and sales confirmation, we'll send an invoice and a secure payment link. Complete the payment, and your order will move to production quickly.</p>
+<br/>
+<p>Feel free to reach out with any questions during the process.</p>`}
         />
       </Container>
     </>
