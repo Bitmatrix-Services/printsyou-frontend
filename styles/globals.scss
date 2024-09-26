@@ -270,10 +270,13 @@
   font-family: Inter, sans-serif;
   color: #676666;
 
-  li {
+  line-height: 1.6rem;
+
+  li:not(:has(> strong)) {
     padding-left: 6px;
-    margin-left: 15px;
+    margin-left: 25px;
     padding-bottom: 3px;
+    list-style: disc;
   }
 }
 
@@ -284,6 +287,7 @@
   color: #676666;
   padding-left: 6px;
   margin-left: 15px;
+  margin-bottom: 0.3rem;
 }
 
 .product-additional-info-value {
@@ -292,9 +296,12 @@
   font-family: Inter, sans-serif;
   color: #676666;
 
+  list-style: disc;
+
   padding-top: 2px;
   padding-bottom: 2px;
-  margin-left: 35px;
+  margin-left: 50px;
+  margin-bottom: 0.3rem;
 }
 
 .MuiListItemButton-root {

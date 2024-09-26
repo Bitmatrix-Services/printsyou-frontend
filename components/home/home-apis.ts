@@ -3,7 +3,7 @@ import axios from 'axios';
 import {BannerList, Category, Faq} from '@components/home/home.types';
 import {ApiResponse} from '@utils/api/axios-utils';
 import {PagedData} from '@utils/util-types';
-import {Product} from '@components/home/product/product.types';
+import {EnclosureProduct} from '@components/home/product/product.types';
 
 export const getAllCategories = async (): Promise<ApiResponse<Category[]>> => {
   try {
@@ -29,9 +29,9 @@ export const getBannersList = async (): Promise<ApiResponse<BannerList[]>> => {
   }
 };
 
-export const getProductsByTag = async (tag: string): Promise<ApiResponse<PagedData<Product>>> => {
+export const getProductsByTag = async (tag: string): Promise<ApiResponse<PagedData<EnclosureProduct>>> => {
   try {
-    const response = await axios.get<ApiResponse<PagedData<Product>>>(
+    const response = await axios.get<ApiResponse<PagedData<EnclosureProduct>>>(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/byTag?tag=${tag}`
     );
     return response.data;

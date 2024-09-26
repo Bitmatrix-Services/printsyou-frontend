@@ -2,7 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import {useSearchParams} from 'next/navigation';
 import axios from 'axios';
-import {Container} from '@components/globals/container.component';
 import {SearchResultsSection} from '@components/search/search-results-section';
 import {CategoryType, SearchSidebar} from '@components/search/search-sidebar.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
@@ -118,7 +117,7 @@ export const SearchResult = () => {
   return (
     <div className="bg-white footer pt-8">
       <Breadcrumb list={[]} prefixTitle="Search Result" />
-      <Container>
+      <div className="w-full max-w-[120rem] mx-auto px-6 md:px-[3rem] tablet:px-[4rem] lg:px-[4rem] xl:px-[8rem] 2xl:px-[10rem] relative">
         <div className="flex flex-col md:flex-row gap-3 lg:gap-8">
           {isPageLoading ? (
             <div className="flex justify-center align-middle items-center h-[20rem] w-[100%]">
@@ -143,7 +142,7 @@ export const SearchResult = () => {
             </>
           )}
         </div>
-      </Container>
+      </div>
     </div>
   );
 };

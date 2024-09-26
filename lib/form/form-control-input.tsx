@@ -38,7 +38,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
           {label ? (
             <div className="flex">
               <h4 className="text-sm text-mute4 font-normal mb-2">{label}</h4>
-              {isRequired && <span className="text-red-600">*</span>}
+              {isRequired ? <span className="text-red-600">*</span> : null}
             </div>
           ) : null}
           {inputType === 'textField' ? (
@@ -54,6 +54,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   borderColor: '#DB0481'
                 }
               }}
+              name={name}
               placeholder={placeholder}
               disabled={disabled}
               value={value}
@@ -71,6 +72,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   borderColor: '#DB0481'
                 }
               }}
+              name={name}
               minRows={6}
               placeholder={placeholder}
               disabled={disabled}

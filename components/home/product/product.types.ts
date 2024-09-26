@@ -67,11 +67,13 @@ export interface Product {
 }
 
 export interface EnclosureProduct {
-  productId: string;
+  id: string;
+  sku: string;
   productName: string;
   minPrice: number;
   salePrice: number;
   priorityOrder: number;
   uniqueProductName: string;
   imageUrl: string;
+  priceGrids: PriceGrids[];
 }

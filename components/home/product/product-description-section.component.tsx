@@ -7,8 +7,8 @@ import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {useAppDispatch} from '../../../store/hooks';
-import {v4 as uuidv4} from 'uuid';
 import {PiShoppingCartSimple} from 'react-icons/pi';
+import {colorNameToHex, extractColorsArray} from '@utils/utils';
 
 interface ProductDescriptionComponent {
   product: Product;
@@ -19,7 +19,8 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
   const dispatch = useAppDispatch();
 
   const colorsArray = useMemo(() => {
-    return [];
+    const availableColors = extractColorsArray(product.additionalFieldProductValues);
+    return availableColors?.filter(color => colorNameToHex(color));
   }, [product.additionalFieldProductValues]);
 
   return (
@@ -29,16 +30,14 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
         {[...(product.crumbs ?? [])]
           .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
           .map((productCategory, index) => (
-            <Fragment key={uuidv4()}>
+            <Fragment key={productCategory.id}>
               {index !== 0 && index < product.crumbs.length - 1 ? (
                 <span className="mx-2">
                   <MdArrowForward className=" h-5 w-6" />
                 </span>
               ) : null}
               {index < product.crumbs.length - 1 ? (
-                <span key={uuidv4()} className="font-semibold capitalize ">
-                  {productCategory.name}
-                </span>
+                <span className="font-semibold capitalize ">{productCategory.name}</span>
               ) : null}
             </Fragment>
           ))}
@@ -66,20 +65,18 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
       <div className="mt-2 flex flex-col sm:flex-row gap-3">
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
-      <h3
-        className="text-sm mt-1 underline cursor-pointer hover:text-primary-500"
-        onClick={handleScroll && handleScroll}
-      >
-        See Details
-      </h3>
-
+      {handleScroll && (
+        <h3 className="text-sm mt-1 underline cursor-pointer hover:text-primary-500" onClick={handleScroll}>
+          See Details
+        </h3>
+      )}
       {colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
           <div className="text-mute text-sm font-normal">Colors:</div>
           <div className="flex flex-wrap gap-3">
             {colorsArray?.map(color => (
               <div
-                key={uuidv4()}
+                key={color}
                 style={{
                   backgroundColor: color,
                   width: 25,
@@ -128,7 +125,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
             {[...product.additionalRows]
               ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map(row => (
-                <li key={uuidv4()}>
+                <li key={`${row.id}${row.name}`}>
                   <span className="pt-[2px] block">
                     <span className="text-mute3 font-base">{row.name}</span>
                     <span className="text-primary-500 ml-2 font-semibold">${row.priceDiff.toFixed(2)}</span>

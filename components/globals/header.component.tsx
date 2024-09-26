@@ -115,7 +115,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
         </header>
       </Container>
 
-      <NavComponent categories={categories.slice(0, 10)} />
+      <NavComponent categories={categories.slice(0, 8)} />
 
       {/* mobile view  */}
       {mobileMenu ? (
@@ -148,15 +148,15 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             <fieldset className="border-b border-gray-600">
               <Accordion sx={{backgroundColor: '#303546'}} className=" px-2 border-0">
                 <AccordionSummary>
-                  <h6 className="text-white text-sm font-semibold uppercase focus:bg-[#303546]">all categories</h6>
+                  <h6 className="text-white text-base font-semibold capitalize">all categories</h6>
                 </AccordionSummary>
                 <AccordionDetails sx={{color: 'white'}}>
                   <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4">
                     {categories.slice(0, 6).map(category => (
-                      <li key={uuidv4()}>
+                      <li key={category.id}>
                         <Link
-                          className="text-sm text-[#b5b8c1] hover:text-primary-500"
-                          href={`/categories/${category.uniqueCategoryName}`}
+                          className="text-white hover:text-primary-500 capitalize"
+                          href={`/categories/${category.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
                           onClick={handleMenuClose}
                         >
                           <span
@@ -174,7 +174,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             <fieldset className="p-6">
               <ul className="grid grid-cols-2 gap-6">
                 {links.map(link => (
-                  <li key={uuidv4()}>
+                  <li key={link.name}>
                     <Link
                       href={link.url}
                       onClick={handleMenuClose}

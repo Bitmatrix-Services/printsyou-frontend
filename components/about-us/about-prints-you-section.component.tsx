@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react';
 import Image from 'next/image';
 import {Container} from '@components/globals/container.component';
-import {v4 as uuidv4} from 'uuid';
 
 export const aboutInfo = [
   {
@@ -18,7 +17,7 @@ export const AboutPrintsYouSection = () => {
         <Container>
           <div className="grid md:grid-cols-2 gap-6 sm:gap-20 md:gap-16 xl:gap-8 2xl:gap-20 items-center justify-center">
             {aboutInfo.map(about => (
-              <Fragment key={uuidv4()}>
+              <Fragment key={about.title}>
                 <div className="mt-16 sm:mt-0">
                   <h1 className="text-3xl lg:text-[28px] font-bold capitalize  mb-5 md:text-left md:mr-auto">
                     {about.title}

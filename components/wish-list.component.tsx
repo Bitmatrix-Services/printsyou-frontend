@@ -3,7 +3,6 @@ import React from 'react';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {CiCircleRemove} from 'react-icons/ci';
 import Image from 'next/image';
-import {v4 as uuidv4} from 'uuid';
 import {PiShoppingCartSimple} from 'react-icons/pi';
 
 export const WishListComponent = () => {
@@ -37,7 +36,7 @@ export const WishListComponent = () => {
               </thead>
               <tbody>
                 {wishListItems.map(product => (
-                  <tr key={uuidv4()} className="border-b">
+                  <tr key={product.id} className="border-b">
                     <td className="px-6 py-3">
                       <div className="flex items-center gap-4 pr-6">
                         <Image

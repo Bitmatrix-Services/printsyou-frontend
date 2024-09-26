@@ -1,16 +1,17 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
-import {setCartStateForModal} from '../../store/slices/cart/cart.slice';
-import {useAppDispatch} from '../../store/hooks';
 import {EnclosureProduct} from '@components/home/product/product.types';
+import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
 
 interface ISearchProductCard {
   product: EnclosureProduct;
+    imagePriority?: boolean;
 }
 
-export const SearchProductCard: FC<ISearchProductCard> = ({product}) => {
-  const dispatch = useAppDispatch();
+export const SearchProductCard: FC<ISearchProductCard> = ({product,imagePriority}) => {
+  const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
+
   return (
     <>
       <Link href={`/products/${product.uniqueProductName}`} className="group relative bg-white cursor-pointer">
@@ -21,6 +22,7 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product}) => {
                 className="object-contain"
                 skeletonRounded={true}
                 fill
+                priority={imagePriority}
                 src={product?.imageUrl}
                 alt={product.productName}
               />
@@ -44,18 +46,11 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product}) => {
                       type="button"
                       className="w-full md:w-full py-2 px-3 bg-primary-500 text-white font-semibold text-xs uppercase"
                       onClick={e => {
-                        dispatch(
-                          setCartStateForModal({
-                            selectedProduct: structuredClone(product),
-                            open: true,
-                            selectedItem: null,
-                            cartMode: 'new'
-                          })
-                        );
+                        setQuickViewModal(true);
                         e.preventDefault();
                       }}
                     >
-                      add to cart
+                      quick view
                     </button>
                   </div>
                 </div>
@@ -102,6 +97,9 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product}) => {
           </div>
         </div>
       </Link>
+      {quickViewModalOpen ? (
+        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} productId={product.id} />
+      ) : null}
     </>
   );
 };

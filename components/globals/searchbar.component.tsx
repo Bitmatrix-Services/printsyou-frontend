@@ -1,5 +1,6 @@
 'use client';
 import {Box} from '@mui/joy';
+import * as React from 'react';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useDebounce} from '../../hooks/useDeboune';
@@ -10,8 +11,6 @@ import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {useRouter} from 'next/navigation';
 import {MdArrowForward, MdSearch} from 'react-icons/md';
-import * as React from 'react';
-import {v4 as uuidv4} from 'uuid';
 
 type ItemType = {
   id: string;
@@ -118,8 +117,8 @@ export const Searchbar = () => {
                       {searchResult.categories.map(category => (
                         <Link
                           className="hover:cursor-pointer"
-                          href={`/categories/${category.uniqueName}`}
-                          key={uuidv4()}
+                          href={`/categories/${category.uniqueName}?page=1&size=20&filter=priceLowToHigh`}
+                          key={category.uniqueName}
                           onClick={() =>
                             setTimeout(() => {
                               handleClickAway();
@@ -157,7 +156,7 @@ export const Searchbar = () => {
                         <Link
                           className="hover:cursor-pointer"
                           href={`/products/${product.uniqueName}`}
-                          key={uuidv4()}
+                          key={product.uniqueName}
                           onClick={() =>
                             setTimeout(() => {
                               handleClickAway();

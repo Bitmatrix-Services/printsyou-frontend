@@ -3,7 +3,6 @@
 import React, {FC, ReactNode, useRef} from 'react';
 import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Pagination} from 'swiper/modules';
-import {v4 as uuidv4} from 'uuid';
 
 interface IHeroSection {
   dataList: any[];
@@ -26,7 +25,7 @@ export const SwiperSlider: FC<IHeroSection> = ({dataList = [], children}) => {
           className="hero-swiper"
         >
           {(dataList ?? []).map(listItem => (
-            <SwiperSlide key={uuidv4()}>{children && children(listItem)}</SwiperSlide>
+            <SwiperSlide key={listItem.id}>{children && children(listItem)}</SwiperSlide>
           ))}
         </Swiper>
       </div>

@@ -1,4 +1,4 @@
-import {Product} from '../product/product';
+import {EnclosureProduct, Product} from '@components/home/product/product.types';
 
 interface specificationsProps {
   fieldName: string;
@@ -61,7 +61,7 @@ export interface CartInitialState {
   cart: CartRoot | null;
   cartState: {
     open: boolean;
-    selectedProduct?: Product | null;
+    selectedProduct?: EnclosureProduct | Product | null;
     selectedItem?: CartItemUpdated | null;
     cartMode: string;
   };

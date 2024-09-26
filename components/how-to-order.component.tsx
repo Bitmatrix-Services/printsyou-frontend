@@ -6,7 +6,6 @@ import 'aos/dist/aos.css';
 import {Container} from '@components/globals/container.component';
 import {aosGlobalSetting} from '@utils/constants';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
-import {v4 as uuidv4} from 'uuid';
 
 export const HowToOrderComponent = () => {
   useEffect(() => {
@@ -26,7 +25,7 @@ export const HowToOrderComponent = () => {
         </div>
         <div className="space-y-12 relative scroll-container py-12 md:ml-[6rem]">
           {orderSteps.map((order, index) => (
-            <Fragment key={uuidv4()}>
+            <Fragment key={order.title}>
               {index % 2 === 0 ? (
                 <figure className="scroll-step-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:space-x-52">
                   <div className="col self-center" data-aos="zoom-in-up">

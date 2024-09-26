@@ -4,10 +4,15 @@ import {Modal, ModalDialog} from '@mui/joy';
 import Image from 'next/image';
 import {useFormik} from 'formik';
 import axios, {AxiosResponse} from 'axios';
-import {CartRoot, File as CartItemFile} from '../../../store/slices/cart/cart';
+import {CartItemUpdated, CartRoot, File as CartItemFile} from '../../../store/slices/cart/cart';
 import {v4 as uuidv4} from 'uuid';
 import {useAppDispatch, useAppSelector} from '../../../store/hooks';
-import {selectCartState, setCartState, setCartStateForModal} from '../../../store/slices/cart/cart.slice';
+import {
+  selectCartRootState,
+  selectCartState,
+  setCartState,
+  setCartStateForModal
+} from '../../../store/slices/cart/cart.slice';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
 import {PriceGrids} from '@components/home/product/product.types';
 import ModalClose from '@mui/joy/ModalClose';
@@ -30,8 +35,11 @@ const specsFields: Record<string, any> = {
 export const AddToCartModal: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const ref = useRef<HTMLFormElement>(null);
+
   const cartState = useAppSelector(selectCartState);
+  const cartRoot = useAppSelector(selectCartRootState);
 
   const formik = useFormik<LocalCartState>({
     initialValues: {
@@ -53,7 +61,7 @@ export const AddToCartModal: FC = () => {
 
     formik.handleSubmit();
 
-    setTimeout(() => handleAddToCart(buttonName), 500);
+    setTimeout(() => handleAddToCart(buttonName, cartRoot?.cartItems), 500);
   };
 
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
@@ -69,11 +77,12 @@ export const AddToCartModal: FC = () => {
   });
   const [addToCartError, setAddToCartError] = useState<boolean>(false);
   const [priceTypes, setPriceTypes] = useState<string[]>([]);
+  const [formSubmitting, setFormSubmitting] = useState<string>('');
 
   useEffect(() => {
     const strings: string[] = [];
     product.priceGrids.forEach(item => {
-      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null) {
+      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null && item.priceType !== '') {
         strings.push(item.priceType);
       }
     });
@@ -164,6 +173,7 @@ export const AddToCartModal: FC = () => {
       })
     );
     setAddToCartError(false);
+    setFormSubmitting('');
     if (submitType === 'checkout') router.push('/checkout');
   };
 
@@ -236,12 +246,18 @@ export const AddToCartModal: FC = () => {
     } catch (error) {}
   };
 
-  const handleAddToCart = (submitType: string) => {
+  const handleAddToCart = (submitType: string, cartItems: CartItemUpdated[] | undefined) => {
     setAddToCartError(false);
+    setFormSubmitting(submitType);
+
     const cartId = getCartId();
+
+    // adding an item which is already added in cart
+    const alreadyAddedProduct = cartItems?.find(cartItem => cartItem.productId === product.id);
+
     const cartData = {
       productId: product.id,
-      qtyRequested: formik.values.itemQty,
+      qtyRequested: (alreadyAddedProduct?.qtyRequested || 0) + formik.values.itemQty,
       priceType: formik.values.selectedPriceType,
       specs: [
         {
@@ -267,9 +283,14 @@ export const AddToCartModal: FC = () => {
         fieldValue: spec.fieldValue
       }));
 
-    if (cartState.cartMode === 'update' && cartState.selectedItem && !Object.keys(formik.errors).length) {
+    if (
+      alreadyAddedProduct ||
+      (cartState.cartMode === 'update' && cartState.selectedItem && !Object.keys(formik.errors).length)
+    ) {
+      const cartItemId = alreadyAddedProduct ? alreadyAddedProduct.id : cartState.selectedItem?.id;
+
       axios
-        .put(`${API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartState.selectedItem.id}`, cartData)
+        .put(`${API_BASE_URL}/cart/update-item?cartId=${cartId}&cartItemId=${cartItemId}`, cartData)
         .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
@@ -277,6 +298,7 @@ export const AddToCartModal: FC = () => {
         })
         .catch(() => {
           setAddToCartError(true);
+          setFormSubmitting('');
         });
     } else if (!Object.keys(formik.errors).length) {
       axios
@@ -288,6 +310,7 @@ export const AddToCartModal: FC = () => {
         })
         .catch(() => {
           setAddToCartError(true);
+          setFormSubmitting('');
         });
     }
   };
@@ -333,7 +356,7 @@ export const AddToCartModal: FC = () => {
                   </div>
                   <div className="flex justify-between space-x-4 w-full">
                     <div className="flex justify-between items-center gap-4">
-                      {Object.keys(priceTypes).length > 0 ? (
+                      {priceTypes.length > 0 ? (
                         <div className="flex items-center gap-2">
                           <label className="font-semibold text-xs" htmlFor="price-type">
                             Item Type
@@ -346,8 +369,8 @@ export const AddToCartModal: FC = () => {
                             value={formik.values.selectedPriceType as string}
                             onChange={formik.handleChange}
                           >
-                            {priceTypes.map(row => (
-                              <option key={uuidv4()} value={row}>
+                            {priceTypes.map((row, index) => (
+                              <option key={`${row}${index}`} value={row}>
                                 {row}
                               </option>
                             ))}
@@ -434,7 +457,7 @@ export const AddToCartModal: FC = () => {
                   />
                   <ul>
                     {artWorkFiles.map((file, index) => (
-                      <li key={uuidv4()} className="flex items-center pt-4 rounded-lg">
+                      <li key={file.fileKey} className="flex items-center pt-4 rounded-lg">
                         <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
                           <Image
                             className="object-cover w-full h-full rounded-sm"
@@ -488,7 +511,7 @@ export const AddToCartModal: FC = () => {
                       disabled={formik.isSubmitting}
                       className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
                     >
-                      {formik.isSubmitting ? (
+                      {formik.isSubmitting && formSubmitting === 'cart' ? (
                         <CircularLoader />
                       ) : (
                         <div className="flex">
@@ -503,7 +526,7 @@ export const AddToCartModal: FC = () => {
                       disabled={formik.isSubmitting}
                       className="py-2 px-6 flex items-center justify-center rounded-md bg-primary-500 text-white w-full lg:w-auto capitalize"
                     >
-                      {formik.isSubmitting ? (
+                      {formik.isSubmitting && formSubmitting === 'checkout' ? (
                         <CircularLoader />
                       ) : (
                         <div className="flex">
@@ -536,7 +559,7 @@ interface IFormDescriptionProps {
 
 export const FormDescription: FC<IFormDescriptionProps> = ({textArray}) => {
   return textArray?.map(item => (
-    <p key={uuidv4()} className="text-mute text-sm mb-2">
+    <p key={item} className="text-mute text-sm mb-2">
       {item}
     </p>
   ));

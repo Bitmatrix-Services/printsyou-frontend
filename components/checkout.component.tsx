@@ -7,7 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {orderCheckoutSchema, OrderFormSchemaType} from '@utils/validation-schemas';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {shippingFormFields} from '@utils/constants';
-import {RadioGroup} from '@mui/joy';
+import {Radio, RadioGroup} from '@mui/joy';
 import {IoClose} from 'react-icons/io5';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
@@ -16,7 +16,6 @@ import {useMutation} from '@tanstack/react-query';
 import {FormControlInput} from '@lib/form/form-control-input';
 import {Container} from '@components/globals/container.component';
 import {FormControlCheckbox} from '@lib/form/form-control-checkbox';
-import Radio from '@mui/joy/Radio';
 import {MdClose, MdModeEdit} from 'react-icons/md';
 import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
@@ -29,6 +28,7 @@ import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import dayjs from 'dayjs';
 import {FormHeading} from '@components/globals/cart/add-to-cart-modal.component';
+import {MaskInput} from '@lib/form/mask-input.component';
 
 export const CheckoutComponent: FC = () => {
   const dispatch = useAppDispatch();
@@ -44,13 +44,7 @@ export const CheckoutComponent: FC = () => {
     return currentDay.toISOString().split('T')[0];
   };
 
-  const {
-    control,
-    reset,
-    handleSubmit,
-    formState: {errors, isSubmitting},
-    watch
-  } = useForm<OrderFormSchemaType>({
+  const methods = useForm<OrderFormSchemaType>({
     resolver: yupResolver(orderCheckoutSchema),
     defaultValues: {
       billingAddress: {
@@ -71,31 +65,38 @@ export const CheckoutComponent: FC = () => {
         city: '',
         state: '',
         zipCode: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        shippingAddressSame: true
       },
       emailAddress: '',
-
-      shippingAddressSame: 'shippingAddressSame',
-
       inHandDate: getInHandDateEst(),
       salesRep: '',
       additionalInformation: '',
-
       newsLetter: false,
       termsAndConditions: false
     }
   });
+
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: {errors, isSubmitting},
+    watch,
+    setValue
+  } = methods;
 
   const {mutate} = useMutation({
     mutationFn: (data: OrderFormSchemaType) => {
       setApiError(false);
       let orderData: any = {
         ...data,
-        shippingAddressSame: data.shippingAddressSame === 'shippingAddressSame',
+        shippingAddressSame: data.shippingAddress.shippingAddressSame,
         cartId: cartRoot?.id
       };
 
       delete orderData.newsLetter;
+      delete orderData.shippingAddress.shippingAddressSame;
       delete orderData.termsAndConditions;
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/create-order`, orderData);
     },
@@ -163,10 +164,6 @@ export const CheckoutComponent: FC = () => {
       );
     } catch (e) {}
   };
-
-  if (cartRoot && cartRoot?.cartItems?.length <= 0) {
-    router.push('/');
-  }
 
   return (
     <>
@@ -254,11 +251,10 @@ export const CheckoutComponent: FC = () => {
                         control={control}
                         errors={errors}
                       />
-
-                      <FormControlInput
+                      <MaskInput
                         name="billingAddress.phoneNumber"
                         label="Phone"
-                        isRequired={true}
+                        isRequired={false}
                         disabled={isSubmitting}
                         control={control}
                         errors={errors}
@@ -277,33 +273,61 @@ export const CheckoutComponent: FC = () => {
                     <FormHeading text="Shipping Information" />
                     <div className="flex flex-col gap-2">
                       <Controller
-                        name="shippingAddressSame"
+                        name="shippingAddress.shippingAddressSame"
                         control={control}
-                        render={({field: {onChange, value}}) => (
-                          <RadioGroup value={value} onChange={onChange}>
+                        render={({field: {onChange, value, ...otherProps}}) => (
+                          <RadioGroup
+                            value={value}
+                            {...otherProps}
+                            onChange={e => {
+                              onChange(e.target.value === 'true');
+                              if (e.target.value === 'true') {
+                                setValue('shippingAddress', {
+                                  fullname: '',
+                                  company: '',
+                                  addressLineOne: '',
+                                  addressLineTwo: '',
+                                  city: '',
+                                  state: '',
+                                  zipCode: '',
+                                  phoneNumber: '',
+                                  shippingAddressSame: true
+                                });
+                              }
+                            }}
+                          >
                             <Radio
-                              value="shippingAddressSame"
+                              value="true"
                               label="Same as my billing address"
                               variant="outlined"
-                              checked={value === 'shippingAddressSame'}
+                              checked={value === true}
                             />
-
                             <Radio
-                              value="diffBillingAddress"
+                              value="false"
                               label="Different shipping address"
                               variant="outlined"
-                              checked={value === 'diffBillingAddress'}
+                              checked={value === false}
                             />
                           </RadioGroup>
                         )}
                       />
                     </div>
-                    {watch('shippingAddressSame') === 'diffBillingAddress' && (
+                    {!watch('shippingAddress.shippingAddressSame') && (
                       <div className="grid md:grid-cols-2 gap-6 mt-6">
                         {shippingFormFields.map(field =>
                           field.label === 'State' ? (
                             <FormControlSelect
-                              key={uuidv4()}
+                              key={field.name}
+                              name={field.name}
+                              label={field.label}
+                              isRequired={field.required}
+                              disabled={isSubmitting}
+                              control={control}
+                              errors={errors}
+                            />
+                          ) : field.label === 'Phone' ? (
+                            <MaskInput
+                              key={field.name}
                               name={field.name}
                               label={field.label}
                               isRequired={field.required}
@@ -313,10 +337,10 @@ export const CheckoutComponent: FC = () => {
                             />
                           ) : (
                             <FormControlInput
-                              key={uuidv4()}
+                              key={field.name}
                               name={field.name}
                               label={field.label}
-                              isRequired={true}
+                              isRequired={field.required}
                               disabled={isSubmitting}
                               control={control}
                               errors={errors}
@@ -347,7 +371,7 @@ export const CheckoutComponent: FC = () => {
                     <div className="p-4 border-2">
                       <FormHeading text="Products in Cart" />
                       {(cartRoot?.cartItems ?? []).map(item => (
-                        <div key={uuidv4()}>
+                        <div key={item.id}>
                           <div className="flex items-center p-4">
                             <div className="relative">
                               <ImageWithFallback
@@ -437,6 +461,7 @@ export const CheckoutComponent: FC = () => {
                           render={({field: {onChange, value}}) => (
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DatePicker
+                                name="inHandDate"
                                 value={value ? dayjs(value) : null}
                                 onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
                               />
@@ -501,8 +526,14 @@ export const CheckoutComponent: FC = () => {
                   </div>
                 </>
               ) : (
-                <div className="flex justify-center w-full items-center my-8">
-                  <h2 className="my-4 font-bold text-3xl text-primary">No product Found!</h2>
+                <div className="flex flex-col justify-center w-full items-center my-8">
+                  <h2 className="my-4 font-bold text-3xl text-primary">Your Cart is Empty!</h2>
+                  <div className=" text-xl">Looks like you have not added any items to your cart yet.</div>
+                  <div className="my-4">
+                    <Link href="/" className="underline text-blue-500">
+                      Shop more...
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>

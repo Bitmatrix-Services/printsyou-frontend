@@ -12,6 +12,9 @@ const config: Config = {
         oswald: 'Oswald, sans-serif',
         poppins: 'Poppins, sans-serif'
       },
+      screens: {
+        tablet: {raw: '(min-width: 820px) and (max-width: 912px)'}
+      },
       colors: {
         primary: {
           DEFAULT: 'rgba(219,4,129,0.5)',

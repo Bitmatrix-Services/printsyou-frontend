@@ -15,6 +15,7 @@ import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {CSPostHogProvider} from './provider';
 import Head from 'next/head';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -46,6 +47,18 @@ export default async function RootLayout({children}: PropsWithChildren) {
             <Head>
               <link href="https://fonts.cdnfonts.com/css/graphik-trial" rel="stylesheet" />
             </Head>
+            <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script
+              id="google-tag-manager"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                
+                                gtag('config', 'AW-16709127988');`
+              }}
+            />
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
               <NotificationComponent />
               <Header categories={categoriesData.payload} />
@@ -59,3 +72,4 @@ export default async function RootLayout({children}: PropsWithChildren) {
     </ReduxProvider>
   );
 }
+

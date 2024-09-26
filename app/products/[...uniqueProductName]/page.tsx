@@ -1,17 +1,51 @@
+import React from 'react';
 import {getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {Product} from '@components/home/product/product.types';
-import {metaConstants} from '@utils/constants';
-import React from 'react';
+import moment from 'moment';
+import {permanentRedirect, RedirectType} from 'next/navigation';
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
-  const response = await getProductDetailsByUniqueName(params.uniqueProductName.join('/'));
+  let uniqueName = params.uniqueProductName.join('/');
+
+  const finalUrl = decodeURIComponent(uniqueName)
+    .replaceAll(',000', 'k')
+    .replaceAll('½', '')
+    .replaceAll('¼', '')
+    .replaceAll('½/', '')
+    .replaceAll('---', '-')
+    .replaceAll('-–-', '-')
+    .replaceAll('--', '-')
+    .replaceAll("'", '')
+    .replaceAll('™', '')
+    .replaceAll('®', '')
+    .replaceAll('"', '')
+    .replaceAll('.', '')
+    .replaceAll('%', '')
+    .replaceAll('”', '')
+    .replaceAll('+', '')
+    .replaceAll('’', '')
+    .replaceAll('&', 'amp')
+    .replaceAll(' ', '')
+    .replaceAll('è', 'e')
+    .replaceAll('©', '')
+    .replaceAll('ü', 'u')
+    .replaceAll(':', '')
+    .replaceAll(',', '')
+    .replaceAll('°', '')
+    .replaceAll('‘', '');
+
+  if (uniqueName !== finalUrl) {
+    permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
+  }
+
+  const response = await getProductDetailsByUniqueName(uniqueName);
   let product: Product | null = null;
 
   if (response?.payload) product = response.payload;
 
   return (
-    <>
+    <section>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -20,7 +54,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'Product',
             name: product?.productName,
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-            description: (product?.description ?? '').replace(/<[^>]+>/g, ''),
+            description: product?.metaDescription ?? '',
             sku: product?.sku,
             offers: {
               '@type': 'Offer',
@@ -28,8 +62,66 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
               itemCondition: 'https://schema.org/NewCondition',
               availability: 'https://schema.org/InStock',
               priceCurrency: 'USD',
-              price: [...(product?.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price
+              priceValidUntil: product?.saleEndDate
+                ? moment(product?.saleEndDate, 'MMMM DD, YYYY').format('YYYY-MM-DD')
+                : null,
+              price: [...(product?.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price,
+              shippingDetails: {
+                '@type': 'OfferShippingDetails',
+                shippingRate: {
+                  '@type': 'MonetaryAmount',
+                  minValue: 3.49,
+                  maxValue: 50.0,
+                  currency: 'USD'
+                },
+                shippingDestination: {
+                  '@type': 'DefinedRegion',
+                  addressCountry: 'US'
+                },
+                deliveryTime: {
+                  '@type': 'ShippingDeliveryTime',
+                  handlingTime: {
+                    '@type': 'QuantitativeValue',
+                    minValue: 0,
+                    maxValue: 3,
+                    unitCode: 'DAY'
+                  },
+                  transitTime: {
+                    '@type': 'QuantitativeValue',
+                    minValue: 1,
+                    maxValue: 7,
+                    unitCode: 'DAY'
+                  },
+                  cutOffTime: '23:30:00-05:00',
+                  businessDays: {
+                    '@type': 'OpeningHoursSpecification',
+                    dayOfWeek: [
+                      'https://schema.org/Monday',
+                      'https://schema.org/Tuesday',
+                      'https://schema.org/Wednesday',
+                      'https://schema.org/Thursday',
+                      'https://schema.org/Friday',
+                      'https://schema.org/Saturday'
+                    ]
+                  }
+                }
+              }
             }
+          })
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ImageGallery',
+            url: `${process.env.FE_URL}${product?.uniqueProductName}`,
+            associatedMedia: (product?.productImages ?? []).map((image, index) => ({
+              '@type': 'ImageObject',
+              contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,
+              text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`
+            }))
           })
         }}
       />
@@ -51,7 +143,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
         }}
       />
       <ProductDetails product={product} />
-    </>
+    </section>
   );
 };
 
@@ -65,7 +157,7 @@ export async function generateMetadata({params}: {params: {uniqueProductName: st
   if (response?.payload) product = response.payload;
 
   return {
-    title: `${product?.metaTitle || product?.productName} | ${metaConstants.SITE_NAME}`,
+    title: `${product?.metaTitle || product?.productName} | PrintsYou`,
     description: product?.metaDescription || '',
     alternates: {
       canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`

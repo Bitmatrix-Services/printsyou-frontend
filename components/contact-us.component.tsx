@@ -13,6 +13,7 @@ import {ContactUsFormSchemaType, contactUsSchema} from '@utils/validation-schema
 import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
+import {MaskInput} from '@lib/form/mask-input.component';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
@@ -77,7 +78,12 @@ export const ContactUsComponent = () => {
                 <h2 className="font-medium">Write to us</h2>
               </div>
               <p className="text-sm">Fill out our form and we will contact you within 24 hours.</p>
-              <h3 className="text-sm">Emails: info@printsyou.com</h3>
+              <h3 className="text-sm">
+                Email: <b>info@printsyou.com</b>
+              </h3>
+              <h3 className="text-sm">
+                Hours of Operations: <b>Monday to Friday / 8:00 AM - 5:00 PM CST</b>
+              </h3>
             </div>
           </div>
 
@@ -85,13 +91,13 @@ export const ContactUsComponent = () => {
             <div className="text-center capitalize">
               <h1 className="text-2xl font-semibold">Get in touch with us</h1>
               <p className="text-sm mt-2 text-mute2 text-center">
-                For more information about our product & services, please feel free to drop us an email. Our staff is
-                always here to help you out. Do not hesitate!
+                We’re here to help! Whether you have questions about our products, need assistance with an order, or
+                just want to say hello, feel free to reach out. Your satisfaction is our top priority!
               </p>
             </div>
             <ReactQueryClientProvider>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-y-6 mt-7 border-2 p-6 border-t-0">
+                <div className="flex flex-col gap-y-6 mt-7 border-2 p-6">
                   <FormControlInput
                     label="Your Name"
                     name="fullName"
@@ -108,9 +114,10 @@ export const ContactUsComponent = () => {
                     control={control}
                     errors={errors}
                   />
-                  <FormControlInput
+                  <MaskInput
                     label="Phone Number"
                     name="phoneNumber"
+                    isRequired={true}
                     disabled={isSubmitting}
                     control={control}
                     errors={errors}

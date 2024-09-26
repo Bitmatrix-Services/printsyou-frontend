@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
-import {v4 as uuidv4} from 'uuid';
 
 const sortList = [
   {label: 'Price Low To High', value: 'priceLowToHigh'},
@@ -49,7 +48,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     onChange={e => setSort(e.target.value)}
                   >
                     {sortList.map(item => (
-                      <option key={uuidv4()} value={item.value}>
+                      <option key={item.label} value={item.value}>
                         {item.label}
                       </option>
                     ))}
@@ -66,7 +65,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     onChange={e => setPageSize(parseInt(e.target.value))}
                   >
                     {[20, 40].map(item => (
-                      <option key={uuidv4()} value={item}>
+                      <option key={item} value={item}>
                         {item}
                       </option>
                     ))}
@@ -88,7 +87,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
               <div className="numbers flex gap-2">
                 {pagesToShow?.map(page => (
                   <button
-                    key={uuidv4()}
+                    key={page}
                     type="button"
                     onClick={() => setPageNumber(page)}
                     className={`item number ${pageNumber == page && 'is-active'}`}

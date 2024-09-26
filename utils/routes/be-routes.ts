@@ -12,12 +12,14 @@ export const HomePageRoutes = Object.freeze({
 export const ProductRoutes = Object.freeze({
   ProductById: `/product`,
   ProductByUniqueName: `/product?uProductName`,
-  ProductByCategoryId: `/product/byCategory`
+  ProductByCategoryId: `/product/byCategory`,
+  Ld: '/product/ld-products/{0}'
 });
 
 export const CategoryRoutes = Object.freeze({
   CategoryById: ``,
-  CategoryByUniqueName: `/category?uCategoryName`
+  CategoryByUniqueName: `/category?uCategoryName`,
+  CategoriesByParentId: `/category/subCategories`
 });
 
 export const NewsletterRoutes = Object.freeze({

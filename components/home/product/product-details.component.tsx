@@ -6,8 +6,7 @@ import {Container} from '@components/globals/container.component';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import {notFound} from 'next/navigation';
-import Head from 'next/head';
-import {v4 as uuidv4} from 'uuid';
+import sanitizeHtml from 'sanitize-html';
 
 interface IProductDetails {
   product: Product | null;
@@ -23,7 +22,6 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
       productDescriptionRef.current.scrollIntoView({behavior: 'smooth'});
     }
   };
-
   return (
     <>
       {product ? (
@@ -44,7 +42,7 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
                 <div
                   className="product-description"
                   dangerouslySetInnerHTML={{
-                    __html: product.productDescription
+                    __html: sanitizeHtml(product.productDescription)
                   }}
                 ></div>
               </div>
@@ -58,12 +56,12 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
 
                 <div className="space-y-2">
                   {product.additionalFieldProductValues?.map(item => (
-                    <Fragment key={uuidv4()}>
+                    <Fragment key={item.fieldValue}>
                       <div>
-                        <div className=" product-additional-info-heading">
-                          <strong>{item.fieldName}:</strong>
+                        <div className="product-additional-info-heading capitalize">
+                          <strong>{item.fieldName.toLowerCase()}:</strong>
                         </div>
-                        <ul className="">
+                        <ul>
                           <li className="text-mute2">
                             {item.fieldValue.includes('<table') ? (
                               <span

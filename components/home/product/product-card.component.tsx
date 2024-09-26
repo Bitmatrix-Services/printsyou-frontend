@@ -1,24 +1,25 @@
-'use client';
 import React, {FC, useState} from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import {Product} from '@components/home/product/product.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
-import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
-import {useAppDispatch} from '../../../store/hooks';
+import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
 import {FaRegHeart} from 'react-icons/fa';
 import {addToWishlist} from '../../../store/slices/wishlist/wishlist.slice';
-import {useAppSelector} from '../../../store/hooks';
 import {selectWishlistId} from 'store/slices/wishlist/wishlist.slice';
+import {useAppDispatch} from '../../../store/hooks';
+import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 
-export interface IProductCardProps {
-  product: Product;
-  showModal?: boolean;
+interface IProductCard {
+  product: EnclosureProduct;
+  imagePriority?: boolean;
 }
 
-export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) => {
-  const wishlistId = useAppSelector(selectWishlistId);
+
+export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
+    const wishlistId = useAppSelector(selectWishlistId);
+
   const dispatch = useAppDispatch();
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
@@ -43,17 +44,18 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
 
   return (
     <div className="group relative bg-white">
-      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl">
+      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl px-3">
         <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
           <div className=" min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback
               className="object-contain"
               skeletonRounded={true}
               fill
-              src={product?.productImages?.[0]?.imageUrl}
+              priority={imagePriority}
+              src={product?.imageUrl}
               alt={product.productName}
             />
-            <div className="absolute top-0 left-0 w-[4vw] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
+            <div className="absolute top-0 left-0 w-[4rem] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
               {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice > 0 ? (
                 <span className="flex items-center justify-center px-3 bg-blue-500 text-white font-medium capitalize">
                   sale
@@ -83,18 +85,16 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
                   >
                     add to cart
                   </button>
-                  {showModal ? (
-                    <button
-                      type="button"
-                      className="hidden md:block w-1/2 py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
-                      onClick={e => {
-                        setQuickViewModal(true);
-                        e.preventDefault();
-                      }}
-                    >
-                      quick view
-                    </button>
-                  ) : null}
+                  <button
+                    type="button"
+                    className="hidden md:block w-1/2 py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
+                    onClick={e => {
+                      setQuickViewModal(true);
+                      e.preventDefault();
+                    }}
+                  >
+                    quick view
+                  </button>
                 </div>
               </div>
             </div>
@@ -147,7 +147,7 @@ export const ProductCard: FC<IProductCardProps> = ({product, showModal = true}) 
         </div>
       </div>
       {quickViewModalOpen ? (
-        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} product={product} />
+        <ProductQuickViewModal open={quickViewModalOpen} onClose={setQuickViewModal} productId={product.id} />
       ) : null}
     </div>
   );

@@ -5,7 +5,6 @@ import {useAppDispatch, useAppSelector} from '../../../store/hooks';
 import {useRouter} from 'next/navigation';
 import {CartItemUpdated, CartRoot} from '../../../store/slices/cart/cart';
 import axios, {AxiosResponse} from 'axios';
-import {v4 as uuidv4} from 'uuid';
 import Link from 'next/link';
 
 export const CartSection = () => {
@@ -15,7 +14,8 @@ export const CartSection = () => {
   const cartRoot = useAppSelector(selectCartRootState);
 
   useEffect(() => {
-    getCartData();
+    const cartId = getCartId();
+    if (cartId) getCartData(cartId);
   }, []);
 
   const handleCheckout = () => {
@@ -54,9 +54,7 @@ export const CartSection = () => {
     [cartRoot]
   );
 
-  const getCartData = async () => {
-    const cartId = getCartId();
-
+  const getCartData = async (cartId: string) => {
     try {
       axios
         .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/${cartId}`)
@@ -77,7 +75,7 @@ export const CartSection = () => {
           <h2 className="text-black text-xl font-semibold capitalize">Shopping Cart</h2>
           <div className="text-mute border-t border my-6" />
           {cartRoot?.cartItems?.map(item => (
-            <CartItemComponent key={uuidv4()} cartItem={item} handleRemoveItem={handleRemoveItem} />
+            <CartItemComponent key={item.id} cartItem={item} handleRemoveItem={handleRemoveItem} />
           ))}
 
           <div>
