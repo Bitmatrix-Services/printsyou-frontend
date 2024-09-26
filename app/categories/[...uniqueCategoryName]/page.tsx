@@ -1,4 +1,8 @@
-import {getCategoryDetailsByUniqueName, getProductsLdForCategoryPage} from '@components/home/category/category.apis';
+import {
+  getAllSiblingCategories,
+  getCategoryDetailsByUniqueName,
+  getProductsLdForCategoryPage
+} from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
@@ -27,6 +31,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   }
 
   const response = await getCategoryDetailsByUniqueName(uniqueName);
+  const siblingCat = await getAllSiblingCategories(response?.payload?.id!!);
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
 
   if (ld?.payload) {
@@ -35,8 +40,12 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   }
 
   let category: Category | null = null;
-
   if (response?.payload) category = response.payload;
+
+  let siblingCategories: Category[] = [];
+  if (siblingCat?.payload) siblingCategories = siblingCat.payload;
+
+  console.log({siblingCat});
 
   return (
     <section>
@@ -76,7 +85,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
       {ld?.payload.itemListElement.length > 0 ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
       ) : null}
-      <CategoryDetails category={category} />
+      <CategoryDetails category={category} siblingCategories={siblingCategories} />
     </section>
   );
 };

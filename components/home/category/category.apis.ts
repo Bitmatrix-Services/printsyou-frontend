@@ -16,6 +16,18 @@ export const getCategoryDetailsByUniqueName = async (uniqueName: string): Promis
   }
 };
 
+export const getAllSiblingCategories = async (parentCategoryId: string): Promise<ApiResponse<Category[]> | null> => {
+  try {
+    const response = await axios.get<ApiResponse<Category[]>>(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${CategoryRoutes.CategoriesByParentId}/${parentCategoryId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching sibling categories:', error);
+    return null;
+  }
+};
+
 export const getProductsLdForCategoryPage = async (id: string): Promise<ApiResponse<any> | null> => {
   try {
     const response = await axios.get<ApiResponse<Category>>(

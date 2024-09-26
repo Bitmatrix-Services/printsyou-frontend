@@ -4,7 +4,6 @@ import {useSearchParams} from 'next/navigation';
 import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
-import {Container} from '@components/globals/container.component';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {SearchProductCard} from '@components/search/search-product-card';
@@ -58,56 +57,54 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
   };
 
   return (
-    <Container>
-      <section className="bg-white pt-8 md:pt-10 lg:pt-16">
-        {categoryName ? (
-          <h2 className="text-xl mb-0 font-bold capitalize">
-            {prefix && <span>{prefix}</span>}
-            {categoryName} Products
-            {suffix && <span>{suffix}</span>}
-          </h2>
-        ) : null}
-        {productsByCategory?.length > 0 && !isPageLoading && (
-          <PaginationHeader
-            pageNumber={page || 1}
-            setPageNumber={setPage}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            totalPages={totalPages}
-            sort={sort}
-            setSort={value => setSort(value)}
-          />
-        )}
+    <section className="bg-white pt-8 md:pt-10 lg:pt-16">
+      {categoryName ? (
+        <h2 className="text-xl mb-0 font-bold capitalize">
+          {prefix && <span>{prefix}</span>}
+          {categoryName} Products
+          {suffix && <span>{suffix}</span>}
+        </h2>
+      ) : null}
+      {productsByCategory?.length > 0 && !isPageLoading && (
+        <PaginationHeader
+          pageNumber={page || 1}
+          setPageNumber={setPage}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          totalPages={totalPages}
+          sort={sort}
+          setSort={value => setSort(value)}
+        />
+      )}
 
-        {isLoading ? (
-          <div className="flex justify-center align-middle items-center h-[20rem]">
-            <CircularLoader />
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-6">
-            {productsByCategory?.map((product, index) => (
-              <SearchProductCard imagePriority={index < 10} key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-        {productsByCategory?.length > 0 && !isPageLoading && (
-          <PaginationHeader
-            pageNumber={page || 1}
-            setPageNumber={setPage}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            totalPages={totalPages}
-            sort={sort}
-            setSort={value => setSort(value)}
-          />
-        )}
+      {isLoading ? (
+        <div className="flex justify-center align-middle items-center h-[20rem]">
+          <CircularLoader />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 2xl:grid-cols-5 gap-6">
+          {productsByCategory?.map((product, index) => (
+            <SearchProductCard imagePriority={index < 10} key={product.id} product={product} />
+          ))}
+        </div>
+      )}
+      {productsByCategory?.length > 0 && !isPageLoading && (
+        <PaginationHeader
+          pageNumber={page || 1}
+          setPageNumber={setPage}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          totalPages={totalPages}
+          sort={sort}
+          setSort={value => setSort(value)}
+        />
+      )}
 
-        {productsByCategory.length <= 0 && !isLoading && (
-          <div className="m-16 flex items-center justify-center">
-            <h4>No Products Found</h4>
-          </div>
-        )}
-      </section>
-    </Container>
+      {productsByCategory.length <= 0 && !isLoading && (
+        <div className="m-16 flex items-center justify-center">
+          <h4>No Products Found</h4>
+        </div>
+      )}
+    </section>
   );
 };
