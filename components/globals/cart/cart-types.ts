@@ -1,5 +1,5 @@
 import {PriceGrids} from '@components/home/product/product.types';
-import {InferType, number, object, ref, string} from 'yup';
+import {InferType, object, ref, string} from 'yup';
 
 export interface CustomProduct {
   id: string;
