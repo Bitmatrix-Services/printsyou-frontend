@@ -9,11 +9,12 @@ import {notFound} from 'next/navigation';
 import CategoriesSidebar from '@components/home/category/categories-sidebar.component';
 
 interface ICategoryDetails {
+  allCategories: Category[];
   category: Category | null;
   siblingCategories: Category[];
 }
 
-export const CategoryDetails: FC<ICategoryDetails> = ({category, siblingCategories}) => {
+export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, siblingCategories}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -28,7 +29,11 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category, siblingCategori
       <div className="w-full max-w-[120rem] mx-auto px-6 md:px-[3rem] tablet:px-[4rem] lg:px-[4rem] xl:px-[8rem] 2xl:px-[10rem] relative">
         <div className="flex flex-col md:flex-row mt-10">
           <div className="hidden lg:block">
-            <CategoriesSidebar selectedCategory={category} siblingCategories={siblingCategories} />
+            <CategoriesSidebar
+              allCategories={allCategories}
+              selectedCategory={category}
+              siblingCategories={siblingCategories}
+            />
           </div>
           <div>
             <section className="bg-secondary-300 bg-opacity-[12%]">
@@ -123,7 +128,11 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category, siblingCategori
           </div>
         </div>
         <div className=" lg:hidden block ">
-          <CategoriesSidebar selectedCategory={category} siblingCategories={siblingCategories} />
+          <CategoriesSidebar
+            allCategories={allCategories}
+            selectedCategory={category}
+            siblingCategories={siblingCategories}
+          />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
+import {getAllCategories} from '@components/home/home-apis';
 
 const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
   let uniqueName = params.uniqueCategoryName.join('/');
@@ -29,7 +30,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/categories/${finalUrl}`, RedirectType.replace);
   }
-
+  const categoriesRes = await getAllCategories();
   const response = await getCategoryDetailsByUniqueName(uniqueName);
   const siblingCat = await getAllSiblingCategories(response?.payload?.id!!);
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
@@ -42,10 +43,10 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   let category: Category | null = null;
   if (response?.payload) category = response.payload;
 
+  let allCategories: Category[] = [];
+  if (siblingCat?.payload) allCategories = categoriesRes.payload;
   let siblingCategories: Category[] = [];
   if (siblingCat?.payload) siblingCategories = siblingCat.payload;
-
-  console.log({siblingCat});
 
   return (
     <section>
@@ -85,7 +86,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
       {ld?.payload.itemListElement.length > 0 ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
       ) : null}
-      <CategoryDetails category={category} siblingCategories={siblingCategories} />
+      <CategoryDetails allCategories={allCategories} category={category} siblingCategories={siblingCategories} />
     </section>
   );
 };
