@@ -154,7 +154,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                       <li key={category.id}>
                         <Link
                           className="text-white hover:text-primary-500 capitalize"
-                          href={`/categories/${category.uniqueCategoryName}`}
+                          href={`/categories/${category.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
                           onClick={handleMenuClose}
                         >
                           <span

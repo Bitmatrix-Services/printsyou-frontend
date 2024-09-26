@@ -26,7 +26,7 @@ const CategoriesSidebar: FC<CategoriesSidebarProps> = ({selectedCategory, siblin
                       <AiFillCaretRight className="text-primary-500" />
                       <Link
                         className={`ml-1 capitalize text-mute3 hover:text-primary-500`}
-                        href={`/categories/${category.uniqueCategoryName}`}
+                        href={`/categories/${category.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
                       >
                         <span
                           dangerouslySetInnerHTML={{
@@ -49,7 +49,7 @@ const CategoriesSidebar: FC<CategoriesSidebarProps> = ({selectedCategory, siblin
                       <AiFillCaretRight className="text-primary-500" />
                       <Link
                         className={`ml-1 capitalize text-mute3 hover:text-primary-500`}
-                        href={`/categories/${category.uniqueCategoryName}`}
+                        href={`/categories/${category.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
                       >
                         <span
                           dangerouslySetInnerHTML={{

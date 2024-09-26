@@ -70,7 +70,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({category, siblingCategori
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 xl:gap-10">
               {(category.subCategories ?? [])?.map(subCategory => (
                 <Link
-                  href={`/categories/${subCategory.uniqueCategoryName}`}
+                  href={`/categories/${subCategory.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
                   className="flex flex-col border p-2"
                   key={subCategory.id}
                 >
