@@ -14,7 +14,7 @@ const servicesData: ServicesData[] = [
     id: 1,
     iconSrc: '/assets/f-icon-1.png',
     title: 'Free Delivery',
-    description: 'Up to $400'
+    description: 'Order Above $400'
   },
   {
     id: 2,
