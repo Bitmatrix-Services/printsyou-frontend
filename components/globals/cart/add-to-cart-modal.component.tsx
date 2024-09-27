@@ -386,6 +386,7 @@ export const AddToCartModal: FC = () => {
                           name="itemQty"
                           onChange={formik.handleChange}
                           onBlur={() => formik.validateField('itemQty')}
+                          onFocus={e => e.target.select()}
                         />
                       </div>
                       <div className="ml-5 flex items-center">x $ {calculatedPrice}</div>
@@ -436,6 +437,7 @@ export const AddToCartModal: FC = () => {
                         name="itemQty"
                         onChange={formik.handleChange}
                         onBlur={() => formik.validateField('itemQty')}
+                        onFocus={e => e.target.select()}
                       />
                     </div>
                     <div className="flex justify-between items-center gap-2">
