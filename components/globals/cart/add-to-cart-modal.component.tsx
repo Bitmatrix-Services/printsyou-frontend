@@ -475,7 +475,7 @@ export const AddToCartModal: FC = () => {
                           className={`block peer px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500 ${
                             formik.errors['itemColor'] ? 'border-red-500' : ''
                           }`}
-                          placeholder="Item Color"
+                          placeholder="Item Color (required)"
                           name="itemColor"
                           value={formik.values.itemColor ?? ''}
                           onChange={formik.handleChange}
@@ -485,7 +485,7 @@ export const AddToCartModal: FC = () => {
                         <input
                           type="text"
                           className="block peer px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500"
-                          placeholder="Imprint Color"
+                          placeholder="Imprint Color (optional)"
                           name="imprintColor"
                           value={formik.values.imprintColor ?? ''}
                           onChange={formik.handleChange}
@@ -495,7 +495,7 @@ export const AddToCartModal: FC = () => {
                         <input
                           type="text"
                           className="block peer px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500"
-                          placeholder="Size"
+                          placeholder="Size (optional)"
                           name="size"
                           value={formik.values.size ?? ''}
                           onChange={formik.handleChange}
