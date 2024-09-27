@@ -18,6 +18,8 @@ import {Sheet} from '@mui/joy';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectCartRootState, setSidebarCartOpen} from '../../store/slices/cart/cart.slice';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
+import {v4 as uuidv4} from 'uuid';
+import {FaRegHeart} from 'react-icons/fa';
 
 interface IHeaderProps {
   categories: Category[];
@@ -64,11 +66,11 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               {/*  mobile menu view */}
               <div className="lg:hidden">
                 <ul className="flex h-full items-center gap-5 ">
-                  {/*<li>*/}
-                  {/*  <Link href="/wishlist">*/}
-                  {/*    <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-                  {/*  </Link>*/}
-                  {/*</li>*/}
+                  <li>
+                    <Link href="/wishlist">
+                      <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
+                    </Link>
+                  </li>
                   <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
                     <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
                     <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-secondary-500 text-white text-sm font-semibold">
@@ -97,11 +99,11 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           </Link>
           <div className={`hidden lg:block pl-6 items-center`}>
             <ul className="flex h-full items-center gap-3 xl:gap-8">
-              {/*<li>*/}
-              {/*  <Link href="/wishlist">*/}
-              {/*    <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-              {/*  </Link>*/}
-              {/*</li>*/}
+              <li>
+                <Link href="/wishlist">
+                  <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
+                </Link>
+              </li>
               <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
                 <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
                 <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-secondary-500 text-white text-sm font-semibold">
