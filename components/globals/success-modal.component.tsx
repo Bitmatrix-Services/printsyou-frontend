@@ -2,6 +2,7 @@ import React, {Dispatch, FC, SetStateAction} from 'react';
 import {Modal, ModalDialog} from '@mui/joy';
 import {FiCheckCircle} from 'react-icons/fi';
 import {BiSolidErrorCircle} from 'react-icons/bi';
+import {useEffect} from 'react';
 
 interface ISuccessModal {
   open: string;
@@ -15,6 +16,13 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
   const handleModalClose = () => {
     onClose('');
   };
+
+  useEffect(() => {
+    if (typeof (window as any).gtag_report_conversion === 'function') {
+      (window as any).gtag_report_conversion(); // Call the function by casting to any
+    }
+  }, []);
+
   return (
     <Modal open={!!open} onClose={handleModalClose}>
       <ModalDialog
@@ -30,10 +38,7 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
           }
         }}
       >
-        <div
-          className="flex flex-col justify-center items-center gap-4"
-          dangerouslySetInnerHTML={{__html: `gtag_report_conversion('https://printsyou.com')`}}
-        >
+        <div className="flex flex-col justify-center items-center gap-4">
           {open === 'success' ? (
             <>
               <h2 className="text-xl text-center font-bold">{title}</h2>
