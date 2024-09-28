@@ -18,7 +18,7 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
   };
   return (
     <>
-      <Script
+      <Script strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
                 gtag('event', 'conversion', {
