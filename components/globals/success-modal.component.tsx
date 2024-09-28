@@ -32,7 +32,7 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
       >
         <div
           className="flex flex-col justify-center items-center gap-4"
-          dangerouslySetInnerHTML={{__html: `gtag_report_conversion(https://printsyou.com)`}}
+          dangerouslySetInnerHTML={{__html: `gtag_report_conversion('https://printsyou.com')`}}
         >
           {open === 'success' ? (
             <>
