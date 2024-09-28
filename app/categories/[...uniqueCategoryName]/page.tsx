@@ -8,8 +8,8 @@ import {Category} from '@components/home/home.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 
-const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) => {
-  let uniqueName = params.uniqueCategoryName.join('/');
+const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams}) => {
+  let uniqueName = queryParams.params.uniqueCategoryName.join('/');
 
   const finalUrl = decodeURIComponent(uniqueName)
     .replaceAll('---', '-')
@@ -33,7 +33,7 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
   const categoriesRes = await getAllCategories();
   const response = await getCategoryDetailsByUniqueName(uniqueName);
   const siblingCat = await getAllSiblingCategories(response?.payload?.id!!);
-  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!);
+  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, queryParams.searchParams.page);
 
   if (ld?.payload) {
     ld.payload['name'] = response?.payload.categoryName;
@@ -93,18 +93,30 @@ const CategoryPage = async ({params}: {params: {uniqueCategoryName: string[]}}) 
 
 export default CategoryPage;
 
-export async function generateMetadata({params}: {params: {uniqueCategoryName: string[]}}) {
-  const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
+export async function generateMetadata(queryParams: {params: {uniqueCategoryName: string[]}; searchParams}) {
+  const response = await getCategoryDetailsByUniqueName(queryParams.params.uniqueCategoryName.join('/'));
+  const currentPage = parseInt(queryParams.searchParams.page);
+  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, queryParams.searchParams.page);
 
+  let totalPages: number = ld?.payload['totalPages'];
   let category: Category | null = null;
-
   if (response?.payload) category = response.payload;
 
   return {
     title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
     description: category?.metaDescription || '',
     alternates: {
-      canonical: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`
+      canonical: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage}`,
+      types: {
+        prev:
+          currentPage > 1
+            ? `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage - 1}`
+            : undefined,
+        next:
+          currentPage < totalPages
+            ? `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage + 1}`
+            : undefined
+      }
     },
     openGraph: {
       images: category?.imageUrl

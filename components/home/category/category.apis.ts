@@ -28,10 +28,10 @@ export const getAllSiblingCategories = async (parentCategoryId: string): Promise
   }
 };
 
-export const getProductsLdForCategoryPage = async (id: string): Promise<ApiResponse<any> | null> => {
+export const getProductsLdForCategoryPage = async (id: string, page: string): Promise<ApiResponse<any> | null> => {
   try {
     const response = await axios.get<ApiResponse<Category>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${formatString(ProductRoutes.Ld, id)}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${formatString(ProductRoutes.Ld, id, page)}`
     );
     return response.data;
   } catch (error) {
