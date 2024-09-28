@@ -29,7 +29,7 @@ const HomeComponent: FC<IHome> = ({categories, underABuck, newAndExclusive, inno
           title="new & exclusive"
           productList={newAndExclusive}
           navNumber={2}
-          showAllUrl={`/search-results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=24`}
+          showAllUrl={`/search-results?tag=newAndExclusive&filter=priceHighToLow&page=1&size=20`}
         />
       </Container>
       {/*<div className="py-4 my-16 border-y border-primary-500">*/}
@@ -60,7 +60,7 @@ const HomeComponent: FC<IHome> = ({categories, underABuck, newAndExclusive, inno
           title="innovative idea"
           productList={innovativeIdea}
           navNumber={4}
-          showAllUrl={`/search-results?tag=mostPopular&filter=priceHighToLow&page=1&size=24`}
+          showAllUrl={`/search-results?tag=mostPopular&filter=priceHighToLow&page=1&size=20`}
         />
       </Container>
 
@@ -86,7 +86,7 @@ const HomeComponent: FC<IHome> = ({categories, underABuck, newAndExclusive, inno
           title="just a buck"
           productList={underABuck}
           navNumber={3}
-          showAllUrl={`/search-results?tag=featured&filter=priceHighToLow&size=24&page=1&minPrice=0&maxPrice=1`}
+          showAllUrl={`/search-results?tag=featured&filter=priceHighToLow&size=20&page=1&minPrice=0&maxPrice=1`}
         />
       </Container>
 
@@ -116,7 +116,7 @@ const HomeComponent: FC<IHome> = ({categories, underABuck, newAndExclusive, inno
           title="deals"
           productList={deals}
           navNumber={4}
-          showAllUrl={`/search-results?tag=deals&filter=priceHighToLow&size=24&page=1`}
+          showAllUrl={`/search-results?tag=deals&filter=priceHighToLow&size=20&page=1`}
         />
       </Container>
 

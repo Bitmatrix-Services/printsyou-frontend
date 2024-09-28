@@ -68,7 +68,7 @@ export const Searchbar = () => {
 
   const handleSeeAllResults = () => {
     if (searchQuery) {
-      router.push(`/search-results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`);
+      router.push(`/search-results?keywords=${searchQuery}&filter=priceHighToLow&size=20&page=1`);
       handleClickAway();
     }
   };
