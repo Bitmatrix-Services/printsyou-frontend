@@ -2,6 +2,7 @@ import React, {Dispatch, FC, SetStateAction} from 'react';
 import {Modal, ModalDialog} from '@mui/joy';
 import {FiCheckCircle} from 'react-icons/fi';
 import {BiSolidErrorCircle} from 'react-icons/bi';
+import Head from "next/head";
 
 interface ISuccessModal {
   open: string;
