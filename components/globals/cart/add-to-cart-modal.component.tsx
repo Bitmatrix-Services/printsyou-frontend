@@ -589,7 +589,7 @@ export const AddToCartModal: FC = () => {
                         <CircularLoader />
                       ) : (
                         <div className="flex">
-                          Checkout <IoBagCheckOutline className="w-6 h-6 ml-3" />
+                          Proceed To Checkout <IoBagCheckOutline className="w-6 h-6 ml-3" />
                         </div>
                       )}
                     </button>
