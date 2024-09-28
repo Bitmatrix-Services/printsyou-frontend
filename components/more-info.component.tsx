@@ -128,7 +128,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                     <MaskInput
                       label="Phone Number"
                       name="phoneNumber"
-                      isRequired={true}
+                      isRequired={false}
                       disabled={isSubmitting}
                       control={control}
                       errors={errors}
@@ -137,7 +137,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
                     <FormControlInput
                       label="Subject"
                       name="subject"
-                      isRequired={true}
+                      isRequired={false}
                       disabled={isSubmitting}
                       control={control}
                       errors={errors}

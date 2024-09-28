@@ -117,7 +117,7 @@ export const ContactUsComponent = () => {
                   <MaskInput
                     label="Phone Number"
                     name="phoneNumber"
-                    isRequired={true}
+                    isRequired={false}
                     disabled={isSubmitting}
                     control={control}
                     errors={errors}
@@ -125,7 +125,7 @@ export const ContactUsComponent = () => {
                   <FormControlInput
                     label="Subject"
                     name="subject"
-                    isRequired={true}
+                    isRequired={false}
                     disabled={isSubmitting}
                     control={control}
                     errors={errors}

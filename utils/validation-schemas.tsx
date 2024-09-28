@@ -4,7 +4,7 @@ export const contactUsSchema = object({
   fullName: string().required('Please enter your n'),
   emailAddress: string().email().required('Please enter your email address'),
   phoneNumber: string().nullable(),
-  subject: string().required('Please enter subject'),
+  subject: string().nullable(),
   message: string().required('Please enter message')
 });
 
