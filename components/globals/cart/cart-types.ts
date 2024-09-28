@@ -18,7 +18,7 @@ export const cartModalSchema = object({
     .transform((_, value) => (value === '' ? 0 : +value))
     .required()
     .positive()
-    .min(ref('minQty'), 'Specified Qty must be greater than Min Qty'),
+    .min(ref('minQty'), 'Quantity must be greater than or equal to minimum quantity'),
   selectedPriceType: string().notRequired()
 });
 

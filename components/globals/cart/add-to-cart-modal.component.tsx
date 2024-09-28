@@ -386,6 +386,7 @@ export const AddToCartModal: FC = () => {
                           name="itemQty"
                           onChange={formik.handleChange}
                           onBlur={() => formik.validateField('itemQty')}
+                          onFocus={e => e.target.select()}
                         />
                       </div>
                       <div className="ml-5 flex items-center">x $ {calculatedPrice}</div>
@@ -404,15 +405,17 @@ export const AddToCartModal: FC = () => {
                   </div>
 
                   {/*  quantity pricing mobile view*/}
-                  <div className="md:hidden sm:flex flex-col">
-                    <div>
-                      {priceTypes.length > 0 ? (
-                        <div className="flex justify-between gap-2 mb-5">
+                  <div className="md:hidden">
+                    {priceTypes.length > 0 ? (
+                      <>
+                        <div className="flex">
                           <h4 className="my-3 text-lg font-semibold capitalize ">Item Type</h4>
+                        </div>
+                        <div className="flex">
                           <select
                             name="selectedPriceType"
                             id="price-type"
-                            className="block placeholder:text-[#303541] max-w-[16rem] border h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
+                            className="block w-full placeholder:text-[#303541] border h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
                             value={formik.values.selectedPriceType as string}
                             onChange={formik.handleChange}
                           >
@@ -423,19 +426,20 @@ export const AddToCartModal: FC = () => {
                             ))}
                           </select>
                         </div>
-                      ) : null}
-                    </div>
-                    <div className="flex justify-between gap-2 mb-3">
-                      <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
+                      </>
+                    ) : null}
+                    <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
+                    <div className="flex ">
                       <input
                         type="number"
                         min={0}
                         placeholder="Quantity"
-                        className="flex-1 block placeholder:text-[#303541] max-w-[16rem] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+                        className="flex-1 block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
                         value={formik.values.itemQty}
                         name="itemQty"
                         onChange={formik.handleChange}
                         onBlur={() => formik.validateField('itemQty')}
+                        onFocus={e => e.target.select()}
                       />
                     </div>
                     <div className="flex justify-between items-center gap-2">
