@@ -19,6 +19,7 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
   return (
     <>
       <Script
+        id="google-conversion-script"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
