@@ -2,7 +2,6 @@ import React, {Dispatch, FC, SetStateAction} from 'react';
 import {Modal, ModalDialog} from '@mui/joy';
 import {FiCheckCircle} from 'react-icons/fi';
 import {BiSolidErrorCircle} from 'react-icons/bi';
-import Head from 'next/head';
 import Script from 'next/script';
 
 interface ISuccessModal {
@@ -19,17 +18,15 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
   };
   return (
     <>
-      <Head>
-        <Script
-          dangerouslySetInnerHTML={{
-            __html: `
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `
                 gtag('event', 'conversion', {
                     'send_to': 'AW-16709127988/LWP-CNKl59YZELSexJ8-',
                     'transaction_id': new Date()}'
                 });`
-          }}
-        />
-      </Head>
+        }}
+      />
       <Modal open={!!open} onClose={handleModalClose}>
         <ModalDialog
           sx={{
