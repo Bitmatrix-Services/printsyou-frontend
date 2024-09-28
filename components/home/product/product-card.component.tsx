@@ -17,9 +17,9 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
 
   return (
     <div className="group relative bg-white">
-      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl px-2 md:px-3">
+      <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl pt-2 md:pt-3 px-2 md:px-3">
         <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
-          <div className=" min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
+          <div className="min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback
               className="object-contain"
               skeletonRounded={true}
@@ -74,19 +74,10 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
           </div>
         </Link>
 
-        <div className="py-2 md:px-4">
-          {/*<div className="flex gap-3">*/}
-          {/*  {['black', 'red', 'white', 'green'].map(color => (*/}
-          {/*    <span*/}
-          {/*      key={color}*/}
-          {/*      className="min-h-4 h-4 w-4 rounded-full border-2 border-black"*/}
-          {/*      style={{backgroundColor: color}}*/}
-          {/*    ></span>*/}
-          {/*  ))}*/}
-          {/*</div>*/}
-          <div className="line-clamp-2">
+        <div className="py-2">
+          <div className="line-clamp-2 text-center">
             <h2
-              className="text-lg font-semibold text-subHeading min-h-[3.40rem]"
+              className="text-lg font-semibold text-subHeading min-h-[3.5rem]"
               dangerouslySetInnerHTML={{
                 __html: product?.productName
               }}
@@ -97,16 +88,14 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
           {/*    <IoMdStar key={rating} className="text-primary-500 w-6 h-6" />*/}
           {/*  ))}*/}
           {/*</div>*/}
-          <h3 className="mt-3 flex gap-2 justify-between items-center text-base font-normal text-gray-600 ">
-            <div>As Low As</div>
-            <div>
+          <div className="mt-3 flex gap-2 justify-between items-center">
+            <h3 className="text-[0.7rem] font-normal text-gray-600 ">As Low As</h3>
+            <div className="flex justify-between items-center gap-2">
               {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice > 0 ? (
                 <>
                   <span className="line-through text-lg font-semibold">
                     ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.price?.toFixed(2)}
                   </span>
-
-                  <span>—</span>
                   <span className="text-2xl font-semibold text-primary-500">
                     ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice?.toFixed(2)}
                   </span>
@@ -117,7 +106,7 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
                 </span>
               )}
             </div>
-          </h3>
+          </div>
         </div>
       </div>
       {quickViewModalOpen ? (

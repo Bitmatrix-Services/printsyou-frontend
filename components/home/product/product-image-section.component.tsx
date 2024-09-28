@@ -28,6 +28,7 @@ import 'lightgallery/css/lg-share.css';
 import 'lightgallery/css/lg-rotate.css';
 import 'lightgallery/css/lg-video.css';
 import 'lightgallery/css/lg-medium-zoom.css';
+import {AppLightGallery} from '@components/app-light-gallery.component';
 
 interface IProductImageSection {
   product: Product;
@@ -39,84 +40,15 @@ const LightGallery = dynamic(() => import('lightgallery/react'), {
 
 export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
   return (
-    <div>
-      <LightGallery
-        enableSwipe
-        escKey
-        mode="lg-slide"
-        mobileSettings={{closeOnTap: true}}
-        plugins={[
-          lgZoom,
-          lgAutoplay,
-          lgComment,
-          lgFullscreen,
-          lgHash,
-          lgPager,
-          lgRotate,
-          lgShare,
-          lgThumbnail,
-          lgVideo
-        ]}
-      >
-        {product?.productImages
-          .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-          ?.map((image, index) => (
-            <a
-              key={`${image.imageUrl}${image.altText}`}
-              className={`${index === 0 ? 'block' : 'hidden'} border border-gray-200 rounded gallery-item cursor-pointer 
-                        'max-w-[28rem] mx-auto'
-                    'max-h-[28rem]`}
-              data-src={image ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image?.imageUrl}` : ''}
-            >
-              <div className="relative w-full aspect-[16/9] cursor-pointer">
-                <ImageWithFallback
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  fill
-                  className="object-contain"
-                  src={image?.imageUrl}
-                  priority={index < 5}
-                  alt={
-                    image?.altText ??
-                    (product.productName.startsWith('.')
-                      ? `${product.productName.substring(1)} ${index + 1}`
-                      : `${product.productName} ${index + 1}`)
-                  }
-                />
-              </div>
-            </a>
-          ))}
-      </LightGallery>
-      {/*</Swiper>*/}
-
-      {/* Swiper for thumbnail images */}
-      <Swiper
-        spaceBetween={5}
-        freeMode
-        navigation
-        watchSlidesProgress
-        modules={[Navigation, Thumbs]}
-        breakpoints={breakpoints}
-        className="slider-swipper-2 mt-6"
-        slidesPerView="auto"
-      >
-        {product?.productImages?.map((image, index) => (
-          <SwiperSlide
-            key={`${image.imageUrl}${image.sequenceNumber}`}
-            className={`w-20 h-20 border rounded border-gray-200`}
-          >
-            <div className="relative w-full h-full cursor-pointer flex justify-center items-center">
-              <ImageWithFallback
-                className="object-contain size-16"
-                height={96}
-                width={96}
-                priority={index < 5}
-                src={image.imageUrl}
-                alt={image.altText ?? `${product.productName} ${index + 1}`}
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <figure className="order-first">
+      <div className="sticky top-0">
+        <div className="md:pt-8 border border-gray-200">
+          <AppLightGallery productName={product.productName} productImages={product.productImages} showOne={true} />
+        </div>
+        <div className="gallery-container">
+          <AppLightGallery productName={product.productName} productImages={product.productImages} />
+        </div>
+      </div>
+    </figure>
   );
 };

@@ -53,12 +53,12 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           </Link>
         </div>
       </div>
-      <Container>
-        <header className="flex my-4 items-center">
+      <Container className="pt-6 md:pt-0 translate-y-0 sticky bg-white top-0 z-50 transition-transform duration-800">
+        <header className="flex items-center p-6">
           <div className={`flex flex-col lg:flex-row lg:items-center gap-3 flex-1`}>
             <div className="flex">
               <Link href="/" className="block relative mr-auto">
-                <Image width={200} height={38} className=" object-contain" src="/assets/logo-full.png" alt="logo" />
+                <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
               </Link>
 
               {/*  mobile menu view */}
@@ -85,17 +85,19 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               </div>
               {/*  mobile menu view end */}
             </div>
-            <div className="flex-1 lg:ml-6 ">
+            <div className="flex-1 lg:ml-6">
               <Searchbar />
             </div>
           </div>
+
           <Link
             href="/how-to-order"
             className="hidden lg:flex justify-center items-center ml-4 border border-primary-700 py-1 px-4 rounded-full text-primary-700 hover:text-primary-500 hover:border-primary-500"
           >
             <div className="capitalize">how to order</div>
           </Link>
-          <div className={`hidden lg:block pl-6 items-center`}>
+
+          <div className="hidden lg:block pl-6 items-center">
             <ul className="flex h-full items-center gap-3 xl:gap-8">
               {/*<li>*/}
               {/*  <Link href="/wishlist">*/}
