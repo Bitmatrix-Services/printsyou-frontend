@@ -8,7 +8,7 @@ import {Category} from '@components/home/home.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 
-const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any }) => {
+const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) => {
   let uniqueName = queryParams.params.uniqueCategoryName.join('/');
 
   const finalUrl = decodeURIComponent(uniqueName)
@@ -93,7 +93,7 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
 
 export default CategoryPage;
 
-export async function generateMetadata(queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any }) {
+export async function generateMetadata(queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) {
   const response = await getCategoryDetailsByUniqueName(queryParams.params.uniqueCategoryName.join('/'));
   const currentPage = parseInt(queryParams.searchParams.page);
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, queryParams.searchParams.page);
