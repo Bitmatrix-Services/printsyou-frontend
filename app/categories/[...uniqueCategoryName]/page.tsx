@@ -102,21 +102,16 @@ export async function generateMetadata(queryParams: {params: {uniqueCategoryName
   let category: Category | null = null;
   if (response?.payload) category = response.payload;
 
+  let canonicalURL: string = `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`;
+  if (currentPage > 1) {
+    canonicalURL = `${canonicalURL}?page=${currentPage}`;
+  }
+
   return {
     title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
     description: category?.metaDescription || '',
     alternates: {
-      canonical: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage}`,
-      types: {
-        prev:
-          currentPage > 1
-            ? `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage - 1}`
-            : null,
-        next:
-          currentPage < totalPages
-            ? `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage + 1}`
-            : null
-      }
+      canonical: canonicalURL
     },
     openGraph: {
       images: category?.imageUrl
