@@ -61,7 +61,7 @@ export const AddToCartModal: FC = () => {
 
     formik.handleSubmit();
 
-    setTimeout(() => handleAddToCart(buttonName, cartRoot?.cartItems), 500);
+    handleAddToCart(buttonName, cartRoot?.cartItems);
   };
 
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
@@ -161,7 +161,7 @@ export const AddToCartModal: FC = () => {
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
   }, [formik.values.itemQty, formik.values.selectedPriceType, product, priceTypes]);
 
-  const handleCartModalClose = (submitType: string) => {
+  const handleCartModalClose = () => {
     formik.resetForm();
     setArtWorkFiles([]);
     dispatch(
@@ -174,7 +174,6 @@ export const AddToCartModal: FC = () => {
     );
     setAddToCartError(false);
     setFormSubmitting('');
-    if (submitType === 'checkout') router.push('/checkout');
   };
 
   const handleFileUpload = async (file: File) => {
@@ -294,7 +293,8 @@ export const AddToCartModal: FC = () => {
         .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
-          handleCartModalClose(submitType);
+          if (submitType === 'checkout') router.push('/checkout');
+          setTimeout(() => handleCartModalClose(), 200);
         })
         .catch(() => {
           setAddToCartError(true);
@@ -306,7 +306,8 @@ export const AddToCartModal: FC = () => {
         .then(() => axios.get(`${API_BASE_URL}/cart/${cartId}`))
         .then((response: AxiosResponse) => {
           dispatch(setCartState(response.data.payload as CartRoot));
-          handleCartModalClose(submitType);
+          if (submitType === 'checkout') router.push('/checkout');
+          setTimeout(() => handleCartModalClose(), 200);
         })
         .catch(() => {
           setAddToCartError(true);
