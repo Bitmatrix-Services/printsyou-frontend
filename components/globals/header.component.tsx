@@ -54,15 +54,22 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
         </div>
       </div>
       <Container className="pt-6 md:pt-0 translate-y-0 sticky bg-white top-0 z-50 transition-transform duration-800">
-        <header className="flex items-center p-6">
-          <div className={`flex flex-col lg:flex-row lg:items-center gap-3 flex-1`}>
-            <div className="flex">
-              <Link href="/" className="block relative mr-auto">
-                <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
-              </Link>
-
-              {/*  mobile menu view */}
-              <div className="lg:hidden">
+        <header className="flex items-center md:p-6">
+          {/*  mobile view*/}
+          <div className={`lg:hidden flex flex-col gap-3 flex-1`}>
+            <div className="flex justify-between items-center">
+              <div>
+                <GiHamburgerMenu
+                  className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700"
+                  onClick={() => setMobileMenu(true)}
+                />
+              </div>
+              <div>
+                <Link href="/" className="block relative mr-auto">
+                  <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
+                </Link>
+              </div>
+              <div>
                 <ul className="flex h-full items-center gap-5 ">
                   {/*<li>*/}
                   {/*  <Link href="/wishlist">*/}
@@ -75,15 +82,21 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                       {cartRoot?.cartItems?.length ?? 0}
                     </span>
                   </li>
-                  <li>
-                    <GiHamburgerMenu
-                      className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700"
-                      onClick={() => setMobileMenu(true)}
-                    />
-                  </li>
                 </ul>
               </div>
-              {/*  mobile menu view end */}
+            </div>
+            <div className="flex-1 lg:ml-6">
+              <Searchbar />
+            </div>
+          </div>
+          {/*  mobile view end */}
+
+          {/*  lg screen view */}
+          <div className={`hidden lg:flex items-center gap-3 flex-1`}>
+            <div className="flex justify-between">
+              <Link href="/" className="block relative mr-auto">
+                <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
+              </Link>
             </div>
             <div className="flex-1 lg:ml-6">
               <Searchbar />
