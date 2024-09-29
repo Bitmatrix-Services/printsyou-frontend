@@ -111,11 +111,11 @@ export async function generateMetadata(queryParams: {params: {uniqueCategoryName
         prev:
           currentPage > 1
             ? `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage - 1}`
-            : undefined,
+            : null,
         next:
           currentPage < totalPages
             ? `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage + 1}`
-            : undefined
+            : null
       }
     },
     openGraph: {
