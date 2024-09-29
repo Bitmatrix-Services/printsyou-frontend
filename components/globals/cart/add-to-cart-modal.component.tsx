@@ -351,34 +351,33 @@ export const AddToCartModal: FC = () => {
               </figure>
               <figure>
                 <div>
-                  <div className="hidden md:block">
-                    <div className="flex justify-between">
-                      <FormHeading text="Quantity" />
-                      <FormHeading text="Sub Total" />
-                    </div>
-                    <div className="flex justify-between space-x-4 w-full">
-                      <div className="flex justify-between items-center gap-4">
-                        {priceTypes.length > 0 ? (
-                          <div className="flex items-center gap-2">
-                            <label className="font-semibold text-xs" htmlFor="price-type">
-                              Item Type
-                            </label>
-
-                            <select
-                              name="selectedPriceType"
-                              id="price-type"
-                              className="block placeholder:text-[#303541] border md:max-w-[12rem] lg:max-w-[15rem] h-14 pl-2 pr-2 rounded-sm text-sm focus:outline-none"
-                              value={formik.values.selectedPriceType as string}
-                              onChange={formik.handleChange}
-                            >
-                              {priceTypes.map((row, index) => (
-                                <option key={`${row}${index}`} value={row}>
-                                  {row}
-                                </option>
-                              ))}
-                            </select>
+                  <div className="hidden md:grid grid-cols-3">
+                    <div className="col-span-2">
+                      {priceTypes.length > 0 ? (
+                        <div className="flex justify-between items-center gap-8 mb-5">
+                          <div className="w-[6rem]">
+                            <FormHeading text="Item Type" />
                           </div>
-                        ) : null}
+                          <select
+                            name="selectedPriceType"
+                            id="price-type"
+                            className="flex-1 block placeholder:text-[#303541] border w-full h-14 pl-4 pr-6 rounded-sm text-sm focus:outline-none"
+                            value={formik.values.selectedPriceType as string}
+                            onChange={formik.handleChange}
+                          >
+                            {priceTypes.map((row, index) => (
+                              <option key={`${row}${index}`} value={row}>
+                                {row}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      ) : null}
+
+                      <div className="flex justify-between items-center gap-8">
+                        <div className="w-[6rem]">
+                          <FormHeading text="Quantity" />
+                        </div>
                         <input
                           type="number"
                           placeholder="Quantity"
@@ -390,8 +389,14 @@ export const AddToCartModal: FC = () => {
                           onFocus={e => e.target.select()}
                         />
                       </div>
-                      <div className="ml-5 flex items-center">x $ {calculatedPrice}</div>
-                      <div className="flex items-center flex-1 justify-end">
+                      {/*<div className="ml-5 flex items-center">x $ {calculatedPrice}</div>*/}
+                    </div>
+
+                    <div className="col-span-1">
+                      <div className="flex flex-col">
+                        <div className="flex justify-end">
+                          <FormHeading text="Sub Total" />
+                        </div>
                         {formik.values.itemQty < product.sortedPrices[0].countFrom ? (
                           <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
                             Min Qty is {product.sortedPrices[0].countFrom}
@@ -480,7 +485,7 @@ export const AddToCartModal: FC = () => {
                           className={`block peer px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 border bg-transparent rounded-lg border-1 border-gray-300 appearance-none  focus:outline-none focus:ring-0 focus:border-secondary-500 ${
                             formik.errors['itemColor'] ? 'border-red-500' : ''
                           }`}
-                          placeholder="Item Color (required)"
+                          placeholder="Item Color (optional)"
                           name="itemColor"
                           value={formik.values.itemColor ?? ''}
                           onChange={formik.handleChange}
