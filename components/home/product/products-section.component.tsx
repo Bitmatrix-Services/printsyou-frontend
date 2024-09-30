@@ -75,8 +75,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
     return updatedQuery;
   };
 
-  if (!isLoading && page && parseInt(page) > totalPages) notFound();
-
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
       {categoryName ? (
@@ -121,11 +119,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         />
       )}
 
-      {productsByCategory.length <= 0 && !isLoading && (
-        <div className="m-16 flex items-center justify-center">
-          <h4>No Products Found</h4>
-        </div>
-      )}
+      {productsByCategory.length <= 0 && !isLoading && notFound()}
     </section>
   );
 };
