@@ -35,7 +35,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
 
   useEffect(() => {
     if (categoryId) getProductByCategory();
-    if (!isLoading && page && parseInt(page) > totalPages) router.push('/404');
   }, [categoryId, size, filter, page]);
 
   const getProductByCategory = async () => {
@@ -50,6 +49,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
       if (data.payload.content.length > 0) {
         setProductsByCategory(data.payload.content);
         setTotalPages(data.payload.totalPages);
+        if ( page && parseInt(page) > data.payload.totalPages) router.push('/404');
       }
     } catch (error) {
       console.log('error', error);
