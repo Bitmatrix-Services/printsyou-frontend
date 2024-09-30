@@ -152,3 +152,21 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
     </div>
   );
 };
+
+export async function generateMetadata(queryParams: {searchParams: any}) {
+  const currentPage = parseInt(queryParams.searchParams.page);
+  const searchQuery = queryParams.searchParams.keywords;
+
+  let canonicalURL: string = `${process.env.FE_URL}search-results`;
+  if (currentPage > 1) {
+    canonicalURL = `${canonicalURL}?page=${currentPage}`;
+  }
+
+  return {
+    title: `Search for ${searchQuery} showing page ${currentPage} - PrintsYou`,
+    description: `Showing Custom Printed Promotional Products for Search Query ${searchQuery} from PrintsYou. Current Page is ${currentPage}`,
+    alternates: {
+      canonical: canonicalURL
+    }
+  };
+}

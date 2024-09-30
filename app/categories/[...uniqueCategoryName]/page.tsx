@@ -96,9 +96,7 @@ export default CategoryPage;
 export async function generateMetadata(queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) {
   const response = await getCategoryDetailsByUniqueName(queryParams.params.uniqueCategoryName.join('/'));
   const currentPage = parseInt(queryParams.searchParams.page);
-  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, queryParams.searchParams.page);
 
-  let totalPages: number = ld?.payload['totalPages'];
   let category: Category | null = null;
   if (response?.payload) category = response.payload;
 
