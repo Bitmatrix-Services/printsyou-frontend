@@ -50,6 +50,8 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         setProductsByCategory(data.payload.content);
         setTotalPages(data.payload.totalPages);
       }
+
+      if (page && parseInt(page) > totalPages) notFound();
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -84,19 +86,17 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
           {suffix && <span>{suffix}</span>}
         </h2>
       ) : null}
-      <div className="hidden lg:block">
-        {productsByCategory?.length > 0 && !isPageLoading && (
-          <PaginationHeader
-            pageNumber={(page && parseInt(page)) || 1}
-            setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
-            pageSize={(size && parseInt(size)) || 20}
-            setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
-            totalPages={totalPages}
-            sort={filter || 'priceLowToHigh'}
-            setSort={(value: string) => handleQueryUpdate(value, 'filter')}
-          />
-        )}
-      </div>
+      {productsByCategory?.length > 0 && !isPageLoading && (
+        <PaginationHeader
+          pageNumber={(page && parseInt(page)) || 1}
+          setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
+          pageSize={(size && parseInt(size)) || 20}
+          setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
+          totalPages={totalPages}
+          sort={filter || 'priceLowToHigh'}
+          setSort={(value: string) => handleQueryUpdate(value, 'filter')}
+        />
+      )}
 
       {isLoading ? (
         <div className="flex justify-center align-middle items-center h-[20rem]">
@@ -121,7 +121,11 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         />
       )}
 
-      { productsByCategory.length <= 0 && !isLoading && notFound() }
+      {productsByCategory.length <= 0 && !isLoading && (
+        <div className="m-16 flex items-center justify-center">
+          <h4>No Products Found</h4>
+        </div>
+      )}
     </section>
   );
 };
