@@ -120,6 +120,34 @@ export const CheckoutComponent: FC = () => {
     }
   });
 
+  const handleFormError = (errorData: Record<string, any>) => {
+    const firstErrorKey = getFirstErrorKey(errorData);
+    if (firstErrorKey) {
+      const errorElement = document.querySelector(`[name="${firstErrorKey}`);
+      if (errorElement) {
+        const yOffset = -150;
+        const yPosition = errorElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+        window.scrollTo({top: yPosition, behavior: 'smooth'});
+      }
+    }
+  };
+
+  const getFirstErrorKey = (errorData: Record<string, any>): string | null => {
+    for (const key in errorData) {
+      if (typeof errorData[key] === 'object' && errorData[key] !== null) {
+        for (const nestedKey in errorData[key]) {
+          let keyValue = `${key}.${nestedKey}`;
+          if (keyValue.includes('.message')) return keyValue.split('.')[0];
+          else return keyValue;
+        }
+      } else {
+        if (key.includes('.message')) return key.split('.')[0];
+      }
+    }
+    return null;
+  };
+
   const handleBackButtonClick = () => {
     router.back();
   };
@@ -178,7 +206,7 @@ export const CheckoutComponent: FC = () => {
           </button>
         </div>
         <ReactQueryClientProvider>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit, handleFormError)}>
             <div
               className={
                 (cartRoot?.cartItems ?? []).length > 0
