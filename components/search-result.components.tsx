@@ -116,7 +116,7 @@ export const SearchResult = () => {
   };
 
   let canonicalURL: string = `${process.env.FE_URL}search-results`;
-  if (page > 1) {
+  if (page && parseInt(page) > 1) {
     canonicalURL = `${canonicalURL}?page=${page}`;
   }
 
