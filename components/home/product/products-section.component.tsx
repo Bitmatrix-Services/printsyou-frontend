@@ -50,8 +50,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         setProductsByCategory(data.payload.content);
         setTotalPages(data.payload.totalPages);
       }
-
-      if (page && parseInt(page) > totalPages) notFound();
     } catch (error) {
       console.log('error', error);
     } finally {
@@ -76,6 +74,8 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
 
     return updatedQuery;
   };
+
+  if (page && parseInt(page) > totalPages) notFound();
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
