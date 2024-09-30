@@ -15,8 +15,5 @@ export default NoSSRSearchResultPage;
 
 export const metadata: Metadata = {
   title: `Search | ${metaConstants.SITE_NAME}`,
-  description: `Find the perfect promotional products tailored to your needs. Explore a wide range of options from your search results to elevate your brand's marketing and outreach efforts.`,
-  alternates: {
-    canonical: `${process.env.FE_URL}search-results`
-  }
+  description: `Find the perfect promotional products tailored to your needs. Explore a wide range of options from your search results to elevate your brand's marketing and outreach efforts.`
 };
