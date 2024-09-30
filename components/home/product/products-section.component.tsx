@@ -35,6 +35,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
 
   useEffect(() => {
     if (categoryId) getProductByCategory();
+    if (!isLoading && page && parseInt(page) > totalPages) router.push('/404');
   }, [categoryId, size, filter, page]);
 
   const getProductByCategory = async () => {
@@ -119,7 +120,11 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         />
       )}
 
-      {productsByCategory.length <= 0 && !isLoading && notFound()}
+      {productsByCategory.length <= 0 && !isLoading && (
+        <div className="m-16 flex items-center justify-center">
+          <h4>No Products Found</h4>
+        </div>
+      )}
     </section>
   );
 };
