@@ -7,6 +7,10 @@ import {CategoryType, SearchSidebar} from '@components/search/search-sidebar.com
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {CircularLoader} from '@components/globals/circular-loader.component';
+import {DialogContent, Drawer} from '@mui/joy';
+import {selectFilterSidebarOpen, setFilterSidebarOpen} from '../store/slices/cart/cart.slice';
+import {IoClose} from 'react-icons/io5';
+import {useAppDispatch, useAppSelector} from '../store/hooks';
 
 type SearchType = {
   name: string;
@@ -29,6 +33,7 @@ type FilterType = {
 };
 
 export const SearchResult = () => {
+  const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const {keywords, page, minPrice, maxPrice, colors, category, filter, size, tag} = Object.fromEntries(
     ['keywords', 'page', 'minPrice', 'maxPrice', 'colors', 'category', 'filter', 'size', 'tag'].map(param => [
@@ -36,6 +41,8 @@ export const SearchResult = () => {
       searchParams.get(param)
     ])
   );
+
+  const isFilterSidebarOpen = useAppSelector(selectFilterSidebarOpen);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -142,13 +149,26 @@ export const SearchResult = () => {
                 isPageLoading={isPageLoading}
               />
               <div className="md:hidden block">
-                <SearchSidebar
-                  byPriceRange={updatedSearchResults.byPrice}
-                  byColor={updatedSearchResults.byColors}
-                  byCategory={updatedSearchResults.byCategory}
-                  filters={filters}
-                  setFilters={setFilters}
-                />
+                <Drawer
+                  anchor="left"
+                  open={isFilterSidebarOpen}
+                  onClose={() => dispatch(setFilterSidebarOpen(false))}
+                  size="sm"
+                >
+                  <div className="p-3">
+                    <IoClose className="h-7 w-7" onClick={() => dispatch(setFilterSidebarOpen(false))} />
+                    <DialogContent>
+                      <SearchSidebar
+                        byPriceRange={updatedSearchResults.byPrice}
+                        byColor={updatedSearchResults.byColors}
+                        byCategory={updatedSearchResults.byCategory}
+                        filters={filters}
+                        setFilters={setFilters}
+                        isMobileMenu={true}
+                      />
+                    </DialogContent>
+                  </div>
+                </Drawer>
               </div>
             </>
           )}

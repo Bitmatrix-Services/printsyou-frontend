@@ -6,6 +6,9 @@ import {SearchProductCard} from '@components/search/search-product-card';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {allowableSearchParams} from '@utils/constants';
 import {CircularLoader} from '@components/globals/circular-loader.component';
+import {LuListFilter} from 'react-icons/lu';
+import {setFilterSidebarOpen} from '../../store/slices/cart/cart.slice';
+import {useDispatch} from 'react-redux';
 
 interface CategoryDetailsSectionProps {
   products: EnclosureProduct[];
@@ -37,6 +40,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const {keywords, page, filter, size, tag}: IQueryParams = Object.fromEntries(
     ['keywords', 'page', 'minPrice', 'maxPrice', 'colors', 'category', 'filter', 'size', 'tag'].map(param => [
       param,
@@ -65,58 +69,71 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   return (
     <div className="flex-1">
       <div className="grid grid-cols-1 items-center">
-        <div className="flex justify-between flex-col mt-10">
-          <h1 className="text-[#000] font-normal text-xl leading-[22px] mb-3 ">
-            {(keywords || tag) && (
-              <span>
-                Search Results for{' '}
+        <div className="lg:hidden flex justify-between mt-10">
+          <div className="flex justify-between flex-col">
+            <h1 className="text-[#000] font-normal text-xl leading-[22px] mb-3 ">
+              {(keywords || tag) && (
                 <span>
-                  <q>
-                    <span className="text-primary-500">
-                      {keywords
-                        ? keywords
-                        : tag === 'newAndExclusive'
-                          ? 'New and Exclusive'
-                          : tag === 'featured'
-                            ? 'Just a Buck'
-                            : 'Most Popular'}
-                    </span>
-                  </q>
+                  Search Results for{' '}
+                  <span>
+                    <q>
+                      <span className="text-primary-500">
+                        {keywords
+                          ? keywords
+                          : tag === 'newAndExclusive'
+                            ? 'New and Exclusive'
+                            : tag === 'featured'
+                              ? 'Just a Buck'
+                              : 'Most Popular'}
+                      </span>
+                    </q>
+                  </span>
                 </span>
-              </span>
-            )}
-          </h1>
-          <div className="text-[#000] font-light text-xs  mb-3">
-            Displaying &nbsp;
-            {page && size && totalPages ? (
-              <>
-                <span className="font-semibold text-primary-500">
-                  {(parseInt(page) - 1) * parseInt(size) + 1} -{' '}
-                  {Math.min(parseInt(page) * parseInt(size), totalProducts)}
-                </span>
-                &nbsp; of&nbsp;
-                <span className="font-semibold text-primary-500">{totalProducts}</span>
-              </>
-            ) : (
-              <span className="font-semibold text-primary-500">0</span>
-            )}
-            &nbsp;results for&nbsp;
-            <span className="font-semibold text-primary-500">{keywords}</span>
+              )}
+            </h1>
+            <div className="text-[#000] font-light text-xs  mb-3">
+              Displaying &nbsp;
+              {page && size && totalPages ? (
+                <>
+                  <span className="font-semibold text-primary-500">
+                    {(parseInt(page) - 1) * parseInt(size) + 1} -{' '}
+                    {Math.min(parseInt(page) * parseInt(size), totalProducts)}
+                  </span>
+                  &nbsp; of&nbsp;
+                  <span className="font-semibold text-primary-500">{totalProducts}</span>
+                </>
+              ) : (
+                <span className="font-semibold text-primary-500">0</span>
+              )}
+              &nbsp;results for&nbsp;
+              <span className="font-semibold text-primary-500">{keywords}</span>
+            </div>
+          </div>
+          <div className="md:hidden flex justify-between items-center">
+            <div
+              className="py-2 px-3 flex gap-2 border-2 items-center justify-center border-gray-300 rounded-md w-full capitalize"
+              onClick={() => dispatch(setFilterSidebarOpen(true))}
+            >
+              Filters
+              <LuListFilter className="h-5 w-5" />
+            </div>
           </div>
         </div>
 
         <section className="bg-white pb-8 lg:pb-12">
-          {products.length > 0 && !isPageLoading && (
-            <PaginationHeader
-              pageNumber={(page && parseInt(page)) || 1}
-              setPageNumber={(value: number) => handleQueryUpdate(value, 'page')}
-              pageSize={(size && parseInt(size)) || 20}
-              setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
-              totalPages={totalPages}
-              sort={filter || 'priceLowToHigh'}
-              setSort={(value: string) => handleQueryUpdate(value, 'filter')}
-            />
-          )}
+          <div className="hidden lg:block">
+            {products.length > 0 && !isPageLoading && (
+              <PaginationHeader
+                pageNumber={(page && parseInt(page)) || 1}
+                setPageNumber={(value: number) => handleQueryUpdate(value, 'page')}
+                pageSize={(size && parseInt(size)) || 20}
+                setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
+                totalPages={totalPages}
+                sort={filter || 'priceLowToHigh'}
+                setSort={(value: string) => handleQueryUpdate(value, 'filter')}
+              />
+            )}
+          </div>
 
           <div>
             {isLoading ? (

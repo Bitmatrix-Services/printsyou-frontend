@@ -12,7 +12,8 @@ const INITIAL_STATE: CartInitialState = {
     selectedItem: null,
     selectedProduct: null,
     cartMode: ''
-  }
+  },
+  filterSidebarOpen: false
 };
 
 export const cartSlice = createSlice({
@@ -50,12 +51,21 @@ export const cartSlice = createSlice({
     },
     setCartStateForModal: (state, action: PayloadAction<CartInitialState['cartState']>) => {
       state.cartState = action.payload;
+    },
+    setFilterSidebarOpen: (state, action) => {
+      state.filterSidebarOpen = action.payload;
     }
   }
 });
 
-export const {addtocart, setCartStateForModal, setSidebarCartOpen, setIsCartModalOpen, setCartState} =
-  cartSlice.actions;
+export const {
+  addtocart,
+  setCartStateForModal,
+  setSidebarCartOpen,
+  setIsCartModalOpen,
+  setCartState,
+  setFilterSidebarOpen
+} = cartSlice.actions;
 
 export const cartReducer = cartSlice.reducer;
 
@@ -63,6 +73,7 @@ export const selectCartModalOpen = (state: RootState) => state.cart.isCartModalO
 export const selectCartState = (state: RootState) => state.cart.cartState;
 export const selectSidebarCartOpen = (state: RootState) => state.cart.sidebarCartOpen;
 export const selectCartRootState = (state: RootState) => state.cart.cart;
+export const selectFilterSidebarOpen = (state: RootState) => state.cart.filterSidebarOpen;
 const updateLocalStorage = (cartItemsFromLocalStorage: any) => {
   localStorage.setItem('cartItems', JSON.stringify(cartItemsFromLocalStorage));
 };

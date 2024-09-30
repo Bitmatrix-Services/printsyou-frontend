@@ -84,17 +84,19 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
           {suffix && <span>{suffix}</span>}
         </h2>
       ) : null}
-      {productsByCategory?.length > 0 && !isPageLoading && (
-        <PaginationHeader
-          pageNumber={(page && parseInt(page)) || 1}
-          setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
-          pageSize={(size && parseInt(size)) || 20}
-          setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
-          totalPages={totalPages}
-          sort={filter || 'priceLowToHigh'}
-          setSort={(value: string) => handleQueryUpdate(value, 'filter')}
-        />
-      )}
+      <div className="hidden lg:block">
+        {productsByCategory?.length > 0 && !isPageLoading && (
+          <PaginationHeader
+            pageNumber={(page && parseInt(page)) || 1}
+            setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
+            pageSize={(size && parseInt(size)) || 20}
+            setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
+            totalPages={totalPages}
+            sort={filter || 'priceLowToHigh'}
+            setSort={(value: string) => handleQueryUpdate(value, 'filter')}
+          />
+        )}
+      </div>
 
       {isLoading ? (
         <div className="flex justify-center align-middle items-center h-[20rem]">

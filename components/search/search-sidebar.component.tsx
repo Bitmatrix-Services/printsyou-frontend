@@ -9,6 +9,8 @@ import {Checkbox, FormControl, FormLabel, Stack} from '@mui/joy';
 import {IoRemove} from 'react-icons/io5';
 import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
+import {setFilterSidebarOpen} from '../../store/slices/cart/cart.slice';
+import {useAppDispatch} from '../../store/hooks';
 
 type searchType = {
   name: string;
@@ -31,10 +33,19 @@ interface SidebarProps {
   byPriceRange: searchType[];
   filters: filterType;
   setFilters: Dispatch<SetStateAction<filterType>>;
+  isMobileMenu?: boolean;
 }
 
-export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRange, filters, setFilters}) => {
+export const SearchSidebar: FC<SidebarProps> = ({
+  byCategory,
+  byColor,
+  byPriceRange,
+  filters,
+  setFilters,
+  isMobileMenu
+}) => {
   const router = useRouter();
+  const disptach = useAppDispatch();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const {colors, category}: IQueryParams = Object.fromEntries(
@@ -119,6 +130,10 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
     } else if (type === 'colors') {
       updateColorFilters(colors, 'colors');
     }
+
+    if (isMobileMenu) {
+      disptach(setFilterSidebarOpen(false));
+    }
   };
 
   const getUpdatedQueryParams = (): Record<string, any> => {
@@ -142,6 +157,10 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
     updatedQuery.page = '1';
     setFilters({price: []});
     router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
+
+    if (isMobileMenu) {
+      disptach(setFilterSidebarOpen(false));
+    }
   };
 
   return (
@@ -309,8 +328,10 @@ export const SearchSidebar: FC<SidebarProps> = ({byCategory, byColor, byPriceRan
                           category: catItem.ucategoryName,
                           page: '1'
                         };
-
                         router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
+                        if (isMobileMenu) {
+                          disptach(setFilterSidebarOpen(false));
+                        }
                       }}
                     >
                       <FormLabel className="cursor-pointer">

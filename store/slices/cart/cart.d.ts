@@ -65,4 +65,5 @@ export interface CartInitialState {
     selectedItem?: CartItemUpdated | null;
     cartMode: string;
   };
+  filterSidebarOpen: boolean;
 }
