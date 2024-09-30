@@ -1,6 +1,6 @@
 'use client';
 import React, {FC, useEffect, useState} from 'react';
-import {usePathname, useRouter, useSearchParams} from 'next/navigation';
+import {notFound, usePathname, useRouter, useSearchParams} from 'next/navigation';
 import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
@@ -121,11 +121,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
         />
       )}
 
-      {productsByCategory.length <= 0 && !isLoading && (
-        <div className="m-16 flex items-center justify-center">
-          <h4>No Products Found</h4>
-        </div>
-      )}
+      { productsByCategory.length <= 0 && !isLoading && notFound() }
     </section>
   );
 };
