@@ -15,9 +15,16 @@ interface ProductsSectionProps {
   categoryName: string;
   prefix?: string;
   suffix?: string;
+  uniqueCategoryName: string;
 }
 
-export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryName, prefix, suffix}) => {
+export const ProductsSection: FC<ProductsSectionProps> = ({
+  categoryId,
+  categoryName,
+  prefix,
+  suffix,
+  uniqueCategoryName
+}) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -25,6 +32,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
   const maxPrice = searchParams.get('maxPrice');
   const [productsByCategory, setProductsByCategory] = useState<EnclosureProduct[]>([]);
 
+  const [totalElements, setTotalElements] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -46,10 +54,12 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
       }
       const {data} = await axios.get(query);
 
+      setTotalElements(data.payload.totalElements);
+
       if (data.payload.content.length > 0) {
         setProductsByCategory(data.payload.content);
         setTotalPages(data.payload.totalPages);
-        if ( page && parseInt(page) > data.payload.totalPages) notFound();
+        if (page && parseInt(page) > data.payload.totalPages) notFound();
       }
     } catch (error) {
       console.log('error', error);
@@ -79,6 +89,35 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'http://schema.org',
+            '@type': 'WebPage',
+            url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
+            mainEntity: {
+              '@context': 'http://schema.org',
+              '@type': 'OfferCatalog',
+              name: categoryName,
+              url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
+              numberOfItems: totalElements,
+              itemListElement: (productsByCategory ?? []).map(product => ({
+                '@type': 'Product',
+                url: `${process.env.NEXT_PUBLIC_FE_URL}${product.uniqueProductName}`,
+                name: product.productName,
+                image: product.imageUrl,
+                offers: {
+                  price: [...(product.priceGrids ?? [])].sort((a, b) => a.price - b.price).shift()?.price,
+                  priceCurrency: 'USD',
+                  availability: 'http://schema.org/InStock',
+                  itemCondition: 'NewCondition'
+                }
+              }))
+            }
+          })
+        }}
+      />
       {categoryName ? (
         <h2 className="text-xl mb-0 font-bold capitalize">
           {prefix && <span>{prefix}</span>}

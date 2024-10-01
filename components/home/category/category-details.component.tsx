@@ -124,6 +124,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, 
               categoryName={category.categoryName}
               prefix={category.prefix}
               suffix={category.suffix}
+              uniqueCategoryName={category.uniqueCategoryName}
             />
           </div>
         </div>

@@ -35,12 +35,6 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
   const categoriesRes = await getAllCategories();
   const response = await getCategoryDetailsByUniqueName(uniqueName);
   const siblingCat = await getAllSiblingCategories(response?.payload?.id!!);
-  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, queryParams.searchParams.page);
-
-  if (ld?.payload) {
-    ld.payload['name'] = response?.payload.categoryName;
-    ld.payload['url'] = `${process.env.FE_URL}categories/${response?.payload.uniqueCategoryName}`;
-  }
 
   let category: Category | null = null;
   if (response?.payload) category = response.payload;
@@ -52,22 +46,6 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
 
   return (
     <section>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebPage',
-            url: `${process.env.FE_URL}${category?.uniqueCategoryName}`,
-            mainEntity: {
-              '@context': 'https://schema.org',
-              '@type': 'OfferCatalog',
-              name: category?.categoryName,
-              url: `${process.env.FE_URL}${category?.uniqueCategoryName}`
-            }
-          })
-        }}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -85,9 +63,6 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
           })
         }}
       />
-      {ld?.payload.itemListElement.length > 0 ? (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld?.payload ?? {})}} />
-      ) : null}
       <CategoryDetails allCategories={allCategories} category={category} siblingCategories={siblingCategories} />
     </section>
   );
