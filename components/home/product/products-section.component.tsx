@@ -108,7 +108,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
         numberOfItems: totalElements,
         itemListElement: (productsByCategory ?? []).map(product => ({
           '@type': 'Product',
-          url: `${process.env.NEXT_PUBLIC_FE_URL}${product.uniqueProductName}`,
+          url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
           name: product.productName,
           image: product.imageUrl,
           offers: {
