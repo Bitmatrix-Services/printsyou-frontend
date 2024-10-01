@@ -9,6 +9,7 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
 import {ProductCard} from '@components/home/product/product-card.component';
+import Script from 'next/script';
 
 interface ProductsSectionProps {
   categoryId: string;
@@ -89,7 +90,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
-      <script
+      <Script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
