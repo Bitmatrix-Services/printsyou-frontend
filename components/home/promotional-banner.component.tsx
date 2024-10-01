@@ -24,7 +24,7 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
           <p className="text-black text-base">{description}</p>
           <div className="mt-3 flex flex-wrap justify-start">
             <Link
-              href={`${link}?page=1&size=20&filter=priceLowToHigh`}
+              href={`${link}?size=20&filter=priceLowToHigh`}
               className="px-4 py-1 text-white bg-primary-500 text-sm rounded-full"
             >
               Explore Products

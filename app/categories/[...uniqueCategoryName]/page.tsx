@@ -5,8 +5,10 @@ import {
 } from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {Category} from '@components/home/home.types';
-import {permanentRedirect, RedirectType} from 'next/navigation';
+import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
+import {Metadata} from 'next';
+import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
 
 const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) => {
   let uniqueName = queryParams.params.uniqueCategoryName.join('/');
@@ -93,9 +95,20 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
 
 export default CategoryPage;
 
-export async function generateMetadata(queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) {
+export async function generateMetadata(queryParams: {
+  params: {uniqueCategoryName: string[]};
+  searchParams: any;
+}): Promise<Metadata> {
   const response = await getCategoryDetailsByUniqueName(queryParams.params.uniqueCategoryName.join('/'));
-  const currentPage = parseInt(queryParams.searchParams.page);
+
+  const pageNumberQuery = queryParams.searchParams.page;
+  const currentPage = +(pageNumberQuery ?? '1');
+
+  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, currentPage + '');
+
+  let totalPages: number = ld?.payload['totalPages'];
+
+  if (currentPage > totalPages) notFound();
 
   let category: Category | null = null;
   if (response?.payload) category = response.payload;
@@ -105,9 +118,27 @@ export async function generateMetadata(queryParams: {params: {uniqueCategoryName
     canonicalURL = `${canonicalURL}?page=${currentPage}`;
   }
 
+  const descriptors: IconDescriptor[] = [];
+  if (currentPage > 1) {
+    descriptors.push({
+      rel: 'prev',
+      url: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}${currentPage - 1 === 1 ? '' : `?page=${currentPage - 1}`}`
+    });
+  }
+
+  if (currentPage < totalPages) {
+    descriptors.push({
+      rel: 'next',
+      url: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}?page=${currentPage + 1}`
+    });
+  }
+
   return {
     title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
     description: category?.metaDescription || '',
+    icons: {
+      other: descriptors
+    },
     alternates: {
       canonical: canonicalURL
     },

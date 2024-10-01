@@ -25,7 +25,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           <div className="relative z-10">
             <div className="h-[11rem] md:h-[15rem] lg:h-[25rem] pb-8 lg:pb-16 flex flex-col justify-end items-center text-center">
               <Link
-                href={`/categories/${banner.bannerCategory.ucategoryName}?page=1&size=20&filter=priceLowToHigh`}
+                href={`/categories/${banner.bannerCategory.ucategoryName}?size=20&filter=priceLowToHigh`}
                 className="w-[7rem] md:w-[12rem] md:block py-1 text-[10px] md:py-3 md:text-sm text-white font-normal md:font-bold border border-white rounded-full"
               >
                 SHOP NOW

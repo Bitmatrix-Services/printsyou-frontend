@@ -117,7 +117,7 @@ export const Searchbar = () => {
                       {searchResult.categories.map(category => (
                         <Link
                           className="hover:cursor-pointer"
-                          href={`/categories/${category.uniqueName}?page=1&size=20&filter=priceLowToHigh`}
+                          href={`/categories/${category.uniqueName}?size=20&filter=priceLowToHigh`}
                           key={category.uniqueName}
                           onClick={() =>
                             setTimeout(() => {

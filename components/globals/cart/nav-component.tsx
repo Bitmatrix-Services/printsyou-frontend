@@ -36,7 +36,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                       className={`inline-block flex-grow list-none text-center cursor-pointer pb-4`}
                     >
                       <Link
-                        href={`/categories/${category.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
+                        href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
                         className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-normal text-mute3 ${
                           hoveredCategory === category.id ? 'text-primary-500 border-primary-500' : 'border-transparent'
                         }`}
@@ -62,7 +62,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                     .map(subCategory => (
                                       <div className="py-2 text-left" key={subCategory.id}>
                                         <Link
-                                          href={`/categories/${subCategory.uniqueCategoryName}?page=1&size=20&filter=priceLowToHigh`}
+                                          href={`/categories/${subCategory.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
                                           onClick={() => setHoveredCategory(null)}
                                         >
                                           <span className="font-base text-[15px] text-mute2 capitalize hover:text-primary-500">

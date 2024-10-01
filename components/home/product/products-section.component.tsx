@@ -49,7 +49,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
       if (data.payload.content.length > 0) {
         setProductsByCategory(data.payload.content);
         setTotalPages(data.payload.totalPages);
-        if ( page && parseInt(page) > data.payload.totalPages) router.push('/404');
+        if ( page && parseInt(page) > data.payload.totalPages) notFound();
       }
     } catch (error) {
       console.log('error', error);
@@ -58,6 +58,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({categoryId, categoryN
       setIsLoading(false);
     }
   };
+
   const handleQueryUpdate = (value: string | number, queryName: string) => {
     const currentQuery = getUpdatedQueryParams();
     let updatedQuery = {...currentQuery, [queryName]: value};
