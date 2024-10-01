@@ -9,7 +9,6 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
 import {ProductCard} from '@components/home/product/product-card.component';
-import Script from 'next/script';
 
 interface ProductsSectionProps {
   categoryId: string;
@@ -88,37 +87,44 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     return updatedQuery;
   };
 
+  useEffect(() => {
+    let script = document.getElementById('OfferCatalogue');
+
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'OfferCatalogue';
+      script.setAttribute('type', 'application/ld+json')
+    }
+
+    script.innerHTML = JSON.stringify({
+      '@context': 'http://schema.org',
+      '@type': 'WebPage',
+      url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
+      mainEntity: {
+        '@context': 'http://schema.org',
+        '@type': 'OfferCatalog',
+        name: categoryName,
+        url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
+        numberOfItems: totalElements,
+        itemListElement: (productsByCategory ?? []).map(product => ({
+          '@type': 'Product',
+          url: `${process.env.NEXT_PUBLIC_FE_URL}${product.uniqueProductName}`,
+          name: product.productName,
+          image: product.imageUrl,
+          offers: {
+            price: [...(product.priceGrids ?? [])].sort((a, b) => a.price - b.price).shift()?.price,
+            priceCurrency: 'USD',
+            availability: 'http://schema.org/InStock',
+            itemCondition: 'NewCondition'
+          }
+        }))
+      }
+    });
+    document.head.appendChild(script);
+  }, [productsByCategory, uniqueCategoryName, totalElements]);
+
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
-      <Script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'http://schema.org',
-            '@type': 'WebPage',
-            url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
-            mainEntity: {
-              '@context': 'http://schema.org',
-              '@type': 'OfferCatalog',
-              name: categoryName,
-              url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
-              numberOfItems: totalElements,
-              itemListElement: (productsByCategory ?? []).map(product => ({
-                '@type': 'Product',
-                url: `${process.env.NEXT_PUBLIC_FE_URL}${product.uniqueProductName}`,
-                name: product.productName,
-                image: product.imageUrl,
-                offers: {
-                  price: [...(product.priceGrids ?? [])].sort((a, b) => a.price - b.price).shift()?.price,
-                  priceCurrency: 'USD',
-                  availability: 'http://schema.org/InStock',
-                  itemCondition: 'NewCondition'
-                }
-              }))
-            }
-          })
-        }}
-      />
       {categoryName ? (
         <h2 className="text-xl mb-0 font-bold capitalize">
           {prefix && <span>{prefix}</span>}
