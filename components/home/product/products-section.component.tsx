@@ -104,7 +104,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
         '@context': 'http://schema.org',
         '@type': 'OfferCatalog',
         name: categoryName,
-        url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
+        url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${uniqueCategoryName}`,
         numberOfItems: totalElements,
         itemListElement: (productsByCategory ?? []).map(product => ({
           '@type': 'Product',
