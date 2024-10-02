@@ -91,7 +91,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
         </div>
       ) : null}
 
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-start gap-4 w-full mt-4  ">
+      <div className="flex flex-col flex-wrap lg:flex-row lg:items-center lg:justify-start gap-4 w-full mt-4  ">
         <button
           className="py-2 px-6 flex border-2 items-center justify-center border-primary-500 rounded-md  bg-primary-500 text-white w-full lg:w-auto capitalize"
           onClick={e => {
