@@ -1,7 +1,7 @@
 'use client';
 import React, {ChangeEvent, FC, Fragment, useEffect, useMemo, useState} from 'react';
 import Link from 'next/link';
-import {notFound, useRouter} from 'next/navigation';
+import {notFound} from 'next/navigation';
 import axios, {AxiosResponse} from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
@@ -41,8 +41,6 @@ interface IOrderNowComponentProps {
 }
 
 export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}) => {
-  const router = useRouter();
-
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
   const [apiError, setApiError] = useState<boolean>(false);
   const [priceTypes, setPriceTypes] = useState<string[]>([]);

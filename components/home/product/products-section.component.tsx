@@ -93,7 +93,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     if (!script) {
       script = document.createElement('script');
       script.id = 'OfferCatalogue';
-      script.setAttribute('type', 'application/ld+json')
+      script.setAttribute('type', 'application/ld+json');
     }
 
     script.innerHTML = JSON.stringify({

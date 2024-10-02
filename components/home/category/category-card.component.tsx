@@ -9,10 +9,7 @@ interface ICategoryCard {
 }
 export const CategoryCard: FC<ICategoryCard> = ({category}) => {
   return (
-    <Link
-      className="text-center"
-      href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
-    >
+    <Link className="text-center" href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}>
       <div className="flex bg-white shadow-category overflow-hidden rounded-full h-[9rem] w-[9rem] mx-auto p-2 items-center justify-center">
         <Image
           className="object-contain"
