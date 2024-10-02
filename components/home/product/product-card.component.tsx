@@ -43,7 +43,7 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
                 <div className="mt-auto mb-2 flex gap-3">
                   <button
                     type="button"
-                    className="w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"
+                    className="hidden md:block w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"
                     onClick={e => {
                       dispatch(
                         setCartStateForModal({
