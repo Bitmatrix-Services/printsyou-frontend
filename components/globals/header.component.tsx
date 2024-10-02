@@ -10,11 +10,8 @@ import {Category} from '@components/home/home.types';
 import {FC, useState} from 'react';
 import {GiHamburgerMenu} from 'react-icons/gi';
 import Drawer from '@mui/joy/Drawer';
-import Accordion from '@mui/joy/Accordion';
-import AccordionDetails from '@mui/joy/AccordionDetails';
-import AccordionSummary from '@mui/joy/AccordionSummary';
 import {IoClose} from 'react-icons/io5';
-import {Sheet} from '@mui/joy';
+import {DialogContent} from '@mui/joy';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectCartRootState, setSidebarCartOpen} from '../../store/slices/cart/cart.slice';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
@@ -133,12 +130,11 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
       {/* mobile view  */}
       {mobileMenu ? (
         <Drawer open={mobileMenu} onClose={handleMenuClose} size="lg">
-          <Sheet
+          <DialogContent
             sx={{
               bgcolor: '#303546',
               color: 'white',
               width: '100%',
-              maxWidth: '25rem',
               height: '100%'
             }}
           >
@@ -159,56 +155,27 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               </div>
             </fieldset>
             <fieldset className="border-b border-gray-600">
-              <Accordion sx={{backgroundColor: '#303546'}} className=" px-2 border-0">
-                <AccordionSummary>
-                  <h6 className="text-white text-base font-semibold capitalize">all categories</h6>
-                </AccordionSummary>
-                <AccordionDetails sx={{color: 'white'}}>
-                  <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4">
-                    {categories.slice(0, 6).map(category => (
-                      <li key={category.id}>
-                        <Link
-                          className="text-white hover:text-primary-500 capitalize"
-                          href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
-                          onClick={handleMenuClose}
-                        >
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: category.categoryName
-                            }}
-                          ></span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionDetails>
-              </Accordion>
-            </fieldset>
-            <fieldset className="p-6">
-              <ul className="grid grid-cols-2 gap-6">
-                {links.map(link => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.url}
-                      onClick={handleMenuClose}
-                      className={`nav-link text-white hover:text-primary-500 capitalize`}
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </fieldset>
-            <fieldset className="p-6">
-              <div className="flex gap-1">
-                <a href="mailto: info@printsyou.com" className="p-3 w-full bg-[#3f4553]">
-                  <div className="w-6 h-6 mx-auto relative">
-                    <MdEmail />
-                  </div>
-                </a>
+              <div style={{backgroundColor: '#303546'}} className=" px-2 border-0">
+                <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4 text-white">
+                  {categories.map(category => (
+                    <li key={category.id}>
+                      <Link
+                        className="text-white hover:text-primary-500 capitalize"
+                        href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
+                        onClick={handleMenuClose}
+                      >
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: category.categoryName
+                          }}
+                        ></span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </fieldset>
-          </Sheet>
+          </DialogContent>
         </Drawer>
       ) : null}
       <SidebarCart />
