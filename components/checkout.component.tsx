@@ -6,7 +6,7 @@ import axios, {AxiosResponse} from 'axios';
 import {v4 as uuidv4} from 'uuid';
 import {orderCheckoutSchema, OrderFormSchemaType} from '@utils/validation-schemas';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
-import {shippingFormFields} from '@utils/constants';
+import {shippingFormFields, statesList} from '@utils/constants';
 import {Radio, RadioGroup} from '@mui/joy';
 import {IoClose} from 'react-icons/io5';
 import {SuccessModal} from '@components/globals/success-modal.component';
@@ -29,6 +29,7 @@ import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import dayjs from 'dayjs';
 import {FormHeading} from '@components/globals/cart/add-to-cart-modal.component';
 import {MaskInput} from '@lib/form/mask-input.component';
+import Option from '@mui/joy/Option';
 
 export const CheckoutComponent: FC = () => {
   const dispatch = useAppDispatch();
@@ -269,7 +270,13 @@ export const CheckoutComponent: FC = () => {
                         disabled={isSubmitting}
                         control={control}
                         errors={errors}
-                      />
+                      >
+                        {statesList.map(state => (
+                          <Option key={state.name} value={state.value}>
+                            {state.name}
+                          </Option>
+                        ))}
+                      </FormControlSelect>
 
                       <FormControlInput
                         name="billingAddress.zipCode"
@@ -352,7 +359,13 @@ export const CheckoutComponent: FC = () => {
                               disabled={isSubmitting}
                               control={control}
                               errors={errors}
-                            />
+                            >
+                              {statesList.map(state => (
+                                <Option key={state.name} value={state.value}>
+                                  {state.name}
+                                </Option>
+                              ))}
+                            </FormControlSelect>
                           ) : field.label === 'Phone' ? (
                             <MaskInput
                               key={field.name}
