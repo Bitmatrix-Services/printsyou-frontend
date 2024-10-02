@@ -175,4 +175,3 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     </section>
   );
 };
-
