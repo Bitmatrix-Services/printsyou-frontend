@@ -20,14 +20,6 @@ interface IHeaderProps {
   categories: Category[];
 }
 
-const links = [
-  {name: 'how to order', url: '/how-to-order'},
-  {name: 'Contact Us', url: '/contact-us'},
-  {name: 'About Us', url: '/about-us'},
-  {name: 'Terms & Conditions', url: '/terms-and-conditions'},
-  {name: 'blogs', url: '/blog'}
-];
-
 export const Header: FC<IHeaderProps> = ({categories}) => {
   const dispatch = useAppDispatch();
   const cartRoot = useAppSelector(selectCartRootState);
