@@ -1,9 +1,7 @@
 import {Controller} from 'react-hook-form';
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import {Select, selectClasses} from '@mui/joy';
 import {MdOutlineKeyboardArrowDown} from 'react-icons/md';
-import {statesList} from '@utils/constants';
-import Option from '@mui/joy/Option';
 import {deepFind} from '@utils/utils';
 
 interface IFormControlSelect {
@@ -14,6 +12,7 @@ interface IFormControlSelect {
   disabled?: boolean;
   isRequired?: boolean;
   errors?: any;
+  children?: ReactNode;
 }
 
 export const FormControlSelect: FC<IFormControlSelect> = ({
@@ -23,7 +22,8 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
   placeholder,
   isRequired = false,
   disabled = false,
-  errors
+  errors,
+  children
 }) => {
   return (
     <Controller
@@ -62,11 +62,7 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
             value={value}
             onChange={(event, value) => onChange(value)}
           >
-            {statesList.map(state => (
-              <Option key={state.name} value={state.value}>
-                {state.name}
-              </Option>
-            ))}
+            {children}
           </Select>
 
           {isRequired && deepFind(errors ?? {}, name)?.message ? (
