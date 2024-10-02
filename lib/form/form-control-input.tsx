@@ -1,5 +1,5 @@
 import {Controller} from 'react-hook-form';
-import React, {FC} from 'react';
+import React, {FC, FocusEventHandler} from 'react';
 import Input from '@mui/joy/Input';
 import Textarea from '@mui/joy/Textarea';
 import {deepFind} from '@utils/utils';
@@ -11,9 +11,12 @@ interface IFormControlInput {
   size?: 'md' | 'sm' | 'lg';
   placeholder?: string;
   inputType?: 'textField' | 'textarea';
+  fieldType?: 'text' | 'number';
   disabled?: boolean;
   isRequired?: boolean;
   errors?: any;
+  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  onFocus?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 export const FormControlInput: FC<IFormControlInput> = ({
@@ -24,7 +27,10 @@ export const FormControlInput: FC<IFormControlInput> = ({
   isRequired = false,
   disabled = false,
   inputType = 'textField',
-  errors
+  fieldType = 'text',
+  errors,
+  onBlur,
+  onFocus
 }) => {
   return (
     <Controller
@@ -54,11 +60,14 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   borderColor: '#DB0481'
                 }
               }}
+              type={fieldType}
               name={name}
               placeholder={placeholder}
               disabled={disabled}
               value={value}
               onChange={onChange}
+              onBlur={onBlur}
+              onFocus={onFocus}
             />
           ) : inputType === 'textarea' ? (
             <Textarea
