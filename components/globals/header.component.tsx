@@ -149,21 +149,23 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             <fieldset className="border-b border-gray-600">
               <div style={{backgroundColor: '#303546'}} className=" px-2 border-0">
                 <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4 text-white">
-                  {categories.map(category => (
-                    <li key={category.id}>
-                      <Link
-                        className="text-white hover:text-primary-500 capitalize"
-                        href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
-                        onClick={handleMenuClose}
-                      >
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: category.categoryName
-                          }}
-                        ></span>
-                      </Link>
-                    </li>
-                  ))}
+                  {categories
+                    .sort((a, b) => a.categoryName.toLowerCase().localeCompare(b.categoryName.toLowerCase()))
+                    .map(category => (
+                      <li key={category.id}>
+                        <Link
+                          className="text-white hover:text-primary-500 capitalize"
+                          href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
+                          onClick={handleMenuClose}
+                        >
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: category.categoryName
+                            }}
+                          ></span>
+                        </Link>
+                      </li>
+                    ))}
                 </ul>
               </div>
             </fieldset>
