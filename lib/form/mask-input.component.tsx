@@ -39,6 +39,7 @@ export const MaskInput: FC<IMaskInput> = ({label, name, control, isRequired = fa
             }}
             className="block border w-full "
             mask="+1 (000) 000-0000"
+            placeholder={'+1 (123) 456-7890'}
             name={name}
             value={value}
             radix="-"
