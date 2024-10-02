@@ -69,7 +69,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   return (
     <div className="flex-1">
       <div className="grid grid-cols-1 items-center">
-        <div className="lg:hidden flex justify-between mt-10">
+        <div className="flex justify-between mt-10">
           <div className="flex justify-between flex-col">
             <h1 className="text-[#000] font-normal text-xl leading-[22px] mb-3 ">
               {(keywords || tag) && (
