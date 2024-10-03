@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
-import React, {PropsWithChildren} from 'react';
+import React, {PropsWithChildren, Suspense} from 'react';
 import {ReactQueryClientProvider} from './query-client-provider';
 import 'swiper/css';
 import 'swiper/css/thumbs';
@@ -75,7 +75,9 @@ export default async function RootLayout({children}: PropsWithChildren) {
             />
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
               <NotificationComponent />
-              <NavigationEvents />
+              <Suspense fallback={null}>
+                <NavigationEvents />
+              </Suspense>
               <Header categories={categoriesData.payload} />
               {children}
               <Footer categories={categoriesData.payload.slice(0, 6)} />
