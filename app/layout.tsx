@@ -16,6 +16,7 @@ import {NotificationComponent} from '@components/notification/notification.compo
 import {CSPostHogProvider} from './provider';
 import Head from 'next/head';
 import Script from 'next/script';
+import {NavigationEvents} from '@components/navigation-events';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -74,6 +75,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             />
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
               <NotificationComponent />
+              <NavigationEvents />
               <Header categories={categoriesData.payload} />
               {children}
               <Footer categories={categoriesData.payload.slice(0, 6)} />
