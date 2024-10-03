@@ -351,6 +351,244 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         <ReactQueryClientProvider>
           <form onSubmit={handleSubmit(onSubmit, handleFormError)}>
             <div className={'flex-col grid md:grid-cols-2 lg:flex-row w-full justify-between py-0 gap-6 lg:gap-20'}>
+              {/* mobile only view */}
+              <div className="md:hidden block p-4 border-2">
+                <div>
+                  <div className="flex items-center p-4">
+                    <div className="relative">
+                      <ImageWithFallback
+                        style={{
+                          position: 'relative',
+                          width: '100%',
+                          minHeight: '100px',
+                          maxHeight: '100px',
+                          objectFit: 'contain',
+                          borderRadius: '8px'
+                        }}
+                        width={100}
+                        height={100}
+                        src={
+                          selectedProduct?.productImages.sort((a, b) => a.sequenceNumber - b.sequenceNumber)[0].imageUrl
+                        }
+                        alt="Product"
+                      />
+                    </div>
+
+                    <div className="ml-4 flex-grow">
+                      <div className="text-black mb-2">
+                        Item#:
+                        <span className="text-yellow-500">{product?.sku}</span>
+                      </div>
+                      <h3
+                        className="text-sm lg:text-base font-semibold"
+                        dangerouslySetInnerHTML={{
+                          __html: product?.productName
+                        }}
+                      ></h3>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="hidden md:grid grid-cols-3">
+                      <div className="col-span-2">
+                        {priceTypes.length > 0 ? (
+                          <div className="flex justify-between items-center gap-8 mb-5">
+                            <FormControlSelect
+                              name="selectedPriceType"
+                              label="Item Type"
+                              isRequired={true}
+                              disabled={isSubmitting}
+                              control={control}
+                              errors={errors}
+                            >
+                              {priceTypes.map((row, index) => (
+                                <option key={`${row}${index}`} value={row}>
+                                  {row}
+                                </option>
+                              ))}
+                            </FormControlSelect>
+                          </div>
+                        ) : null}
+
+                        <div className="flex justify-between items-center gap-8">
+                          <FormControlInput
+                            fieldType="number"
+                            name="itemQty"
+                            label="Quantity"
+                            isRequired={true}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                            onBlur={() => trigger('itemQty')}
+                            onFocus={e => e.target.select()}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-span-1">
+                        <div className="flex flex-col">
+                          <div className="flex justify-end">
+                            <FormHeading text="Sub Total" />
+                          </div>
+                          {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
+                            <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
+                              Min Qty is {product.sortedPrices[0].countFrom}
+                            </h2>
+                          ) : (
+                            <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
+                              ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                            </h2>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/*  quantity pricing mobile view*/}
+                    <div className="md:hidden">
+                      {priceTypes.length > 0 ? (
+                        <div className="flex">
+                          <FormControlSelect
+                            name="selectedPriceType"
+                            label="Item Type"
+                            isRequired={true}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          >
+                            {priceTypes.map((row, index) => (
+                              <option key={`${row}${index}`} value={row}>
+                                {row}
+                              </option>
+                            ))}
+                          </FormControlSelect>
+                        </div>
+                      ) : null}
+                      <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
+                      <div className="flex ">
+                        <FormControlInput
+                          fieldType="number"
+                          name="itemQty"
+                          label="Quantity"
+                          isRequired={true}
+                          disabled={isSubmitting}
+                          control={control}
+                          errors={errors}
+                          onBlur={() => trigger('itemQty')}
+                          onFocus={e => e.target.select()}
+                        />
+                      </div>
+                      <div className="flex justify-between items-center gap-2">
+                        <h4 className="my-3 text-lg font-semibold capitalize ">Sub Total</h4>
+                        <div className="">
+                          {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
+                            <h5 className="text-red-500 text-lg lg:text-2xl font-bold">
+                              Min Qty is {product?.sortedPrices[0].countFrom}
+                            </h5>
+                          ) : (
+                            <h5 className="text-primary-500 text-2xl font-bold">
+                              ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                            </h5>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-2 justify-between mt-4">
+                      <div className="text-xs">
+                        *Final total including shipping and any additional charges will be sent with the artwork proof
+                        after the order is placed.
+                      </div>
+
+                      <hr className="my-4 border border-black-100" />
+                    </div>
+
+                    <div>
+                      <FormHeading text="Product Details" />
+                      <div className="grid md:grid-cols-2 gap-6 ">
+                        <div className="relative">
+                          <FormControlInput
+                            name="itemColor"
+                            label="Item Color (optional)"
+                            isRequired={false}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          />
+                        </div>
+                        <div className="relative">
+                          <FormControlInput
+                            name="imprintColor"
+                            label="Imprint Color (optional)"
+                            isRequired={false}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          />
+                        </div>
+                        <div className="relative">
+                          <FormControlInput
+                            name="size"
+                            label="Size (optional)"
+                            isRequired={false}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <FormHeading text="Artwork files" />
+                    <FormDescription
+                      textArray={[
+                        `Click the "Add Files" button to locate the artwork on your computer. Your artwork will automatically begin to upload. We can accept any artwork format you send us. However, we prefer vector format. This is usually .ai or .eps`,
+                        `We will send a digital artwork proof for approval once the order is received.`
+                      ]}
+                    />
+                    <div>
+                      <label
+                        htmlFor="fileInput"
+                        className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 capitalize"
+                      >
+                        <input
+                          id="fileInput"
+                          type="file"
+                          name="fileInput"
+                          multiple
+                          onChange={e => handleFileChange(e)}
+                          hidden
+                        />
+                        Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
+                      </label>
+                    </div>
+                    <ul>
+                      {artWorkFiles.map((file, index) => (
+                        <li key={file.fileKey} className="flex items-center pt-4 rounded-lg">
+                          <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
+                            <Image
+                              className="object-cover w-full h-full rounded-sm"
+                              width={100}
+                              height={100}
+                              src={`${ASSETS_SERVER_URL}${file.fileKey}`}
+                              alt={file.filename}
+                            />
+                          </div>
+                          <div className="flex-grow pl-4">
+                            <span className="text-sm lg:text-base font-semibold break-all">{file.filename}</span>
+                          </div>
+                          <IoClose
+                            onClick={e => {
+                              handleFileRemove(index);
+                              e.stopPropagation();
+                            }}
+                            className="text-red-600 w-6 h-6 cursor-pointer"
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                    {progress > 0 ? <LinearProgressWithLabel progress={progress} /> : null}
+                  </div>
+                </div>
+              </div>
               <div className="w-full">
                 <FormHeading text="Billing Information" />
                 <div className="grid md:grid-cols-2 gap-6">
@@ -542,7 +780,8 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                 </ul>
               </div>
               <div className="flex flex-col gap-3">
-                <div className="p-4 border-2">
+                {/*  hidden on mobile screen */}
+                <div className="hidden md:block p-4 border-2">
                   <div>
                     <div className="flex items-center p-4">
                       <div className="relative">

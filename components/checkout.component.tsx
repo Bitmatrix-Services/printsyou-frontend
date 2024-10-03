@@ -218,6 +218,89 @@ export const CheckoutComponent: FC = () => {
               {/* Form */}
               {(cartRoot?.cartItems ?? []).length > 0 ? (
                 <>
+                  {/* for mobile only */}
+                  <div className="block md:hidden p-4 border-2">
+                    <FormHeading text="Products in Cart" />
+                    {(cartRoot?.cartItems ?? []).map(item => (
+                      <div key={item.id}>
+                        <div className="flex items-center p-4">
+                          <div className="relative">
+                            <ImageWithFallback
+                              style={{
+                                position: 'relative',
+                                width: '100%',
+                                minHeight: '100px',
+                                maxHeight: '100px',
+                                objectFit: 'contain',
+                                borderRadius: '8px'
+                              }}
+                              width={100}
+                              height={100}
+                              src={item?.imageUrl}
+                              alt="Product"
+                            />
+                          </div>
+
+                          <div className="ml-4 flex-grow">
+                            <div className="text-black mb-2">
+                              Item#:
+                              <span className="text-yellow-500">{item.sku}</span>
+                            </div>
+                            <h3
+                              className="text-sm lg:text-base font-semibold"
+                              dangerouslySetInnerHTML={{
+                                __html: item.productName
+                              }}
+                            ></h3>
+                            <div className="flex items-center justify-between mt-2 text-sm min-w-max">
+                              <div className="flex items-center gap-3">
+                                <div className="flex">
+                                  <span className="">Qty: {item.qtyRequested || 0}</span>
+                                  <IoClose className="w-4 h-4" />
+                                  <span>${item.priceQuotedPerItem}</span>
+                                </div>
+                                <div className="font-semibold text-sm lg:text-base">
+                                  ${item.itemTotalPrice.toFixed(2)}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div
+                              onClick={e => {
+                                handleUpdateItem(item);
+                                e.stopPropagation();
+                              }}
+                              className="cursor-pointer hover:text-red-600"
+                            >
+                              <MdModeEdit className="w-5 h-5" />
+                            </div>
+
+                            <div
+                              onClick={e => {
+                                handleRemoveItem(item);
+                                e.stopPropagation();
+                              }}
+                              className="cursor-pointer hover:text-red-600"
+                            >
+                              <MdClose className="w-6 h-6" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <div>
+                      <hr className="my-4 border border-black-100" />
+                      <div className="flex justify-evenly items-center">
+                        <h2 className="text-lg">Total Price:</h2>
+                        <h2 className="text-lg font-bold">${cartRoot?.totalCartPrice.toFixed(2)}</h2>
+                      </div>
+                      <div className="text-xs mt-3">
+                        *Final total including shipping and any additional charges will be sent with the artwork proof
+                        after the order is placed.
+                      </div>
+                    </div>
+                  </div>
                   <div className="w-full">
                     <FormHeading text="Billing Information" />
                     <div className="grid md:grid-cols-2 gap-6">
@@ -409,7 +492,8 @@ export const CheckoutComponent: FC = () => {
                     </ul>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <div className="p-4 border-2">
+                    {/* hidden on mobile */}
+                    <div className="hidden md:block p-4 border-2">
                       <FormHeading text="Products in Cart" />
                       {(cartRoot?.cartItems ?? []).map(item => (
                         <div key={item.id}>
