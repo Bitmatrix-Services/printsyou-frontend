@@ -92,22 +92,23 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
       ) : null}
 
       <div className="flex flex-col flex-wrap lg:flex-row lg:items-center lg:justify-start gap-4 w-full mt-4  ">
-        <button
-          className="py-2 px-6 flex border-2 items-center justify-center border-primary-500 rounded-md  bg-primary-500 text-white w-full lg:w-auto capitalize"
-          onClick={e => {
-            dispatch(
-              setCartStateForModal({
-                selectedProduct: structuredClone(product),
-                open: true,
-                selectedItem: null,
-                cartMode: 'new'
-              })
-            );
-            e.stopPropagation();
-          }}
-        >
-          Add to cart <PiShoppingCartSimple className=" ml-3 h-5 w-5" />
-        </button>
+        {/*TODO: Commenting this for watching user behaviour on PostHog */}
+        {/*<button*/}
+        {/*  className="py-2 px-6 flex border-2 items-center justify-center border-primary-500 rounded-md  bg-primary-500 text-white w-full lg:w-auto capitalize"*/}
+        {/*  onClick={e => {*/}
+        {/*    dispatch(*/}
+        {/*      setCartStateForModal({*/}
+        {/*        selectedProduct: structuredClone(product),*/}
+        {/*        open: true,*/}
+        {/*        selectedItem: null,*/}
+        {/*        cartMode: 'new'*/}
+        {/*      })*/}
+        {/*    );*/}
+        {/*    e.stopPropagation();*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  Add to cart <PiShoppingCartSimple className=" ml-3 h-5 w-5" />*/}
+        {/*</button>*/}
         <Link
           className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary-500 text-white bg-primary-500  w-full lg:w-auto"
           href={`/order-now?product_id=${product.id}`}
