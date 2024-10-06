@@ -58,48 +58,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   });
   if (!selectedProduct) notFound();
 
-  useEffect(() => {
-    const strings: string[] = [];
-    product.priceGrids.forEach(item => {
-      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null && item.priceType !== '') {
-        strings.push(item.priceType);
-      }
-    });
-    setPriceTypes(strings);
-  }, [selectedProduct.priceGrids]);
-
-  useEffect(() => {
-    if (selectedProduct) {
-      // adding a new item to the cart
-      const priceTypeExists = selectedProduct.priceGrids.some((item: {priceType: any}) => item.priceType);
-      const priceTypesGroups: Record<string, PriceGrids[]> = {};
-      if (priceTypeExists) {
-        selectedProduct.priceGrids.forEach((item: PriceGrids) => {
-          if (!(item.priceType in priceTypesGroups)) {
-            priceTypesGroups[item.priceType] = [];
-          }
-          priceTypesGroups[item.priceType].push(item);
-        });
-
-        Object.keys(priceTypesGroups).forEach(itemKey => {
-          priceTypesGroups[itemKey] = priceTypesGroups[itemKey].sort((a, b) => a.countFrom - b.countFrom);
-        });
-      }
-
-      const productState = {
-        id: selectedProduct.id,
-        sku: selectedProduct.sku,
-        productName: selectedProduct.productName,
-        priceGrids: selectedProduct.priceGrids,
-        sortedPrices: [...selectedProduct.priceGrids].sort((a, b) => a.countFrom - b.countFrom),
-        groupedByPricing: priceTypesGroups,
-        priceTypeExists
-      };
-      setProduct(productState);
-      setValue('minQty', productState.sortedPrices[0].countFrom);
-    }
-  }, [selectedProduct]);
-
   const getInHandDateEst = () => {
     const currentDay = new Date();
     return currentDay.toISOString().split('T')[0];
@@ -154,6 +112,51 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     trigger,
     getValues
   } = methods;
+
+  useEffect(() => {
+    const strings: string[] = [];
+    product.priceGrids.forEach(item => {
+      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null && item.priceType !== '') {
+        strings.push(item.priceType);
+      }
+    });
+    setPriceTypes(strings);
+    if (strings.length > 0) {
+      setValue('selectedPriceType', strings[0]);
+    }
+  }, [product.priceGrids, selectedProduct]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      // adding a new item to the cart
+      const priceTypeExists = selectedProduct.priceGrids.some((item: {priceType: any}) => item.priceType);
+      const priceTypesGroups: Record<string, PriceGrids[]> = {};
+      if (priceTypeExists) {
+        selectedProduct.priceGrids.forEach((item: PriceGrids) => {
+          if (!(item.priceType in priceTypesGroups)) {
+            priceTypesGroups[item.priceType] = [];
+          }
+          priceTypesGroups[item.priceType].push(item);
+        });
+
+        Object.keys(priceTypesGroups).forEach(itemKey => {
+          priceTypesGroups[itemKey] = priceTypesGroups[itemKey].sort((a, b) => a.countFrom - b.countFrom);
+        });
+      }
+
+      const productState = {
+        id: selectedProduct.id,
+        sku: selectedProduct.sku,
+        productName: selectedProduct.productName,
+        priceGrids: selectedProduct.priceGrids,
+        sortedPrices: [...selectedProduct.priceGrids].sort((a, b) => a.countFrom - b.countFrom),
+        groupedByPricing: priceTypesGroups,
+        priceTypeExists
+      };
+      setProduct(productState);
+      setValue('minQty', productState.sortedPrices[0].countFrom);
+    }
+  }, [selectedProduct]);
 
   const {mutate} = useMutation({
     mutationFn: async (data: OrderNowFormSchemaType) => {
@@ -269,15 +272,15 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     );
 
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
-  }, [getValues('itemQty'), priceTypes]);
+  }, [watch('itemQty'), watch('selectedPriceType'), priceTypes]);
 
   const getCartId = () => {
     let cartId;
     try {
-      cartId = localStorage.getItem('cartId');
+      cartId = localStorage.getItem('orderId');
       if (!cartId) {
         cartId = uuidv4();
-        localStorage.setItem('cartId', cartId);
+        localStorage.setItem('orderId', cartId);
       }
       return cartId;
     } catch (error) {}
@@ -338,9 +341,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       updatedFiles.splice(index, 1);
       return updatedFiles;
     });
-  };
-  const handleBackButtonClick = () => {
-    router.back();
   };
 
   return (
@@ -832,9 +832,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                 errors={errors}
                               >
                                 {priceTypes.map((row, index) => (
-                                  <option key={`${row}${index}`} value={row}>
+                                  <Option key={`${row}${index}`} value={row}>
                                     {row}
-                                  </option>
+                                  </Option>
                                 ))}
                               </FormControlSelect>
                             </div>
@@ -1100,7 +1100,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         <SuccessModal
           open={isSuccessModalOpen}
           onClose={() => {
-            handleBackButtonClick();
+            if (isSuccessModalOpen === 'success') {
+              router.push('/');
+            }
             setIsSuccessModalOpen('');
             setApiError(false);
           }}
