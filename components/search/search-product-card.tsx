@@ -44,7 +44,7 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
                   <div className="mt-auto mb-2 flex gap-3">
                     <button
                       type="button"
-                      className="w-full md:w-full py-2 px-3 bg-primary-500 text-white font-semibold text-xs uppercase"
+                      className="hidden md:block w-full py-2 px-3 bg-primary-500 text-white font-semibold text-xs uppercase"
                       onClick={e => {
                         setQuickViewModal(true);
                         e.preventDefault();

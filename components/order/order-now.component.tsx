@@ -193,7 +193,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       // add to cart first
       await axios
         .post(`${API_BASE_URL}/cart/add?cartId=${cartId}`, cartData)
-        .then((response: AxiosResponse) => {})
+        .then((_: AxiosResponse) => {})
         .catch(() => {});
 
       // creating order
@@ -402,9 +402,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               errors={errors}
                             >
                               {priceTypes.map((row, index) => (
-                                <option key={`${row}${index}`} value={row}>
+                                <Option key={`${row}${index}`} value={row}>
                                   {row}
-                                </option>
+                                </Option>
                               ))}
                             </FormControlSelect>
                           </div>
@@ -456,9 +456,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                             errors={errors}
                           >
                             {priceTypes.map((row, index) => (
-                              <option key={`${row}${index}`} value={row}>
+                              <Option key={`${row}${index}`} value={row}>
                                 {row}
-                              </option>
+                              </Option>
                             ))}
                           </FormControlSelect>
                         </div>
@@ -886,9 +886,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               errors={errors}
                             >
                               {priceTypes.map((row, index) => (
-                                <option key={`${row}${index}`} value={row}>
+                                <Option key={`${row}${index}`} value={row}>
                                   {row}
-                                </option>
+                                </Option>
                               ))}
                             </FormControlSelect>
                           </div>

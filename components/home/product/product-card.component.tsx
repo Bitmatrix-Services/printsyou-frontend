@@ -3,8 +3,6 @@ import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
-import {useAppDispatch} from '../../../store/hooks';
-import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 
 interface IProductCard {
   product: EnclosureProduct;
@@ -12,7 +10,6 @@ interface IProductCard {
 }
 
 export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
-  const dispatch = useAppDispatch();
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
   return (
@@ -60,7 +57,7 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
                   {/*</button>*/}
                   <button
                     type="button"
-                    className="hidden md:block w-1/2 py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
+                    className="hidden md:block w-full py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
                     onClick={e => {
                       setQuickViewModal(true);
                       e.preventDefault();
