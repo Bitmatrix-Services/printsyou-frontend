@@ -668,7 +668,9 @@ export const CheckoutComponent: FC = () => {
         <SuccessModal
           open={isSuccessModalOpen}
           onClose={() => {
-            handleBackButtonClick();
+            if (isSuccessModalOpen === 'success') {
+              router.push('/');
+            }
             setIsSuccessModalOpen('');
             setApiError(false);
           }}
