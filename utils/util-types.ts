@@ -1,4 +1,5 @@
 export type NullableField<T> = T | null | undefined;
+
 export interface Auditable {
   createdAt: string;
   createdBy: string;
