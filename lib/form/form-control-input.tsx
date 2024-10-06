@@ -52,6 +52,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
               sx={{
                 borderRadius: '3px 3px  3px 3px',
                 height: '2.7rem',
+                minWidth: '15rem',
                 '& input::placeholder': {
                   color: 'gray',
                   fontSize: 'sm'
