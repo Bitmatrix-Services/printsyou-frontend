@@ -41,23 +41,23 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
                 {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
                 {/*</button>*/}
                 <div className="mt-auto mb-2 flex gap-3">
-                  <button
-                    type="button"
-                    className="hidden md:block w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"
-                    onClick={e => {
-                      dispatch(
-                        setCartStateForModal({
-                          selectedProduct: structuredClone(product),
-                          open: true,
-                          selectedItem: null,
-                          cartMode: 'new'
-                        })
-                      );
-                      e.preventDefault();
-                    }}
-                  >
-                    add to cart
-                  </button>
+                  {/*<button*/}
+                  {/*  type="button"*/}
+                  {/*  className="hidden md:block w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"*/}
+                  {/*  onClick={e => {*/}
+                  {/*    dispatch(*/}
+                  {/*      setCartStateForModal({*/}
+                  {/*        selectedProduct: structuredClone(product),*/}
+                  {/*        open: true,*/}
+                  {/*        selectedItem: null,*/}
+                  {/*        cartMode: 'new'*/}
+                  {/*      })*/}
+                  {/*    );*/}
+                  {/*    e.preventDefault();*/}
+                  {/*  }}*/}
+                  {/*>*/}
+                  {/*  add to cart*/}
+                  {/*</button>*/}
                   <button
                     type="button"
                     className="hidden md:block w-1/2 py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
