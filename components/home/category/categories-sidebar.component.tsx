@@ -23,7 +23,7 @@ const CategoriesSidebar: FC<CategoriesSidebarProps> = ({allCategories, selectedC
                 {[...selectedCategory.subCategories]
                   .sort((a: Category, b: Category) => a.categoryName.localeCompare(b.categoryName))
                   .map(category => (
-                    <li key={category.id} className="flex mb-2">
+                    <li key={category.id} className="flex mb-2 items-center">
                       <AiFillCaretRight className="text-primary-500" />
                       <Link
                         className={`ml-1 capitalize text-mute3 hover:text-primary-500`}
