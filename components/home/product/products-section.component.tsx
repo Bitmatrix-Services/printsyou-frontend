@@ -41,7 +41,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     ['page', 'filter', 'size'].map(param => [param, searchParams.get(param)])
   );
 
-  console.log('categoryId :', categoryId);
+  console.log('categoryId :  ', categoryId);
 
   useEffect(() => {
     if (categoryId) {
