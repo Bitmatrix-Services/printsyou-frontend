@@ -41,8 +41,14 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     ['page', 'filter', 'size'].map(param => [param, searchParams.get(param)])
   );
 
+  console.log('categoryId :', categoryId);
+
   useEffect(() => {
-    if (categoryId) getProductByCategory();
+    if (categoryId) {
+      getProductByCategory();
+    } else {
+      console.log('useEffect in ProductsSection categoryId :', categoryId);
+    }
   }, [categoryId, size, filter, page]);
 
   const getProductByCategory = async () => {
