@@ -1,6 +1,7 @@
 'use client';
 import React, {useEffect, useState} from 'react';
 import Image, {ImageProps} from 'next/image';
+import {Skeleton} from '@mui/joy';
 
 interface ImageWithFallbackProps extends ImageProps {
   fallbackSrc?: string;
@@ -18,6 +19,15 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
 
   return (
     <>
+      {loading && (
+        <Skeleton
+          sx={{borderRadius: skeletonRounded ? '1rem' : ''}}
+          variant="overlay"
+          animation="pulse"
+          width="100%"
+          height="100%"
+        />
+      )}
       <Image
         alt={alt}
         src={src ? imgSrc : '/assets/logo-full.png'}
