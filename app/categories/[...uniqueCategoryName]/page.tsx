@@ -46,23 +46,23 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
 
   return (
     <section>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: (category?.crumbs ?? [])
-              .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-              .map(item => ({
-                '@type': 'ListItem',
-                position: item.sequenceNumber + 1,
-                name: item.name,
-                item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
-              }))
-          })
-        }}
-      />
+      {/*<script*/}
+      {/*  type="application/ld+json"*/}
+      {/*  dangerouslySetInnerHTML={{*/}
+      {/*    __html: JSON.stringify({*/}
+      {/*      '@context': 'https://schema.org',*/}
+      {/*      '@type': 'BreadcrumbList',*/}
+      {/*      itemListElement: (category?.crumbs ?? [])*/}
+      {/*        .sort((a, b) => a.sequenceNumber - b.sequenceNumber)*/}
+      {/*        .map(item => ({*/}
+      {/*          '@type': 'ListItem',*/}
+      {/*          position: item.sequenceNumber + 1,*/}
+      {/*          name: item.name,*/}
+      {/*          item: `${process.env.FE_URL}/${item.uniqueCategoryName}`*/}
+      {/*        }))*/}
+      {/*    })*/}
+      {/*  }}*/}
+      {/*/>*/}
       <CategoryDetails allCategories={allCategories} category={category} siblingCategories={siblingCategories} />
     </section>
   );
