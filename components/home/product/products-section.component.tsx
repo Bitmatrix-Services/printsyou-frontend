@@ -34,7 +34,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
 
   const [totalElements, setTotalElements] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
 
   const {page, filter, size}: IQueryParams = Object.fromEntries(
