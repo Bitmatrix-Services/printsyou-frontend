@@ -63,7 +63,7 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
       {/*    })*/}
       {/*  }}*/}
       {/*/>*/}
-      <CategoryDetails allCategories={allCategories} category={JSON.parse(JSON.stringify(category))} siblingCategories={siblingCategories} />
+      <CategoryDetails allCategories={allCategories} category={category} siblingCategories={siblingCategories} />
     </section>
   );
 };
