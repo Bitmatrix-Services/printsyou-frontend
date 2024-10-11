@@ -41,17 +41,15 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     ['page', 'filter', 'size'].map(param => [param, searchParams.get(param)])
   );
 
-  console.log('categoryId :', categoryId);
-
   useEffect(() => {
+    console.log('useEffect in ProductsSection categoryId :', categoryId);
     if (categoryId) {
       getProductByCategory();
-    } else {
-      console.log('useEffect in ProductsSection categoryId :', categoryId);
     }
   }, [categoryId, size, filter, page]);
 
   const getProductByCategory = async () => {
+    console.log('in getProductByCategory categoryId :', categoryId);
     try {
       setIsLoading(true);
       let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 20}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
