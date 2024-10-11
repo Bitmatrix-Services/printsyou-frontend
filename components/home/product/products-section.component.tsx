@@ -9,22 +9,13 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
 import {ProductCard} from '@components/home/product/product-card.component';
+import {Category} from '@components/home/home.types';
 
 interface ProductsSectionProps {
-  categoryId: string;
-  categoryName: string;
-  prefix?: string;
-  suffix?: string;
-  uniqueCategoryName: string;
+  category: Category;
 }
 
-export const ProductsSection: FC<ProductsSectionProps> = ({
-  categoryId,
-  categoryName,
-  prefix,
-  suffix,
-  uniqueCategoryName
-}) => {
+export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -42,15 +33,15 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
   );
 
   useEffect(() => {
-    if (categoryId) {
+    if (category.id) {
       getProductByCategory();
     }
-  }, [categoryId, size, filter, page]);
+  }, [category.id, size, filter, page]);
 
   const getProductByCategory = async () => {
     try {
       setIsLoading(true);
-      let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 20}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
+      let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${category.id}?page=${page ?? 1}&size=${size ?? 20}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
       if (maxPrice && minPrice) {
         query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
       }
@@ -101,12 +92,12 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
     script.innerHTML = JSON.stringify({
       '@context': 'http://schema.org',
       '@type': 'WebPage',
-      url: `${process.env.NEXT_PUBLIC_FE_URL}${uniqueCategoryName}`,
+      url: `${process.env.NEXT_PUBLIC_FE_URL}${category.uniqueCategoryName}`,
       mainEntity: {
         '@context': 'http://schema.org',
         '@type': 'OfferCatalog',
-        name: categoryName,
-        url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${uniqueCategoryName}`,
+        name: category.categoryName,
+        url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
         numberOfItems: totalElements,
         itemListElement: (productsByCategory ?? []).map(product => ({
           '@type': 'Product',
@@ -123,15 +114,15 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
       }
     });
     document.head.appendChild(script);
-  }, [productsByCategory, uniqueCategoryName, totalElements]);
+  }, [productsByCategory, category.uniqueCategoryName, totalElements]);
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
-      {categoryName ? (
+      {category.categoryName ? (
         <h2 className="text-xl mb-0 font-bold capitalize">
-          {prefix && <span>{prefix}</span>}
-          {categoryName} Products
-          {suffix && <span>{suffix}</span>}
+          {category.prefix && <span>{category.prefix}</span>}
+          {category.categoryName} Products
+          {category.suffix && <span>{category.suffix}</span>}
         </h2>
       ) : null}
       {productsByCategory?.length > 0 && !isPageLoading && (
