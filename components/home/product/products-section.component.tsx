@@ -36,6 +36,10 @@ export const ProductsSection: FC<ProductsSectionProps> = ({
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
+  const [rendered, setRendered] = useState<boolean>(false);
+
+  console.log('rendered', rendered);
+  if (!rendered) setRendered(true);
 
   const {page, filter, size}: IQueryParams = Object.fromEntries(
     ['page', 'filter', 'size'].map(param => [param, searchParams.get(param)])
