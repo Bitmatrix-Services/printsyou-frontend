@@ -120,7 +120,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, 
             {/*    </Container>*/}
             {/*</section>*/}
             <ProductsSection
-              categoryId={JSON.parse(JSON.stringify(category.id))}
+              categoryId={category.id}
               categoryName={category.categoryName}
               prefix={category.prefix}
               suffix={category.suffix}

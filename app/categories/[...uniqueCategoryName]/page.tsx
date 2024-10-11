@@ -65,7 +65,7 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
       />
       <CategoryDetails
         allCategories={allCategories}
-        category={JSON.parse(JSON.stringify(category))}
+        category={structuredClone(category)}
         siblingCategories={siblingCategories}
       />
     </section>
