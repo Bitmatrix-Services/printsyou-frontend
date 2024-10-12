@@ -69,7 +69,6 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
       <Script
         id="product-page-ld-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org/',
@@ -175,7 +174,6 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
       <Script
         id="image-gallery-product-page-ld-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -192,7 +190,6 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
       <Script
         id="breadcrumb-product-page-ld-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

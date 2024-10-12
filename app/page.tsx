@@ -16,7 +16,6 @@ export default async function HomePage() {
       <Script
         type="application/ld+json"
         id="organization-page-ld-schema"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -94,7 +93,6 @@ export default async function HomePage() {
       <Script
         id="store-page-ld-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

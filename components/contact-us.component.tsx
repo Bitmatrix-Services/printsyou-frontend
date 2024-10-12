@@ -57,7 +57,6 @@ export const ContactUsComponent = () => {
       <Script
         type="application/ld+json"
         id="organization-page-ld-schema"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',

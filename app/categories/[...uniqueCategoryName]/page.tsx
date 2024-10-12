@@ -50,7 +50,6 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
       <Script
         id="category-page-ld-schema"
         type="application/ld+json"
-        strategy={'beforeInteractive'}
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
