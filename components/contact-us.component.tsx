@@ -14,7 +14,6 @@ import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
-import Script from 'next/script';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
@@ -53,10 +52,9 @@ export const ContactUsComponent = () => {
   };
 
   return (
-    <Fragment>
-      <Script
+    <>
+      <script
         type="application/ld+json"
-        id="organization-page-ld-schema"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -235,6 +233,6 @@ export const ContactUsComponent = () => {
         title={'Thank You for Reaching Out!'}
         note={`Thank you for subscribing to our newsletter! We're excited to have you with us.`}
       />
-    </Fragment>
+    </>
   );
 };

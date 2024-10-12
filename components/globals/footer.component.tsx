@@ -6,7 +6,6 @@ import {Newsletter} from '@components/home/newsletter-section.component';
 import {Category, Faq} from '@components/home/home.types';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import {getFaqsList} from '@components/home/home-apis';
-import Script from 'next/script';
 
 type listType = {
   name: string;
@@ -38,8 +37,7 @@ export const Footer: FC<IFooter> = async ({categories}) => {
       <FaqSectionComponent faqsList={faqsList} />
       <Newsletter />
       <footer className="bg-secondary-100/50 py-4">
-        <Script
-          id="faq-page-ld-schema"
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({

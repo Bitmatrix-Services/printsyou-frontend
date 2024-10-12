@@ -3,15 +3,13 @@ import {AboutPrintsYouSection} from '@components/about-us/about-prints-you-secti
 import {HeadlineSection} from '@components/about-us/headline-section.component';
 import {IconBoxesSection} from '@components/about-us/icon-boxes.section.component';
 import {OffersSection} from '@components/about-us/offers-section.component';
-import React, {Fragment} from 'react';
-import Script from 'next/script';
+import React from 'react';
 
 export const AboutUsComponent = () => {
   return (
-    <Fragment>
-      <Script
+    <>
+      <script
         type="application/ld+json"
-        id="organization-page-ld-schema"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -91,6 +89,6 @@ export const AboutUsComponent = () => {
       <HeadlineSection />
       <IconBoxesSection />
       <OffersSection />
-    </Fragment>
+    </>
   );
 };

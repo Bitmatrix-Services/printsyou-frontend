@@ -1,7 +1,6 @@
 import HomeComponent from '@components/home/home-component';
 import {getAllCategories, getBannersList, getProductsByTag} from '@components/home/home-apis';
 import React from 'react';
-import Script from 'next/script';
 
 export default async function HomePage() {
   const categoriesData = await getAllCategories();
@@ -13,9 +12,8 @@ export default async function HomePage() {
 
   return (
     <section>
-      <Script
+      <script
         type="application/ld+json"
-        id="organization-page-ld-schema"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -90,7 +88,7 @@ export default async function HomePage() {
           })
         }}
       />
-      <Script
+      <script
         id="store-page-ld-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{

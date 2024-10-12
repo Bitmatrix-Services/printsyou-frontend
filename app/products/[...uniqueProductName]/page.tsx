@@ -4,7 +4,6 @@ import {ProductDetails} from '@components/home/product/product-details.component
 import {PriceGrids, Product} from '@components/home/product/product.types';
 import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
-import Script from 'next/script';
 
 const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
   let uniqueName = params.uniqueProductName.join('/');
@@ -66,8 +65,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
 
   return (
     <section>
-      <Script
-        id="product-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -171,8 +169,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
           })
         }}
       />
-      <Script
-        id="image-gallery-product-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -187,8 +184,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
           })
         }}
       />
-      <Script
-        id="breadcrumb-product-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
