@@ -29,7 +29,7 @@
     "lightgallery": "^2.7.2",
     "moment": "^2.30.1",
     "next": "14.2.5",
-    "nprogress": "^0.2.0",
+    "nextjs-toploader": "^3.7.15",
     "posthog-js": "^1.155.2",
     "react": "^18",
     "react-dom": "^18",

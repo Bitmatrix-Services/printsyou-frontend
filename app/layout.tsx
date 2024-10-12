@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
-import React, {PropsWithChildren, Suspense} from 'react';
+import React, {PropsWithChildren} from 'react';
 import {ReactQueryClientProvider} from './query-client-provider';
 import 'swiper/css';
 import 'swiper/css/thumbs';
@@ -14,8 +14,8 @@ import dynamic from 'next/dynamic';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {CSPostHogProvider} from './provider';
-import {NavigationEvents} from '@components/navigation-events';
 import Head from 'next/head';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -73,10 +73,8 @@ export default async function RootLayout({children}: PropsWithChildren) {
             {/*  }}*/}
             {/*/>*/}
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
+              <NextTopLoader color="#DB0481" showSpinner={false} />
               <NotificationComponent />
-              <Suspense fallback={null}>
-                <NavigationEvents />
-              </Suspense>
               <Header categories={categoriesData.payload} />
               {children}
               <Footer categories={categoriesData.payload.slice(0, 6)} />
