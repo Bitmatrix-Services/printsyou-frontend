@@ -1,4 +1,3 @@
-'use client';
 import React, {FC, useEffect, useState} from 'react';
 import {notFound, usePathname, useRouter, useSearchParams} from 'next/navigation';
 import axios from 'axios';
