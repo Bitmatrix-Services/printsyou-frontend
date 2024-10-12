@@ -110,21 +110,39 @@ export const ContactUsComponent = () => {
                 '@type': 'Offer',
                 itemOffered: {
                   '@type': 'Product',
-                  name: 'Promotional Products'
+                  name: 'Promotional Products',
+                  offers: {
+                    '@type': 'Offer',
+                    priceCurrency: 'USD',
+                    itemCondition: 'https://schema.org/NewCondition',
+                    availability: 'https://schema.org/InStock'
+                  }
                 }
               },
               {
                 '@type': 'Offer',
                 itemOffered: {
                   '@type': 'Product',
-                  name: 'Custom Printed Products'
+                  name: 'Custom Printed Products',
+                  offers: {
+                    '@type': 'Offer',
+                    priceCurrency: 'USD',
+                    itemCondition: 'https://schema.org/NewCondition',
+                    availability: 'https://schema.org/InStock'
+                  }
                 }
               },
               {
                 '@type': 'Offer',
                 itemOffered: {
                   '@type': 'Product',
-                  name: 'Corporate Gifts'
+                  name: 'Corporate Gifts',
+                  offers: {
+                    '@type': 'Offer',
+                    priceCurrency: 'USD',
+                    itemCondition: 'https://schema.org/NewCondition',
+                    availability: 'https://schema.org/InStock'
+                  }
                 }
               }
             ]
