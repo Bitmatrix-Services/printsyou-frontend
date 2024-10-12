@@ -97,6 +97,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
               offers: (product?.priceGrids ?? []).map(item => ({
                 '@type': 'Offer',
                 price: isProductOnSale && item.salePrice ? item.salePrice : item.price,
+                additionalType: item.priceType,
                 priceCurrency: 'USD',
                 itemCondition: 'https://schema.org/NewCondition',
                 availability: 'https://schema.org/InStock',
