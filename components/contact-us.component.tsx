@@ -104,48 +104,48 @@ export const ContactUsComponent = () => {
                 email: 'info@printsyou.com',
                 contactType: 'customer support'
               }
-            ],
-            makesOffer: [
-              {
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Product',
-                  name: 'Promotional Products',
-                  offers: {
-                    '@type': 'Offer',
-                    priceCurrency: 'USD',
-                    itemCondition: 'https://schema.org/NewCondition',
-                    availability: 'https://schema.org/InStock'
-                  }
-                }
-              },
-              {
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Product',
-                  name: 'Custom Printed Products',
-                  offers: {
-                    '@type': 'Offer',
-                    priceCurrency: 'USD',
-                    itemCondition: 'https://schema.org/NewCondition',
-                    availability: 'https://schema.org/InStock'
-                  }
-                }
-              },
-              {
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Product',
-                  name: 'Corporate Gifts',
-                  offers: {
-                    '@type': 'Offer',
-                    priceCurrency: 'USD',
-                    itemCondition: 'https://schema.org/NewCondition',
-                    availability: 'https://schema.org/InStock'
-                  }
-                }
-              }
             ]
+            // makesOffer: [
+            //   {
+            //     '@type': 'Offer',
+            //     itemOffered: {
+            //       '@type': 'Product',
+            //       name: 'Promotional Products',
+            //       offers: {
+            //         '@type': 'Offer',
+            //         priceCurrency: 'USD',
+            //         itemCondition: 'https://schema.org/NewCondition',
+            //         availability: 'https://schema.org/InStock'
+            //       }
+            //     }
+            //   },
+            //   {
+            //     '@type': 'Offer',
+            //     itemOffered: {
+            //       '@type': 'Product',
+            //       name: 'Custom Printed Products',
+            //       offers: {
+            //         '@type': 'Offer',
+            //         priceCurrency: 'USD',
+            //         itemCondition: 'https://schema.org/NewCondition',
+            //         availability: 'https://schema.org/InStock'
+            //       }
+            //     }
+            //   },
+            //   {
+            //     '@type': 'Offer',
+            //     itemOffered: {
+            //       '@type': 'Product',
+            //       name: 'Corporate Gifts',
+            //       offers: {
+            //         '@type': 'Offer',
+            //         priceCurrency: 'USD',
+            //         itemCondition: 'https://schema.org/NewCondition',
+            //         availability: 'https://schema.org/InStock'
+            //       }
+            //     }
+            //   }
+            // ]
           })
         }}
       />

@@ -59,30 +59,30 @@ export const AboutUsComponent = () => {
                 email: 'info@printsyou.com',
                 contactType: 'customer support'
               }
-            ],
-            makesOffer: [
-              {
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Product',
-                  name: 'Promotional Products'
-                }
-              },
-              {
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Product',
-                  name: 'Custom Printed Products'
-                }
-              },
-              {
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Product',
-                  name: 'Corporate Gifts'
-                }
-              }
             ]
+            // makesOffer: [
+            //   {
+            //     '@type': 'Offer',
+            //     itemOffered: {
+            //       '@type': 'Product',
+            //       name: 'Promotional Products'
+            //     }
+            //   },
+            //   {
+            //     '@type': 'Offer',
+            //     itemOffered: {
+            //       '@type': 'Product',
+            //       name: 'Custom Printed Products'
+            //     }
+            //   },
+            //   {
+            //     '@type': 'Offer',
+            //     itemOffered: {
+            //       '@type': 'Product',
+            //       name: 'Corporate Gifts'
+            //     }
+            //   }
+            // ]
           })
         }}
       />
