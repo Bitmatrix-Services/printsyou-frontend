@@ -119,10 +119,10 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, 
             {/*        </div>*/}
             {/*    </Container>*/}
             {/*</section>*/}
-            <ProductsSection category={category} />
+            <ProductsSection category={structuredClone(category)} />
           </div>
         </div>
-        <div className=" lg:hidden block ">
+        <div className="lg:hidden block">
           <CategoriesSidebar
             allCategories={allCategories}
             selectedCategory={category}
