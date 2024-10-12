@@ -16,6 +16,7 @@ import {NotificationComponent} from '@components/notification/notification.compo
 import {CSPostHogProvider} from './provider';
 import {NavigationEvents} from '@components/navigation-events';
 import Head from 'next/head';
+import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -47,31 +48,31 @@ export default async function RootLayout({children}: PropsWithChildren) {
             <Head>
               <link href="https://fonts.cdnfonts.com/css/graphik-trial" rel="stylesheet" />
             </Head>
-            {/*<Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />*/}
-            {/*<Script*/}
-            {/*  id="google-tag-manager"*/}
-            {/*  strategy="afterInteractive"*/}
-            {/*  dangerouslySetInnerHTML={{*/}
-            {/*    __html: `window.dataLayer = window.dataLayer || [];*/}
-            {/*                    function gtag(){dataLayer.push(arguments);}*/}
-            {/*                    gtag('js', new Date());*/}
-            {/*                    gtag('config', 'AW-16709127988');*/}
-            {/*                    */}
-            {/*                    function gtag_report_conversion(url) {*/}
-            {/*                      var callback = function () {*/}
-            {/*                        if (typeof(url) != 'undefined') {*/}
-            {/*                          window.location = url;*/}
-            {/*                        }*/}
-            {/*                      };*/}
-            {/*                      gtag('event', 'conversion', {*/}
-            {/*                          'send_to': 'AW-16709127988/LWP-CNKl59YZELSexJ8-',*/}
-            {/*                          'transaction_id': '',*/}
-            {/*                          'event_callback': callback*/}
-            {/*                      });*/}
-            {/*                      return false;*/}
-            {/*                    }`*/}
-            {/*  }}*/}
-            {/*/>*/}
+            <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script
+              id="google-tag-manager"
+              strategy="beforeInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', 'AW-16709127988');
+                                
+                                function gtag_report_conversion(url) {
+                                  var callback = function () {
+                                    if (typeof(url) != 'undefined') {
+                                      window.location = url;
+                                    }
+                                  };
+                                  gtag('event', 'conversion', {
+                                      'send_to': 'AW-16709127988/LWP-CNKl59YZELSexJ8-',
+                                      'transaction_id': '',
+                                      'event_callback': callback
+                                  });
+                                  return false;
+                                }`
+              }}
+            />
             <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
               <NotificationComponent />
               <Suspense fallback={null}>
