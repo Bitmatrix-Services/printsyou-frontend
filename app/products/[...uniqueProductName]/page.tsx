@@ -1,7 +1,7 @@
 import React from 'react';
 import {getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
-import {Product} from '@components/home/product/product.types';
+import {PriceGrids, Product} from '@components/home/product/product.types';
 import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import Script from 'next/script';
@@ -45,6 +45,25 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
 
   if (response?.payload) product = response.payload;
 
+  let minPrice: PriceGrids | null = null;
+  let maxPrice: PriceGrids | null = null;
+
+  const isProductOnSale: boolean = product?.saleEndDate ? moment(product?.saleEndDate).isAfter(moment()) : false;
+
+  const sortedPricing = (product?.priceGrids ?? []).sort((a, b) => a.price - b.price);
+  if (sortedPricing.length > 0) {
+    minPrice = sortedPricing[0];
+    maxPrice = sortedPricing[sortedPricing.length - 1];
+  }
+
+  const size = (product?.additionalFieldProductValues ?? []).find(
+    it => 'approximate size'.indexOf(it?.fieldName.toLowerCase()) > -1
+  );
+
+  const colors = (product?.additionalFieldProductValues ?? []).find(
+    item => 'colors available'.indexOf(item?.fieldName.toLowerCase()) > -1
+  );
+
   return (
     <section>
       <Script
@@ -57,18 +76,38 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'Product',
             name: product?.productName,
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-            description: product?.metaDescription ?? '',
+            description: (product?.description ?? '').replace(/<[^>]+>/g, ''),
             sku: product?.sku,
+            url: `${process.env.FE_URL}/products/${product?.uniqueProductName}`,
+            brand: {
+              '@type': 'Brand',
+              name: 'PrintsYou'
+            },
+            manufacturer: {
+              '@type': 'Organization',
+              name: 'PrintsYou'
+            },
             offers: {
-              '@type': 'Offer',
-              url: `${process.env.FE_URL}${product?.uniqueProductName}`,
-              itemCondition: 'https://schema.org/NewCondition',
-              availability: 'https://schema.org/InStock',
+              '@type': 'AggregateOffer',
               priceCurrency: 'USD',
-              priceValidUntil: product?.saleEndDate
-                ? moment(product?.saleEndDate, 'MMMM DD, YYYY').format('YYYY-MM-DD')
-                : null,
-              price: [...(product?.priceGrids ?? [])].sort((a, b) => a.countFrom - b.countFrom).pop()?.price,
+
+              lowPrice: isProductOnSale && minPrice?.salePrice ? minPrice?.salePrice : minPrice?.price,
+              highPrice: isProductOnSale && maxPrice?.salePrice ? maxPrice?.salePrice : maxPrice?.price,
+              offerCount: (product?.priceGrids ?? []).length,
+              offers: (product?.priceGrids ?? []).map(item => ({
+                '@type': 'Offer',
+                price: isProductOnSale && item.salePrice ? item.salePrice : item.price,
+                priceCurrency: 'USD',
+                itemCondition: 'https://schema.org/NewCondition',
+                availability: 'https://schema.org/InStock',
+                priceValidUntil:
+                  isProductOnSale && product?.saleEndDate
+                    ? moment(product?.saleEndDate).format('YYYY-MM-DD')
+                    : moment().add(1, 'year').format('YYYY-MM-DD'),
+                minQuantity: item.countFrom
+              })),
+
+              availability: 'https://schema.org/InStock',
               shippingDetails: {
                 '@type': 'OfferShippingDetails',
                 shippingRate: {
@@ -108,7 +147,26 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
                     ]
                   }
                 }
-              }
+              },
+
+              additionalProperty: (product?.additionalRows ?? []).map(item => ({
+                '@type': 'PropertyValue',
+                name: item.name,
+                value: `$${item.priceDiff}`
+              })),
+              category: [
+                ...(product?.crumbs ?? []),
+                {
+                  sequenceNumber: 100,
+                  uniqueCategoryName: '',
+                  name: 'Promotional Products'
+                }
+              ]
+                .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+                .map(item => item.name)
+                .join(' > '),
+              size: size ? size.fieldValue : 'Standard',
+              color: colors ? colors.fieldValue : null
             }
           })
         }}
