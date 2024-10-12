@@ -10,6 +10,7 @@ import {getAllCategories} from '@components/home/home-apis';
 import {Metadata} from 'next';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
 import Head from 'next/head';
+import Script from 'next/script';
 
 const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) => {
   let uniqueName = queryParams.params.uniqueCategoryName.join('/');
@@ -48,7 +49,8 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
   return (
     <section>
       <Head>
-        <script
+        <Script
+          id="breadcrumb-category-page-ld-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({

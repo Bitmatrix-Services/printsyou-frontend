@@ -5,12 +5,14 @@ import {IconBoxesSection} from '@components/about-us/icon-boxes.section.componen
 import {OffersSection} from '@components/about-us/offers-section.component';
 import React from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
 
 export const AboutUsComponent = () => {
   return (
     <>
       <Head>
-        <script
+        <Script
+          id="organization-ld-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
