@@ -14,7 +14,6 @@ import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
-import Head from 'next/head';
 import Script from 'next/script';
 
 export const ContactUsComponent = () => {
@@ -55,85 +54,83 @@ export const ContactUsComponent = () => {
 
   return (
     <>
-      <Head>
-        <Script
-          id="contact-us-page-ld-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Prints You',
-              description:
-                'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
-              email: 'info@printsyou.com',
-              url: 'https://printsYou.com',
-              telephone: '+1-877-934-1874',
-              address: {
-                '@type': 'PostalAddress',
-                streetAddress: '8602 Royal Star Rd',
-                addressLocality: 'Rowlett',
-                addressRegion: 'TX',
-                postalCode: '75089',
-                addressCountry: 'US'
+      <Script
+        id="contact-us-page-ld-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Prints You',
+            description:
+              'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
+            email: 'info@printsyou.com',
+            url: 'https://printsYou.com',
+            telephone: '+1-877-934-1874',
+            address: {
+              '@type': 'PostalAddress',
+              streetAddress: '8602 Royal Star Rd',
+              addressLocality: 'Rowlett',
+              addressRegion: 'TX',
+              postalCode: '75089',
+              addressCountry: 'US'
+            },
+            geo: {
+              '@type': 'GeoCoordinates',
+              latitude: '32.93553656433128',
+              longitude: '-96.57029793014921'
+            },
+            openingHoursSpecification: [
+              {
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                opens: '08:00',
+                closes: '17:00'
+              }
+            ],
+            sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
+            foundingDate: '2022',
+            image: 'https://printsyou.com/assets/logo-full.png',
+            priceRange: '$$',
+            areaServed: 'United States',
+            contactPoint: [
+              {
+                '@type': 'ContactPoint',
+                telephone: '+1-877-934-1874',
+                contactType: 'customer service'
               },
-              geo: {
-                '@type': 'GeoCoordinates',
-                latitude: '32.93553656433128',
-                longitude: '-96.57029793014921'
+              {
+                '@type': 'ContactPoint',
+                email: 'info@printsyou.com',
+                contactType: 'customer support'
+              }
+            ],
+            makesOffer: [
+              {
+                '@type': 'Offer',
+                itemOffered: {
+                  '@type': 'Product',
+                  name: 'Promotional Products'
+                }
               },
-              openingHoursSpecification: [
-                {
-                  '@type': 'OpeningHoursSpecification',
-                  dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                  opens: '08:00',
-                  closes: '17:00'
+              {
+                '@type': 'Offer',
+                itemOffered: {
+                  '@type': 'Product',
+                  name: 'Custom Printed Products'
                 }
-              ],
-              sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
-              foundingDate: '2022',
-              image: 'https://printsyou.com/assets/logo-full.png',
-              priceRange: '$$',
-              areaServed: 'United States',
-              contactPoint: [
-                {
-                  '@type': 'ContactPoint',
-                  telephone: '+1-877-934-1874',
-                  contactType: 'customer service'
-                },
-                {
-                  '@type': 'ContactPoint',
-                  email: 'info@printsyou.com',
-                  contactType: 'customer support'
+              },
+              {
+                '@type': 'Offer',
+                itemOffered: {
+                  '@type': 'Product',
+                  name: 'Corporate Gifts'
                 }
-              ],
-              makesOffer: [
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Promotional Products'
-                  }
-                },
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Custom Printed Products'
-                  }
-                },
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Corporate Gifts'
-                  }
-                }
-              ]
-            })
-          }}
-        />
-      </Head>
+              }
+            ]
+          })
+        }}
+      />
       <Breadcrumb list={[]} prefixTitle="Contact Us" />
       <Container>
         <div className="flex md:flex-row lg:flex-row my-6 md:gap-8 lg:gap-x-32 flex-col-reverse gap-y-4">
