@@ -32,44 +32,45 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
                 </span>
               ) : null}
             </div>
-            <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-0 left-0 h-full w-full p-3">
-              <div className="h-full flex flex-col">
-                {/*<button type="button" className="ml-auto">*/}
-                {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
-                {/*</button>*/}
-                <div className="mt-auto mb-2 flex gap-3">
-                  {/*<button*/}
-                  {/*  type="button"*/}
-                  {/*  className="hidden md:block w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"*/}
-                  {/*  onClick={e => {*/}
-                  {/*    dispatch(*/}
-                  {/*      setCartStateForModal({*/}
-                  {/*        selectedProduct: structuredClone(product),*/}
-                  {/*        open: true,*/}
-                  {/*        selectedItem: null,*/}
-                  {/*        cartMode: 'new'*/}
-                  {/*      })*/}
-                  {/*    );*/}
-                  {/*    e.preventDefault();*/}
-                  {/*  }}*/}
-                  {/*>*/}
-                  {/*  add to cart*/}
-                  {/*</button>*/}
-                  <button
-                    type="button"
-                    className="hidden md:block w-full py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
-                    onClick={e => {
-                      setQuickViewModal(true);
-                      e.preventDefault();
-                    }}
-                  >
-                    quick view
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </Link>
+
+        <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-[60%] left-0 w-full p-3">
+          <div className="flex flex-col">
+            {/*<button type="button" className="ml-auto">*/}
+            {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
+            {/*</button>*/}
+            <div className="mt-auto mb-2 flex gap-3">
+              {/*<button*/}
+              {/*  type="button"*/}
+              {/*  className="hidden md:block w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"*/}
+              {/*  onClick={e => {*/}
+              {/*    dispatch(*/}
+              {/*      setCartStateForModal({*/}
+              {/*        selectedProduct: structuredClone(product),*/}
+              {/*        open: true,*/}
+              {/*        selectedItem: null,*/}
+              {/*        cartMode: 'new'*/}
+              {/*      })*/}
+              {/*    );*/}
+              {/*    e.preventDefault();*/}
+              {/*  }}*/}
+              {/*>*/}
+              {/*  add to cart*/}
+              {/*</button>*/}
+              <button
+                type="button"
+                className="hidden md:block w-full py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
+                onClick={e => {
+                  setQuickViewModal(true);
+                  e.preventDefault();
+                }}
+              >
+                quick view
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div className="py-2">
           <div className="line-clamp-2 text-center">
