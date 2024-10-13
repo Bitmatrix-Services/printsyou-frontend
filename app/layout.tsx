@@ -14,7 +14,6 @@ import dynamic from 'next/dynamic';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {CSPostHogProvider} from './provider';
-import Head from 'next/head';
 import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
@@ -44,9 +43,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
-            <Head>
-              <link href="https://fonts.cdnfonts.com/css/graphik-trial" rel="stylesheet" />
-            </Head>
             {/*<Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />*/}
             {/*<Script*/}
             {/*  id="google-tag-manager"*/}
@@ -72,7 +68,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             {/*                    }`*/}
             {/*  }}*/}
             {/*/>*/}
-            <body className="overflow-x-hidden" style={{fontFamily: 'Graphik Trial, sans-serif'}}>
+            <body className="overflow-x-hidden">
               <NextTopLoader color="#DB0481" showSpinner={false} />
               <NotificationComponent />
               <Header categories={categoriesData.payload} />

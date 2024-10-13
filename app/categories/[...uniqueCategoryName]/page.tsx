@@ -30,7 +30,6 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
     .replaceAll('&', 'amp')
     .replaceAll(' ', '');
 
-
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/categories/${finalUrl}`, RedirectType.replace);
   }

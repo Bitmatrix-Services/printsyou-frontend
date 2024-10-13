@@ -1,8 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* swiper css */
 
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+//body {
+//  font-family: 'helvetica neue', helvetica, arial, sans-serif;
+//}
+
+/* swiper css */
 .swiper-button-prev,
 .swiper-button-next {
   width: 3.125rem !important;
@@ -265,11 +273,9 @@
 }
 
 .product-description {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  font-family: Inter, sans-serif;
   color: #676666;
-
   line-height: 1.6rem;
 
   li:not(:has(> strong)) {
@@ -281,9 +287,8 @@
 }
 
 .product-additional-info-heading {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
-  font-family: Inter, sans-serif;
   color: #676666;
   padding-left: 6px;
   margin-left: 15px;
@@ -291,13 +296,10 @@
 }
 
 .product-additional-info-value {
-  font-size: 14px;
+  font-size: 15px;
   padding-left: 6px;
-  font-family: Inter, sans-serif;
   color: #676666;
-
   list-style: disc;
-
   padding-top: 2px;
   padding-bottom: 2px;
   margin-left: 50px;
