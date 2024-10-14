@@ -282,7 +282,7 @@ export const SearchSidebar: FC<SidebarProps> = ({
 
             <AccordionDetails className="max-h-64 overflow-y-auto">
               {byColor?.map(color => (
-                <FormControl key={color.count} className="block border-b-2 font-normal">
+                <FormControl key={color.name} className="block border-b-2 font-normal">
                   <Stack direction="row" alignItems="center" spacing={1} marginTop={1} marginBottom={1}>
                     <Checkbox
                       name={color.name}
