@@ -35,7 +35,7 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
           </div>
         </Link>
 
-        <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-[60%] left-0 w-full p-3">
+        <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-[55%] lg:top-[60%] left-0 w-full p-3">
           <div className="flex flex-col">
             {/*<button type="button" className="ml-auto">*/}
             {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
