@@ -64,6 +64,10 @@ export const SearchResult = () => {
     if (keywords || tag) handleSearch();
   }, [searchParams]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleSearch = async () => {
     let queryString = `${process.env.NEXT_PUBLIC_API_BASE_URL}/updated-search?`;
 
