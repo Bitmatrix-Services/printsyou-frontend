@@ -11,6 +11,7 @@ import {DialogContent, Drawer} from '@mui/joy';
 import {selectFilterSidebarOpen, setFilterSidebarOpen} from '../store/slices/cart/cart.slice';
 import {IoClose} from 'react-icons/io5';
 import {useAppDispatch, useAppSelector} from '../store/hooks';
+import {useEffectOnce} from '../hooks/use-effect-once.hook';
 
 type SearchType = {
   name: string;
@@ -64,9 +65,9 @@ export const SearchResult = () => {
     if (keywords || tag) handleSearch();
   }, [searchParams]);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     window.scrollTo(0, 0);
-  }, []);
+  });
 
   const handleSearch = async () => {
     let queryString = `${process.env.NEXT_PUBLIC_API_BASE_URL}/updated-search?`;
