@@ -35,7 +35,6 @@ const AddToCartModalClientSide = dynamic(
   }
 );
 
-
 export default async function RootLayout({children}: PropsWithChildren) {
   const categoriesData = await getAllCategories();
 
