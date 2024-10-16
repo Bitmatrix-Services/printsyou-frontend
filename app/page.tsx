@@ -6,7 +6,7 @@ import Script from 'next/script';
 export default async function HomePage() {
   const categoriesData = await getAllCategories();
   const newAndExclusiveData = await getProductsByTag('newAndExclusive');
-  const underABuck = await getProductsByTag('featured');
+  const underABuck = await getProductsByTag('under1Dollar');
   const innovativeIdea = await getProductsByTag('mostPopular');
   const deals = await getProductsByTag('deals');
   const bannersList = await getBannersList();

@@ -24,7 +24,9 @@ export async function generateMetadata(queryParams: {searchParams: any}) {
       ? 'New and Exclusive'
       : queryParams.searchParams.tag === 'featured'
         ? 'Just a Buck'
-        : 'Most Popular';
+        : queryParams.searchParams.tag === 'under1Dollar'
+          ? 'Under $1'
+          : 'Most Popular';
 
   return {
     title: `Search for ${searchKeyword} showing page ${currentPage} - PrintsYou`,

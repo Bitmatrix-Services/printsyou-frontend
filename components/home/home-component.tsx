@@ -83,10 +83,10 @@ const HomeComponent: FC<IHome> = ({categories, underABuck, newAndExclusive, inno
 
       <Container>
         <ProductSliderSection
-          title="just a buck"
+          title="under $1"
           productList={underABuck}
           navNumber={3}
-          showAllUrl={`/search-results?tag=featured&filter=priceHighToLow&size=20&page=1&minPrice=0&maxPrice=1`}
+          showAllUrl={`/search-results?tag=under1Dollar&filter=priceHighToLow&size=20&page=1`}
         />
       </Container>
 

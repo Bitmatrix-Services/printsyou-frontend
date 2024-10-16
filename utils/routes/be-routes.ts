@@ -3,7 +3,7 @@ export const HomePageRoutes = Object.freeze({
   AllCategories: '/category/all',
   NewAndExclusive: '/product/byTag?tag=newAndExclusive',
   UniqueIdeas: '/product/byTag?tag=mostPopular',
-  UnderABuck: '/product/byTag?tag=featured',
+  UnderABuck: '/product/byTag?tag=under1Dollar',
   innovativeIdea: '/product/byTag?tag=featured',
   Deals: '/product/byTag?tag=featured',
   Faqs: `/faqs/all`

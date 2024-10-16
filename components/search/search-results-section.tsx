@@ -83,8 +83,10 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                           : tag === 'newAndExclusive'
                             ? 'New and Exclusive'
                             : tag === 'featured'
-                              ? 'Just a Buck'
-                              : 'Most Popular'}
+                              ? 'Featured'
+                              : tag === 'under1Dollar'
+                                ? 'Under $1'
+                                : 'Most Popular'}
                       </span>
                     </q>
                   </span>
