@@ -215,6 +215,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     },
     onSuccess: () => {
       setIsSuccessModalOpen('success');
+      localStorage.removeItem('orderId');
       reset();
     },
     onError: () => {
