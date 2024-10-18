@@ -114,3 +114,14 @@ export const containsHTML = (input: string): boolean => {
   const htmlTagPattern = /<[^>]*>/;
   return htmlTagPattern.test(input);
 };
+
+export const scrollIntoProductsView = () => {
+  const paginationElem = document.getElementById('products-page');
+  if (paginationElem) {
+    setTimeout(() => {
+      const yOffset = -150;
+      const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({top: yPosition, behavior: 'smooth'});
+    }, 1200);
+  }
+};

@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
+import {scrollIntoProductsView} from '@utils/utils';
 
 const sortList = [
   {label: 'Price Low To High', value: 'priceLowToHigh'},
@@ -32,17 +33,6 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   const pagesToShow = Array.from({length: totalPages}, (_, index) => index + 1).filter(
     page => pageNumber >= page - 2 && pageNumber <= page + 2
   );
-
-  const scrollIntoView = () => {
-    const paginationElem = document.getElementById('products-page');
-    if (paginationElem) {
-      setTimeout(() => {
-        const yOffset = -150;
-        const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({top: yPosition, behavior: 'smooth'});
-      }, 1000);
-    }
-  };
 
   return (
     <div id="products-page" className="my-6">
@@ -92,7 +82,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 className="item prev"
                 onClick={() => {
                   if (pageNumber > 1) setPageNumber(pageNumber - 1);
-                  scrollIntoView();
+                  scrollIntoProductsView();
                 }}
               >
                 <IoIosArrowBack className="h-4 w-4" />
@@ -104,7 +94,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     type="button"
                     onClick={() => {
                       setPageNumber(page);
-                      scrollIntoView();
+                      scrollIntoProductsView();
                     }}
                     className={`item number ${pageNumber == page && 'is-active'}`}
                   >
@@ -117,7 +107,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 className="item next"
                 onClick={() => {
                   if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
-                  scrollIntoView();
+                  scrollIntoProductsView();
                 }}
               >
                 <IoIosArrowForward className="h-4 w-4" />
