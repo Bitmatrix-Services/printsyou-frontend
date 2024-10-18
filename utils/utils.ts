@@ -125,3 +125,4 @@ export const scrollIntoProductsView = () => {
     }, 1200);
   }
 };
+
