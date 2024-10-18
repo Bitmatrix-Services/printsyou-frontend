@@ -40,7 +40,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
         const yOffset = -150;
         const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({top: yPosition, behavior: 'smooth'});
-      }, 1000);
+      }, 800);
     }
   };
 
