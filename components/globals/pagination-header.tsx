@@ -32,6 +32,18 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   const pagesToShow = Array.from({length: totalPages}, (_, index) => index + 1).filter(
     page => pageNumber >= page - 2 && pageNumber <= page + 2
   );
+
+  const scrollIntoView = () => {
+    const paginationElem = document.getElementById('products-page');
+    if (paginationElem) {
+      setTimeout(() => {
+        const yOffset = -150;
+        const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: yPosition, behavior: 'smooth'});
+      }, 500);
+    }
+  };
+
   return (
     <div id="products-page" className="my-6">
       <div className="list-product">
@@ -80,6 +92,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 className="item prev"
                 onClick={() => {
                   if (pageNumber > 1) setPageNumber(pageNumber - 1);
+                  scrollIntoView();
                 }}
               >
                 <IoIosArrowBack className="h-4 w-4" />
@@ -89,7 +102,10 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                   <button
                     key={page}
                     type="button"
-                    onClick={() => setPageNumber(page)}
+                    onClick={() => {
+                      setPageNumber(page);
+                      scrollIntoView();
+                    }}
                     className={`item number ${pageNumber == page && 'is-active'}`}
                   >
                     {page}
@@ -101,6 +117,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 className="item next"
                 onClick={() => {
                   if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
+                  scrollIntoView();
                 }}
               >
                 <IoIosArrowForward className="h-4 w-4" />
