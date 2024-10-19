@@ -9,6 +9,7 @@ import {IQueryParams} from '@components/search/search-results-section';
 import {allowableSearchParams} from '@utils/constants';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
+import {scrollIntoProductsView} from '@utils/utils';
 
 interface ProductsSectionProps {
   category: Category;
@@ -36,6 +37,10 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
       getProductByCategory();
     }
   }, [category.id, size, filter, page]);
+
+  useEffect(() => {
+    scrollIntoProductsView();
+  }, [size, filter, page]);
 
   const getProductByCategory = async () => {
     try {

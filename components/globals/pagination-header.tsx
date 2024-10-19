@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
-import {scrollIntoProductsView} from '@utils/utils';
 
 const sortList = [
   {label: 'Price Low To High', value: 'priceLowToHigh'},
@@ -82,7 +81,6 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 className="item prev"
                 onClick={() => {
                   if (pageNumber > 1) setPageNumber(pageNumber - 1);
-                  scrollIntoProductsView();
                 }}
               >
                 <IoIosArrowBack className="h-4 w-4" />
@@ -94,7 +92,6 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                     type="button"
                     onClick={() => {
                       setPageNumber(page);
-                      scrollIntoProductsView();
                     }}
                     className={`item number ${pageNumber == page && 'is-active'}`}
                   >
@@ -107,7 +104,6 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                 className="item next"
                 onClick={() => {
                   if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
-                  scrollIntoProductsView();
                 }}
               >
                 <IoIosArrowForward className="h-4 w-4" />
