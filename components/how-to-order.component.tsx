@@ -23,23 +23,24 @@ export const HowToOrderComponent = () => {
             through every step.
           </h2>
         </div>
-        <div className="space-y-12 relative scroll-container py-12 md:ml-[6rem]">
+        <div className="space-y-12 relative scroll-container py-12">
           {orderSteps.map((order, index) => (
             <Fragment key={order.title}>
               {index % 2 === 0 ? (
-                <figure className="scroll-step-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:space-x-52">
-                  <div className="col self-center" data-aos="zoom-in-up">
-                    <h3 className="sub-title tetx-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>
+                <figure className="flex flex-row items-center justify-center px-[5%] md:px-[10%] lg:px-0 xl:px-[10%]">
+                  <div className="w-full lg:w-[55%] lg:pr-20 xl:pr-32" data-aos="zoom-in-up">
+                    <h3 className="sub-title text-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>
                     <h4 className="title text-3xl font-semibold mb-4">{order.title}</h4>
                     <p className="text-mute text-lg">{order.description}</p>
                   </div>
-                  <div className="col lg:col-span-2 hidden lg:block">
-                    <div className="h-full w-[47%] border-r-4 border-primary-500">
+                  <div className="w-[30%] hidden lg:block">
+                    <div className="h-full w-full border-r-4 border-primary-500">
                       <Image
                         data-aos="fade-down-left"
                         className="object-cover"
                         height={500}
                         width={500}
+                        quality={100}
                         src={order.imageUrl}
                         alt="order"
                       />
@@ -47,23 +48,24 @@ export const HowToOrderComponent = () => {
                   </div>
                 </figure>
               ) : (
-                <figure className="scroll-step-1 top-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 md:space-x-52">
-                  <div className="col lg:col-span-2 hidden lg:block">
-                    <div className="h-full w-full border-l-4 border-primary-500">
+                <figure className="flex flex-row items-center justify-center px-[5%] md:px-[10%] lg:px-0 xl:px-[10%]">
+                  <div className="w-[55%] pr-20 xl:pr-32 hidden lg:block">
+                    <div className="h-full w-[85%] border-l-4 border-primary-500">
                       <Image
                         data-aos="fade-down-right"
                         className="object-cover"
                         height={500}
                         width={500}
+                        quality={100}
                         src={order.imageUrl}
                         alt="order"
                       />
                     </div>
                   </div>
-                  <div className="col self-center lg:col-span-2" data-aos="zoom-in-up">
-                    <h3 className="sub-title text-xl text-primary-500 mb-3">Step {index + 1}</h3>
+                  <div className="w-full lg:w-[30%]" data-aos="zoom-in-up">
+                    <h3 className="sub-title text-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>
                     <h4 className="title text-3xl font-semibold mb-4">{order.title}</h4>
-                    <p className="text-mute3 text-lg">{order.description}</p>
+                    <p className="text-mute text-lg">{order.description}</p>
                   </div>
                 </figure>
               )}

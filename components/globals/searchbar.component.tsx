@@ -77,7 +77,7 @@ export const Searchbar = () => {
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box sx={{position: 'relative'}}>
         <Input
-          className="py-2"
+          className="py-2 mb-2 md:mb-0"
           placeholder="Search for Categories or Products"
           value={searchQuery}
           onChange={e => {
