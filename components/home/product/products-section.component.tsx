@@ -69,6 +69,9 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   const handleQueryUpdate = (value: string | number, queryName: string) => {
     const currentQuery = getUpdatedQueryParams();
     let updatedQuery = {...currentQuery, [queryName]: value};
+    if (queryName === 'size' || queryName === 'filter') {
+      updatedQuery.page = '1';
+    }
     router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
   };
 
