@@ -146,6 +146,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                 </button>
               </div>
             </fieldset>
+            <p className="text-2xl font-medium pl-4">Categories:</p>
             <fieldset className="border-b border-gray-600">
               <div style={{backgroundColor: '#303546'}} className=" px-2 border-0">
                 <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4 text-white">

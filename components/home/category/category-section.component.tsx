@@ -30,10 +30,18 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
     <>
       <SectionHeading title="Categories" />
       <div className="featured-swiper relative">
-        <button type="button" className={`swiper-button-prev swiper-nav-prev-${navNumber}`} onClick={handlePrev}>
+        <button
+          type="button"
+          className={`hidden md:flex swiper-button-prev swiper-nav-prev-${navNumber}`}
+          onClick={handlePrev}
+        >
           <IoIosArrowBack />
         </button>
-        <button type="button" className={`swiper-button-next swiper-nav-next-${navNumber}`} onClick={handleNext}>
+        <button
+          type="button"
+          className={`hidden md:flex swiper-button-next swiper-nav-next-${navNumber}`}
+          onClick={handleNext}
+        >
           <IoIosArrowForward />
         </button>
         <Swiper
@@ -51,6 +59,22 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
             </SwiperSlide>
           ))}
         </Swiper>
+        <div className="md:hidden w-full flex flex-row gap-6 items-center justify-center mt-4">
+          <button
+            type="button"
+            className={`w-[40px] h-[40px] flex rounded-full border-[2px] border-black`}
+            onClick={handlePrev}
+          >
+            <IoIosArrowBack size={20} className="m-auto" />
+          </button>
+          <button
+            type="button"
+            className={`w-[40px] h-[40px] flex rounded-full border-[2px] border-black`}
+            onClick={handleNext}
+          >
+            <IoIosArrowForward size={20} className="m-auto" />
+          </button>
+        </div>
       </div>
     </>
   );
