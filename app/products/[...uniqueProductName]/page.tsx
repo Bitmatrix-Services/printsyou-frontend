@@ -75,7 +75,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'Product',
             name: product?.productName,
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
-            description: (product?.description ?? '').replace(/<[^>]+>/g, ''),
+            description: (product?.metaDescription ?? product?.description ?? '').replace(/<[^>]+>/g, ''),
             sku: product?.sku,
             url: `${process.env.FE_URL}/products/${product?.uniqueProductName}`,
             brand: {
@@ -104,7 +104,10 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
                   isProductOnSale && product?.saleEndDate
                     ? moment(product?.saleEndDate).format('YYYY-MM-DD')
                     : moment().add(1, 'year').format('YYYY-MM-DD'),
-                minQuantity: item.countFrom
+                eligibleQuantity: {
+                  '@type': 'QuantitativeValue',
+                  minValue: item.countFrom
+                }
               })),
 
               availability: 'https://schema.org/InStock',
