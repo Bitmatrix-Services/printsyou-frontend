@@ -18,12 +18,13 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
         <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
           <div className="min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback
-              className="object-contain"
+              className="object-contain h-auto"
               skeletonRounded={true}
               fill
               priority={imagePriority}
               src={product?.imageUrl}
               alt={product.productName}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
             <div className="absolute top-0 left-0 w-[4rem] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
               {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice > 0 ? (

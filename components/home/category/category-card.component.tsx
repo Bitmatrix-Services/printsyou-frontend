@@ -12,7 +12,7 @@ export const CategoryCard: FC<ICategoryCard> = ({category}) => {
     <Link className="text-center" href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}>
       <div className="flex bg-white shadow-category overflow-hidden rounded-full h-[9rem] w-[9rem] mx-auto p-2 items-center justify-center">
         <Image
-          className="object-contain"
+          className="object-contain w-[90px] h-[90px]"
           width={90}
           height={90}
           src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`}

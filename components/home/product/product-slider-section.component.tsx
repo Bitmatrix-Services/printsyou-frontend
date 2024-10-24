@@ -36,6 +36,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
           <div className="featured-swiper relative">
             <button
               type="button"
+              aria-label="Previous Slide"
               className={`hidden md:flex swiper-button-prev swiper-nav-prev-${navNumber}`}
               onClick={handlePrev}
             >
@@ -43,6 +44,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
             </button>
             <button
               type="button"
+              aria-label="Next Slide"
               className={`hidden md:flex swiper-button-next swiper-nav-next-${navNumber}`}
               onClick={handleNext}
             >
@@ -67,6 +69,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
             <div className="md:hidden w-full flex flex-row gap-6 items-center justify-center mt-4">
               <button
                 type="button"
+                aria-label="Previous Slide"
                 className={`w-[40px] h-[40px] flex rounded-full border-[2px] border-black`}
                 onClick={handlePrev}
               >
@@ -74,6 +77,7 @@ export const ProductSliderSection: FC<IProductSection> = ({title, productList, n
               </button>
               <button
                 type="button"
+                aria-label="Next Slide"
                 className={`w-[40px] h-[40px] flex rounded-full border-[2px] border-black`}
                 onClick={handleNext}
               >
