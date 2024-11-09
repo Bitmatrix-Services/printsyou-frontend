@@ -6,7 +6,6 @@ import {Newsletter} from '@components/home/newsletter-section.component';
 import {Category, Faq} from '@components/home/home.types';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import {getFaqsList} from '@components/home/home-apis';
-import Script from 'next/script';
 
 type listType = {
   name: string;
@@ -38,28 +37,6 @@ export const Footer: FC<IFooter> = async ({categories}) => {
       <FaqSectionComponent faqsList={faqsList} />
       <Newsletter />
       <footer className="bg-secondary-100/50 py-4">
-        <Script
-          id="faq-ld-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'FAQPage',
-              mainEntity: [
-                [...faqsList]
-                  .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                  .map(item => ({
-                    '@type': 'Question',
-                    name: item.question,
-                    acceptedAnswer: {
-                      '@type': 'Answer',
-                      text: item.answer
-                    }
-                  }))
-              ]
-            })
-          }}
-        />
         <Container>
           <div className="grid lg:grid-cols-12 gap-6 md:grid-cols-2">
             <div className="lg:col-span-4 md:col-span-2">

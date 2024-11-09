@@ -1,7 +1,8 @@
 import HomeComponent from '@components/home/home-component';
-import {getAllCategories, getBannersList, getProductsByTag} from '@components/home/home-apis';
+import {getAllCategories, getBannersList, getFaqsList, getProductsByTag} from '@components/home/home-apis';
 import React from 'react';
 import Script from 'next/script';
+import {Faq} from "@components/home/home.types";
 
 export default async function HomePage() {
   const categoriesData = await getAllCategories();
@@ -10,6 +11,10 @@ export default async function HomePage() {
   const innovativeIdea = await getProductsByTag('mostPopular');
   const deals = await getProductsByTag('deals');
   const bannersList = await getBannersList();
+
+  const response = await getFaqsList();
+  let faqsList: Faq[] = [];
+  if (response?.payload) faqsList = response.payload;
 
   return (
     <section>
@@ -122,6 +127,28 @@ export default async function HomePage() {
                 opens: '10:00',
                 closes: '18:00'
               }
+            ]
+          })
+        }}
+      />
+      <Script
+        id="faq-ld-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              [...faqsList]
+                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                .map(item => ({
+                  '@type': 'Question',
+                  name: item.question,
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: item.answer
+                  }
+                }))
             ]
           })
         }}
