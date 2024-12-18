@@ -108,6 +108,11 @@ body {
   padding: 3px 10px 3px 10px;
 }
 
+.description-table table {
+  margin-left: 50px !important;
+  margin-top: 15px !important;
+}
+
 #products-page .list-product .sort-show {
   border: 1px solid #edeff2;
   display: -webkit-box;
@@ -297,9 +302,7 @@ body {
 
 .product-additional-info-value {
   font-size: 15px;
-  padding-left: 6px;
   color: #676666;
-  list-style: disc;
   padding-top: 2px;
   padding-bottom: 2px;
   margin-left: 50px;

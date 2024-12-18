@@ -71,7 +71,7 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
                                 }}
                               ></span>
                             ) : item.fieldValue ? (
-                              <li
+                              <div
                                 className="product-additional-info-value"
                                 dangerouslySetInnerHTML={{
                                   __html: item.fieldValue
