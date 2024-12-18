@@ -2,7 +2,7 @@ import HomeComponent from '@components/home/home-component';
 import {getAllCategories, getBannersList, getFaqsList, getProductsByTag} from '@components/home/home-apis';
 import React from 'react';
 import Script from 'next/script';
-import {Faq} from "@components/home/home.types";
+import {Faq} from '@components/home/home.types';
 
 export default async function HomePage() {
   const categoriesData = await getAllCategories();
