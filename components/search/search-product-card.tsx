@@ -73,14 +73,16 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
         </div>
 
         <div className="py-2">
-          <div className="line-clamp-2 text-center">
-            <h2
-              className="text-lg font-semibold text-subHeading min-h-[3.5rem]"
-              dangerouslySetInnerHTML={{
-                __html: product?.productName
-              }}
-            ></h2>
-          </div>
+          <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
+            <div className="line-clamp-2 text-center">
+              <h2
+                className="text-lg font-semibold text-subHeading min-h-[3.5rem]"
+                dangerouslySetInnerHTML={{
+                  __html: product?.productName
+                }}
+              ></h2>
+            </div>
+          </Link>
           {/*<div className="mt-2 flex gap-1">*/}
           {/*  {[1, 2, 3, 4, 5].map(rating => (*/}
           {/*    <IoMdStar key={rating} className="text-primary-500 w-6 h-6" />*/}
