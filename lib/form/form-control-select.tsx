@@ -47,7 +47,6 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
             sx={{
               borderRadius: '3px 3px  3px 3px',
               height: '2.7rem',
-              minWidth: '15rem',
               '& select::placeholder': {
                 color: 'gray',
                 fontSize: 'sm'

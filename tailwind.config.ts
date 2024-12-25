@@ -13,7 +13,7 @@ const config: Config = {
         poppins: 'Poppins, sans-serif'
       },
       screens: {
-        tablet: {raw: '(min-width: 820px) and (max-width: 912px)'}
+        tablet: {raw: '(min-width: 760px) and (max-width: 860px)'}
       },
       colors: {
         primary: {

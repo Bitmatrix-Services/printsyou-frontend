@@ -2,7 +2,6 @@ import axios from 'axios';
 import {AdditionalFieldProductValues} from '@components/home/product/product.types';
 import chroma from 'chroma-js';
 
-
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
   return input.map((value: string) => {

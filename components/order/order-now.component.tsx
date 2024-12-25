@@ -351,9 +351,13 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         <div className="pt-8"></div>
         <ReactQueryClientProvider>
           <form onSubmit={handleSubmit(onSubmit, handleFormError)}>
-            <div className={'flex-col grid md:grid-cols-2 lg:flex-row w-full justify-between py-0 gap-6 lg:gap-20'}>
+            <div
+              className={
+                'flex-col grid tablet:grid-cols-1 md:grid-cols-2 lg:flex-row w-full justify-between py-0 gap-6 lg:gap-20'
+              }
+            >
               {/* mobile only view */}
-              <div className="md:hidden block p-4 border-2">
+              <div className="tablet:block md:hidden block p-4 border-2">
                 <div>
                   <div className="flex items-center p-4">
                     <div className="relative">
@@ -782,7 +786,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
               </div>
               <div className="flex flex-col gap-3">
                 {/*  hidden on mobile screen */}
-                <div className="hidden md:block p-4 border-2">
+                <div className="hidden tablet:hidden md:block p-4 border-2">
                   <div>
                     <div className="flex items-center p-4">
                       <div className="relative">
@@ -841,7 +845,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                             </div>
                           ) : null}
 
-                          <div className="flex justify-between items-center gap-8">
+                          <div
+                            className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} `}
+                          >
                             <FormControlInput
                               fieldType="number"
                               name="itemQty"
@@ -862,7 +868,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               <FormHeading text="Sub Total" />
                             </div>
                             {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
-                              <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
+                              <h2 className="text-red-500 text-lg lg:text-2xl text-end font-bold flex justify-end items-center">
                                 Min Qty is {product.sortedPrices[0].countFrom}
                               </h2>
                             ) : (
