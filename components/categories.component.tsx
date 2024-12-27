@@ -11,7 +11,7 @@ import AccordionDetails from '@mui/joy/AccordionDetails';
 import Typography from '@mui/joy/Typography';
 import ListItemContent from '@mui/joy/ListItemContent';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
-import Link from "next/link";
+import Link from 'next/link';
 
 interface ICategoriesComponent {
   categoryList: Category[];
@@ -24,7 +24,7 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
       <div className="bg-white py-8">
         <Container>
           <div className="pt-2 pb-11">
-            <h1 className="text-3xl font-bold mb-6 text-center">All Promotional Categories</h1>
+            <h1 className="text-3xl font-bold mb-6 text-center">All Promotional Products</h1>
             <div className=" flex flex-wrap flex-1 flex-row">
               {categoryList?.length > 0 ? (
                 categoryList.map(category => (
@@ -54,12 +54,19 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                             />
                           </Avatar>
                           <ListItemContent>
-                            <Link href={`/categories/${category.uniqueCategoryName}`}><Typography  sx={{
-                                transition: 'color 0.3s',
-                                '&:hover': {
-                                    color: '#DB0481',
-                                },
-                            }} level="title-md">{category.categoryName}</Typography></Link>
+                            <Link href={`/categories/${category.uniqueCategoryName}`}>
+                              <Typography
+                                sx={{
+                                  transition: 'color 0.3s',
+                                  '&:hover': {
+                                    color: '#DB0481'
+                                  }
+                                }}
+                                level="title-md"
+                              >
+                                {category.categoryName}
+                              </Typography>
+                            </Link>
                             <Typography level="body-sm">{category.metaDescription}</Typography>
                           </ListItemContent>
                         </AccordionSummary>

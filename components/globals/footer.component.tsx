@@ -17,6 +17,7 @@ const helpList: listType[] = [
   {name: 'blogs', url: '/blog'}
 ];
 const companyList: listType[] = [
+  {name: 'Promotional Products', url: '/categories'},
   {name: 'Contact Us', url: '/contact-us'},
   {name: 'About Us', url: '/about-us'},
   {name: 'Terms & Conditions', url: '/terms-and-conditions'}

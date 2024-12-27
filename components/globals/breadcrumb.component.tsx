@@ -19,16 +19,20 @@ export const Breadcrumb: FC<IBreadcrumb> = ({list, prefixTitle}) => {
       <Container>
         <div className="flex flex-wrap gap-2 items-center text-mute4">
           <Link href={'/'}>
-            <GoHome className="h-5 w-5 text-mute2" />
+            <GoHome className="h-5 w-5 text-mute2 hover:text-primary-500" />
           </Link>
           <div>
             <MdOutlineChevronRight className="h-5 w-5" />
           </div>
-          {prefixTitle && (
-            <div className={`${list.length === 0 ? 'font-medium text-primary-500' : 'text-sm text-mute4'}`}>
+          {prefixTitle && (prefixTitle === 'Promotional Categories' || prefixTitle === 'Promotional Products') ? (
+            <Link href={'/categories'}>
+              <div className="text-sm hover:text-primary-500">{prefixTitle}</div>
+            </Link>
+          ) : prefixTitle ? (
+            <div className={`${list.length === 0 ? 'font-medium text-primary-500' : 'text-sm text-mute2'}`}>
               {prefixTitle}
             </div>
-          )}
+          ) : null}
           {list.length > 0 &&
             [...list]
               ?.sort((a, b) => b.sequenceNumber - a.sequenceNumber)
