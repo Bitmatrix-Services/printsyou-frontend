@@ -3,11 +3,8 @@ import * as React from 'react';
 import {FC, Fragment, useMemo} from 'react';
 import {MdArrowForward, MdInfo} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
-import {setCartStateForModal} from '../../../store/slices/cart/cart.slice';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
-import {useAppDispatch} from '../../../store/hooks';
-import {PiShoppingCartSimple} from 'react-icons/pi';
 import {colorNameToHex, extractColorsArray} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 
@@ -17,8 +14,6 @@ interface ProductDescriptionComponent {
 }
 
 export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({product, handleScroll}) => {
-  const dispatch = useAppDispatch();
-
   const colorsArray = useMemo(() => {
     const availableColors = extractColorsArray(product.additionalFieldProductValues);
     return availableColors?.filter(color => colorNameToHex(color));
@@ -71,22 +66,35 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
           See Details
         </h3>
       )}
-      {colorsArray.length > 0 ? (
+      {product.productColors?.length > 0 || colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
           <div className="text-mute text-sm font-normal">Colors:</div>
           <div className="flex flex-wrap gap-3">
-            {colorsArray?.map(color => (
-              <div
-                key={color}
-                style={{
-                  backgroundColor: color,
-                  width: 25,
-                  height: 25,
-                  borderRadius: '50%',
-                  border: `1px solid grey`
-                }}
-              />
-            ))}
+            {product.productColors?.length > 0
+              ? product.productColors?.map(color => (
+                  <div
+                    key={color.id}
+                    style={{
+                      backgroundColor: color.colorHex ? `#${color.colorHex}` : colorNameToHex(color.colorName),
+                      width: 25,
+                      height: 25,
+                      borderRadius: '50%',
+                      border: `1px solid grey`
+                    }}
+                  />
+                ))
+              : colorsArray?.map(color => (
+                  <div
+                    key={color}
+                    style={{
+                      backgroundColor: color,
+                      width: 25,
+                      height: 25,
+                      borderRadius: '50%',
+                      border: `1px solid grey`
+                    }}
+                  />
+                ))}
           </div>
         </div>
       ) : null}

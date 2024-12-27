@@ -64,6 +64,7 @@ export interface Product {
   additionalRows: AdditionalRows[];
   crumbs: Crumbs[];
   allCategoryNameAndIds: AllCategoryNameAndIds[];
+  productColors: productColors[];
 }
 
 export interface EnclosureProduct {
@@ -76,4 +77,12 @@ export interface EnclosureProduct {
   uniqueProductName: string;
   imageUrl: string;
   priceGrids: PriceGrids[];
+}
+
+export interface productColors {
+  id: string;
+  colorName: string;
+  colorHex: string;
+  onlyColorImage?: string;
+  coloredProductImage?: string;
 }
