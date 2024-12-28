@@ -12,6 +12,7 @@ import Typography from '@mui/joy/Typography';
 import ListItemContent from '@mui/joy/ListItemContent';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
+import {FiExternalLink} from 'react-icons/fi';
 
 interface ICategoriesComponent {
   categoryList: Category[];
@@ -54,19 +55,20 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                             />
                           </Avatar>
                           <ListItemContent>
-                            <Link href={`/categories/${category.uniqueCategoryName}`}>
-                              <Typography
-                                sx={{
-                                  transition: 'color 0.3s',
-                                  '&:hover': {
-                                    color: '#DB0481'
-                                  }
-                                }}
-                                level="title-md"
-                              >
-                                {category.categoryName}
-                              </Typography>
-                            </Link>
+                            <Typography
+                              sx={{
+                                transition: 'color 0.3s'
+                              }}
+                              level="title-md"
+                            >
+                              <div className="flex items-center">
+                                <span className="mr-2">{category.categoryName}</span>
+                                <Link href={`/categories/${category.uniqueCategoryName}`}>
+                                  <FiExternalLink color={'blue'} />
+                                </Link>
+                              </div>
+                            </Typography>
+
                             <Typography level="body-sm">{category.metaDescription}</Typography>
                           </ListItemContent>
                         </AccordionSummary>
@@ -82,7 +84,19 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                                 />
                               </Avatar>
                               <ListItemContent>
-                                <Typography level="title-md">{subCategory.categoryName}</Typography>
+                                <Typography
+                                  sx={{
+                                    transition: 'color 0.3s'
+                                  }}
+                                  level="title-md"
+                                >
+                                  <div className="flex items-center">
+                                    <span className="mr-2">{subCategory.categoryName}</span>
+                                    <Link href={`/categories/${subCategory.uniqueCategoryName}`}>
+                                      <FiExternalLink color={'blue'} />
+                                    </Link>
+                                  </div>
+                                </Typography>
                                 <Typography level="body-sm">{subCategory.metaDescription}</Typography>
                               </ListItemContent>
                             </div>
