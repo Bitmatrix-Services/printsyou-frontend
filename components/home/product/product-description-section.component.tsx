@@ -75,7 +75,12 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
                   <div
                     key={color.id}
                     style={{
-                      backgroundColor: color.colorHex ? `#${color.colorHex}` : colorNameToHex(color.colorName),
+                      backgroundColor:
+                        color.colorHex && color.colorHex.startsWith('#')
+                          ? color.colorHex
+                          : color.colorHex && !color.colorHex.startsWith('#')
+                            ? `#${color.colorHex}`
+                            : colorNameToHex(color.colorName),
                       width: 25,
                       height: 25,
                       borderRadius: '50%',
