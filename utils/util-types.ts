@@ -54,4 +54,5 @@ export interface Sortable {
 export type listType = {
   name: string;
   url: string;
+  menuItems?: listType[];
 };
