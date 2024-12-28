@@ -28,84 +28,86 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
             <h1 className="text-3xl font-bold mb-6 text-center">All Promotional Products</h1>
             <div className=" flex flex-wrap flex-1 flex-row">
               {categoryList?.length > 0 ? (
-                categoryList.map(category => (
-                  <div key={category.id} className="basis-[100%] sm:basis-[50%]">
-                    <AccordionGroup
-                      variant="plain"
-                      transition="0.3s"
-                      sx={{
-                        maxWidth: 700,
-                        borderRadius: 'md',
-                        [`& .${accordionDetailsClasses.content}.${accordionDetailsClasses.expanded}`]: {
-                          paddingBlock: '1rem'
-                        },
-                        [`& .${accordionSummaryClasses.button}`]: {
-                          paddingBlock: '1rem'
-                        }
-                      }}
-                    >
-                      <Accordion>
-                        <AccordionSummary>
-                          <Avatar color="primary">
-                            <ImageWithFallback
-                              src={category.imageUrl}
-                              alt={category.categoryName}
-                              className="object-contain"
-                              fill
-                            />
-                          </Avatar>
-                          <ListItemContent>
-                            <Typography
-                              sx={{
-                                transition: 'color 0.3s'
-                              }}
-                              level="title-md"
-                            >
-                              <div className="flex items-center">
-                                <span className="mr-2">{category.categoryName}</span>
-                                <Link href={`/categories/${category.uniqueCategoryName}`}>
-                                  <FiExternalLink color={'blue'} />
-                                </Link>
-                              </div>
-                            </Typography>
+                categoryList
+                  .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
+                  .map(category => (
+                    <div key={category.id} className="basis-[100%] sm:basis-[50%]">
+                      <AccordionGroup
+                        variant="plain"
+                        transition="0.3s"
+                        sx={{
+                          maxWidth: 700,
+                          borderRadius: 'md',
+                          [`& .${accordionDetailsClasses.content}.${accordionDetailsClasses.expanded}`]: {
+                            paddingBlock: '1rem'
+                          },
+                          [`& .${accordionSummaryClasses.button}`]: {
+                            paddingBlock: '1rem'
+                          }
+                        }}
+                      >
+                        <Accordion>
+                          <AccordionSummary>
+                            <Avatar color="primary">
+                              <ImageWithFallback
+                                src={category.imageUrl}
+                                alt={category.categoryName}
+                                className="object-contain"
+                                fill
+                              />
+                            </Avatar>
+                            <ListItemContent>
+                              <Typography
+                                sx={{
+                                  transition: 'color 0.3s'
+                                }}
+                                level="title-md"
+                              >
+                                <div className="flex items-center">
+                                  <span className="mr-2">{category.categoryName}</span>
+                                  <Link href={`/categories/${category.uniqueCategoryName}`}>
+                                    <FiExternalLink color={'blue'} />
+                                  </Link>
+                                </div>
+                              </Typography>
 
-                            <Typography level="body-sm">{category.metaDescription}</Typography>
-                          </ListItemContent>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          {(category.subCategories ?? []).map(subCategory => (
-                            <div className="flex items-center px-5 py-2" key={subCategory.id}>
-                              <Avatar color="primary" sx={{marginRight: '1rem'}}>
-                                <ImageWithFallback
-                                  src={subCategory.imageUrl}
-                                  alt={subCategory.categoryName}
-                                  className="object-contain"
-                                  fill
-                                />
-                              </Avatar>
-                              <ListItemContent>
-                                <Typography
-                                  sx={{
-                                    transition: 'color 0.3s'
-                                  }}
-                                  level="title-md"
-                                >
-                                  <div className="flex items-center">
-                                    <span className="mr-2">{subCategory.categoryName}</span>
-                                    <Link href={`/categories/${subCategory.uniqueCategoryName}`}>
-                                      <FiExternalLink color={'blue'} />
-                                    </Link>
-                                  </div>
-                                </Typography>
-                                <Typography level="body-sm">{subCategory.metaDescription}</Typography>
-                              </ListItemContent>
-                            </div>
-                          ))}
-                        </AccordionDetails>
-                      </Accordion>
-                    </AccordionGroup>
-                  </div>
-                ))
+                              <Typography level="body-sm">{category.metaDescription}</Typography>
+                            </ListItemContent>
+                          </AccordionSummary>
+                          <AccordionDetails>
+                            {(category.subCategories ?? []).map(subCategory => (
+                              <div className="flex items-center px-5 py-2" key={subCategory.id}>
+                                <Avatar color="primary" sx={{marginRight: '1rem'}}>
+                                  <ImageWithFallback
+                                    src={subCategory.imageUrl}
+                                    alt={subCategory.categoryName}
+                                    className="object-contain"
+                                    fill
+                                  />
+                                </Avatar>
+                                <ListItemContent>
+                                  <Typography
+                                    sx={{
+                                      transition: 'color 0.3s'
+                                    }}
+                                    level="title-md"
+                                  >
+                                    <div className="flex items-center">
+                                      <span className="mr-2">{subCategory.categoryName}</span>
+                                      <Link href={`/categories/${subCategory.uniqueCategoryName}`}>
+                                        <FiExternalLink color={'blue'} />
+                                      </Link>
+                                    </div>
+                                  </Typography>
+                                  <Typography level="body-sm">{subCategory.metaDescription}</Typography>
+                                </ListItemContent>
+                              </div>
+                            ))}
+                          </AccordionDetails>
+                        </Accordion>
+                      </AccordionGroup>
+                    </div>
+                  ))
               ) : (
                 <div className="flex justify-center align-center items-center h-[20rem] w-full">
                   No Categories Found
