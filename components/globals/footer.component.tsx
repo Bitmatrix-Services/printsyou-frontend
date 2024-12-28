@@ -6,11 +6,7 @@ import {Newsletter} from '@components/home/newsletter-section.component';
 import {Category, Faq} from '@components/home/home.types';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import {getFaqsList} from '@components/home/home-apis';
-
-type listType = {
-  name: string;
-  url: string;
-};
+import {listType} from '@utils/util-types';
 
 const helpList: listType[] = [
   {name: 'how to order', url: '/how-to-order'},

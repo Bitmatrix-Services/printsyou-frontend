@@ -50,3 +50,8 @@ export interface Notification extends Sortable {
 export interface Sortable {
   sequenceNumber: number;
 }
+
+export type listType = {
+  name: string;
+  url: string;
+};
