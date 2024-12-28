@@ -65,9 +65,9 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                               >
                                 <div className="flex items-center">
                                   <span className="mr-2">{category.categoryName}</span>
-                                  <Link href={`/categories/${category.uniqueCategoryName}`}>
-                                    <FiExternalLink color={'blue'} />
-                                  </Link>
+                                  {/*<Link href={`/categories/${category.uniqueCategoryName}`}>*/}
+                                  {/*  <FiExternalLink color={'blue'} />*/}
+                                  {/*</Link>*/}
                                 </div>
                               </Typography>
 
