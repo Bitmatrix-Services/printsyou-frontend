@@ -11,7 +11,7 @@ interface IBlogCardItem {
 
 export const BlogCardItem: React.FC<IBlogCardItem> = ({blog}) => {
   return (
-    <Link href={`/blog/${blog.id}`}>
+    <Link href={`/blog/${blog.uniqueId}`}>
       <Card className="flex rounded text-center px-4 border">
         <div className="relative h-[10rem] ">
           <ImageWithFallback className="object-contain" fill src={blog.metaImage} alt={blog.title} />
