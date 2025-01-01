@@ -12,7 +12,6 @@ import Typography from '@mui/joy/Typography';
 import ListItemContent from '@mui/joy/ListItemContent';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
-import {FiExternalLink} from 'react-icons/fi';
 
 interface ICategoriesComponent {
   categoryList: Category[];
@@ -64,10 +63,12 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                                 level="title-md"
                               >
                                 <div className="flex items-center">
-                                  <span className="mr-2">{category.categoryName}</span>
-                                  <Link href={`/categories/${category.uniqueCategoryName}`}>
-                                    {/*<FiExternalLink color={'blue'} />*/}
-                                    View Products
+                                  <Link
+                                    className="hover:text-primary-500"
+                                    href={`/categories/${category.uniqueCategoryName}`}
+                                    onClick={e => e.stopPropagation()}
+                                  >
+                                    <span className="mr-2">{category.categoryName}</span>
                                   </Link>
                                 </div>
                               </Typography>
@@ -94,9 +95,12 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                                     level="title-md"
                                   >
                                     <div className="flex items-center">
-                                      <span className="mr-2">{subCategory.categoryName}</span>
-                                      <Link href={`/categories/${subCategory.uniqueCategoryName}`}>
-                                        <FiExternalLink color={'blue'} />
+                                      <Link
+                                        className="hover:text-primary-500"
+                                        href={`/categories/${subCategory.uniqueCategoryName}`}
+                                        onClick={e => e.stopPropagation()}
+                                      >
+                                        <span className="mr-2">{subCategory.categoryName}</span>
                                       </Link>
                                     </div>
                                   </Typography>
