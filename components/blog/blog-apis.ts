@@ -15,10 +15,10 @@ export const getAllBlogs = async (): Promise<ApiResponse<Blog[]> | null> => {
   }
 };
 
-export const getBlogDetails = async (blogId: string): Promise<ApiResponse<Blog> | null> => {
+export const getBlogDetails = async (blogUniqueName: string): Promise<ApiResponse<Blog> | null> => {
   try {
     const response = await axios.get<ApiResponse<Blog>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${BlogRoutes.blogById}/${blogId}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${BlogRoutes.blogByUniqueName}/${blogUniqueName}`
     );
     return response.data;
   } catch (error) {
