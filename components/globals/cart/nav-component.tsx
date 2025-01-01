@@ -63,12 +63,8 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                         <div aria-hidden="true" className="absolute inset-0 top-1/2 bg-white shadow" />
                         <div className="relative bg-white min-h-[22rem] max-h-[22rem]">
                           <Container>
-                            <div className="flex flex-row gap-x-4 ml-3 justify-between py-6">
-                              <div
-                                data-aos="fade-down"
-                                className="max-h-[16rem]"
-                                style={{columnCount: '3', columnFill: 'auto'}}
-                              >
+                            <div className="flex flex-row gap-x-4 ml-3 justify-between pt-6">
+                              <div data-aos="fade-down" className="max-h-[18rem] overflow-clip columns-5 xl:columns-6">
                                 {categories
                                   .sort((a, b) => a.categoryName.localeCompare(b.categoryName))
                                   .map(category => (
