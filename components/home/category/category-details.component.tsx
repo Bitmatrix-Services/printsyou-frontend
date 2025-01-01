@@ -36,8 +36,8 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, 
             />
           </div>
           <div>
-            <section className="bg-secondary-300 bg-opacity-[12%]">
-              <div className="md:grid md:grid-cols-12 flex flex-col gap-2 md:gap-6 lg:gap-6 px-8">
+            <section>
+              <div className="md:grid md:grid-cols-12 flex flex-col gap-2 md:gap-6 lg:gap-6">
                 <div className="md:col-span-9 py-9">
                   <h1 className="mb-3 text-black font-semibold text-3xl capitalize">
                     {category.prefix && <span>{category.prefix}</span>}
