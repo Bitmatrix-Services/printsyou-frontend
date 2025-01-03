@@ -5,7 +5,7 @@ import {MdArrowForward, MdInfo} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
-import {colorNameToHex, extractColorsArray} from '@utils/utils';
+import {colorNameToHex, extractColorsArray, getColorsWithHex} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 
 interface ProductDescriptionComponent {
@@ -18,6 +18,10 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
     const availableColors = extractColorsArray(product.additionalFieldProductValues);
     return availableColors?.filter(color => colorNameToHex(color));
   }, [product.additionalFieldProductValues]);
+
+  const productColors = useMemo(() => {
+    return (product.productColors || []).map(color => getColorsWithHex(color)).filter(Boolean);
+  }, [product.productColors]);
 
   return (
     <div className="col flex flex-col">
@@ -66,21 +70,16 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
           See Details
         </h3>
       )}
-      {product.productColors?.length > 0 || colorsArray.length > 0 ? (
+      {productColors?.length > 0 || colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
           <div className="text-mute text-sm font-normal">Colors:</div>
           <div className="flex flex-wrap gap-3">
-            {product.productColors?.length > 0
-              ? product.productColors?.map(color => (
+            {productColors.length > 0
+              ? productColors.map(color => (
                   <div
-                    key={color.id}
+                    key={color?.id}
                     style={{
-                      backgroundColor:
-                        color.colorHex && color.colorHex.startsWith('#')
-                          ? color.colorHex
-                          : color.colorHex && !color.colorHex.startsWith('#')
-                            ? `#${color.colorHex}`
-                            : colorNameToHex(color.colorName),
+                      backgroundColor: color?.colorHex,
                       width: 25,
                       height: 25,
                       borderRadius: '50%',

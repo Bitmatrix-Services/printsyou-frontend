@@ -41,5 +41,5 @@ export const NotificationRoutes = Object.freeze({
 export const BlogRoutes = Object.freeze({
   allBlogs: `/blog/all`,
   blogById: `/blog`,
-  blogByUniqueName: `/blog/unique`,
+  blogByUniqueName: `/blog/unique`
 });

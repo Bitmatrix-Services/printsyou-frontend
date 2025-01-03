@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {AdditionalFieldProductValues} from '@components/home/product/product.types';
+import {AdditionalFieldProductValues, productColors} from '@components/home/product/product.types';
 import chroma from 'chroma-js';
+import {v4 as uuidv4} from 'uuid';
 
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
@@ -82,11 +83,16 @@ export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<s
 
 export const formatString = (str: string, ...args: any[]) => str.replace(/{(\d+)}/g, (_, index) => args[index] || '');
 
-export const colorNameToHex = (colorName: string): string => {
+export const colorNameToHex = (colorName: string): productColors | null => {
   try {
-    return chroma(colorName).hex();
+    const colorHex = chroma(colorName).hex();
+    return {
+      id: uuidv4(),
+      colorName,
+      colorHex
+    };
   } catch (e) {
-    return '';
+    return null;
   }
 };
 
@@ -123,5 +129,31 @@ export const scrollIntoProductsView = () => {
       const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({top: yPosition, behavior: 'smooth'});
     }, 1200);
+  }
+};
+
+export const isValidHex = (hex: string) => {
+  const hexRegex = /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6})$/;
+  return hexRegex.test(hex);
+};
+
+export const getColorsWithHex = (color: productColors) => {
+  if (color.colorHex && isValidHex(color.colorHex)) return color;
+  else if (color.colorHex && !color.colorHex.startsWith('#') && isValidHex(`#${color.colorHex}`))
+    return {
+      id: color.id,
+      colorName: color.colorName,
+      colorHex: `#${color.colorHex}`
+    };
+  else {
+    const colorFromName = colorNameToHex(color?.colorName);
+    if (colorFromName?.colorHex && isValidHex(colorFromName.colorHex)) {
+      return {
+        ...colorFromName,
+        colorHex: colorFromName.colorHex
+      };
+    } else {
+      return null;
+    }
   }
 };
