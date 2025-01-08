@@ -21,7 +21,6 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
               className="object-contain"
               skeletonRounded={true}
               fill
-              priority={imagePriority}
               src={product?.imageUrl}
               alt={product.productName}
             />

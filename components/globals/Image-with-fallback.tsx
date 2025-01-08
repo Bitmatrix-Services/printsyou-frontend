@@ -9,7 +9,7 @@ interface ImageWithFallbackProps extends ImageProps {
 }
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
-  const {src, fallbackSrc = '/assets/logo-full.png', skeletonRounded, priority = true, alt, ...rest} = props;
+  const {src, fallbackSrc = '/assets/logo-full.png', skeletonRounded, priority, alt, ...rest} = props;
   const [imgSrc, setImgSrc] = useState(`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${src}`);
   const [loading, setLoading] = useState(true);
 

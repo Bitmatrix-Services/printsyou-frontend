@@ -15,13 +15,12 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
   return (
     <div className="group relative bg-white">
       <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl pt-2 md:pt-3 px-2 md:px-3">
-        <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
+        <Link prefetch={false} href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
           <div className="min-h-56 h-56 max-h-56 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
             <ImageWithFallback
               className="object-contain h-auto"
               skeletonRounded={true}
               fill
-              priority={imagePriority}
               src={product?.imageUrl}
               alt={product.productName}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -74,7 +73,7 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
         </div>
 
         <div className="py-2">
-          <Link href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
+          <Link prefetch={false} href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
             <div className="line-clamp-2 text-center">
               <h2
                 className="text-lg font-semibold text-subHeading min-h-[3.5rem]"

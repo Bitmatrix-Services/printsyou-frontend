@@ -6,7 +6,7 @@ import {Pagination} from 'swiper/modules';
 
 interface IHeroSection {
   dataList: any[];
-  children: (_: any) => ReactNode;
+  children: (_: any, index: number) => ReactNode;
 }
 
 export const SwiperSlider: FC<IHeroSection> = ({dataList = [], children}) => {
@@ -24,8 +24,8 @@ export const SwiperSlider: FC<IHeroSection> = ({dataList = [], children}) => {
           pagination={{clickable: true}}
           className="hero-swiper"
         >
-          {(dataList ?? []).map(listItem => (
-            <SwiperSlide key={listItem.id}>{children && children(listItem)}</SwiperSlide>
+          {(dataList ?? []).map((listItem, index) => (
+            <SwiperSlide key={listItem.id}>{children && children(listItem, index)}</SwiperSlide>
           ))}
         </Swiper>
       </div>
