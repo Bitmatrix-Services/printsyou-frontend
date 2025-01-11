@@ -150,7 +150,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-4 md:gap-6 lg:gap-6">
-          {productsByCategory?.map((product, index) => <ProductCard key={product.id} product={product} />)}
+          {productsByCategory?.map(product => <ProductCard key={product.id} product={product} />)}
         </div>
       )}
       {productsByCategory?.length > 0 && !isPageLoading && (
