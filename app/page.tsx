@@ -160,6 +160,7 @@ export default async function HomePage() {
         underABuck={underABuck.payload.content}
         innovativeIdea={innovativeIdea.payload.content}
         deals={deals.payload.content}
+        faqsList={faqsList}
       />
     </section>
   );
