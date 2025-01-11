@@ -60,7 +60,7 @@ export const Footer: FC<IFooter> = async ({categories}) => {
               list={categories?.map(category => {
                 return {
                   name: category.categoryName,
-                  url: `/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`
+                  url: `/categories/${category.uniqueCategoryName}`
                 };
               })}
             />

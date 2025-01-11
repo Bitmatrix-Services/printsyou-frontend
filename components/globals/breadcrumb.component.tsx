@@ -49,7 +49,7 @@ export const Breadcrumb: FC<IBreadcrumb> = ({list, prefixTitle}) => {
                     }`}
                     onClick={() => {
                       if (index !== list.length - 1) {
-                        router.push(`/categories/${listItem.uniqueCategoryName}?size=20&filter=priceLowToHigh`);
+                        router.push(`/categories/${listItem.uniqueCategoryName}`);
                       }
                     }}
                   >

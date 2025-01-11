@@ -75,7 +75,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                       onMouseLeave={() => setHoveredCategory(null)}
                                     >
                                       <Link
-                                        href={`/categories/${category.uniqueCategoryName}?size=20&filter=priceLowToHigh`}
+                                        href={`/categories/${category.uniqueCategoryName}`}
                                         onClick={() => {
                                           setIsMenuOpen(false);
                                           setHoveredCategory(null);
