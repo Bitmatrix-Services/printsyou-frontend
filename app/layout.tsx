@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
   title: metaConstants.SITE_NAME,
   description: metaConstants.DESCRIPTION,
+  alternates: {
+    canonical: `${process.env.FE_URL}`
+  },
   openGraph: {
     images: '/assets/logo-full.png',
     title: metaConstants.SITE_NAME,
