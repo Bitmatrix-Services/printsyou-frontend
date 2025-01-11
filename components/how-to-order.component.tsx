@@ -13,7 +13,7 @@ export const HowToOrderComponent = () => {
   }, []);
 
   return (
-    <section className="bg-white pt-3 pb-10 lg:py-5">
+    <section>
       <Breadcrumb list={[]} prefixTitle="How to Order" />
       <Container>
         <div className="py-12">
