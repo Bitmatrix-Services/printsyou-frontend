@@ -147,9 +147,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                {products?.map((product, index) => (
-                  <SearchProductCard key={product.id} product={product} />
-                ))}
+                {products?.map((product, index) => <SearchProductCard key={product.id} product={product} />)}
               </div>
             )}
           </div>

@@ -3,7 +3,6 @@ import {AdditionalFieldProductValues, productColors} from '@components/home/prod
 import chroma from 'chroma-js';
 import {v4 as uuidv4} from 'uuid';
 
-
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
   return input.map((value: string) => {
