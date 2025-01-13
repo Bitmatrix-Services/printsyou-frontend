@@ -107,7 +107,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           <div className="flex flex-wrap gap-3">
             {productColors.length > 0
               ? productColors.map(color => (
-                  <div style={{display: 'flex', gap: '10px', position: 'relative'}}>
+                  <div key={color?.id} style={{display: 'flex', gap: '10px', position: 'relative'}}>
                     <div
                       key={color?.id}
                       className={color?.coloredProductImage ? 'hover:cursor-pointer' : ''}

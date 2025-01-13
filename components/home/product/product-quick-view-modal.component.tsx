@@ -9,7 +9,7 @@ import {IoIosAdd} from 'react-icons/io';
 import Accordion from '@mui/joy/Accordion';
 import AccordionDetails from '@mui/joy/AccordionDetails';
 import AccordionSummary, {accordionSummaryClasses} from '@mui/joy/AccordionSummary';
-import {Product} from '@components/home/product/product.types';
+import {Product, ProductImage} from '@components/home/product/product.types';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import sanitizeHtml from 'sanitize-html';
@@ -23,12 +23,20 @@ interface IProductQuickViewModal {
 }
 
 export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose, productId}) => {
+  const [images, setImages] = useState<ProductImage[]>([]);
   const [product, setProduct] = useState<Product | null>(null);
+
   useEffect(() => {
     if (productId) {
       getProductDetail();
     }
   }, [productId]);
+
+  useEffect(() => {
+    if (product && product?.productImages?.length > 0) {
+      setImages(product.productImages);
+    }
+  }, [product?.productImages]);
 
   const getProductDetail = async () => {
     const res = await getProductDetailsById(productId);
@@ -58,8 +66,8 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
         {product ? (
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 mb-4">
-              <ProductDescriptionComponent product={product} />
-              <ProductImageComponent product={product} />
+              <ProductDescriptionComponent setImages={setImages} images={images} product={product} />
+              <ProductImageComponent productImages={images} productName={product.productName} />
             </div>
 
             <div className=" space-y-2">
