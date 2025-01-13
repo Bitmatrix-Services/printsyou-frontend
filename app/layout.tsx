@@ -65,19 +65,14 @@ export default async function RootLayout({children}: PropsWithChildren) {
                 strategy="lazyOnload"
                 dangerouslySetInnerHTML={{
                     __html: `
-                    function gtag_report_conversion(url) {
-                        var callback = function () {
-                        if (typeof(url) != 'undefined') {
-                        window.location = url;
-                    }
-                    };
-                        gtag('event', 'conversion', {
-                        'send_to': 'AW-16709127988/pXIgCID20IQaELSexJ8-',
-                        'transaction_id': '',
-                        'event_callback': callback
+                  function gtag_report_conversion(url) {
+                    gtag('event', 'conversion', {
+                      send_to: 'AW-16709127988/pXIgCID20IQaELSexJ8-',
+                      transaction_id: '',
+                      event_callback: () => {}
                     });
-                        return false;
-                    }
+                    return false;
+                  }
                 `
                 }}
             />
