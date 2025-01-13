@@ -1,27 +1,56 @@
 'use client';
 import * as React from 'react';
-import {FC, Fragment, useMemo} from 'react';
+import {Dispatch, FC, Fragment, SetStateAction, useMemo, useState} from 'react';
 import {MdArrowForward, MdInfo} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import Link from 'next/link';
-import {Product} from '@components/home/product/product.types';
-import {colorNameToHex, extractColorsArray, getColorsWithHex} from '@utils/utils';
+import {Product, productColors, ProductImage} from '@components/home/product/product.types';
+import {colorNameToHex, extractColorsArray, getColorsWithHex, getContrastColor} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 
 interface ProductDescriptionComponent {
   product: Product;
   handleScroll?: () => void;
+  setImages: Dispatch<SetStateAction<ProductImage[]>>;
+  images: ProductImage[];
 }
 
-export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({product, handleScroll}) => {
+export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
+  product,
+  handleScroll,
+  images,
+  setImages
+}) => {
+  const [selectedColor, setSelectedColor] = useState<string>('');
+
   const colorsArray = useMemo(() => {
     const availableColors = extractColorsArray(product.additionalFieldProductValues);
     return availableColors?.filter(color => colorNameToHex(color));
   }, [product.additionalFieldProductValues]);
 
   const productColors = useMemo(() => {
-    return (product.productColors || []).map(color => getColorsWithHex(color)).filter(Boolean);
+    const uniqueColorsByName = Array.from(
+      new Map(product.productColors.map((color: productColors) => [color?.colorName.toLowerCase(), color])).values()
+    );
+
+    return uniqueColorsByName.map(color => getColorsWithHex(color)).filter(color => Boolean(color?.colorName));
   }, [product.productColors]);
+
+  const handleColorSelect = (color: productColors | null) => {
+    if (color?.coloredProductImage) {
+      let newImg: ProductImage = {
+        imageUrl: color.coloredProductImage,
+        sequenceNumber: 0
+      };
+
+      const updatedImages = [...images];
+      setImages(updatedImages);
+      if (selectedColor) updatedImages.shift();
+
+      updatedImages.unshift(newImg);
+      setSelectedColor(color.colorName);
+    }
+  };
 
   return (
     <div className="col flex flex-col">
@@ -76,16 +105,36 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({pr
           <div className="flex flex-wrap gap-3">
             {productColors.length > 0
               ? productColors.map(color => (
-                  <div
-                    key={color?.id}
-                    style={{
-                      backgroundColor: color?.colorHex,
-                      width: 25,
-                      height: 25,
-                      borderRadius: '50%',
-                      border: `1px solid grey`
-                    }}
-                  />
+                  <div style={{display: 'flex', gap: '10px', position: 'relative'}}>
+                    <div
+                      key={color?.id}
+                      className={color?.coloredProductImage ? 'hover:cursor-pointer' : ''}
+                      style={{
+                        backgroundColor: color?.colorHex,
+                        width: color?.colorName === selectedColor ? 30 : 25,
+                        height: color?.colorName === selectedColor ? 30 : 25,
+                        borderRadius: '50%',
+                        border: `1px solid grey`,
+                        position: 'relative'
+                      }}
+                      onClick={() => handleColorSelect(color)}
+                    />
+                    {selectedColor === color?.colorName && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          fontSize: '24px',
+                          color: getContrastColor(color.colorHex),
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        ✔
+                      </div>
+                    )}
+                  </div>
                 ))
               : colorsArray?.map(color => (
                   <div

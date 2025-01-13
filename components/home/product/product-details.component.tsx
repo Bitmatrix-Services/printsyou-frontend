@@ -1,7 +1,7 @@
 'use client';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
-import React, {FC, Fragment, useRef} from 'react';
-import {Product} from '@components/home/product/product.types';
+import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
+import {Product, ProductImage} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
@@ -17,6 +17,14 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
   if (!product) notFound();
 
   const productDescriptionRef = useRef<HTMLDivElement>(null);
+  const [images, setImages] = useState<ProductImage[]>([]);
+
+  useEffect(() => {
+    if (product?.productImages?.length > 0) {
+      setImages(product.productImages);
+    }
+  }, []);
+
   const scrollToElement = () => {
     if (productDescriptionRef.current) {
       productDescriptionRef.current.scrollIntoView({behavior: 'smooth'});
@@ -29,8 +37,13 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
           <Breadcrumb prefixTitle="Promotional Products" list={product.crumbs ?? []} />
           <Container>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
-              <ProductImageComponent product={product} />
-              <ProductDescriptionComponent product={product} handleScroll={() => scrollToElement()} />
+              <ProductImageComponent productName={product.productName} productImages={images} />
+              <ProductDescriptionComponent
+                product={product}
+                handleScroll={() => scrollToElement()}
+                images={images}
+                setImages={setImages}
+              />
             </div>
 
             {/* description section  */}

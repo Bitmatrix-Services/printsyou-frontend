@@ -1,8 +1,6 @@
 'use client';
 import * as React from 'react';
 import {FC} from 'react';
-import {Product} from '@components/home/product/product.types';
-import dynamic from 'next/dynamic';
 import 'lightgallery/css/lightgallery.css';
 import 'lightgallery/css/lg-zoom.css';
 import 'lightgallery/css/lg-thumbnail.css';
@@ -15,24 +13,22 @@ import 'lightgallery/css/lg-rotate.css';
 import 'lightgallery/css/lg-video.css';
 import 'lightgallery/css/lg-medium-zoom.css';
 import {AppLightGallery} from '@components/app-light-gallery.component';
+import {ProductImage} from '@components/home/product/product.types';
 
 interface IProductImageSection {
-  product: Product;
+  productName: string;
+  productImages: ProductImage[];
 }
 
-const LightGallery = dynamic(() => import('lightgallery/react'), {
-  ssr: false
-});
-
-export const ProductImageComponent: FC<IProductImageSection> = ({product}) => {
+export const ProductImageComponent: FC<IProductImageSection> = ({productName, productImages}) => {
   return (
     <figure className="order-first">
       <div className="sticky top-0">
         <div className="md:pt-8 border border-gray-200">
-          <AppLightGallery productName={product.productName} productImages={product.productImages} showOne={true} />
+          <AppLightGallery productName={productName} productImages={productImages} showOne={true} />
         </div>
         <div className="gallery-container">
-          <AppLightGallery productName={product.productName} productImages={product.productImages} />
+          <AppLightGallery productName={productName} productImages={productImages} />
         </div>
       </div>
     </figure>
