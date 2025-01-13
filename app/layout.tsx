@@ -49,6 +49,18 @@ export default async function RootLayout({children}: PropsWithChildren) {
           <html lang="en">
             <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
             <Script
+              id="gtag-integration-initialization"
+              strategy="beforeInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                   window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'AW-16709127988');
+                `
+              }}
+            />
+            <Script
                 id="gtag-integration"
                 strategy="lazyOnload"
                 dangerouslySetInnerHTML={{
