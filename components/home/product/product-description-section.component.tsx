@@ -76,11 +76,13 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         <span className="font-semibold text-primary-500">{product.sku}</span>
       </div>
       <h1 className=" text-xl md:text-2xl font-bold capitalize">
+        {product?.prefix ? product.prefix + ' ' : ''}
         <span
           dangerouslySetInnerHTML={{
             __html: product?.productName ?? ''
           }}
-        ></span>
+        />
+        {product?.suffix ? ' ' + product.suffix : ''}
       </h1>
 
       {/*<div className=" lg:flex md:flex-row flex-col items-center gap-5">*/}
@@ -181,7 +183,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary-500 text-primary-500 w-full lg:w-auto"
           href={`/more-info?item_id=${product.id}`}
         >
-          More Info
+          Request More Info
           <MdInfo className=" ml-3 h-6 w-6" />
         </Link>
       </div>
