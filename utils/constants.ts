@@ -6,7 +6,6 @@ export const metaConstants = {
     'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!'
 };
 
-
 export const breakpoints = {
   320: {
     slidesPerView: 2,
