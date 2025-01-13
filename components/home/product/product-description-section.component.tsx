@@ -38,12 +38,14 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
 
   const handleColorSelect = (color: productColors | null) => {
     if (color?.coloredProductImage) {
+      let updatedImages = [...images];
+      updatedImages = updatedImages.filter(img => img.imageUrl !== color.coloredProductImage);
+
       let newImg: ProductImage = {
         imageUrl: color.coloredProductImage,
         sequenceNumber: 0
       };
 
-      const updatedImages = [...images];
       setImages(updatedImages);
       if (selectedColor) updatedImages.shift();
 
