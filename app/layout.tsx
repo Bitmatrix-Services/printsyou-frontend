@@ -47,7 +47,35 @@ export default async function RootLayout({children}: PropsWithChildren) {
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
-            {/*<Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />*/}
+            <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script
+              id="gtag-integration-initialization"
+              strategy="beforeInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                   window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', 'AW-16709127988');
+                `
+              }}
+            />
+            <Script
+                id="gtag-integration"
+                strategy="lazyOnload"
+                dangerouslySetInnerHTML={{
+                    __html: `
+                  function gtag_report_conversion(url) {
+                    gtag('event', 'conversion', {
+                      send_to: 'AW-16709127988/pXIgCID20IQaELSexJ8-',
+                      transaction_id: '',
+                      event_callback: () => {}
+                    });
+                    return false;
+                  }
+                `
+                }}
+            />
             {/*<Script*/}
             {/*  id="google-tag-manager"*/}
             {/*  strategy="beforeInteractive"*/}
