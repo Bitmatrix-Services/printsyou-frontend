@@ -153,6 +153,28 @@ export default async function HomePage() {
           })
         }}
       />
+      <Script
+        id="chatwoot-integration"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function(d,t) {
+              var BASE_URL="https://chatwoot.printsyou.com/";
+              var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+              g.src=BASE_URL+"/packs/js/sdk.js";
+              g.defer = true;
+              g.async = true;
+              s.parentNode.insertBefore(g,s);
+              g.onload=function(){
+                window.chatwootSDK.run({
+                  websiteToken: 'LQKAw5skqedd5h5WWeUAFvQR',
+                  baseUrl: BASE_URL
+                })
+              }
+            })(document,"script");
+          `
+        }}
+      />
       <HomeComponent
         bannersList={bannersList.payload}
         categories={categoriesData.payload}
