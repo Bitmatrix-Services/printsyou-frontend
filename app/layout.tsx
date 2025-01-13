@@ -15,7 +15,7 @@ import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {CSPostHogProvider} from './provider';
 import NextTopLoader from 'nextjs-toploader';
-import Script from "next/script";
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -70,10 +70,10 @@ export default async function RootLayout({children}: PropsWithChildren) {
             {/*  }}*/}
             {/*/>*/}
             <Script
-                id="chatwoot-integration"
-                strategy="lazyOnload"
-                dangerouslySetInnerHTML={{
-                    __html: `
+              id="chatwoot-integration"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `
                   (function(d,t) {
                     var BASE_URL="https://chatwoot.printsyou.com/";
                     var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
@@ -89,7 +89,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
                     };
                   })(document,"script");
                 `
-                }}
+              }}
             />
             <body className="overflow-x-hidden">
               <NextTopLoader color="#DB0481" showSpinner={false} />
