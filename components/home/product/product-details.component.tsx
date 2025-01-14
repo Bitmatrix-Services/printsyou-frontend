@@ -22,8 +22,21 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
   useEffect(() => {
     if (product?.productImages?.length > 0) {
       setImages(product.productImages);
+    } else if (product.productColors?.length > 0) {
+      const imagesFromColors = Array.from(
+        new Map(
+          product.productColors.map((color, index) => [
+            color.coloredProductImage,
+            {
+              imageUrl: color.coloredProductImage ?? '',
+              sequenceNumber: index + 1
+            }
+          ])
+        ).values()
+      );
+      setImages(imagesFromColors);
     }
-  }, []);
+  }, [product.productImages, product.productColors]);
 
   const scrollToElement = () => {
     if (productDescriptionRef.current) {
