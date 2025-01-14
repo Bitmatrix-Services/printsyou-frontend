@@ -151,7 +151,8 @@ export const getColorsWithHex = (color: productColors) => {
     if (colorFromName?.colorHex && isValidHex(colorFromName.colorHex)) {
       return {
         ...colorFromName,
-        colorHex: colorFromName.colorHex
+        colorHex: colorFromName.colorHex,
+        coloredProductImage: color?.coloredProductImage
       };
     } else {
       return null;

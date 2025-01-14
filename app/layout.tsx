@@ -61,10 +61,10 @@ export default async function RootLayout({children}: PropsWithChildren) {
               }}
             />
             <Script
-                id="gtag-integration"
-                strategy="lazyOnload"
-                dangerouslySetInnerHTML={{
-                    __html: `
+              id="gtag-integration"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `
                   function gtag_report_conversion(url) {
                     gtag('event', 'conversion', {
                       send_to: 'AW-16709127988/pXIgCID20IQaELSexJ8-',
@@ -74,7 +74,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
                     return false;
                   }
                 `
-                }}
+              }}
             />
             {/*<Script*/}
             {/*  id="google-tag-manager"*/}
