@@ -18,7 +18,6 @@ interface PaginationHeaderProps {
   totalPages: number;
   sort: string;
   setSort: (_: string) => void;
-  paginationId: string;
 }
 
 const PaginationHeader: FC<PaginationHeaderProps> = ({
@@ -28,15 +27,14 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   setPageSize,
   totalPages,
   sort,
-  setSort,
-  paginationId
+  setSort
 }) => {
   const pagesToShow = Array.from({length: totalPages}, (_, index) => index + 1).filter(
     page => pageNumber >= page - 2 && pageNumber <= page + 2
   );
 
   return (
-    <div id={paginationId} className="products-page my-6">
+    <div className="products-page my-6">
       <div className="list-product">
         <div className="pagination-top paginations">
           <div className="sort-show leftpagnation flex items-center flex-col md:flex-row justify-center">

@@ -118,7 +118,6 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           <div className="hidden lg:block">
             {products.length > 0 && !isPageLoading && (
               <PaginationHeader
-                paginationId={'pagination-header-1'}
                 pageNumber={(page && parseInt(page)) || 1}
                 setPageNumber={(value: number) => handleQueryUpdate(value, 'page')}
                 pageSize={(size && parseInt(size)) || 20}
@@ -136,14 +135,13 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
                 <CircularLoader />
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+              <div id="product-card-container" className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
                 {products?.map(product => <SearchProductCard key={product.id} product={product} />)}
               </div>
             )}
           </div>
           {products.length > 0 && !isPageLoading && (
             <PaginationHeader
-              paginationId={'pagination-header-2'}
               pageNumber={(page && parseInt(page)) || 1}
               setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
               pageSize={(size && parseInt(size)) || 20}

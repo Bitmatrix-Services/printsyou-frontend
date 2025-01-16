@@ -122,10 +122,11 @@ export const containsHTML = (input: string): boolean => {
 };
 
 export const scrollIntoProductsView = () => {
-  const paginationElem = document.getElementById('pagination-header-1');
+  const paginationElem = document.getElementById('product-card-container');
+
   if (paginationElem) {
     setTimeout(() => {
-      const yOffset = -150;
+      const yOffset = -180;
       const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({top: yPosition, behavior: 'smooth'});
     }, 100);
