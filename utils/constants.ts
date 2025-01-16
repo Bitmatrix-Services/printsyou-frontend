@@ -1,6 +1,5 @@
 import {Sortable} from '@utils/util-types';
 
-
 export const metaConstants = {
   SITE_NAME: 'PrintsYou - Custom Printed Products',
   DESCRIPTION:

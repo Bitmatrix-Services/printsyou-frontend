@@ -6,5 +6,5 @@ interface ICircularLoaderProps {
 }
 
 export const CircularLoader: FC<ICircularLoaderProps> = () => {
-  return <CircularProgress />;
+  return <CircularProgress color="primary" />;
 };

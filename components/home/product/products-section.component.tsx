@@ -1,15 +1,13 @@
 import React, {FC, useEffect, useState} from 'react';
-import {notFound, usePathname, useRouter, useSearchParams} from 'next/navigation';
+import {notFound, usePathname, useSearchParams} from 'next/navigation';
 import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {IQueryParams} from '@components/search/search-results-section';
-import {allowableSearchParams} from '@utils/constants';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
-import {scrollIntoProductsView} from '@utils/utils';
 
 interface ProductsSectionProps {
   category: Category;
@@ -18,7 +16,6 @@ interface ProductsSectionProps {
 export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const router = useRouter();
   const minPrice = searchParams.get('minPrice');
   const maxPrice = searchParams.get('maxPrice');
   const [productsByCategory, setProductsByCategory] = useState<EnclosureProduct[]>([]);
@@ -37,10 +34,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
       getProductByCategory();
     }
   }, [category.id, size, filter, page]);
-
-  useEffect(() => {
-    scrollIntoProductsView();
-  }, [size, filter, page]);
 
   const getProductByCategory = async () => {
     try {
@@ -67,24 +60,12 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   };
 
   const handleQueryUpdate = (value: string | number, queryName: string) => {
-    const currentQuery = getUpdatedQueryParams();
-    let updatedQuery = {...currentQuery, [queryName]: value};
+    const params = new URLSearchParams(searchParams);
+    params.set(queryName, value.toString());
     if (queryName === 'size' || queryName === 'filter') {
-      updatedQuery.page = '1';
+      params.set('page', '1');
     }
-    router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
-  };
-
-  const getUpdatedQueryParams = (): Record<string, any> => {
-    let updatedQuery: Record<string, any> = {};
-
-    searchParams.forEach((value, key) => {
-      if (~allowableSearchParams.indexOf(key)) {
-        updatedQuery[key] = value;
-      }
-    });
-
-    return updatedQuery;
+    window.history.pushState(null, '', `${pathname}?${params.toString()}`);
   };
 
   useEffect(() => {
