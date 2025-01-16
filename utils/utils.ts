@@ -122,13 +122,13 @@ export const containsHTML = (input: string): boolean => {
 };
 
 export const scrollIntoProductsView = () => {
-  const paginationElem = document.getElementById('products-page');
+  const paginationElem = document.getElementById('pagination-header-1');
   if (paginationElem) {
     setTimeout(() => {
       const yOffset = -150;
       const yPosition = paginationElem.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({top: yPosition, behavior: 'smooth'});
-    }, 1200);
+    }, 100);
   }
 };
 

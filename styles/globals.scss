@@ -113,7 +113,7 @@ body {
   margin-top: 15px !important;
 }
 
-#products-page .list-product .sort-show {
+.products-page .list-product .sort-show {
   border: 1px solid #edeff2;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -123,11 +123,11 @@ body {
   align-items: center;
 }
 
-#products-page .list-product .sort-show .sort-style {
+.products-page .list-product .sort-show .sort-style {
   display: none;
 }
 
-#products-page .list-product .sort-show .select-sort {
+.products-page .list-product .sort-show .select-sort {
   padding: 10px;
   font-size: 14px;
   -webkit-box-flex: 1;
@@ -135,7 +135,7 @@ body {
   flex: 1 0;
 }
 
-#products-page .list-product .sort-show .select-sort .item {
+.products-page .list-product .sort-show .select-sort .item {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -147,7 +147,7 @@ body {
 }
 
 @media (max-width: 1919px) and (min-width: 1212px) {
-  #products-page .list-product .sort-show .select-sort .item.show:after {
+  .products-page .list-product .sort-show .select-sort .item.show:after {
     content: '';
     position: absolute;
     top: -10px;
@@ -158,12 +158,12 @@ body {
   }
 }
 
-#products-page .list-product .sort-show .select-sort .name {
+.products-page .list-product .sort-show .select-sort .name {
   margin-right: 10px;
   font-weight: 400;
 }
 
-#products-page .list-product .sort-show .select-sort .select {
+.products-page .list-product .sort-show .select-sort .select {
   border: 1px solid #eceef1;
   -webkit-box-flex: 1;
   -ms-flex: 1 0;
@@ -172,7 +172,7 @@ body {
   position: relative;
 }
 
-#products-page .list-product .sort-show .select-sort .select:after {
+.products-page .list-product .sort-show .select-sort .select:after {
   position: absolute;
   content: '';
   width: 6px;
@@ -184,7 +184,7 @@ body {
   pointer-events: none;
 }
 
-#products-page .list-product .sort-show .select-sort .select select {
+.products-page .list-product .sort-show .select-sort .select select {
   border: none;
   background: transparent;
   font-size: 14px;
@@ -197,7 +197,7 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-#products-page .list-product .sort-show .select-sort .per {
+.products-page .list-product .sort-show .select-sort .per {
   margin-left: 10px;
   font-weight: 400;
 }
@@ -248,8 +248,8 @@ body {
   display: none;
 }
 
-#products-page .list-product .sort-show.bottom .select-sort .item.sort-by,
-#products-page .list-product .sort-show.bottom .select-sort .item.show .per {
+.products-page .list-product .sort-show.bottom .select-sort .item.sort-by,
+.products-page .list-product .sort-show.bottom .select-sort .item.show .per {
   display: none;
 }
 

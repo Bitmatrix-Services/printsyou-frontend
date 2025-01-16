@@ -8,6 +8,7 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {IQueryParams} from '@components/search/search-results-section';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
+import {scrollIntoProductsView} from '@utils/utils';
 
 interface ProductsSectionProps {
   category: Category;
@@ -60,6 +61,8 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   };
 
   const handleQueryUpdate = (value: string | number, queryName: string) => {
+    scrollIntoProductsView();
+
     const params = new URLSearchParams(searchParams);
     params.set(queryName, value.toString());
     if (queryName === 'size' || queryName === 'filter') {
@@ -115,6 +118,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
       ) : null}
       {productsByCategory?.length > 0 && !isPageLoading && (
         <PaginationHeader
+          paginationId={'pagination-header-1'}
           pageNumber={(page && parseInt(page)) || 1}
           setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
           pageSize={(size && parseInt(size)) || 20}
@@ -136,6 +140,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
       )}
       {productsByCategory?.length > 0 && !isPageLoading && (
         <PaginationHeader
+          paginationId={'pagination-header-2'}
           pageNumber={(page && parseInt(page)) || 1}
           setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
           pageSize={(size && parseInt(size)) || 20}

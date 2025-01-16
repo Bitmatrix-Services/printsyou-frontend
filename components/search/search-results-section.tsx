@@ -1,14 +1,14 @@
 'use client';
 import React, {FC} from 'react';
-import {usePathname, useRouter, useSearchParams} from 'next/navigation';
+import {usePathname, useSearchParams} from 'next/navigation';
 import PaginationHeader from '@components/globals/pagination-header';
 import {SearchProductCard} from '@components/search/search-product-card';
 import {EnclosureProduct} from '@components/home/product/product.types';
-import {allowableSearchParams} from '@utils/constants';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {LuListFilter} from 'react-icons/lu';
 import {setFilterSidebarOpen} from '../../store/slices/cart/cart.slice';
 import {useDispatch} from 'react-redux';
+import {scrollIntoProductsView} from '@utils/utils';
 
 interface CategoryDetailsSectionProps {
   products: EnclosureProduct[];
@@ -37,7 +37,6 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   totalProducts,
   isPageLoading
 }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -49,24 +48,14 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   );
 
   const handleQueryUpdate = (value: string | number, queryName: string) => {
-    const currentQuery = getUpdatedQueryParams();
-    let updatedQuery = {...currentQuery, [queryName]: value};
+    scrollIntoProductsView();
+
+    const params = new URLSearchParams(searchParams);
+    params.set(queryName, value.toString());
     if (queryName === 'size' || queryName === 'filter') {
-      updatedQuery.page = '1';
+      params.set('page', '1');
     }
-    router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
-  };
-
-  const getUpdatedQueryParams = (): Record<string, any> => {
-    let updatedQuery: Record<string, any> = {};
-
-    searchParams.forEach((value, key) => {
-      if (~allowableSearchParams.indexOf(key)) {
-        updatedQuery[key] = value;
-      }
-    });
-
-    return updatedQuery;
+    window.history.pushState(null, '', `${pathname}?${params.toString()}`);
   };
 
   return (
@@ -129,6 +118,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           <div className="hidden lg:block">
             {products.length > 0 && !isPageLoading && (
               <PaginationHeader
+                paginationId={'pagination-header-1'}
                 pageNumber={(page && parseInt(page)) || 1}
                 setPageNumber={(value: number) => handleQueryUpdate(value, 'page')}
                 pageSize={(size && parseInt(size)) || 20}
@@ -153,6 +143,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           </div>
           {products.length > 0 && !isPageLoading && (
             <PaginationHeader
+              paginationId={'pagination-header-2'}
               pageNumber={(page && parseInt(page)) || 1}
               setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
               pageSize={(size && parseInt(size)) || 20}
