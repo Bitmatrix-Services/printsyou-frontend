@@ -132,7 +132,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
           <div id="product-card-container" className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
             {isLoading
               ? Array.from({length: 12}, (_, index) => (
-                  <div key={index} className="relative">
+                  <div key={index} className="relative mt-10">
                     <Skeleton
                       sx={{borderRadius: '1rem'}}
                       animation="pulse"
