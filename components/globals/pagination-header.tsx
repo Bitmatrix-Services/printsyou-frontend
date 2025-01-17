@@ -71,15 +71,17 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
               </div>
             </div>
             <div className="paging flex gap-2">
-              <button
-                type="button"
-                className={`item prev ${pageNumber === 1 ? ' disabled-pointer' : ''}`}
-                onClick={() => {
-                  if (pageNumber > 1) setPageNumber(pageNumber - 1);
-                }}
-              >
-                <IoIosArrowBack className="h-4 w-4" />
-              </button>
+              {pageNumber !== 1 ? (
+                <button
+                  type="button"
+                  className={`item prev ${pageNumber === 1 ? ' disabled-pointer' : ''}`}
+                  onClick={() => {
+                    if (pageNumber > 1) setPageNumber(pageNumber - 1);
+                  }}
+                >
+                  <IoIosArrowBack className="h-4 w-4" />
+                </button>
+              ) : null}
               <div className="numbers flex gap-2">
                 {pagesToShow?.map(page => (
                   <button
@@ -94,15 +96,17 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
                   </button>
                 ))}
               </div>
-              <button
-                type="button"
-                className={`item next ${pageNumber === totalPages ? ' disabled-pointer' : ''}`}
-                onClick={() => {
-                  if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
-                }}
-              >
-                <IoIosArrowForward className="h-4 w-4" />
-              </button>
+              {pageNumber !== totalPages ? (
+                <button
+                  type="button"
+                  className={`item next ${pageNumber === totalPages ? ' disabled-pointer' : ''}`}
+                  onClick={() => {
+                    if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
+                  }}
+                >
+                  <IoIosArrowForward className="h-4 w-4" />
+                </button>
+              ) : null}
             </div>
           </div>
         </div>
