@@ -336,3 +336,9 @@ body {
   overflow: auto;
   margin-top: 1rem;
 }
+
+.disabled-pointer {
+  background-color: gray !important;
+  color: black !important;
+  cursor: not-allowed !important;
+}

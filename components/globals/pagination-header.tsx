@@ -73,7 +73,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
             <div className="paging flex gap-2">
               <button
                 type="button"
-                className="item prev"
+                className={`item prev ${pageNumber === 1 ? ' disabled-pointer' : ''}`}
                 onClick={() => {
                   if (pageNumber > 1) setPageNumber(pageNumber - 1);
                 }}
@@ -96,7 +96,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
               </div>
               <button
                 type="button"
-                className="item next"
+                className={`item next ${pageNumber === totalPages ? ' disabled-pointer' : ''}`}
                 onClick={() => {
                   if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
                 }}
