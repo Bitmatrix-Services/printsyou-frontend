@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useMemo, useState} from 'react';
 import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {EnclosureProduct} from '@components/home/product/product.types';
@@ -11,6 +11,13 @@ interface IProductCard {
 
 export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
+
+  const prices = useMemo(() => {
+    const sortedPriceGrid = product.priceGrids?.filter(item => item.price > 0).sort((a, b) => a.price - b.price);
+    const salePrice = sortedPriceGrid[0]?.salePrice?.toFixed(2);
+    const price = sortedPriceGrid[0]?.price?.toFixed(2);
+    return {salePrice, price};
+  }, [product.priceGrids]);
 
   return (
     <div className="group relative bg-white">
@@ -91,19 +98,13 @@ export const ProductCard: FC<IProductCard> = ({product, imagePriority}) => {
           <div className="mt-3 flex gap-2 justify-between items-center">
             <h3 className="text-[0.7rem] font-normal text-gray-600 ">As Low As</h3>
             <div className="flex justify-between items-center gap-2">
-              {(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice > 0 ? (
+              {prices?.salePrice && parseInt(prices?.salePrice) > 0 ? (
                 <>
-                  <span className="line-through text-lg font-semibold">
-                    ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.price?.toFixed(2)}
-                  </span>
-                  <span className="text-2xl font-semibold text-primary-500">
-                    ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.salePrice?.toFixed(2)}
-                  </span>
+                  <span className="line-through text-lg font-semibold">${prices.price}</span>
+                  <span className="text-2xl font-semibold text-primary-500">${prices.salePrice}</span>
                 </>
               ) : (
-                <span className="text-2xl font-semibold text-primary-500">
-                  ${(product.priceGrids ?? []).sort((a, b) => a.price - b.price)[0]?.price?.toFixed(2)}
-                </span>
+                <span className="text-2xl font-semibold text-primary-500">${prices.price}</span>
               )}
             </div>
           </div>
