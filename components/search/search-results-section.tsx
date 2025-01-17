@@ -2,13 +2,13 @@
 import React, {FC} from 'react';
 import {usePathname, useSearchParams} from 'next/navigation';
 import PaginationHeader from '@components/globals/pagination-header';
-import {SearchProductCard} from '@components/search/search-product-card';
 import {EnclosureProduct} from '@components/home/product/product.types';
-import {CircularLoader} from '@components/globals/circular-loader.component';
 import {LuListFilter} from 'react-icons/lu';
 import {setFilterSidebarOpen} from '../../store/slices/cart/cart.slice';
 import {useDispatch} from 'react-redux';
 import {scrollIntoProductsView} from '@utils/utils';
+import {Skeleton} from '@mui/joy';
+import {SearchProductCard} from '@components/search/search-product-card';
 
 interface CategoryDetailsSectionProps {
   products: EnclosureProduct[];
@@ -129,17 +129,23 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
             )}
           </div>
 
-          <div>
-            {isLoading ? (
-              <div className="flex justify-center align-middle items-center h-[20rem]">
-                <CircularLoader />
-              </div>
-            ) : (
-              <div id="product-card-container" className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-                {products?.map(product => <SearchProductCard key={product.id} product={product} />)}
-              </div>
-            )}
+          <div id="product-card-container" className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+            {isLoading
+              ? Array.from({length: 12}, (_, index) => (
+                  <div className="relative">
+                    <Skeleton
+                      key={index}
+                      sx={{borderRadius: '1rem'}}
+                      animation="pulse"
+                      variant={'rectangular'}
+                      height={'200px'}
+                      width={'100%'}
+                    />
+                  </div>
+                ))
+              : products?.map(product => <SearchProductCard key={product.id} product={product} />)}
           </div>
+
           {products.length > 0 && !isPageLoading && (
             <PaginationHeader
               pageNumber={(page && parseInt(page)) || 1}
