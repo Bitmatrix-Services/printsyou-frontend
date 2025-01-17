@@ -22,6 +22,16 @@ const nextConfig = {
   },
   redirects: async () => [
     {
+      destination: '/categories/desk-amp-office/desk-accessories',
+      source: '/categories/office/desk-accessories',
+      permanent: true
+    },
+        {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/construction',
+      permanent: true
+    },
+    {
       destination: '/categories/ceramic-mugs/mugs-8-oz-11-oz-',
       source: '/ceramic-mugs/mugs-8-oz-11-oz/11-oz-full-color-mug',
       permanent: true
