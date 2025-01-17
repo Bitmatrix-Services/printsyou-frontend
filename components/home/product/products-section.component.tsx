@@ -134,9 +134,8 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
       >
         {isLoading
           ? Array.from({length: 12}, (_, index) => (
-              <div className="relative">
+              <div key={index} className="relative">
                 <Skeleton
-                  key={index}
                   sx={{borderRadius: '1rem'}}
                   animation="pulse"
                   variant={'rectangular'}
