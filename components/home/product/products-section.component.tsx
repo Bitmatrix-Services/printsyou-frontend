@@ -4,11 +4,11 @@ import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductRoutes} from '@utils/routes/be-routes';
-import {CircularLoader} from '@components/globals/circular-loader.component';
 import {IQueryParams} from '@components/search/search-results-section';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
 import {scrollIntoProductsView} from '@utils/utils';
+import {Skeleton} from '@mui/joy';
 
 interface ProductsSectionProps {
   category: Category;
@@ -128,18 +128,26 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
         />
       )}
 
-      {isLoading ? (
-        <div className="flex justify-center align-middle items-center h-[20rem]">
-          <CircularLoader />
-        </div>
-      ) : (
-        <div
-          id="product-card-container"
-          className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-4 md:gap-6 lg:gap-6"
-        >
-          {productsByCategory?.map(product => <ProductCard key={product.id} product={product} />)}
-        </div>
-      )}
+      <div
+        id="product-card-container"
+        className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-4 md:gap-6 lg:gap-6"
+      >
+        {isLoading
+          ? Array.from({length: 12}, (_, index) => (
+              <div className="relative">
+                <Skeleton
+                  key={index}
+                  sx={{borderRadius: '1rem'}}
+                  animation="pulse"
+                  variant={'rectangular'}
+                  height={'200px'}
+                  width={'100%'}
+                />
+              </div>
+            ))
+          : productsByCategory?.map(product => <ProductCard key={product.id} product={product} />)}
+      </div>
+
       {productsByCategory?.length > 0 && !isPageLoading && (
         <PaginationHeader
           pageNumber={(page && parseInt(page)) || 1}
