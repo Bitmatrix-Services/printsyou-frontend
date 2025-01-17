@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/more-info', 'https://api.printsyou.com']
+      disallow: ['/more-info', '/order-now', 'https://api.printsyou.com', 'https://chatwoot.printsyou.com/']
     },
     sitemap: 'https://printsyou.com/api/sitemap.xml'
   };
