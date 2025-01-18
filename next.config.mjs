@@ -26,7 +26,7 @@ const nextConfig = {
       source: '/categories/office/desk-accessories',
       permanent: true
     },
-        {
+    {
       destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
       source: '/categories/stress-relievers/construction',
       permanent: true
@@ -54,21 +54,23 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/bags-duffels-amp-accessories/tote-bags-non-woven/non-woven-economy-tote-bag',
+      destination: '/products/bags-duffels-amp-accessories/tote-bags-non-woven/non-woven-economy-tote-bag',
       source: '/bags-duffels-amp-accessories/tote-bags-non-woven/non-woven-economy-tote-bag',
       permanent: true
     },
     {
       destination: '/products/drinkware/bottles-shaker/26-oz-brumate-multishaker',
-      source: '/products/drinkware/tumblers-stainless-steel/26-oz.-br\u00fcmate-multishaker',
+      source: '/products/drinkware/tumblers-stainless-steel/26-oz-brumate-multishaker',
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-br\u00fcmate-hopsulator-trio',
+      destination: '/products/drinkware/bottles-shaker/26-oz-brumate-multishaker',
+      source: '/products/drinkware/tumblers-stainless-steel/26-oz-brumate-multishaker',
+      permanent: true
+    },
+    {
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
@@ -123,7 +125,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-excellent-elephant',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-excellent-elephant',
+      source: '/products/plush-amp-novelties/plush-8-/8-excellent-elephant',
       permanent: true
     },
     {
@@ -133,12 +135,12 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-salty-shark',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-salty-shark',
+      source: '/products/plush-amp-novelties/plush-8-/8-salty-shark',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-dog',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-big-paw-dog',
+      source: '/products/plush-amp-novelties/plush-8-/8-big-paw-dog',
       permanent: true
     },
     {
@@ -148,7 +150,7 @@ const nextConfig = {
     },
     {
       destination: '/categories/desk-amp-office/realtree',
-      source: '/categories/ceramic-mugs/realtree\u00ae',
+      source: '/categories/ceramic-mugs/realtree',
       permanent: true
     },
     {
@@ -158,7 +160,7 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/brumate/12-oz-brumate-hopsulator-slim',
-      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12-oz.-br\u00fcmate-hopsulator-slim',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12-oz-brumate-hopsulator-slim',
       permanent: true
     },
     {
@@ -168,7 +170,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-koko-koala',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-koko-koala',
+      source: '/products/plush-amp-novelties/plush-8-/8-koko-koala',
       permanent: true
     },
     {
@@ -178,7 +180,7 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/barware-stainless-steel/25-oz-brumate-winesulator',
-      source: '/products/drinkware/bottles-stainless-steel-amp-aluminum/25-oz.-brümate-winesulator™',
+      source: '/products/drinkware/bottles-stainless-steel-amp-aluminum/25-oz-brumate-winesulator',
       permanent: true
     },
     {
@@ -188,12 +190,12 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/pins/1-half-full-color-pin-back-button',
-      source: '/products/plush-amp-novelties/pins/1-½"-full-color-pin-back-button',
+      source: '/products/plush-amp-novelties/pins/1-full-color-pin-back-button',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-mystic-unicorn',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-mystic-unicorn',
+      source: '/products/plush-amp-novelties/plush-8-/8-mystic-unicorn',
       permanent: true
     },
     {
@@ -203,7 +205,7 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/tumblers-stainless-steel/22-oz-brumate-toddy',
-      source: '/products/drinkware/mugs-stainless-steel-amp-copper/22-oz.-brümate-toddy',
+      source: '/products/drinkware/mugs-stainless-steel-amp-copper/22-oz-brumate-toddy',
       permanent: true
     },
     {
@@ -213,12 +215,12 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-liberty-eagle',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-liberty-eagle',
+      source: '/products/plush-amp-novelties/plush-8-/8-liberty-eagle',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-panda',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-big-paw-panda',
+      source: '/products/plush-amp-novelties/plush-8-/8-big-paw-panda',
       permanent: true
     },
     {
@@ -228,12 +230,12 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/tumblers-stainless-steel/32-oz-brumate-toddy-xl',
-      source: '/products/drinkware/mugs-stainless-steel-amp-copper/32-oz.-brümate-toddy-xl',
+      source: '/products/drinkware/mugs-stainless-steel-amp-copper/32-oz-brumate-toddy-xl',
       permanent: true
     },
     {
       destination: '/products/drinkware/tumblers-stainless-steel/14-oz-brumate-uncorkd-xl',
-      source: '/products/drinkware/tumblers-stemless-wine/14-oz.-brümate-uncork’d-xl',
+      source: '/products/drinkware/tumblers-stemless-wine/14-oz-brumate-uncorkd-xl',
       permanent: true
     },
     {
@@ -247,10 +249,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
-      source:
-        '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-&-scoop-kitchen-tool',
+      destination: '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
+      source: '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-&-scoop-kitchen-tool',
       permanent: true
     },
     {
@@ -260,12 +260,12 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-liberty-eagle',
-      source: '/plush-amp-novelties/plush-8-8-liberty-eagle',
+      source: '/products/plush-amp-novelties/plush-8-/8-liberty-eagle',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-ole-time-rag-bear',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-ole\'-time-rag-bear',
+      source: '/products/plush-amp-novelties/plush-8-/8-ole-time-rag-bear',
       permanent: true
     },
     {
@@ -310,9 +310,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source: '/products/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/drinkware/brumate/12/16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
@@ -327,22 +326,22 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/tumblers-stainless-steel/14-oz-brumate-uncorkd-xl',
-      source: '/products/drinkware/tumblers-stemless-wine/14-oz-brümate-uncorkd-xl',
+      source: '/products/drinkware/tumblers-stemless-wine/14-oz-brumate-uncorkd-xl',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-bear',
-      source: '/products/plush-amp-novelties/plush-8-½/8-½-big-paw-bear',
+      source: '/products/plush-amp-novelties/plush-8-/8-big-paw-bear',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-panda',
-      source: '/products/plush-amp-novelties/plush-8-½/8-½-big-paw-panda',
+      source: '/products/plush-amp-novelties/plush-8-/8-big-paw-panda',
       permanent: true
     },
     {
       destination: '/products/drinkware/brumate/12-oz-brumate-hopsulator-slim',
-      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12-oz-brümate-hopsulator-slim',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12-oz-brumate-hopsulator-slim',
       permanent: true
     },
     {
@@ -352,19 +351,17 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-ole-time-rag-bear',
-      source: '/products/plush-amp-novelties/plush-8-½/8-½-ole-time-rag-bear',
+      source: '/products/plush-amp-novelties/plush-8-/8-ole-time-rag-bear',
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source:
-        '/products/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/drinkware/brumate/12/16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-liberty-eagle',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-liberty-eagle',
+      source: '/products/plush-amp-novelties/plush-8-/8-liberty-eagle',
       permanent: true
     },
     {
@@ -374,23 +371,22 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/barware-stainless-steel/25-oz-brumate-winesulator',
-      source: '/products/drinkware/bottles-stainless-steel-amp-aluminum/25-oz-brümate-winesulator',
+      source: '/products/drinkware/bottles-stainless-steel-amp-aluminum/25-oz-brumate-winesulator',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-salty-shark',
-      source: '/products/plush-amp-novelties/plush-8-½/8-½-salty-shark',
+      source: '/products/plush-amp-novelties/plush-8-/8-salty-shark',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-dog',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-big-paw-dog',
+      source: '/products/plush-amp-novelties/plush-8-/8-big-paw-dog',
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders-12by16-oz-brumate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
@@ -400,7 +396,7 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/tumblers-stainless-steel/32-oz-brumate-toddy-xl',
-      source: '/products/drinkware/mugs-stainless-steel-amp-copper/32-oz-brümate-toddy-xl',
+      source: '/products/drinkware/mugs-stainless-steel-amp-copper/32-oz-brumate-toddy-xl',
       permanent: true
     },
     {
@@ -415,24 +411,22 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/tumblers-stainless-steel/22-oz-brumate-toddy',
-      source: '/products/drinkware/mugs-stainless-steel-amp-copper/22-oz-brümate-toddy',
+      source: '/products/drinkware/mugs-stainless-steel-amp-copper/22-oz-brumate-toddy',
       permanent: true
     },
     {
-      destination:
-        '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
-      source:
-        '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-amp-scoop-kitchen-tool',
+      destination: '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
+      source: '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-amp-scoop-kitchen-tool',
       permanent: true
     },
     {
       destination: '/products/drinkware/bottles-shaker/26-oz-brumate-multishaker',
-      source: '/products/drinkware/tumblers-stainless-steel/26-oz-brümate-multishaker',
+      source: '/products/drinkware/tumblers-stainless-steel/26-oz-brumate-multishaker',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/pins/1-half-full-color-pin-back-button',
-      source: '/products/plush-amp-novelties/pins/1-½"-full-color-pin-back-button',
+      source: '/products/plush-amp-novelties/pins/1-full-color-pin-back-button',
       permanent: true
     },
     {
@@ -446,20 +440,18 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/towels-sports-amp-fitness/15-x-18-microfiber-rally-towel',
+      destination: '/products/leisure-amp-outdoor/towels-sports-amp-fitness/15-x-18-microfiber-rally-towel',
       source: '/leisure-amp-outdoor/towels-sports-amp-fitness/15-x-18-microfiber-rally-towel',
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source: '/products/drinkware/brumate/12/16-oz.-br\u00fcmate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/drinkware/brumate/12/16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-excellent-elephant',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd/8-\u00bd-excellent-elephant',
+      source: '/products/plush-amp-novelties/plush-8-/8-excellent-elephant',
       permanent: true
     },
     {
@@ -468,8 +460,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/full-color-retail-boxes/custom-box-stock-designs/custom-full-color-box',
+      destination: '/products/full-color-retail-boxes/custom-box-stock-designs/custom-full-color-box',
       source: '/products/leisure-amp-outdoor/beach-balls-mats-amp-accessories/12"-beach-ball',
       permanent: true
     },
@@ -1520,7 +1511,7 @@ const nextConfig = {
     },
     {
       destination: '/drinkware/brumate/12by16-oz-brumate-hopsulator-trio',
-      source: '/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      source: '/drinkware/brumate/12/16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
