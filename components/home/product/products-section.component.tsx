@@ -9,6 +9,7 @@ import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
 import {scrollIntoProductsView} from '@utils/utils';
 import {Skeleton} from '@mui/joy';
+import Head from "next/head";
 
 interface ProductsSectionProps {
   category: Category;
@@ -109,6 +110,11 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
+      {page && (
+        <Head>
+          <meta name="robots" content="noindex,nofollow,noodp,noydir" />
+        </Head>
+      )}
       {category.categoryName ? (
         <h2 className="text-xl mb-0 font-bold capitalize">
           {category.prefix && <span>{category.prefix}</span>}
