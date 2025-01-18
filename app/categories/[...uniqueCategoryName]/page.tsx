@@ -117,8 +117,8 @@ export async function generateMetadata(queryParams: {
       other: descriptors
     },
     robots: {
-      index: !pageNumberQuery,
-      follow: !pageNumberQuery
+      index: currentPage == 1,
+      follow: currentPage == 1
     },
     alternates: {
       canonical: canonicalURL
