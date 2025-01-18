@@ -116,6 +116,10 @@ export async function generateMetadata(queryParams: {
     icons: {
       other: descriptors
     },
+    robots: {
+      index: !pageNumberQuery,
+      follow: !pageNumberQuery
+    },
     alternates: {
       canonical: canonicalURL
     },
