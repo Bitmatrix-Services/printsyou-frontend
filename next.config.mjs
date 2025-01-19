@@ -26,7 +26,7 @@ const nextConfig = {
       source: '/categories/office/desk-accessories',
       permanent: true
     },
-        {
+    {
       destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
       source: '/categories/stress-relievers/construction',
       permanent: true
@@ -54,8 +54,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/bags-duffels-amp-accessories/tote-bags-non-woven/non-woven-economy-tote-bag',
+      destination: '/products/bags-duffels-amp-accessories/tote-bags-non-woven/non-woven-economy-tote-bag',
       source: '/bags-duffels-amp-accessories/tote-bags-non-woven/non-woven-economy-tote-bag',
       permanent: true
     },
@@ -65,10 +64,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-br\u00fcmate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-br\u00fcmate-hopsulator-trio',
       permanent: true
     },
     {
@@ -247,10 +244,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
-      source:
-        '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-&-scoop-kitchen-tool',
+      destination: '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
+      source: '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-&-scoop-kitchen-tool',
       permanent: true
     },
     {
@@ -310,8 +305,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       source: '/products/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
       permanent: true
     },
@@ -356,10 +350,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source:
-        '/products/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
       permanent: true
     },
     {
@@ -388,8 +380,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders-12by16-oz-brumate-hopsulator-trio',
       permanent: true
     },
@@ -419,10 +410,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
-      source:
-        '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-amp-scoop-kitchen-tool',
+      destination: '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
+      source: '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-amp-scoop-kitchen-tool',
       permanent: true
     },
     {
@@ -446,14 +435,12 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/towels-sports-amp-fitness/15-x-18-microfiber-rally-towel',
+      destination: '/products/leisure-amp-outdoor/towels-sports-amp-fitness/15-x-18-microfiber-rally-towel',
       source: '/leisure-amp-outdoor/towels-sports-amp-fitness/15-x-18-microfiber-rally-towel',
       permanent: true
     },
     {
-      destination:
-        '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       source: '/products/drinkware/brumate/12/16-oz.-br\u00fcmate-hopsulator-trio',
       permanent: true
     },
@@ -468,8 +455,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination:
-        '/products/full-color-retail-boxes/custom-box-stock-designs/custom-full-color-box',
+      destination: '/products/full-color-retail-boxes/custom-box-stock-designs/custom-full-color-box',
       source: '/products/leisure-amp-outdoor/beach-balls-mats-amp-accessories/12"-beach-ball',
       permanent: true
     },

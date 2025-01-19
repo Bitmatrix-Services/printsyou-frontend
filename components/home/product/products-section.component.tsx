@@ -1,5 +1,5 @@
 import React, {FC, useEffect, useState} from 'react';
-import {notFound, usePathname, useSearchParams} from 'next/navigation';
+import {notFound, usePathname, useRouter, useSearchParams} from 'next/navigation';
 import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
@@ -7,15 +7,16 @@ import {ProductRoutes} from '@utils/routes/be-routes';
 import {IQueryParams} from '@components/search/search-results-section';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
-import {scrollIntoProductsView} from '@utils/utils';
 import {Skeleton} from '@mui/joy';
-import Head from "next/head";
+import Head from 'next/head';
+import {allowableSearchParams} from '@utils/constants';
 
 interface ProductsSectionProps {
   category: Category;
 }
 
 export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const minPrice = searchParams.get('minPrice');
@@ -62,14 +63,21 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   };
 
   const handleQueryUpdate = (value: string | number, queryName: string) => {
-    scrollIntoProductsView();
-
-    const params = new URLSearchParams(searchParams);
-    params.set(queryName, value.toString());
+    const currentQuery = getUpdatedQueryParams();
+    let updatedQuery = {...currentQuery, [queryName]: value};
     if (queryName === 'size' || queryName === 'filter') {
-      params.set('page', '1');
+      updatedQuery.page = '1';
     }
-    window.history.pushState(null, '', `${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
+  };
+  const getUpdatedQueryParams = (): Record<string, any> => {
+    let updatedQuery: Record<string, any> = {};
+    searchParams.forEach((value, key) => {
+      if (~allowableSearchParams.indexOf(key)) {
+        updatedQuery[key] = value;
+      }
+    });
+    return updatedQuery;
   };
 
   useEffect(() => {
