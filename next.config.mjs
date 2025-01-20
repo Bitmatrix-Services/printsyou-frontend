@@ -1819,7 +1819,17 @@ const nextConfig = {
     {
       source: '/ingest/decide',
       destination: 'https://us.i.posthog.com/decide'
-    }
+    },
+    {
+      destination: '/products/pet-toys/folding-flying-disc-with-pouch',
+      source: '/pet-toys/folding-flying-disc-with-pouch',
+      permanent: true
+    },
+    {
+      destination: '/products/pet-toys/gonia-wing-ring-flyer',
+      source: '/pet-toys/gonia-wing-ring-flyer',
+      permanent: true
+    },
   ]
 };
 
