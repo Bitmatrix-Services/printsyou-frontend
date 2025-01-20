@@ -46,7 +46,7 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
   if (siblingCat?.payload) siblingCategories = siblingCat.payload;
 
   return (
-    <section>
+    <section key={uniqueName}>
       <Script
         id="breadcrumb-category-page-ld-schema"
         type="application/ld+json"

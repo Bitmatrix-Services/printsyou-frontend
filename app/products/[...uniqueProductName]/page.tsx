@@ -72,7 +72,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
   );
 
   return (
-    <section>
+    <section key={uniqueName}>
       <Script
         id="product-page-ld-schema"
         type="application/ld+json"
