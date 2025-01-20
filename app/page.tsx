@@ -28,7 +28,7 @@ export default async function HomePage() {
               'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
             email: 'info@printsyou.com',
             url: 'https://printsYou.com',
-            telephone: '+1-877-934-1874',
+            telephone: '+1-888-299-2940',
             address: {
               '@type': 'PostalAddress',
               streetAddress: '8602 Royal Star Rd',
@@ -58,7 +58,7 @@ export default async function HomePage() {
             contactPoint: [
               {
                 '@type': 'ContactPoint',
-                telephone: '+1-877-934-1874',
+                telephone: '+1-888-299-2940',
                 contactType: 'customer service'
               },
               {
@@ -110,7 +110,7 @@ export default async function HomePage() {
               addressCountry: 'US'
             },
             priceRange: '$$$',
-            telephone: '+18779341874',
+            telephone: '+1-888-299-2940',
             openingHoursSpecification: [
               {
                 '@type': 'OpeningHoursSpecification',

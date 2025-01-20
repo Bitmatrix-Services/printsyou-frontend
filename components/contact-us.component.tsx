@@ -64,7 +64,7 @@ export const ContactUsComponent = () => {
               'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
             email: 'info@printsyou.com',
             url: 'https://printsYou.com',
-            telephone: '+1-877-934-1874',
+            telephone: '+1-888-299-2940',
             address: {
               '@type': 'PostalAddress',
               streetAddress: '8602 Royal Star Rd',
@@ -94,7 +94,7 @@ export const ContactUsComponent = () => {
             contactPoint: [
               {
                 '@type': 'ContactPoint',
-                telephone: '+1-877-934-1874',
+                telephone: '+1-888-299-2940',
                 contactType: 'customer service'
               },
               {
