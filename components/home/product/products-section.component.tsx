@@ -88,7 +88,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
           __html: JSON.stringify({
             '@context': 'http://schema.org',
             '@type': 'WebPage',
-            url: `${process.env.NEXT_PUBLIC_FE_URL}${category.uniqueCategoryName}`,
+            url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
             mainEntity: {
               '@context': 'http://schema.org',
               '@type': 'OfferCatalog',
