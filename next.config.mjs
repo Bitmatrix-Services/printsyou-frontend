@@ -1829,7 +1829,7 @@ const nextConfig = {
       destination: '/products/pet-toys/gonia-wing-ring-flyer',
       source: '/pet-toys/gonia-wing-ring-flyer',
       permanent: true
-    },
+    }
   ]
 };
 
