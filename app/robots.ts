@@ -18,7 +18,9 @@ export default function robots(): MetadataRoute.Robots {
         '/products/coolers/cooler-lunch-bags/café-cooler-bag',
         '/products/apparel/apparel-mens/hanes ecosmart 50/50-cotton/poly-t-shirt',
         '/products/headwear-amp-accessories/caps-cotton/district mesh-back-cap',
-        '/sitemap_products.xml'
+        '/sitemap_products.xml',
+        '/search-results?',
+        '/*?*&filter=*'
       ]
     },
     sitemap: 'https://printsyou.com/api/sitemap.xml'
