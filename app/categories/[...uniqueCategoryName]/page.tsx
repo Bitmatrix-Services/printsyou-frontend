@@ -9,7 +9,6 @@ import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 import {Metadata} from 'next';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
-import Script from 'next/script';
 
 const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) => {
   let uniqueName = queryParams.params.uniqueCategoryName.join('/');
@@ -47,7 +46,7 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
 
   return (
     <section key={uniqueName}>
-      <Script
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
