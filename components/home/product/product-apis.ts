@@ -1,5 +1,5 @@
 import {ApiResponse} from '@utils/api/axios-utils';
-import {Product} from '@components/home/product/product.types';
+import {EnclosureProduct, Product} from '@components/home/product/product.types';
 import axios from 'axios';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {PagedData} from '@utils/util-types';
@@ -12,6 +12,17 @@ export const getProductDetailsByUniqueName = async (uniqueName: string): Promise
     return response.data;
   } catch (error) {
     console.error('Error fetching product:', error);
+    return null;
+  }
+};
+export const fetchRelatedProductDetails = async (productId: string): Promise<ApiResponse<EnclosureProduct[]> | null> => {
+  try {
+    const response = await axios.get<ApiResponse<EnclosureProduct[]>>(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.FetchRelatedProducts}?productId=${productId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching related products:', error);
     return null;
   }
 };

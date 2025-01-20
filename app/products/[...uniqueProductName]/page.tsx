@@ -1,7 +1,7 @@
 import React from 'react';
-import {getProductDetailsByUniqueName} from '@components/home/product/product-apis';
+import {fetchRelatedProductDetails, getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
-import {PriceGrids, Product} from '@components/home/product/product.types';
+import {EnclosureProduct, PriceGrids, Product} from '@components/home/product/product.types';
 import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import Script from 'next/script';
@@ -42,8 +42,15 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
 
   const response = await getProductDetailsByUniqueName(uniqueName);
   let product: Product | null = null;
-
-  if (response?.payload) product = response.payload;
+  let relatedProducts: EnclosureProduct[] | null = null;
+  if (response?.payload) {
+    product = response.payload;
+    const relatedProductResponse = await fetchRelatedProductDetails(product.id);
+    if (relatedProductResponse?.payload) {
+      //@ts-ignore
+      relatedProducts = relatedProductResponse.payload.content;
+    }
+  }
 
   let minPrice: PriceGrids | null = null;
   let maxPrice: PriceGrids | null = null;
@@ -208,7 +215,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
           })
         }}
       />
-      <ProductDetails product={product} />
+      <ProductDetails product={product} relatedProducts={relatedProducts} />
     </section>
   );
 };

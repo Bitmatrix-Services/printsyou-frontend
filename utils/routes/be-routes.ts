@@ -12,6 +12,7 @@ export const HomePageRoutes = Object.freeze({
 export const ProductRoutes = Object.freeze({
   ProductById: `/product`,
   ProductByUniqueName: `/product?uProductName`,
+  FetchRelatedProducts: `/product/fetchRelatedProducts`,
   ProductByCategoryId: `/product/byCategory`,
   Ld: '/product/ld-products/{0}?page={1}'
 });
