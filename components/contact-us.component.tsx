@@ -14,7 +14,6 @@ import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
-import Script from 'next/script';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
@@ -54,8 +53,7 @@ export const ContactUsComponent = () => {
 
   return (
     <>
-      <Script
-        id="contact-us-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({

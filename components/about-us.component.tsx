@@ -4,13 +4,11 @@ import {HeadlineSection} from '@components/about-us/headline-section.component';
 import {IconBoxesSection} from '@components/about-us/icon-boxes.section.component';
 import {OffersSection} from '@components/about-us/offers-section.component';
 import React from 'react';
-import Script from 'next/script';
 
 export const AboutUsComponent = () => {
   return (
     <>
-      <Script
-        id="organization-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({

@@ -1,7 +1,6 @@
 import HomeComponent from '@components/home/home-component';
 import {getAllCategories, getBannersList, getFaqsList, getProductsByTag} from '@components/home/home-apis';
 import React from 'react';
-import Script from 'next/script';
 import {Faq} from '@components/home/home.types';
 
 export default async function HomePage() {
@@ -18,8 +17,7 @@ export default async function HomePage() {
 
   return (
     <section>
-      <Script
-        id="home-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -95,8 +93,7 @@ export default async function HomePage() {
           })
         }}
       />
-      <Script
-        id="store-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -131,8 +128,7 @@ export default async function HomePage() {
           })
         }}
       />
-      <Script
-        id="faq-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
