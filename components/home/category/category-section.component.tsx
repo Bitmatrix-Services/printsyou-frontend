@@ -3,7 +3,6 @@
 import React, {FC, useCallback, useRef} from 'react';
 import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Navigation} from 'swiper/modules';
-import {SectionHeading} from '@components/home/section-heading.component';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {CategoryCard} from '@components/home/category/category-card.component';
 import {Category} from '@components/home/home.types';
@@ -28,7 +27,10 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
 
   return (
     <>
-      <SectionHeading title="Categories" />
+      <div className="flex gap-6 items-baseline justify-start my-10">
+        <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold capitalize">Featured Categories</h1>
+      </div>
+
       <div className="featured-swiper relative">
         <button
           type="button"
