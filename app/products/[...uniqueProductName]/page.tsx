@@ -206,11 +206,11 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
             '@type': 'BreadcrumbList',
             itemListElement: (product?.crumbs ?? [])
               .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-              .map(item => ({
+              .map((item, index) => ({
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}products/${item.uniqueCategoryName}`
+                item: `${process.env.FE_URL}${index === 0 ? 'products' : 'categories'}/${item.uniqueCategoryName}`
               }))
           })
         }}
