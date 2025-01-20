@@ -1805,6 +1805,11 @@ const nextConfig = {
       destination: '/coolers/cooler-lunch-bags/cafe-cooler-bag',
       source: '/coolers/cooler-lunch-bags/café-cooler-bag',
       permanent: true
+    },
+    {
+      destination: '/products/pet-toys/gonia-wing-ring-flyer',
+      source: '/pet-toys/gonia-wing-ring-flyer',
+      permanent: true
     }
   ],
   rewrites: () => [
@@ -1823,11 +1828,6 @@ const nextConfig = {
     {
       destination: '/products/pet-toys/folding-flying-disc-with-pouch',
       source: '/pet-toys/folding-flying-disc-with-pouch',
-      permanent: true
-    },
-    {
-      destination: '/products/pet-toys/gonia-wing-ring-flyer',
-      source: '/pet-toys/gonia-wing-ring-flyer',
       permanent: true
     }
   ]
