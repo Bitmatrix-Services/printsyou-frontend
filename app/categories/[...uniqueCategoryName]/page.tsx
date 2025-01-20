@@ -48,7 +48,6 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
   return (
     <section key={uniqueName}>
       <Script
-        id="breadcrumb-category-page-ld-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
