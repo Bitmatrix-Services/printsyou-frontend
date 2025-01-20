@@ -210,7 +210,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
+                item: `${process.env.FE_URL}products/${item.uniqueCategoryName}`
               }))
           })
         }}

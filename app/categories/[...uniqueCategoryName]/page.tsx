@@ -60,7 +60,7 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
+                item: `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
               }))
           })
         }}
