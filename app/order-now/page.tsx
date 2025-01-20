@@ -18,6 +18,10 @@ export default OrderNowPage;
 export const metadata: Metadata = {
   title: `Order Now | ${metaConstants.SITE_NAME}`,
   description: `Shop our curated collection and find the perfect pieces to express yourself. Enjoy fast shipping, secure payments, and excellent customer service.`,
+  robots: {
+    index: false,
+    follow: false
+  },
   alternates: {
     canonical: `${process.env.FE_URL}order-now`
   }

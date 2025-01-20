@@ -1,5 +1,9 @@
 import React, {FC} from 'react';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
+import Link from 'next/link';
+import {usePathname} from 'next/navigation';
+
+const FE_URL = process.env.NEXT_PUBLIC_FE_URL?.slice(0, -1);
 
 const sortList = [
   {label: 'Price Low To High', value: 'priceLowToHigh'},
@@ -29,6 +33,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
   sort,
   setSort
 }) => {
+  const pathname = usePathname();
   const pagesToShow = Array.from({length: totalPages}, (_, index) => index + 1).filter(
     page => pageNumber >= page - 2 && pageNumber <= page + 2
   );
@@ -72,40 +77,42 @@ const PaginationHeader: FC<PaginationHeaderProps> = ({
             </div>
             <div className="paging flex gap-2">
               {pageNumber !== 1 ? (
-                <button
-                  type="button"
+                <Link
+                  href={`${FE_URL}${pathname}?page=${pageNumber - 1}`}
                   className={`item prev ${pageNumber === 1 ? ' disabled-pointer' : ''}`}
-                  onClick={() => {
+                  onClick={e => {
                     if (pageNumber > 1) setPageNumber(pageNumber - 1);
+                    e.preventDefault();
                   }}
                 >
                   <IoIosArrowBack className="h-4 w-4" />
-                </button>
+                </Link>
               ) : null}
               <div className="numbers flex gap-2">
                 {pagesToShow?.map(page => (
-                  <button
+                  <Link
                     key={page}
-                    type="button"
-                    onClick={() => {
+                    href={`${FE_URL}${pathname}?page=${page}`}
+                    onClick={e => {
                       setPageNumber(page);
+                      e.preventDefault();
                     }}
                     className={`item number ${pageNumber == page && 'is-active'}`}
                   >
                     {page}
-                  </button>
+                  </Link>
                 ))}
               </div>
               {pageNumber !== totalPages ? (
-                <button
-                  type="button"
+                <Link
+                  href={`${FE_URL}${pathname}?page=${pageNumber + 1}`}
                   className={`item next ${pageNumber === totalPages ? ' disabled-pointer' : ''}`}
                   onClick={() => {
                     if (pageNumber < totalPages) setPageNumber(pageNumber + 1);
                   }}
                 >
                   <IoIosArrowForward className="h-4 w-4" />
-                </button>
+                </Link>
               ) : null}
             </div>
           </div>

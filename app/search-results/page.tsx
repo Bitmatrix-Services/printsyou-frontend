@@ -31,6 +31,10 @@ export async function generateMetadata(queryParams: {searchParams: any}) {
   return {
     title: `Search for ${searchKeyword} showing page ${currentPage} - PrintsYou`,
     description: `Find the perfect promotional products tailored to your needs. Explore a wide range of options from your search results to elevate your brand's marketing and outreach efforts.`,
+    robots: {
+      index: false,
+      follow: false
+    },
     alternates: {
       canonical: canonicalURL
     }

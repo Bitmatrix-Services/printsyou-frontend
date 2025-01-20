@@ -1,14 +1,14 @@
 'use client';
 import React, {FC} from 'react';
-import {usePathname, useSearchParams} from 'next/navigation';
+import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {LuListFilter} from 'react-icons/lu';
 import {setFilterSidebarOpen} from '../../store/slices/cart/cart.slice';
 import {useDispatch} from 'react-redux';
-import {scrollIntoProductsView} from '@utils/utils';
 import {Skeleton} from '@mui/joy';
 import {SearchProductCard} from '@components/search/search-product-card';
+import {allowableSearchParams} from '@utils/constants';
 
 interface CategoryDetailsSectionProps {
   products: EnclosureProduct[];
@@ -37,6 +37,7 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   totalProducts,
   isPageLoading
 }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const dispatch = useDispatch();
@@ -48,14 +49,22 @@ export const SearchResultsSection: FC<CategoryDetailsSectionProps> = ({
   );
 
   const handleQueryUpdate = (value: string | number, queryName: string) => {
-    scrollIntoProductsView();
-
-    const params = new URLSearchParams(searchParams);
-    params.set(queryName, value.toString());
+    const currentQuery = getUpdatedQueryParams();
+    let updatedQuery = {...currentQuery, [queryName]: value};
     if (queryName === 'size' || queryName === 'filter') {
-      params.set('page', '1');
+      updatedQuery.page = '1';
     }
-    window.history.pushState(null, '', `${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
+  };
+
+  const getUpdatedQueryParams = (): Record<string, any> => {
+    let updatedQuery: Record<string, any> = {};
+    searchParams.forEach((value, key) => {
+      if (~allowableSearchParams.indexOf(key)) {
+        updatedQuery[key] = value;
+      }
+    });
+    return updatedQuery;
   };
 
   return (

@@ -88,6 +88,11 @@ const nextConfig = {
       source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-brümate-hopsulator-trio',
       permanent: true
     },
+   {
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-br\u00fcmate-hopsulator-trio',
+      permanent: true
+    },
     {
       destination: '/products/umbrellas/automatic-open-umbrellas/46-arc-umbrella',
       source: '/umbrellas/automatic-open-umbrellas/46-arc-umbrella',
@@ -291,6 +296,11 @@ const nextConfig = {
     {
       destination: '/products/home-amp-auto/utensils-cooking-amp-baking-3-in-1-grip-flip-amp-scoop-kitchen-tool',
       source: '/products/home-amp-auto/utensils-cooking-amp-baking/3-in-1-grip,-flip-&-scoop-kitchen-tool',
+      permanent: true
+    },
+    {
+      destination: '/categories/headwear-amp-accessories/bucket-hats',
+      source: '/categories/headwear-amp-accessories/bucket-hats',
       permanent: true
     },
     {
@@ -503,6 +513,11 @@ const nextConfig = {
     {
       destination: '/categories/drinkware/realtree',
       source: '/categories/drinkware/realtree',
+      permanent: true
+    },
+    {
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/drinkware/brumate/12/16-oz.-br\u00fcmate-hopsulator-trio',
       permanent: true
     },
     {

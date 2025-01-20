@@ -225,6 +225,10 @@ export async function generateMetadata({params}: {params: {uniqueProductName: st
   return {
     title: `${product?.metaTitle || product?.productName} | PrintsYou`,
     description: product?.metaDescription || '',
+    robots: {
+      index: true,
+      follow: true
+    },
     alternates: {
       canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`
     },
