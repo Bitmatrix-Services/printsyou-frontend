@@ -181,22 +181,22 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
           })
         }}
       />
-      <Script
-        id="images-product-page-ld-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'ImageGallery',
-            url: `${process.env.FE_URL}${product?.uniqueProductName}`,
-            associatedMedia: (product?.productImages ?? []).map((image, index) => ({
-              '@type': 'ImageObject',
-              contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,
-              text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`
-            }))
-          })
-        }}
-      />
+      {/*<Script*/}
+      {/*  id="images-product-page-ld-schema"*/}
+      {/*  type="application/ld+json"*/}
+      {/*  dangerouslySetInnerHTML={{*/}
+      {/*    __html: JSON.stringify({*/}
+      {/*      '@context': 'https://schema.org',*/}
+      {/*      '@type': 'ImageGallery',*/}
+      {/*      url: `${process.env.FE_URL}${product?.uniqueProductName}`,*/}
+      {/*      associatedMedia: (product?.productImages ?? []).map((image, index) => ({*/}
+      {/*        '@type': 'ImageObject',*/}
+      {/*        contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,*/}
+      {/*        text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`*/}
+      {/*      }))*/}
+      {/*    })*/}
+      {/*  }}*/}
+      {/*/>*/}
       <Script
         id="breadcrumb-product-page-ld-schema"
         type="application/ld+json"
