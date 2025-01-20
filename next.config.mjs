@@ -526,11 +526,6 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination: 'SKIP',
-      source: '/sitemap_products/sitemap/2.xml',
-      permanent: true
-    },
-    {
       destination: '/products/full-color-retail-boxes/custom-retail-box',
       source: '/products/full-color-retail-boxes/custom-box-stock-designs/custom-retail-box',
       permanent: true
