@@ -56,7 +56,7 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
 
   const isProductOnSale: boolean = product?.saleEndDate ? moment(product?.saleEndDate).isAfter(moment()) : false;
 
-  const sortedPricing = (product?.priceGrids ?? []).sort((a, b) => a.price - b.price);
+  const sortedPricing = (product?.priceGrids ?? []).filter(item => item.price !== 0).sort((a, b) => a.price - b.price);
   if (sortedPricing.length > 0) {
     minPrice = sortedPricing[0];
     maxPrice = sortedPricing[sortedPricing.length - 1];
@@ -98,22 +98,24 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
               lowPrice: isProductOnSale && minPrice?.salePrice ? minPrice?.salePrice : minPrice?.price,
               highPrice: isProductOnSale && maxPrice?.salePrice ? maxPrice?.salePrice : maxPrice?.price,
               offerCount: (product?.priceGrids ?? []).length,
-              offers: (product?.priceGrids ?? []).map(item => ({
-                '@type': 'Offer',
-                price: isProductOnSale && item.salePrice ? item.salePrice : item.price,
-                additionalType: item.priceType,
-                priceCurrency: 'USD',
-                itemCondition: 'https://schema.org/NewCondition',
-                availability: 'https://schema.org/InStock',
-                priceValidUntil:
-                  isProductOnSale && product?.saleEndDate
-                    ? moment(product?.saleEndDate).format('YYYY-MM-DD')
-                    : moment().add(1, 'year').format('YYYY-MM-DD'),
-                eligibleQuantity: {
-                  '@type': 'QuantitativeValue',
-                  minValue: item.countFrom
-                }
-              })),
+              offers: (product?.priceGrids ?? [])
+                .filter(item => item.price !== 0)
+                .map(item => ({
+                  '@type': 'Offer',
+                  price: isProductOnSale && item.salePrice ? item.salePrice : item.price,
+                  additionalType: item.priceType,
+                  priceCurrency: 'USD',
+                  itemCondition: 'https://schema.org/NewCondition',
+                  availability: 'https://schema.org/InStock',
+                  priceValidUntil:
+                    isProductOnSale && product?.saleEndDate
+                      ? moment(product?.saleEndDate).format('YYYY-MM-DD')
+                      : moment().add(1, 'year').format('YYYY-MM-DD'),
+                  eligibleQuantity: {
+                    '@type': 'QuantitativeValue',
+                    minValue: item.countFrom
+                  }
+                })),
 
               availability: 'https://schema.org/InStock',
               shippingDetails: {
