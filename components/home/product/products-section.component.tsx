@@ -80,48 +80,37 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
     return updatedQuery;
   };
 
-  useEffect(() => {
-    let script = document.getElementById('OfferCatalogue');
-
-    if (!script) {
-      script = document.createElement('script');
-      script.id = 'OfferCatalogue';
-      script.setAttribute('type', 'application/ld+json');
-    }
-
-    script.innerHTML = JSON.stringify({
-      '@context': 'http://schema.org',
-      '@type': 'WebPage',
-      url: `${process.env.NEXT_PUBLIC_FE_URL}${category.uniqueCategoryName}`,
-      mainEntity: {
-        '@context': 'http://schema.org',
-        '@type': 'OfferCatalog',
-        name: category.categoryName,
-        url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
-        numberOfItems: totalElements,
-        itemListElement: (productsByCategory ?? []).map(product => ({
-          '@type': 'Product',
-          url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-          name: product.productName,
-          image: product.imageUrl,
-          offers: {
-            price: [...(product.priceGrids ?? [])].sort((a, b) => a.price - b.price).shift()?.price,
-            priceCurrency: 'USD',
-            availability: 'http://schema.org/InStock',
-            itemCondition: 'NewCondition'
-          }
-        }))
-      }
-    });
-
-    if (!script) {
-      document.head.appendChild(script);
-    }
-
-  }, [productsByCategory, category.uniqueCategoryName, totalElements]);
-
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'http://schema.org',
+            '@type': 'WebPage',
+            url: `${process.env.NEXT_PUBLIC_FE_URL}${category.uniqueCategoryName}`,
+            mainEntity: {
+              '@context': 'http://schema.org',
+              '@type': 'OfferCatalog',
+              name: category.categoryName,
+              url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+              numberOfItems: totalElements,
+              itemListElement: (productsByCategory ?? []).map(product => ({
+                '@type': 'Product',
+                url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+                name: product.productName,
+                image: product.imageUrl,
+                offers: {
+                  price: [...(product.priceGrids ?? [])].sort((a, b) => a.price - b.price).shift()?.price,
+                  priceCurrency: 'USD',
+                  availability: 'http://schema.org/InStock',
+                  itemCondition: 'NewCondition'
+                }
+              }))
+            }
+          })
+        }}
+      />
       {page && (
         <Head>
           <meta name="robots" content="noindex,nofollow,noodp,noydir" />
