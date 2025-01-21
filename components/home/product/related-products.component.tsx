@@ -53,14 +53,29 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
         <div className="relative w-full mx-auto py-4">
           <Typography className="font-bold text-lg">You may also like:</Typography>
           <Swiper
-            modules={[Navigation]}
-            navigation={{
-              nextEl: `.swiper-nav-next`,
-              prevEl: `.swiper-nav-prev`
-            }}
-            loop={true}
-            slidesPerView={5}
-            spaceBetween={2}
+              modules={[Navigation]}
+              navigation={{
+                nextEl: `.swiper-nav-next`,
+                prevEl: `.swiper-nav-prev`
+              }}
+              loop={true}
+              slidesPerView={5}
+              spaceBetween={2}
+              breakpoints={{
+                // Screens larger than 1024px
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 2,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 8,
+                },
+                0: {
+                  slidesPerView: 1,
+                  spaceBetween: 12,
+                }
+              }}
           >
             {relatedProducts.map(product => (
               <SwiperSlide key={product.id}>
