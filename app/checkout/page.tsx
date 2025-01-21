@@ -10,6 +10,10 @@ export default CheckoutPage;
 
 export const metadata: Metadata = {
   title: `Checkout | ${metaConstants.SITE_NAME}`,
+  robots: {
+    index: false,
+    follow: false
+  },
   alternates: {
     canonical: `${process.env.FE_URL}checkout`
   }

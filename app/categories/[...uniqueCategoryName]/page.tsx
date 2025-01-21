@@ -8,7 +8,6 @@ import {Category} from '@components/home/home.types';
 import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
-import Script from 'next/script';
 
 type Params = Promise<{uniqueCategoryName: string[]}>;
 type SearchParams = Promise<any>;
@@ -50,9 +49,8 @@ const CategoryPage = async (props: {params: Params}) => {
   if (siblingCat?.payload) siblingCategories = siblingCat.payload;
 
   return (
-    <section>
-      <Script
-        id="breadcrumb-category-page-ld-schema"
+    <section key={uniqueName}>
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -64,7 +62,7 @@ const CategoryPage = async (props: {params: Params}) => {
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
+                item: `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
               }))
           })
         }}
@@ -119,10 +117,6 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
     description: category?.metaDescription || '',
     icons: {
       other: descriptors
-    },
-    robots: {
-      index: currentPage == 1,
-      follow: currentPage == 1
     },
     alternates: {
       canonical: canonicalURL

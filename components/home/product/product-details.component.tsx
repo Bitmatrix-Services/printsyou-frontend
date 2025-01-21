@@ -1,19 +1,20 @@
 'use client';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
-import {Product, ProductImage} from '@components/home/product/product.types';
+import {EnclosureProduct, Product, ProductImage} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import {notFound} from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
+import RelatedProductsSection from "@components/home/product/related-products.component";
 
 interface IProductDetails {
   product: Product | null;
-  relatedProducts?: Product[];
+  relatedProducts: EnclosureProduct[] | null;
 }
 
-export const ProductDetails: FC<IProductDetails> = ({product}) => {
+export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) => {
   if (!product) notFound();
 
   const productDescriptionRef = useRef<HTMLDivElement>(null);
@@ -61,9 +62,9 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
 
             {/* description section  */}
 
-            <div ref={productDescriptionRef} className="flex flex-col md:flex-row capitalize gap-12 my-6">
+            <div ref={productDescriptionRef} className="flex flex-col md:flex-row gap-12 my-6">
               <div className="flex-1">
-                <h4 className="text-2xl font-semibold mb-6">overview</h4>
+                <h4 className="text-2xl font-semibold mb-6">Overview</h4>
 
                 <div
                   className="product-description"
@@ -78,7 +79,7 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
               </div>
 
               <div className="flex-1">
-                <h4 className="text-2xl font-semibold mb-6">additional information</h4>
+                <h4 className="text-2xl font-semibold mb-6">Additional Information</h4>
 
                 <div className="space-y-2">
                   {product.additionalFieldProductValues?.map(item => (
@@ -165,6 +166,7 @@ export const ProductDetails: FC<IProductDetails> = ({product}) => {
             {/*</div>*/}
 
             {/* end Rating review section  */}
+              <RelatedProductsSection relatedProducts={relatedProducts}/>
           </Container>
         </>
       ) : (

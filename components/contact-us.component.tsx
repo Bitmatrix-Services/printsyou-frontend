@@ -14,7 +14,6 @@ import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
-import Script from 'next/script';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
@@ -54,8 +53,7 @@ export const ContactUsComponent = () => {
 
   return (
     <>
-      <Script
-        id="contact-us-page-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -66,7 +64,7 @@ export const ContactUsComponent = () => {
               'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
             email: 'info@printsyou.com',
             url: 'https://printsYou.com',
-            telephone: '+1-877-934-1874',
+            telephone: '+1-888-299-2940',
             address: {
               '@type': 'PostalAddress',
               streetAddress: '8602 Royal Star Rd',
@@ -96,7 +94,7 @@ export const ContactUsComponent = () => {
             contactPoint: [
               {
                 '@type': 'ContactPoint',
-                telephone: '+1-877-934-1874',
+                telephone: '+1-888-299-2940',
                 contactType: 'customer service'
               },
               {

@@ -1,10 +1,9 @@
 import React from 'react';
-import {getProductDetailsByUniqueName} from '@components/home/product/product-apis';
+import {fetchRelatedProductDetails, getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
-import {PriceGrids, Product} from '@components/home/product/product.types';
+import {EnclosureProduct, PriceGrids, Product} from '@components/home/product/product.types';
 import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
-import Script from 'next/script';
 
 type Params = Promise<{uniqueProductName: string[]}>;
 
@@ -45,15 +44,22 @@ const ProductsPage = async (props: {params: Params}) => {
 
   const response = await getProductDetailsByUniqueName(uniqueName);
   let product: Product | null = null;
-
-  if (response?.payload) product = response.payload;
+  let relatedProducts: EnclosureProduct[] | null = null;
+  if (response?.payload) {
+    product = response.payload;
+    const relatedProductResponse = await fetchRelatedProductDetails(product.id);
+    if (relatedProductResponse?.payload) {
+      //@ts-ignore
+      relatedProducts = relatedProductResponse.payload.content;
+    }
+  }
 
   let minPrice: PriceGrids | null = null;
   let maxPrice: PriceGrids | null = null;
 
   const isProductOnSale: boolean = product?.saleEndDate ? moment(product?.saleEndDate).isAfter(moment()) : false;
 
-  const sortedPricing = (product?.priceGrids ?? []).sort((a, b) => a.price - b.price);
+  const sortedPricing = (product?.priceGrids ?? []).filter(item => item.price !== 0).sort((a, b) => a.price - b.price);
   if (sortedPricing.length > 0) {
     minPrice = sortedPricing[0];
     maxPrice = sortedPricing[sortedPricing.length - 1];
@@ -68,9 +74,8 @@ const ProductsPage = async (props: {params: Params}) => {
   );
 
   return (
-    <section>
-      <Script
-        id="product-page-ld-schema"
+    <section key={uniqueName}>
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -96,22 +101,24 @@ const ProductsPage = async (props: {params: Params}) => {
               lowPrice: isProductOnSale && minPrice?.salePrice ? minPrice?.salePrice : minPrice?.price,
               highPrice: isProductOnSale && maxPrice?.salePrice ? maxPrice?.salePrice : maxPrice?.price,
               offerCount: (product?.priceGrids ?? []).length,
-              offers: (product?.priceGrids ?? []).map(item => ({
-                '@type': 'Offer',
-                price: isProductOnSale && item.salePrice ? item.salePrice : item.price,
-                additionalType: item.priceType,
-                priceCurrency: 'USD',
-                itemCondition: 'https://schema.org/NewCondition',
-                availability: 'https://schema.org/InStock',
-                priceValidUntil:
-                  isProductOnSale && product?.saleEndDate
-                    ? moment(product?.saleEndDate).format('YYYY-MM-DD')
-                    : moment().add(1, 'year').format('YYYY-MM-DD'),
-                eligibleQuantity: {
-                  '@type': 'QuantitativeValue',
-                  minValue: item.countFrom
-                }
-              })),
+              offers: (product?.priceGrids ?? [])
+                .filter(item => item.price !== 0)
+                .map(item => ({
+                  '@type': 'Offer',
+                  price: isProductOnSale && item.salePrice ? item.salePrice : item.price,
+                  additionalType: item.priceType,
+                  priceCurrency: 'USD',
+                  itemCondition: 'https://schema.org/NewCondition',
+                  availability: 'https://schema.org/InStock',
+                  priceValidUntil:
+                    isProductOnSale && product?.saleEndDate
+                      ? moment(product?.saleEndDate).format('YYYY-MM-DD')
+                      : moment().add(1, 'year').format('YYYY-MM-DD'),
+                  eligibleQuantity: {
+                    '@type': 'QuantitativeValue',
+                    minValue: item.countFrom
+                  }
+                })),
 
               availability: 'https://schema.org/InStock',
               shippingDetails: {
@@ -177,24 +184,23 @@ const ProductsPage = async (props: {params: Params}) => {
           })
         }}
       />
-      <Script
-        id="images-product-page-ld-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'ImageGallery',
-            url: `${process.env.FE_URL}${product?.uniqueProductName}`,
-            associatedMedia: (product?.productImages ?? []).map((image, index) => ({
-              '@type': 'ImageObject',
-              contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,
-              text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`
-            }))
-          })
-        }}
-      />
-      <Script
-        id="breadcrumb-product-page-ld-schema"
+      {/*<Script*/}
+      {/*  id="images-product-page-ld-schema"*/}
+      {/*  type="application/ld+json"*/}
+      {/*  dangerouslySetInnerHTML={{*/}
+      {/*    __html: JSON.stringify({*/}
+      {/*      '@context': 'https://schema.org',*/}
+      {/*      '@type': 'ImageGallery',*/}
+      {/*      url: `${process.env.FE_URL}${product?.uniqueProductName}`,*/}
+      {/*      associatedMedia: (product?.productImages ?? []).map((image, index) => ({*/}
+      {/*        '@type': 'ImageObject',*/}
+      {/*        contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,*/}
+      {/*        text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`*/}
+      {/*      }))*/}
+      {/*    })*/}
+      {/*  }}*/}
+      {/*/>*/}
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -202,16 +208,16 @@ const ProductsPage = async (props: {params: Params}) => {
             '@type': 'BreadcrumbList',
             itemListElement: (product?.crumbs ?? [])
               .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-              .map(item => ({
+              .map((item, index) => ({
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}/${item.uniqueCategoryName}`
+                item: `${process.env.FE_URL}${index === 0 ? 'products' : 'categories'}/${item.uniqueCategoryName}`
               }))
           })
         }}
       />
-      <ProductDetails product={product} />
+      <ProductDetails product={product} relatedProducts={relatedProducts} />
     </section>
   );
 };

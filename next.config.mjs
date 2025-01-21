@@ -22,13 +22,18 @@ const nextConfig = {
   },
   redirects: async () => [
     {
-      destination: '/categories/desk-amp-office/desk-accessories',
-      source: '/categories/office/desk-accessories',
+      destination: '/categories/amenities',
+      source: '/categories/brands/flipstik®',
       permanent: true
     },
     {
-      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
-      source: '/categories/stress-relievers/construction',
+      destination: '/categories/amenities',
+      source: '/categories/brands/flipstik',
+      permanent: true
+    },
+    {
+      destination: '/categories/desk-amp-office/desk-accessories',
+      source: '/categories/office/desk-accessories',
       permanent: true
     },
     {
@@ -37,8 +42,23 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/amenities/cases-amp-organizers',
+      source: '/products/brands/aeroloft-travel/aeroloft-organizer-4-pocket-zip-organizer',
+      permanent: true
+    },
+    {
       destination: '/categories/bags-duffels-amp-accessories/travel-amp-toiletry-bags',
       source: '/categories/bags/toiletry',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/construction',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/travel-kits',
+      source: '/categories/travel/locks',
       permanent: true
     },
     {
@@ -60,10 +80,15 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/bottles-shaker/26-oz-brumate-multishaker',
-      source: '/products/drinkware/tumblers-stainless-steel/26-oz.-br\u00fcmate-multishaker',
+      source: '/products/drinkware/tumblers-stainless-steel/26-oz.-brümate-multishaker',
       permanent: true
     },
     {
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-brümate-hopsulator-trio',
+      permanent: true
+    },
+   {
       destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-br\u00fcmate-hopsulator-trio',
       permanent: true
@@ -120,7 +145,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-excellent-elephant',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-excellent-elephant',
+      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-excellent-elephant',
       permanent: true
     },
     {
@@ -130,12 +155,12 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-salty-shark',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-salty-shark',
+      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-salty-shark',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-dog',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-big-paw-dog',
+      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-big-paw-dog',
       permanent: true
     },
     {
@@ -145,7 +170,7 @@ const nextConfig = {
     },
     {
       destination: '/categories/desk-amp-office/realtree',
-      source: '/categories/ceramic-mugs/realtree\u00ae',
+      source: '/categories/ceramic-mugs/realtree®',
       permanent: true
     },
     {
@@ -155,7 +180,12 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/brumate/12-oz-brumate-hopsulator-slim',
-      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12-oz.-br\u00fcmate-hopsulator-slim',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12-oz.-brümate-hopsulator-slim',
+      permanent: true
+    },
+    {
+      destination: '/categories',
+      source: '/categories/virtual-reality',
       permanent: true
     },
     {
@@ -165,7 +195,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-koko-koala',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd"/8-\u00bd"-koko-koala',
+      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-koko-koala',
       permanent: true
     },
     {
@@ -179,6 +209,16 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories',
+      source: '/categories/individual-drop-shipping',
+      permanent: true
+    },
+    {
+      destination: '/categories/aws-collection, /categories/amenities/aws',
+      source: '/categories/writing-instruments/aws',
+      permanent: true
+    },
+    {
       destination: '/categories/apparel/hoodies-adult',
       source: '/apparel/hoodies-adult',
       permanent: true
@@ -186,6 +226,11 @@ const nextConfig = {
     {
       destination: '/products/plush-amp-novelties/pins/1-half-full-color-pin-back-button',
       source: '/products/plush-amp-novelties/pins/1-½"-full-color-pin-back-button',
+      permanent: true
+    },
+    {
+      destination: '/categories',
+      source: '/categories/global-resource',
       permanent: true
     },
     {
@@ -201,6 +246,11 @@ const nextConfig = {
     {
       destination: '/products/drinkware/tumblers-stainless-steel/22-oz-brumate-toddy',
       source: '/products/drinkware/mugs-stainless-steel-amp-copper/22-oz.-brümate-toddy',
+      permanent: true
+    },
+    {
+      destination: '/categories/hitronics-amp-tech-accessories',
+      source: '/categories/hitronics-amp-tech-accessories/smart-plugs-amp-sockets',
       permanent: true
     },
     {
@@ -264,6 +314,11 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/drinkware/realtree, /categories/ceramic-mugs/realtree',
+      source: '/categories/sunglasses-amp-eyewear/realtree®',
+      permanent: true
+    },
+    {
       destination: '/products/gourmet-food-gifts/nuts-tins/candy-window-tin',
       source: '/gourmet-food-gifts/nuts-tins/candy-window-tin',
       permanent: true
@@ -292,6 +347,12 @@ const nextConfig = {
       destination:
         '/products/special-packaging/food-/-snack-stuffer/large-chest-box-with-trail-mix-almonds-and-mixed-nuts',
       source: '/special-packaging/food-/-snack-stuffer/large-chest-box-with-trail-mix-almonds-and-mixed-nuts',
+      permanent: true
+    },
+    {
+      destination:
+        '/categories/aws-collection, /categories/amenities/aws, /categories/bags-duffels-amp-accessories/aws',
+      source: '/categories/sunglasses-amp-eyewear/aws',
       permanent: true
     },
     {
@@ -351,12 +412,12 @@ const nextConfig = {
     },
     {
       destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
-      source: '/products/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz-brümate-hopsulator-trio',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-liberty-eagle',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-liberty-eagle',
+      source: '/products/plush-amp-novelties/plush-8-½/8-½-liberty-eagle',
       permanent: true
     },
     {
@@ -366,7 +427,7 @@ const nextConfig = {
     },
     {
       destination: '/products/drinkware/barware-stainless-steel/25-oz-brumate-winesulator',
-      source: '/products/drinkware/bottles-stainless-steel-amp-aluminum/25-oz-brümate-winesulator',
+      source: '/products/drinkware/bottles-stainless-steel-amp-aluminum/25-oz-brumate-winesulator',
       permanent: true
     },
     {
@@ -376,7 +437,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-big-paw-dog',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-big-paw-dog',
+      source: '/products/plush-amp-novelties/plush-8-½/8-½-big-paw-dog',
       permanent: true
     },
     {
@@ -386,7 +447,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-koko-koala',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-koko-koala',
+      source: '/products/plush-amp-novelties/plush-8-½/8-½-koko-koala',
       permanent: true
     },
     {
@@ -395,8 +456,13 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/desk-amp-office/realtree',
+      source: '/categories/sunglasses-amp-eyewear/realtree',
+      permanent: true
+    },
+    {
       destination: '/products/plush-amp-novelties/plush-8-8-mystic-unicorn',
-      source: '/products/plush-amp-novelties/plush-8-½"/8-½"-mystic-unicorn',
+      source: '/products/plush-amp-novelties/plush-8-½/8-½-mystic-unicorn',
       permanent: true
     },
     {
@@ -421,7 +487,7 @@ const nextConfig = {
     },
     {
       destination: '/products/plush-amp-novelties/pins/1-half-full-color-pin-back-button',
-      source: '/products/plush-amp-novelties/pins/1-½"-full-color-pin-back-button',
+      source: '/products/plush-amp-novelties/pins/1-½-full-color-pin-back-button',
       permanent: true
     },
     {
@@ -430,8 +496,8 @@ const nextConfig = {
       permanent: true
     },
     {
-      source: '/apparel/apparel-ladies/mountain-standard-alma-down-jacket',
       destination: '/products/apparel/apparel-ladies/mountain-standard-alma-down-jacket',
+      source: '/apparel/apparel-ladies/mountain-standard-alma-down-jacket',
       permanent: true
     },
     {
@@ -441,12 +507,22 @@ const nextConfig = {
     },
     {
       destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
+      source: '/products/drinkware/brumate/12/16-oz.-brümate-hopsulator-trio',
+      permanent: true
+    },
+    {
+      destination: '/categories/drinkware/realtree',
+      source: '/categories/drinkware/realtree',
+      permanent: true
+    },
+    {
+      destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       source: '/products/drinkware/brumate/12/16-oz.-br\u00fcmate-hopsulator-trio',
       permanent: true
     },
     {
       destination: '/products/plush-amp-novelties/plush-8-8-excellent-elephant',
-      source: '/products/plush-amp-novelties/plush-8-\u00bd/8-\u00bd-excellent-elephant',
+      source: '/products/plush-amp-novelties/plush-8-½/8-½-excellent-elephant',
       permanent: true
     },
     {
@@ -465,8 +541,33 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/amenities',
+      source: '/categories/amenities/aws',
+      permanent: true
+    },
+    {
       destination: '/categories/headwear-amp-accessories/flexfit',
       source: '/categories/headwear-amp-accessories/flexfit',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/hot-amp-cold-packs',
+      source: '/categories/aqua-pearls-hot-&amp;-cold-packs/plush',
+      permanent: true
+    },
+    {
+      destination: '/categories/desk-amp-office/calculators',
+      source: '/categories/office/calculators-&amp;-rulers',
+      permanent: true
+    },
+    {
+      destination: '/categories/leisure-amp-outdoor',
+      source: '/categories/outdoors-&amp;-leisure/raingear',
+      permanent: true
+    },
+    {
+      destination: '/categories/admints',
+      source: '/categories/admints',
       permanent: true
     },
     {
@@ -475,8 +576,48 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/kits/home-amp-office-kits',
+      source: '/categories/office/dusters-&-brushes',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/aws',
+      source: '/categories/aws-collection',
+      permanent: true
+    },
+    {
+      destination: '/categories/desk-amp-office/calculators',
+      source: '/categories/office/calculators-&-rulers',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/hot-amp-cold-packs',
+      source: '/categories/aqua-pearls-hot-&amp;-cold-packs/mini-shapes',
+      permanent: true
+    },
+    {
+      destination: '/categories/personal-care/sunscreen',
+      source: '/categories/health-&-wellness/sunscreens',
+      permanent: true
+    },
+    {
+      destination: '/categories/portfolios-amp-notebooks/pen-included',
+      source: '/categories/journals-&-notepads/journal-with-pen',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/health-&-wellness/pedometers-step-counters',
+      permanent: true
+    },
+    {
       destination: '/categories/personal-care/hand-sanitizers',
       source: '/categories/health-&-wellness/sanitizers',
+      permanent: true
+    },
+    {
+      destination: '/categories/leisure-amp-outdoor/towels-sports-amp-fitness',
+      source: '/categories/outdoors-&-leisure/towels',
       permanent: true
     },
     {
@@ -485,8 +626,18 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/home-amp-auto/home-accessories',
+      source: '/categories/home/dusters-&amp;-squeegees',
+      permanent: true
+    },
+    {
       destination: '/categories/sunglasses-amp-eyewear',
       source: '/categories/outdoors-&amp;-leisure/sunglasses',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/hot-amp-cold-packs',
+      source: '/categories/aqua-pearls-hot-&-cold-packs/mini-shapes',
       permanent: true
     },
     {
@@ -495,8 +646,48 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/health-&-wellness/wonder-beads',
+      permanent: true
+    },
+    {
+      destination: '/categories/home-amp-auto/home-accessories',
+      source: '/categories/home/dusters-&-squeegees',
+      permanent: true
+    },
+    {
+      destination: '/categories/portfolios-amp-notebooks/journals',
+      source: '/categories/journals-&-notepads/softcover',
+      permanent: true
+    },
+    {
+      destination: '/categories/leisure-amp-outdoor',
+      source: '/categories/outdoors-&-leisure/event-gear',
+      permanent: true
+    },
+    {
+      destination: '/categories/leisure-amp-outdoor',
+      source: '/categories/outdoors-&-leisure/raingear',
+      permanent: true
+    },
+    {
       destination: '/categories/blankets',
       source: '/categories/outdoors-&-leisure/blankets-inventory',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/fruits-&-veggies',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/space-&-science',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/pet-accessories',
+      source: '/categories/sports-&-fitness/pet',
       permanent: true
     },
     {
@@ -510,8 +701,28 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/portfolios-amp-notebooks/journals',
+      source: '/categories/journals-&-notepads/hardcover',
+      permanent: true
+    },
+    {
       destination: '/categories/apparel',
       source: '/categories/outdoors-&-leisure/apparel',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/earth-&-nature',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/hot-amp-cold-packs',
+      source: '/categories/aqua-pearls-hot-&-cold-packs/aqua-pearls-original',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/hot-amp-cold-packs',
+      source: '/categories/aqua-pearls-hot-&-cold-packs/theraputic',
       permanent: true
     },
     {
@@ -535,6 +746,11 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/leisure-amp-outdoor',
+      source: '/categories/outdoors-&-leisure/cooling-scarves',
+      permanent: true
+    },
+    {
       destination: '/categories/plush-amp-novelties/puzzles-amp-games',
       source: '/categories/outdoors-&-leisure/games',
       permanent: true
@@ -547,6 +763,16 @@ const nextConfig = {
     {
       destination: '/categories/plush-amp-novelties/plush-special-packaging',
       source: '/categories/aqua-pearls-hot-&-cold-packs/plush',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/health-&-wellness/comfortclay',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/health-&-wellness/fitness-trackers',
       permanent: true
     },
     {
@@ -565,13 +791,63 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/categories/industry-essentials/sports-amp-fitness-products',
+      source: '/categories/sports-&-fitness/bicycle-items',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/hot-amp-cold-packs',
+      source: '/categories/aqua-pearls-hot-&-cold-packs',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/health-&-wellness/pedometers-multi-function',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/cases-amp-organizers',
+      source: '/categories/health-&-wellness/pill-boxes',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/food-&-beverage',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/super-heroes-&-fantasy',
+      permanent: true
+    },
+    {
       destination: '/categories/blankets',
       source: '/categories/outdoors-&-leisure/blankets',
       permanent: true
     },
     {
+      destination: '/categories/industry-essentials/sports-amp-fitness-products',
+      source: '/categories/sports-&-fitness/exercise-equipment',
+      permanent: true
+    },
+    {
       destination: '/categories/bags-duffels-amp-accessories/pouches',
       source: '/categories/bags/pouches-&-cases',
+      permanent: true
+    },
+    {
+      destination: '/categories/drinkware',
+      source: '/categories/drinkware/insulated-bottles-&-tumblers',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/health-&-wellness/eye-mask',
+      permanent: true
+    },
+    {
+      destination: '/categories/amenities/massagers',
+      source: '/categories/health-&-wellness/massagers-&-scratchers',
       permanent: true
     },
     {
@@ -594,6 +870,12 @@ const nextConfig = {
       source: '/categories/outdoors-&-leisure/fans',
       permanent: true
     },
+    {
+      destination: '/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers',
+      source: '/categories/stress-relievers/shapes-&-symbols',
+      permanent: true
+    },
+      // END OF COVERAGE FILE
     {
       destination: '/categories/amenities/cases-amp-organizers',
       source: '/categories/technology/organizers-&-cases',
@@ -1506,7 +1788,7 @@ const nextConfig = {
     },
     {
       destination: '/drinkware/brumate/12by16-oz-brumate-hopsulator-trio',
-      source: '/drinkware/brumate/12/16-oz-brümate-hopsulator-trio',
+      source: '/drinkware/brumate/12/16-oz-brumate-hopsulator-trio',
       permanent: true
     },
     {
@@ -1522,6 +1804,16 @@ const nextConfig = {
     {
       destination: '/coolers/cooler-lunch-bags/cafe-cooler-bag',
       source: '/coolers/cooler-lunch-bags/café-cooler-bag',
+      permanent: true
+    },
+    {
+      destination: '/products/pet-toys/gonia-wing-ring-flyer',
+      source: '/pet-toys/gonia-wing-ring-flyer',
+      permanent: true
+    },
+    {
+      destination: '/products/pet-toys/folding-flying-disc-with-pouch',
+      source: '/pet-toys/folding-flying-disc-with-pouch',
       permanent: true
     }
   ],

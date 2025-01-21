@@ -4,13 +4,11 @@ import {HeadlineSection} from '@components/about-us/headline-section.component';
 import {IconBoxesSection} from '@components/about-us/icon-boxes.section.component';
 import {OffersSection} from '@components/about-us/offers-section.component';
 import React from 'react';
-import Script from 'next/script';
 
 export const AboutUsComponent = () => {
   return (
     <>
-      <Script
-        id="organization-ld-schema"
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
@@ -21,7 +19,7 @@ export const AboutUsComponent = () => {
               'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
             email: 'info@printsyou.com',
             url: 'https://printsYou.com',
-            telephone: '+1-877-934-1874',
+            telephone: '+1-888-299-2940',
             address: {
               '@type': 'PostalAddress',
               streetAddress: '8602 Royal Star Rd',
@@ -51,7 +49,7 @@ export const AboutUsComponent = () => {
             contactPoint: [
               {
                 '@type': 'ContactPoint',
-                telephone: '+1-877-934-1874',
+                telephone: '+1-888-299-2940',
                 contactType: 'customer service'
               },
               {
