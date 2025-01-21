@@ -62,9 +62,9 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
 
             {/* description section  */}
 
-            <div ref={productDescriptionRef} className="flex flex-col md:flex-row capitalize gap-12 my-6">
+            <div ref={productDescriptionRef} className="flex flex-col md:flex-row gap-12 my-6">
               <div className="flex-1">
-                <h4 className="text-2xl font-semibold mb-6">overview</h4>
+                <h4 className="text-2xl font-semibold mb-6">Overview</h4>
 
                 <div
                   className="product-description"
@@ -79,7 +79,7 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
               </div>
 
               <div className="flex-1">
-                <h4 className="text-2xl font-semibold mb-6">additional information</h4>
+                <h4 className="text-2xl font-semibold mb-6">Additional Information</h4>
 
                 <div className="space-y-2">
                   {product.additionalFieldProductValues?.map(item => (
