@@ -241,7 +241,7 @@ export async function generateMetadata(props: {params: Params}) {
   if (lowestPrice.length > 0) minimumPrice = lowestPrice[0].price;
 
   return {
-    title: `${product?.prefix ?? 'Promotional'} ${product?.metaTitle || product?.productName}${product?.suffix ? ` ${product?.suffix}` : ''} ${minimumPrice}`,
+    title: `${product?.prefix ?? 'Promotional'} ${product?.metaTitle || product?.productName}${product?.suffix ? ` ${product?.suffix}` : ''} ${minimumPrice}$`,
     description: product?.metaDescription || '',
     robots: {
       index: true,
