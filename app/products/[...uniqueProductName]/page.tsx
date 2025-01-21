@@ -6,7 +6,10 @@ import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import Script from 'next/script';
 
-const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) => {
+type Params = Promise<{uniqueProductName: string[]}>;
+
+const ProductsPage = async (props: {params: Params}) => {
+  const params = await props.params;
   let uniqueName = params.uniqueProductName.join('/');
 
   const finalUrl = decodeURIComponent(uniqueName)
@@ -215,7 +218,9 @@ const ProductsPage = async ({params}: {params: {uniqueProductName: string[]}}) =
 
 export default ProductsPage;
 
-export async function generateMetadata({params}: {params: {uniqueProductName: string[]}}) {
+export async function generateMetadata(props: {params: Params}) {
+  const params = await props.params;
+
   const response = await getProductDetailsByUniqueName(params.uniqueProductName.join('/'));
 
   let product: Product | null = null;

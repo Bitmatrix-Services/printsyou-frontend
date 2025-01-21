@@ -7,12 +7,16 @@ import {CategoryDetails} from '@components/home/category/category-details.compon
 import {Category} from '@components/home/home.types';
 import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
-import {Metadata} from 'next';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
 import Script from 'next/script';
 
-const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}; searchParams: any}) => {
-  let uniqueName = queryParams.params.uniqueCategoryName.join('/');
+type Params = Promise<{uniqueCategoryName: string[]}>;
+type SearchParams = Promise<any>;
+
+const CategoryPage = async (props: {params: Params}) => {
+  const params = await props.params;
+
+  let uniqueName = params.uniqueCategoryName.join('/');
 
   const finalUrl = decodeURIComponent(uniqueName)
     .replaceAll('---', '-')
@@ -72,13 +76,13 @@ const CategoryPage = async (queryParams: {params: {uniqueCategoryName: string[]}
 
 export default CategoryPage;
 
-export async function generateMetadata(queryParams: {
-  params: {uniqueCategoryName: string[]};
-  searchParams: any;
-}): Promise<Metadata> {
-  const response = await getCategoryDetailsByUniqueName(queryParams.params.uniqueCategoryName.join('/'));
+export async function generateMetadata(props: {params: Params; searchParams: SearchParams}) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
 
-  const pageNumberQuery = queryParams.searchParams.page;
+  const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
+
+  const pageNumberQuery = searchParams.page;
   const currentPage = +(pageNumberQuery ?? '1');
 
   const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, currentPage + '');

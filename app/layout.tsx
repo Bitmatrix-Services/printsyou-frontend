@@ -31,14 +31,6 @@ export const metadata: Metadata = {
   }
 };
 
-const AddToCartModalClientSide = dynamic(
-  () => import('./../components/globals/cart/add-to-cart-modal.component').then(file => file.AddToCartModal),
-  {
-    ssr: false,
-    loading: () => null
-  }
-);
-
 export default async function RootLayout({children}: PropsWithChildren) {
   const categoriesData = await getAllCategories();
 
@@ -129,7 +121,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
               <Header categories={categoriesData.payload} />
               {children}
               <Footer categories={categoriesData.payload.slice(0, 6)} />
-              <AddToCartModalClientSide />
             </body>
           </html>
         </CSPostHogProvider>

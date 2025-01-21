@@ -4,8 +4,11 @@ import {OrderNowComponent} from '@components/order/order-now.component';
 import {getProductDetailsById} from '@components/home/product/product-apis';
 import {Product} from '@components/home/product/product.types';
 
-const OrderNowPage = async (params: {searchParams: {product_id: string}}) => {
-  const response = await getProductDetailsById(params.searchParams.product_id);
+type Params = Promise<{product_id: string}>;
+
+const OrderNowPage = async (props: {searchParams: Params}) => {
+  const searchParams = await props.searchParams;
+  const response = await getProductDetailsById(searchParams.product_id);
 
   let product: Product | null = null;
   if (response?.payload) product = response?.payload;

@@ -5,8 +5,10 @@ import {Product} from '@components/home/product/product.types';
 import {Metadata} from 'next';
 import {metaConstants} from '@utils/constants';
 
-const MoreInfoPage = async (params: {searchParams: {item_id: string}}) => {
-  const response = await getProductDetailsById(params.searchParams.item_id);
+type Params = Promise<{item_id: string}>;
+const MoreInfoPage = async (props: {searchParams: Params}) => {
+  const searchParams = await props.searchParams;
+  const response = await getProductDetailsById(searchParams.item_id);
 
   let product: Product | null = null;
   if (response?.payload) product = response?.payload;

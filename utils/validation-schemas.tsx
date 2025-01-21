@@ -1,7 +1,7 @@
 import {boolean, InferType, number, object, ref, string} from 'yup';
 
 export const contactUsSchema = object({
-  fullName: string().required('Please enter your n'),
+  fullName: string().required('Please enter your name'),
   emailAddress: string().email().required('Please enter your email address'),
   phoneNumber: string().nullable(),
   subject: string().nullable(),

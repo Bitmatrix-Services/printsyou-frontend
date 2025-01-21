@@ -11,7 +11,7 @@ declare module 'axios' {
 }
 
 export async function ServerApi<Response>({request}: IServerApi): Promise<ApiResponse<Response> | undefined> {
-  const cookie = cookies();
+  const cookie = await cookies();
   const searchParams = new URL(request.url).searchParams;
 
   let apiUrl = searchParams.get('apiUrl')!!;

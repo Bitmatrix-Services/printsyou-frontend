@@ -2,7 +2,9 @@ import {BlogDetailsComponent} from '@components/blog/blog-details.component';
 import {getBlogDetails} from '@components/blog/blog-apis';
 import {Blog} from '@components/blog/type';
 
-const BlogDetailsPage = async ({params}: {params: {id: string}}) => {
+type Params = Promise<{id: string}>;
+const BlogDetailsPage = async (props: {params: Params}) => {
+  const params = await props.params;
   const response = await getBlogDetails(params.id);
 
   let blog: Blog | null = null;

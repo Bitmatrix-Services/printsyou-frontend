@@ -10,6 +10,7 @@ import React, {FC} from 'react';
 import {FeatureSection} from '@components/home/feature-section.component';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
+import dynamic from 'next/dynamic';
 
 interface IHome {
   categories: Category[];
@@ -20,6 +21,14 @@ interface IHome {
   bannersList: BannerList[];
   faqsList: Faq[];
 }
+
+const AddToCartModalClientSide = dynamic(
+  () => import('./../globals/cart/add-to-cart-modal.component').then(file => file.AddToCartModal),
+  {
+    ssr: false,
+    loading: () => null
+  }
+);
 
 const HomeComponent: FC<IHome> = ({
   categories,
@@ -140,6 +149,7 @@ const HomeComponent: FC<IHome> = ({
       <Benefits />
       <FeatureSection />
       <FaqSectionComponent faqsList={faqsList} />
+      <AddToCartModalClientSide />
     </main>
   );
 };

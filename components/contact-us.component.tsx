@@ -251,7 +251,7 @@ export const ContactUsComponent = () => {
         open={isSuccessModalOpen}
         onClose={setIsSuccessModalOpen}
         title={'Thank You for Reaching Out!'}
-        note={`Thank you for subscribing to our newsletter! We're excited to have you with us.`}
+        note={`We’ve received your message and appreciate you reaching out.We will get back to you shortly!`}
       />
     </>
   );

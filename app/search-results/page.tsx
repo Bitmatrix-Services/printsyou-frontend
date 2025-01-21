@@ -1,30 +1,36 @@
 import {SearchResult} from '@components/search-result.components';
-import dynamic from 'next/dynamic';
+import {Suspense} from 'react';
 
 const SearchResultPage = () => {
-  return <SearchResult />;
+  return (
+    <Suspense>
+      <SearchResult />
+    </Suspense>
+  );
 };
 
-const NoSSRSearchResultPage = dynamic(() => Promise.resolve(SearchResultPage), {
-  ssr: false
-});
+export default SearchResultPage;
 
-export default NoSSRSearchResultPage;
+type SearchParams = Promise<any>;
 
-export async function generateMetadata(queryParams: {searchParams: any}) {
-  const currentPage = parseInt(queryParams.searchParams.page);
+export async function generateMetadata(props: {searchParams: SearchParams}) {
+  const searchParams = await props.searchParams;
+
+  console.log('searchParams', searchParams);
+
+  const currentPage = parseInt(searchParams.page);
   let canonicalURL: string = `${process.env.FE_URL}search-results`;
   if (currentPage > 1) {
     canonicalURL = `${canonicalURL}?page=${currentPage}`;
   }
 
-  const searchKeyword = queryParams.searchParams.keywords
-    ? queryParams.searchParams.keywords
-    : queryParams.searchParams.tag === 'newAndExclusive'
+  const searchKeyword = searchParams.keywords
+    ? searchParams.keywords
+    : searchParams.tag === 'newAndExclusive'
       ? 'New and Exclusive'
-      : queryParams.searchParams.tag === 'featured'
+      : searchParams.tag === 'featured'
         ? 'Just a Buck'
-        : queryParams.searchParams.tag === 'under1Dollar'
+        : searchParams.tag === 'under1Dollar'
           ? 'Under $1'
           : 'Most Popular';
 
