@@ -78,13 +78,11 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         <span className="font-semibold text-primary-500">{product.sku}</span>
       </div>
       <h1 className=" text-xl md:text-2xl font-bold capitalize">
-        {product?.prefix ? product.prefix + ' ' : ''}
         <span
           dangerouslySetInnerHTML={{
             __html: product?.productName ?? ''
           }}
         />
-        {product?.suffix ? ' ' + product.suffix : ''}
       </h1>
 
       {/*<div className=" lg:flex md:flex-row flex-col items-center gap-5">*/}

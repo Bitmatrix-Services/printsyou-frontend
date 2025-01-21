@@ -113,7 +113,7 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
   }
 
   return {
-    title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
+    title: `${category?.prefix ?? 'Shop'} ${category?.metaTitle || category?.categoryName} ${category?.suffix ?? ''}`,
     description: category?.metaDescription || '',
     icons: {
       other: descriptors

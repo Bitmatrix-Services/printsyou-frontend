@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import 'swiper/css';
+import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {Navigation} from 'swiper/modules';
 import {ProductCard} from '@components/home/product/product-card.component';
 import Typography from '@mui/joy/Typography';
@@ -11,42 +12,6 @@ interface IRelatedProductsSection {
 }
 
 export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProducts}) => {
-  // useEffect(() => {
-  //   // Create or update the ld+json script
-  //   let script = document.getElementById('RelatedProductsJSON');
-  //
-  //   if (!script) {
-  //     script = document.createElement('script');
-  //     script.id = 'RelatedProductsJSON';
-  //     script.setAttribute('type', 'application/ld+json');
-  //     document.head.appendChild(script);
-  //   }
-  //
-  //   // Generate JSON-LD data
-  //   script.innerHTML = JSON.stringify({
-  //     '@context': 'http://schema.org',
-  //     '@type': 'ItemList',
-  //     itemListElement: (relatedProducts ?? []).map((product, index) => ({
-  //       '@type': 'ListItem',
-  //       position: index + 1,
-  //       item: {
-  //         '@type': 'Product',
-  //         name: product.productName,
-  //         image: product.imageUrl,
-  //         sku: product.sku,
-  //         offers: {
-  //           '@type': 'Offer',
-  //           priceCurrency: 'USD',
-  //           price: product.salePrice || product.minPrice,
-  //           availability: 'http://schema.org/InStock',
-  //           itemCondition: 'http://schema.org/NewCondition',
-  //           url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`
-  //         }
-  //       }
-  //     }))
-  //   });
-  // }, [relatedProducts]);
-
   return (
     <section className="bg-white py-8 md:py-10 lg:py-16">
       {relatedProducts && relatedProducts.length > 0 ? (
@@ -61,26 +26,46 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
             loop={true}
             slidesPerView={5}
             spaceBetween={2}
+            breakpoints={{
+              1024: {
+                slidesPerView: 5,
+                spaceBetween: 2
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 2
+              },
+              0: {
+                slidesPerView: 2,
+                spaceBetween: 2
+              }
+            }}
           >
             {relatedProducts.map(product => (
               <SwiperSlide key={product.id}>
-                <div className="relative max-w-full p-1" style={{aspectRatio: '3 / 4'}}>
+                <div className="relative max-w-full p-1" style={{overflow: 'visible', height: 'auto'}}>
                   <ProductCard product={product} />
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
           <button
-            className="swiper-nav-prev absolute -bottom-10 left-4 bg-gray-800 text-white p-3 rounded-full hover:bg-gray-700 transition z-10 shadow-md"
+            className="swiper-nav-prev absolute -left-2.5 top-1/2 transform -translate-y-1/2 z-10"
             aria-label="Previous"
           >
-            ←
+            <IoIosArrowBack
+              size={48}
+              className="p-2 bg-transparent text-blue-600 rounded-full shadow-md hover:bg-blue-600 hover:text-white transition"
+            />
           </button>
           <button
-            className="swiper-nav-next absolute -bottom-10 right-4 bg-gray-800 text-white p-3 rounded-full hover:bg-gray-700 transition z-10 shadow-md"
+            className="swiper-nav-next absolute -right-2.5 top-1/2 transform -translate-y-1/2 z-10"
             aria-label="Next"
           >
-            →
+            <IoIosArrowForward
+              size={48}
+              className="p-2 bg-transparent text-blue-600 rounded-full shadow-md hover:bg-blue-600 hover:text-white transition"
+            />
           </button>
         </div>
       ) : (

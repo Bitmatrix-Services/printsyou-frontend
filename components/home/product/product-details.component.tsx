@@ -166,7 +166,7 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
             {/*</div>*/}
 
             {/* end Rating review section  */}
-              <RelatedProductsSection relatedProducts={relatedProducts}/>
+            <RelatedProductsSection relatedProducts={relatedProducts} />
           </Container>
         </>
       ) : (
