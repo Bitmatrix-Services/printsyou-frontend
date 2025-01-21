@@ -233,8 +233,15 @@ export async function generateMetadata(props: {params: Params}) {
 
   if (response?.payload) product = response.payload;
 
+  const lowestPrice = (product?.priceGrids ?? [])
+    .filter(item => item.price && item.price !== 0)
+    .sort((a, b) => a.price - b.price);
+
+  let minimumPrice = 0;
+  if (lowestPrice.length > 0) minimumPrice = lowestPrice[0].price;
+
   return {
-    title: `${product?.prefix ?? 'Promotional'} ${product?.metaTitle || product?.productName} ${product?.suffix ?? ''}`,
+    title: `${product?.prefix ?? 'Promotional'} ${product?.metaTitle || product?.productName}${product?.suffix ? ` ${product?.suffix}` : ''} ${minimumPrice}`,
     description: product?.metaDescription || '',
     robots: {
       index: true,
