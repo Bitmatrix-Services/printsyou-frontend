@@ -41,7 +41,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           >
             <MdEmail size={16} /> <span>info@printsyou.com</span>
           </Link>
-
+          <div className="h-full w-1"></div>
           <Link href="tel:8882992940" className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10">
             <BiSolidPhone size={16} />
             <span>(888) 299-2940</span>

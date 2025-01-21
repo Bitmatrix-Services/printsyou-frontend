@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   title: `Request Info | ${metaConstants.SITE_NAME}`,
   description: `Learn more about our wide range of promotional products and services. Explore how we help businesses create impactful, custom-branded merchandise to enhance brand visibility and engagement. Contact us today for personalized solutions and expert guidance.`,
   robots: {
-     index: false,
-     follow: false
+    index: false,
+    follow: false
   },
   alternates: {
     canonical: `${process.env.FE_URL}more-info`

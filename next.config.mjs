@@ -88,7 +88,7 @@ const nextConfig = {
       source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-brümate-hopsulator-trio',
       permanent: true
     },
-   {
+    {
       destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       source: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12/16-oz.-br\u00fcmate-hopsulator-trio',
       permanent: true
@@ -875,7 +875,7 @@ const nextConfig = {
       source: '/categories/stress-relievers/shapes-&-symbols',
       permanent: true
     },
-      // END OF COVERAGE FILE
+    // END OF COVERAGE FILE
     {
       destination: '/categories/amenities/cases-amp-organizers',
       source: '/categories/technology/organizers-&-cases',

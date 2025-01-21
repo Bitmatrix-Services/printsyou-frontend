@@ -101,7 +101,10 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
                 name: product.productName,
                 image: product.imageUrl,
                 offers: {
-                  price: [...(product.priceGrids ?? [])].filter(item => item.price !== 0).sort((a, b) => a.price - b.price).shift()?.price,
+                  price: [...(product.priceGrids ?? [])]
+                    .filter(item => item.price !== 0)
+                    .sort((a, b) => a.price - b.price)
+                    .shift()?.price,
                   priceCurrency: 'USD',
                   availability: 'http://schema.org/InStock',
                   itemCondition: 'NewCondition'

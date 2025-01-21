@@ -15,7 +15,9 @@ export const getProductDetailsByUniqueName = async (uniqueName: string): Promise
     return null;
   }
 };
-export const fetchRelatedProductDetails = async (productId: string): Promise<ApiResponse<EnclosureProduct[]> | null> => {
+export const fetchRelatedProductDetails = async (
+  productId: string
+): Promise<ApiResponse<EnclosureProduct[]> | null> => {
   try {
     const response = await axios.get<ApiResponse<EnclosureProduct[]>>(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.FetchRelatedProducts}?productId=${productId}`

@@ -7,7 +7,7 @@ import {ProductImageComponent} from '@components/home/product/product-image-sect
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import {notFound} from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
-import RelatedProductsSection from "@components/home/product/related-products.component";
+import RelatedProductsSection from '@components/home/product/related-products.component';
 
 interface IProductDetails {
   product: Product | null;
