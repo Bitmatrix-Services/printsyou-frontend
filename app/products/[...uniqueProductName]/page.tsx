@@ -234,7 +234,7 @@ export async function generateMetadata(props: {params: Params}) {
   if (response?.payload) product = response.payload;
 
   return {
-    title: `${product?.metaTitle || product?.productName} | PrintsYou`,
+    title: `${product?.prefix ?? 'Promotional'} ${product?.metaTitle || product?.productName} ${product?.suffix ?? ''}`,
     description: product?.metaDescription || '',
     robots: {
       index: true,
