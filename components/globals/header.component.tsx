@@ -15,6 +15,7 @@ import {DialogContent} from '@mui/joy';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectCartRootState, setSidebarCartOpen} from '../../store/slices/cart/cart.slice';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
+import {BiSolidPhone} from 'react-icons/bi';
 
 interface IHeaderProps {
   categories: Category[];
@@ -32,13 +33,18 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
   return (
     <>
       <div className="bg-primary-500 bg-opacity-[12%]">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <div className="mr-auto"></div>
           <Link
             href="mailto: info@printsyou.com"
-            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10"
+            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1"
           >
             <MdEmail size={16} /> <span>info@printsyou.com</span>
+          </Link>
+
+          <Link href="tel:8882992940" className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10">
+            <BiSolidPhone size={16} />
+            <span>(888) 299-2940</span>
           </Link>
         </div>
       </div>
