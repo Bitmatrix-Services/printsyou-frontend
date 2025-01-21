@@ -1,5 +1,4 @@
 'use client';
-import {MdEmail} from 'react-icons/md';
 import Link from 'next/link';
 import Image from 'next/image';
 import {RiShoppingBagFill} from 'react-icons/ri';
@@ -35,17 +34,16 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
       <div className="bg-primary-500 bg-opacity-[12%]">
         <div className="flex items-center">
           <div className="mr-auto"></div>
-          <Link
-            href="mailto: info@printsyou.com"
-            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1"
-          >
-            <MdEmail size={16} /> <span>info@printsyou.com</span>
-          </Link>
-          <div className="h-full w-1"></div>
           <Link href="tel:8882992940" className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10">
             <BiSolidPhone size={16} />
-            <span>(888) 299-2940</span>
+            <span>Toll Free (888) 299-2940</span>
           </Link>
+          {/*<Link*/}
+          {/*  href="mailto: info@printsyou.com"*/}
+          {/*  className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10"*/}
+          {/*>*/}
+          {/*  <MdEmail size={16} /> <span>info@printsyou.com</span>*/}
+          {/*</Link>*/}
         </div>
       </div>
       <Container className="pt-6 md:pt-0 translate-y-0 sticky bg-white top-0 z-50 transition-transform duration-800">
