@@ -33,9 +33,9 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
     <>
       <div className="bg-primary-500 bg-opacity-[12%]">
         <div className="flex items-center">
-          <div className="mr-auto"></div>
+          <div className="lg:mr-auto"></div>
           <div
-            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 hover:cursor-pointer"
+            className="flex items-center justify-center bg-primary-500/10 py-1 lg:py-2 px-14 lg:px-4 gap-1 hover:cursor-pointer"
             onClick={() => {
               if (typeof window !== undefined && '$chatwoot' in window) {
                 // @ts-ignore
@@ -43,15 +43,22 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               }
             }}
           >
-            <RiChat1Fill size={16} />
-            <span>Chat with Us</span>
+            <div className="flex flex-col lg:flex-row items-center gap-1">
+              <RiChat1Fill size={16} />
+              <span>Chat with Us</span>
+            </div>
           </div>
 
           <div className="w-1 h-full"></div>
 
-          <Link href="tel:8882992940" className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10">
-            <FaHeadphones size={16} />
-            <span>Toll Free (888) 299-2940</span>
+          <Link
+            href="tel:8882992940"
+            className="flex items-center justify-end bg-primary-500/10 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"
+          >
+            <div className="flex flex-col lg:flex-row items-center gap-1">
+              <FaHeadphones size={16} />
+              <span>Toll Free (888) 299-2940</span>
+            </div>
           </Link>
           {/*<Link*/}
           {/*  href="mailto: info@printsyou.com"*/}
