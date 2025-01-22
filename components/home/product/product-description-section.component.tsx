@@ -103,7 +103,15 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       )}
       {productColors?.length > 0 || colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
-          <div className="text-mute text-sm font-normal">Colors:</div>
+          <div className="text-mute text-sm font-normal">
+            {selectedColor ? (
+              <>
+                Color: <span className="text-black font-bold">{selectedColor}</span>
+              </>
+            ) : (
+              'Colors:'
+            )}
+          </div>
           <div className="flex flex-wrap gap-3">
             {productColors.length > 0
               ? productColors.map(color => (
