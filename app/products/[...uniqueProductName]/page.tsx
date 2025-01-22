@@ -85,7 +85,7 @@ const ProductsPage = async (props: {params: Params}) => {
             image: (product?.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
             description: (product?.metaDescription ?? product?.description ?? '').replace(/<[^>]+>/g, ''),
             sku: product?.sku,
-            url: `${process.env.FE_URL}/products/${product?.uniqueProductName}`,
+            url: `${process.env.FE_URL}products/${product?.uniqueProductName}`,
             brand: {
               '@type': 'Brand',
               name: 'PrintsYou'
