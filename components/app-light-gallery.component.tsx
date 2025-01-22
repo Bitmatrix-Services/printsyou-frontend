@@ -62,7 +62,7 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
                   className="object-contain"
                   src={image.imageUrl}
                   alt={
-                    image?.imageAltText ??
+                    image?.altText ??
                     (productName.startsWith('.')
                       ? `${productName.substring(1)} ${index + 1}`
                       : `${productName} ${index + 1}`)

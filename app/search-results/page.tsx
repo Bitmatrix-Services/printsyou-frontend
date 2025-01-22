@@ -16,8 +16,6 @@ type SearchParams = Promise<any>;
 export async function generateMetadata(props: {searchParams: SearchParams}) {
   const searchParams = await props.searchParams;
 
-  console.log('searchParams', searchParams);
-
   const currentPage = parseInt(searchParams.page);
   let canonicalURL: string = `${process.env.FE_URL}search-results`;
   if (currentPage > 1) {
