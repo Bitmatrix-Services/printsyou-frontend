@@ -35,7 +35,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
         <div className="flex items-center">
           <div className="mr-auto"></div>
           <div
-            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1"
+            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 hover:cursor-pointer"
             onClick={() => {
               if (typeof window !== undefined && '$chatwoot' in window) {
                 // @ts-ignore
