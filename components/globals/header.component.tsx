@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import {RiShoppingBagFill} from 'react-icons/ri';
+import {RiChat1Fill, RiShoppingBagFill} from 'react-icons/ri';
 import {Searchbar} from '@components/globals/searchbar.component';
 import {Container} from '@components/globals/container.component';
 import {NavComponent} from '@components/globals/cart/nav-component';
@@ -14,7 +14,7 @@ import {DialogContent} from '@mui/joy';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {selectCartRootState, setSidebarCartOpen} from '../../store/slices/cart/cart.slice';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
-import {BiSolidPhone} from 'react-icons/bi';
+import {FaHeadphones} from 'react-icons/fa';
 
 interface IHeaderProps {
   categories: Category[];
@@ -34,8 +34,23 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
       <div className="bg-primary-500 bg-opacity-[12%]">
         <div className="flex items-center">
           <div className="mr-auto"></div>
+          <div
+            className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1"
+            onClick={() => {
+              if (typeof window !== undefined && '$chatwoot' in window) {
+                // @ts-ignore
+                window.$chatwoot.toggle();
+              }
+            }}
+          >
+            <RiChat1Fill size={16} />
+            <span>Chat with Us</span>
+          </div>
+
+          <div className="w-1 h-full"></div>
+
           <Link href="tel:8882992940" className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10">
-            <BiSolidPhone size={16} />
+            <FaHeadphones size={16} />
             <span>Toll Free (888) 299-2940</span>
           </Link>
           {/*<Link*/}
