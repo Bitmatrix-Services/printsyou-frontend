@@ -99,7 +99,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
                 '@type': 'Product',
                 url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
                 name: product.productName,
-                image: `${process.env.ASSETS_SERVER_URL}${product.imageUrl}`,
+                image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
                 offers: {
                   price: [...(product.priceGrids ?? [])]
                     .filter(item => item.price !== 0)
