@@ -46,10 +46,10 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         sequenceNumber: 0
       };
 
-      setImages(updatedImages);
-      if (selectedColor) updatedImages.shift();
+      if (selectedColor && selectedColor === color.colorName) updatedImages.shift();
 
       updatedImages.unshift(newImg);
+      setImages(updatedImages);
       setSelectedColor(color.colorName);
     }
   };
