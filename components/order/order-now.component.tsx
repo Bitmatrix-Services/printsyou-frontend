@@ -72,7 +72,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         addressLineOne: '',
         addressLineTwo: '',
         city: '',
-        state: '',
+        state: 'NONE',
         zipCode: '',
         phoneNumber: ''
       },
@@ -82,7 +82,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         addressLineOne: '',
         addressLineTwo: '',
         city: '',
-        state: '',
+        state: 'NONE',
         zipCode: '',
         phoneNumber: '',
         shippingAddressSame: true
@@ -703,7 +703,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               addressLineOne: '',
                               addressLineTwo: '',
                               city: '',
-                              state: '',
+                              state: 'NONE',
                               zipCode: '',
                               phoneNumber: '',
                               shippingAddressSame: true
