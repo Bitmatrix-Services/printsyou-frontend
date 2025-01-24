@@ -32,10 +32,10 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
   return (
     <>
       <div className="bg-primary-500 bg-opacity-[12%]">
-        <div className="flex items-center">
-          <div className="lg:mr-auto"></div>
+        <div className="flex items-center justify-between">
+          <div className="hidden md:block lg:mr-auto"></div>
           <div
-            className="flex items-center justify-center bg-primary-500/10 py-1 lg:py-2 px-14 lg:px-4 gap-1 hover:cursor-pointer"
+            className="flex items-center justify-center bg-primary-500/10 py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"
             onClick={() => {
               if (typeof window !== undefined && '$chatwoot' in window) {
                 // @ts-ignore
@@ -44,7 +44,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             }}
           >
             <div className="flex flex-col lg:flex-row items-center gap-1">
-              <RiChat1Fill size={16} />
+              <RiChat1Fill size={18} />
               <span>Chat with Us</span>
             </div>
           </div>
@@ -56,7 +56,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             className="flex items-center justify-end bg-primary-500/10 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"
           >
             <div className="flex flex-col lg:flex-row items-center gap-1">
-              <FaHeadphones size={16} />
+              <FaHeadphones size={18} />
               <span>Toll Free (888) 299-2940</span>
             </div>
           </Link>
