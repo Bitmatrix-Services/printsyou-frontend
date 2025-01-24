@@ -14,7 +14,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
   return (
     <SwiperSlider dataList={bannersList.sort((a, b) => a.sequenceNumber - b.sequenceNumber)}>
       {banner => (
-        <div key={banner.id} className="grid grid-rows-3 md:grid-rows-1 md:grid-cols-3 gap-2">
+        <div key={banner.id} className="grid grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 gap-2">
           {/*  tagline section */}
           <div className="banner-text-section font-century-gothic">
             <div className="flex flex-col justify-center items-start text-start text-white px-8 h-full font-normal text-5xl tracking-wide leading-extra-loose">
@@ -38,7 +38,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
               fill
             />
           </div>
-          <div className="grid grid-rows-2 gap-1">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 grid-rows-2 gap-1">
             <ShortImageTitleSection
               textColor={'white'}
               heading={'Made in USA'}
