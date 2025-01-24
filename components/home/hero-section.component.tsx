@@ -68,15 +68,15 @@ const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, hea
   return (
     <div className="relative min-h-[13rem] w-full">
       <Image
-        className="object-cover"
+        className="object-fill"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
         alt="Image 4"
         fill
       />
       <div
-        className={`absolute font-century-gothic ${textColor === 'white' ? 'text-black' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-center font-normal`}
+        className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}
       >
-        <div className="text-2xl mb-3" dangerouslySetInnerHTML={{__html: heading}}></div>
+        <div className="text-2xl mb-1" dangerouslySetInnerHTML={{__html: heading}}></div>
         <Link href={`/categories/${ucategoryName}`} className="text-lg underline ">
           Shop Now
         </Link>
