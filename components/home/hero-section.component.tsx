@@ -16,7 +16,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
       {(banner, index) => (
         <div className="relative h-full w-full">
           <Image
-            className="object-contain lg:object-none"
+            className="object-contain lg:object-cover"
             src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner.bannerUrl}`}
             alt="banner"
             fill
