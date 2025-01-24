@@ -16,13 +16,13 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
       {banner => (
         <div key={banner.id} className="grid grid-rows-3 md:grid-rows-1 md:grid-cols-3 gap-2">
           {/*  tagline section */}
-          <div className="banner-text-section">
-            <div className="flex flex-col justify-center items-center text-white px-8 h-full font-semibold text-4xl">
-              Carry in Style: The Perfect Tote for Every Occasion
-              <div className="bg-white px-4 py-2 font-semibold mt-10">
+          <div className="banner-text-section font-century-gothic">
+            <div className="flex flex-col justify-center items-start text-start text-white px-8 h-full font-normal text-5xl tracking-wide leading-extra-loose">
+              <h1>Carry in Style: The Perfect Tote for Every Occasion</h1>
+              <div className="mt-4">
                 <Link
                   href={`/categories/bags-duffels-amp-accessories/tote-bags-nylon-amp-polyester`}
-                  className="text-lg text-[#005c90] align-middle"
+                  className="text-lg text-[#005c90] align-middle bg-white px-4 lg:px-8 py-4 font-normal font-century-gothic hover:bg-blue-100"
                   dangerouslySetInnerHTML={{__html: 'Buy Tote Bags and Gifts'}}
                 ></Link>
               </div>
@@ -47,7 +47,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
             />
             <ShortImageTitleSection
               heading={'Pet Products'}
-              ucategoryName={'plush-amp-novelties/pet-accessories'}
+              ucategoryName={'pet-products'}
               bannerUrl={'static-assets/banners/pet-supplies.jpg'}
             />
           </div>
@@ -74,9 +74,9 @@ const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, hea
         fill
       />
       <div
-        className={`absolute ${textColor === 'white' ? 'text-white' : 'text-black'} bottom-4 ml-6 mb-10 text-center`}
+        className={`absolute ${textColor === 'white' ? 'text-[#13366c]' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-center`}
       >
-        <div className="font-bold text-2xl mb-4" dangerouslySetInnerHTML={{__html: heading}}></div>
+        <div className="font-bold text-2xl mb-3" dangerouslySetInnerHTML={{__html: heading}}></div>
         <Link href={`/categories/${ucategoryName}`} className="underline ">
           Show Now
         </Link>

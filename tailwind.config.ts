@@ -12,6 +12,9 @@ const config: Config = {
         oswald: 'Oswald, sans-serif',
         poppins: 'Poppins, sans-serif'
       },
+      lineHeight: {
+        'extra-loose': '1.2'
+      },
       screens: {
         tablet: {raw: '(min-width: 760px) and (max-width: 860px)'}
       },
