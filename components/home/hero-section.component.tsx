@@ -74,7 +74,7 @@ const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, hea
         fill
       />
       <div
-        className={`absolute ${textColor === 'white' ? 'text-red-700' : 'text-black'} bottom-4 ml-6 mb-10 text-center`}
+        className={`absolute ${textColor === 'white' ? 'text-white' : 'text-black'} bottom-4 ml-6 mb-10 text-center`}
       >
         <div className="font-bold text-2xl mb-4" dangerouslySetInnerHTML={{__html: heading}}></div>
         <Link href={`/categories/${ucategoryName}`} className="underline ">
