@@ -2040,7 +2040,7 @@ const nextConfig = {
           destination: '/categories/kits/health-amp-wellness-kits',
           source: '/categories/protection-and-wellness',
           permanent: true
-      },
+      }
   ],
   rewrites: () => [
     {
