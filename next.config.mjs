@@ -370,7 +370,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination: '/categories/plush-amp-novelties/aws',
+      destination: '/categories/leisure-amp-outdoor',
       source: '/categories/leisure-amp-outdoor/aws',
       permanent: true
     },
@@ -786,7 +786,7 @@ const nextConfig = {
       permanent: true
     },
     {
-      destination: '/categories/plush-amp-novelties/aws',
+      destination: '/categories/plush-amp-novelties',
       source: '/categories/aws-collection',
       permanent: true
     },
@@ -2015,7 +2015,27 @@ const nextConfig = {
       destination: '/products/pet-toys/folding-flying-disc-with-pouch',
       source: '/pet-toys/folding-flying-disc-with-pouch',
       permanent: true
-    }
+    },
+      {
+          destination: '/categories/hitronics-amp-tech-accessories',
+          source: '/categories/hitronics-amp-tech-accessories/aws',
+          permanent: true
+      },
+      {
+          destination: '/categories/plush-amp-novelties',
+          source: '/categories/plush-amp-novelties/aws',
+          permanent: true
+      },
+      {
+          destination: '/categories/drinkware',
+          source: '/categories/drinkware/aws',
+          permanent: true
+      },
+      {
+          destination: '/categories/bags-duffels-amp-accessories',
+          source: '/categories/bags-duffels-amp-accessories/aws',
+          permanent: true
+      },
   ],
   rewrites: () => [
     {
