@@ -2036,6 +2036,11 @@ const nextConfig = {
           source: '/categories/bags-duffels-amp-accessories/aws',
           permanent: true
       },
+      {
+          destination: '/categories/kits/health-amp-wellness-kits',
+          source: '/categories/protection-and-wellness',
+          permanent: true
+      },
   ],
   rewrites: () => [
     {
