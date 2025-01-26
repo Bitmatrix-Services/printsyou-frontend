@@ -2016,31 +2016,31 @@ const nextConfig = {
       source: '/pet-toys/folding-flying-disc-with-pouch',
       permanent: true
     },
-      {
-          destination: '/categories/hitronics-amp-tech-accessories',
-          source: '/categories/hitronics-amp-tech-accessories/aws',
-          permanent: true
-      },
-      {
-          destination: '/categories/plush-amp-novelties',
-          source: '/categories/plush-amp-novelties/aws',
-          permanent: true
-      },
-      {
-          destination: '/categories/drinkware',
-          source: '/categories/drinkware/aws',
-          permanent: true
-      },
-      {
-          destination: '/categories/bags-duffels-amp-accessories',
-          source: '/categories/bags-duffels-amp-accessories/aws',
-          permanent: true
-      },
-      {
-          destination: '/categories/kits/health-amp-wellness-kits',
-          source: '/categories/protection-and-wellness',
-          permanent: true
-      }
+    {
+      destination: '/categories/hitronics-amp-tech-accessories',
+      source: '/categories/hitronics-amp-tech-accessories/aws',
+      permanent: true
+    },
+    {
+      destination: '/categories/plush-amp-novelties',
+      source: '/categories/plush-amp-novelties/aws',
+      permanent: true
+    },
+    {
+      destination: '/categories/drinkware',
+      source: '/categories/drinkware/aws',
+      permanent: true
+    },
+    {
+      destination: '/categories/bags-duffels-amp-accessories',
+      source: '/categories/bags-duffels-amp-accessories/aws',
+      permanent: true
+    },
+    {
+      destination: '/categories/kits/health-amp-wellness-kits',
+      source: '/categories/protection-and-wellness',
+      permanent: true
+    }
   ],
   rewrites: () => [
     {
