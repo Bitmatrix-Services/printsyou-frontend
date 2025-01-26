@@ -38,11 +38,6 @@ export default async function HomePage() {
               postalCode: '75089',
               addressCountry: 'US'
             },
-            geo: {
-              '@type': 'GeoCoordinates',
-              latitude: '32.93553656433128',
-              longitude: '-96.57029793014921'
-            },
             sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
             contactPoint: {
                 '@type': 'ContactPoint',
@@ -51,9 +46,7 @@ export default async function HomePage() {
                 contactType: 'customer service',
                 areaServed: "US",
                 availableLanguage: [
-                    "English",
-                    "Hindi",
-                    "Urdu"
+                    "English"
                 ],
                 email: "info@printsyou.com"
             }

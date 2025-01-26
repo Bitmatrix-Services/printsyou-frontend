@@ -57,93 +57,35 @@ export const ContactUsComponent = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'Prints You',
-            description:
-              'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
-            email: 'info@printsyou.com',
-            url: 'https://printsYou.com',
-            telephone: '+1-888-299-2940',
-            address: {
-              '@type': 'PostalAddress',
-              streetAddress: '8602 Royal Star Rd',
-              addressLocality: 'Rowlett',
-              addressRegion: 'TX',
-              postalCode: '75089',
-              addressCountry: 'US'
-            },
-            geo: {
-              '@type': 'GeoCoordinates',
-              latitude: '32.93553656433128',
-              longitude: '-96.57029793014921'
-            },
-            openingHoursSpecification: [
-              {
-                '@type': 'OpeningHoursSpecification',
-                dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-                opens: '08:00',
-                closes: '17:00'
-              }
-            ],
-            sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
-            foundingDate: '2022',
-            image: 'https://printsyou.com/assets/logo-full.png',
-            priceRange: '$$',
-            areaServed: 'United States',
-            contactPoint: [
-              {
-                '@type': 'ContactPoint',
-                telephone: '+1-888-299-2940',
-                contactType: 'customer service'
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'Prints You',
+              description:
+                  'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!',
+              email: 'info@printsyou.com',
+              url: 'https://printsYou.com',
+              logo: "https://printsyou.com/assets/logo-full.png",
+              telephone: '+1-888-299-2940',
+              address: {
+                  '@type': 'PostalAddress',
+                  streetAddress: '8602 Royal Star Rd',
+                  addressLocality: 'Rowlett',
+                  addressRegion: 'TX',
+                  postalCode: '75089',
+                  addressCountry: 'US'
               },
-              {
-                '@type': 'ContactPoint',
-                email: 'info@printsyou.com',
-                contactType: 'customer support'
+              sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
+              contactPoint: {
+                  '@type': 'ContactPoint',
+                  telephone: '+1-888-299-2940',
+                  contactOption: "TollFree",
+                  contactType: 'customer service',
+                  areaServed: "US",
+                  availableLanguage: [
+                      "English"
+                  ],
+                  email: "info@printsyou.com"
               }
-            ]
-            // makesOffer: [
-            //   {
-            //     '@type': 'Offer',
-            //     itemOffered: {
-            //       '@type': 'Product',
-            //       name: 'Promotional Products',
-            //       offers: {
-            //         '@type': 'Offer',
-            //         priceCurrency: 'USD',
-            //         itemCondition: 'https://schema.org/NewCondition',
-            //         availability: 'https://schema.org/InStock'
-            //       }
-            //     }
-            //   },
-            //   {
-            //     '@type': 'Offer',
-            //     itemOffered: {
-            //       '@type': 'Product',
-            //       name: 'Custom Printed Products',
-            //       offers: {
-            //         '@type': 'Offer',
-            //         priceCurrency: 'USD',
-            //         itemCondition: 'https://schema.org/NewCondition',
-            //         availability: 'https://schema.org/InStock'
-            //       }
-            //     }
-            //   },
-            //   {
-            //     '@type': 'Offer',
-            //     itemOffered: {
-            //       '@type': 'Product',
-            //       name: 'Corporate Gifts',
-            //       offers: {
-            //         '@type': 'Offer',
-            //         priceCurrency: 'USD',
-            //         itemCondition: 'https://schema.org/NewCondition',
-            //         availability: 'https://schema.org/InStock'
-            //       }
-            //     }
-            //   }
-            // ]
           })
         }}
       />
