@@ -14,15 +14,15 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
   return (
     <SwiperSlider dataList={bannersList.sort((a, b) => a.sequenceNumber - b.sequenceNumber)}>
       {banner => (
-        <div key={banner.id} className="grid grid-rows-3 lg:grid-rows-1 lg:grid-cols-3 gap-2">
+        <div key={banner.id} className="grid sm:grid-rows-2  lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-3 gap-2">
           {/*  tagline section */}
           <div className="banner-text-section font-century-gothic">
-            <div className="flex flex-col justify-center items-start text-start text-white px-8 h-full font-normal text-5xl tracking-wide leading-extra-loose">
+            <div className="flex flex-col justify-center items-start xl:max-w-[32rem] text-start text-white px-5 lg:px-8 py-8 h-full font-normal text-4xl lg:text-5xl tracking-wide leading-extra-loose lg:leading-extra-loose">
               <h1>Carry in Style: The Perfect Tote for Every Occasion</h1>
-              <div className="mt-4">
+              <div className="mt-4 w-full">
                 <Link
                   href={`/categories/bags-duffels-amp-accessories/tote-bags-nylon-amp-polyester`}
-                  className="text-lg text-[#005c90] align-middle bg-white px-4 lg:px-8 py-4 font-normal font-century-gothic hover:bg-blue-100"
+                  className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 py-2 xl:py-4 font-normal font-century-gothic hover:bg-blue-100"
                   dangerouslySetInnerHTML={{__html: 'Buy Tote Bags and Gifts'}}
                 ></Link>
               </div>
@@ -30,7 +30,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           </div>
 
           {/*  center image section */}
-          <div className="relative min-h-full w-full">
+          <div className="relative min-h-[200px] lg:min-h-full w-full">
             <Image
               className="object-cover"
               src={`https://printsyouassets.s3.amazonaws.com/static-assets/banners/FullToteBag.png`}
@@ -38,7 +38,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
               fill
             />
           </div>
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-1 grid-rows-2 gap-1">
+          <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 grid-rows-2 gap-1">
             <ShortImageTitleSection
               textColor={'white'}
               heading={'Made in USA'}
