@@ -22,7 +22,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
               <div className="mt-4 w-full">
                 <Link
                   href={`/categories/bags-duffels-amp-accessories/tote-bags-nylon-amp-polyester`}
-                  className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 sm:py-2 md:py-3 xl:py-4 font-normal font-century-gothic hover:bg-blue-100"
+                  className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 sm:py-3 xl:py-4 font-normal font-century-gothic hover:bg-blue-100"
                   dangerouslySetInnerHTML={{__html: 'Buy Tote Bags and Gifts'}}
                 ></Link>
               </div>
@@ -30,7 +30,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           </div>
 
           {/*  center image section */}
-          <div className="relative min-h-[160px] lg:min-h-full w-full">
+          <div className="relative min-h-[180px] lg:min-h-full w-full">
             <Image
               className="object-cover"
               src={`https://printsyouassets.s3.amazonaws.com/static-assets/banners/FullToteBag.png`}
@@ -66,7 +66,7 @@ interface IShortImageTitleSection {
 
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
-    <div className="relative sm:min-h-[10rem] md:min-h-[12rem] tablet:w-full lg:w-full ">
+    <div className="relative min-h-[12rem] md:min-h-[13rem] tablet:min-h-[13rem] lg:min-h-[14rem] xl:w-full">
       <Image
         className="object-cover tablet:object-fill md:object-fill"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
