@@ -52,12 +52,12 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
         sx={{
           height: 'auto',
           width: '90%',
-          maxWidth: '60rem',
+          maxWidth: '75rem',
           margin: 'auto',
           overflowY: 'auto',
           '@media (max-width: 600px)': {
             width: '95%',
-            maxWidth: '95%'
+            maxWidth: '90%'
           }
         }}
       >
@@ -65,7 +65,7 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
         {/* Left Column */}
         {product ? (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 mb-4">
               <ProductDescriptionComponent setImages={setImages} images={images} product={product} />
               <ProductImageComponent productImages={images} productName={product.productName} />
             </div>
