@@ -14,7 +14,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
   return (
     <SwiperSlider dataList={bannersList.sort((a, b) => a.sequenceNumber - b.sequenceNumber)}>
       {banner => (
-        <div key={banner.id} className="grid sm:grid-rows-2  lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-3 gap-2">
+        <div key={banner.id} className="grid sm:grid-rows-2 lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-3">
           {/*  tagline section */}
           <div className="banner-text-section font-century-gothic">
             <div className="flex flex-col justify-center items-start xl:max-w-[32rem] text-start text-white px-5 lg:px-8 py-8 h-full font-normal text-4xl lg:text-5xl tracking-wide leading-extra-loose lg:leading-extra-loose">
@@ -38,7 +38,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
               fill
             />
           </div>
-          <div className="grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 grid-rows-2 gap-1">
+          <div className="grid sm:grid-cols-1 tablet:grid-rows-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 md:grid-rows-2 px-4 gap-4 mt-4 tablet:mt-4 lg:mt-4 xl:mt-0 ">
             <ShortImageTitleSection
               textColor={'white'}
               heading={'Made in USA'}
@@ -66,9 +66,9 @@ interface IShortImageTitleSection {
 
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
-    <div className="relative min-h-[13rem] w-full">
+    <div className="relative min-h-[13rem] w-full ">
       <Image
-        className="object-fill"
+        className="object-cover tablet:object-fill md:object-fill"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
         alt="Image 4"
         fill
