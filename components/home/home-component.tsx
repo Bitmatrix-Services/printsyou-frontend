@@ -7,7 +7,6 @@ import {PromotionalBanner} from '@components/home/promotional-banner.component';
 import {CategorySection} from '@components/home/category/category-section.component';
 import {BannerList, Category, Faq} from '@components/home/home.types';
 import React, {FC} from 'react';
-import {FeatureSection} from '@components/home/feature-section.component';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import dynamic from 'next/dynamic';
