@@ -17,12 +17,12 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
         <div key={banner.id} className="grid sm:grid-rows-2 lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-3">
           {/*  tagline section */}
           <div className="banner-text-section font-century-gothic">
-            <div className="flex flex-col justify-center items-start xl:max-w-[32rem] text-start text-white px-5 lg:px-8 py-8 h-full font-normal text-4xl lg:text-5xl tracking-wide leading-extra-loose lg:leading-extra-loose">
+            <div className="flex flex-col justify-center items-start xl:max-w-[32rem] text-start text-white px-5 lg:px-8 py-8 h-full font-normal text-3xl lg:text-5xl tracking-wide leading-extra-loose lg:leading-extra-loose">
               <h1>Carry in Style: The Perfect Tote for Every Occasion</h1>
               <div className="mt-4 w-full">
                 <Link
                   href={`/categories/bags-duffels-amp-accessories/tote-bags-nylon-amp-polyester`}
-                  className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 py-2 xl:py-4 font-normal font-century-gothic hover:bg-blue-100"
+                  className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 sm:py-2 md:py-3 xl:py-4 font-normal font-century-gothic hover:bg-blue-100"
                   dangerouslySetInnerHTML={{__html: 'Buy Tote Bags and Gifts'}}
                 ></Link>
               </div>
@@ -30,7 +30,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           </div>
 
           {/*  center image section */}
-          <div className="relative min-h-[200px] lg:min-h-full w-full">
+          <div className="relative min-h-[160px] lg:min-h-full w-full">
             <Image
               className="object-cover"
               src={`https://printsyouassets.s3.amazonaws.com/static-assets/banners/FullToteBag.png`}
@@ -66,7 +66,7 @@ interface IShortImageTitleSection {
 
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
-    <div className="relative min-h-[13rem] w-full ">
+    <div className="relative sm:min-h-[10rem] md:min-h-[12rem] tablet:w-full lg:w-full ">
       <Image
         className="object-cover tablet:object-fill md:object-fill"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
