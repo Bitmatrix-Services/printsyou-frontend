@@ -10,7 +10,8 @@ const config: Config = {
     extend: {
       fontFamily: {
         oswald: 'Oswald, sans-serif',
-        poppins: 'Poppins, sans-serif'
+        poppins: 'Poppins, sans-serif',
+        century: ['Century Gothic', 'Arial', 'sans-serif']
       },
       lineHeight: {
         'extra-loose': '1.3'
