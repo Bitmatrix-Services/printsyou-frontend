@@ -416,22 +416,20 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         <div className="hidden md:grid grid-cols-3">
                           <div className="col-span-2">
                             {priceTypes.length > 0 ? (
-                              <div className="flex justify-between items-center gap-8 mb-5">
-                                <FormControlSelect
-                                  name="selectedPriceType"
-                                  label="Item Type"
-                                  isRequired={true}
-                                  disabled={isSubmitting}
-                                  control={control}
-                                  errors={errors}
-                                >
-                                  {priceTypes.map((row, index) => (
-                                    <Option key={`${row}${index}`} value={row}>
+                              <>
+                                <FormHeading text="Item Type" />
+                                <div className="flex justify-start items-center flex-wrap gap-6 mb-5">
+                                  {priceTypes.map(row => (
+                                    <div
+                                      key={row}
+                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                      onClick={() => setValue('selectedPriceType', row)}
+                                    >
                                       {row}
-                                    </Option>
+                                    </div>
                                   ))}
-                                </FormControlSelect>
-                              </div>
+                                </div>
+                              </>
                             ) : null}
 
                             <div className="flex justify-between items-center gap-8">
@@ -470,22 +468,20 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         {/*  quantity pricing mobile view*/}
                         <div className="md:hidden">
                           {priceTypes.length > 0 ? (
-                            <div className="flex">
-                              <FormControlSelect
-                                name="selectedPriceType"
-                                label="Item Type"
-                                isRequired={true}
-                                disabled={isSubmitting}
-                                control={control}
-                                errors={errors}
-                              >
-                                {priceTypes.map((row, index) => (
-                                  <Option key={`${row}${index}`} value={row}>
+                            <>
+                              <FormHeading text="Item Type" />
+                              <div className="flex justify-start items-center flex-wrap gap-2">
+                                {priceTypes.map(row => (
+                                  <div
+                                    key={row}
+                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                    onClick={() => setValue('selectedPriceType', row)}
+                                  >
                                     {row}
-                                  </Option>
+                                  </div>
                                 ))}
-                              </FormControlSelect>
-                            </div>
+                              </div>
+                            </>
                           ) : null}
                           <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
                           <div className="flex ">
@@ -843,25 +839,23 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         </div>
 
                         <div>
-                          <div className="hidden md:grid grid-cols-3">
+                          <div className="hidden tablet:grid md:grid grid-cols-3">
                             <div className="col-span-2">
                               {priceTypes.length > 0 ? (
-                                <div className="flex justify-between items-center gap-8 mb-5">
-                                  <FormControlSelect
-                                    name="selectedPriceType"
-                                    label="Item Type"
-                                    isRequired={true}
-                                    disabled={isSubmitting}
-                                    control={control}
-                                    errors={errors}
-                                  >
-                                    {priceTypes.map((row, index) => (
-                                      <Option key={`${row}${index}`} value={row}>
+                                <>
+                                  <FormHeading text="Item Type" />
+                                  <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
+                                    {priceTypes.map(row => (
+                                      <div
+                                        key={row}
+                                        className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                        onClick={() => setValue('selectedPriceType', row)}
+                                      >
                                         {row}
-                                      </Option>
+                                      </div>
                                     ))}
-                                  </FormControlSelect>
-                                </div>
+                                  </div>
+                                </>
                               ) : null}
 
                               <div
@@ -902,22 +896,20 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                           {/*  quantity pricing mobile view*/}
                           <div className="md:hidden">
                             {priceTypes.length > 0 ? (
-                              <div className="flex">
-                                <FormControlSelect
-                                  name="selectedPriceType"
-                                  label="Item Type"
-                                  isRequired={true}
-                                  disabled={isSubmitting}
-                                  control={control}
-                                  errors={errors}
-                                >
-                                  {priceTypes.map((row, index) => (
-                                    <Option key={`${row}${index}`} value={row}>
+                              <>
+                                <FormHeading text="Item Type" />
+                                <div className="flex justify-start items-center flex-wrap gap-2">
+                                  {priceTypes.map(row => (
+                                    <div
+                                      key={row}
+                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                      onClick={() => setValue('selectedPriceType', row)}
+                                    >
                                       {row}
-                                    </Option>
+                                    </div>
                                   ))}
-                                </FormControlSelect>
-                              </div>
+                                </div>
+                              </>
                             ) : null}
                             <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
                             <div className="flex ">
