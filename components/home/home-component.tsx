@@ -147,7 +147,7 @@ const HomeComponent: FC<IHome> = ({
       {/*    imageUrl="/assets/upcoming-bags.jpg"*/}
       {/*/>*/}
       <Benefits />
-      <FeatureSection />
+      {/*<FeatureSection />*/}
       <FaqSectionComponent faqsList={faqsList} />
       <AddToCartModalClientSide />
     </main>
