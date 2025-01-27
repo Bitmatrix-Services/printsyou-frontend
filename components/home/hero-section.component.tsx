@@ -30,7 +30,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           </div>
 
           {/*  center image section */}
-          <div className="relative min-h-[180px] lg:min-h-full w-full">
+          <div className="relative min-h-[150px] md:min-h-[170px] lg:min-h-full w-full">
             <Image
               className="object-cover"
               src={`https://printsyouassets.s3.amazonaws.com/static-assets/banners/FullToteBag.png`}
@@ -66,7 +66,7 @@ interface IShortImageTitleSection {
 
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
-    <div className="relative min-h-[12rem] md:min-h-[13rem] tablet:min-h-[13rem] lg:min-h-[14rem] xl:w-full">
+    <div className="relative min-h-[150px] md:min-h-[170px] tablet:min-h-[180px] lg:min-h-[180px] lg:w-full">
       <Image
         className="object-cover tablet:object-fill md:object-fill"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
