@@ -163,7 +163,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   const {mutate} = useMutation({
     mutationFn: async (data: OrderNowFormSchemaType) => {
       setLoading(true);
-      window.scrollTo(0, 0);
+      window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
 
       const cartId = getCartId();
       setApiError(false);
