@@ -38,7 +38,7 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
               fill
             />
           </div>
-          <div className="grid sm:grid-cols-1 tablet:grid-rows-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 md:grid-rows-2 px-4 gap-4 mt-4 tablet:mt-4 lg:mt-4 xl:mt-0 ">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 tablet:grid-rows-1 md:grid-rows-2 lg:grid-rows-1 px-4 gap-4 mt-4 tablet:mt-4 lg:mt-4 xl:mt-0 ">
             <ShortImageTitleSection
               textColor={'white'}
               heading={'Made in USA'}
