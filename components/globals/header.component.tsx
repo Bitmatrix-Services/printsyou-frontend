@@ -120,7 +120,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
 
           <Link
             href="/how-to-order"
-            className="hidden lg:flex justify-center items-center ml-4 border border-primary-700 py-1 px-4 rounded-full text-primary-700 hover:text-primary-500 hover:border-primary-500"
+            className="hidden lg:flex justify-center items-center ml-4 border border-secondary py-2 px-4 rounded-full text-white bg-secondary hover:drop-shadow-2xl"
           >
             <div className="capitalize">how to order</div>
           </Link>

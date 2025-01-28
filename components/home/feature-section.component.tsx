@@ -28,12 +28,12 @@ const servicesData: ServicesData[] = [
     title: '7 Days',
     description: 'Free return policy'
   },
-  {
-    id: 4,
-    iconSrc: '/assets/f-icon-4.png',
-    title: '100 %Money Back',
-    description: 'Guarantee'
-  },
+  // {
+  //   id: 4,
+  //   iconSrc: '/assets/f-icon-4.png',
+  //   title: '100 %Money Back',
+  //   description: 'Guarantee'
+  // },
   {
     id: 5,
     iconSrc: '/assets/f-icon-5.png',

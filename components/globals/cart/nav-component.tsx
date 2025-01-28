@@ -16,11 +16,9 @@ interface INavComponentProps {
 const navList: listType[] = [
   // {name: 'markets', url: '/how-to-order'},
   // {name: 'shop by', url: '/how-to-order', menuItems: [{name: 'USA only', url: '/'}]},
-  {name: 'how to order', url: '/how-to-order'},
-  {name: 'blogs', url: '/blog'},
-  {name: 'Contact Us', url: '/contact-us'},
   {name: 'About Us', url: '/about-us'},
-  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
+  {name: 'Contact Us', url: '/contact-us'},
+  {name: 'blogs', url: '/blog'}
 ];
 
 export const NavComponent: FC<INavComponentProps> = ({categories}) => {
@@ -40,6 +38,15 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
             <div className="hidden lg:block w-full">
               <nav className="flex flex-col justify-center">
                 <ul className="flex h-full justify-between items-stretch border-b border-gray-200">
+                  <li className={`inline-block flex-grow list-none text-center cursor-pointer pb-4`}>
+                    <Link
+                      href="/"
+                      className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3 border-transparent
+                         hover:text-primary-500 hover:border-primary-500`}
+                    >
+                      Home
+                    </Link>
+                  </li>
                   <li
                     onMouseEnter={() => setIsMenuOpen(true)}
                     onMouseLeave={() => {
@@ -50,7 +57,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                   >
                     <Link
                       href={'/categories'}
-                      className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-normal text-mute3 ${
+                      className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3 ${
                         isMenuOpen ? 'text-primary-500 border-primary-500' : 'border-transparent'
                       }`}
                       onClick={() => setIsMenuOpen(false)}
@@ -113,7 +120,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                     >
                       <Link
                         href={listItem.url}
-                        className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-normal text-mute3 border-transparent
+                        className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3 border-transparent
                          hover:text-primary-500 hover:border-primary-500`}
                       >
                         {listItem.name}

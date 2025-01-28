@@ -102,10 +102,10 @@ export const ProductCard = memo<IProductCard>(
                 {prices?.salePrice && parseInt(prices?.salePrice) > 0 ? (
                   <>
                     <span className="line-through text-lg font-semibold">${prices.price}</span>
-                    <span className="text-2xl font-semibold text-primary-500">${prices.salePrice}</span>
+                    <span className="text-3xl font-semibold">${prices.salePrice}</span>
                   </>
                 ) : (
-                  <span className="text-2xl font-semibold text-primary-500">${prices.price}</span>
+                  <span className="text-3xl font-semibold">${prices.price}</span>
                 )}
               </div>
             </div>

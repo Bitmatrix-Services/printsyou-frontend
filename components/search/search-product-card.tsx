@@ -93,10 +93,10 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
               {product.salePrice > 0 ? (
                 <>
                   <span className="line-through text-lg font-semibold">${product.minPrice.toFixed(2)}</span>
-                  <span className="text-2xl font-semibold text-primary-500">${product.salePrice.toFixed(2)}</span>
+                  <span className="text-3xl font-semibold">${product.salePrice.toFixed(2)}</span>
                 </>
               ) : (
-                <span className="text-2xl font-semibold text-primary-500">${product.minPrice.toFixed(2)}</span>
+                <span className="text-3xl font-semibold">${product.minPrice.toFixed(2)}</span>
               )}
             </div>
           </div>
