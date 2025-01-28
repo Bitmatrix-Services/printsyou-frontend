@@ -68,7 +68,9 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
       <Container>
         <div className="px-8 pb-8 pt-10 ">
           <div className="flex flex-col  md:px-32">
-            <h2 className="text-xl font-semibold text-mute3">Have questions? Request more information about this product, We will get back to you promptly!</h2>
+            <h2 className="text-xl font-semibold text-mute3">
+              Have questions? Request more information about this product, We will get back to you promptly!
+            </h2>
             <h2 className="text-2xl mt-3 mb-4 font-semibold capitalize">{product.productName}</h2>
             <h6 className="text-sm font-semibold text-body">
               ITEM#: <span className="text-primary-500">{product.sku}</span>
