@@ -10,7 +10,6 @@ interface IHeroSection {
 }
 
 export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
-  console.log({bannersList});
   return (
     <SwiperSlider dataList={bannersList.sort((a, b) => a.sequenceNumber - b.sequenceNumber)}>
       {banner => <GridBannerComponent banner={banner} />}
