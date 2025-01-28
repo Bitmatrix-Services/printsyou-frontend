@@ -181,14 +181,14 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         {/*  Add to cart <PiShoppingCartSimple className=" ml-3 h-5 w-5" />*/}
         {/*</button>*/}
         <Link
-          className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary-500 text-white bg-primary-500  w-full lg:w-auto"
+          className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-secondary text-white bg-secondary hover:bg-secondary-600 w-full lg:w-auto"
           href={`/order-now?product_id=${product.id}`}
         >
           Order Now
           <RiShoppingBag4Fill className=" ml-3 h-6 w-6" />
         </Link>
         <Link
-          className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary-500 text-primary-500 w-full lg:w-auto"
+          className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-secondary text-secondary hover:bg-secondary hover:text-white w-full lg:w-auto"
           href={`/more-info?item_id=${product.id}`}
         >
           Request More Info
