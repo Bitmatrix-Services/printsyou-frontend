@@ -8,6 +8,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {aosGlobalSetting} from '@utils/constants';
 import {listType} from '@utils/util-types';
+import {usePathname} from 'next/navigation';
 
 interface INavComponentProps {
   categories: Category[];
@@ -22,6 +23,8 @@ const navList: listType[] = [
 ];
 
 export const NavComponent: FC<INavComponentProps> = ({categories}) => {
+  const pathname = usePathname();
+
   const [hoveredCategory, setHoveredCategory] = useState<Category | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -41,8 +44,8 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                   <li className={`inline-block flex-grow list-none text-center cursor-pointer pb-4`}>
                     <Link
                       href="/"
-                      className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3 border-transparent
-                         hover:text-primary-500 hover:border-primary-500`}
+                      className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3
+                         hover:text-primary-500 hover:border-primary-500 ${pathname === '/' ? 'text-primary-500 border-primary-500' : 'border-transparent'}`}
                     >
                       Home
                     </Link>
@@ -120,8 +123,8 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                     >
                       <Link
                         href={listItem.url}
-                        className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3 border-transparent
-                         hover:text-primary-500 hover:border-primary-500`}
+                        className={`capitalize relative whitespace-break-spaces z-10 2xl:whitespace-nowrap pb-4 border-b-2 text-[15px] font-semibold text-mute3
+                         hover:text-primary-500 hover:border-primary-500 ${pathname === listItem.url ? 'text-primary-500 border-primary-500' : 'border-transparent'}`}
                       >
                         {listItem.name}
                       </Link>

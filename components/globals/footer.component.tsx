@@ -26,7 +26,7 @@ export const Footer: FC<IFooter> = async ({categories}) => {
   return (
     <>
       <Newsletter />
-      <footer className="bg-secondary-100/50 py-4">
+      <footer className="bg-primary-100/50 py-4">
         <Container>
           <div className="grid lg:grid-cols-12 gap-6 md:grid-cols-2">
             <div className="lg:col-span-4 md:col-span-2">
@@ -83,7 +83,7 @@ const FooterLinks: FC<FooterLinksProps> = ({title, list}) => {
         <h6 className="mb-4 text-lg lg:text-base font-bold text-headingColor capitalize">{title}</h6>
         <div className="space-y-4">
           {(list ?? []).map(linkItem => (
-            <Link href={linkItem.url} className="block text-sm hover:text-primary-500" key={linkItem.url}>
+            <Link href={linkItem.url} className="block text-sm hover:text-secondary-500" key={linkItem.url}>
               <span className="capitalize">{linkItem.name}</span>
             </Link>
           ))}

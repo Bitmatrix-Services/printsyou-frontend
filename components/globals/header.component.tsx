@@ -31,11 +31,11 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
 
   return (
     <>
-      <div className="bg-primary-500 bg-opacity-[12%]">
+      <div className="bg-primary-500 bg-opacity-[40%]">
         <div className="flex items-center justify-between">
           <div className="hidden md:block lg:mr-auto"></div>
           <div
-            className="flex items-center justify-center bg-primary-500/10 py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"
+            className="flex items-center justify-center bg-primary-500/50 py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"
             onClick={() => {
               if (typeof window !== undefined && '$chatwoot' in window) {
                 // @ts-ignore
@@ -43,7 +43,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               }
             }}
           >
-            <div className="flex flex-col lg:flex-row items-center gap-1">
+            <div className="flex flex-col lg:flex-row items-center gap-1 text-white">
               <RiChat1Fill size={18} />
               <span>Chat with Us</span>
             </div>
@@ -53,9 +53,9 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
 
           <Link
             href="tel:8882992940"
-            className="flex items-center justify-end bg-primary-500/10 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"
+            className="flex items-center justify-end bg-primary-500/50 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"
           >
-            <div className="flex flex-col lg:flex-row items-center gap-1">
+            <div className="flex flex-col lg:flex-row items-center gap-1 text-white">
               <FaHeadphones size={18} />
               <span>Toll Free (888) 299-2940</span>
             </div>
@@ -120,7 +120,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
 
           <Link
             href="/how-to-order"
-            className="hidden lg:flex justify-center items-center ml-4 border border-secondary py-2 px-4 rounded-full text-white bg-secondary hover:drop-shadow-2xl"
+            className="hidden lg:flex justify-center items-center ml-4 border border-primary py-2 px-4 rounded-full text-white bg-primary hover:drop-shadow-2xl"
           >
             <div className="capitalize">how to order</div>
           </Link>
@@ -134,7 +134,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               {/*</li>*/}
               <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
                 <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
-                <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-secondary-500 text-white text-sm font-semibold">
+                <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">
                   {cartRoot?.cartItems?.length ?? 0}
                 </span>
               </li>

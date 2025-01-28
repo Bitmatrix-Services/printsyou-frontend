@@ -45,7 +45,7 @@ export const Breadcrumb: FC<IBreadcrumb> = ({list, prefixTitle}) => {
                     className={`text-sm capitalize ${
                       index == list.length - 1
                         ? 'font-medium text-primary-500'
-                        : 'text-mute4 hover:text-primary-700 hover:cursor-pointer'
+                        : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
                     }`}
                     onClick={() => {
                       if (index !== list.length - 1) {

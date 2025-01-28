@@ -68,7 +68,7 @@ export const ProductCard = memo<IProductCard>(
                 {/*</button>*/}
                 <button
                   type="button"
-                  className="hidden md:block w-full py-2 bg-secondary-500 text-white font-semibold text-xs uppercase"
+                  className="hidden md:block w-full py-2 bg-primary text-white font-semibold text-xs uppercase"
                   onClick={e => {
                     setQuickViewModal(true);
                     e.preventDefault();

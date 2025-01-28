@@ -10,7 +10,6 @@ import {Header} from '@components/globals/header.component';
 import {Footer} from '@components/globals/footer.component';
 import {getAllCategories} from '@components/home/home-apis';
 import {ReduxProvider} from './redux-provider';
-import dynamic from 'next/dynamic';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {CSPostHogProvider} from './provider';
@@ -116,7 +115,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
               }}
             />
             <body className="overflow-x-hidden">
-              <NextTopLoader color="#DB0481" showSpinner={false} />
+              <NextTopLoader color="#019ce0" showSpinner={false} />
               <NotificationComponent />
               <Header categories={categoriesData.payload} />
               {children}

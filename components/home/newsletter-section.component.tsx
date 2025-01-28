@@ -66,13 +66,13 @@ export const Newsletter = () => {
                     <Input
                       sx={{
                         borderRadius: '3px 0  0 3px',
-                        borderColor: '#DB0481',
+                        borderColor: '#019ce0',
                         borderWidth: '3px',
                         '& input::placeholder': {
                           color: 'gray'
                         },
                         '&:focus': {
-                          borderColor: '#DB0481'
+                          borderColor: '#019ce0'
                         }
                       }}
                       placeholder="Enter your email..."
@@ -88,12 +88,12 @@ export const Newsletter = () => {
                   type="submit"
                   size="lg"
                   sx={{
-                    bgcolor: '#DB0481',
+                    bgcolor: '#019ce0',
                     borderRadius: '0 3px 3px 0',
                     padding: '8px 16px',
                     color: '#fff',
                     '&:hover': {
-                      bgcolor: '#DB0497D9'
+                      bgcolor: '#019ce0'
                     }
                   }}
                   disabled={isSubmitting}

@@ -57,7 +57,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   fontSize: 'sm'
                 },
                 '&:focus': {
-                  borderColor: '#DB0481'
+                  borderColor: '#019ce0'
                 }
               }}
               type={fieldType}
@@ -78,7 +78,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
                   fontSize: 'sm'
                 },
                 '&:focus': {
-                  borderColor: '#DB0481'
+                  borderColor: '#019ce0'
                 }
               }}
               name={name}

@@ -567,7 +567,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         <div>
                           <label
                             htmlFor="fileInput"
-                            className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 capitalize"
+                            className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 hover:bg-primary-600 hover:text-white capitalize"
                           >
                             <input
                               id="fileInput"
@@ -995,7 +995,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                           <div>
                             <label
                               htmlFor="fileInput"
-                              className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 capitalize"
+                              className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500  hover:bg-primary-600 hover:text-white capitalize"
                             >
                               <input
                                 id="fileInput"
@@ -1104,7 +1104,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       <div className="my-6 flex w-full justify-center items-center">
                         <button
                           type="submit"
-                          className="w-full py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-secondary-500 text-white"
+                          className="w-full py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-primary-600 text-white"
                         >
                           {isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                         </button>
