@@ -23,46 +23,42 @@ export const HowToOrderComponent = () => {
             through every step.
           </h2>
         </div>
-        <div className="space-y-12 relative scroll-container py-12">
+        <div className="space-y-12 relative scroll-container py-2">
           {orderSteps.map((order, index) => (
             <Fragment key={order.title}>
               {index % 2 === 0 ? (
-                <figure className="flex flex-row items-center justify-center px-[5%] md:px-[10%] lg:px-0 xl:px-[10%]">
-                  <div className="w-full lg:w-[55%] lg:pr-20 xl:pr-32" data-aos="zoom-in-up">
+                <figure className="flex lg:flex-row flex-col items-center justify-betweem gap-5">
+                  <div className="w-full" data-aos="zoom-in-up">
                     <h3 className="sub-title text-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>
                     <h4 className="title text-3xl font-semibold mb-4">{order.title}</h4>
                     <p className="text-mute text-lg">{order.description}</p>
                   </div>
-                  <div className="w-[30%] hidden lg:block">
-                    <div className="h-full w-full border-r-4 border-primary-500">
-                      <Image
-                        data-aos="fade-down-left"
-                        className="object-cover"
-                        height={500}
-                        width={500}
-                        quality={100}
-                        src={order.imageUrl}
-                        alt="order"
-                      />
-                    </div>
+                  <div className="h-full w-full border-4 border-primary-500">
+                    <Image
+                      data-aos="fade-down-left"
+                      className="object-contain"
+                      height={500}
+                      width={750}
+                      quality={100}
+                      src={order.imageUrl}
+                      alt="order"
+                    />
                   </div>
                 </figure>
               ) : (
-                <figure className="flex flex-row items-center justify-center px-[5%] md:px-[10%] lg:px-0 xl:px-[10%]">
-                  <div className="w-[55%] pr-20 xl:pr-32 hidden lg:block">
-                    <div className="h-full w-[85%] border-l-4 border-primary-500">
-                      <Image
-                        data-aos="fade-down-right"
-                        className="object-cover"
-                        height={500}
-                        width={500}
-                        quality={100}
-                        src={order.imageUrl}
-                        alt="order"
-                      />
-                    </div>
+                <figure className="flex lg:flex-row flex-col-reverse items-center justify-betweem gap-5">
+                  <div className="h-full w-full border-4 border-primary-500">
+                    <Image
+                      data-aos="fade-down-right"
+                      className="object-contain"
+                      height={500}
+                      width={720}
+                      quality={100}
+                      src={order.imageUrl}
+                      alt="order"
+                    />
                   </div>
-                  <div className="w-full lg:w-[30%]" data-aos="zoom-in-up">
+                  <div className="w-full" data-aos="zoom-in-up">
                     <h3 className="sub-title text-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>
                     <h4 className="title text-3xl font-semibold mb-4">{order.title}</h4>
                     <p className="text-mute text-lg">{order.description}</p>
