@@ -81,25 +81,25 @@ const orderSteps = [
   {
     title: 'Start Your Order',
     description:
-      "Click the 'Add to Cart' button on any product page to select items with no immediate payment required. This action requests a quote without any obligation.",
+      'Explore our curated product catalog and find an item that catches your eye. Click on a product to access detailed information, including its features, variants, and pricing, to help you make an informed decision.',
     imageUrl: '/assets/o-step-1.png'
   },
   {
     title: 'Know What You’re Getting',
     description:
-      'Enter the necessary details for each product you select. This could include size, color, quantity, or any other specific preferences along with artwork files. Ensure everything is just how you like it!',
+      'Upon selecting a product, you will be directed to its detailed product page, where you can view multiple images highlighting different colors and variants. You will have the option to choose from various color and variant selections, review the comprehensive product description, and explore additional details such as specifications and pricing.',
     imageUrl: '/assets/o-step-2.png'
   },
   {
-    title: 'Sneak Peek of Cart, Ready, Set, Checkout!',
+    title: 'Proceed to Checkout!',
     description:
-      'As you shop, keep an eye on your sidebar where your cart summary is displayed. It’s a quick way to see all the goodies you’ve picked up without leaving your current page. Head to the checkout page where every item you picked is listed. This is where you finalize your order.',
+      'By clicking the "Order Now" button, you\'ll be taken to the checkout page, where you\'ll enter your shipping and billing details. This includes selecting product specifications, providing your address, and reviewing the product details and total cost before completing your purchase.',
     imageUrl: '/assets/o-step-3.png'
   },
   {
-    title: 'Update product specification? No Problem!',
+    title: 'Choose product specification!',
     description:
-      'Need to adjust your selections? Easily update product details or quantities directly from the checkout page. Make sure everything is perfect before you proceed!',
+      'Enter the product details, including the quantity, item type, color, size, and imprint color. You can also upload a design file for printing on the product. Please make sure all information is accurate and complete before proceeding with your order.',
     imageUrl: '/assets/o-step-4.png'
   },
   {
@@ -111,7 +111,7 @@ const orderSteps = [
   {
     title: 'Click to Complete',
     description:
-      "Add expected delivery date and addition information about your order and you're done. Review all your details and when everything looks good, hit the submit button. Your order is now on its way!",
+      'Enter your expected delivery date and any additional order details. Once you’ve reviewed all your information and are satisfied, click the submit button to complete your order. Please note, before submitting, you must agree to our terms and conditions. Your order will be on its way!',
     imageUrl: '/assets/o-step-6.png'
   }
 ];
