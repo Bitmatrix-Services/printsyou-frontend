@@ -81,7 +81,7 @@ const orderSteps = [
   {
     title: 'Start Your Order',
     description:
-      'Explore our curated product catalog and find an item that catches your eye. Click on a product to access detailed information, including its features, variants, and pricing, to help you make an informed decision.',
+      'Explore our curated product catalog and find an item that you want. Click on a product to access detailed information, including its features, variants, and pricing to help you make an informed decision.',
     imageUrl: '/assets/o-step-1.png'
   },
   {
@@ -111,7 +111,7 @@ const orderSteps = [
   {
     title: 'Click to Complete',
     description:
-      'Enter your expected delivery date and any additional order details. Once you’ve reviewed all your information and are satisfied, click the submit button to complete your order. Please note, before submitting, you must agree to our terms and conditions. Your order will be on its way!',
+      'Enter your expected delivery date and any additional order details. Once you’ve reviewed all your information and are satisfied, click the submit button to complete your order. Please note that, before submitting, you must agree to our terms and conditions. Your order will be on its way!',
     imageUrl: '/assets/o-step-6.png'
   }
 ];
