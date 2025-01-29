@@ -93,7 +93,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                   {/*</li>*/}
                   <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
                     <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
-                    <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-secondary-500 text-white text-sm font-semibold">
+                    <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">
                       {cartRoot?.cartItems?.length ?? 0}
                     </span>
                   </li>
