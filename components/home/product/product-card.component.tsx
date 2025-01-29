@@ -96,8 +96,16 @@ export const ProductCard = memo<IProductCard>(
             {/*    <IoMdStar key={rating} className="text-primary-500 w-6 h-6" />*/}
             {/*  ))}*/}
             {/*</div>*/}
-            <div className="mt-3 flex gap-2 justify-between items-center">
-              <h3 className="text-[0.7rem] font-normal text-gray-600 ">As Low As</h3>
+            <div
+              className={`mt-3 flex gap-2 ${prices?.salePrice && parseInt(prices?.salePrice) > 0 ? 'justify-end md:justify-between' : 'justify-between'} items-center`}
+            >
+              {
+                <h3
+                  className={`${prices?.salePrice && parseInt(prices?.salePrice) > 0 ? 'hidden md:block' : 'block'} text-[0.7rem] font-normal text-gray-600`}
+                >
+                  As Low As
+                </h3>
+              }
               <div className="flex justify-between items-center gap-2">
                 {prices?.salePrice && parseInt(prices?.salePrice) > 0 ? (
                   <>

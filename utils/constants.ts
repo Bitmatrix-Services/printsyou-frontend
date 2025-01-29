@@ -11,22 +11,23 @@ export const breakpoints = {
     slidesPerView: 2,
     spaceBetween: 10
   },
-
   600: {
     slidesPerView: 2,
-    spaceBetween: 10
+    spaceBetween: 20
   },
-
   800: {
     slidesPerView: 3,
     spaceBetween: 20
   },
-
-  1024: {
-    slidesPerView: 4,
+  1100: {
+    slidesPerView: 3,
     spaceBetween: 20
   },
   1200: {
+    slidesPerView: 4,
+    spaceBetween: 20
+  },
+  1440: {
     slidesPerView: 5,
     spaceBetween: 20
   }
@@ -180,4 +181,3 @@ export const allowableSearchParams = [
 export const sortSortable = <T extends Sortable>(list: T[]): T[] => {
   return list.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 };
-
