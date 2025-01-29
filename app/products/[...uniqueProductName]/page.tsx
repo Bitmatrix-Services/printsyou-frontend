@@ -86,6 +86,19 @@ const ProductsPage = async (props: {params: Params}) => {
             description: (product?.metaDescription ?? product?.description ?? '').replace(/<[^>]+>/g, ''),
             sku: product?.sku,
             url: `${process.env.FE_URL}products/${product?.uniqueProductName}`,
+            category: [
+              ...(product?.crumbs ?? []),
+              {
+                sequenceNumber: 100,
+                uniqueCategoryName: '',
+                name: 'Promotional Products'
+              }
+            ]
+              .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+              .map(item => item.name)
+              .join(' > '),
+            size: size ? size.fieldValue : 'Standard',
+            color: colors ? colors.fieldValue : null,
             brand: {
               '@type': 'Brand',
               name: 'PrintsYou'
@@ -166,20 +179,7 @@ const ProductsPage = async (props: {params: Params}) => {
                 '@type': 'PropertyValue',
                 name: item.name,
                 value: `$${item.priceDiff}`
-              })),
-              category: [
-                ...(product?.crumbs ?? []),
-                {
-                  sequenceNumber: 100,
-                  uniqueCategoryName: '',
-                  name: 'Promotional Products'
-                }
-              ]
-                .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
-                .map(item => item.name)
-                .join(' > '),
-              size: size ? size.fieldValue : 'Standard',
-              color: colors ? colors.fieldValue : null
+              }))
             }
           })
         }}
