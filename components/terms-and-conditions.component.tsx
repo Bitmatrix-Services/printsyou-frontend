@@ -12,7 +12,7 @@ const TermsAndConditions = () => {
             <h1 className="text-3xl font-bold mb-6 text-center">Terms and Conditions</h1>
             {termsList.map(item => (
               <div key={item.body} className="pb-2">
-                {item.title ? <h3 className="text-xl mt-2 mb-1 font-bold text-secondary-500">{item.title}</h3> : null}
+                {item.title ? <h3 className="text-xl mt-2 mb-1 font-bold text-primary-500">{item.title}</h3> : null}
                 <p className="font-normal text-mute2 text-base leading-[30px]">{item.body}</p>
               </div>
             ))}

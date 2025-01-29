@@ -200,7 +200,7 @@ export const CheckoutComponent: FC = () => {
       <Container>
         <div className="pt-8">
           <button
-            className="block py-4 text-base tracking-[3.5px] font-bold w-fit text-secondary-500"
+            className="block py-4 text-base tracking-[3.5px] font-bold w-fit text-primary-500"
             onClick={handleBackButtonClick}
           >
             Back Continue Shopping

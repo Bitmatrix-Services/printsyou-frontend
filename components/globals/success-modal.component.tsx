@@ -52,7 +52,7 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
           ) : null}
           <div className="flex justify-center items-center mt-2">
             {open === 'success' ? (
-              <FiCheckCircle className="w-10 h-10 text-secondary" />
+              <FiCheckCircle className="w-10 h-10 text-primary" />
             ) : open === 'error' ? (
               <BiSolidErrorCircle className="w-10 h-10 text-red-600" />
             ) : null}
