@@ -8,7 +8,6 @@ import {Product, productColors, ProductImage} from '@components/home/product/pro
 import {colorNameToHex, extractColorsArray, getColorsWithHex, getContrastColor} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 import {Chip} from '@mui/joy';
-import Typography from '@mui/joy/Typography';
 
 interface ProductDescriptionComponent {
   product: Product;
@@ -113,7 +112,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
 
-      {!product.outOfStock ? (
+      {product.outOfStock ? (
         <div className="flex items-center my-2">
           <Chip size="sm" color="danger" variant="solid">
             Out of Stock
