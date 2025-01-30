@@ -47,6 +47,7 @@ export interface Product {
   productName: string;
   uniqueProductName: string;
   sku: string;
+  outOfStock: boolean;
   price: ProductPrice[];
   productImages: ProductImage[];
   esp?: string | null;
@@ -77,6 +78,7 @@ export interface EnclosureProduct {
   uniqueProductName: string;
   imageUrl: string;
   priceGrids: PriceGrids[];
+  outOfStock: boolean;
 }
 
 export interface productColors {

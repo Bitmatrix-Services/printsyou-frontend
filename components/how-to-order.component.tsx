@@ -34,25 +34,13 @@ export const HowToOrderComponent = () => {
                     <p className="text-mute text-lg">{order.description}</p>
                   </div>
                   <div className="h-full w-full" data-aos="fade-down-left">
-                    <Image
-                      className="object-contain"
-                      height={500}
-                      width={750}
-                      src={order.imageUrl}
-                      alt="order"
-                    />
+                    <Image className="object-contain" height={500} width={750} src={order.imageUrl} alt="order" />
                   </div>
                 </figure>
               ) : (
                 <figure className="flex lg:flex-row flex-col-reverse items-center justify-betweem gap-10 lg:gap-16">
                   <div className="h-full w-full " data-aos="fade-down-right">
-                    <Image
-                      className="object-contain"
-                      height={500}
-                      width={720}
-                      src={order.imageUrl}
-                      alt="order"
-                    />
+                    <Image className="object-contain" height={500} width={720} src={order.imageUrl} alt="order" />
                   </div>
                   <div className="w-full" data-aos="zoom-in-up">
                     <h3 className="sub-title text-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>

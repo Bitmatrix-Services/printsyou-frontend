@@ -7,19 +7,23 @@ import Link from 'next/link';
 import {Product, productColors, ProductImage} from '@components/home/product/product.types';
 import {colorNameToHex, extractColorsArray, getColorsWithHex, getContrastColor} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
+import {Chip} from '@mui/joy';
+import Typography from '@mui/joy/Typography';
 
 interface ProductDescriptionComponent {
   product: Product;
   handleScroll?: () => void;
   setImages: Dispatch<SetStateAction<ProductImage[]>>;
   images: ProductImage[];
+  relatedProductsLink?: boolean;
 }
 
 export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
   product,
   handleScroll,
   images,
-  setImages
+  setImages,
+  relatedProductsLink
 }) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
 
@@ -51,6 +55,18 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       updatedImages.unshift(newImg);
       setImages(updatedImages);
       setSelectedColor(color.colorName);
+    }
+  };
+
+  const scrollToRelatedProducts = () => {
+    const relatedProducts = document.getElementById('related-products');
+
+    if (relatedProducts) {
+      setTimeout(() => {
+        const yOffset = -180;
+        const yPosition = relatedProducts.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: yPosition, behavior: 'smooth'});
+      }, 100);
     }
   };
 
@@ -96,10 +112,29 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       <div className="mt-2 flex flex-col sm:flex-row gap-3">
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
+
+      {product.outOfStock ? (
+        <div className="flex items-center my-2">
+          <Chip size="sm" color="danger" variant="solid">
+            Out of Stock
+          </Chip>
+          {relatedProductsLink ? (
+            <Typography
+              className="text-sm underline text-[#16467b] cursor-pointer hover:text-primary-500 ml-2"
+              onClick={() => scrollToRelatedProducts()}
+            >
+              Checkout Related Products
+            </Typography>
+          ) : null}
+        </div>
+      ) : null}
+
       {handleScroll && (
-        <h3 className="text-sm mt-1 underline cursor-pointer hover:text-primary-500" onClick={handleScroll}>
-          See Details
-        </h3>
+        <div className="flex items-center">
+          <h3 className="text-sm underline cursor-pointer hover:text-primary-500" onClick={handleScroll}>
+            See Details
+          </h3>
+        </div>
       )}
       {productColors?.length > 0 || colorsArray.length > 0 ? (
         <div className="my-4 flex flex-col gap-3">
@@ -181,7 +216,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         {/*  Add to cart <PiShoppingCartSimple className=" ml-3 h-5 w-5" />*/}
         {/*</button>*/}
         <Link
-          className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary text-white bg-primary hover:bg-primary-400 w-full lg:w-auto"
+          className={`py-2 px-6 border-2 flex items-center justify-center rounded-md text-white ${product.outOfStock ? 'border-mute4 bg-mute4 pointer-events-none': 'border-primary bg-primary hover:bg-primary-400'} w-full lg:w-auto`}
           href={`/order-now?product_id=${product.id}`}
         >
           Order Now

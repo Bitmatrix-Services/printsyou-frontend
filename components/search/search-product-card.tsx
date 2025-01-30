@@ -24,6 +24,13 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
               src={product?.imageUrl}
               alt={product.productName}
             />
+
+            {product.outOfStock ? (
+              <div className="absolute top-2 -left-5 text-center bg-red-500 text-white text-[0.6rem] px-3 py-1 font-bold transform -rotate-45 ">
+                Out of Stock
+              </div>
+            ) : null}
+
             <div className="absolute top-0 left-0 w-[4rem] gap-2 h-auto flex flex-col justify-end p-2 text-sm">
               {product.salePrice > 0 ? (
                 <span className="flex items-center justify-center px-3 bg-blue-500 text-white font-medium capitalize">

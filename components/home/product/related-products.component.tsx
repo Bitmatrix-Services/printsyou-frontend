@@ -16,7 +16,9 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
     <section className="bg-white py-8 md:py-10 lg:py-16">
       {relatedProducts && relatedProducts.length > 0 ? (
         <div className="relative w-full mx-auto py-4">
-          <Typography className="font-bold text-lg">You may also like:</Typography>
+          <Typography id="related-products" className="font-bold text-lg">
+            You may also like:
+          </Typography>
           <Swiper
             modules={[Navigation]}
             navigation={{

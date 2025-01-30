@@ -67,7 +67,11 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 mb-4">
               <ProductDescriptionComponent setImages={setImages} images={images} product={product} />
-              <ProductImageComponent productImages={images} productName={product.productName} />
+              <ProductImageComponent
+                productImages={images}
+                productName={product.productName}
+                outOfStock={product.outOfStock}
+              />
             </div>
 
             <div className=" space-y-2">
