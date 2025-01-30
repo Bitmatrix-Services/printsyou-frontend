@@ -113,18 +113,18 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
 
-      {product.outOfStock ? (
+      {!product.outOfStock ? (
         <div className="flex items-center my-2">
           <Chip size="sm" color="danger" variant="solid">
             Out of Stock
           </Chip>
           {relatedProductsLink ? (
-            <Typography
+            <div
               className="text-sm underline text-[#16467b] cursor-pointer hover:text-primary-500 ml-2"
               onClick={() => scrollToRelatedProducts()}
             >
               Checkout Related Products
-            </Typography>
+            </div>
           ) : null}
         </div>
       ) : null}
