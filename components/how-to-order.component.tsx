@@ -23,37 +23,33 @@ export const HowToOrderComponent = () => {
             through every step.
           </h2>
         </div>
-        <div className="space-y-12 relative scroll-container py-2">
+        <div className="space-y-16 relative scroll-container py-2">
           {orderSteps.map((order, index) => (
             <Fragment key={order.title}>
               {index % 2 === 0 ? (
-                <figure className="flex lg:flex-row flex-col items-center justify-betweem gap-5">
+                <figure className="flex lg:flex-row flex-col items-center justify-betweem gap-10 lg:gap-16">
                   <div className="w-full" data-aos="zoom-in-up">
                     <h3 className="sub-title text-xl font-bold text-primary-500 mb-3">Step {index + 1}</h3>
                     <h4 className="title text-3xl font-semibold mb-4">{order.title}</h4>
                     <p className="text-mute text-lg">{order.description}</p>
                   </div>
-                  <div className="h-full w-full border-4 border-primary-500">
+                  <div className="h-full w-full" data-aos="fade-down-left">
                     <Image
-                      data-aos="fade-down-left"
                       className="object-contain"
                       height={500}
                       width={750}
-                      quality={100}
                       src={order.imageUrl}
                       alt="order"
                     />
                   </div>
                 </figure>
               ) : (
-                <figure className="flex lg:flex-row flex-col-reverse items-center justify-betweem gap-5">
-                  <div className="h-full w-full border-4 border-primary-500">
+                <figure className="flex lg:flex-row flex-col-reverse items-center justify-betweem gap-10 lg:gap-16">
+                  <div className="h-full w-full " data-aos="fade-down-right">
                     <Image
-                      data-aos="fade-down-right"
                       className="object-contain"
                       height={500}
                       width={720}
-                      quality={100}
                       src={order.imageUrl}
                       alt="order"
                     />
