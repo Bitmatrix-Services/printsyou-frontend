@@ -99,7 +99,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                   '@type': 'Product',
                   url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
                   name: product.productName,
-                    description:product.metaDescription,
+                  description: product.metaDescription,
+                  sku: product.sku,
                   image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
                   offers: {
                     price: [...(product.priceGrids ?? [])]
