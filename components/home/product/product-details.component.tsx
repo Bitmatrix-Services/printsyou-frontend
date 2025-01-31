@@ -71,7 +71,8 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
               <div className="flex-1">
                 <h4 className="text-2xl font-semibold mb-6">Overview</h4>
 
-                <div
+                <div id="product-overview"
+                  data-productId={product.id}
                   className="product-description"
                   dangerouslySetInnerHTML={{
                     __html: sanitizeHtml((function() {
