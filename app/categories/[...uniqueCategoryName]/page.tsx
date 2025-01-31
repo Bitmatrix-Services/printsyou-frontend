@@ -120,6 +120,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                   numberOfItems: productsByCategoryPaged.totalElements,
                   itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
                     '@type': 'Product',
+                    '@id': `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
                     url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
                     name: product.productName,
                     description: product.metaDescription,
