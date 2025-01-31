@@ -106,7 +106,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                       .sort((a, b) => a.price - b.price)
                       .shift()?.price,
                     priceCurrency: 'USD',
-                    availability: 'http://schema.org/InStock',
+                    availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
                     itemCondition: 'NewCondition'
                   }
                 }))
