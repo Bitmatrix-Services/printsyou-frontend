@@ -113,7 +113,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                   }
                 }))
               },
-              mainEntityOfPage: {
+              hasPart: {
                 '@type': 'ItemList',
                 numberOfItems: productsByCategoryPaged.totalPages,
                 itemListElement:
