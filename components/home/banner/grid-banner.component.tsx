@@ -13,7 +13,7 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
     <div className="w-full max-w-[120rem] mx-auto md:px-2 lg:px-8 2xl:px-0 relative">
       <div key={banner.id} className="grid sm:grid-rows-2 lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-8">
         {/*  tagline section */}
-        <div className="banner-text-section font-century-gothic xl:col-span-3">
+        <div className="banner-text-section font-century-gothic xl:col-span-2">
           <div className="flex flex-col justify-center items-start xl:max-w-[32rem] text-start text-white px-5 lg:px-8 py-8 h-full font-normal text-4xl lg:text-5xl tracking-wide leading-extra-loose lg:leading-extra-loose">
             <h1>Carry in Style: The Perfect Tote for Every Occasion</h1>
             <div className="mt-4 w-full">
@@ -35,7 +35,7 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
             fill
           />
         </div>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 tablet:grid-rows-1 md:grid-rows-2 lg:grid-rows-1 px-4 lg:px-6 md:px-4 xl:pl-4 xl:pr-0  gap-4 lg:gap-32 xl:gap-4 mt-4 md:pt-5 tablet:mt-5 lg:mt-4 xl:mt-0 xl:pt-0 xl:col-span-2">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 tablet:grid-rows-1 md:grid-rows-2 lg:grid-rows-1 px-4 lg:px-6 md:px-4 xl:pl-4 xl:pr-0  gap-4 lg:gap-32 xl:gap-4 mt-4 md:pt-5 tablet:mt-5 lg:mt-4 xl:mt-0 xl:pt-0 xl:col-span-3">
           <ShortImageTitleSection
             textColor={'white'}
             heading={'Made in USA'}
