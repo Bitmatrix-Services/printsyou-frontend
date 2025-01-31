@@ -64,7 +64,6 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
       {/*    <meta name="robots" content="noindex,nofollow,noodp,noydir" />*/}
       {/*  </Head>*/}
       {/*)}*/}
-
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
