@@ -181,4 +181,3 @@ export const allowableSearchParams = [
 export const sortSortable = <T extends Sortable>(list: T[]): T[] => {
   return list.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 };
-

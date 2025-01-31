@@ -243,14 +243,14 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         setIsSuccessModalOpen('success');
         localStorage.removeItem('orderId');
         reset();
-      }, 5000);
+      }, 2000);
     },
     onError: () => {
       setTimeout(() => {
         setLoading(false);
         setIsSuccessModalOpen('error');
         setApiError(true);
-      }, 5000);
+      }, 2000);
     }
   });
 
