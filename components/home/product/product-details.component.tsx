@@ -114,9 +114,9 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
                               ></span>
                             ) : item.fieldValue ? (
                               <div
-                                className="product-additional-info-value"
+                                className="product-additional-info-value capitalize"
                                 dangerouslySetInnerHTML={{
-                                  __html: item.fieldValue
+                                  __html: item.fieldValue.toLowerCase()
                                 }}
                               />
                             ) : (
