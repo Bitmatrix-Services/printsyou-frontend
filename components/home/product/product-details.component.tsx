@@ -74,7 +74,16 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
                 <div
                   className="product-description"
                   dangerouslySetInnerHTML={{
-                    __html: sanitizeHtml(product.productDescription)
+                    __html: sanitizeHtml((function() {
+                          let description = product.productDescription
+                          if (!description.startsWith("<p")) {
+                              description = "<p style=\"text-align: justify;\">" + description;
+                              description = description.replace("<ul>", "</p> <p>&nbsp;</p> <ul>");
+                          } else if (!description.includes("<p>&nbsp;</p>")) {
+                              description = description.replace("<ul>", "</p> <p>&nbsp;</p> <ul>");
+                          }
+                          return description;
+                      })())
                   }}
                 ></div>
               </div>
