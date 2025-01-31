@@ -76,6 +76,7 @@ export interface EnclosureProduct {
   salePrice: number;
   priorityOrder: number;
   uniqueProductName: string;
+  metaDescription: string;
   imageUrl: string;
   priceGrids: PriceGrids[];
   outOfStock: boolean;
