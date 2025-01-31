@@ -133,7 +133,11 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                         .shift()?.price,
                       priceCurrency: 'USD',
                       availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
-                      itemCondition: 'NewCondition'
+                      itemCondition: 'http://schema.org/NewCondition',
+                      seller: {
+                        '@type': 'Organization',
+                        name: 'PrintsYou'
+                      }
                     }
                   }))
                 }
