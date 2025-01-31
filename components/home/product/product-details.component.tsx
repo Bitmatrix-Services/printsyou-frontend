@@ -71,20 +71,23 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
               <div className="flex-1">
                 <h4 className="text-2xl font-semibold mb-6">Overview</h4>
 
-                <div id="product-overview"
+                <div
+                  id="product-overview"
                   data-productId={product.id}
                   className="product-description"
                   dangerouslySetInnerHTML={{
-                    __html: sanitizeHtml((function() {
-                          let description = product.productDescription
-                          if (!description.startsWith("<p")) {
-                              description = "<p style=\"text-align: justify;\">" + description;
-                              description = description.replace("<ul>", "</p> <p>&nbsp;</p> <ul>");
-                          } else if (!description.includes("<p>&nbsp;</p>")) {
-                              description = description.replace("<ul>", "</p> <p>&nbsp;</p> <ul>");
-                          }
-                          return description;
-                      })())
+                    __html: sanitizeHtml(
+                      (function () {
+                        let description = product.productDescription;
+                        if (!description.startsWith('<p')) {
+                          description = '<p style="text-align: justify;">' + description;
+                          description = description.replace('<ul>', '</p> <p>&nbsp;</p> <ul>');
+                        } else if (!description.includes('<p>&nbsp;</p>')) {
+                          description = description.replace('<ul>', '</p> <p>&nbsp;</p> <ul>');
+                        }
+                        return description;
+                      })()
+                    )
                   }}
                 ></div>
               </div>
