@@ -82,39 +82,14 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
         }}
       />
       {category && productsByCategoryPaged && productsByCategoryPaged.content.length > 0 ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'http://schema.org',
-              '@type': 'WebPage',
-              url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
-              mainEntity: {
-                '@context': 'http://schema.org',
-                '@type': 'OfferCatalog',
-                name: category.categoryName,
-                url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
-                numberOfItems: productsByCategoryPaged.totalElements,
-                itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
-                  '@type': 'Product',
-                  url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                  name: product.productName,
-                  description: product.metaDescription,
-                  sku: product.sku,
-                  image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
-                  offers: {
-                    price: [...(product.priceGrids ?? [])]
-                      .filter(item => item.price !== 0)
-                      .sort((a, b) => a.price - b.price)
-                      .shift()?.price,
-                    priceCurrency: 'USD',
-                    availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
-                    itemCondition: 'NewCondition'
-                  }
-                }))
-              },
-              hasPart: {
+        <>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
                 '@type': 'ItemList',
+                '@context': 'http://schema.org',
+                name: category.categoryName,
                 numberOfItems: productsByCategoryPaged.totalPages,
                 itemListElement:
                   productsByCategoryPaged.totalPages &&
@@ -127,10 +102,44 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                         : category &&
                           `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${index + 1}`
                   }))
-              }
-            })
-          }}
-        />
+              })
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'http://schema.org',
+                '@type': 'WebPage',
+                url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+                mainEntity: {
+                  '@context': 'http://schema.org',
+                  '@type': 'OfferCatalog',
+                  name: category.categoryName,
+                  url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+                  numberOfItems: productsByCategoryPaged.totalElements,
+                  itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
+                    '@type': 'Product',
+                    url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+                    name: product.productName,
+                    description: product.metaDescription,
+                    sku: product.sku,
+                    image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
+                    offers: {
+                      price: [...(product.priceGrids ?? [])]
+                        .filter(item => item.price !== 0)
+                        .sort((a, b) => a.price - b.price)
+                        .shift()?.price,
+                      priceCurrency: 'USD',
+                      availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
+                      itemCondition: 'NewCondition'
+                    }
+                  }))
+                }
+              })
+            }}
+          />
+        </>
       ) : null}
       <CategoryDetails
         allCategories={allCategories}
