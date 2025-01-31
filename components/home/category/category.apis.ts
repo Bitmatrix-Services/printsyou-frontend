@@ -39,3 +39,23 @@ export const getProductsLdForCategoryPage = async (id: string, page: string): Pr
     return null;
   }
 };
+
+export const getProductByCategoryWithFilers = async (
+  categoryId: string,
+  searchParams: any
+): Promise<ApiResponse<any> | null> => {
+  const {page, size, filter, maxPrice, minPrice} = searchParams;
+  try {
+    let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 20}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
+    if (maxPrice && minPrice) {
+      query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    }
+    const response = await axios.get(query);
+
+    if (response.data.payload.content.length > 0) {
+      return response.data.payload;
+    } else return null;
+  } catch (error) {
+    return null;
+  }
+};

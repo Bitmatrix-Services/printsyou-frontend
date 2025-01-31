@@ -12,9 +12,10 @@ interface ICategoryDetails {
   allCategories: Category[];
   category: Category | null;
   siblingCategories: Category[];
+  pagedData: any;
 }
 
-export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, siblingCategories}) => {
+export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, pagedData, category, siblingCategories}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleToggle = () => {
@@ -119,7 +120,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, category, 
             {/*        </div>*/}
             {/*    </Container>*/}
             {/*</section>*/}
-            <ProductsSection category={category} />
+            <ProductsSection category={category} pagedData={pagedData} />
           </div>
         </div>
         <div className="lg:hidden block">

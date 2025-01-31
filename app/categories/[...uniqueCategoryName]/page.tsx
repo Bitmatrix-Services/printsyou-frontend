@@ -1,6 +1,7 @@
 import {
   getAllSiblingCategories,
   getCategoryDetailsByUniqueName,
+  getProductByCategoryWithFilers,
   getProductsLdForCategoryPage
 } from '@components/home/category/category.apis';
 import {CategoryDetails} from '@components/home/category/category-details.component';
@@ -8,12 +9,15 @@ import {Category} from '@components/home/home.types';
 import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
+import React from 'react';
+import {EnclosureProduct, Product} from '@components/home/product/product.types';
 
 type Params = Promise<{uniqueCategoryName: string[]}>;
 type SearchParams = Promise<any>;
 
-const CategoryPage = async (props: {params: Params}) => {
+const CategoryPage = async (props: {params: Params; searchParams: SearchParams}) => {
   const params = await props.params;
+  const searchParams = await props.searchParams;
 
   let uniqueName = params.uniqueCategoryName.join('/');
 
@@ -41,7 +45,12 @@ const CategoryPage = async (props: {params: Params}) => {
   const siblingCat = await getAllSiblingCategories(response?.payload?.id!!);
 
   let category: Category | null = null;
-  if (response?.payload) category = response.payload;
+  let productsByCategoryPaged: any | null = null;
+
+  if (response?.payload) {
+    category = response.payload;
+    productsByCategoryPaged = await getProductByCategoryWithFilers(category.id, searchParams);
+  }
 
   let allCategories: Category[] = [];
   if (siblingCat?.payload) allCategories = categoriesRes.payload;
@@ -50,6 +59,11 @@ const CategoryPage = async (props: {params: Params}) => {
 
   return (
     <section key={uniqueName}>
+      {/*{searchParams.page && (*/}
+      {/*  <Head>*/}
+      {/*    <meta name="robots" content="noindex,nofollow,noodp,noydir" />*/}
+      {/*  </Head>*/}
+      {/*)}*/}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -67,7 +81,46 @@ const CategoryPage = async (props: {params: Params}) => {
           })
         }}
       />
-      <CategoryDetails allCategories={allCategories} category={category} siblingCategories={siblingCategories} />
+      {category && productsByCategoryPaged && productsByCategoryPaged.content.length > 0 ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'http://schema.org',
+              '@type': 'WebPage',
+              url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+              mainEntity: {
+                '@context': 'http://schema.org',
+                '@type': 'OfferCatalog',
+                name: category.categoryName,
+                url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+                numberOfItems: productsByCategoryPaged.totalElements,
+                itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
+                  '@type': 'Product',
+                  url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+                  name: product.productName,
+                  image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
+                  offers: {
+                    price: [...(product.priceGrids ?? [])]
+                      .filter(item => item.price !== 0)
+                      .sort((a, b) => a.price - b.price)
+                      .shift()?.price,
+                    priceCurrency: 'USD',
+                    availability: 'http://schema.org/InStock',
+                    itemCondition: 'NewCondition'
+                  }
+                }))
+              }
+            })
+          }}
+        />
+      ) : null}
+      <CategoryDetails
+        allCategories={allCategories}
+        category={category}
+        pagedData={productsByCategoryPaged}
+        siblingCategories={siblingCategories}
+      />
     </section>
   );
 };

@@ -8,14 +8,14 @@ import {IQueryParams} from '@components/search/search-results-section';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
 import {Skeleton} from '@mui/joy';
-import Head from 'next/head';
 import {allowableSearchParams} from '@utils/constants';
 
 interface ProductsSectionProps {
   category: Category;
+  pagedData: any;
 }
 
-export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
+export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -33,10 +33,14 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
   );
 
   useEffect(() => {
-    if (category.id) {
-      getProductByCategory();
+    if (pagedData.content.length > 0) {
+      setProductsByCategory(pagedData.content);
+      setTotalPages(pagedData.totalPages);
+      if (page && parseInt(page) > pagedData.totalPages) notFound();
     }
-  }, [category.id, size, filter, page]);
+    setIsPageLoading(false);
+    setIsLoading(false);
+  }, []);
 
   const getProductByCategory = async () => {
     try {
@@ -82,43 +86,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category}) => {
 
   return (
     <section className="bg-white pt-8 md:pt-10 lg:pt-16">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'http://schema.org',
-            '@type': 'WebPage',
-            url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
-            mainEntity: {
-              '@context': 'http://schema.org',
-              '@type': 'OfferCatalog',
-              name: category.categoryName,
-              url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
-              numberOfItems: totalElements,
-              itemListElement: (productsByCategory ?? []).map(product => ({
-                '@type': 'Product',
-                url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                name: product.productName,
-                image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
-                offers: {
-                  price: [...(product.priceGrids ?? [])]
-                    .filter(item => item.price !== 0)
-                    .sort((a, b) => a.price - b.price)
-                    .shift()?.price,
-                  priceCurrency: 'USD',
-                  availability: 'http://schema.org/InStock',
-                  itemCondition: 'NewCondition'
-                }
-              }))
-            }
-          })
-        }}
-      />
-      {page && (
-        <Head>
-          <meta name="robots" content="noindex,nofollow,noodp,noydir" />
-        </Head>
-      )}
       {category.categoryName ? (
         <h2 className="text-xl mb-0 font-bold capitalize">
           {category.prefix && <span>{category.prefix}</span>}
