@@ -111,22 +111,22 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
                     itemCondition: 'NewCondition'
                   }
-                })),
-                relatedLink: {
-                  '@type': 'ItemList',
-                  numberOfItems: productsByCategoryPaged.totalPages,
-                  itemListElement:
-                    productsByCategoryPaged.totalPages &&
-                    Array.from({length: productsByCategoryPaged.totalPages}, (_, index) => ({
-                      '@type': 'ListItem',
-                      position: index + 1,
-                      url:
-                        index == 0
-                          ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
-                          : category &&
-                            `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${index + 1}`
-                    }))
-                }
+                }))
+              },
+              mainEntityOfPage: {
+                '@type': 'ItemList',
+                numberOfItems: productsByCategoryPaged.totalPages,
+                itemListElement:
+                  productsByCategoryPaged.totalPages &&
+                  Array.from({length: productsByCategoryPaged.totalPages}, (_, index) => ({
+                    '@type': 'ListItem',
+                    position: index + 1,
+                    url:
+                      index == 0
+                        ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+                        : category &&
+                          `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${index + 1}`
+                  }))
               }
             })
           }}
