@@ -120,14 +120,14 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                   (productsByCategoryPaged.content ?? [])
                     .filter((item: EnclosureProduct) => !item.outOfStock)
                     .slice(0, 5)
-                    .map((product, index) => ({
+                    .map((product: EnclosureProduct, index) => ({
                       '@type': 'ListItem',
                       position: index + 1,
                       item: {
                         '@type': 'Product',
                         url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
                         name: product.productName,
-                        image: product.productImages[0],
+                        image: product.imageUrl,
                         offers: {
                           '@type': 'Offer',
                           price: [...(product.priceGrids ?? [])]
