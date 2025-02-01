@@ -211,13 +211,28 @@ const ProductsPage = async (props: {params: Params}) => {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
-            itemListElement: (product?.crumbs ?? [])
+            itemListElement: (
+              (product?.crumbs && [
+                ...(product?.crumbs ?? []),
+                {
+                  sequenceNumber: 1,
+                  uniqueCategoryName: '',
+                  name: 'Promotional Products'
+                },
+                {
+                  sequenceNumber: 0,
+                  uniqueCategoryName: '',
+                  name: 'Home'
+                }
+              ]) ??
+              []
+            )
               .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map((item, index) => ({
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}${index === 0 ? 'products' : 'categories'}/${item.uniqueCategoryName}`
+                item: `${process.env.FE_URL}${index === 0 ? '' : index === 1 ? 'categories' : `categories/${item.uniqueCategoryName}`}`
               }))
           })
         }}
