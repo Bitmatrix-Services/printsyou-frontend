@@ -2,7 +2,7 @@
 import React, {FC, useState} from 'react';
 import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
-import {SubmitHandler, useForm} from 'react-hook-form';
+import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@tanstack/react-query';
 import axios from 'axios';
@@ -16,6 +16,7 @@ import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {notFound} from 'next/navigation';
 import {MaskInput} from '@lib/form/mask-input.component';
+import {UserInfoCapture} from '@components/user-info-capture';
 
 interface IMoreInfoComponent {
   product: Product | null;
@@ -24,12 +25,7 @@ interface IMoreInfoComponent {
 export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
 
-  const {
-    control,
-    reset,
-    handleSubmit,
-    formState: {errors, isSubmitting}
-  } = useForm<ContactUsFormSchemaType>({
+  const methods = useForm<ContactUsFormSchemaType>({
     resolver: yupResolver(contactUsSchema),
     defaultValues: {
       fullName: '',
@@ -39,6 +35,13 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
       message: ''
     }
   });
+
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: {errors, isSubmitting}
+  } = methods;
 
   const {mutate} = useMutation({
     mutationFn: (data: ContactUsFormSchemaType) => {
@@ -110,60 +113,63 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
             </div>
             <div className="pt-[2rem]">
               <ReactQueryClientProvider>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <FormControlInput
-                      label="Your Name"
-                      name="fullName"
-                      disabled={isSubmitting}
-                      isRequired={true}
-                      control={control}
-                      errors={errors}
-                    />
-                    <FormControlInput
-                      label="Email Address"
-                      name="emailAddress"
-                      isRequired={true}
-                      disabled={isSubmitting}
-                      control={control}
-                      errors={errors}
-                    />
-                    <MaskInput
-                      label="Phone Number"
-                      name="phoneNumber"
-                      isRequired={false}
-                      disabled={isSubmitting}
-                      control={control}
-                      errors={errors}
-                    />
-
-                    <FormControlInput
-                      label="Subject"
-                      name="subject"
-                      isRequired={false}
-                      disabled={isSubmitting}
-                      control={control}
-                      errors={errors}
-                    />
-
-                    <div className=" sm:col-span-2">
+                <FormProvider {...methods}>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <UserInfoCapture emailField="emailAddress" nameField="fullName" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                       <FormControlInput
-                        label="Message"
-                        name="message"
+                        label="Your Name"
+                        name="fullName"
+                        disabled={isSubmitting}
+                        isRequired={true}
+                        control={control}
+                        errors={errors}
+                      />
+                      <FormControlInput
+                        label="Email Address"
+                        name="emailAddress"
                         isRequired={true}
                         disabled={isSubmitting}
                         control={control}
-                        inputType="textarea"
                         errors={errors}
                       />
+                      <MaskInput
+                        label="Phone Number"
+                        name="phoneNumber"
+                        isRequired={false}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                      />
+
+                      <FormControlInput
+                        label="Subject"
+                        name="subject"
+                        isRequired={false}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                      />
+
+                      <div className=" sm:col-span-2">
+                        <FormControlInput
+                          label="Message"
+                          name="message"
+                          isRequired={true}
+                          disabled={isSubmitting}
+                          control={control}
+                          inputType="textarea"
+                          errors={errors}
+                        />
+                      </div>
+                      <div>
+                        <button className="rounded-[4px] py-2 px-14 text-white font-normal bg-primary-500">
+                          {isSubmitting ? <CircularLoader /> : 'Submit'}
+                        </button>
+                      </div>
                     </div>
-                    <div>
-                      <button className="rounded-[4px] py-2 px-14 text-white font-normal bg-primary-500">
-                        {isSubmitting ? <CircularLoader /> : 'Submit'}
-                      </button>
-                    </div>
-                  </div>
-                </form>
+                  </form>
+                </FormProvider>
               </ReactQueryClientProvider>
             </div>
           </div>

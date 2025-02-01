@@ -9,7 +9,7 @@ import {shippingFormFields, statesList} from '@utils/constants';
 import {Radio, RadioGroup} from '@mui/joy';
 import {IoClose} from 'react-icons/io5';
 import {SuccessModal} from '@components/globals/success-modal.component';
-import {Controller, SubmitHandler, useForm} from 'react-hook-form';
+import {Controller, FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@tanstack/react-query';
 import {FormControlInput} from '@lib/form/form-control-input';
@@ -32,6 +32,7 @@ import {CustomProduct, UploadedFileType} from '@components/globals/cart/cart-typ
 import {v4 as uuidv4} from 'uuid';
 import Option from '@mui/joy/Option';
 import {MdOutlineFileDownload} from 'react-icons/md';
+import {UserInfoCapture} from "@components/user-info-capture";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -390,439 +391,16 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         ) : null}
 
         <ReactQueryClientProvider>
-          <form onSubmit={handleSubmit(onSubmit, handleFormError)}>
-            <div
-              className={
-                'flex-col grid tablet:grid-cols-1 md:grid-cols-2 lg:flex-row w-full justify-between py-0 gap-6 lg:gap-20'
-              }
-            >
-              {/* mobile only view */}
-              <div className="tablet:block md:hidden block p-4 border-2">
-                <div>
-                  <div className="flex items-center p-4">
-                    <div className="relative">
-                      <ImageWithFallback
-                        style={{
-                          position: 'relative',
-                          width: '100%',
-                          minHeight: '100px',
-                          maxHeight: '100px',
-                          objectFit: 'contain',
-                          borderRadius: '8px'
-                        }}
-                        width={100}
-                        height={100}
-                        src={
-                          selectedProduct?.productImages.sort((a, b) => a.sequenceNumber - b.sequenceNumber)[0].imageUrl
-                        }
-                        alt="Product"
-                      />
-                    </div>
-
-                    <div className="ml-4 flex-grow">
-                      <div className="text-black mb-2">
-                        Item#:
-                        <span className="text-yellow-500">{product?.sku}</span>
-                      </div>
-                      <h3
-                        className="text-sm lg:text-base font-semibold"
-                        dangerouslySetInnerHTML={{
-                          __html: product?.productName
-                        }}
-                      ></h3>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="hidden md:grid grid-cols-3">
-                      <div className="col-span-2">
-                        {priceTypes.length > 0 ? (
-                          <>
-                            <FormHeading text="Item Type" />
-                            <div className="flex justify-start items-center flex-wrap gap-6 mb-5">
-                              {priceTypes.map(row => (
-                                <div
-                                  key={row}
-                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                  onClick={() => setValue('selectedPriceType', row)}
-                                >
-                                  {row}
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        ) : null}
-
-                        <div className="flex justify-between items-center gap-8">
-                          <FormControlInput
-                            fieldType="number"
-                            name="itemQty"
-                            label="Quantity"
-                            isRequired={true}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                            onBlur={() => trigger('itemQty')}
-                            onFocus={e => e.target.select()}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-span-1">
-                        <div className="flex flex-col">
-                          <div className="flex justify-end">
-                            <FormHeading text="Sub Total" />
-                          </div>
-                          {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
-                            <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
-                              Min Qty is {product.sortedPrices[0].countFrom}
-                            </h2>
-                          ) : (
-                            <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                              ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
-                            </h2>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/*  quantity pricing mobile view*/}
-                    <div className="md:hidden">
-                      {priceTypes.length > 0 ? (
-                        <>
-                          <FormHeading text="Item Type" />
-                          <div className="flex justify-start items-center flex-wrap gap-2">
-                            {priceTypes.map(row => (
-                              <div
-                                key={row}
-                                className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                onClick={() => setValue('selectedPriceType', row)}
-                              >
-                                {row}
-                              </div>
-                            ))}
-                          </div>
-                        </>
-                      ) : null}
-                      <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
-                      <div className="flex ">
-                        <FormControlInput
-                          fieldType="number"
-                          name="itemQty"
-                          label="Quantity"
-                          isRequired={true}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                          onBlur={() => trigger('itemQty')}
-                          onFocus={e => e.target.select()}
-                        />
-                      </div>
-                      <div className="flex justify-between items-center gap-2">
-                        <h4 className="my-3 text-lg font-semibold capitalize ">Sub Total</h4>
-                        <div className="">
-                          {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
-                            <h5 className="text-red-500 text-lg lg:text-2xl font-bold">
-                              Min Qty is {product?.sortedPrices[0].countFrom}
-                            </h5>
-                          ) : (
-                            <h5 className="text-primary-500 text-2xl font-bold">
-                              ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
-                            </h5>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col md:flex-row gap-2 justify-between mt-4">
-                      <div className="text-xs">
-                        *Final total including shipping and any additional charges will be sent with the artwork proof
-                        after the order is placed.
-                      </div>
-
-                      <hr className="my-4 border border-black-100" />
-                    </div>
-
-                    <div>
-                      <FormHeading text="Product Details" />
-                      <div className="grid md:grid-cols-2 gap-6 ">
-                        <div className="relative">
-                          <FormControlInput
-                            name="itemColor"
-                            label="Item Color (optional)"
-                            isRequired={false}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                          />
-                        </div>
-                        <div className="relative">
-                          <FormControlInput
-                            name="imprintColor"
-                            label="Imprint Color (optional)"
-                            isRequired={false}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                          />
-                        </div>
-                        <div className="relative">
-                          <FormControlInput
-                            name="size"
-                            label="Size (optional)"
-                            isRequired={false}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <FormHeading text="Artwork files" />
-                    <FormDescription
-                      textArray={[
-                        `Click the "Add Files" button to locate the artwork on your computer. Your artwork will automatically begin to upload. We can accept any artwork format you send us. However, we prefer vector format. This is usually .ai or .eps`,
-                        `We will send a digital artwork proof for approval once the order is received.`
-                      ]}
-                    />
-                    <div>
-                      <label
-                        htmlFor="fileInput"
-                        className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 hover:bg-primary-600 hover:text-white capitalize"
-                      >
-                        <input
-                          id="fileInput"
-                          type="file"
-                          name="fileInput"
-                          multiple
-                          onChange={e => handleFileChange(e)}
-                          hidden
-                        />
-                        Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
-                      </label>
-                    </div>
-                    <ul>
-                      {artWorkFiles.map((file, index) => (
-                        <li key={file.fileKey} className="flex items-center pt-4 rounded-lg">
-                          <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
-                            <Image
-                              className="object-cover w-full h-full rounded-sm"
-                              width={100}
-                              height={100}
-                              src={`${ASSETS_SERVER_URL}${file.fileKey}`}
-                              alt={file.filename}
-                            />
-                          </div>
-                          <div className="flex-grow pl-4">
-                            <span className="text-sm lg:text-base font-semibold break-all">{file.filename}</span>
-                          </div>
-                          <IoClose
-                            onClick={e => {
-                              handleFileRemove(index);
-                              e.stopPropagation();
-                            }}
-                            className="text-red-600 w-6 h-6 cursor-pointer"
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                    {progress > 0 ? <LinearProgressWithLabel progress={progress} /> : null}
-                  </div>
-                </div>
-              </div>
-              <div className="w-full">
-                <FormHeading text="Billing Information" />
-                <div className="grid md:grid-cols-2 gap-6">
-                  <FormControlInput
-                    label="Your Name"
-                    name="billingAddress.fullname"
-                    isRequired={true}
-                    disabled={isSubmitting}
-                    control={control}
-                    errors={errors}
-                  />
-                  <FormControlInput
-                    label="Company"
-                    name="billingAddress.company"
-                    disabled={isSubmitting}
-                    control={control}
-                  />
-
-                  <div className="md:col-span-2">
-                    <FormControlInput
-                      name="billingAddress.addressLineOne"
-                      label="Address"
-                      isRequired={true}
-                      disabled={isSubmitting}
-                      control={control}
-                      errors={errors}
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <FormControlInput
-                      name="billingAddress.addressLineTwo"
-                      label="Address 2"
-                      disabled={isSubmitting}
-                      control={control}
-                    />
-                  </div>
-                  <FormControlInput
-                    name="billingAddress.city"
-                    label="City"
-                    isRequired={true}
-                    disabled={isSubmitting}
-                    control={control}
-                    errors={errors}
-                  />
-
-                  <FormControlSelect
-                    name="billingAddress.state"
-                    label="State"
-                    isRequired={true}
-                    disabled={isSubmitting}
-                    control={control}
-                    errors={errors}
-                  >
-                    {statesList.map(state => (
-                      <Option key={state.name} value={state.value}>
-                        {state.name}
-                      </Option>
-                    ))}
-                  </FormControlSelect>
-
-                  <FormControlInput
-                    name="billingAddress.zipCode"
-                    label="Zip Code"
-                    isRequired={true}
-                    disabled={isSubmitting}
-                    control={control}
-                    errors={errors}
-                  />
-                  <MaskInput
-                    name="billingAddress.phoneNumber"
-                    label="Phone"
-                    isRequired={false}
-                    disabled={isSubmitting}
-                    control={control}
-                    errors={errors}
-                  />
-                  <div className="md:col-span-2">
-                    <FormControlInput
-                      name="emailAddress"
-                      label="Email"
-                      isRequired={true}
-                      disabled={isSubmitting}
-                      control={control}
-                      errors={errors}
-                    />
-                  </div>
-                </div>
-                <FormHeading text="Shipping Information" />
-                <div className="flex flex-col gap-2">
-                  <Controller
-                    name="shippingAddress.shippingAddressSame"
-                    control={control}
-                    render={({field: {onChange, value, ...otherProps}}) => (
-                      <RadioGroup
-                        value={value}
-                        {...otherProps}
-                        onChange={e => {
-                          onChange(e.target.value === 'true');
-                          if (e.target.value === 'true') {
-                            setValue('shippingAddress', {
-                              fullname: '',
-                              company: '',
-                              addressLineOne: '',
-                              addressLineTwo: '',
-                              city: '',
-                              state: 'NONE',
-                              zipCode: '',
-                              phoneNumber: '',
-                              shippingAddressSame: true
-                            });
-                          }
-                        }}
-                      >
-                        <Radio
-                          value="true"
-                          label="Same as my billing address"
-                          variant="outlined"
-                          checked={value === true}
-                        />
-                        <Radio
-                          value="false"
-                          label="Different shipping address"
-                          variant="outlined"
-                          checked={value === false}
-                        />
-                      </RadioGroup>
-                    )}
-                  />
-                </div>
-                {!watch('shippingAddress.shippingAddressSame') && (
-                  <div className="grid md:grid-cols-2 gap-6 mt-6">
-                    {shippingFormFields.map(field =>
-                      field.label === 'State' ? (
-                        <FormControlSelect
-                          key={field.name}
-                          name={field.name}
-                          label={field.label}
-                          isRequired={field.required}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                        >
-                          {statesList.map(state => (
-                            <Option key={state.name} value={state.value}>
-                              {state.name}
-                            </Option>
-                          ))}
-                        </FormControlSelect>
-                      ) : field.label === 'Phone' ? (
-                        <MaskInput
-                          key={field.name}
-                          name={field.name}
-                          label={field.label}
-                          isRequired={field.required}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                        />
-                      ) : (
-                        <FormControlInput
-                          key={field.name}
-                          name={field.name}
-                          label={field.label}
-                          isRequired={field.required}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                        />
-                      )
-                    )}
-                  </div>
-                )}
-                <FormHeading text="Payment Information" />
-
-                <ul className="list-disc ml-4">
-                  <li className=" text-[14px] mb-2">
-                    After submitting your order, PrintsYou will follow up with any questions, a confirmation, and an
-                    artwork proof. The confirmation will include shipping charges, any applicable taxes, and any
-                    additional charges that may be required based on your artwork.
-                  </li>
-                  <li className=" text-[14px] mb-2">
-                    You have nothing to worry about by submitting your order. The order is not firm until your artwork
-                    proof along with the pricing breakdown has been approved and we begin production. The order may be
-                    canceled any time before that.
-                  </li>
-                  <li className=" text-[14px] mb-2">
-                    {`We do not request payment until we receive approvals, so if you're nervous about placing your order with us, don't be . There will be plenty of communication before we begin production.`}
-                  </li>
-                </ul>
-              </div>
-              <div className="flex flex-col gap-3">
-                {/*  hidden on mobile screen */}
-                <div className="hidden tablet:hidden md:block p-4 border-2">
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit, handleFormError)}>
+              <UserInfoCapture emailField="emailAddress" nameField="billingAddress.fullName" />
+              <div
+                className={
+                  'flex-col grid tablet:grid-cols-1 md:grid-cols-2 lg:flex-row w-full justify-between py-0 gap-6 lg:gap-20'
+                }
+              >
+                {/* mobile only view */}
+                <div className="tablet:block md:hidden block p-4 border-2">
                   <div>
                     <div className="flex items-center p-4">
                       <div className="relative">
@@ -860,12 +438,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     </div>
 
                     <div>
-                      <div className="hidden tablet:grid md:grid grid-cols-3">
+                      <div className="hidden md:grid grid-cols-3">
                         <div className="col-span-2">
                           {priceTypes.length > 0 ? (
                             <>
                               <FormHeading text="Item Type" />
-                              <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
+                              <div className="flex justify-start items-center flex-wrap gap-6 mb-5">
                                 {priceTypes.map(row => (
                                   <div
                                     key={row}
@@ -879,9 +457,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                             </>
                           ) : null}
 
-                          <div
-                            className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} `}
-                          >
+                          <div className="flex justify-between items-center gap-8">
                             <FormControlInput
                               fieldType="number"
                               name="itemQty"
@@ -902,7 +478,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               <FormHeading text="Sub Total" />
                             </div>
                             {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
-                              <h2 className="text-red-500 text-lg lg:text-2xl text-end font-bold flex justify-end items-center">
+                              <h2 className="text-red-500 text-lg lg:text-2xl font-bold flex justify-end items-center">
                                 Min Qty is {product.sortedPrices[0].countFrom}
                               </h2>
                             ) : (
@@ -1016,7 +592,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       <div>
                         <label
                           htmlFor="fileInput"
-                          className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500  hover:bg-primary-600 hover:text-white capitalize"
+                          className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 hover:bg-primary-600 hover:text-white capitalize"
                         >
                           <input
                             id="fileInput"
@@ -1058,82 +634,511 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     </div>
                   </div>
                 </div>
-
-                {/* additional info section*/}
-                <div className="p-4 border-2">
-                  <FormHeading text="Additional Information" />
+                <div className="w-full">
+                  <FormHeading text="Billing Information" />
                   <div className="grid md:grid-cols-2 gap-6">
-                    <Controller
-                      name="inHandDate"
-                      control={control}
-                      render={({field: {onChange, value}}) => (
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            name="inHandDate"
-                            value={value ? dayjs(value) : null}
-                            onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
-                          />
-                        </LocalizationProvider>
-                      )}
-                    />
-
                     <FormControlInput
-                      name="salesRep"
-                      placeholder="Sales Rep Name"
+                      label="Your Name"
+                      name="billingAddress.fullname"
+                      isRequired={true}
+                      disabled={isSubmitting}
+                      control={control}
+                      errors={errors}
+                    />
+                    <FormControlInput
+                      label="Company"
+                      name="billingAddress.company"
                       disabled={isSubmitting}
                       control={control}
                     />
 
                     <div className="md:col-span-2">
                       <FormControlInput
-                        inputType="textarea"
-                        name="additionalInformation"
-                        placeholder="Additional Information"
+                        name="billingAddress.addressLineOne"
+                        label="Address"
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <FormControlInput
+                        name="billingAddress.addressLineTwo"
+                        label="Address 2"
                         disabled={isSubmitting}
                         control={control}
                       />
                     </div>
-                  </div>
-
-                  <div className="flex justify-between gap-2 flex-col mt-4">
-                    <FormControlCheckbox
-                      name="newsLetter"
-                      label="Be up to date with our promotions, sign up for our email newsletters
-                                            now."
-                      disabled={isSubmitting}
-                      control={control}
-                    />
-                    <FormControlCheckbox
-                      name="termsAndConditions"
-                      label={
-                        <Fragment>
-                          I have read & agree to PrintsYou{' '}
-                          <Link href="/terms-and-conditions" target="blank" className="text-blue-500">
-                            Terms and Conditions
-                          </Link>
-                        </Fragment>
-                      }
+                    <FormControlInput
+                      name="billingAddress.city"
+                      label="City"
                       isRequired={true}
                       disabled={isSubmitting}
                       control={control}
                       errors={errors}
                     />
-                  </div>
-                  {apiError ? (
-                    <div className="text-red-500 pt-4 text-center">Something went wrong, Please try again!</div>
-                  ) : null}
-                  <div className="my-6 flex w-full justify-center items-center">
-                    <button
-                      type="submit"
-                      className="w-full py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-primary-600 text-white"
+
+                    <FormControlSelect
+                      name="billingAddress.state"
+                      label="State"
+                      isRequired={true}
+                      disabled={isSubmitting}
+                      control={control}
+                      errors={errors}
                     >
-                      {isSubmitting ? <CircularLoader /> : 'SUBMIT'}
-                    </button>
+                      {statesList.map(state => (
+                        <Option key={state.name} value={state.value}>
+                          {state.name}
+                        </Option>
+                      ))}
+                    </FormControlSelect>
+
+                    <FormControlInput
+                      name="billingAddress.zipCode"
+                      label="Zip Code"
+                      isRequired={true}
+                      disabled={isSubmitting}
+                      control={control}
+                      errors={errors}
+                    />
+                    <MaskInput
+                      name="billingAddress.phoneNumber"
+                      label="Phone"
+                      isRequired={false}
+                      disabled={isSubmitting}
+                      control={control}
+                      errors={errors}
+                    />
+                    <div className="md:col-span-2">
+                      <FormControlInput
+                        name="emailAddress"
+                        label="Email"
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                      />
+                    </div>
+                  </div>
+                  <FormHeading text="Shipping Information" />
+                  <div className="flex flex-col gap-2">
+                    <Controller
+                      name="shippingAddress.shippingAddressSame"
+                      control={control}
+                      render={({field: {onChange, value, ...otherProps}}) => (
+                        <RadioGroup
+                          value={value}
+                          {...otherProps}
+                          onChange={e => {
+                            onChange(e.target.value === 'true');
+                            if (e.target.value === 'true') {
+                              setValue('shippingAddress', {
+                                fullname: '',
+                                company: '',
+                                addressLineOne: '',
+                                addressLineTwo: '',
+                                city: '',
+                                state: 'NONE',
+                                zipCode: '',
+                                phoneNumber: '',
+                                shippingAddressSame: true
+                              });
+                            }
+                          }}
+                        >
+                          <Radio
+                            value="true"
+                            label="Same as my billing address"
+                            variant="outlined"
+                            checked={value === true}
+                          />
+                          <Radio
+                            value="false"
+                            label="Different shipping address"
+                            variant="outlined"
+                            checked={value === false}
+                          />
+                        </RadioGroup>
+                      )}
+                    />
+                  </div>
+                  {!watch('shippingAddress.shippingAddressSame') && (
+                    <div className="grid md:grid-cols-2 gap-6 mt-6">
+                      {shippingFormFields.map(field =>
+                        field.label === 'State' ? (
+                          <FormControlSelect
+                            key={field.name}
+                            name={field.name}
+                            label={field.label}
+                            isRequired={field.required}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          >
+                            {statesList.map(state => (
+                              <Option key={state.name} value={state.value}>
+                                {state.name}
+                              </Option>
+                            ))}
+                          </FormControlSelect>
+                        ) : field.label === 'Phone' ? (
+                          <MaskInput
+                            key={field.name}
+                            name={field.name}
+                            label={field.label}
+                            isRequired={field.required}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          />
+                        ) : (
+                          <FormControlInput
+                            key={field.name}
+                            name={field.name}
+                            label={field.label}
+                            isRequired={field.required}
+                            disabled={isSubmitting}
+                            control={control}
+                            errors={errors}
+                          />
+                        )
+                      )}
+                    </div>
+                  )}
+                  <FormHeading text="Payment Information" />
+
+                  <ul className="list-disc ml-4">
+                    <li className=" text-[14px] mb-2">
+                      After submitting your order, PrintsYou will follow up with any questions, a confirmation, and an
+                      artwork proof. The confirmation will include shipping charges, any applicable taxes, and any
+                      additional charges that may be required based on your artwork.
+                    </li>
+                    <li className=" text-[14px] mb-2">
+                      You have nothing to worry about by submitting your order. The order is not firm until your artwork
+                      proof along with the pricing breakdown has been approved and we begin production. The order may be
+                      canceled any time before that.
+                    </li>
+                    <li className=" text-[14px] mb-2">
+                      {`We do not request payment until we receive approvals, so if you're nervous about placing your order with us, don't be . There will be plenty of communication before we begin production.`}
+                    </li>
+                  </ul>
+                </div>
+                <div className="flex flex-col gap-3">
+                  {/*  hidden on mobile screen */}
+                  <div className="hidden tablet:hidden md:block p-4 border-2">
+                    <div>
+                      <div className="flex items-center p-4">
+                        <div className="relative">
+                          <ImageWithFallback
+                            style={{
+                              position: 'relative',
+                              width: '100%',
+                              minHeight: '100px',
+                              maxHeight: '100px',
+                              objectFit: 'contain',
+                              borderRadius: '8px'
+                            }}
+                            width={100}
+                            height={100}
+                            src={
+                              selectedProduct?.productImages.sort((a, b) => a.sequenceNumber - b.sequenceNumber)[0]
+                                .imageUrl
+                            }
+                            alt="Product"
+                          />
+                        </div>
+
+                        <div className="ml-4 flex-grow">
+                          <div className="text-black mb-2">
+                            Item#:
+                            <span className="text-yellow-500">{product?.sku}</span>
+                          </div>
+                          <h3
+                            className="text-sm lg:text-base font-semibold"
+                            dangerouslySetInnerHTML={{
+                              __html: product?.productName
+                            }}
+                          ></h3>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="hidden tablet:grid md:grid grid-cols-3">
+                          <div className="col-span-2">
+                            {priceTypes.length > 0 ? (
+                              <>
+                                <FormHeading text="Item Type" />
+                                <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
+                                  {priceTypes.map(row => (
+                                    <div
+                                      key={row}
+                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                      onClick={() => setValue('selectedPriceType', row)}
+                                    >
+                                      {row}
+                                    </div>
+                                  ))}
+                                </div>
+                              </>
+                            ) : null}
+
+                            <div
+                              className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} `}
+                            >
+                              <FormControlInput
+                                fieldType="number"
+                                name="itemQty"
+                                label="Quantity"
+                                isRequired={true}
+                                disabled={isSubmitting}
+                                control={control}
+                                errors={errors}
+                                onBlur={() => trigger('itemQty')}
+                                onFocus={e => e.target.select()}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-span-1">
+                            <div className="flex flex-col">
+                              <div className="flex justify-end">
+                                <FormHeading text="Sub Total" />
+                              </div>
+                              {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
+                                <h2 className="text-red-500 text-lg lg:text-2xl text-end font-bold flex justify-end items-center">
+                                  Min Qty is {product.sortedPrices[0].countFrom}
+                                </h2>
+                              ) : (
+                                <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
+                                  ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                </h2>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/*  quantity pricing mobile view*/}
+                        <div className="md:hidden">
+                          {priceTypes.length > 0 ? (
+                            <>
+                              <FormHeading text="Item Type" />
+                              <div className="flex justify-start items-center flex-wrap gap-2">
+                                {priceTypes.map(row => (
+                                  <div
+                                    key={row}
+                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                    onClick={() => setValue('selectedPriceType', row)}
+                                  >
+                                    {row}
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          ) : null}
+                          <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
+                          <div className="flex ">
+                            <FormControlInput
+                              fieldType="number"
+                              name="itemQty"
+                              label="Quantity"
+                              isRequired={true}
+                              disabled={isSubmitting}
+                              control={control}
+                              errors={errors}
+                              onBlur={() => trigger('itemQty')}
+                              onFocus={e => e.target.select()}
+                            />
+                          </div>
+                          <div className="flex justify-between items-center gap-2">
+                            <h4 className="my-3 text-lg font-semibold capitalize ">Sub Total</h4>
+                            <div className="">
+                              {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
+                                <h5 className="text-red-500 text-lg lg:text-2xl font-bold">
+                                  Min Qty is {product?.sortedPrices[0].countFrom}
+                                </h5>
+                              ) : (
+                                <h5 className="text-primary-500 text-2xl font-bold">
+                                  ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                </h5>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row gap-2 justify-between mt-4">
+                          <div className="text-xs">
+                            *Final total including shipping and any additional charges will be sent with the artwork
+                            proof after the order is placed.
+                          </div>
+
+                          <hr className="my-4 border border-black-100" />
+                        </div>
+
+                        <div>
+                          <FormHeading text="Product Details" />
+                          <div className="grid md:grid-cols-2 gap-6 ">
+                            <div className="relative">
+                              <FormControlInput
+                                name="itemColor"
+                                label="Item Color (optional)"
+                                isRequired={false}
+                                disabled={isSubmitting}
+                                control={control}
+                                errors={errors}
+                              />
+                            </div>
+                            <div className="relative">
+                              <FormControlInput
+                                name="imprintColor"
+                                label="Imprint Color (optional)"
+                                isRequired={false}
+                                disabled={isSubmitting}
+                                control={control}
+                                errors={errors}
+                              />
+                            </div>
+                            <div className="relative">
+                              <FormControlInput
+                                name="size"
+                                label="Size (optional)"
+                                isRequired={false}
+                                disabled={isSubmitting}
+                                control={control}
+                                errors={errors}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <FormHeading text="Artwork files" />
+                        <FormDescription
+                          textArray={[
+                            `Click the "Add Files" button to locate the artwork on your computer. Your artwork will automatically begin to upload. We can accept any artwork format you send us. However, we prefer vector format. This is usually .ai or .eps`,
+                            `We will send a digital artwork proof for approval once the order is received.`
+                          ]}
+                        />
+                        <div>
+                          <label
+                            htmlFor="fileInput"
+                            className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500  hover:bg-primary-600 hover:text-white capitalize"
+                          >
+                            <input
+                              id="fileInput"
+                              type="file"
+                              name="fileInput"
+                              multiple
+                              onChange={e => handleFileChange(e)}
+                              hidden
+                            />
+                            Upload design <MdOutlineFileDownload className="w-6 h-6 ml-3" />
+                          </label>
+                        </div>
+                        <ul>
+                          {artWorkFiles.map((file, index) => (
+                            <li key={file.fileKey} className="flex items-center pt-4 rounded-lg">
+                              <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
+                                <Image
+                                  className="object-cover w-full h-full rounded-sm"
+                                  width={100}
+                                  height={100}
+                                  src={`${ASSETS_SERVER_URL}${file.fileKey}`}
+                                  alt={file.filename}
+                                />
+                              </div>
+                              <div className="flex-grow pl-4">
+                                <span className="text-sm lg:text-base font-semibold break-all">{file.filename}</span>
+                              </div>
+                              <IoClose
+                                onClick={e => {
+                                  handleFileRemove(index);
+                                  e.stopPropagation();
+                                }}
+                                className="text-red-600 w-6 h-6 cursor-pointer"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                        {progress > 0 ? <LinearProgressWithLabel progress={progress} /> : null}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* additional info section*/}
+                  <div className="p-4 border-2">
+                    <FormHeading text="Additional Information" />
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <Controller
+                        name="inHandDate"
+                        control={control}
+                        render={({field: {onChange, value}}) => (
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              name="inHandDate"
+                              value={value ? dayjs(value) : null}
+                              onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
+                            />
+                          </LocalizationProvider>
+                        )}
+                      />
+
+                      <FormControlInput
+                        name="salesRep"
+                        placeholder="Sales Rep Name"
+                        disabled={isSubmitting}
+                        control={control}
+                      />
+
+                      <div className="md:col-span-2">
+                        <FormControlInput
+                          inputType="textarea"
+                          name="additionalInformation"
+                          placeholder="Additional Information"
+                          disabled={isSubmitting}
+                          control={control}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between gap-2 flex-col mt-4">
+                      <FormControlCheckbox
+                        name="newsLetter"
+                        label="Be up to date with our promotions, sign up for our email newsletters
+                                            now."
+                        disabled={isSubmitting}
+                        control={control}
+                      />
+                      <FormControlCheckbox
+                        name="termsAndConditions"
+                        label={
+                          <Fragment>
+                            I have read & agree to PrintsYou{' '}
+                            <Link href="/terms-and-conditions" target="blank" className="text-blue-500">
+                              Terms and Conditions
+                            </Link>
+                          </Fragment>
+                        }
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                      />
+                    </div>
+                    {apiError ? (
+                      <div className="text-red-500 pt-4 text-center">Something went wrong, Please try again!</div>
+                    ) : null}
+                    <div className="my-6 flex w-full justify-center items-center">
+                      <button
+                        type="submit"
+                        className="w-full py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-primary-600 text-white"
+                      >
+                        {isSubmitting ? <CircularLoader /> : 'SUBMIT'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </FormProvider>
         </ReactQueryClientProvider>
         <SuccessModal
           open={isSuccessModalOpen}
