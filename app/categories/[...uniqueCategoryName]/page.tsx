@@ -111,44 +111,44 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
               })
             }}
           />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@type': 'ItemList',
-                '@context': 'http://schema.org',
-                '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#featured-products`,
-                name: `Featured ${category.categoryName}`,
-                description: `A list of featured ${category.categoryName}`,
-                numberOfItems: 5,
-                itemListElement:
-                  productsByCategoryPaged.totalPages &&
-                  (productsByCategoryPaged.content ?? [])
-                    .filter((item: EnclosureProduct) => !item.outOfStock)
-                    .slice(0, 5)
-                    .map((product: EnclosureProduct, index: any) => ({
-                      '@type': 'ListItem',
-                      position: index + 1,
-                      item: {
-                        '@type': 'Product',
-                        url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                        name: product.productName,
-                        image: product.imageUrl,
-                        offers: {
-                          '@type': 'Offer',
-                          price: [...(product.priceGrids ?? [])]
-                            .filter(item => item.price !== 0)
-                            .sort((a, b) => a.price - b.price)
-                            .shift()?.price,
-                          priceCurrency: 'USD',
-                          availability: 'http://schema.org/InStock',
-                          itemCondition: 'http://schema.org/NewCondition'
-                        }
-                      }
-                    }))
-              })
-            }}
-          />
+          {/*<script*/}
+          {/*  type="application/ld+json"*/}
+          {/*  dangerouslySetInnerHTML={{*/}
+          {/*    __html: JSON.stringify({*/}
+          {/*      '@type': 'ItemList',*/}
+          {/*      '@context': 'http://schema.org',*/}
+          {/*      '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#featured-products`,*/}
+          {/*      name: `Featured ${category.categoryName}`,*/}
+          {/*      description: `A list of featured ${category.categoryName}`,*/}
+          {/*      numberOfItems: 5,*/}
+          {/*      itemListElement:*/}
+          {/*        productsByCategoryPaged.totalPages &&*/}
+          {/*        (productsByCategoryPaged.content ?? [])*/}
+          {/*          .filter((item: EnclosureProduct) => !item.outOfStock)*/}
+          {/*          .slice(0, 5)*/}
+          {/*          .map((product: EnclosureProduct, index: any) => ({*/}
+          {/*            '@type': 'ListItem',*/}
+          {/*            position: index + 1,*/}
+          {/*            item: {*/}
+          {/*              '@type': 'Product',*/}
+          {/*              url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,*/}
+          {/*              name: product.productName,*/}
+          {/*              image: product.imageUrl,*/}
+          {/*              offers: {*/}
+          {/*                '@type': 'Offer',*/}
+          {/*                price: [...(product.priceGrids ?? [])]*/}
+          {/*                  .filter(item => item.price !== 0)*/}
+          {/*                  .sort((a, b) => a.price - b.price)*/}
+          {/*                  .shift()?.price,*/}
+          {/*                priceCurrency: 'USD',*/}
+          {/*                availability: 'http://schema.org/InStock',*/}
+          {/*                itemCondition: 'http://schema.org/NewCondition'*/}
+          {/*              }*/}
+          {/*            }*/}
+          {/*          }))*/}
+          {/*    })*/}
+          {/*  }}*/}
+          {/*/>*/}
 
           <script
             type="application/ld+json"
