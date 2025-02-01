@@ -9,11 +9,27 @@ export const UserInfoCapture: FC<{nameField: string; emailField: string}> = ({na
   const emailFieldValue = watch(emailField);
 
   useEffect(() => {
-    posthog.setPersonProperties({name: nameValue});
+    const interval = setInterval(() => {
+      posthog.setPersonProperties({name: nameValue});
+    }, 3000);
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [nameValue]);
 
   useEffect(() => {
-    posthog.setPersonProperties({email: emailFieldValue});
+    const interval = setInterval(() => {
+      posthog.setPersonProperties({email: emailFieldValue});
+    }, 3000);
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [emailFieldValue]);
 
   return null;
