@@ -118,7 +118,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 itemListElement:
                   productsByCategoryPaged.totalPages &&
                   (productsByCategoryPaged.content ?? [])
-                    .filter(item => !item.outOfStock)
+                    .filter((item: EnclosureProduct) => !item.outOfStock)
                     .slice(0, 5)
                     .map((product, index) => ({
                       '@type': 'ListItem',
