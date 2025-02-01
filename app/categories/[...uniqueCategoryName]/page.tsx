@@ -90,8 +90,12 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 '@type': 'ItemList',
                 '@context': 'http://schema.org',
                 name: `${category.categoryName} - Pagination`,
-                description: `Pagination for the ${category.categoryName} - category`,
+                description: `Pagination for the ${category.categoryName} category`,
                 numberOfItems: productsByCategoryPaged.totalPages,
+                mainEntityOfPage: {
+                  '@type': 'WebPage',
+                  '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+                },
                 itemListElement:
                   productsByCategoryPaged.totalPages &&
                   Array.from({length: productsByCategoryPaged.totalPages}, (_, index) => ({
