@@ -229,8 +229,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                         name: 'PrintsYou'
                       }
                     }
-                  })),
-                  paginationLinks: paginationLinks
+                  }))
+                  // paginationLinks: paginationLinks
                 },
                 isPartOf: {
                   '@type': 'CollectionPage',
