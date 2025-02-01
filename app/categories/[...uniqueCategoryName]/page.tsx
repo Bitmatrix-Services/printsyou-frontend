@@ -218,7 +218,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     '@type': 'WebPage',
                     name: 'Previous Page',
                     url:
-                      productsByCategoryPaged.pageNumber > 1
+                      productsByCategoryPaged.number > 1
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber - 1}`
                         : null
                   },
@@ -226,7 +226,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     '@type': 'WebPage',
                     name: 'Next Page',
                     url:
-                      productsByCategoryPaged.pageNumber < productsByCategoryPaged.totalPages
+                      productsByCategoryPaged.number < productsByCategoryPaged.totalPages
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber + 1}`
                         : null
                   }
