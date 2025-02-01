@@ -89,6 +89,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
               __html: JSON.stringify({
                 '@type': 'ItemList',
                 '@context': 'http://schema.org',
+                '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#pagination`,
                 name: `${category.categoryName} - Pagination`,
                 description: `Pagination for the ${category.categoryName} category`,
                 numberOfItems: productsByCategoryPaged.totalPages,
@@ -116,6 +117,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
               __html: JSON.stringify({
                 '@type': 'ItemList',
                 '@context': 'http://schema.org',
+                '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#featured-products`,
                 name: `Featured ${category.categoryName}`,
                 description: `A list of featured ${category.categoryName}`,
                 numberOfItems: 5,
