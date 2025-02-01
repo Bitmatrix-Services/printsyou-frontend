@@ -220,13 +220,15 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     url:
                       productsByCategoryPaged.number > 1
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`
-                        : null
+                        : productsByCategoryPaged.number == 1
+                          ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+                          : null
                   },
                   {
                     '@type': 'WebPage',
                     name: 'Next Page',
                     url:
-                        (productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages)
+                      productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`
                         : null
                   }
