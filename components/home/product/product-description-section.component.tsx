@@ -69,6 +69,12 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
     }
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggle = () => {
+    setIsExpanded(prevState => !prevState);
+  };
+
   return (
     <div className="col flex flex-col">
       <div className="text-sm mb-2 flex items-center flex-wrap">
@@ -235,7 +241,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
 
       {product?.additionalRows.length > 0 && (
         <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl">
-          <ul className="text-xs text-mute3">
+          <ul className={`text-xs text-mute3 ${isExpanded ? '' : 'see-less-more'}`}>
             {[...product.additionalRows]
               ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map(row => (
@@ -247,6 +253,11 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
                 </li>
               ))}
           </ul>
+          {product?.additionalRows.length > 4 && (
+            <span onClick={handleToggle} className="text-blue-500 text-sm font-medium cursor-pointer">
+              {isExpanded ? 'Show Less' : 'Show More'}
+            </span>
+          )}
         </div>
       )}
 
