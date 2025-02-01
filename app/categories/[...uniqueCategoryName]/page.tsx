@@ -69,7 +69,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
           `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`;
   }
 
-  if (productsByCategoryPaged.number < productsByCategoryPaged.totalPages) {
+  if (productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages) {
     paginationLinks.nextPage =
       category &&
       `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`;
