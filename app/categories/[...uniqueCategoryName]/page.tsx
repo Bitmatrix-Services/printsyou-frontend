@@ -236,6 +236,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
           />
         </>
       ) : null}
+
       <CategoryDetails
         allCategories={allCategories}
         category={category}
