@@ -75,7 +75,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 ...(category?.crumbs ?? []),
                 {
                   sequenceNumber: 1,
-                  uniqueCategoryName: 'categories',
+                  uniqueCategoryName: '',
                   name: 'Promotional Products'
                 },
                 {
@@ -91,7 +91,10 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 '@type': 'ListItem',
                 position: item.sequenceNumber + 1,
                 name: item.name,
-                item: `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
+                item:
+                  item.sequenceNumber === 0
+                    ? `${process.env.FE_URL}`
+                    : `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
               }))
           })
         }}
