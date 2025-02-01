@@ -160,6 +160,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 mainEntity: {
                   '@context': 'http://schema.org',
                   '@type': 'OfferCatalog',
+                  '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#catalog`,
                   name: category.categoryName,
                   url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
                   numberOfItems: productsByCategoryPaged.totalElements,
