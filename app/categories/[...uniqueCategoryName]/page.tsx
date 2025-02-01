@@ -77,7 +77,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
 
   let currentUrl: any = category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`;
   if (productsByCategoryPaged.number > 0) {
-    currentUrl = `${currentUrl}?page=${productsByCategoryPaged.number + 1}`
+    currentUrl = `${currentUrl}?page=${productsByCategoryPaged.number + 1}`;
   }
 
   return (
@@ -229,7 +229,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                         name: 'PrintsYou'
                       }
                     }
-                  }))
+                  })),
+                  paginationLinks: paginationLinks
                 },
                 isPartOf: {
                   '@type': 'CollectionPage',
@@ -255,8 +256,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`
                         : null
                   }
-                ].filter(page => page.url !== null),
-                paginationLinks: paginationLinks
+                ].filter(page => page.url !== null)
               })
             }}
           />
