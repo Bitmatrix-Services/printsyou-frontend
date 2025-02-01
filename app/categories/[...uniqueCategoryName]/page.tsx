@@ -207,7 +207,30 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                       }
                     }
                   }))
-                }
+                },
+                isPartOf: {
+                  '@type': 'CollectionPage',
+                  name: category.categoryName,
+                  url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+                },
+                hasPart: [
+                  {
+                    '@type': 'WebPage',
+                    name: 'Previous Page',
+                    url:
+                      productsByCategoryPaged.pageNumber > 1
+                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber - 1}`
+                        : `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+                  },
+                  {
+                    '@type': 'WebPage',
+                    name: 'Next Page',
+                    url:
+                      productsByCategoryPaged.pageNumber < productsByCategoryPaged.totalPages
+                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber + 1}`
+                        : null
+                  }
+                ].filter(page => page.url !== null)
               })
             }}
           />
