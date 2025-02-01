@@ -66,13 +66,18 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
       productsByCategoryPaged.number === 2
         ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
         : category &&
-          `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number - 1}`;
+          `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`;
   }
 
   if (productsByCategoryPaged.number < productsByCategoryPaged.totalPages) {
     paginationLinks.nextPage =
       category &&
-      `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 1}`;
+      `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`;
+  }
+
+  let currentUrl: any = category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`;
+  if (productsByCategoryPaged.number > 0) {
+    currentUrl = `${currentUrl}?page=${productsByCategoryPaged.number + 1}`
   }
 
   return (
@@ -195,11 +200,11 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
               __html: JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'WebPage',
-                url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+                url: currentUrl,
                 mainEntity: {
                   '@context': 'http://schema.org',
                   '@type': 'OfferCatalog',
-                  '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#catalog`,
+                  '@id': `${currentUrl}#catalog`,
                   name: category.categoryName,
                   url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
                   numberOfItems: productsByCategoryPaged.totalElements,
