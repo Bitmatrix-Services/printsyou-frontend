@@ -89,9 +89,14 @@ const ProductsPage = async (props: {params: Params}) => {
             category: [
               ...(product?.crumbs ?? []),
               {
-                sequenceNumber: 100,
-                uniqueCategoryName: '',
+                sequenceNumber: 1,
+                uniqueCategoryName: 'categories',
                 name: 'Promotional Products'
+              },
+              {
+                sequenceNumber: 0,
+                uniqueCategoryName: '',
+                name: 'Home'
               }
             ]
               .sort((a, b) => b.sequenceNumber - a.sequenceNumber)

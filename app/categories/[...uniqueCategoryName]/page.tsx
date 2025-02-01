@@ -70,7 +70,22 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
-            itemListElement: (category?.crumbs ?? [])
+            itemListElement: (
+              (category?.crumbs && [
+                ...(category?.crumbs ?? []),
+                {
+                  sequenceNumber: 1,
+                  uniqueCategoryName: 'categories',
+                  name: 'Promotional Products'
+                },
+                {
+                  sequenceNumber: 0,
+                  uniqueCategoryName: '',
+                  name: 'Home'
+                }
+              ]) ??
+              []
+            )
               .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map(item => ({
                 '@type': 'ListItem',
