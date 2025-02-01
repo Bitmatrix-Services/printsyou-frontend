@@ -220,7 +220,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     url:
                       productsByCategoryPaged.pageNumber > 1
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber - 1}`
-                        : `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+                        : null
                   },
                   {
                     '@type': 'WebPage',
@@ -236,7 +236,6 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
           />
         </>
       ) : null}
-
       <CategoryDetails
         allCategories={allCategories}
         category={category}
