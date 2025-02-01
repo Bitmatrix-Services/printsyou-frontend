@@ -143,6 +143,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
               })
             }}
           />
+
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
