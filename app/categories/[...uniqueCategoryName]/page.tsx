@@ -206,7 +206,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                   '@type': 'OfferCatalog',
                   '@id': `${currentUrl}#catalog`,
                   name: category.categoryName,
-                  url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`,
+                  url: currentUrl,
                   numberOfItems: productsByCategoryPaged.totalElements,
                   itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
                     '@type': 'Product',
