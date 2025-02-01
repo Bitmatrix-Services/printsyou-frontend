@@ -219,7 +219,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     name: 'Previous Page',
                     url:
                       productsByCategoryPaged.number > 1
-                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber - 1}`
+                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number - 1}`
                         : null
                   },
                   {
@@ -227,7 +227,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     name: 'Next Page',
                     url:
                       productsByCategoryPaged.number < productsByCategoryPaged.totalPages
-                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.pageNumber + 1}`
+                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 1}`
                         : null
                   }
                 ].filter(page => page.url !== null)
