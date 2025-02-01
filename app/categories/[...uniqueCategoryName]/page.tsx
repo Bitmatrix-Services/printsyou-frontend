@@ -63,7 +63,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
 
   if (productsByCategoryPaged.number > 1) {
     paginationLinks.previousPage =
-      productsByCategoryPaged.number === 2
+      productsByCategoryPaged.number === 1
         ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
         : category &&
           `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`;
