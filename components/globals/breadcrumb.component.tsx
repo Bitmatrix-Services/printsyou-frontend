@@ -35,7 +35,7 @@ export const Breadcrumb: FC<IBreadcrumb> = ({list, prefixTitle}) => {
           ) : null}
           {list.length > 0 &&
             [...list]
-              ?.sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+              ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map((listItem, index) => (
                 <Fragment key={listItem.id}>
                   <div>
