@@ -57,6 +57,24 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
   let siblingCategories: Category[] = [];
   if (siblingCat?.payload) siblingCategories = siblingCat.payload;
 
+  const paginationLinks: any = {
+    '@type': 'WebPage'
+  };
+
+  if (productsByCategoryPaged.number > 1) {
+    paginationLinks.previousPage =
+      productsByCategoryPaged.number === 2
+        ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+        : category &&
+          `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number - 1}`;
+  }
+
+  if (productsByCategoryPaged.number < productsByCategoryPaged.totalPages) {
+    paginationLinks.nextPage =
+      category &&
+      `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 1}`;
+  }
+
   return (
     <section key={uniqueName}>
       {/*{searchParams.page && (*/}
@@ -232,7 +250,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                         ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`
                         : null
                   }
-                ].filter(page => page.url !== null)
+                ].filter(page => page.url !== null),
+                paginationLinks: paginationLinks
               })
             }}
           />
