@@ -120,7 +120,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                   (productsByCategoryPaged.content ?? [])
                     .filter((item: EnclosureProduct) => !item.outOfStock)
                     .slice(0, 5)
-                    .map((product: EnclosureProduct, index) => ({
+                    .map((product: EnclosureProduct, index: any) => ({
                       '@type': 'ListItem',
                       position: index + 1,
                       item: {
