@@ -29,7 +29,7 @@ export const FormControlCheckbox: FC<IFormControlCheckbox> = ({
         required: isRequired
       }}
       render={({field: {onChange, value}}) => (
-        <div>
+        <div className="flex items-center">
           <Checkbox label={label} size="md" name={name} disabled={disabled} value={value} onChange={onChange} />
           {isRequired && errors[name]?.message ? (
             <div className="flex justify-start mt-2">

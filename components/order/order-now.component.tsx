@@ -1107,34 +1107,30 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         disabled={isSubmitting}
                         control={control}
                       />
-                      <FormControlCheckbox
-                        name="termsAndConditions"
-                        label={
-                          <Fragment>
-                            I have read & agree to PrintsYou{' '}
-                            <Link href="/terms-and-conditions" target="blank" className="text-blue-500">
-                              Terms and Conditions
-                            </Link>
-                          </Fragment>
-                        }
-                        isRequired={true}
-                        disabled={isSubmitting}
-                        control={control}
-                        errors={errors}
-                      />
-                      <FormControlCheckbox
-                        name="textNotifications"
-                        label={
-                          <>
-                            <Fragment>I have read & agree to Text Consensual </Fragment>
-                            <Link href="/terms-and-conditions" target="blank" className="text-blue-500">
-                              Textual Notification Consent
-                            </Link>
-                          </>
-                        }
-                        disabled={isSubmitting}
-                        control={control}
-                      />
+                      <div className="flex items-center gap-1">
+                        <FormControlCheckbox
+                          name="termsAndConditions"
+                          label="I have read & agree to PrintsYou"
+                          isRequired={true}
+                          disabled={isSubmitting}
+                          control={control}
+                          errors={errors}
+                        />
+                        <Link href="/terms-and-conditions" target="blank" className="text-blue-500 text-md">
+                          Terms and Conditions
+                        </Link>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <FormControlCheckbox
+                          name="textNotifications"
+                          label={'I have read & agree to Text Consensual'}
+                          disabled={isSubmitting}
+                          control={control}
+                        />
+                        <Link href="/text-consent" target="blank" className="text-blue-500 text-md">
+                          Textual Notification Consent
+                        </Link>
+                      </div>
                     </div>
                     {apiError ? (
                       <div className="text-red-500 pt-4 text-center">Something went wrong, Please try again!</div>
