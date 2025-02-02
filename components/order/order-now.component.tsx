@@ -1122,6 +1122,19 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         control={control}
                         errors={errors}
                       />
+                      <FormControlCheckbox
+                        name="textNotifications"
+                        label={
+                          <>
+                            <Fragment>I have read & agree to Text Consensual </Fragment>
+                            <Link href="/terms-and-conditions" target="blank" className="text-blue-500">
+                              Textual Notification Consent
+                            </Link>
+                          </>
+                        }
+                        disabled={isSubmitting}
+                        control={control}
+                      />
                     </div>
                     {apiError ? (
                       <div className="text-red-500 pt-4 text-center">Something went wrong, Please try again!</div>
