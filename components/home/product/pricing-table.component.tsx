@@ -11,15 +11,25 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
   const byRowTypeObjects: Record<PriceGrids['priceType'], {price: number; salePrice: number}[]> = {};
 
   if (product) {
+    const isNullPriceType =
+      product.priceGrids.filter(item => item.priceType == null || item.priceType == '').length > 0;
     product?.priceGrids?.length > 0 &&
       product.priceGrids
         ?.sort((a, b) => a.countFrom - b.countFrom)
         .forEach(gridItem => {
           countFrom.add(gridItem.countFrom);
-          if (!(gridItem.priceType in byRowTypeObjects)) {
-            byRowTypeObjects[gridItem.priceType] = [];
+          if (isNullPriceType && gridItem.priceType == null) {
+            if (!(null in byRowTypeObjects)) {
+              byRowTypeObjects[null] = [];
+            }
+            byRowTypeObjects[null].push({price: gridItem.price, salePrice: gridItem.salePrice});
           }
-          byRowTypeObjects[gridItem.priceType].push({price: gridItem.price, salePrice: gridItem.salePrice});
+          if (!isNullPriceType) {
+            if (!(gridItem.priceType in byRowTypeObjects)) {
+              byRowTypeObjects[gridItem.priceType] = [];
+            }
+            byRowTypeObjects[gridItem.priceType].push({price: gridItem.price, salePrice: gridItem.salePrice});
+          }
         });
   }
 
