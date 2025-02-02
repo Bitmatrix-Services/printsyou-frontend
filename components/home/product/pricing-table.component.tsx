@@ -18,7 +18,7 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
         ?.sort((a, b) => a.countFrom - b.countFrom)
         .forEach(gridItem => {
           countFrom.add(gridItem.countFrom);
-          if (isNullPriceType && gridItem.priceType == null) {
+          if ((isNullPriceType && gridItem.priceType == null) || gridItem.priceType == '') {
             if (!('' in byRowTypeObjects)) {
               byRowTypeObjects[''] = [];
             }
