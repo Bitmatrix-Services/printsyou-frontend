@@ -635,6 +635,13 @@ export const CheckoutComponent: FC = () => {
                           control={control}
                           errors={errors}
                         />
+                        <FormControlCheckbox
+                          name="textNotification"
+                          label="I agree to receive text notifications about my order, including updates and special offers. Message and data rates may apply. I understand that this consent is not required to make a purchase. I can opt out at any time by replying 'STOP' or emailing info@printsyou.com"
+                          disabled={isSubmitting}
+                          control={control}
+                          isRequired={false}
+                        />
                       </div>
                       {apiError ? (
                         <div className="text-red-500 pt-4 text-center">Something went wrong, Please try again!</div>
