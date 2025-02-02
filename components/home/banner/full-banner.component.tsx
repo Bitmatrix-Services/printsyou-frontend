@@ -13,7 +13,7 @@ export const FullBannerComponent: FC<IFullBannerComponentProps> = ({banner}) => 
       <Image
         className="object-contain lg:object-none"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner.bannerUrl}`}
-        alt="banner"
+        alt={banner.heading}
         fill
       />
       <div className="relative z-10">
