@@ -19,10 +19,10 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
         .forEach(gridItem => {
           countFrom.add(gridItem.countFrom);
           if (isNullPriceType && gridItem.priceType == null) {
-            if (!(null in byRowTypeObjects)) {
-              byRowTypeObjects[null] = [];
+            if (!('' in byRowTypeObjects)) {
+              byRowTypeObjects[''] = [];
             }
-            byRowTypeObjects[null].push({price: gridItem.price, salePrice: gridItem.salePrice});
+            byRowTypeObjects[''].push({price: gridItem.price, salePrice: gridItem.salePrice});
           }
           if (!isNullPriceType) {
             if (!(gridItem.priceType in byRowTypeObjects)) {
