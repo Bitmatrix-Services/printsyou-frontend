@@ -32,7 +32,7 @@ import {CustomProduct, UploadedFileType} from '@components/globals/cart/cart-typ
 import {v4 as uuidv4} from 'uuid';
 import Option from '@mui/joy/Option';
 import {MdOutlineFileDownload} from 'react-icons/md';
-import {UserInfoCapture} from "@components/user-info-capture";
+import {UserInfoCapture} from '@components/user-info-capture';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';

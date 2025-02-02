@@ -102,8 +102,8 @@ const ProductsPage = async (props: {params: Params}) => {
               .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
               .map(item => item.name)
               .join(' > '),
-            size: size ? size.fieldValue.replaceAll(/<\/?[^>]+(>|$)/g, "") : 'Standard',
-            color: colors ? colors.fieldValue.replaceAll(/<\/?[^>]+(>|$)/g, "") : '',
+            size: size ? size.fieldValue.replaceAll(/<\/?[^>]+(>|$)/g, '') : 'Standard',
+            color: colors ? colors.fieldValue.replaceAll(/<\/?[^>]+(>|$)/g, '') : '',
             brand: {
               '@type': 'Brand',
               name: 'PrintsYou'

@@ -14,7 +14,7 @@ import {FormControlInput} from '@lib/form/form-control-input';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
-import {UserInfoCapture} from "@components/user-info-capture";
+import {UserInfoCapture} from '@components/user-info-capture';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
