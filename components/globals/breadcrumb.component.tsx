@@ -41,20 +41,16 @@ export const Breadcrumb: FC<IBreadcrumb> = ({list, prefixTitle}) => {
                   <div>
                     <MdOutlineChevronRight className="h-5 w-5 mr-1" />
                   </div>
-                  <div
+                  <Link
+                    href={`/categories/${listItem.uniqueCategoryName}`}
                     className={`text-sm capitalize ${
                       index == list.length - 1
                         ? 'font-medium text-primary-500'
                         : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
                     }`}
-                    onClick={() => {
-                      if (index !== list.length - 1) {
-                        router.push(`/categories/${listItem.uniqueCategoryName}`);
-                      }
-                    }}
                   >
                     {listItem.name}
-                  </div>
+                  </Link>
                 </Fragment>
               ))}
         </div>
