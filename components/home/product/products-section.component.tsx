@@ -40,7 +40,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
     }
     setIsPageLoading(false);
     setIsLoading(false);
-  }, []);
+  }, [pagedData]);
 
   const getProductByCategory = async () => {
     try {
