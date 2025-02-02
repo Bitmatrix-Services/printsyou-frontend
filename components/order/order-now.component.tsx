@@ -1116,9 +1116,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                           control={control}
                           errors={errors}
                         />
-                        <Link href="/terms-and-conditions" target="blank" className="text-blue-500 text-md">
+                        <div
+                          className="text-blue-500 text-md cursor-pointer"
+                          onClick={() => window.open('/terms-and-conditions', '_blank')}
+                        >
                           Terms and Conditions
-                        </Link>
+                        </div>
                       </div>
                       <div className="flex items-center gap-1">
                         <FormControlCheckbox
@@ -1127,9 +1130,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                           disabled={isSubmitting}
                           control={control}
                         />
-                        <Link href="/text-consent" target="blank" className="text-blue-500 text-md">
+                        <div
+                          className="text-blue-500 text-md cursor-pointer"
+                          onClick={() => window.open('/text-consent', '_blank')}
+                        >
                           Textual Notification Consent
-                        </Link>
+                        </div>
                       </div>
                     </div>
                     {apiError ? (
