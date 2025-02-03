@@ -49,13 +49,13 @@ export const ContactUsComponent = () => {
         setLoading(false);
         setIsSuccessModalOpen('success');
         reset();
-      }, 5000);
+      }, 2000);
     },
     onError: () => {
       setTimeout(() => {
         setLoading(false);
         setIsSuccessModalOpen('error');
-      }, 5000);
+      }, 2000);
     }
   });
 
