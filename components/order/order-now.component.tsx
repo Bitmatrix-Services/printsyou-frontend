@@ -1,5 +1,5 @@
 'use client';
-import React, {ChangeEvent, FC, Fragment, useEffect, useMemo, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useMemo, useState} from 'react';
 import {notFound, useRouter} from 'next/navigation';
 import axios, {AxiosResponse} from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
@@ -32,6 +32,7 @@ import {v4 as uuidv4} from 'uuid';
 import Option from '@mui/joy/Option';
 import {MdOutlineFileDownload} from 'react-icons/md';
 import {UserInfoCapture} from '@components/user-info-capture';
+import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -159,17 +160,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       setValue('minQty', productState.sortedPrices[0].countFrom);
     }
   }, [selectedProduct]);
-
-  useEffect(() => {
-    if (loading) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [loading]);
 
   const {mutate} = useMutation({
     mutationFn: async (data: OrderNowFormSchemaType) => {
@@ -380,14 +370,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       <Container>
         <div className="pt-8"></div>
 
-        {loading ? (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="flex flex-col items-center">
-              <CircularLoader />
-              <p className="text-white mt-4">Loading...</p>
-            </div>
-          </div>
-        ) : null}
+        <LoaderWithBackdrop loading={loading} />
 
         <ReactQueryClientProvider>
           <FormProvider {...methods}>

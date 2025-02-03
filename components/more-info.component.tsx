@@ -17,6 +17,7 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {notFound} from 'next/navigation';
 import {MaskInput} from '@lib/form/mask-input.component';
 import {UserInfoCapture} from '@components/user-info-capture';
+import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 
 interface IMoreInfoComponent {
   product: Product | null;
@@ -24,6 +25,7 @@ interface IMoreInfoComponent {
 
 export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const methods = useForm<ContactUsFormSchemaType>({
     resolver: yupResolver(contactUsSchema),
@@ -45,17 +47,24 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
 
   const {mutate} = useMutation({
     mutationFn: (data: ContactUsFormSchemaType) => {
+      setLoading(true);
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${MoreInfoRoutes.moreInfo}`, {
         ...data,
         productId: product?.id
       });
     },
     onSuccess: () => {
-      setIsSuccessModalOpen('success');
-      reset();
+      setTimeout(() => {
+        setLoading(false);
+        setIsSuccessModalOpen('success');
+        reset();
+      }, 2000);
     },
     onError: () => {
-      setIsSuccessModalOpen('error');
+      setTimeout(() => {
+        setLoading(false);
+        setIsSuccessModalOpen('error');
+      }, 2000);
     }
   });
 
@@ -69,6 +78,7 @@ export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
     <>
       <Breadcrumb list={[]} prefixTitle="Request More Info" />
       <Container>
+        <LoaderWithBackdrop loading={loading} />
         <div className="px-8 pb-8 pt-10 ">
           <div className="flex flex-col  md:px-32">
             <h2 className="text-xl font-semibold text-mute3">

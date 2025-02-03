@@ -1,5 +1,5 @@
 'use client';
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 import {AiOutlineMail} from 'react-icons/ai';
 import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
@@ -15,9 +15,11 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
 import {UserInfoCapture} from '@components/user-info-capture';
+import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const methods = useForm<ContactUsFormSchemaType>({
     resolver: yupResolver(contactUsSchema),
@@ -39,14 +41,21 @@ export const ContactUsComponent = () => {
 
   const {mutate} = useMutation({
     mutationFn: (data: ContactUsFormSchemaType) => {
+      setLoading(true);
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${ContactUsRoutes.contactUs}`, data);
     },
     onSuccess: () => {
-      setIsSuccessModalOpen('success');
-      reset();
+      setTimeout(() => {
+        setLoading(false);
+        setIsSuccessModalOpen('success');
+        reset();
+      }, 5000);
     },
     onError: () => {
-      setIsSuccessModalOpen('error');
+      setTimeout(() => {
+        setLoading(false);
+        setIsSuccessModalOpen('error');
+      }, 5000);
     }
   });
 
@@ -92,6 +101,7 @@ export const ContactUsComponent = () => {
       />
       <Breadcrumb list={[]} prefixTitle="Contact Us" />
       <Container>
+        <LoaderWithBackdrop loading={loading} />
         <div className="flex md:flex-row lg:flex-row my-6 md:gap-8 lg:gap-x-32 flex-col-reverse gap-y-4">
           <div className="sm:w-full md:w-[18rem] lg:w-[18rem] h-[22rem] p-6 gap-8 border-2">
             {/*<div className="grid gap-y-4">*/}
