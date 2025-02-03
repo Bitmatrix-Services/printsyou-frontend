@@ -425,7 +425,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       <div className="ml-4 flex-grow">
                         <div className="text-black mb-2">
                           Item#:
-                          <span className="text-yellow-500">{product?.sku}</span>
+                          <span className="text-primary">{product?.sku}</span>
                         </div>
                         <h3
                           className="text-sm lg:text-base font-semibold"
@@ -437,8 +437,8 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     </div>
 
                     {selectedProduct.outOfStock ? (
-                      <div className="flex justify-start items-center text-yellow-500">
-                        Note: This item is out of stock
+                      <div className="flex justify-start items-center text-black">
+                        Note: <span className="text-yellow-500 ml-1">This item is out of stock.</span>
                       </div>
                     ) : null}
 
@@ -857,7 +857,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         <div className="ml-4 flex-grow">
                           <div className="text-black mb-2">
                             Item#:
-                            <span className="text-yellow-500">{product?.sku}</span>
+                            <span className="text-primary">{product?.sku}</span>
                           </div>
                           <h3
                             className="text-sm lg:text-base font-semibold"
@@ -869,8 +869,8 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
 
                       {selectedProduct.outOfStock ? (
-                        <div className="flex justify-start items-center text-yellow-500 my-1 md:my-2 2xl:mt-0 ">
-                          Note: This item is out of stock
+                        <div className="flex justify-start items-center text-black">
+                          Note: <span className="text-yellow-500 ml-1">This item is out of stock.</span>
                         </div>
                       ) : null}
 
