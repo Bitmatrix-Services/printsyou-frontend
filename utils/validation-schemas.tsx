@@ -119,7 +119,7 @@ export const orderNowSchema = object({
   additionalInformation: string().optional(),
   newsLetter: boolean().optional(),
   emailAddress: string().email('Email is not valid').required('Please enter your email address'),
-  termsAndConditions: boolean().oneOf([true], 'You must agree to the terms'),
+  termsAndConditions: boolean().oneOf([true], 'You must agree to the our terms and conditions'),
 
   imprintColor: string().notRequired(),
   itemColor: string().notRequired(),

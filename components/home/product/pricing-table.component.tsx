@@ -41,10 +41,14 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
           <table className="w-full">
             <tbody>
               <tr className="one">
-                {'' in byRowTypeObjects || 'null' in byRowTypeObjects ? null : <td className="headcell"></td>}
+                {'' in byRowTypeObjects || 'null' in byRowTypeObjects ? null : (
+                  <td className="headcell">
+                    <h3 className="font-semibold">Decoration Type</h3>
+                  </td>
+                )}
                 {Array.from(countFrom).map(row => (
                   <td className="headcell" key={row}>
-                    {row} Items
+                    <h3 className="font-semibold">{row} Items</h3>
                   </td>
                 ))}
               </tr>

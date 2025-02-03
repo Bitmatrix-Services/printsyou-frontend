@@ -436,6 +436,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
                     </div>
 
+                    {selectedProduct.outOfStock ? (
+                      <div className="flex justify-start items-center text-yellow-500">
+                        Note: This item is out of stock
+                      </div>
+                    ) : null}
+
                     <div>
                       <div className="hidden md:grid grid-cols-3">
                         <div className="col-span-2">
@@ -862,6 +868,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         </div>
                       </div>
 
+                      {selectedProduct.outOfStock ? (
+                        <div className="flex justify-start items-center text-yellow-500 my-1 md:my-2 2xl:mt-0 ">
+                          Note: This item is out of stock
+                        </div>
+                      ) : null}
+
                       <div>
                         <div className="hidden tablet:grid md:grid grid-cols-3">
                           <div className="col-span-2">
@@ -1106,36 +1118,24 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         disabled={isSubmitting}
                         control={control}
                       />
-                      <div className="flex items-center gap-1">
-                        <FormControlCheckbox
-                          name="termsAndConditions"
-                          label="I have read & agree to PrintsYou"
-                          isRequired={true}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                        />
-                        <div
-                          className="text-blue-500 text-md cursor-pointer"
-                          onClick={() => window.open('/terms-and-conditions', '_blank')}
-                        >
-                          Terms and Conditions
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <FormControlCheckbox
-                          name="textNotifications"
-                          label={'I have read & agree to Text Consensual'}
-                          disabled={isSubmitting}
-                          control={control}
-                        />
-                        <div
-                          className="text-blue-500 text-md cursor-pointer"
-                          onClick={() => window.open('/text-consent', '_blank')}
-                        >
-                          Textual Notification Consent
-                        </div>
-                      </div>
+                      <FormControlCheckbox
+                        name="textNotifications"
+                        label={'I have read & agree to Text Notification Consent.'}
+                        disabled={isSubmitting}
+                        control={control}
+                        linkUrl={'/text-consent'}
+                        linkTitle={'Text Notification Consent'}
+                      />
+                      <FormControlCheckbox
+                        name="termsAndConditions"
+                        label="I have read & agree to PrintsYou terms and conditions."
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                        linkUrl={'/terms-and-conditions'}
+                        linkTitle={'Terms and Conditions'}
+                      />
                     </div>
                     {apiError ? (
                       <div className="text-red-500 pt-4 text-center">Something went wrong, Please try again!</div>
@@ -1143,7 +1143,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     <div className="my-6 flex w-full justify-center items-center">
                       <button
                         type="submit"
-                        className="w-full py-5 px-32 text-sm font-bold  bg-primary-500 hover:bg-primary-600 text-white"
+                        className={`w-full py-5 px-32 text-sm font-bold ${selectedProduct.outOfStock ? 'border-mute4 bg-mute4 pointer-events-none' : 'bg-primary hover:bg-primary-400'} text-white`}
                       >
                         {isSubmitting ? <CircularLoader /> : 'SUBMIT'}
                       </button>
