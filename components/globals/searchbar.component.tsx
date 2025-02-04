@@ -1,5 +1,5 @@
 'use client';
-import {Box} from '@mui/joy';
+import {Box, Stack} from '@mui/joy';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
@@ -76,31 +76,42 @@ export const Searchbar = () => {
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box sx={{position: 'relative'}}>
-        <Input
-          className="py-2 mb-2 md:mb-0"
-          placeholder="Search for Categories or Products"
-          value={searchQuery}
-          onChange={e => {
-            setAnchorEl(e.currentTarget);
-            setSearchQuery(e.target.value);
-          }}
-          onFocus={_ => {
-            // if (searchQuery) handleSearch();
-            // setAnchorEl(event.currentTarget);
-          }}
-          onKeyDown={({key}) => {
-            if (key === 'Enter') {
-              handleSeeAllResults();
-            }
-          }}
-          sx={{
-            width: '100%',
-            borderColor: 'primary.main'
-          }}
-        />
-        <span className="absolute top-0 right-0 text-mute4 p-[0.688rem]">
-          <MdSearch className="h-6 w-6" onClick={() => handleSeeAllResults()} />
-        </span>
+        <Stack direction="row" spacing={0}>
+          <Input
+            className="py-2 mb-2 md:mb-0"
+            placeholder="Search for Categories or Products"
+            value={searchQuery}
+            onChange={e => {
+              setAnchorEl(e.currentTarget);
+              setSearchQuery(e.target.value);
+            }}
+            onFocus={_ => {
+              // if (searchQuery) handleSearch();
+              // setAnchorEl(event.currentTarget);
+            }}
+            onKeyDown={({key}) => {
+              if (key === 'Enter') {
+                handleSeeAllResults();
+              }
+            }}
+            sx={{
+              width: '100%'
+            }}
+          />
+
+          <button
+            type="button"
+            onClick={() => {
+              if (searchQuery)
+                router.push(`/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`);
+            }}
+            className="py-2 px-2 md:px-4 rounded-e-full text-white bg-primary-500 hover:bg-primary-600 bg-center bg-no-repeat transition-all duration-300"
+          >
+            <div className="flex justify-center">
+              <MdSearch className="h-6 w-6" /> Search
+            </div>
+          </button>
+        </Stack>
         <Popper
           open={open}
           anchorEl={anchorEl}

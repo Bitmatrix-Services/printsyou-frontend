@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import Image from 'next/image';
-import {RiChat1Fill, RiShoppingBagFill} from 'react-icons/ri';
 import {Searchbar} from '@components/globals/searchbar.component';
 import {Container} from '@components/globals/container.component';
 import {NavComponent} from '@components/globals/cart/nav-component';
@@ -9,20 +8,16 @@ import {Category} from '@components/home/home.types';
 import {FC, useState} from 'react';
 import {GiHamburgerMenu} from 'react-icons/gi';
 import Drawer from '@mui/joy/Drawer';
-import {IoClose} from 'react-icons/io5';
+import {IoChatbubblesOutline, IoClose} from 'react-icons/io5';
 import {DialogContent} from '@mui/joy';
-import {useAppDispatch, useAppSelector} from '../../store/hooks';
-import {selectCartRootState, setSidebarCartOpen} from '../../store/slices/cart/cart.slice';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
-import {FaHeadphones} from 'react-icons/fa';
+import {TfiHeadphoneAlt} from 'react-icons/tfi';
 
 interface IHeaderProps {
   categories: Category[];
 }
 
 export const Header: FC<IHeaderProps> = ({categories}) => {
-  const dispatch = useAppDispatch();
-  const cartRoot = useAppSelector(selectCartRootState);
   const [mobileMenu, setMobileMenu] = useState<boolean>(false);
 
   const handleMenuClose = () => {
@@ -31,43 +26,44 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
 
   return (
     <>
-      <div className="bg-primary-500 bg-opacity-[40%]">
-        <div className="flex items-center justify-between">
-          <div className="hidden md:block lg:mr-auto"></div>
-          <div
-            className="flex items-center justify-center bg-primary-500/50 py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"
-            onClick={() => {
-              if (typeof window !== undefined && '$chatwoot' in window) {
-                // @ts-ignore
-                window.$chatwoot.toggle();
-              }
-            }}
-          >
-            <div className="flex flex-col lg:flex-row items-center gap-1 text-white">
-              <RiChat1Fill size={18} />
-              <span>Chat with Us</span>
-            </div>
-          </div>
+      {/*  top header */}
+      {/*<div className="bg-primary-500 bg-opacity-[40%]">*/}
+      {/*  <div className="flex items-center justify-between">*/}
+      {/*    <div className="hidden md:block lg:mr-auto"></div>*/}
+      {/*    <div*/}
+      {/*      className="flex items-center justify-center bg-primary-500/50 py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"*/}
+      {/*      onClick={() => {*/}
+      {/*        if (typeof window !== undefined && '$chatwoot' in window) {*/}
+      {/*          // @ts-ignore*/}
+      {/*          window.$chatwoot.toggle();*/}
+      {/*        }*/}
+      {/*      }}*/}
+      {/*    >*/}
+      {/*      <div className="flex flex-col lg:flex-row items-center gap-1 text-white">*/}
+      {/*        <RiChat1Fill size={18} />*/}
+      {/*        <span>Chat with Us</span>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
 
-          <div className="w-1 h-full"></div>
+      {/*    <div className="w-1 h-full"></div>*/}
 
-          <Link
-            href="tel:8882992940"
-            className="flex items-center justify-end bg-primary-500/50 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"
-          >
-            <div className="flex flex-col lg:flex-row items-center gap-1 text-white">
-              <FaHeadphones size={18} />
-              <span>Toll Free (888) 299-2940</span>
-            </div>
-          </Link>
-          {/*<Link*/}
-          {/*  href="mailto: info@printsyou.com"*/}
-          {/*  className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10"*/}
-          {/*>*/}
-          {/*  <MdEmail size={16} /> <span>info@printsyou.com</span>*/}
-          {/*</Link>*/}
-        </div>
-      </div>
+      {/*    <Link*/}
+      {/*      href="tel:8882992940"*/}
+      {/*      className="flex items-center justify-end bg-primary-500/50 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"*/}
+      {/*    >*/}
+      {/*      <div className="flex flex-col lg:flex-row items-center gap-1 text-white">*/}
+      {/*        <FaHeadphones size={18} />*/}
+      {/*        <span>Toll Free (888) 299-2940</span>*/}
+      {/*      </div>*/}
+      {/*    </Link>*/}
+      {/*    /!*<Link*!/*/}
+      {/*    /!*  href="mailto: info@printsyou.com"*!/*/}
+      {/*    /!*  className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10"*!/*/}
+      {/*    /!*>*!/*/}
+      {/*    /!*  <MdEmail size={16} /> <span>info@printsyou.com</span>*!/*/}
+      {/*    /!*</Link>*!/*/}
+      {/*  </div>*/}
+      {/*</div>*/}
       <Container className="pt-6 md:pt-0 translate-y-0 sticky bg-white top-0 z-50 transition-transform duration-800">
         <header className="flex items-center md:p-6">
           {/*  mobile view*/}
@@ -84,20 +80,43 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                   <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
                 </Link>
               </div>
-              <div>
-                <ul className="flex h-full items-center gap-5 ">
-                  {/*<li>*/}
-                  {/*  <Link href="/wishlist">*/}
-                  {/*    <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-                  {/*  </Link>*/}
-                  {/*</li>*/}
-                  <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
-                    <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
-                    <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">
-                      {cartRoot?.cartItems?.length ?? 0}
-                    </span>
-                  </li>
-                </ul>
+              {/*<div>*/}
+              {/*  <ul className="flex h-full items-center gap-5 ">*/}
+              {/*    <li>*/}
+              {/*      <Link href="/wishlist">*/}
+              {/*        <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
+              {/*      </Link>*/}
+              {/*    </li>*/}
+              {/*    <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>*/}
+              {/*      <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
+              {/*      <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">*/}
+              {/*        {cartRoot?.cartItems?.length ?? 0}*/}
+              {/*      </span>*/}
+              {/*    </li>*/}
+              {/*  </ul>*/}
+              {/*</div>*/}
+              <div className="flex items-center gap-5 md:gap-2">
+                <div
+                  className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer"
+                  onClick={() => {
+                    if (typeof window !== undefined && '$chatwoot' in window) {
+                      // @ts-ignore
+                      window.$chatwoot.toggle();
+                    }
+                  }}
+                >
+                  <IoChatbubblesOutline size={22} color="#019ce0" />
+                  <span className="hidden md:block">Chat with Us</span>
+                </div>
+
+                <div className="">
+                  <Link href="tel:8882992940">
+                    <div className="flex items-center gap-1 font-semibold hover:text-primary ">
+                      <TfiHeadphoneAlt size={20} color="#019ce0" />
+                      <span className="hidden md:block">(888) 299-2940</span>
+                    </div>
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="flex-1 lg:ml-6">
@@ -118,28 +137,50 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             </div>
           </div>
 
-          <Link
-            href="/how-to-order"
-            className="hidden lg:flex justify-center items-center ml-4 border border-primary py-2 px-4 rounded-full text-white bg-primary hover:drop-shadow-2xl"
+          {/*<Link*/}
+          {/*  href="/how-to-order"*/}
+          {/*  className="hidden lg:flex justify-center items-center ml-4 border border-primary py-2 px-4 rounded-full text-white bg-primary hover:drop-shadow-2xl"*/}
+          {/*>*/}
+          {/*  <div className="capitalize">how to order</div>*/}
+          {/*</Link>*/}
+
+          <div
+            className="hidden lg:flex items-center justify-center py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"
+            onClick={() => {
+              if (typeof window !== undefined && '$chatwoot' in window) {
+                // @ts-ignore
+                window.$chatwoot.toggle();
+              }
+            }}
           >
-            <div className="capitalize">how to order</div>
+            <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
+              <IoChatbubblesOutline size={22} color="#019ce0" />
+              <span>Chat with Us</span>
+            </div>
+          </div>
+
+          <Link href="tel:8882992940" className="hidden lg:flex items-center justify-end gap-1">
+            <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
+              <TfiHeadphoneAlt size={20} color="#019ce0" />
+              <span>Toll Free (888) 299-2940</span>
+            </div>
           </Link>
 
-          <div className="hidden lg:block pl-6 items-center">
-            <ul className="flex h-full items-center gap-3 xl:gap-8">
-              {/*<li>*/}
-              {/*  <Link href="/wishlist">*/}
-              {/*    <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-              {/*  </Link>*/}
-              {/*</li>*/}
-              <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>
-                <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />
-                <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">
-                  {cartRoot?.cartItems?.length ?? 0}
-                </span>
-              </li>
-            </ul>
-          </div>
+          {/*<div className="hidden lg:block pl-6 items-center">*/}
+          {/*  <ul className="flex h-full items-center gap-3 xl:gap-8">*/}
+          {/*    <li>*/}
+          {/*      <Link href="/wishlist">*/}
+          {/*        <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
+          {/*      </Link>*/}
+          {/*    </li>*/}
+          {/*    <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>*/}
+          {/*      <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
+          {/*      <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">*/}
+          {/*        {cartRoot?.cartItems?.length ?? 0}*/}
+          {/*      </span>*/}
+          {/*    </li>*/}
+          {/*  </ul>*/}
+          {/*</div>*/}
         </header>
       </Container>
 
