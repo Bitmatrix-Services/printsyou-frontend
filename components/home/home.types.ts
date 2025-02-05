@@ -27,6 +27,7 @@ export type BannerList = {
   heading: string;
   tagLines: string;
   type: string;
+  layout: string;
   bannerCategory: {
     categoryId: string;
     ucategoryName: string;

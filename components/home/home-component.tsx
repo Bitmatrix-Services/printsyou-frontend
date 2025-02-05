@@ -6,7 +6,7 @@ import {Benefits} from '@components/home/benefits-sections.component';
 import {PromotionalBanner} from '@components/home/promotional-banner.component';
 import {CategorySection} from '@components/home/category/category-section.component';
 import {BannerList, Category, Faq} from '@components/home/home.types';
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {FaqSectionComponent} from '@components/home/faq.section.component';
 import dynamic from 'next/dynamic';
@@ -38,9 +38,21 @@ const HomeComponent: FC<IHome> = ({
   bannersList,
   faqsList
 }) => {
+  const primaryBanners = useMemo(() => {
+    return bannersList.filter(banner => banner.type === 'primary');
+  }, [bannersList]);
+
+  const secondaryBanners = useMemo(() => {
+    return bannersList.filter(banner => banner.type === 'secondary');
+  }, [bannersList]);
+
+  const tertiaryBanners = useMemo(() => {
+    return bannersList.filter(banner => banner.type === 'tertiary');
+  }, [bannersList]);
+
   return (
     <main>
-      <HeroSection bannersList={bannersList} />
+      <HeroSection bannersList={primaryBanners} />
       <Container>
         <CategorySection categoryList={categories.filter(item => item.imageUrl)} navNumber={1} />
         <ProductSliderSection
@@ -84,18 +96,15 @@ const HomeComponent: FC<IHome> = ({
 
       <div className="py-4 my-16 border-y border-primary-500">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <PromotionalBanner
-            link="/categories/plush-amp-novelties/fidget-toys-amp-stress-relievers"
-            imageUrl="/assets/stress-reliver.png"
-            title="fidget toys & stress relievers"
-            description="Discover our range of fidget toys and stress relievers to boost focus and reduce anxiety. Perfect for all ages! Shop now for a calmer mind."
-          />
-          <PromotionalBanner
-            link="/categories/desk-amp-office"
-            imageUrl="/assets/office-supplies.png"
-            title="desk & office"
-            description="Discover stylish and functional desk and office solutions to enhance productivity and comfort in your workspace. Shop now!"
-          />
+          {secondaryBanners?.map(banner => (
+            <PromotionalBanner
+              key={banner.id}
+              link={banner.bannerCategory.ucategoryName}
+              imageUrl={banner.bannerUrl}
+              title={banner.heading}
+              description={banner.tagLines}
+            />
+          ))}
         </div>
       </div>
 
@@ -114,18 +123,15 @@ const HomeComponent: FC<IHome> = ({
 
       <div className="py-4 my-16 border-y border-primary-500">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <PromotionalBanner
-            link="/categories/awards"
-            imageUrl="/assets/awards.png"
-            title="awards"
-            description="Explore our prestigious awards showcasing excellence and innovation. Discover winners and celebrate achievements in various fields."
-          />
-          <PromotionalBanner
-            link="/categories/bags-duffels-amp-accessories"
-            imageUrl="/assets/bags.png"
-            title="bags, duffels & accessories"
-            description="Discover stylish bags, duffels, and accessories for every occasion. Shop now for quality and versatility to elevate your travel game!"
-          />
+          {tertiaryBanners?.map(banner => (
+            <PromotionalBanner
+              key={banner.id}
+              link={banner.bannerCategory.ucategoryName}
+              imageUrl={banner.bannerUrl}
+              title={banner.heading}
+              description={banner.tagLines}
+            />
+          ))}
         </div>
       </div>
 

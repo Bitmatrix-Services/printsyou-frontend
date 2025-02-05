@@ -14,14 +14,14 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
   const sliderRef = useRef<SwiperRef>(null);
   const groupAndSortBanners = (data: BannerList[]): Record<string, BannerList[]> => {
     const grouped = data.reduce((acc: Record<string, BannerList[]>, item) => {
-      const type = item.type;
-      acc[type] = acc[type] || [];
-      acc[type].push(item);
+      const layout = item.layout;
+      acc[layout] = acc[layout] || [];
+      acc[layout].push(item);
       return acc;
     }, {});
 
-    Object.keys(grouped).forEach(type => {
-      grouped[type].sort((a, b) => a.sequenceNumber - b.sequenceNumber);
+    Object.keys(grouped).forEach(layout => {
+      grouped[layout].sort((a, b) => a.sequenceNumber - b.sequenceNumber);
     });
 
     return grouped;
@@ -42,11 +42,11 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           pagination={{clickable: true}}
           className="hero-swiper"
         >
-          {Object.entries(typeSortedBanners).map(([bannerType, items]) => (
-            <SwiperSlide key={bannerType}>
-              {bannerType.includes('grid') && items.length === 4 ? (
+          {Object.entries(typeSortedBanners).map(([layout, items]) => (
+            <SwiperSlide key={layout}>
+              {layout.includes('grid') && items.length === 4 ? (
                 <GridBannerComponent banner={items} />
-              ) : bannerType.includes('full') && items.length === 1 ? (
+              ) : layout.includes('full') && items.length === 1 ? (
                 <FullBannerComponent banner={items[0]} />
               ) : null}
             </SwiperSlide>
