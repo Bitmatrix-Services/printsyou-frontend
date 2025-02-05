@@ -20,7 +20,7 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
       <Image
         className="object-cover min-w-full"
         sizes="(max-width: 768px) 50vw, 100vw"
-        src={`https://printsyouassets.s3.amazonaws.com/static-assets/banners/stress-reliver.png`}
+        src={imageUrl}
         alt={title}
         fill
       />
