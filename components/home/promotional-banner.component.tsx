@@ -20,7 +20,7 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
       <Image
         className="object-cover min-w-full"
         sizes="(max-width: 768px) 50vw, 100vw"
-        src={imageUrl}
+        src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${imageUrl}`}
         alt={title}
         fill
       />
