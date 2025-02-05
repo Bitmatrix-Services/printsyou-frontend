@@ -16,15 +16,14 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
   link = '/categories/awards'
 }) => {
   return (
-    <div className="py-60 relative ">
-      <div className="relative h-full w-full">
-        <Image
-          className="object-contain"
-          src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${imageUrl}`}
-          alt={title}
-          fill
-        />
-      </div>
+    <div className="py-60 relative">
+      <Image
+        className="object-cover min-w-full"
+        sizes="(max-width: 768px) 50vw, 100vw"
+        src={`https://printsyouassets.s3.amazonaws.com/static-assets/banners/stress-reliver.png`}
+        alt={title}
+        fill
+      />
       <div className="absolute z-10 h-full w-full left-0 top-0 flex items-end justify-start px-2 pb-2 ">
         <div className="bg-white py-5 px-5 rounded-2xl max-w-md text-start">
           <h2
