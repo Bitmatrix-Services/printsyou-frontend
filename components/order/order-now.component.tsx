@@ -1067,6 +1067,23 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         render={({field: {onChange, value}}) => (
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DatePicker
+                              sx={{
+                                borderRadius: '3px 3px  3px 3px',
+                                borderColor: '#CDD7E1',
+                                maxHeight: '10px',
+                                '&:focus': {
+                                  borderColor: '#019ce0'
+                                }
+                              }}
+                              slotProps={{
+                                textField: {
+                                  sx: {
+                                    '& .MuiInputBase-input': {
+                                      height: '11px'
+                                    }
+                                  }
+                                }
+                              }}
                               name="inHandDate"
                               value={value ? dayjs(value) : null}
                               onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
