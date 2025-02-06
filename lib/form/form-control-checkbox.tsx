@@ -36,7 +36,17 @@ export const FormControlCheckbox: FC<IFormControlCheckbox> = ({
       render={({field: {onChange, value}}) => (
         <div className="flex flex-col">
           <div className="flex items-center gap-1 flex-wrap break-words">
-            <Checkbox label={label} size="md" name={name} disabled={disabled} value={value} onChange={onChange} />
+            <Checkbox
+              sx={{
+                color: isRequired && errors[name]?.message ? 'red' : 'inherit'
+              }}
+              label={label}
+              size="md"
+              name={name}
+              disabled={disabled}
+              value={value}
+              onChange={onChange}
+            />
           </div>
           {linkUrl ? (
             <FormHelperText sx={{marginLeft: '1.9rem'}}>
