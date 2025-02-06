@@ -95,7 +95,8 @@ export const Searchbar = () => {
               }
             }}
             sx={{
-              width: '100%'
+              width: '100%',
+              borderRadius: '8px 0 0 8px'
             }}
           />
 
