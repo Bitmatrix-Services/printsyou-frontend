@@ -1,37 +1,16 @@
-import React, {FC} from 'react';
-import {PriceGrids, Product} from '@components/home/product/product.types';
+import React, {FC, useMemo} from 'react';
+import {Product} from '@components/home/product/product.types';
 import dayjs from 'dayjs';
+import {buildPriceMatrix} from '@utils/utils';
 
 interface IPricingTableProps {
   product: Product;
 }
 
 export const PricingTable: FC<IPricingTableProps> = ({product}) => {
-  const countFrom: Set<PriceGrids['countFrom']> = new Set();
-  const byRowTypeObjects: Record<PriceGrids['priceType'], {price: number; salePrice: number}[]> = {};
-
-  if (product) {
-    const isNullPriceType =
-      product.priceGrids.filter(item => item.priceType == null || item.priceType == '').length > 0;
-    product?.priceGrids?.length > 0 &&
-      product.priceGrids
-        ?.sort((a, b) => a.countFrom - b.countFrom)
-        .forEach(gridItem => {
-          countFrom.add(gridItem.countFrom);
-          if ((isNullPriceType && gridItem.priceType == null) || gridItem.priceType == '') {
-            if (!('' in byRowTypeObjects)) {
-              byRowTypeObjects[''] = [];
-            }
-            byRowTypeObjects[''].push({price: gridItem.price, salePrice: gridItem.salePrice});
-          }
-          if (!isNullPriceType) {
-            if (!(gridItem.priceType in byRowTypeObjects)) {
-              byRowTypeObjects[gridItem.priceType] = [];
-            }
-            byRowTypeObjects[gridItem.priceType].push({price: gridItem.price, salePrice: gridItem.salePrice});
-          }
-        });
-  }
+  const pricingTable = useMemo(() => {
+    return buildPriceMatrix(product.priceGrids);
+  }, [product.priceGrids]);
 
   return (
     <div className="overflow-auto mt-6 px-6 pb-10 shadow-pricingTableShadow rounded-lg">
@@ -41,46 +20,58 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
           <table className="w-full">
             <tbody>
               <tr className="one">
-                {'' in byRowTypeObjects || 'null' in byRowTypeObjects ? null : (
+                {!pricingTable.byRowTypeObjects || '' in pricingTable.byRowTypeObjects ? null : (
                   <td className="headcell">
                     <h3 className="font-semibold">Decoration Type</h3>
                   </td>
                 )}
-                {Array.from(countFrom).map(row => (
+                {pricingTable.countFrom.map(row => (
                   <td className="headcell" key={row}>
                     <h3 className="font-semibold">{row} Items</h3>
                   </td>
                 ))}
               </tr>
-              {Object.keys(byRowTypeObjects)
-                .sort((a: string, b: string) => a.localeCompare(b))
-                .map(row => {
-                  return (
-                    <tr key={row} className="two">
-                      {row && row != 'null' && <td className="pricecell font-bold text-left">{row}</td>}
-                      {byRowTypeObjects[row].map(cell => (
-                        <td className="pricecell" key={cell.price}>
-                          {product.saleEndDate &&
-                          Date.parse(product.saleEndDate) > new Date().getTime() &&
-                          cell.salePrice ? (
-                            <div className="flex justify-evenly flex-col">
-                              <span className="line-through font-bold text-xl">
-                                {cell.price < 0.01 ? '-' : `$${cell.price.toFixed(2)}`}
-                              </span>
-                              <span className="font-bold text-2xl">
-                                {cell.salePrice < 0.01 ? '-' : `$${cell.salePrice.toFixed(2)}`}
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="font-bold text-2xl">
-                              {cell.price < 0.01 ? '-' : `$${cell.price.toFixed(2)}`}
+              {Object.entries(pricingTable.byRowTypeObjects).map(([priceType, prices]) => {
+                return (
+                  <tr key={priceType} className="two">
+                    {priceType && priceType != 'null' && (
+                      <td className="pricecell font-bold text-left capitalize">{priceType.toLowerCase()}</td>
+                    )}
+                    {prices?.map((priceData: any) => (
+                      <td className="pricecell" key={priceData.price}>
+                        {product.saleEndDate &&
+                        Date.parse(product.saleEndDate) > new Date().getTime() &&
+                        priceData.salePrice ? (
+                          <div className="flex justify-evenly flex-col">
+                            <span className="line-through font-bold text-xl">
+                              {priceData.price < 0.01 ? (
+                                <span className="font-normal text-xl">-</span>
+                              ) : (
+                                `$${priceData.price.toFixed(2)}`
+                              )}
                             </span>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
+                            <span className="font-bold text-2xl">
+                              {priceData.salePrice < 0.01 ? (
+                                <span className="font-normal text-xl">-</span>
+                              ) : (
+                                `$${priceData.salePrice.toFixed(2)}`
+                              )}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="font-bold text-2xl">
+                            {priceData.price < 0.01 ? (
+                              <span className="font-normal text-xl">-</span>
+                            ) : (
+                              `$${priceData.price.toFixed(2)}`
+                            )}
+                          </span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
               {product.saleEndDate && Date.parse(product.saleEndDate) > new Date().getTime() && (
                 <tr className=" h-[3rem] px-3 text-center text-base border border-[#eceef1]">
                   <td colSpan={product.priceGrids.length + 1}>

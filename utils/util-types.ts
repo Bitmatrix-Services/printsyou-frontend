@@ -56,3 +56,15 @@ export type listType = {
   url: string;
   menuItems?: listType[];
 };
+
+export interface PriceGrid {
+  countFrom: number;
+  price: number;
+  salePrice: number;
+  priceType: string;
+}
+
+export interface PriceMatrix {
+  countFrom: number[];
+  byRowTypeObjects: Record<string, Array<{price: number; salePrice: number}>>;
+}

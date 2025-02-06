@@ -2,6 +2,7 @@ import axios from 'axios';
 import {AdditionalFieldProductValues, productColors} from '@components/home/product/product.types';
 import chroma from 'chroma-js';
 import {v4 as uuidv4} from 'uuid';
+import {PriceGrid, PriceMatrix} from '@utils/util-types';
 
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
@@ -168,4 +169,34 @@ export const getContrastColor = (bgColor: string) => {
   const b = parseInt(hex.substring(4, 6), 16);
   const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
   return luminance > 186 ? '#000000' : '#FFFFFF';
+};
+
+const groupPriceGridsByType = (priceGrids: PriceGrid[]) => {
+  return priceGrids.reduce(
+    (acc, {countFrom, price, salePrice, priceType}) => {
+      const type = priceType ?? '';
+      acc[type] ??= new Map();
+      acc[type].set(countFrom, {price, salePrice});
+      return acc;
+    },
+    {} as Record<string, Map<number, {price: number; salePrice: number}>>
+  );
+};
+
+export const buildPriceMatrix = (priceGrids: PriceGrid[]): PriceMatrix => {
+  const countFrom = [...new Set(priceGrids.map(({countFrom}) => countFrom))].sort((a, b) => a - b);
+  const groupedByType = groupPriceGridsByType(priceGrids);
+
+  const sortedEntries = Object.entries(groupedByType)
+    .map(([type, map]) => ({
+      type,
+      row: countFrom.map(count => map.get(count) || {price: 0, salePrice: 0}),
+      totalPrice: countFrom.reduce((sum, count) => sum + (map.get(count)?.price || 0), 0) // Sum of prices for sorting
+    }))
+    .sort((a, b) => a.totalPrice - b.totalPrice); // Sort by lowest total price
+
+  return {
+    countFrom,
+    byRowTypeObjects: Object.fromEntries(sortedEntries.map(({type, row}) => [type, row]))
+  };
 };
