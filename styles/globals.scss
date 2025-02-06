@@ -356,3 +356,13 @@ body {
 .font-century-gothic {
   font-family: 'Century-Gothic', Arial, sans-serif;
 }
+
+input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
