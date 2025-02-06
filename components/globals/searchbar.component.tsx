@@ -105,7 +105,7 @@ export const Searchbar = () => {
               if (searchQuery)
                 router.push(`/search_results?keywords=${searchQuery}&filter=priceHighToLow&size=24&page=1`);
             }}
-            className="py-2 px-2 md:px-4 rounded-e-full text-white bg-primary-500 hover:bg-primary-600 bg-center bg-no-repeat transition-all duration-300"
+            className="py-2 px-3 md:px-4 max-h-[2.7rem] rounded-e-full text-white bg-primary-500 hover:bg-primary-600 bg-center"
           >
             <div className="flex justify-center">
               <MdSearch className="h-6 w-6" /> Search
