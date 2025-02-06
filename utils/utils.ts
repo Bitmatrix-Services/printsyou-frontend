@@ -2,7 +2,7 @@ import axios from 'axios';
 import {AdditionalFieldProductValues, productColors} from '@components/home/product/product.types';
 import chroma from 'chroma-js';
 import {v4 as uuidv4} from 'uuid';
-import {PriceGrid, PriceMatrix} from '@utils/util-types';
+import {PriceGrid, PriceMatrix, Sortable} from '@utils/util-types';
 
 export const getMinMaxRange = (input: string[]) => {
   const regex = /^\$([0-9.]+)+(\sto\s)\$([0-9.]+)+$/;
@@ -169,6 +169,10 @@ export const getContrastColor = (bgColor: string) => {
   const b = parseInt(hex.substring(4, 6), 16);
   const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
   return luminance > 186 ? '#000000' : '#FFFFFF';
+};
+
+export const sortSortable = <T extends Sortable>(list: T[]): T[] => {
+  return list.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 };
 
 const groupPriceGridsByType = (priceGrids: PriceGrid[]) => {

@@ -1,9 +1,9 @@
 'use client';
 import React, {FC, useState} from 'react';
 import {useEffectOnce} from '../../hooks/use-effect-once.hook';
-import {sortSortable} from '@utils/constants';
 import {Notification} from '@utils/util-types';
 import {getAllNotifications} from '@components/notification/notification-apis';
+import {sortSortable} from '@utils/utils';
 
 export const NotificationComponent: FC = ({}) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);

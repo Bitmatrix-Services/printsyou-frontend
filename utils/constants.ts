@@ -1,5 +1,3 @@
-import {Sortable} from '@utils/util-types';
-
 export const metaConstants = {
   SITE_NAME: 'PrintsYou - Custom Printed Products',
   DESCRIPTION:
@@ -177,7 +175,3 @@ export const allowableSearchParams = [
   'size',
   'tag'
 ];
-
-export const sortSortable = <T extends Sortable>(list: T[]): T[] => {
-  return list.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
-};
