@@ -41,6 +41,8 @@ interface IOrderNowComponentProps {
   selectedProduct: Product | null;
 }
 
+const allowedImageTypes = ['jpeg', 'png', 'webp', 'gif', 'avif', 'svg+xml'];
+
 export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}) => {
   const router = useRouter();
 
@@ -596,15 +598,17 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       <ul>
                         {artWorkFiles.map((file, index) => (
                           <li key={file.fileKey} className="flex items-center pt-4 rounded-lg">
-                            <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
-                              <Image
-                                className="object-cover w-full h-full rounded-sm"
-                                width={100}
-                                height={100}
-                                src={`${ASSETS_SERVER_URL}${file.fileKey}`}
-                                alt={file.filename}
-                              />
-                            </div>
+                            {allowedImageTypes.some(type => type === file.fileType) ? (
+                              <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
+                                <Image
+                                  className="object-cover w-full h-full rounded-sm"
+                                  width={100}
+                                  height={100}
+                                  src={`${ASSETS_SERVER_URL}${file.fileKey}`}
+                                  alt={file.filename}
+                                />
+                              </div>
+                            ) : null}
                             <div className="flex-grow pl-4">
                               <span className="text-sm lg:text-base font-semibold break-all">{file.filename}</span>
                             </div>
@@ -1030,15 +1034,17 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         <ul>
                           {artWorkFiles.map((file, index) => (
                             <li key={file.fileKey} className="flex items-center pt-4 rounded-lg">
-                              <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
-                                <Image
-                                  className="object-cover w-full h-full rounded-sm"
-                                  width={100}
-                                  height={100}
-                                  src={`${ASSETS_SERVER_URL}${file.fileKey}`}
-                                  alt={file.filename}
-                                />
-                              </div>
+                              {allowedImageTypes.some(type => type === file.fileType) ? (
+                                <div className="w-12 h-12 flex-shrink-0 overflow-hidden ">
+                                  <Image
+                                    className="object-cover w-full h-full rounded-sm"
+                                    width={100}
+                                    height={100}
+                                    src={`${ASSETS_SERVER_URL}${file.fileKey}`}
+                                    alt={file.filename}
+                                  />
+                                </div>
+                              ) : null}
                               <div className="flex-grow pl-4">
                                 <span className="text-sm lg:text-base font-semibold break-all">{file.filename}</span>
                               </div>
