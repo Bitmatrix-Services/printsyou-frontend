@@ -1,245 +1,118 @@
 'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import {FC, useState} from 'react';
+import {GiHamburgerMenu} from 'react-icons/gi';
+import {IoChatbubblesOutline, IoClose} from 'react-icons/io5';
+import {TfiHeadphoneAlt} from 'react-icons/tfi';
+import Drawer from '@mui/joy/Drawer';
+import {DialogContent} from '@mui/joy';
+
 import {Searchbar} from '@components/globals/searchbar.component';
 import {Container} from '@components/globals/container.component';
 import {NavComponent} from '@components/globals/cart/nav-component';
-import {Category} from '@components/home/home.types';
-import {FC, useState} from 'react';
-import {GiHamburgerMenu} from 'react-icons/gi';
-import Drawer from '@mui/joy/Drawer';
-import {IoChatbubblesOutline, IoClose} from 'react-icons/io5';
-import {DialogContent} from '@mui/joy';
 import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
-import {TfiHeadphoneAlt} from 'react-icons/tfi';
+import {Category} from '@components/home/home.types';
 
 interface IHeaderProps {
   categories: Category[];
 }
 
 export const Header: FC<IHeaderProps> = ({categories}) => {
-  const [mobileMenu, setMobileMenu] = useState<boolean>(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
-  const handleMenuClose = () => {
-    setMobileMenu(false);
-  };
+  const handleMenuToggle = () => setMobileMenu(prev => !prev);
 
   return (
     <>
-      {/*  top header */}
-      {/*<div className="bg-primary-500 bg-opacity-[40%]">*/}
-      {/*  <div className="flex items-center justify-between">*/}
-      {/*    <div className="hidden md:block lg:mr-auto"></div>*/}
-      {/*    <div*/}
-      {/*      className="flex items-center justify-center bg-primary-500/50 py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"*/}
-      {/*      onClick={() => {*/}
-      {/*        if (typeof window !== undefined && '$chatwoot' in window) {*/}
-      {/*          // @ts-ignore*/}
-      {/*          window.$chatwoot.toggle();*/}
-      {/*        }*/}
-      {/*      }}*/}
-      {/*    >*/}
-      {/*      <div className="flex flex-col lg:flex-row items-center gap-1 text-white">*/}
-      {/*        <RiChat1Fill size={18} />*/}
-      {/*        <span>Chat with Us</span>*/}
-      {/*      </div>*/}
-      {/*    </div>*/}
+      {/* Sticky Header */}
+      <Container className="sticky top-0 z-50 bg-white shadow-md">
+        <header className="flex items-center justify-between p-4 lg:p-6">
+          {/* Mobile Menu Icon */}
+          <GiHamburgerMenu className="h-6 w-6 text-primary-500 cursor-pointer lg:hidden" onClick={handleMenuToggle} />
 
-      {/*    <div className="w-1 h-full"></div>*/}
-
-      {/*    <Link*/}
-      {/*      href="tel:8882992940"*/}
-      {/*      className="flex items-center justify-end bg-primary-500/50 py-1 lg:py-2 px-2 lg:px-4 gap-1 md:mr-10"*/}
-      {/*    >*/}
-      {/*      <div className="flex flex-col lg:flex-row items-center gap-1 text-white">*/}
-      {/*        <FaHeadphones size={18} />*/}
-      {/*        <span>Toll Free (888) 299-2940</span>*/}
-      {/*      </div>*/}
-      {/*    </Link>*/}
-      {/*    /!*<Link*!/*/}
-      {/*    /!*  href="mailto: info@printsyou.com"*!/*/}
-      {/*    /!*  className="flex items-center justify-end bg-primary-500/10 py-2 px-4 gap-1 mr-10"*!/*/}
-      {/*    /!*>*!/*/}
-      {/*    /!*  <MdEmail size={16} /> <span>info@printsyou.com</span>*!/*/}
-      {/*    /!*</Link>*!/*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-      <Container className="pt-6 md:pt-0 translate-y-0 sticky bg-white top-0 z-50 transition-transform duration-800">
-        <header className="flex items-center md:p-6">
-          {/*  mobile view*/}
-          <div className={`lg:hidden flex flex-col gap-3 flex-1`}>
-            <div className="flex justify-between items-center">
-              <div>
-                <GiHamburgerMenu
-                  className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700"
-                  onClick={() => setMobileMenu(true)}
-                />
-              </div>
-              <div>
-                <Link href="/" className="block relative mr-auto">
-                  <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
-                </Link>
-              </div>
-              {/*<div>*/}
-              {/*  <ul className="flex h-full items-center gap-5 ">*/}
-              {/*    <li>*/}
-              {/*      <Link href="/wishlist">*/}
-              {/*        <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-              {/*      </Link>*/}
-              {/*    </li>*/}
-              {/*    <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>*/}
-              {/*      <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-              {/*      <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">*/}
-              {/*        {cartRoot?.cartItems?.length ?? 0}*/}
-              {/*      </span>*/}
-              {/*    </li>*/}
-              {/*  </ul>*/}
-              {/*</div>*/}
-              <div className="flex items-center gap-5 md:gap-2">
-                <div
-                  className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer"
-                  onClick={() => {
-                    if (typeof window !== undefined && '$chatwoot' in window) {
-                      // @ts-ignore
-                      window.$chatwoot.toggle();
-                    }
-                  }}
-                >
-                  <IoChatbubblesOutline size={22} color="#019ce0" />
-                  <span className="hidden md:block">Chat with Us</span>
-                </div>
-
-                <div className="">
-                  <Link href="tel:8882992940">
-                    <div className="flex items-center gap-1 font-semibold hover:text-primary ">
-                      <TfiHeadphoneAlt size={20} color="#019ce0" />
-                      <span className="hidden md:block">(888) 299-2940</span>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1 lg:ml-6">
-              <Searchbar />
-            </div>
-          </div>
-          {/*  mobile view end */}
-
-          {/*  lg screen view */}
-          <div className={`hidden lg:flex items-center gap-3 flex-1`}>
-            <div className="flex justify-between">
-              <Link href="/" className="block relative mr-auto">
-                <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
-              </Link>
-            </div>
-            <div className="flex-1 lg:ml-6">
-              <Searchbar />
-            </div>
-          </div>
-
-          {/*<Link*/}
-          {/*  href="/how-to-order"*/}
-          {/*  className="hidden lg:flex justify-center items-center ml-4 border border-primary py-2 px-4 rounded-full text-white bg-primary hover:drop-shadow-2xl"*/}
-          {/*>*/}
-          {/*  <div className="capitalize">how to order</div>*/}
-          {/*</Link>*/}
-
-          <div
-            className="hidden lg:flex items-center justify-center py-1 lg:py-2 px-12 lg:px-4 gap-1 hover:cursor-pointer"
-            onClick={() => {
-              if (typeof window !== undefined && '$chatwoot' in window) {
-                // @ts-ignore
-                window.$chatwoot.toggle();
-              }
-            }}
-          >
-            <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
-              <IoChatbubblesOutline size={22} color="#019ce0" />
-              <span>Chat with Us</span>
-            </div>
-          </div>
-
-          <Link href="tel:8882992940" className="hidden lg:flex items-center justify-end gap-1">
-            <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
-              <TfiHeadphoneAlt size={20} color="#019ce0" />
-              <span>Toll Free (888) 299-2940</span>
-            </div>
+          {/* Logo */}
+          <Link href="/" className="block">
+            <Image
+              width={200}
+              height={38}
+              src="/assets/logo-full.png"
+              alt="PrintsYou Logo"
+              className="object-contain"
+            />
           </Link>
 
-          {/*<div className="hidden lg:block pl-6 items-center">*/}
-          {/*  <ul className="flex h-full items-center gap-3 xl:gap-8">*/}
-          {/*    <li>*/}
-          {/*      <Link href="/wishlist">*/}
-          {/*        <FaRegHeart className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-          {/*      </Link>*/}
-          {/*    </li>*/}
-          {/*    <li className="relative" onClick={() => dispatch(setSidebarCartOpen(true))}>*/}
-          {/*      <RiShoppingBagFill className="h-6 w-6 text-primary-500 cursor-pointer hover:text-primary-700" />*/}
-          {/*      <span className="absolute -top-2 -right-2 w-5 h-5 text-center rounded-full bg-primary-400 text-white text-sm font-semibold">*/}
-          {/*        {cartRoot?.cartItems?.length ?? 0}*/}
-          {/*      </span>*/}
-          {/*    </li>*/}
-          {/*  </ul>*/}
-          {/*</div>*/}
+          {/* Search Bar */}
+          <div className="flex-1 lg:ml-6">
+            <Searchbar />
+          </div>
+
+          {/* Chat & Contact */}
+          <div className="flex items-center gap-4">
+            <div
+              className="flex items-center gap-1 cursor-pointer hover:text-primary"
+              onClick={() => {
+                if (typeof window !== undefined && '$chatwoot' in window) {
+                  // @ts-ignore
+                  window.$chatwoot.toggle();
+                }
+              }}
+            >
+              <IoChatbubblesOutline size={22} color="#019ce0" />
+              <span className="hidden md:block">Chat with Us</span>
+            </div>
+
+            <Link
+              href="tel:8882992940"
+              className="flex items-center gap-1 hover:text-primary"
+              aria-label="Call (888) 299-2940"
+            >
+              <TfiHeadphoneAlt size={20} color="#019ce0" />
+              <span className="hidden md:block">(888) 299-2940</span>
+            </Link>
+          </div>
         </header>
       </Container>
 
+      {/* Navigation */}
       <NavComponent categories={categories} />
 
-      {/* mobile view  */}
-      {mobileMenu ? (
-        <Drawer open={mobileMenu} onClose={handleMenuClose} size="lg">
-          <DialogContent
-            sx={{
-              bgcolor: '#303546',
-              color: 'white',
-              width: '100%',
-              height: '100%'
-            }}
-          >
-            <fieldset>
-              <div className="flex pt-6 pb-4 px-6">
-                <Link href="/" className="block relative mr-auto bg-white rounded-md">
-                  <Image
-                    width={170}
-                    height={38}
-                    className="p-2 block object-contain object-left"
-                    src="/assets/logo-full.png"
-                    alt="logo-mobile"
-                  />
+      {/* Mobile Drawer Menu */}
+      <Drawer open={mobileMenu} onClose={handleMenuToggle} size="lg">
+        <DialogContent sx={{bgcolor: '#303546', color: 'white', width: '100%', height: '100%'}}>
+          <div className="flex justify-between items-center p-4">
+            <Link href="/" className="bg-white rounded-md">
+              <Image
+                width={170}
+                height={38}
+                src="/assets/logo-full.png"
+                alt="Mobile Logo"
+                className="p-2 object-contain"
+              />
+            </Link>
+            <IoClose className="h-7 w-7 text-white cursor-pointer" onClick={handleMenuToggle} />
+          </div>
+
+          {/* Categories */}
+          <p className="text-2xl font-medium px-4">Categories:</p>
+          <ul className="grid grid-cols-2 gap-4 p-4 text-white">
+            {categories.slice(0, 10).map(category => (
+              <li key={category.id}>
+                <Link
+                  href={`/categories/${category.uniqueCategoryName}`}
+                  className="hover:text-primary-500 capitalize"
+                  onClick={handleMenuToggle}
+                >
+                  <span dangerouslySetInnerHTML={{__html: category.categoryName}}></span>
                 </Link>
-                <button onClick={handleMenuClose} type="button" className="text-white">
-                  <IoClose className="h-7 w-7 text-white" />
-                </button>
-              </div>
-            </fieldset>
-            <p className="text-2xl font-medium pl-4">Categories:</p>
-            <fieldset className="border-b border-gray-600">
-              <div style={{backgroundColor: '#303546'}} className=" px-2 border-0">
-                <ul className="menu-link grid grid-cols-2 px-3 gap-4 py-4 text-white">
-                  {categories
-                    .sort((a, b) => a.categoryName.toLowerCase().localeCompare(b.categoryName.toLowerCase()))
-                    .map(category => (
-                      <li key={category.id}>
-                        <Link
-                          className="text-white hover:text-primary-500 capitalize"
-                          href={`/categories/${category.uniqueCategoryName}`}
-                          onClick={handleMenuClose}
-                        >
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: category.categoryName
-                            }}
-                          ></span>
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            </fieldset>
-          </DialogContent>
-        </Drawer>
-      ) : null}
+              </li>
+            ))}
+          </ul>
+        </DialogContent>
+      </Drawer>
+
+      {/* Sidebar Cart */}
       <SidebarCart />
     </>
   );

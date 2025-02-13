@@ -28,9 +28,12 @@ export const ProductCard = memo<IProductCard>(
               <ImageWithFallback
                 className="object-contain h-auto"
                 skeletonRounded={true}
-                fill
+                width={238}
+                height={238}
                 src={product?.imageUrl}
-                alt={product.productName}
+                alt={product?.productName || 'Product Image'}
+                priority={true}
+                loading="eager"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
 

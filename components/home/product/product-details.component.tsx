@@ -133,57 +133,6 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
                 </div>
               </div>
             </div>
-
-            {/*<ProductSliderSection title="related products" productList={relatedProducts} navNumber={1} />*/}
-
-            {/* Rating review section  */}
-
-            {/*<div className="my-8">*/}
-            {/*  <div className="flex flex-col lg:flex-row lg:justify-between items-center lg:items-start gap-4">*/}
-            {/*    <div className="flex-grow">*/}
-            {/*      <h4 className="text-xl lg:text-2xl xl:text-3xl font-bold capitalize">Review</h4>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-
-            {/*  <div className="flex gap-6 items-center flex-col md:flex-row my-6">*/}
-            {/*    <div className="flex flex-col justify-center items-center capitalize rounded-md bg-secondary-100/50 p-6">*/}
-            {/*      <p className="text-5xl font-bold">4.7</p>*/}
-            {/*      <div className=" flex mt-2 mb-4  gap-1">*/}
-            {/*        <ViewRating rating={4.7} />*/}
-            {/*      </div>*/}
-
-            {/*      <p className=" text-sm font-medium ">*/}
-            {/*        customer rating <span className="text-sm font-normal text-mute3">(934,516)</span>*/}
-            {/*      </p>*/}
-            {/*    </div>*/}
-
-            {/*    <div className="flex-1 ">*/}
-            {/*      <div className="flex gap-2 flex-col ">*/}
-            {/*        {new Array(5).fill(0).map(rating => (*/}
-            {/*          <div className="flex items-center" key={rating}>*/}
-            {/*            {[1, 2, 3, 4, 5].map(rating => (*/}
-            {/*              <IoMdStar key={rating} className="text-primary-500 w-6 h-6" />*/}
-            {/*            ))}*/}
-            {/*            <div className="w-2/4 h-1 mx-4 bg-gray-300 rounded-2 ">*/}
-            {/*              <div className="h-1 w-[70%] bg-primary-500 rounded"></div>*/}
-            {/*            </div>*/}
-            {/*            <span className="text-sm font-medium text-gray-500">70%</span>*/}
-            {/*          </div>*/}
-            {/*        ))}*/}
-            {/*      </div>*/}
-            {/*    </div>*/}
-            {/*  </div>*/}
-            {/*</div>*/}
-
-            {/*<div className="flex flex-col gap-6">*/}
-            {/*  <h4 className="text-2xl font-semibold">Customer feedback</h4>*/}
-
-            {/*  {new Array(3).fill(0).map((item, i) => (*/}
-            {/*    <CustomerReviewItem key={i} />*/}
-            {/*  ))}*/}
-            {/*</div>*/}
-
-            {/* end Rating review section  */}
             <RelatedProductsSection relatedProducts={relatedProducts} />
           </Container>
         </>

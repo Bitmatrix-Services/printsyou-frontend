@@ -7,70 +7,52 @@ import {permanentRedirect, RedirectType} from 'next/navigation';
 
 type Params = Promise<{uniqueProductName: string[]}>;
 
-const ProductsPage = async (props: {params: Params}) => {
-  const params = await props.params;
-  let uniqueName = params.uniqueProductName.join('/');
+const normalizeUrl = (url: string) =>
+  decodeURIComponent(url)
+    .replace(/[™,®©'”‘’"]/g, '')
+    .replace(/,000/g, 'k')
+    .replace(/[½¼]/g, '')
+    .replace(/---|--|–/g, '-')
+    .replace(
+      /[\s+%:&,°üè]/g,
+      match => ({' ': '', '+': '', '%': '', ':': '', '&': 'amp', '°': '', ü: 'u', è: 'e'})[match] || match
+    );
 
-  const finalUrl = decodeURIComponent(uniqueName)
-    .replaceAll(',000', 'k')
-    .replaceAll('½', '')
-    .replaceAll('¼', '')
-    .replaceAll('½/', '')
-    .replaceAll('---', '-')
-    .replaceAll('-–-', '-')
-    .replaceAll('--', '-')
-    .replaceAll("'", '')
-    .replaceAll('™', '')
-    .replaceAll('®', '')
-    .replaceAll('"', '')
-    .replaceAll('.', '')
-    .replaceAll('%', '')
-    .replaceAll('”', '')
-    .replaceAll('+', '')
-    .replaceAll('’', '')
-    .replaceAll('&', 'amp')
-    .replaceAll(' ', '')
-    .replaceAll('è', 'e')
-    .replaceAll('©', '')
-    .replaceAll('ü', 'u')
-    .replaceAll(':', '')
-    .replaceAll(',', '')
-    .replaceAll('°', '')
-    .replaceAll('‘', '');
+const ProductsPage = async ({params}: {params: Params}) => {
+  const {uniqueProductName} = await params;
+  const uniqueName = uniqueProductName.join('/');
+  const finalUrl = normalizeUrl(uniqueName);
 
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
   }
 
   const response = await getProductDetailsByUniqueName(uniqueName);
-  let product: Product | null = null;
-  let relatedProducts: EnclosureProduct[] | null = null;
-  if (response?.payload) {
-    product = response.payload;
-    const relatedProductResponse = await fetchRelatedProductDetails(product.id);
-    if (relatedProductResponse?.payload) {
-      //@ts-ignore
-      relatedProducts = relatedProductResponse.payload.content;
-    }
-  }
+  const product: Product | null = response?.payload ?? null;
+
+  const relatedProductResponse = product ? await fetchRelatedProductDetails(product.id) : null;
+
+  // @ts-ignore
+  const relatedProducts: EnclosureProduct[] | null = relatedProductResponse?.payload.content ?? null;
 
   let minPrice: PriceGrids | null = null;
   let maxPrice: PriceGrids | null = null;
 
-  const isProductOnSale: boolean = product?.saleEndDate ? moment(product?.saleEndDate).isAfter(moment()) : false;
+  const isProductOnSale: boolean = product?.saleEndDate ? moment(product.saleEndDate).isAfter(moment()) : false;
 
   const sortedPricing = (product?.priceGrids ?? []).filter(item => item.price !== 0).sort((a, b) => a.price - b.price);
+
   if (sortedPricing.length > 0) {
     minPrice = sortedPricing[0];
     maxPrice = sortedPricing[sortedPricing.length - 1];
   }
 
-  const size = (product?.additionalFieldProductValues ?? []).find(
-    it => 'approximate size'.indexOf(it?.fieldName.toLowerCase()) > -1
+  const size = product?.additionalFieldProductValues?.find(it =>
+    it?.fieldName?.toLowerCase().includes('approximate size')
   );
 
-  const colors = (product?.additionalFieldProductValues ?? []).find(
-    item => 'colors available'.indexOf(item?.fieldName.toLowerCase()) > -1
+  const colors = product?.additionalFieldProductValues?.find(item =>
+    item?.fieldName?.toLowerCase().includes('colors available')
   );
 
   return (
@@ -189,22 +171,6 @@ const ProductsPage = async (props: {params: Params}) => {
           })
         }}
       />
-      {/*<Script*/}
-      {/*  id="images-product-page-ld-schema"*/}
-      {/*  type="application/ld+json"*/}
-      {/*  dangerouslySetInnerHTML={{*/}
-      {/*    __html: JSON.stringify({*/}
-      {/*      '@context': 'https://schema.org',*/}
-      {/*      '@type': 'ImageGallery',*/}
-      {/*      url: `${process.env.FE_URL}${product?.uniqueProductName}`,*/}
-      {/*      associatedMedia: (product?.productImages ?? []).map((image, index) => ({*/}
-      {/*        '@type': 'ImageObject',*/}
-      {/*        contentUrl: `${process.env.ASSETS_SERVER_URL}${image.imageUrl}`,*/}
-      {/*        text: image.altText ? image.altText : `${product?.productName} + ${index + 1}`*/}
-      {/*      }))*/}
-      {/*    })*/}
-      {/*  }}*/}
-      {/*/>*/}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

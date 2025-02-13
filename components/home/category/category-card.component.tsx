@@ -16,11 +16,11 @@ export const CategoryCard: FC<ICategoryCard> = ({category}) => {
           width={90}
           height={90}
           src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`}
-          alt={category.categoryName}
+          alt={`Image of ${category.categoryName}`}
           priority={true}
         />
       </div>
-      <h6 className="mt-4 text-base font-medium capitalize text-mute">{category.categoryName}</h6>
+      <h3 className="mt-4 text-base font-medium capitalize text-mute">{category.categoryName}</h3>
     </Link>
   );
 };
