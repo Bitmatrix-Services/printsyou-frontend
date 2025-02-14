@@ -130,6 +130,7 @@ export const orderNowSchema = object({
     .positive()
     .min(ref('minQty'), 'Quantity must be greater than or equal to minimum quantity'),
   selectedPriceType: string().notRequired(),
+  location: string().notRequired(),
   minQty: number().optional()
 });
 

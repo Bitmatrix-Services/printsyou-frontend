@@ -22,7 +22,7 @@ import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import dayjs from 'dayjs';
 import {FormDescription, FormHeading} from '@components/globals/cart/add-to-cart-modal.component';
 import {MaskInput} from '@lib/form/mask-input.component';
-import {PriceGrids, Product} from '@components/home/product/product.types';
+import {Decoration, Locations, PriceGrids, Product} from '@components/home/product/product.types';
 import {ReactQueryClientProvider} from '../../app/query-client-provider';
 import Image from 'next/image';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
@@ -61,7 +61,21 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     groupedByPricing: {},
     priceTypeExists: false
   });
+  const [locations, setLocations] = useState<Locations[]>([]);
+  const [availableDecorationTypes, setAvailableDecorationTypes] = useState<Decoration[]>([]);
+
   if (!selectedProduct) notFound();
+
+  const getLocations = async () => {
+    try {
+      const {data} = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/fetchLocations/${selectedProduct.id}`
+      );
+      setLocations(data.payload);
+    } catch (err) {
+      console.log('error', err);
+    }
+  };
 
   const getInHandDateEst = () => {
     const currentDay = new Date();
@@ -103,6 +117,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       itemColor: undefined,
       size: undefined,
       selectedPriceType: null,
+      location: null,
       minQty: 0
     }
   });
@@ -129,10 +144,22 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     if (strings.length > 0) {
       setValue('selectedPriceType', strings[0]);
     }
-  }, [product.priceGrids, selectedProduct]);
+    if (locations?.length > 0 && !watch('location')) {
+      setValue('location', locations[0]?.id);
+    }
+  }, [product.priceGrids, selectedProduct, locations]);
+
+  useEffect(() => {
+    if (!locations?.length) return;
+
+    const selectedLocation = locations.find(item => item.id === getValues('location'));
+    setAvailableDecorationTypes(selectedLocation?.decorations ?? locations[0].decorations);
+  }, [watch('location'), locations]);
 
   useEffect(() => {
     if (selectedProduct) {
+      getLocations();
+
       // adding a new item to the cart
       const priceTypeExists = selectedProduct.priceGrids.some((item: {priceType: any}) => item.priceType);
       const priceTypesGroups: Record<string, PriceGrids[]> = {};
@@ -297,6 +324,15 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
   }, [watch('itemQty'), watch('selectedPriceType'), priceTypes]);
 
+  const setupFee = useMemo(() => {
+    const selectedPriceType = getValues('selectedPriceType');
+    const setupCharge = availableDecorationTypes
+      .find(item => item.name === selectedPriceType)
+      ?.charges?.find(charge => charge.type === 'SETUP');
+
+    return setupCharge?.chargePrices?.[0]?.price || 0;
+  }, [watch('itemQty'), watch('selectedPriceType'), watch('location')]);
+
   const getCartId = () => {
     let cartId;
     try {
@@ -366,6 +402,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     });
   };
 
+
   return (
     <>
       <Breadcrumb list={[]} prefixTitle="Order Now" />
@@ -427,20 +464,43 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
                     ) : null}
 
+                    <div className="hidden md:block">
+                      {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                      <div className="flex items-center flex-wrap">
+                        {locations?.length > 0 ? (
+                          <>
+                            <div className="flex justify-start items-center flex-wrap gap-4">
+                              {locations.map(location => (
+                                <div
+                                  key={location.id}
+                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location') === location.id ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                  onClick={() => {
+                                    setValue('location', location.id);
+                                  }}
+                                >
+                                  {location.locationName}
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+
                     <div>
                       <div className="hidden md:grid grid-cols-3">
                         <div className="col-span-2">
-                          {priceTypes.length > 0 ? (
+                          {availableDecorationTypes?.length > 0 ? (
                             <>
-                              <FormHeading text="Item Type" />
+                              <FormHeading text="Decoration Types" />
                               <div className="flex justify-start items-center flex-wrap gap-6 mb-5">
-                                {priceTypes.map(row => (
+                                {availableDecorationTypes.map(row => (
                                   <div
-                                    key={row}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('selectedPriceType', row)}
+                                    key={row.id}
+                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                    onClick={() => setValue('selectedPriceType', row.name)}
                                   >
-                                    {row}
+                                    {row.name}
                                   </div>
                                 ))}
                               </div>
@@ -473,7 +533,10 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               </h2>
                             ) : (
                               <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                                ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                $
+                                {(getValues('itemQty') ? getValues('itemQty') * calculatedPrice + setupFee : 0).toFixed(
+                                  2
+                                )}
                               </h2>
                             )}
                           </div>
@@ -481,25 +544,46 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
 
                       {/*  quantity pricing mobile view*/}
+
                       <div className="md:hidden">
-                        {priceTypes.length > 0 ? (
+                        {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                        <div className="flex items-center flex-wrap">
+                          {locations?.length > 0 ? (
+                            <>
+                              <div className="flex justify-start items-center flex-wrap gap-4">
+                                {locations.map(location => (
+                                  <div
+                                    key={location.id}
+                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location') === location.id ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                    onClick={() => setValue('location', location.id)}
+                                  >
+                                    {location.locationName}
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div className="md:hidden">
+                        {availableDecorationTypes?.length > 0 ? (
                           <>
-                            <FormHeading text="Item Type" />
+                            <FormHeading text="Decoration Types" />
                             <div className="flex justify-start items-center flex-wrap gap-2">
-                              {priceTypes.map(row => (
+                              {availableDecorationTypes.map(row => (
                                 <div
-                                  key={row}
-                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                  onClick={() => setValue('selectedPriceType', row)}
+                                  key={row.id}
+                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                  onClick={() => setValue('selectedPriceType', row.name)}
                                 >
-                                  {row}
+                                  {row.name}
                                 </div>
                               ))}
                             </div>
                           </>
                         ) : null}
-                        <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
-                        <div className="flex ">
+                        <div className="flex my-3">
                           <FormControlInput
                             fieldType="number"
                             name="itemQty"
@@ -521,7 +605,10 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               </h5>
                             ) : (
                               <h5 className="text-primary-500 text-2xl font-bold">
-                                ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                $
+                                {(getValues('itemQty') ? getValues('itemQty') * calculatedPrice + setupFee : 0).toFixed(
+                                  2
+                                )}
                               </h5>
                             )}
                           </div>
@@ -862,19 +949,40 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       ) : null}
 
                       <div>
+                        {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                        <div className="flex items-center flex-wrap">
+                          {locations.length > 0 ? (
+                            <>
+                              <div className="flex justify-start items-center flex-wrap gap-4">
+                                {locations.map(location => (
+                                  <div
+                                    key={location.id}
+                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location') === location.id ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                    onClick={() => setValue('location', location.id)}
+                                  >
+                                    {location.locationName}
+                                  </div>
+                                ))}
+                              </div>
+                            </>
+                          ) : null}
+                        </div>
+                      </div>
+
+                      <div>
                         <div className="hidden tablet:grid md:grid grid-cols-3">
                           <div className="col-span-2">
-                            {priceTypes.length > 0 ? (
+                            {availableDecorationTypes?.length > 0 ? (
                               <>
-                                <FormHeading text="Item Type" />
+                                <FormHeading text="Decoration Types" />
                                 <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
-                                  {priceTypes.map(row => (
+                                  {availableDecorationTypes.map(row => (
                                     <div
-                                      key={row}
-                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                      onClick={() => setValue('selectedPriceType', row)}
+                                      key={row.id}
+                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                      onClick={() => setValue('selectedPriceType', row.name)}
                                     >
-                                      {row}
+                                      {row.name}
                                     </div>
                                   ))}
                                 </div>
@@ -909,56 +1017,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                 </h2>
                               ) : (
                                 <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                                  ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                  $
+                                  {(getValues('itemQty')
+                                    ? getValues('itemQty') * calculatedPrice + setupFee
+                                    : 0
+                                  ).toFixed(2)}
                                 </h2>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/*  quantity pricing mobile view*/}
-                        <div className="md:hidden">
-                          {priceTypes.length > 0 ? (
-                            <>
-                              <FormHeading text="Item Type" />
-                              <div className="flex justify-start items-center flex-wrap gap-2">
-                                {priceTypes.map(row => (
-                                  <div
-                                    key={row}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('selectedPriceType', row)}
-                                  >
-                                    {row}
-                                  </div>
-                                ))}
-                              </div>
-                            </>
-                          ) : null}
-                          <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
-                          <div className="flex ">
-                            <FormControlInput
-                              fieldType="number"
-                              name="itemQty"
-                              label="Quantity"
-                              isRequired={true}
-                              disabled={isSubmitting}
-                              control={control}
-                              errors={errors}
-                              onBlur={() => trigger('itemQty')}
-                              onFocus={e => e.target.select()}
-                            />
-                          </div>
-                          <div className="flex justify-between items-center gap-2">
-                            <h4 className="my-3 text-lg font-semibold capitalize ">Sub Total</h4>
-                            <div className="">
-                              {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
-                                <h5 className="text-red-500 text-lg lg:text-2xl font-bold">
-                                  Min Qty is {product?.sortedPrices[0].countFrom}
-                                </h5>
-                              ) : (
-                                <h5 className="text-primary-500 text-2xl font-bold">
-                                  ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
-                                </h5>
                               )}
                             </div>
                           </div>
