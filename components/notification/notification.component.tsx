@@ -1,32 +1,31 @@
 'use client';
-import React, {FC, useState} from 'react';
-import {useEffectOnce} from '../../hooks/use-effect-once.hook';
-import {Notification} from '@utils/util-types';
-import {getAllNotifications} from '@components/notification/notification-apis';
-import {sortSortable} from '@utils/utils';
+import React, { FC, useEffect, useState } from 'react';
+import { Notification } from '@utils/util-types';
+import { getAllNotifications } from '@components/notification/notification-apis';
+import { sortSortable } from '@utils/utils';
 
-export const NotificationComponent: FC = ({}) => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+export const NotificationComponent: FC = () => {
+    const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  useEffectOnce(() => {
-    (async () => {
-      const notis = await getAllNotifications();
-      setNotifications(sortSortable(notis));
-    })();
-  });
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const notis = await getAllNotifications();
+                setNotifications(sortSortable(notis));
+            } catch (error) {
+                console.error('Failed to fetch notifications', error);
+            }
+        };
+        fetchNotifications();
+    }, []);
 
-  return notifications.map(notification => (
-    <div
-      key={notification.id}
-      className="w-full flex justify-center items-center"
-      style={{
-        backgroundColor: notification.backgroundColor,
-        minHeight: '30px',
-        maxHeight: 'fit-content',
-        padding: '0.3rem'
-      }}
-    >
-      <span dangerouslySetInnerHTML={{__html: notification.notificationMessage}} />
-    </div>
-  ));
+    return notifications.map(({ id, backgroundColor, notificationMessage }) => (
+        <div
+            key={id}
+            className="w-full flex justify-center items-center min-h-[30px] py-1 bg-opacity-80"
+            style={{ backgroundColor }}
+        >
+            <span dangerouslySetInnerHTML={{ __html: notificationMessage }} />
+        </div>
+    ));
 };

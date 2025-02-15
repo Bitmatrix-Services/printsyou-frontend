@@ -32,27 +32,29 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({children}: PropsWithChildren) {
   const categoriesData = await getAllCategories();
+  const footerCategories = categoriesData.payload.slice(0, 6);
 
   return (
     <ReduxProvider>
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
-            <Script strategy="beforeInteractive" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            {/* Google Tag Manager - Lazy Load */}
+            <Script src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" strategy="lazyOnload" />
             <Script
-              id="gtag-integration-initialization"
-              strategy="beforeInteractive"
+              id="gtag-integration"
+              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
-                   window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', 'AW-16709127988');
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', 'AW-16709127988');
                 `
               }}
             />
             <Script
-              id="gtag-integration"
+              id="gtag-conversion"
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
@@ -67,59 +69,40 @@ export default async function RootLayout({children}: PropsWithChildren) {
                 `
               }}
             />
-            {/*<Script*/}
-            {/*  id="google-tag-manager"*/}
-            {/*  strategy="beforeInteractive"*/}
-            {/*  dangerouslySetInnerHTML={{*/}
-            {/*    __html: `window.dataLayer = window.dataLayer || [];*/}
-            {/*                    function gtag(){dataLayer.push(arguments);}*/}
-            {/*                    gtag('js', new Date());*/}
-            {/*                    gtag('config', 'AW-16709127988');*/}
-            {/*                    */}
-            {/*                    function gtag_report_conversion(url) {*/}
-            {/*                      var callback = function () {*/}
-            {/*                        if (typeof(url) != 'undefined') {*/}
-            {/*                          window.location = url;*/}
-            {/*                        }*/}
-            {/*                      };*/}
-            {/*                      gtag('event', 'conversion', {*/}
-            {/*                          'send_to': 'AW-16709127988/LWP-CNKl59YZELSexJ8-',*/}
-            {/*                          'transaction_id': '',*/}
-            {/*                          'event_callback': callback*/}
-            {/*                      });*/}
-            {/*                      return false;*/}
-            {/*                    }`*/}
-            {/*  }}*/}
-            {/*/>*/}
+
+            {/* Chatwoot - Defer & Lazy Load */}
             <Script
               id="chatwoot-integration"
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
-                  (function(d,t) {
-                    window.chatwootSettings = {"position":"right","type":"expanded_bubble","launcherTitle":"Chat"};
-                    var BASE_URL="https://chatwoot.printsyou.com/";
-                    var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-                    g.src=BASE_URL+"/packs/js/sdk.js";
-                    g.defer = true;
-                    g.async = true;
-                    s.parentNode.insertBefore(g,s);
-                    g.onload=function(){
-                      window.chatwootSDK.run({
-                        websiteToken: 'LQKAw5skqedd5h5WWeUAFvQR',
-                        baseUrl: BASE_URL
-                      });
-                    };
-                  })(document,"script");
+                  (function(d, t) {
+                    if (!window.chatwootSDK) {
+                      window.chatwootSettings = { position: "right", type: "expanded_bubble", launcherTitle: "Chat" };
+                      var BASE_URL = "https://chatwoot.printsyou.com/";
+                      var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                      g.src = BASE_URL + "/packs/js/sdk.js";
+                      g.defer = true;
+                      g.async = true;
+                      s.parentNode.insertBefore(g, s);
+                      g.onload = function() {
+                        window.chatwootSDK.run({
+                          websiteToken: "LQKAw5skqedd5h5WWeUAFvQR",
+                          baseUrl: BASE_URL,
+                        });
+                      };
+                    }
+                  })(document, "script");
                 `
               }}
             />
+
             <body className="overflow-x-hidden">
               <NextTopLoader color="#019ce0" showSpinner={false} />
               <NotificationComponent />
               <Header categories={categoriesData.payload} />
               {children}
-              <Footer categories={categoriesData.payload.slice(0, 6)} />
+              <Footer categories={footerCategories} />
             </body>
           </html>
         </CSPostHogProvider>

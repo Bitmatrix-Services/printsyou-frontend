@@ -14,6 +14,7 @@ export const FullBannerComponent: FC<IFullBannerComponentProps> = ({banner}) => 
         className="object-contain lg:object-none"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner.bannerUrl}`}
         alt={banner.heading}
+        priority
         fill
       />
       <div className="relative z-10">
