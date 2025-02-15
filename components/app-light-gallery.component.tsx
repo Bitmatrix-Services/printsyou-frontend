@@ -52,14 +52,14 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
                 showOne && index === 0 ? 'block' : !showOne && index !== 0 ? 'block' : 'hidden'
               } gallery-item cursor-pointer ${
                 !showOne ? 'min-w-[6.25rem]' : 'max-w-[28rem] mx-auto'
-              } ${!showOne ? 'h-[6.25rem]' : 'max-h-[28rem]'}`}
+              } ${!showOne ? 'h-[7rem]' : 'max-h-[28rem]'}`}
               data-src={image ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image?.imageUrl}` : ''}
             >
               <span className={`block relative aspect-square ${!showOne ? 'border border-[#eceef1]' : ''}`}>
                 <ImageWithFallback
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 403px"
-                  width={403}
-                  height={403}
+                  width={!showOne ? 100 : 403}
+                  height={!showOne ? 100 : 403}
                   className="object-contain"
                   src={image.imageUrl}
                   alt={
