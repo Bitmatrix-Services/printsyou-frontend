@@ -196,7 +196,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         <PricingTable product={product} />
       </div>
       {product?.additionalRows.length > 0 && (
-        <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl min-h-[120px] transition-all duration-300">
+        <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl transition-all duration-300">
           <ul className={`text-xs text-mute3 ${isExpanded ? '' : 'see-less-more'}`}>
             {[...product.additionalRows]
               ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)

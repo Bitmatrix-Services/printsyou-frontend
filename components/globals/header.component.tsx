@@ -49,7 +49,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           </div>
 
           {/* Chat & Contact */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 ml-5">
             <div
               className="flex items-center gap-1 cursor-pointer hover:text-primary"
               onClick={() => {
