@@ -29,13 +29,22 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
         {/*  center image section */}
         <div className="relative min-h-[150px] md:min-h-[170px] lg:min-h-full w-full xl:col-span-3">
           <Image
-            className="object-cover"
+            className="object-cover w-full h-full"
             src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl}`}
             alt={banner[1].heading}
             priority
-            fill
+            width={752}
+            height={210}
+            sizes="(max-width: 768px) 393px, (max-width: 1024px) 752px, 516px"
+            //@ts-ignore
+            srcSet={`
+                ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl} 393w,
+                ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl} 752w,
+                ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl} 516w
+            `}
           />
         </div>
+
         <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 tablet:grid-rows-1 md:grid-rows-2 lg:grid-rows-1 px-4 lg:px-6 md:px-4 xl:pl-4 xl:pr-0  gap-4 lg:gap-32 xl:gap-4 mt-4 md:pt-5 tablet:mt-5 lg:mt-4 xl:mt-0 xl:pt-0 xl:col-span-2">
           <ShortImageTitleSection
             textColor={'white'}
@@ -65,11 +74,19 @@ const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, hea
   return (
     <div className="relative min-h-[180px] md:min-h-[170px] tablet:min-h-[200px] lg:min-h-[200px] lg:w-full">
       <Image
-        className="object-cover tablet:object-cover md:object-cover"
+        className="object-cover w-full h-full"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
         alt={heading}
-        fill
         priority
+        width={800}
+        height={200}
+        sizes="(max-width: 768px) 393px, (max-width: 1024px) 752px, 800px"
+        //@ts-ignore
+        srcSet={`
+            ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl} 393w,
+            ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl} 752w,
+            ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl} 800w
+    `}
       />
       <div
         className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}

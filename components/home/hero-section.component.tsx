@@ -42,12 +42,16 @@ export const HeroSection: FC<IHeroSection> = ({bannersList = []}) => {
           pagination={{clickable: true}}
           className="hero-swiper"
         >
-          {Object.entries(typeSortedBanners).map(([layout, items]) => (
-            <SwiperSlide key={layout}>
+          {Object.entries(typeSortedBanners).map(([layout, items], index) => (
+            <SwiperSlide key={layout} className={index === 1 ? 'h-[176px]' : 'h-auto'}>
               {layout.includes('grid') && items.length === 4 ? (
-                <GridBannerComponent banner={items} />
+                <div className="h-full">
+                  <GridBannerComponent banner={items} />
+                </div>
               ) : layout.includes('full') && items.length === 1 ? (
-                <FullBannerComponent banner={items[0]} />
+                <div className="h-full">
+                  <FullBannerComponent banner={items[0]} />
+                </div>
               ) : null}
             </SwiperSlide>
           ))}
