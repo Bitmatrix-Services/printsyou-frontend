@@ -92,10 +92,10 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       <h1 className="text-xl md:text-2xl font-bold capitalize min-h-[32px]">
         <span dangerouslySetInnerHTML={{__html: product?.productName ?? ''}} />
       </h1>
-      <div className="mt-2 flex flex-col sm:flex-row gap-3 min-h-[40px]">
+      <div className="mt-2 flex flex-col sm:flex-row gap-3 min-h-[30px]">
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
-      <div className="">
+      <div>
         {product.outOfStock && (
           <div className="flex items-center my-2 min-h-[36px]">
             <Chip size="sm" color="danger" variant="solid">
@@ -112,16 +112,16 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           </div>
         )}
       </div>
-      <div className="flex items-center min-h-[24px]">
+      <div className="flex items-center">
         {handleScroll && (
-          <h3 className="text-sm underline cursor-pointer hover:text-primary-500" onClick={handleScroll}>
+          <h3 className="text-sm underline cursor-pointer hover:text-primary-500 mt-2 min-h-[24px]" onClick={handleScroll}>
             See Details
           </h3>
         )}
       </div>
-      <div className="my-4 flex flex-col gap-3">
+      <div className="my-2 flex flex-col gap-3">
         {productColors.length > 0 ? (
-          <div className="text-mute text-sm font-normal min-h-[50px]">
+          <div className="text-mute text-sm font-normal min-h-[20px]">
             {selectedColor ? (
               <>
                 Color: <span className="text-black font-bold">{selectedColor}</span>
