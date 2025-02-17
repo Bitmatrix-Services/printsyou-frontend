@@ -32,8 +32,6 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
             className="object-cover"
             src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl}`}
             alt={banner[1].heading}
-            width={1002}
-            height={240}
             priority
             fill
           />
@@ -71,8 +69,6 @@ const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, hea
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
         alt={heading}
         fill
-        width={413}
-        height={200}
         priority
       />
       <div

@@ -42,7 +42,7 @@ export const Footer: FC<IFooter> = async ({categories}) => {
               <div className="mt-6 flex space-x-6">
                 {social.map(({name, href, icon: Icon}) => (
                   <Link key={name} href={href} target="_blank">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
+                    <Icon className="h-6 w-6" />
                   </Link>
                 ))}
               </div>
