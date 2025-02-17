@@ -5,7 +5,7 @@ import {MdArrowForward, MdInfo} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import Link from 'next/link';
 import {Product, productColors, ProductImage} from '@components/home/product/product.types';
-import {colorNameToHex, extractColorsArray, getColorsWithHex, getContrastColor} from '@utils/utils';
+import {getColorsWithHex, getContrastColor} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 import {Chip} from '@mui/joy';
 
@@ -25,11 +25,6 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
   relatedProductsLink
 }) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
-
-  const colorsArray = useMemo(() => {
-    const availableColors = extractColorsArray(product.additionalFieldProductValues);
-    return availableColors?.filter(color => colorNameToHex(color));
-  }, [product.additionalFieldProductValues]);
 
   const productColors = useMemo(() => {
     const uniqueColorsByName = Array.from(
@@ -126,16 +121,18 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           </h3>
         )}
       </div>
-      <div className="my-4 flex flex-col gap-3 min-h-[50px]">
-        <div className="text-mute text-sm font-normal">
-          {selectedColor ? (
-            <>
-              Color: <span className="text-black font-bold">{selectedColor}</span>
-            </>
-          ) : (
-            'Colors:'
-          )}
-        </div>
+      <div className="my-4 flex flex-col gap-3">
+        {productColors.length > 0 ? (
+          <div className="text-mute text-sm font-normal min-h-[50px]">
+            {selectedColor ? (
+              <>
+                Color: <span className="text-black font-bold">{selectedColor}</span>
+              </>
+            ) : (
+              'Colors:'
+            )}
+          </div>
+        ) : null}
         <div className="flex flex-wrap gap-3">
           {productColors.map(color => (
             <div key={color?.id} style={{display: 'flex', gap: '10px', position: 'relative'}}>
