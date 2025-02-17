@@ -29,7 +29,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
       <Container className="pt-6 md:pt-0 translate-y-0 sticky bg-white top-0 z-50 transition-transform duration-800 shadow-md">
         <header className="flex items-center md:p-6">
           {/*  mobile view*/}
-          <div className={`lg:hidden flex flex-col gap-3 flex-1`}>
+          <div className={`lg:hidden flex flex-col gap-3 flex-1 pb-2`}>
             <div className="flex justify-between items-center">
               <div>
                 <GiHamburgerMenu
