@@ -14,7 +14,7 @@ interface CategoriesSidebarProps {
 const CategoriesSidebar: FC<CategoriesSidebarProps> = ({allCategories, selectedCategory, siblingCategories}) => {
   return (
     <div className="xl:w-64 mb-6 xl:mb-0">
-      <div className="lg:w-64 md:w-full mb-4 tablet:w-full">
+      <div className="lg:w-60 md:w-full mb-4 tablet:w-full">
         <div className="xl:pr-4">
           {selectedCategory && selectedCategory?.subCategories?.length > 0 ? (
             <>

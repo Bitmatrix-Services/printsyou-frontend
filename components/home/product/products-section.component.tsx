@@ -1,9 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {notFound, usePathname, useRouter, useSearchParams} from 'next/navigation';
-import axios from 'axios';
 import PaginationHeader from '@components/globals/pagination-header';
 import {EnclosureProduct} from '@components/home/product/product.types';
-import {ProductRoutes} from '@utils/routes/be-routes';
 import {IQueryParams} from '@components/search/search-results-section';
 import {ProductCard} from '@components/home/product/product-card.component';
 import {Category} from '@components/home/home.types';
@@ -19,11 +17,8 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const minPrice = searchParams.get('minPrice');
-  const maxPrice = searchParams.get('maxPrice');
   const [productsByCategory, setProductsByCategory] = useState<EnclosureProduct[]>([]);
 
-  const [totalElements, setTotalElements] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
@@ -42,30 +37,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
     setIsLoading(false);
   }, [pagedData]);
 
-  const getProductByCategory = async () => {
-    try {
-      setIsLoading(true);
-      let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${category.id}?page=${page ?? 1}&size=${size ?? 20}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
-      if (maxPrice && minPrice) {
-        query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
-      }
-      const {data} = await axios.get(query);
-
-      setTotalElements(data.payload.totalElements);
-
-      if (data.payload.content.length > 0) {
-        setProductsByCategory(data.payload.content);
-        setTotalPages(data.payload.totalPages);
-        if (page && parseInt(page) > data.payload.totalPages) notFound();
-      }
-    } catch (error) {
-      console.log('error', error);
-    } finally {
-      setIsPageLoading(false);
-      setIsLoading(false);
-    }
-  };
-
   const handleQueryUpdate = (value: string | number, queryName: string) => {
     const currentQuery = getUpdatedQueryParams();
     let updatedQuery = {...currentQuery, [queryName]: value};
@@ -74,6 +45,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
     }
     router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`);
   };
+
   const getUpdatedQueryParams = (): Record<string, any> => {
     let updatedQuery: Record<string, any> = {};
     searchParams.forEach((value, key) => {
@@ -107,7 +79,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
 
       <div
         id="product-card-container"
-        className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-4 md:gap-6 lg:gap-6"
+        className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4 md:gap-6 lg:gap-6"
       >
         {isLoading
           ? Array.from({length: 12}, (_, index) => (

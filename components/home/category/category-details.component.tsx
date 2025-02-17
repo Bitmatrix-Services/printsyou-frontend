@@ -72,7 +72,7 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, pagedData,
             {category.subCategories?.length > 0 ? (
               <h3 className="my-6 text-black font-semibold text-3xl capitalize">{category.categoryName} Categories</h3>
             ) : null}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
               {(category.subCategories ?? [])?.map(subCategory => (
                 <Link
                   href={`/categories/${subCategory.uniqueCategoryName}`}
