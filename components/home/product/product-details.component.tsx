@@ -73,7 +73,7 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
 
                 <div
                   id="product-overview"
-                  data-productId={product.id}
+                  data-productid={product.id}
                   className="product-description"
                   dangerouslySetInnerHTML={{
                     __html: sanitizeHtml(
