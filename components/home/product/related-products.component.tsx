@@ -57,7 +57,7 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
           >
             <IoIosArrowBack
               size={48}
-              className="p-2 bg-transparent text-blue-600 rounded-full shadow-md hover:bg-blue-600 hover:text-white transition"
+              className="p-2 bg-transparent text-primary rounded-full shadow-md hover:bg-primary hover:text-white transition"
             />
           </button>
           <button
@@ -66,7 +66,7 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
           >
             <IoIosArrowForward
               size={48}
-              className="p-2 bg-transparent text-blue-600 rounded-full shadow-md hover:bg-blue-600 hover:text-white transition"
+              className="p-2 bg-transparent text-primary rounded-full shadow-md hover:bg-primary hover:text-white transition"
             />
           </button>
         </div>
