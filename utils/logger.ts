@@ -15,5 +15,5 @@ export const logger = createLogger({
     splat(),
     printf(info => `[${info.timestamp}] ${info.level}: ${info.message}`)
   ),
-  defaultMeta: {service: 'mentuplift-frontend'}
+  defaultMeta: {service: 'printsyou-frontend'}
 });

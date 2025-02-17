@@ -10,7 +10,6 @@ import {GiHamburgerMenu} from 'react-icons/gi';
 import Drawer from '@mui/joy/Drawer';
 import {IoChatbubblesOutline, IoClose} from 'react-icons/io5';
 import {DialogContent} from '@mui/joy';
-import {SidebarCart} from '@components/globals/cart/cart-sidebar.component';
 import {TfiHeadphoneAlt} from 'react-icons/tfi';
 
 interface IHeaderProps {
@@ -164,7 +163,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           </DialogContent>
         </Drawer>
       ) : null}
-      <SidebarCart />
+      {/*<SidebarCart />*/}
     </>
   );
 };
