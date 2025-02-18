@@ -2,8 +2,8 @@ import React from 'react';
 import {fetchRelatedProductDetails, getProductDetailsByUniqueName} from '@components/home/product/product-apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {EnclosureProduct, PriceGrids, Product} from '@components/home/product/product.types';
-import moment from 'moment';
 import {permanentRedirect, RedirectType} from 'next/navigation';
+import dayjs from 'dayjs';
 
 type Params = Promise<{uniqueProductName: string[]}>;
 
@@ -38,7 +38,7 @@ const ProductsPage = async ({params}: {params: Params}) => {
   let minPrice: PriceGrids | null = null;
   let maxPrice: PriceGrids | null = null;
 
-  const isProductOnSale: boolean = product?.saleEndDate ? moment(product.saleEndDate).isAfter(moment()) : false;
+  const isProductOnSale: boolean = product?.saleEndDate ? dayjs(product.saleEndDate).isAfter(dayjs()) : false;
 
   const sortedPricing = (product?.priceGrids ?? []).filter(item => item.price !== 0).sort((a, b) => a.price - b.price);
 
@@ -112,8 +112,8 @@ const ProductsPage = async ({params}: {params: Params}) => {
                   availability: 'https://schema.org/InStock',
                   priceValidUntil:
                     isProductOnSale && product?.saleEndDate
-                      ? moment(product?.saleEndDate).format('YYYY-MM-DD')
-                      : moment().add(1, 'year').format('YYYY-MM-DD'),
+                      ? dayjs(product?.saleEndDate).format('YYYY-MM-DD')
+                      : dayjs().add(1, 'year').format('YYYY-MM-DD'),
                   eligibleQuantity: {
                     '@type': 'QuantitativeValue',
                     minValue: item.countFrom
