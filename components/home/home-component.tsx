@@ -21,14 +21,6 @@ interface IHome {
   faqsList: Faq[];
 }
 
-const AddToCartModalClientSide = dynamic(
-  () => import('./../globals/cart/add-to-cart-modal.component').then(file => file.AddToCartModal),
-  {
-    ssr: false,
-    loading: () => null
-  }
-);
-
 const HomeComponent: FC<IHome> = ({
   categories,
   underABuck,
@@ -118,7 +110,7 @@ const HomeComponent: FC<IHome> = ({
       </Container>
       <Benefits />
       <FaqSectionComponent faqsList={faqsList} />
-      <AddToCartModalClientSide />
+      {/*<AddToCartModalClientSide />*/}
     </main>
   );
 };
