@@ -108,17 +108,11 @@ export const ProductCard = memo<IProductCard>(
             {/*</div>*/}
 
             <div
-              className={`mt-1 flex gap-2 sm:h-24 ${
-                prices?.salePrice && parseInt(prices?.salePrice) > 0
-                  ? 'justify-end md:justify-between'
-                  : 'justify-between'
-              } items-center`}
+              className={`mt-3 flex gap-2 ${prices?.salePrice && parseInt(prices?.salePrice) > 0 ? 'justify-end md:justify-between' : 'justify-between'} items-center`}
             >
               {
                 <h3
-                  className={`${
-                    prices?.salePrice && parseInt(prices?.salePrice) > 0 ? 'hidden md:block' : 'block'
-                  } text-[0.7rem] font-normal text-gray-600 flex-shrink-0`}
+                  className={`${prices?.salePrice && parseInt(prices?.salePrice) > 0 ? 'hidden md:block' : 'block'} text-[0.7rem] font-normal text-gray-600`}
                 >
                   As Low As
                 </h3>
@@ -126,11 +120,11 @@ export const ProductCard = memo<IProductCard>(
               <div className="flex justify-between items-center gap-2 sm:flex-grow">
                 {prices?.salePrice && parseInt(prices?.salePrice) > 0 ? (
                   <>
-                    <span className="line-through text-lg sm:text-md font-semibold">${prices.price}</span>
-                    <span className="md:text-3xl text-lg font-semibold">${prices.salePrice}</span>
+                    <span className="line-through text-lg font-semibold">${prices.price}</span>
+                    <span className="text-3xl font-semibold">${prices.salePrice}</span>
                   </>
                 ) : (
-                  <span className="md:text-3xl text-lg font-semibold">${prices.price}</span>
+                  <span className="text-3xl font-semibold">${prices.price}</span>
                 )}
               </div>
             </div>

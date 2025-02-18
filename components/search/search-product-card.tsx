@@ -94,16 +94,16 @@ export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriorit
           {/*    <IoMdStar key={rating} className="text-primary-500 w-6 h-6" />*/}
           {/*  ))}*/}
           {/*</div>*/}
-          <div className="mt-1 flex gap-2 justify-between items-center sm:h-24">
-            <h3 className="text-[0.7rem] font-normal text-gray-600 flex-shrink-0">As Low As</h3>
-            <div className="flex justify-between items-center gap-2 sm:flex-grow">
+          <div className="mt-3 flex gap-2 justify-between items-center">
+            <h3 className="text-[0.7rem] font-normal text-gray-600 ">As Low As</h3>
+            <div className="flex justify-between items-center gap-2">
               {product.salePrice > 0 ? (
                 <>
                   <span className="line-through text-lg font-semibold">${product.minPrice.toFixed(2)}</span>
-                  <span className="md:text-3xl text-lg font-semibold">${product.salePrice.toFixed(2)}</span>
+                  <span className="text-3xl font-semibold">${product.salePrice.toFixed(2)}</span>
                 </>
               ) : (
-                <span className="md:text-3xl text-lg font-semibold">${product.minPrice.toFixed(2)}</span>
+                <span className="text-3xl font-semibold">${product.minPrice.toFixed(2)}</span>
               )}
             </div>
           </div>
