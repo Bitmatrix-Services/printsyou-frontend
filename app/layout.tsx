@@ -78,7 +78,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
                 __html: `
                   (function(d, t) {
                     if (!window.chatwootSDK) {
-                      window.chatwootSettings = { position: "right", type: "expanded_bubble", launcherTitle: "Chat" };
+                      window.chatwootSettings = { position: "right", type: "standard", launcherTitle: "Chat" };
                       var BASE_URL = "https://chatwoot.printsyou.com/";
                       var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
                       g.src = BASE_URL + "/packs/js/sdk.js";

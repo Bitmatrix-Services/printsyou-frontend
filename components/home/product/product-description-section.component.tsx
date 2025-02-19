@@ -72,20 +72,18 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
 
   return (
     <div className="col flex flex-col">
-      <div className="text-sm mb-2 flex items-center flex-wrap min-h-[24px]">
-        <span className="text-mute4 mr-1">Category:</span>
-        {[...(product.crumbs ?? [])]
-          .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
-          .map((productCategory, index) => (
-            <Fragment key={productCategory.id}>
-              <span className="mx-2 inline-block w-6 h-5">
-                {index !== 0 && index < product.crumbs.length - 1 && <MdArrowForward className="h-5 w-6" />}
-              </span>
-              {index < product.crumbs.length - 1 && (
+      <div className="text-sm mb-2 flex flex-wrap items-start">
+        <div className="flex flex-wrap items-center">
+        <span className="text-mute4 mr-1 whitespace-nowrap">Category:</span>
+          {[...(product.crumbs ?? [])]
+            .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+            .map((productCategory, index) => (
+              <Fragment key={productCategory.id}>
+                {index > 0 && <span className="mx-2"><MdArrowForward className="h-5 w-6"/></span>}
                 <span className="font-semibold capitalize">{productCategory.name}</span>
-              )}
-            </Fragment>
-          ))}
+              </Fragment>
+            ))}
+        </div>
       </div>
       <div className="text-sm mb-2 flex items-center flex-wrap min-h-[24px]">
         <span className="text-mute4 mr-1 capitalize">sku:</span>
@@ -94,12 +92,12 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       <h1 className="text-xl md:text-2xl font-bold capitalize min-h-[32px]">
         <span dangerouslySetInnerHTML={{__html: product?.productName ?? ''}} />
       </h1>
-      <div className="mt-2 flex flex-col sm:flex-row gap-3 min-h-[40px]">
+      <div className="mt-2 flex flex-col sm:flex-row gap-3 min-h-[30px]">
         <p className="text-sm font-normal text-mute3">{product.metaDescription}</p>
       </div>
-      <div className="min-h-[36px]">
+      <div>
         {product.outOfStock && (
-          <div className="flex items-center my-2">
+          <div className="flex items-center my-2 min-h-[36px]">
             <Chip size="sm" color="danger" variant="solid">
               Out of Stock
             </Chip>
@@ -114,16 +112,16 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           </div>
         )}
       </div>
-      <div className="flex items-center min-h-[24px]">
+      <div className="flex items-center">
         {handleScroll && (
-          <h3 className="text-sm underline cursor-pointer hover:text-primary-500" onClick={handleScroll}>
+          <h3 className="text-sm underline cursor-pointer hover:text-primary-500 mt-2 min-h-[24px]" onClick={handleScroll}>
             See Details
           </h3>
         )}
       </div>
-      <div className="my-4 flex flex-col gap-3">
+      <div className="my-2 flex flex-col gap-3">
         {productColors.length > 0 ? (
-          <div className="text-mute text-sm font-normal min-h-[50px]">
+          <div className="text-mute text-sm font-normal min-h-[20px]">
             {selectedColor ? (
               <>
                 Color: <span className="text-black font-bold">{selectedColor}</span>
@@ -188,7 +186,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           <MdInfo className=" ml-3 h-6 w-6" />
         </Link>
       </div>
-      <div className="text-mute border-t border mt-6 min-h-[10px]" />
+      {/*<div className="text-mute border-t border mt-6 min-h-[10px]" />*/}
       <div className="min-h-[150px]">
         <PricingTable product={product} />
       </div>

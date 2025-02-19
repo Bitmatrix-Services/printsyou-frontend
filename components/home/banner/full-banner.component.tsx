@@ -9,12 +9,12 @@ interface IFullBannerComponentProps {
 
 export const FullBannerComponent: FC<IFullBannerComponentProps> = ({banner}) => {
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full w-fit">
       <Image
         className="object-contain lg:object-none"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner.bannerUrl}`}
         alt={banner.heading}
-        priority
+        loading="lazy"
         fill
       />
       <div className="relative z-10">
