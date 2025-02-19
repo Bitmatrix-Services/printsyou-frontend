@@ -10,7 +10,7 @@ interface IGridBannerComponentProps {
 
 export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => {
   return (
-    <div className="w-full max-w-[120rem] mx-auto md:px-2 lg:px-8 2xl:px-0 relative">
+    <div className="w-full max-w-[120rem] mx-auto md:px-2 lg:px-16 2xl:px-0 relative">
       <div className="grid sm:grid-rows-1 lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-8">
         {/*  tagline section */}
         <div className="banner-text-section font-century-gothic xl:col-span-3 h-full md:h-[400px] lg:h-full">
