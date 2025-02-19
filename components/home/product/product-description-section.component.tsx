@@ -74,12 +74,16 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
     <div className="col flex flex-col">
       <div className="text-sm mb-2 flex flex-wrap items-start">
         <div className="flex flex-wrap items-center">
-        <span className="text-mute4 mr-1 whitespace-nowrap">Category:</span>
+          <span className="text-mute4 mr-1 whitespace-nowrap">Category:</span>
           {[...(product.crumbs ?? [])]
             .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
             .map((productCategory, index) => (
               <Fragment key={productCategory.id}>
-                {index > 0 && <span className="mx-2"><MdArrowForward className="h-5 w-6"/></span>}
+                {index > 0 && (
+                  <span className="mx-2">
+                    <MdArrowForward className="h-5 w-6" />
+                  </span>
+                )}
                 <span className="font-semibold capitalize">{productCategory.name}</span>
               </Fragment>
             ))}
@@ -114,7 +118,10 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       </div>
       <div className="flex items-center">
         {handleScroll && (
-          <h3 className="text-sm underline cursor-pointer hover:text-primary-500 mt-2 min-h-[24px]" onClick={handleScroll}>
+          <h3
+            className="text-sm underline cursor-pointer hover:text-primary-500 mt-2 min-h-[24px]"
+            onClick={handleScroll}
+          >
             See Details
           </h3>
         )}
