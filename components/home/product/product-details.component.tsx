@@ -1,13 +1,22 @@
 'use client';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
-import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
+import React, {FC, Fragment, Suspense, useEffect, useRef, useState} from 'react';
 import {EnclosureProduct, Product, ProductImage} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
 import {notFound} from 'next/navigation';
 import sanitizeHtml from 'sanitize-html';
-import RelatedProductsSection from '@components/home/product/related-products.component';
+import dynamic from 'next/dynamic';
+import {SliderSkeleton} from '@components/home/home-component';
+
+const RelatedProductsSection = dynamic(
+  () => import('@components/home/product/related-products.component').then(mod => mod.RelatedProductsSection),
+  {
+    ssr: false,
+    loading: SliderSkeleton
+  }
+);
 
 interface IProductDetails {
   product: Product | null;
@@ -131,7 +140,9 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
                 </div>
               </div>
             </div>
-            <RelatedProductsSection relatedProducts={relatedProducts} />
+            <Suspense fallback={<SliderSkeleton />}>
+              <RelatedProductsSection relatedProducts={relatedProducts} />
+            </Suspense>
           </Container>
         </>
       ) : (

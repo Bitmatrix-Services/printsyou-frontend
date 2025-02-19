@@ -7,7 +7,7 @@ import React, {FC, Suspense, useEffect, useMemo} from 'react';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import dynamic from 'next/dynamic';
 
-const SliderSkeleton = () => <div className="h-64 animate-pulse bg-gray-100 rounded-lg" />;
+export const SliderSkeleton = () => <div className="h-64 animate-pulse bg-gray-100 rounded-lg" />;
 const BannerSkeleton = () => <div className="h-48 animate-pulse bg-gray-100 rounded-lg" />;
 
 const ProductSliderSection = dynamic(
