@@ -16,16 +16,19 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
   link = '/categories/awards'
 }) => {
   return (
-    <div className="py-60 relative">
+    <div className="relative h-[480px] sm:h-[500px] md:h-[550px] lg:h-[600px] w-full">
       <Image
-        className="object-cover min-w-full"
+        className="object-cover w-full h-full rounded-lg"
         sizes="(max-width: 768px) 50vw, 100vw"
         src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${imageUrl}`}
         alt={title}
-        fill
+        width={800}
+        height={600}
       />
-      <div className="absolute z-10 h-full w-full left-0 top-0 flex items-end justify-start px-2 pb-2 ">
-        <div className="bg-white py-5 px-5 rounded-2xl max-w-md text-start">
+
+      {/* Text Overlay Inside Image */}
+      <div className="absolute inset-0 flex items-end justify-start p-4 sm:p-6 bg-gradient-to-t from-black/50 via-black/20 to-transparent">
+        <div className="bg-white/90 backdrop-blur-sm py-4 px-5 rounded-xl max-w-md text-start">
           <h2
             className="text-primary-500 font-bold text-xl mb-1 capitalize"
             dangerouslySetInnerHTML={{__html: title}}

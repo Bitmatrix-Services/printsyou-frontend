@@ -11,15 +11,15 @@ interface IGridBannerComponentProps {
 export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => {
   return (
     <div className="w-full max-w-[120rem] mx-auto md:px-2 lg:px-8 2xl:px-0 relative">
-      <div className="grid sm:grid-rows-2 lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-8">
+      <div className="grid sm:grid-rows-1 lg:grid-rows-2 xl:grid-rows-1 xl:grid-cols-8">
         {/*  tagline section */}
-        <div className="banner-text-section font-century-gothic xl:col-span-3">
+        <div className="banner-text-section font-century-gothic xl:col-span-3 h-full md:h-[400px] lg:h-full">
           <div className="flex flex-col justify-center items-start xl:max-w-[43rem] text-start text-white px-5 lg:px-8 py-8 h-full font-normal text-4xl lg:text-5xl tracking-wide leading-extra-loose lg:leading-extra-loose">
             <h1 dangerouslySetInnerHTML={{__html: banner[0].heading}}></h1>
             <div className="mt-4 w-full">
               <Link
                 href={`/categories/${banner[0].bannerCategory.ucategoryName}`}
-                className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 py-2 tablet:py-1 md:py-1 xl:py-3 font-normal font-century-gothic hover:bg-blue-100"
+                className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 py-2 md:py-2 xl:py-3 font-normal font-century-gothic hover:bg-blue-100"
                 dangerouslySetInnerHTML={{__html: banner[0].tagLines}}
               ></Link>
             </div>
@@ -27,15 +27,15 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
         </div>
 
         {/*  center image section */}
-        <div className="relative min-h-[150px] md:min-h-[170px] lg:min-h-full w-full xl:col-span-3">
+        <div className="relative min-h-[170px] md:min-h-[170px] lg:min-h-full w-full xl:col-span-3">
           <Image
             className="object-cover w-full h-full"
             src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl}`}
             alt={banner[1].heading}
             priority
             width={752}
-            height={210}
-            sizes="(max-width: 768px) 393px, (max-width: 1024px) 752px, 516px"
+            height={240}
+            // sizes="(max-width: 768px) 393px, (max-width: 1024px) 752px, 516px"
             //@ts-ignore
             srcSet={`
                 ${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl} 393w,
