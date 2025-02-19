@@ -46,9 +46,6 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
     }
   };
 
-  console.log('PRODUCT => ', product);
-  console.log('PRODUCT 123');
-
   return (
     <Modal open={open} onClose={() => onClose(false)}>
       <ModalDialog
