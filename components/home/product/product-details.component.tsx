@@ -102,32 +102,30 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
                 <div className="space-y-2">
                   {product.additionalFieldProductValues?.map(item => (
                     <Fragment key={item.fieldValue}>
-                      <div>
-                        <div className="product-additional-info-heading capitalize">
-                          <strong>{item.fieldName.toLowerCase()}:</strong>
-                        </div>
-                        <ul>
-                          <li className="text-mute2">
-                            {item.fieldValue.includes('<table') ? (
-                              <span
-                                className="font-normal text-md text-base description-table"
-                                dangerouslySetInnerHTML={{
-                                  __html: item.fieldValue
-                                }}
-                              ></span>
-                            ) : item.fieldValue ? (
-                              <div
-                                className="product-additional-info-value capitalize"
-                                dangerouslySetInnerHTML={{
-                                  __html: item.fieldValue.toLowerCase()
-                                }}
-                              />
-                            ) : (
-                              <span className="font-normal text-md text-base text-mute2">N/A</span>
-                            )}
-                          </li>
-                        </ul>
+                      <div className="product-additional-info-heading capitalize">
+                        <strong>{item.fieldName.toLowerCase()}:</strong>
                       </div>
+                      <ul>
+                        <li className="text-mute2">
+                          {item.fieldValue.includes('<table') ? (
+                            <span
+                              className="font-normal text-md text-base description-table"
+                              dangerouslySetInnerHTML={{
+                                __html: item.fieldValue
+                              }}
+                            ></span>
+                          ) : item.fieldValue ? (
+                            <div
+                              className="product-additional-info-value capitalize"
+                              dangerouslySetInnerHTML={{
+                                __html: item.fieldValue.toLowerCase()
+                              }}
+                            />
+                          ) : (
+                            <span className="font-normal text-md text-base text-mute2">N/A</span>
+                          )}
+                        </li>
+                      </ul>
                     </Fragment>
                   ))}
                 </div>
