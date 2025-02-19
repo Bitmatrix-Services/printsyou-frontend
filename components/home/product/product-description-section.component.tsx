@@ -173,7 +173,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           ))}
         </div>
       </div>
-      <div className="flex flex-wrap lg:flex-row lg:items-center gap-4 min-h-[50px]">
+      <div className="flex flex-wrap lg:flex-row lg:items-center gap-4 min-h-[50px] mt-3">
         <Link
           className={`py-2 px-6 border-2 flex items-center justify-center rounded-md text-white ${
             product.outOfStock
@@ -198,8 +198,8 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         <PricingTable product={product} />
       </div>
       {product?.additionalRows.length > 0 && (
-        <div className="mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl transition-all duration-300">
-          <ul className={`text-xs text-mute3 ${isExpanded ? '' : 'see-less-more'}`}>
+        <div className={`mt-2 p-4 w-full bg-[#f6f7f8] rounded-xl transition-all duration-300`}>
+          <ul className={`text-xs text-mute3  ${isExpanded ? '' : 'max-h-[3.5rem] see-less-more'}`}>
             {[...product.additionalRows]
               ?.sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map(row => (
@@ -211,7 +211,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
                 </li>
               ))}
           </ul>
-          {product?.additionalRows.length > 4 && (
+          {product?.additionalRows.length > 3 && (
             <span onClick={handleToggle} className="text-blue-500 text-sm font-medium cursor-pointer">
               {isExpanded ? 'Show Less' : 'Show More'}
             </span>
