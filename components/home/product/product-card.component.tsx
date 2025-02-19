@@ -117,7 +117,7 @@ export const ProductCard = memo<IProductCard>(
                   As Low As
                 </h3>
               }
-              <div className="flex justify-between items-center gap-2 sm:flex-grow">
+              <div className="flex justify-end items-center gap-2 sm:flex-grow">
                 {prices?.salePrice && parseInt(prices?.salePrice) > 0 ? (
                   <>
                     <span className="line-through text-lg font-semibold">${prices.price}</span>
