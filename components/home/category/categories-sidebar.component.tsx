@@ -12,36 +12,6 @@ interface CategoryListProps {
 
 const GRID_CLASSES = 'text-sm grid grid-cols-2 tablet:gap-x-4 tablet:grid-cols-3 md:grid-cols-3 lg:grid-cols-1';
 
-const CategoryListItem = React.memo(({category}: {category: Category}) => (
-  <li className="flex mb-2 items-center">
-    <AiFillCaretRight className="text-primary-500" />
-    <Link
-      className="ml-1 capitalize text-mute3 hover:text-primary-500"
-      href={`/categories/${category.uniqueCategoryName}`}
-    >
-      <span dangerouslySetInnerHTML={{__html: sanitize(category.categoryName)}} />
-    </Link>
-  </li>
-));
-
-const CategoryList = React.memo(({categories, title}: {categories: Category[]; title: string}) => {
-  const sortedCategories = useMemo(
-    () => [...categories].sort((a, b) => a.categoryName.localeCompare(b.categoryName)),
-    [categories]
-  );
-
-  return (
-    <>
-      <div className="mb-6 block text-body font-semibold text-sm capitalize">{title}</div>
-      <ul className={GRID_CLASSES}>
-        {sortedCategories.map(category => (
-          <CategoryListItem key={category.id} category={category} />
-        ))}
-      </ul>
-    </>
-  );
-});
-
 const CategorySection = ({selectedCategory, siblingCategories, allCategories}: CategoryListProps) => {
   const {categories, title} = useMemo(() => {
     if (selectedCategory?.subCategories?.length) {
@@ -75,4 +45,37 @@ const CategorySection = ({selectedCategory, siblingCategories, allCategories}: C
   );
 };
 
+const CategoryListItem = React.memo(({category}: {category: Category}) => (
+  <li className="flex mb-2 items-center">
+    <AiFillCaretRight className="text-primary-500" />
+    <Link
+      className="ml-1 capitalize text-mute3 hover:text-primary-500"
+      href={`/categories/${category.uniqueCategoryName}`}
+    >
+      <span dangerouslySetInnerHTML={{__html: sanitize(category.categoryName)}} />
+    </Link>
+  </li>
+));
+
+CategoryListItem.displayName = 'CategoryListItem';
+
+const CategoryList = React.memo(({categories, title}: {categories: Category[]; title: string}) => {
+  const sortedCategories = useMemo(
+    () => [...categories].sort((a, b) => a.categoryName.localeCompare(b.categoryName)),
+    [categories]
+  );
+
+  return (
+    <>
+      <div className="mb-6 block text-body font-semibold text-sm capitalize">{title}</div>
+      <ul className={GRID_CLASSES}>
+        {sortedCategories.map(category => (
+          <CategoryListItem key={category.id} category={category} />
+        ))}
+      </ul>
+    </>
+  );
+});
+
+CategoryList.displayName = 'CategoryList';
 export default React.memo(CategorySection);
