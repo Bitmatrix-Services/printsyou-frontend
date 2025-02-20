@@ -76,8 +76,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
   // }
 
   let currentUrl: any = category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`;
-  if (productsByCategoryPaged.number > 0) {
-    currentUrl = `${currentUrl}?page=${productsByCategoryPaged.number + 1}`;
+  if (productsByCategoryPaged?.number > 0) {
+    currentUrl = `${currentUrl}?page=${productsByCategoryPaged?.number + 1}`;
   }
 
   return (
