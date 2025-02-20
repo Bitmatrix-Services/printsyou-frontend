@@ -1,6 +1,6 @@
 import {getSitemapStuff} from '@utils/utils';
 
-export async function GET(request: Request) {
+export async function GET(_: Request) {
   const feUrl = process.env.FE_URL;
 
   const response: number = await getSitemapStuff('product-chunks');
