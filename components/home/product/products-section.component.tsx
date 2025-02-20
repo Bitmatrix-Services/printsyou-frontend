@@ -57,7 +57,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
   };
 
   return (
-    <section className="bg-white pt-8 md:pt-10 lg:pt-16">
+    <section className="bg-white pt-8 md:pt-10">
       {category.categoryName ? (
         <h2 className="text-xl mb-0 font-bold capitalize">
           {category.prefix && <span>{category.prefix}</span>}
