@@ -38,7 +38,7 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
           />
         </div>
 
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 tablet:grid-rows-1 md:grid-rows-1 lg:grid-rows-1 px-4 lg:px-6 md:px-4 xl:pl-4 xl:pr-0  gap-4 lg:gap-32 xl:gap-4 mt-4 md:pt-0 tablet:mt-5 lg:mt-4 xl:mt-0 xl:pt-0 xl:col-span-2">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-1 sm:grid-rows-2 tablet:grid-rows-1 md:grid-rows-1 lg:grid-rows-1 px-4 lg:px-6 md:px-4 xl:pl-4 xl:pr-0 gap-4 lg:gap-4 mt-4 md:pt-0 tablet:mt-5 lg:mt-4 xl:mt-0 xl:pt-0 xl:col-span-2">
           <ShortImageTitleSection
             textColor={'white'}
             heading={banner[2].heading}
@@ -65,23 +65,23 @@ interface IShortImageTitleSection {
 
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
-    <div className="relative h-[11.25rem] md:h-[14.625rem] tablet:h-[12.5rem] lg:h-[12rem] lg:w-full">
-      <Image
-        className="object-fill w-full h-full"
-        src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
-        alt={heading}
-        priority
-        width={800}
-        height={200}
-      />
-      <div
-        className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}
-      >
-        <div className="text-2xl mb-1 capitalize" dangerouslySetInnerHTML={{__html: heading}}></div>
-        <Link href={`/categories/${ucategoryName}`} className="text-lg underline ">
-          Shop Now
-        </Link>
+      <div className="relative h-[12rem] md:h-[14.625rem] tablet:h-[12.5rem] lg:h-[12rem] lg:w-full">
+          <Image
+              className="object-fill w-full h-full"
+              src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
+              alt={heading}
+              priority
+              width={800}
+              height={200}
+          />
+          <div
+              className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}
+          >
+              <div className="text-2xl mb-1 capitalize" dangerouslySetInnerHTML={{__html: heading}}></div>
+              <Link href={`/categories/${ucategoryName}`} className="text-lg underline ">
+                  Shop Now
+              </Link>
+          </div>
       </div>
-    </div>
   );
 };
