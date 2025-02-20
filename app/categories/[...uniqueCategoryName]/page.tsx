@@ -57,23 +57,23 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
   let siblingCategories: Category[] = [];
   if (siblingCat?.payload) siblingCategories = siblingCat.payload;
 
-  const paginationLinks: any = {
-    '@type': 'WebPage'
-  };
+  // const paginationLinks: any = {
+  //   '@type': 'WebPage'
+  // };
 
-  if (productsByCategoryPaged.number > 1) {
-    paginationLinks.previousPage =
-      productsByCategoryPaged.number === 1
-        ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
-        : category &&
-          `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`;
-  }
+  // if (productsByCategoryPaged.number > 1) {
+  //   paginationLinks.previousPage =
+  //     productsByCategoryPaged.number === 1
+  //       ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+  //       : category &&
+  //         `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`;
+  // }
 
-  if (productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages) {
-    paginationLinks.nextPage =
-      category &&
-      `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`;
-  }
+  // if (productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages) {
+  //   paginationLinks.nextPage =
+  //     category &&
+  //     `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`;
+  // }
 
   let currentUrl: any = category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`;
   if (productsByCategoryPaged.number > 0) {
