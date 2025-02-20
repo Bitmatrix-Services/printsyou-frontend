@@ -1,12 +1,12 @@
 'use client';
-import React, {FC, useState} from 'react';
+import React, {FC, Suspense, useState} from 'react';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
-import {ProductsSection} from '@components/home/product/products-section.component';
 import {notFound} from 'next/navigation';
 import CategoriesSidebar from '@components/home/category/categories-sidebar.component';
+import dynamic from 'next/dynamic';
 
 interface ICategoryDetails {
   allCategories: Category[];
@@ -14,6 +14,16 @@ interface ICategoryDetails {
   siblingCategories: Category[];
   pagedData: any;
 }
+
+const ProductSectionSkeleton = <div className="h-160 animate-pulse bg-gray-100 rounded-lg mt-20" />;
+
+const ProductsSection = dynamic(
+  () => import('@components/home/product/products-section.component').then(mod => mod.ProductsSection),
+  {
+    ssr: false,
+    loading: () => ProductSectionSkeleton
+  }
+);
 
 export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, pagedData, category, siblingCategories}) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -120,7 +130,10 @@ export const CategoryDetails: FC<ICategoryDetails> = ({allCategories, pagedData,
             {/*        </div>*/}
             {/*    </Container>*/}
             {/*</section>*/}
-            <ProductsSection category={category} pagedData={pagedData} />
+
+            <Suspense fallback={ProductSectionSkeleton}>
+              <ProductsSection category={category} pagedData={pagedData} />
+            </Suspense>
           </div>
         </div>
         <div className="lg:hidden block">
