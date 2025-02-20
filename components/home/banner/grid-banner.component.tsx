@@ -65,23 +65,23 @@ interface IShortImageTitleSection {
 
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
-      <div className="relative h-[12rem] md:h-[14.625rem] tablet:h-[12.5rem] lg:h-[12rem] lg:w-full">
-          <Image
-              className="object-fill w-full h-full"
-              src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
-              alt={heading}
-              priority
-              width={800}
-              height={200}
-          />
-          <div
-              className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}
-          >
-              <div className="text-2xl mb-1 capitalize" dangerouslySetInnerHTML={{__html: heading}}></div>
-              <Link href={`/categories/${ucategoryName}`} className="text-lg underline ">
-                  Shop Now
-              </Link>
-          </div>
+    <div className="relative h-[12rem] md:h-[14.625rem] tablet:h-[12.5rem] lg:h-[12rem] lg:w-full">
+      <Image
+        className="object-fill w-full h-full"
+        src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
+        alt={heading}
+        priority
+        width={800}
+        height={200}
+      />
+      <div
+        className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}
+      >
+        <div className="text-2xl mb-1 capitalize" dangerouslySetInnerHTML={{__html: heading}}></div>
+        <Link href={`/categories/${ucategoryName}`} className="text-lg underline ">
+          Shop Now
+        </Link>
       </div>
+    </div>
   );
 };
