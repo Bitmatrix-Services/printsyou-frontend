@@ -21,12 +21,12 @@ const sortList: SortOption[] = [
 
 interface PaginationHeaderProps {
   pageNumber: number;
-  setPageNumber: (page: number) => void;
+  setPageNumber: (_: number) => void;
   pageSize: number;
-  setPageSize: (size: number) => void;
+  setPageSize: (_: number) => void;
   totalPages: number;
   sort: string;
-  setSort: (sort: string) => void;
+  setSort: (_: string) => void;
 }
 
 const PaginationHeader: FC<PaginationHeaderProps> = memo(
@@ -90,7 +90,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = memo(
         </Link>
       );
     });
-
+    PaginationArrow.displayName = 'PaginationArrow';
     return (
       <div className="products-page my-6">
         <div className="list-product">

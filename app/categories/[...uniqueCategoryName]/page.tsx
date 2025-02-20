@@ -10,7 +10,7 @@ import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
 import React from 'react';
-import {EnclosureProduct, Product} from '@components/home/product/product.types';
+import {EnclosureProduct} from '@components/home/product/product.types';
 
 type Params = Promise<{uniqueCategoryName: string[]}>;
 type SearchParams = Promise<any>;

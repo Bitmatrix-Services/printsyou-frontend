@@ -11,22 +11,6 @@ interface IBreadcrumb {
   prefixTitle?: string;
 }
 
-const BreadcrumbItem = React.memo(({item, isLast}: {item: any; isLast: boolean}) => (
-  <>
-    <div aria-hidden="true">
-      <MdOutlineChevronRight className="h-5 w-5 mr-1" />
-    </div>
-    <Link
-      href={`/categories/${item.uniqueCategoryName}`}
-      className={`text-sm capitalize ${
-        isLast ? 'font-medium text-primary-500' : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
-      }`}
-    >
-      {item.name}
-    </Link>
-  </>
-));
-
 export const Breadcrumb: FC<IBreadcrumb> = ({prefixTitle, list}) => {
   const sortedList = useMemo(() => [...list].sort((a, b) => a.sequenceNumber - b.sequenceNumber), [list]);
 
@@ -73,3 +57,22 @@ export const Breadcrumb: FC<IBreadcrumb> = ({prefixTitle, list}) => {
     </div>
   );
 };
+
+const BreadcrumbItem = React.memo(({item, isLast}: {item: any; isLast: boolean}) => (
+  <>
+    <div aria-hidden="true">
+      <MdOutlineChevronRight className="h-5 w-5 mr-1" />
+    </div>
+    <Link
+      href={`/categories/${item.uniqueCategoryName}`}
+      className={`text-sm capitalize ${
+        isLast ? 'font-medium text-primary-500' : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
+      }`}
+    >
+      {item.name}
+    </Link>
+  </>
+));
+
+BreadcrumbItem.displayName = 'BreadcrumbItem';
+Breadcrumb.displayName = 'Breadcrumb';
