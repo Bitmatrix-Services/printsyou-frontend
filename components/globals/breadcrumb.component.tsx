@@ -40,8 +40,8 @@ export const Breadcrumb: FC<IBreadcrumb> = ({prefixTitle, list}) => {
   return (
     <div className="py-4 bg-mute5">
       <Container>
-        <nav aria-label="Breadcrumb" className="flex flex-wrap gap-2 items-center text-mute4">
-          <Link href="/" aria-label="Home">
+        <nav className="flex flex-wrap gap-2 items-center text-mute4">
+          <Link href="/">
             <GoHome className="h-5 w-5 text-mute2 hover:text-primary-500" />
           </Link>
 

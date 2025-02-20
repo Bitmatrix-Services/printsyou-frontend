@@ -107,7 +107,6 @@ const PaginationHeader: FC<PaginationHeaderProps> = memo(
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setSort(e.target.value);
                       }}
-                      aria-label="Sort products"
                     >
                       {SortOptions}
                     </select>
@@ -123,7 +122,6 @@ const PaginationHeader: FC<PaginationHeaderProps> = memo(
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                         setPageSize(Number(e.target.value));
                       }}
-                      aria-label="Items per page"
                     >
                       {PageSizeOptions}
                     </select>
