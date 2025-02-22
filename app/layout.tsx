@@ -15,6 +15,8 @@ import {NotificationComponent} from '@components/notification/notification.compo
 import {CSPostHogProvider} from './provider';
 import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';
+// @ts-ignore
+import {Partytown} from '@builder.io/partytown/react';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -39,10 +41,16 @@ export default async function RootLayout({children}: PropsWithChildren) {
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
+            <Partytown debug={true} forward={['dataLayer.push']} />
             {/* Google Tag Manager - Lazy Load */}
-            <Script src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" strategy="lazyOnload" />
+            <Script
+              type="text/partytown"
+              src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988"
+              strategy="lazyOnload"
+            />
             <Script
               id="gtag-integration"
+              type="text/partytown"
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
@@ -56,6 +64,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             <Script
               id="gtag-conversion"
               strategy="lazyOnload"
+              type="text/partytown"
               dangerouslySetInnerHTML={{
                 __html: `
                   function gtag_report_conversion(url) {
@@ -73,6 +82,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             {/* Chatwoot - Defer & Lazy Load */}
             <Script
               id="chatwoot-integration"
+              type="text/partytown"
               strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
