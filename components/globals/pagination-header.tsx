@@ -130,7 +130,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = memo(
                 </div>
               </div>
               <div className="paging flex gap-2">
-                <PaginationArrow direction="prev" />
+                {pageNumber !== 1 ? <PaginationArrow direction="prev" />:null}
                 <div className="numbers flex gap-2">
                   {pagesToShow.map(page => (
                     <Link
@@ -147,7 +147,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = memo(
                     </Link>
                   ))}
                 </div>
-                <PaginationArrow direction="next" />
+                  {pageNumber !== totalPages ? <PaginationArrow direction="next" />:null}
               </div>
             </div>
           </div>
