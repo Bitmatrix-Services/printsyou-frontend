@@ -46,12 +46,10 @@ export default async function RootLayout({children}: PropsWithChildren) {
             <Script
               type="text/partytown"
               src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988"
-              strategy="lazyOnload"
             />
             <Script
               id="gtag-integration"
               type="text/partytown"
-              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
@@ -63,7 +61,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
             />
             <Script
               id="gtag-conversion"
-              strategy="lazyOnload"
               type="text/partytown"
               dangerouslySetInnerHTML={{
                 __html: `
@@ -83,7 +80,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
             <Script
               id="chatwoot-integration"
               type="text/partytown"
-              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
                   (function(d, t) {
