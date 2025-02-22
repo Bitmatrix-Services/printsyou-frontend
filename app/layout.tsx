@@ -43,12 +43,13 @@ export default async function RootLayout({children}: PropsWithChildren) {
           <html lang="en">
             <Partytown debug={true} forward={['dataLayer.push']} />
             <Script
-                id='parttown-script'
+              id="parttown-script"
               dangerouslySetInnerHTML={{
                 __html: ` partytown = {
                 forward: [
                 'chatwootSettings',
-                'chatwootSDK.run'
+                'chatwootSDK.run',
+                'dataLayer.push'
                 ]
             }`
               }}
@@ -90,9 +91,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
               dangerouslySetInnerHTML={{
                 __html: `
                   (function(d, t) {
-                    console.log("In chatwootSDK")
                     if (!window.chatwootSDK) {
-                      console.log("!window.chatwootSDK is true")
                       window.chatwootSettings = { position: "right", type: "standard", launcherTitle: "Chat" };
                       var BASE_URL = "https://chatwoot.printsyou.com/";
                       var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
@@ -101,7 +100,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
                       g.async = true;
                       s.parentNode.insertBefore(g, s);
                       g.onload = function() {
-                        console.log("chatwoot onload function is called")
                         window.chatwootSDK.run({
                           websiteToken: "LQKAw5skqedd5h5WWeUAFvQR",
                           baseUrl: BASE_URL,
