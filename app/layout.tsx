@@ -42,11 +42,18 @@ export default async function RootLayout({children}: PropsWithChildren) {
         <CSPostHogProvider>
           <html lang="en">
             <Partytown debug={true} forward={['dataLayer.push']} />
-            {/* Google Tag Manager - Lazy Load */}
             <Script
-              type="text/partytown"
-              src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988"
-            />
+              dangerouslySetInnerHTML={{
+                __html: ` partytown = {
+                forward: [
+                'chatwootSettings',
+                'chatwootSDK.run'
+                ]
+            }`
+              }}
+            ></Script>
+            {/* Google Tag Manager - Lazy Load */}
+            <Script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
             <Script
               id="gtag-integration"
               type="text/partytown"
@@ -79,7 +86,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
             {/* Chatwoot - Defer & Lazy Load */}
             <Script
               id="chatwoot-integration"
-              type="text/partytown"
               dangerouslySetInnerHTML={{
                 __html: `
                   (function(d, t) {
