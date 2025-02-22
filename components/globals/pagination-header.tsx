@@ -62,7 +62,7 @@ const PaginationHeader: FC<PaginationHeaderProps> = memo(
 
     const PageSizeOptions = useMemo(
       () =>
-        [20, 40].map(item => (
+        [24, 48].map(item => (
           <option key={item} value={item}>
             {item}
           </option>
