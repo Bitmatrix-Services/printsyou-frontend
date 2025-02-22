@@ -74,6 +74,7 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
     </div>
   );
 });
+CategoryDetails.displayName = 'CategoryDetails';
 
 const SubCategoryItem = memo(({subCategory}: {subCategory: Category}) => (
   <Link
