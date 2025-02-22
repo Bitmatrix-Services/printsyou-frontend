@@ -4,11 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm run partytown && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier --write .",
-    "partytown": "partytown copylib public/~partytown"
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "@builder.io/partytown": "^0.10.3",
