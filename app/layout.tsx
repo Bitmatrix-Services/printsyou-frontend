@@ -17,6 +17,7 @@ import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';
 // @ts-ignore
 import {Partytown} from '@builder.io/partytown/react';
+import Head from 'next/head';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -41,38 +42,39 @@ export default async function RootLayout({children}: PropsWithChildren) {
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
-            <Partytown debug={true} forward={['dataLayer.push']} />
-            <Script
-              id="parttown-script"
-              dangerouslySetInnerHTML={{
-                __html: ` partytown = {
+            <Head>
+              <Partytown debug={true} forward={['dataLayer.push']} />
+              <Script
+                id="parttown-script"
+                dangerouslySetInnerHTML={{
+                  __html: ` partytown = {
                 forward: [
                 'chatwootSettings',
                 'chatwootSDK.run',
                 'dataLayer.push'
                 ]
             }`
-              }}
-            ></Script>
-            {/* Google Tag Manager - Lazy Load */}
-            <Script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
-            <Script
-              id="gtag-integration"
-              type="text/partytown"
-              dangerouslySetInnerHTML={{
-                __html: `
+                }}
+              ></Script>
+              {/* Google Tag Manager - Lazy Load */}
+              <Script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+              <Script
+                id="gtag-integration"
+                type="text/partytown"
+                dangerouslySetInnerHTML={{
+                  __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
                   gtag('config', 'AW-16709127988');
                 `
-              }}
-            />
-            <Script
-              id="gtag-conversion"
-              type="text/partytown"
-              dangerouslySetInnerHTML={{
-                __html: `
+                }}
+              />
+              <Script
+                id="gtag-conversion"
+                type="text/partytown"
+                dangerouslySetInnerHTML={{
+                  __html: `
                   function gtag_report_conversion(url) {
                     gtag('event', 'conversion', {
                       send_to: 'AW-16709127988/pXIgCID20IQaELSexJ8-',
@@ -82,14 +84,14 @@ export default async function RootLayout({children}: PropsWithChildren) {
                     return false;
                   }
                 `
-              }}
-            />
+                }}
+              />
 
-            {/* Chatwoot - Defer & Lazy Load */}
-            <Script
-              id="chatwoot-integration"
-              dangerouslySetInnerHTML={{
-                __html: `
+              {/* Chatwoot - Defer & Lazy Load */}
+              <Script
+                id="chatwoot-integration"
+                dangerouslySetInnerHTML={{
+                  __html: `
                   (function(d, t) {
                     if (!window.chatwootSDK) {
                       window.chatwootSettings = { position: "right", type: "standard", launcherTitle: "Chat" };
@@ -108,8 +110,9 @@ export default async function RootLayout({children}: PropsWithChildren) {
                     }
                   })(document, "script");
                 `
-              }}
-            />
+                }}
+              />
+            </Head>
 
             <body className="overflow-x-hidden">
               <NextTopLoader color="#019ce0" showSpinner={false} />
