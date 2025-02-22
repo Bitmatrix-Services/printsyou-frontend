@@ -43,6 +43,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
           <html lang="en">
             <Partytown debug={true} forward={['dataLayer.push']} />
             <Script
+                id='parttown-script'
               dangerouslySetInnerHTML={{
                 __html: ` partytown = {
                 forward: [
