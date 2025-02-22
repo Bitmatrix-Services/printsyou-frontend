@@ -69,7 +69,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
         <PaginationHeader
           pageNumber={(page && parseInt(page)) || 1}
           setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
-          pageSize={(size && parseInt(size)) || 20}
+          pageSize={(size && parseInt(size)) || 24}
           setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
           totalPages={totalPages}
           sort={filter || 'priceLowToHigh'}
@@ -100,7 +100,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
         <PaginationHeader
           pageNumber={(page && parseInt(page)) || 1}
           setPageNumber={(value: string | number) => handleQueryUpdate(value, 'page')}
-          pageSize={(size && parseInt(size)) || 20}
+          pageSize={(size && parseInt(size)) || 24}
           setPageSize={(value: string | number) => handleQueryUpdate(value, 'size')}
           totalPages={totalPages}
           sort={filter || 'priceLowToHigh'}
