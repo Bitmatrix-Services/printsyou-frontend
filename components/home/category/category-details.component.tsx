@@ -50,8 +50,8 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
                   {category.categoryName} Categories
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {category.subCategories.map(subCategory => (
-                    <SubCategoryItem key={subCategory.id} subCategory={subCategory} />
+                  {category.subCategories.map((subCategory, index) => (
+                    <SubCategoryItem key={subCategory.id} subCategory={subCategory} priority={index >= 3} />
                   ))}
                 </div>
               </>
@@ -61,14 +61,14 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
               <ProductsSection category={category} pagedData={pagedData} />
             </Suspense>
           </div>
+        </div>
 
-          <div className="lg:hidden block">
-            <CategoriesSidebar
-              allCategories={allCategories}
-              selectedCategory={category}
-              siblingCategories={siblingCategories}
-            />
-          </div>
+        <div className="sm:block lg:hidden">
+          <CategoriesSidebar
+            allCategories={allCategories}
+            selectedCategory={category}
+            siblingCategories={siblingCategories}
+          />
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
 });
 CategoryDetails.displayName = 'CategoryDetails';
 
-const SubCategoryItem = memo(({subCategory}: {subCategory: Category}) => (
+const SubCategoryItem = memo(({subCategory, priority}: {subCategory: Category; priority: boolean}) => (
   <Link
     href={`/categories/${subCategory.uniqueCategoryName}`}
     className="flex flex-col border p-2"
@@ -85,11 +85,12 @@ const SubCategoryItem = memo(({subCategory}: {subCategory: Category}) => (
     <div className="relative aspect-square">
       <ImageWithFallback
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        className="object-contain md:w-[60%] lg:w-[85%]"
-        fill
+        className="object-contain"
+        width={290}
+        height={170}
         src={subCategory?.imageUrl}
         alt={subCategory.categoryName}
-        priority={false}
+        priority={priority}
       />
     </div>
     <h6 className="text-lg font-normal text-center mt-4">{subCategory.categoryName}</h6>
@@ -121,12 +122,14 @@ const CategoryHeader = memo(({category}: {category: Category}) => {
           </div>
         </div>
         {category?.imageUrl ? (
-          <div className={`relative hidden md:block md:col-span-3 ${isExpanded ? 'h-full' : 'max-h-[14rem]'}`}>
+          <div className={`relative hidden md:flex md:col-span-3 ${isExpanded ? 'h-full' : 'max-h-[14rem]'}`}>
             <ImageWithFallback
               src={category?.imageUrl}
               alt={category.uniqueCategoryName}
               className="object-contain"
-              fill
+              width={isExpanded ? 400 : 150}
+              height={isExpanded ? 100 : 200}
+              priority={true}
             />
           </div>
         ) : null}
