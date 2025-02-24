@@ -32,8 +32,8 @@ export const ProductCard = memo<IProductCard>(
                 height={238}
                 src={product?.imageUrl}
                 alt={product?.productName || 'Product Image'}
-                priority={imagePriority}
-                loading={imagePriority ? 'eager' : 'lazy'}
+                priority={true}
+                loading="eager"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
 
