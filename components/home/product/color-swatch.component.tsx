@@ -5,7 +5,7 @@ import {getContrastColor} from '@utils/utils';
 interface IColorSwatch {
   color: productColors | null;
   selectedColor: string;
-  onSelect: (color: productColors | null) => void;
+  onSelect: (_: productColors | null) => void;
 }
 
 export const ColorSwatch: FC<IColorSwatch> = ({color, selectedColor, onSelect}) => {

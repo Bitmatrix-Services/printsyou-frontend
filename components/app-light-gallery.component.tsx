@@ -69,7 +69,6 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
                       ? `${productName.substring(1)} ${index + 1}`
                       : `${productName} ${index + 1}`)
                   }
-                  loading={index === 0 ? 'eager' : 'lazy'}
                 />
               </span>
             </a>

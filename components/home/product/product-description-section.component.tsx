@@ -159,7 +159,6 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         </Link>
       </div>
 
-      {/* Pricing Table */}
       <div className="min-h-[150px]">
         <PricingTable product={product} />
       </div>

@@ -28,10 +28,10 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
         <tbody>
           <tr className="one">
             {pricingTable.byRowTypeObjects && !pricingTable.byRowTypeObjects[''] && (
-              <td className="headcell font-semibold">Decoration Type</td>
+              <td className="headcell">Decoration Type</td>
             )}
             {pricingTable.countFrom.map(row => (
-              <td key={row} className="headcell font-semibold">
+              <td key={row} className="headcell">
                 {row} Items
               </td>
             ))}
