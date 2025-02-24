@@ -53,41 +53,17 @@ export const ProductCard = memo<IProductCard>(
             </div>
           </Link>
 
-          <div className="overlay rounded-2xl transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-[55%] lg:top-[60%] left-0 w-full p-3">
-            <div className="flex flex-col">
-              {/*<button type="button" className="ml-auto">*/}
-              {/*  <FaRegHeart className="h-7 w-7 text-primary-500" />*/}
-              {/*</button>*/}
-              <div className="mt-auto flex gap-3">
-                {/*<button*/}
-                {/*  type="button"*/}
-                {/*  className="hidden md:block w-full md:w-1/2 py-2 bg-primary-500 text-white font-semibold text-xs uppercase"*/}
-                {/*  onClick={e => {*/}
-                {/*    dispatch(*/}
-                {/*      setCartStateForModal({*/}
-                {/*        selectedProduct: structuredClone(product),*/}
-                {/*        open: true,*/}
-                {/*        selectedItem: null,*/}
-                {/*        cartMode: 'new'*/}
-                {/*      })*/}
-                {/*    );*/}
-                {/*    e.preventDefault();*/}
-                {/*  }}*/}
-                {/*>*/}
-                {/*  add to cart*/}
-                {/*</button>*/}
-                <button
-                  type="button"
-                  className="hidden md:block w-full py-2 bg-primary text-white font-semibold text-xs uppercase relative xl:-translate-y-8"
-                  onClick={e => {
-                    setQuickViewModal(true);
-                    e.preventDefault();
-                  }}
-                >
-                  quick view
-                </button>
-              </div>
-            </div>
+          <div className="hidden md:block overlay transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute top-[55%] lg:top-[70%] left-0 w-full px-3">
+            <button
+              type="button"
+              className="w-full py-2 bg-primary text-white font-semibold text-xs relative xl:-translate-y-8"
+              onClick={e => {
+                setQuickViewModal(true);
+                e.preventDefault();
+              }}
+            >
+              QUICK VIEW
+            </button>
           </div>
 
           <div className="pb-2">
@@ -101,12 +77,6 @@ export const ProductCard = memo<IProductCard>(
                 ></h2>
               </div>
             </Link>
-            {/*<div className="mt-2 flex gap-1">*/}
-            {/*  {[1, 2, 3, 4, 5].map(rating => (*/}
-            {/*    <IoMdStar key={rating} className="text-primary-500 w-6 h-6" />*/}
-            {/*  ))}*/}
-            {/*</div>*/}
-
             <div
               className={`mt-3 flex gap-2 ${prices?.salePrice && parseInt(prices?.salePrice) > 0 ? 'justify-end md:justify-between' : 'justify-between'} items-center`}
             >
