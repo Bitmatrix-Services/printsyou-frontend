@@ -10,7 +10,7 @@ interface IProductCard {
 }
 
 export const ProductCard = memo<IProductCard>(
-  ({product, imagePriority}) => {
+  ({product, imagePriority = true}) => {
     const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
     const prices = useMemo(() => {
@@ -32,8 +32,8 @@ export const ProductCard = memo<IProductCard>(
                 height={238}
                 src={product?.imageUrl}
                 alt={product?.productName || 'Product Image'}
-                priority={true}
-                loading="eager"
+                priority={imagePriority}
+                loading={imagePriority ? 'eager' : 'lazy'}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
 

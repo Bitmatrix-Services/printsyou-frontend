@@ -93,7 +93,9 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
                 />
               </div>
             ))
-          : productsByCategory?.map(product => <ProductCard key={product.id} product={product} />)}
+          : productsByCategory?.map((product, index) => (
+              <ProductCard key={product.id} product={product} imagePriority={index < 4} />
+            ))}
       </div>
 
       {productsByCategory?.length > 0 && !isPageLoading && (

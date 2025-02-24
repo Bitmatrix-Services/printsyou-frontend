@@ -46,7 +46,7 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
             {relatedProducts.map(product => (
               <SwiperSlide key={product.id}>
                 <div className="relative max-w-full p-1" style={{overflow: 'visible', height: 'auto'}}>
-                  <ProductCard product={product} />
+                  <ProductCard product={product} imagePriority={false} />
                 </div>
               </SwiperSlide>
             ))}
