@@ -57,7 +57,6 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
             >
               <span className={`block relative aspect-square ${!showOne ? 'border border-[#eceef1]' : ''}`}>
                 <ImageWithFallback
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 403px"
                   width={!showOne ? 100 : 403}
                   height={!showOne ? 100 : 403}
                   className="object-contain"

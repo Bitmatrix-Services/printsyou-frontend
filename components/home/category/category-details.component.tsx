@@ -84,7 +84,6 @@ const SubCategoryItem = memo(({subCategory, priority}: {subCategory: Category; p
   >
     <div className="relative aspect-square">
       <ImageWithFallback
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className="object-contain"
         width={290}
         height={170}
