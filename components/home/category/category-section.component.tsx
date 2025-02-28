@@ -28,7 +28,7 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
   return (
     <>
       <div className="flex gap-6 items-baseline justify-start my-10">
-        <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold capitalize">Featured Categories</h1>
+        <h2 className="text-xl lg:text-2xl xl:text-3xl font-bold capitalize">Featured Categories</h2>
       </div>
 
       <div className="featured-swiper relative">
