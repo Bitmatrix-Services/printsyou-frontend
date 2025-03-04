@@ -47,16 +47,17 @@ const ldJsonData = [
 ];
 
 export default async function HomePage() {
-  const categoriesData = await getAllCategories();
-  const newAndExclusiveData = await getProductsByTag('newAndExclusive');
-  const underABuck = await getProductsByTag('under1Dollar');
-  const innovativeIdea = await getProductsByTag('mostPopular');
-  const deals = await getProductsByTag('deals');
-  const bannersList = await getBannersList();
+  const [categoriesData, bannersList, faqsResponse, ...productsData] = await Promise.all([
+    getAllCategories(),
+    getBannersList(),
+    getFaqsList(),
+    getProductsByTag('newAndExclusive'),
+    getProductsByTag('under1Dollar'),
+    getProductsByTag('mostPopular'),
+    getProductsByTag('deals')
+  ]);
 
-  const response = await getFaqsList();
-
-  const sortedFaqs = [...(response?.payload || [])].sort((a, b) => a.sequenceNumber - b.sequenceNumber);
+  const sortedFaqs = [...(faqsResponse?.payload || [])].sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 
   const getFaqsSchema = () => ({
     '@context': 'https://schema.org',
@@ -90,10 +91,10 @@ export default async function HomePage() {
       <HomeComponent
         bannersList={bannersList.payload}
         categories={categoriesData.payload}
-        newAndExclusive={newAndExclusiveData.payload.content}
-        underABuck={underABuck.payload.content}
-        innovativeIdea={innovativeIdea.payload.content}
-        deals={deals.payload.content}
+        newAndExclusive={productsData[0]?.payload.content}
+        underABuck={productsData[1]?.payload.content}
+        innovativeIdea={productsData[2]?.payload.content}
+        deals={productsData[3]?.payload.content}
         faqsList={sortedFaqs}
       />
     </section>
