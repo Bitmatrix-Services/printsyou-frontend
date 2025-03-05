@@ -13,7 +13,7 @@ interface IRelatedProductsSection {
 
 export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProducts}) => {
   return (
-    <section className="bg-white py-8 md:py-10 lg:py-16">
+    <section className="bg-white">
       {relatedProducts && relatedProducts.length > 0 ? (
         <div className="relative w-full mx-auto py-4">
           <Typography id="related-products" className="font-bold text-lg">
