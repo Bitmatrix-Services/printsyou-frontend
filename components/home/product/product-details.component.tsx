@@ -47,6 +47,10 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
     }
   }, [product.productImages, product.productColors]);
 
+  const sortedImages = useMemo(() => {
+    return images.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
+  }, [images]);
+
   const scrollToElement = () => {
     if (productDescriptionRef.current) {
       const yOffset = -120;
@@ -75,16 +79,19 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
           <ProductImageComponent
             productName={product.productName}
-            productImages={images}
+            productImages={sortedImages}
             outOfStock={product.outOfStock}
           />
-          <ProductDescriptionComponent
-            product={product}
-            handleScroll={scrollToElement}
-            images={images}
-            setImages={setImages}
-            relatedProductsLink
-          />
+
+          <Suspense fallback={<SliderSkeleton />}>
+            <ProductDescriptionComponent
+              product={product}
+              handleScroll={scrollToElement}
+              images={sortedImages}
+              setImages={setImages}
+              relatedProductsLink
+            />
+          </Suspense>
         </div>
 
         {/* Description Section */}

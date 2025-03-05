@@ -140,6 +140,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
 
       <div className="flex flex-wrap lg:flex-row lg:items-center gap-4 mt-3">
         <Link
+          rel="preload"
           className={`py-2 px-6 border-2 flex items-center justify-center rounded-md text-white ${
             isOutOfStock
               ? 'border-mute4 bg-mute4 pointer-events-none'
@@ -151,6 +152,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           <RiShoppingBag4Fill className="ml-3 h-6 w-6" />
         </Link>
         <Link
+          rel="preload"
           className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary text-primary hover:bg-primary hover:text-white w-full lg:w-auto"
           href={`/more-info?item_id=${product.id}`}
         >

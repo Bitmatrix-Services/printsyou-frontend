@@ -61,7 +61,7 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
                   height={!showOne ? 100 : 403}
                   className="object-contain"
                   src={image.imageUrl}
-                  priority={showOne}
+                  priority={showOne || index <= 5}
                   alt={
                     image?.altText ??
                     (productName.startsWith('.')
