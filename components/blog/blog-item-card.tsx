@@ -13,8 +13,14 @@ export const BlogCardItem: React.FC<IBlogCardItem> = ({blog}) => {
   return (
     <Link href={`/blog/${blog.uniqueId}`}>
       <Card className="flex rounded text-center px-4 border">
-        <div className="relative h-[10rem] ">
-          <ImageWithFallback className="object-contain" fill src={blog.metaImage} alt={blog.title} />
+        <div className="relative ">
+          <ImageWithFallback
+            className="object-contain"
+            height={120}
+            width={370}
+            src={blog.metaImage}
+            alt={blog.title}
+          />
         </div>
         <div className="flex-1">
           <CardContent>
