@@ -1,31 +1,32 @@
-import React, {FC} from 'react';
+'use client';
+import React, {FC, memo, Suspense} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {Container} from '@components/globals/container.component';
-import {Newsletter} from '@components/home/newsletter-section.component';
 import {Category} from '@components/home/home.types';
 import {listType} from '@utils/util-types';
+import dynamic from 'next/dynamic';
 
-const helpList: listType[] = [
-  {name: 'how to order', url: '/how-to-order'},
-  {name: 'blogs', url: '/blog'}
-];
-const companyList: listType[] = [
-  {name: 'Promotional Products', url: '/categories'},
-  {name: 'Contact Us', url: '/contact-us'},
-  {name: 'About Us', url: '/about-us'},
-  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
-];
-const supportList: listType[] = [{name: 'help center', url: '/'}];
+const Newsletter = dynamic(() => import('@components/home/newsletter-section.component').then(mod => mod.Newsletter), {
+  ssr: false,
+  loading: () => <div className="h-[25rem] animate-pulse bg-gray-100 mt-8" />
+});
 
 interface IFooter {
   categories: Category[];
 }
 
-export const Footer: FC<IFooter> = async ({categories}) => {
+interface FooterLinksProps {
+  title: string;
+  list: listType[];
+}
+
+export const Footer: FC<IFooter> = memo(({categories}) => {
   return (
     <>
-      <Newsletter />
+      <Suspense fallback={<div className="h-[25rem] animate-pulse bg-gray-100 mt-8" />}>
+        <Newsletter />
+      </Suspense>
       <footer className="bg-primary-100/50 py-4">
         <Container>
           <div className="grid lg:grid-cols-12 gap-6 md:grid-cols-2">
@@ -37,12 +38,13 @@ export const Footer: FC<IFooter> = async ({categories}) => {
                 className="block object-contain mb-2"
                 src="/assets/logo-full.png"
                 alt="logo"
+                priority
               />
               <p className="text-sm lg:text-left">© 2024 PrintsYou. All rights reserved.</p>
               <div className="mt-6 flex space-x-6">
                 {social.map(({name, href, icon: Icon}) => (
-                  <Link key={name} href={href} target="_blank">
-                    <Icon className="h-6 w-6" />
+                  <Link key={name} href={href} target="_blank" aria-label={name}>
+                    <Icon height={24} width={24} />
                   </Link>
                 ))}
               </div>
@@ -64,14 +66,9 @@ export const Footer: FC<IFooter> = async ({categories}) => {
       </footer>
     </>
   );
-};
+});
 
-interface FooterLinksProps {
-  title: string;
-  list: listType[];
-}
-
-const FooterLinks: FC<FooterLinksProps> = ({title, list}) => {
+const FooterLinks: FC<FooterLinksProps> = memo(({title, list}) => {
   return (
     <div className="col-span-1 lg:col-span-2 mt-6">
       <div>
@@ -79,7 +76,7 @@ const FooterLinks: FC<FooterLinksProps> = ({title, list}) => {
         <ul className="space-y-4">
           {(list ?? []).map(linkItem => (
             <li key={linkItem.url}>
-              <Link href={linkItem.url} className="block text-sm hover:text-secondary-500 capitalize">
+              <Link href={linkItem.url} className="block text-sm hover:text-secondary-500 capitalize" prefetch={false}>
                 {linkItem.name}
               </Link>
             </li>
@@ -88,9 +85,23 @@ const FooterLinks: FC<FooterLinksProps> = ({title, list}) => {
       </div>
     </div>
   );
-};
+});
 
-export const social = [
+const helpList: listType[] = [
+  {name: 'how to order', url: '/how-to-order'},
+  {name: 'blogs', url: '/blog'}
+];
+
+const companyList: listType[] = [
+  {name: 'Promotional Products', url: '/categories'},
+  {name: 'Contact Us', url: '/contact-us'},
+  {name: 'About Us', url: '/about-us'},
+  {name: 'Terms & Conditions', url: '/terms-and-conditions'}
+];
+
+const supportList: listType[] = [{name: 'help center', url: '/'}];
+
+const social = [
   {
     name: 'Facebook',
     href: 'https://www.facebook.com/PrintsYouPromotional',
@@ -108,7 +119,7 @@ export const social = [
     name: 'LinkedIn',
     href: 'https://www.linkedin.com/company/printsyou',
     icon: (props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) => (
-      <svg {...props} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 30 30">
+      <svg {...props} xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 24 24">
         <path d="M24,4H6C4.895,4,4,4.895,4,6v18c0,1.105,0.895,2,2,2h18c1.105,0,2-0.895,2-2V6C26,4.895,25.105,4,24,4z M10.954,22h-2.95 v-9.492h2.95V22z M9.449,11.151c-0.951,0-1.72-0.771-1.72-1.72c0-0.949,0.77-1.719,1.72-1.719c0.948,0,1.719,0.771,1.719,1.719 C11.168,10.38,10.397,11.151,9.449,11.151z M22.004,22h-2.948v-4.616c0-1.101-0.02-2.517-1.533-2.517 c-1.535,0-1.771,1.199-1.771,2.437V22h-2.948v-9.492h2.83v1.297h0.04c0.394-0.746,1.356-1.533,2.791-1.533 c2.987,0,3.539,1.966,3.539,4.522V22z"></path>
       </svg>
     )

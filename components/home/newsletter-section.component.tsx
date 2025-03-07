@@ -115,12 +115,14 @@ export const Newsletter = () => {
           </ReactQueryClientProvider>
         </div>
       </Container>
-      <SuccessModal
-        open={isSuccessModalOpen}
-        onClose={setIsSuccessModalOpen}
-        title="Thank You for Reaching Out!"
-        note={`Thank you for subscribing to our newsletter! We're excited to have you with us.`}
-      />
+      {isSuccessModalOpen ? (
+        <SuccessModal
+          open={isSuccessModalOpen}
+          onClose={setIsSuccessModalOpen}
+          title="Thank You for Reaching Out!"
+          note={`Thank you for subscribing to our newsletter! We're excited to have you with us.`}
+        />
+      ) : null}
     </div>
   );
 };
