@@ -1,5 +1,5 @@
 'use client';
-import React, {FC, memo, Suspense} from 'react';
+import React, {FC, memo} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {Container} from '@components/globals/container.component';
@@ -24,9 +24,7 @@ interface FooterLinksProps {
 export const Footer: FC<IFooter> = memo(({categories}) => {
   return (
     <>
-      <Suspense fallback={<div className="h-[25rem] animate-pulse bg-gray-100 mt-8" />}>
-        <Newsletter />
-      </Suspense>
+      <Newsletter />
       <footer className="bg-primary-100/50 py-4">
         <Container>
           <div className="grid lg:grid-cols-12 gap-6 md:grid-cols-2">
