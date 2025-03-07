@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {memo, useMemo} from 'react';
 import Link from 'next/link';
 import sanitize from 'sanitize-html';
 import {Category} from '@components/home/home.types';
@@ -9,8 +9,6 @@ interface CategoryListProps {
   siblingCategories?: Category[];
   allCategories?: Category[];
 }
-
-const GRID_CLASSES = 'text-sm grid grid-cols-2 tablet:gap-x-4 tablet:grid-cols-3 md:grid-cols-3 lg:grid-cols-1';
 
 const CategorySection = ({selectedCategory, siblingCategories, allCategories}: CategoryListProps) => {
   const {categories, title} = useMemo(() => {
@@ -35,31 +33,13 @@ const CategorySection = ({selectedCategory, siblingCategories, allCategories}: C
   }, [selectedCategory, siblingCategories, allCategories]);
 
   return (
-    <div className="xl:w-64 mb-6 xl:mb-0">
-      <div className="lg:w-60 md:w-full mb-4 tablet:w-full">
-        <div className="xl:pr-4">
-          <CategoryList categories={categories} title={title} />
-        </div>
-      </div>
+    <div className="w-full lg:w-60 mb-4">
+      <CategoryList categories={categories} title={title} />
     </div>
   );
 };
 
-const CategoryListItem = React.memo(({category}: {category: Category}) => (
-  <li className="flex mb-2 items-center">
-    <AiFillCaretRight className="text-primary-500" />
-    <Link
-      className="ml-1 capitalize text-mute3 hover:text-primary-500"
-      href={`/categories/${category.uniqueCategoryName}`}
-    >
-      <span dangerouslySetInnerHTML={{__html: sanitize(category.categoryName)}} />
-    </Link>
-  </li>
-));
-
-CategoryListItem.displayName = 'CategoryListItem';
-
-const CategoryList = React.memo(({categories, title}: {categories: Category[]; title: string}) => {
+const CategoryList = memo(({categories, title}: {categories: Category[]; title: string}) => {
   const sortedCategories = useMemo(
     () => [...categories].sort((a, b) => a.categoryName.localeCompare(b.categoryName)),
     [categories]
@@ -68,9 +48,17 @@ const CategoryList = React.memo(({categories, title}: {categories: Category[]; t
   return (
     <>
       <div className="mb-6 block text-body font-semibold text-sm capitalize">{title}</div>
-      <ul className={GRID_CLASSES}>
+      <ul className="text-sm grid grid-cols-2 tablet:gap-x-4 tablet:grid-cols-3 md:grid-cols-3 lg:grid-cols-1">
         {sortedCategories.map(category => (
-          <CategoryListItem key={category.id} category={category} />
+          <li className="flex mb-2 items-center" key={category.id}>
+            <AiFillCaretRight className="text-primary-500" height={12} width={12} />
+            <Link
+              className="ml-1 capitalize text-mute3 hover:text-primary-500"
+              href={`/categories/${category.uniqueCategoryName}`}
+            >
+              <span dangerouslySetInnerHTML={{__html: sanitize(category.categoryName)}} />
+            </Link>
+          </li>
         ))}
       </ul>
     </>
