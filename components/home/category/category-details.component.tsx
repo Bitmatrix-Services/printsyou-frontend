@@ -63,15 +63,13 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
           </div>
         </div>
 
-        <Suspense fallback={<div className="h-80 animate-pulse bg-gray-100 mt-8" />}>
-          <div className="block lg:hidden">
-            <CategoriesSidebar
-              allCategories={allCategories}
-              selectedCategory={category}
-              siblingCategories={siblingCategories}
-            />
-          </div>
-        </Suspense>
+        <div className="block lg:hidden">
+          <CategoriesSidebar
+            allCategories={allCategories}
+            selectedCategory={category}
+            siblingCategories={siblingCategories}
+          />
+        </div>
       </div>
     </div>
   );
