@@ -86,6 +86,8 @@ const FooterLinks: FC<FooterLinksProps> = memo(({title, list}) => {
     </div>
   );
 });
+Footer.displayName = 'Footer';
+FooterLinks.displayName = 'FooterLinks';
 
 const helpList: listType[] = [
   {name: 'how to order', url: '/how-to-order'},
