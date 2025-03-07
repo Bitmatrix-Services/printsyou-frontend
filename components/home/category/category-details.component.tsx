@@ -1,5 +1,5 @@
 'use client';
-import React, {FC, memo, Suspense, useCallback, useState} from 'react';
+import React, {FC, memo, Suspense, useCallback, useMemo, useState} from 'react';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {Category} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
@@ -28,6 +28,11 @@ const ProductsSection = dynamic(
 export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, pagedData, category, siblingCategories}) => {
   if (!category) notFound();
 
+  const sortedSubCategories = useMemo(
+    () => (category.subCategories ?? []).sort((a, b) => a.categoryName.localeCompare(b.categoryName)),
+    [category.subCategories]
+  );
+
   return (
     <div>
       <Breadcrumb prefixTitle="Promotional Categories" list={category.crumbs ?? []} />
@@ -50,9 +55,11 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
                   {category.categoryName} Categories
                 </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {category.subCategories.map((subCategory, index) => (
-                    <SubCategoryItem key={subCategory.id} subCategory={subCategory} priority={index >= 3} />
-                  ))}
+                  {sortedSubCategories?.length
+                    ? sortedSubCategories.map((subCategory, index) => (
+                        <SubCategoryItem key={subCategory.id} subCategory={subCategory} priority={index >= 3} />
+                      ))
+                    : null}
                 </div>
               </>
             )}
