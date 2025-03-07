@@ -90,7 +90,7 @@ const SubCategoryItem = memo(({subCategory, priority}: {subCategory: Category; p
         src={subCategory?.imageUrl}
         alt={subCategory.categoryName}
         priority={priority}
-        loading='eager'
+        loading="eager"
       />
     </div>
     <h6 className="text-lg font-normal text-center mt-4">{subCategory.categoryName}</h6>
@@ -130,6 +130,7 @@ const CategoryHeader = memo(({category}: {category: Category}) => {
               width={isExpanded ? 400 : 150}
               height={isExpanded ? 100 : 200}
               priority={true}
+              loading="eager"
             />
           </div>
         ) : null}

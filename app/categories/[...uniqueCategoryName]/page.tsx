@@ -22,26 +22,17 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
   let uniqueName = params.uniqueCategoryName.join('/');
 
   const finalUrl = decodeURIComponent(uniqueName)
-    .replaceAll('---', '-')
-    .replaceAll('--', '-')
-    .replaceAll("'", '')
-    .replaceAll('™', '')
-    .replaceAll('®', '')
-    .replaceAll('½', '')
-    .replaceAll('"', '')
-    .replaceAll('.', '-')
-    .replaceAll('%', '')
-    .replaceAll('”', '')
-    .replaceAll('+', '')
-    .replaceAll('’', '')
-    .replaceAll('&', 'amp')
-    .replaceAll(' ', '');
+    .replace(/[™,®©'”‘’".]/g, '')
+    .replace(/---|--|–/g, '-')
+    .replace(/[½%+’&]/g, '')
+    .replace(/\s+/g, '');
 
   if (uniqueName !== finalUrl) {
     permanentRedirect(`/categories/${finalUrl}`, RedirectType.replace);
   }
-  const categoriesRes = await getAllCategories();
-  const response = await getCategoryDetailsByUniqueName(uniqueName);
+
+  const [categoriesRes, response] = await Promise.all([getAllCategories(), getCategoryDetailsByUniqueName(uniqueName)]);
+
   const siblingCat = await getAllSiblingCategories(response?.payload?.id!!);
 
   let category: Category | null = null;
@@ -57,210 +48,30 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
   let siblingCategories: Category[] = [];
   if (siblingCat?.payload) siblingCategories = siblingCat.payload;
 
-  // const paginationLinks: any = {
-  //   '@type': 'WebPage'
-  // };
-
-  // if (productsByCategoryPaged.number > 1) {
-  //   paginationLinks.previousPage =
-  //     productsByCategoryPaged.number === 1
-  //       ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
-  //       : category &&
-  //         `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`;
-  // }
-
-  // if (productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages) {
-  //   paginationLinks.nextPage =
-  //     category &&
-  //     `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`;
-  // }
-
   let currentUrl: any = category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`;
   if (productsByCategoryPaged?.number > 0) {
     currentUrl = `${currentUrl}?page=${productsByCategoryPaged?.number + 1}`;
   }
 
+  const breadcrumbSchema = generateBreadcrumbSchema(category);
+  const productCatalogSchema =
+    category && productsByCategoryPaged
+      ? generateProductCatalogSchema(category, productsByCategoryPaged, currentUrl)
+      : null;
+
   return (
     <section key={uniqueName}>
-      {/*{searchParams.page && (*/}
-      {/*  <Head>*/}
-      {/*    <meta name="robots" content="noindex,nofollow,noodp,noydir" />*/}
-      {/*  </Head>*/}
-      {/*)}*/}
       <script
+        id="breadcrumb-schema"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: (
-              (category?.crumbs && [
-                ...(category?.crumbs ?? []),
-                {
-                  sequenceNumber: 1,
-                  uniqueCategoryName: '',
-                  name: 'Promotional Products'
-                },
-                {
-                  sequenceNumber: 0,
-                  uniqueCategoryName: '',
-                  name: 'Home'
-                }
-              ]) ??
-              []
-            )
-              .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-              .map(item => ({
-                '@type': 'ListItem',
-                position: item.sequenceNumber + 1,
-                name: item.name,
-                item:
-                  item.sequenceNumber === 0
-                    ? `${process.env.FE_URL}`
-                    : `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
-              }))
-          })
-        }}
+        dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
       />
-      {category && productsByCategoryPaged && productsByCategoryPaged.content.length > 0 ? (
-        <>
-          {/*<script*/}
-          {/*  type="application/ld+json"*/}
-          {/*  dangerouslySetInnerHTML={{*/}
-          {/*    __html: JSON.stringify({*/}
-          {/*      '@type': 'ItemList',*/}
-          {/*      '@context': 'http://schema.org',*/}
-          {/*      '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#pagination`,*/}
-          {/*      name: `${category.categoryName} - Pagination`,*/}
-          {/*      description: `Pagination for the ${category.categoryName} category`,*/}
-          {/*      numberOfItems: productsByCategoryPaged.totalPages,*/}
-          {/*      mainEntityOfPage: {*/}
-          {/*        '@type': 'WebPage',*/}
-          {/*        '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`*/}
-          {/*      },*/}
-          {/*      itemListElement:*/}
-          {/*        productsByCategoryPaged.totalPages &&*/}
-          {/*        Array.from({length: productsByCategoryPaged.totalPages}, (_, index) => ({*/}
-          {/*          '@type': 'ListItem',*/}
-          {/*          position: index + 1,*/}
-          {/*          url:*/}
-          {/*            index == 0*/}
-          {/*              ? category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`*/}
-          {/*              : category &&*/}
-          {/*                `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${index + 1}`*/}
-          {/*        }))*/}
-          {/*    })*/}
-          {/*  }}*/}
-          {/*/>*/}
-          {/*{(productsByCategoryPaged.content ?? []).filter((item: EnclosureProduct) => !item.outOfStock).length > 0 && (*/}
-          {/*  <script*/}
-          {/*    type="application/ld+json"*/}
-          {/*    dangerouslySetInnerHTML={{*/}
-          {/*      __html: JSON.stringify({*/}
-          {/*        '@type': 'ItemList',*/}
-          {/*        '@context': 'http://schema.org',*/}
-          {/*        '@id': `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}#featured-products`,*/}
-          {/*        name: `Featured ${category.categoryName}`,*/}
-          {/*        description: `A list of featured ${category.categoryName}`,*/}
-          {/*        numberOfItems: (productsByCategoryPaged.content ?? []).filter(*/}
-          {/*          (item: EnclosureProduct) => !item.outOfStock*/}
-          {/*        ).length,*/}
-          {/*        itemListElement:*/}
-          {/*          productsByCategoryPaged.totalPages &&*/}
-          {/*          (productsByCategoryPaged.content ?? [])*/}
-          {/*            .filter((item: EnclosureProduct) => !item.outOfStock)*/}
-          {/*            .map((product: EnclosureProduct, index: any) => ({*/}
-          {/*              '@type': 'ListItem',*/}
-          {/*              position: index + 1,*/}
-          {/*              item: {*/}
-          {/*                '@type': 'Product',*/}
-          {/*                url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,*/}
-          {/*                name: product.productName,*/}
-          {/*                image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,*/}
-          {/*                offers: {*/}
-          {/*                  '@type': 'Offer',*/}
-          {/*                  price: [...(product.priceGrids ?? [])]*/}
-          {/*                    .filter(item => item.price !== 0)*/}
-          {/*                    .sort((a, b) => a.price - b.price)*/}
-          {/*                    .shift()?.price,*/}
-          {/*                  priceCurrency: 'USD',*/}
-          {/*                  availability: 'http://schema.org/InStock',*/}
-          {/*                  itemCondition: 'http://schema.org/NewCondition'*/}
-          {/*                }*/}
-          {/*              }*/}
-          {/*            }))*/}
-          {/*      })*/}
-          {/*    }}*/}
-          {/*  />*/}
-          {/*)}*/}
-
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'http://schema.org',
-                '@type': 'WebPage',
-                url: currentUrl,
-                mainEntity: {
-                  '@context': 'http://schema.org',
-                  '@type': 'OfferCatalog',
-                  '@id': `${currentUrl}#catalog`,
-                  name: category.categoryName,
-                  url: currentUrl,
-                  numberOfItems: productsByCategoryPaged.totalElements,
-                  itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
-                    '@type': 'Product',
-                    '@id': `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                    url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                    name: product.productName,
-                    description: product.metaDescription,
-                    sku: product.sku,
-                    image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
-                    offers: {
-                      price: [...(product.priceGrids ?? [])]
-                        .filter(item => item.price !== 0)
-                        .sort((a, b) => a.price - b.price)
-                        .shift()?.price,
-                      priceCurrency: 'USD',
-                      availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
-                      itemCondition: 'http://schema.org/NewCondition',
-                      seller: {
-                        '@type': 'Organization',
-                        name: 'PrintsYou'
-                      }
-                    }
-                  }))
-                  // paginationLinks: paginationLinks
-                },
-                isPartOf: {
-                  '@type': 'CollectionPage',
-                  name: category.categoryName,
-                  url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
-                },
-                hasPart: [
-                  {
-                    '@type': 'WebPage',
-                    name: 'Previous Page',
-                    url:
-                      productsByCategoryPaged.number > 1
-                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`
-                        : productsByCategoryPaged.number == 1
-                          ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
-                          : null
-                  },
-                  {
-                    '@type': 'WebPage',
-                    name: 'Next Page',
-                    url:
-                      productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages
-                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`
-                        : null
-                  }
-                ].filter(page => page.url !== null)
-              })
-            }}
-          />
-        </>
+      {productCatalogSchema ? (
+        <script
+          id="product-catalog-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{__html: JSON.stringify(productCatalogSchema)}}
+        />
       ) : null}
 
       <CategoryDetails
@@ -280,32 +91,27 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
   const searchParams = await props.searchParams;
 
   const response = await getCategoryDetailsByUniqueName(params.uniqueCategoryName.join('/'));
+  const category: Category | null = response?.payload ?? null;
 
-  const pageNumberQuery = searchParams.page;
-  const currentPage = +(pageNumberQuery ?? '1');
-
-  const ld = await getProductsLdForCategoryPage(response?.payload?.id!!, currentPage + '');
-
-  let totalPages: number = ld?.payload['totalPages'];
+  const currentPage = +(searchParams.page ?? '1');
+  const ld = await getProductsLdForCategoryPage(category?.id ?? '', currentPage.toString());
+  const totalPages: number = ld?.payload.totalPages ?? 1;
 
   if (currentPage > totalPages) notFound();
 
-  let category: Category | null = null;
-  if (response?.payload) category = response.payload;
-
-  let canonicalURL: string = `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`;
-  if (currentPage > 1) {
-    canonicalURL = `${canonicalURL}?page=${currentPage}`;
-  }
+  const canonicalURL = `${process.env.FE_URL}categories/${category?.uniqueCategoryName}${
+    currentPage > 1 ? `?page=${currentPage}` : ''
+  }`;
 
   const descriptors: IconDescriptor[] = [];
   if (currentPage > 1) {
     descriptors.push({
       rel: 'prev',
-      url: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}${currentPage - 1 === 1 ? '' : `?page=${currentPage - 1}`}`
+      url: `${process.env.FE_URL}categories/${category?.uniqueCategoryName}${
+        currentPage - 1 === 1 ? '' : `?page=${currentPage - 1}`
+      }`
     });
   }
-
   if (currentPage < totalPages) {
     descriptors.push({
       rel: 'next',
@@ -314,7 +120,7 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
   }
 
   return {
-    title: `${category?.prefix ?? 'Shop'} ${category?.metaTitle || category?.categoryName} ${category?.suffix ?? ''}`,
+    title: `${category?.prefix ?? 'Shop'} ${category?.metaTitle || category?.categoryName} ${category?.suffix ?? ''} | Categories | PrintsYou - Custom Printed Products`,
     description: category?.metaDescription || '',
     icons: {
       other: descriptors
@@ -335,3 +141,90 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
     }
   };
 }
+
+const generateBreadcrumbSchema = (category: Category | null) => {
+  if (!category?.crumbs) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      ...(category.crumbs ?? []),
+      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Promotional Products'},
+      {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
+    ]
+      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+      .map(item => ({
+        '@type': 'ListItem',
+        position: item.sequenceNumber + 1,
+        name: item.name,
+        item:
+          item.sequenceNumber === 0
+            ? `${process.env.FE_URL}`
+            : `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
+      }))
+  };
+};
+
+const generateProductCatalogSchema = (category: Category, productsByCategoryPaged: any, currentUrl: string) => {
+  return {
+    '@context': 'http://schema.org',
+    '@type': 'WebPage',
+    url: currentUrl,
+    mainEntity: {
+      '@context': 'http://schema.org',
+      '@type': 'OfferCatalog',
+      '@id': `${currentUrl}#catalog`,
+      name: category.categoryName,
+      url: currentUrl,
+      numberOfItems: productsByCategoryPaged.totalElements,
+      itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
+        '@type': 'Product',
+        '@id': `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+        url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+        name: product.productName,
+        description: product.metaDescription,
+        sku: product.sku,
+        image: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}`,
+        offers: {
+          price: [...(product.priceGrids ?? [])]
+            .filter(item => item.price !== 0)
+            .sort((a, b) => a.price - b.price)
+            .shift()?.price,
+          priceCurrency: 'USD',
+          availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
+          itemCondition: 'http://schema.org/NewCondition',
+          seller: {
+            '@type': 'Organization',
+            name: 'PrintsYou'
+          }
+        }
+      }))
+    },
+    isPartOf: {
+      '@type': 'CollectionPage',
+      name: category.categoryName,
+      url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+    },
+    hasPart: [
+      {
+        '@type': 'WebPage',
+        name: 'Previous Page',
+        url:
+          productsByCategoryPaged.number > 1
+            ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`
+            : productsByCategoryPaged.number === 1
+              ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+              : null
+      },
+      {
+        '@type': 'WebPage',
+        name: 'Next Page',
+        url:
+          productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages
+            ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`
+            : null
+      }
+    ].filter(page => page.url !== null)
+  };
+};
