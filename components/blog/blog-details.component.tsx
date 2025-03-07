@@ -37,7 +37,7 @@ export const BlogDetailsComponent: FC<IBlogDetailsComponent> = ({blog}) => {
               </AvatarGroup>
             ))}
           </Stack>
-          <div className="relative h-[12rem] md:h-[20rem] lg:h-[20rem] xl:h-[32rem]">
+          <div className="relative h-[12rem] md:h-[20rem] lg:h-[20rem] xl:h-[32rem] mb-4">
             <ImageWithFallback
               fill
               className="object-contain object-left"
