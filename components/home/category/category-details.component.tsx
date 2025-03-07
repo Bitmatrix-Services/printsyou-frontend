@@ -90,6 +90,7 @@ const SubCategoryItem = memo(({subCategory, priority}: {subCategory: Category; p
         src={subCategory?.imageUrl}
         alt={subCategory.categoryName}
         priority={priority}
+        loading='eager'
       />
     </div>
     <h6 className="text-lg font-normal text-center mt-4">{subCategory.categoryName}</h6>
