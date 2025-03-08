@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import React, {FC} from 'react';
+import React, {FC, useMemo} from 'react';
 import lgZoom from 'lightgallery/plugins/zoom';
 import lgAutoplay from 'lightgallery/plugins/autoplay';
 import lgComment from 'lightgallery/plugins/comment';
@@ -34,6 +34,11 @@ interface AppLightGalleryProps {
 }
 
 export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, productName, showOne = false}) => {
+  const sortedProductImages = useMemo(
+    () => productImages.sort((a, b) => a.sequenceNumber - b.sequenceNumber),
+    [productImages]
+  );
+
   return (
     <LightGallery
       enableSwipe
@@ -42,36 +47,34 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
       mobileSettings={{closeOnTap: true}}
       plugins={[lgZoom, lgAutoplay, lgComment, lgFullscreen, lgHash, lgPager, lgRotate, lgShare, lgThumbnail, lgVideo]}
     >
-      {productImages &&
-        productImages
-          .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-          .map((image, index) => (
-            <a
-              key={image.imageUrl}
-              className={`${
-                showOne && index === 0 ? 'block' : !showOne && index !== 0 ? 'block' : 'hidden'
-              } gallery-item cursor-pointer ${
-                !showOne ? 'min-w-[6.25rem]' : 'max-w-[28rem] mx-auto'
-              } ${!showOne ? 'h-[7rem]' : 'max-h-[28rem]'}`}
-              data-src={image ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image?.imageUrl}` : ''}
-            >
-              <span className={`block relative aspect-square ${!showOne ? 'border border-[#eceef1]' : ''}`}>
-                <ImageWithFallback
-                  width={!showOne ? 100 : 403}
-                  height={!showOne ? 100 : 403}
-                  className="object-contain"
-                  src={image.imageUrl}
-                  priority={showOne || index <= 5}
-                  alt={
-                    image?.altText ??
-                    (productName.startsWith('.')
-                      ? `${productName.substring(1)} ${index + 1}`
-                      : `${productName} ${index + 1}`)
-                  }
-                />
-              </span>
-            </a>
-          ))}
+      {sortedProductImages &&
+        sortedProductImages.map((image, index) => (
+          <a
+            key={image.imageUrl}
+            className={`${
+              showOne && index === 0 ? 'block' : !showOne && index !== 0 ? 'block' : 'hidden'
+            } gallery-item cursor-pointer ${
+              !showOne ? 'min-w-[6.25rem]' : 'max-w-[28rem] mx-auto'
+            } ${!showOne ? 'h-[7rem]' : 'max-h-[28rem]'}`}
+            data-src={image ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${image?.imageUrl}` : ''}
+          >
+            <span className={`block relative aspect-square ${!showOne ? 'border border-[#eceef1]' : ''}`}>
+              <ImageWithFallback
+                width={!showOne ? 100 : 403}
+                height={!showOne ? 100 : 403}
+                className="object-contain"
+                src={image.imageUrl}
+                priority={showOne || index <= 5}
+                alt={
+                  image?.altText ??
+                  (productName.startsWith('.')
+                    ? `${productName.substring(1)} ${index + 1}`
+                    : `${productName} ${index + 1}`)
+                }
+              />
+            </span>
+          </a>
+        ))}
     </LightGallery>
   );
 };
