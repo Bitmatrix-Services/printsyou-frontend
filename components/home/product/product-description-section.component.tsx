@@ -5,7 +5,7 @@ import {MdArrowForward, MdInfo} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import Link from 'next/link';
 import {Product, productColors, ProductImage} from '@components/home/product/product.types';
-import {getColorsWithHex} from '@utils/utils';
+import {colorNameToHex, extractColorsArray, getColorsWithHex} from '@utils/utils';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 import {Chip} from '@mui/joy';
 import {ColorSwatch} from '@components/home/product/color-swatch.component';
@@ -29,13 +29,17 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const productColors = useMemo(() => {
-    const uniqueColors = new Map(
-      product.productColors.map((color: productColors) => [color?.colorName.toLowerCase(), color])
+    const colorsFromAdditionalFields = extractColorsArray(product.additionalFieldProductValues).map(color =>
+      colorNameToHex(color)
     );
+
+    let finalColors = [...colorsFromAdditionalFields, ...product.productColors];
+
+    const uniqueColors = new Map(finalColors.map((color: productColors) => [color?.colorName.toLowerCase(), color]));
     return Array.from(uniqueColors.values())
       .map(getColorsWithHex)
       .filter(color => color?.colorName);
-  }, [product.productColors]);
+  }, [product.productColors, product.additionalFieldProductValues]);
 
   const sortedCategories = useMemo(
     () => [...(product.crumbs ?? [])].sort((a, b) => b.sequenceNumber - a.sequenceNumber),
@@ -131,7 +135,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
                 key={color?.colorName}
                 color={color}
                 selectedColor={selectedColor}
-                onSelect={() => handleColorSelect(color)}
+                onSelect={() => color?.coloredProductImage && handleColorSelect(color)}
               />
             ))}
           </div>

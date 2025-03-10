@@ -4,8 +4,8 @@ import {getContrastColor} from '@utils/utils';
 
 interface IColorSwatch {
   color: productColors | null;
-  selectedColor: string;
-  onSelect: (_: productColors | null) => void;
+  selectedColor?: string;
+  onSelect?: (_: productColors | null) => void;
 }
 
 export const ColorSwatch: FC<IColorSwatch> = ({color, selectedColor, onSelect}) => {
@@ -21,9 +21,12 @@ export const ColorSwatch: FC<IColorSwatch> = ({color, selectedColor, onSelect}) 
           border: '1px solid grey',
           position: 'relative'
         }}
-        onClick={() => onSelect(color)}
+        onClick={() => {
+          if (!onSelect) return;
+          onSelect(color);
+        }}
       />
-      {selectedColor === color?.colorName && (
+      {color && selectedColor === color?.colorName && (
         <div
           style={{
             position: 'absolute',

@@ -84,17 +84,16 @@ export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<s
 
 export const formatString = (str: string, ...args: any[]) => str.replace(/{(\d+)}/g, (_, index) => args[index] || '');
 
-export const colorNameToHex = (colorName: string): productColors | null => {
+export const colorNameToHex = (colorName: string): productColors => {
+  let colorHex = '';
   try {
-    const colorHex = chroma(colorName).hex();
-    return {
-      id: uuidv4(),
-      colorName,
-      colorHex
-    };
-  } catch (e) {
-    return null;
-  }
+    colorHex = chroma(colorName).hex();
+  } catch (e) {}
+  return {
+    id: uuidv4(),
+    colorName,
+    colorHex
+  };
 };
 
 export const extractColorsArray = (additionalFields: AdditionalFieldProductValues[]): string[] => {
