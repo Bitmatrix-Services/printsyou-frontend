@@ -40,7 +40,9 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
           {Object.entries(pricingTable.byRowTypeObjects).map(([priceType, prices]) => (
             <tr key={priceType} className="two">
               {priceType && priceType !== 'null' && (
-                <td className="pricecell font-bold text-left capitalize">{priceType.toLowerCase()}</td>
+                <td className="pricecell text-left capitalize" style={{fontWeight: 500}}>
+                  {priceType.toLowerCase()}
+                </td>
               )}
               {prices.map(({price, salePrice}) => (
                 <td key={price} className="pricecell">
