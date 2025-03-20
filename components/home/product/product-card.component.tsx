@@ -24,7 +24,7 @@ export const ProductCard = memo<IProductCard>(
       <div className="group relative bg-white" key={product.id}>
         <div className="ring-1 ring-mute4 hover:ring-primary-500 hover:ring-2 group rounded-2xl pt-2 md:pt-2 px-2 md:px-3">
           <Link prefetch={false} href={`/products/${product.uniqueProductName}`} className="cursor-pointer">
-            <div className="min-h-56 h-56 max-h-56 lg:min-h-46 lg:h-46 lg:max-h-46 2xl:min-h-72 2xl:h-72 2xl:max-h-72 relative hover:scale-95">
+            <div className="min-h-[14rem] h-[14rem] max-h-[14rem] md:min-h-[15rem] md:h-[15rem] md:max-h-[15rem] 2xl:min-h-[19rem] 2xl:h-[19rem] 2xl:max-h-[19rem] relative hover:scale-95">
               <ImageWithFallback
                 className="object-contain h-auto"
                 skeletonRounded={true}
