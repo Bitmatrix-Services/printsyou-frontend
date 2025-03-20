@@ -46,7 +46,7 @@ export const getProductByCategoryWithFilers = async (
 ): Promise<ApiResponse<any> | null> => {
   const {page, size, filter, maxPrice, minPrice} = searchParams;
   try {
-    let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 20}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
+    let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 24}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
     if (maxPrice && minPrice) {
       query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     }
