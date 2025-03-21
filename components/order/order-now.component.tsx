@@ -141,7 +141,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       }
     });
     setPriceTypes(strings);
-    if (strings.length > 0) {
+    if (availableDecorationTypes) {
+      setValue('selectedPriceType', availableDecorationTypes[0]?.name);
+    } else if (strings.length > 0) {
       setValue('selectedPriceType', strings[0]);
     }
     if (locations?.length > 0 && !watch('location')) {
@@ -153,7 +155,10 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     if (!locations?.length) return;
 
     const selectedLocation = locations.find(item => item.id === getValues('location'));
-    setAvailableDecorationTypes(selectedLocation?.decorations ?? locations[0].decorations);
+    setAvailableDecorationTypes(
+      selectedLocation?.decorations.sort((a, b) => a.name.localeCompare(b.name)) ??
+        locations[0].decorations.sort((a, b) => a.name.localeCompare(b.name))
+    );
   }, [watch('location'), locations]);
 
   useEffect(() => {
@@ -401,7 +406,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       return updatedFiles;
     });
   };
-
 
   return (
     <>
