@@ -138,9 +138,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     getValues
   } = methods;
 
-  console.log('availableDecorationTypessss', availableDecorationTypes);
-  console.log('priceTypesss', priceTypes);
-
   useEffect(() => {
     const types: StringItem[] = [];
 
