@@ -1,5 +1,5 @@
 'use client';
-import React, {ChangeEvent, FC, useEffect, useMemo, useState} from 'react';
+import React, {ChangeEvent, FC, memo, useEffect, useMemo, useState} from 'react';
 import {notFound, useRouter} from 'next/navigation';
 import axios, {AxiosResponse} from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
@@ -41,6 +41,11 @@ interface IOrderNowComponentProps {
   selectedProduct: Product | null;
 }
 
+type StringItem = {
+  id: string;
+  name: string;
+};
+
 const allowedImageTypes = ['jpeg', 'png', 'webp', 'gif', 'avif', 'svg+xml'];
 
 export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}) => {
@@ -49,7 +54,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
   const [apiError, setApiError] = useState<boolean>(false);
-  const [priceTypes, setPriceTypes] = useState<string[]>([]);
+  const [priceTypes, setPriceTypes] = useState<StringItem[]>([]);
   const [progress, setProgress] = useState<number>(0);
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
   const [product, setProduct] = useState<CustomProduct>({
@@ -133,19 +138,23 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     getValues
   } = methods;
 
+  console.log('availableDecorationTypessss', availableDecorationTypes);
+  console.log('priceTypesss', priceTypes);
+
   useEffect(() => {
-    const strings: string[] = [];
-    product.priceGrids.forEach(item => {
-      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null && item.priceType !== '') {
-        strings.push(item.priceType);
+    const types: StringItem[] = [];
+
+    product.priceGrids?.forEach(item => {
+      if (item.priceType && !types.some(entry => entry.name === item.priceType)) {
+        types.push({id: uuidv4(), name: item.priceType});
       }
     });
-    setPriceTypes(strings);
-    if (availableDecorationTypes) {
-      setValue('selectedPriceType', availableDecorationTypes[0]?.name);
-    } else if (strings.length > 0) {
-      setValue('selectedPriceType', strings[0]);
-    }
+    setPriceTypes(types);
+
+    const selectedPriceTypeName =
+      availableDecorationTypes.length > 0 ? availableDecorationTypes[0].name : types.length > 0 ? types[0].name : null;
+    setValue('selectedPriceType', selectedPriceTypeName);
+
     if (locations?.length > 0 && !watch('location')) {
       setValue('location', locations[0]?.id);
     }
@@ -494,21 +503,18 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     <div>
                       <div className="hidden md:grid grid-cols-3">
                         <div className="col-span-2">
-                          {availableDecorationTypes?.length > 0 ? (
-                            <>
-                              <FormHeading text="Decoration Types" />
-                              <div className="flex justify-start items-center flex-wrap gap-6 mb-5">
-                                {availableDecorationTypes.map(row => (
-                                  <div
-                                    key={row.id}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('selectedPriceType', row.name)}
-                                  >
-                                    {row.name}
-                                  </div>
-                                ))}
-                              </div>
-                            </>
+                          {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
+                            <DecorationType
+                              availableOptions={
+                                availableDecorationTypes.length > 0
+                                  ? availableDecorationTypes
+                                  : priceTypes.length > 0
+                                    ? priceTypes
+                                    : []
+                              }
+                              handleClick={(value: string) => setValue('selectedPriceType', value)}
+                              selectedValue={watch('selectedPriceType') ?? ''}
+                            />
                           ) : null}
 
                           <div className="flex justify-between items-center gap-8">
@@ -571,21 +577,18 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
 
                       <div className="md:hidden">
-                        {availableDecorationTypes?.length > 0 ? (
-                          <>
-                            <FormHeading text="Decoration Types" />
-                            <div className="flex justify-start items-center flex-wrap gap-2">
-                              {availableDecorationTypes.map(row => (
-                                <div
-                                  key={row.id}
-                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                  onClick={() => setValue('selectedPriceType', row.name)}
-                                >
-                                  {row.name}
-                                </div>
-                              ))}
-                            </div>
-                          </>
+                        {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
+                          <DecorationType
+                            availableOptions={
+                              availableDecorationTypes.length > 0
+                                ? availableDecorationTypes
+                                : priceTypes.length > 0
+                                  ? priceTypes
+                                  : []
+                            }
+                            handleClick={(value: string) => setValue('selectedPriceType', value)}
+                            selectedValue={watch('selectedPriceType') ?? ''}
+                          />
                         ) : null}
                         <div className="flex my-3">
                           <FormControlInput
@@ -976,21 +979,18 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       <div>
                         <div className="hidden tablet:grid md:grid grid-cols-3">
                           <div className="col-span-2">
-                            {availableDecorationTypes?.length > 0 ? (
-                              <>
-                                <FormHeading text="Decoration Types" />
-                                <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
-                                  {availableDecorationTypes.map(row => (
-                                    <div
-                                      key={row.id}
-                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                      onClick={() => setValue('selectedPriceType', row.name)}
-                                    >
-                                      {row.name}
-                                    </div>
-                                  ))}
-                                </div>
-                              </>
+                            {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
+                              <DecorationType
+                                availableOptions={
+                                  availableDecorationTypes.length > 0
+                                    ? availableDecorationTypes
+                                    : priceTypes.length > 0
+                                      ? priceTypes
+                                      : []
+                                }
+                                handleClick={(value: string) => setValue('selectedPriceType', value)}
+                                selectedValue={watch('selectedPriceType') ?? ''}
+                              />
                             ) : null}
 
                             <div
@@ -1250,3 +1250,26 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     </>
   );
 };
+
+interface DecorationTypeProps {
+  availableOptions: StringItem[];
+  selectedValue: string;
+  handleClick: (_: string) => void;
+}
+
+const DecorationType: FC<DecorationTypeProps> = memo(({availableOptions, selectedValue, handleClick}) => (
+  <div className='mb-3'>
+    <FormHeading text="Decoration Types" />
+    <div className="flex justify-start items-center flex-wrap gap-2">
+      {availableOptions.map(row => (
+        <div
+          key={row.id}
+          className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${selectedValue === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+          onClick={() => handleClick(row.name)}
+        >
+          {row.name}
+        </div>
+      ))}
+    </div>
+  </div>
+));
