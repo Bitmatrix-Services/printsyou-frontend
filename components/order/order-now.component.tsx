@@ -1098,7 +1098,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                         <div>
                           <label
                             htmlFor="fileInput"
-                            className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500  hover:bg-primary-600 hover:text-white capitalize"
+                            className="py-2 px-2 flex w-full lg:w-1/2 2xl:w-1/3 items-center justify-center cursor-pointer rounded-md border-2 border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white capitalize"
                           >
                             <input
                               id="fileInput"
