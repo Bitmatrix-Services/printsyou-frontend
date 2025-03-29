@@ -89,3 +89,52 @@ export interface productColors {
   onlyColorImage?: string;
   coloredProductImage?: string;
 }
+
+export interface Locations {
+  id: string;
+  externalId: string;
+  locationName: string;
+  decorationsIncluded: number;
+  defaultLocation: boolean;
+  maxDecoration: number;
+  minDecoration: number;
+  locationRank: number;
+  decorations: Decoration[];
+}
+
+export interface Decoration {
+  id: string;
+  externalId: string;
+  name: string;
+  geometry: string;
+  height: string;
+  width: string;
+  diameter: string;
+  uom: string;
+  units: number;
+  unitsMax: number;
+  charges: Charge[];
+}
+
+export interface ChargePrice {
+  id: string;
+  price: number;
+  discountCode: string;
+  repeatPrice: number;
+  repeatDiscountCode: string;
+  effectiveDate: string;
+  expiryDate: string;
+  xMinQty: number;
+  xUom: string;
+  yMinQty: number;
+  yUom: string;
+}
+
+export interface Charge {
+  id: string;
+  externalId: string;
+  name: string;
+  description: string;
+  type: string;
+  chargePrices: ChargePrice[];
+}

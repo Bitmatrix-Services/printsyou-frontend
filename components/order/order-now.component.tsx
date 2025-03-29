@@ -1,5 +1,5 @@
 'use client';
-import React, {ChangeEvent, FC, useEffect, useMemo, useState} from 'react';
+import React, {ChangeEvent, FC, memo, useEffect, useMemo, useState} from 'react';
 import {notFound, useRouter} from 'next/navigation';
 import axios, {AxiosResponse} from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
@@ -22,7 +22,7 @@ import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import dayjs from 'dayjs';
 import {FormDescription, FormHeading} from '@components/globals/cart/add-to-cart-modal.component';
 import {MaskInput} from '@lib/form/mask-input.component';
-import {PriceGrids, Product} from '@components/home/product/product.types';
+import {Decoration, Locations, PriceGrids, Product} from '@components/home/product/product.types';
 import {ReactQueryClientProvider} from '../../app/query-client-provider';
 import Image from 'next/image';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
@@ -41,6 +41,11 @@ interface IOrderNowComponentProps {
   selectedProduct: Product | null;
 }
 
+type StringItem = {
+  id: string;
+  name: string;
+};
+
 const allowedImageTypes = ['jpeg', 'png', 'webp', 'gif', 'avif', 'svg+xml'];
 
 export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}) => {
@@ -49,7 +54,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
   const [apiError, setApiError] = useState<boolean>(false);
-  const [priceTypes, setPriceTypes] = useState<string[]>([]);
+  const [priceTypes, setPriceTypes] = useState<StringItem[]>([]);
   const [progress, setProgress] = useState<number>(0);
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
   const [product, setProduct] = useState<CustomProduct>({
@@ -61,7 +66,21 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     groupedByPricing: {},
     priceTypeExists: false
   });
+  const [locations, setLocations] = useState<Locations[]>([]);
+  const [availableDecorationTypes, setAvailableDecorationTypes] = useState<Decoration[]>([]);
+
   if (!selectedProduct) notFound();
+
+  const getLocations = async () => {
+    try {
+      const {data} = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/fetchLocations/${selectedProduct.id}`
+      );
+      setLocations(data.payload);
+    } catch (err) {
+      console.log('error', err);
+    }
+  };
 
   const getInHandDateEst = () => {
     const currentDay = new Date();
@@ -103,6 +122,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       itemColor: undefined,
       size: undefined,
       selectedPriceType: null,
+      location: [],
       minQty: 0
     }
   });
@@ -119,20 +139,38 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   } = methods;
 
   useEffect(() => {
-    const strings: string[] = [];
-    product.priceGrids.forEach(item => {
-      if (strings.indexOf(item.priceType) === -1 && item.priceType !== null && item.priceType !== '') {
-        strings.push(item.priceType);
+    const types: StringItem[] = [];
+
+    product.priceGrids?.forEach(item => {
+      if (item.priceType && !types.some(entry => entry.name === item.priceType)) {
+        types.push({id: uuidv4(), name: item.priceType});
       }
     });
-    setPriceTypes(strings);
-    if (strings.length > 0) {
-      setValue('selectedPriceType', strings[0]);
+    setPriceTypes(types);
+
+    const selectedPriceTypeName =
+      availableDecorationTypes.length > 0 ? availableDecorationTypes[0].name : types.length > 0 ? types[0].name : null;
+    setValue('selectedPriceType', selectedPriceTypeName);
+
+    if (locations?.length > 0 && watch('location')?.length === 0) {
+      setValue('location', [locations[0]?.id]);
     }
-  }, [product.priceGrids, selectedProduct]);
+  }, [product.priceGrids, selectedProduct, locations]);
+
+  useEffect(() => {
+    if (!locations?.length) return;
+
+    const locationValue = getValues('location')?.[0];
+    const selectedLocation = locations.find(item => item.id === locationValue) || locations[0];
+
+    const sortedDecorations = selectedLocation?.decorations || [];
+    setAvailableDecorationTypes(sortedDecorations);
+  }, [watch('location'), locations]);
 
   useEffect(() => {
     if (selectedProduct) {
+      getLocations();
+
       // adding a new item to the cart
       const priceTypeExists = selectedProduct.priceGrids.some((item: {priceType: any}) => item.priceType);
       const priceTypesGroups: Record<string, PriceGrids[]> = {};
@@ -288,7 +326,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       ? product.groupedByPricing[getValues('selectedPriceType') as string]
       : product.sortedPrices;
 
-    const priceGrid = priceGridsFinalSelected.find(
+    const priceGrid = priceGridsFinalSelected?.find(
       (grid, index) =>
         quantity >= grid.countFrom &&
         (index === priceGridsFinalSelected.length - 1 || quantity < priceGridsFinalSelected[index + 1].countFrom)
@@ -296,6 +334,18 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
     return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
   }, [watch('itemQty'), watch('selectedPriceType'), priceTypes]);
+
+  const setupFee = useMemo(() => {
+    const selectedPriceType = getValues('selectedPriceType');
+    const setupCharge = availableDecorationTypes
+      .find(item => item.name === selectedPriceType)
+      ?.charges?.find(charge => charge.type === 'SETUP');
+
+    // multiple locations selected
+    const setupChargeTimes = (selectedPriceType?.toLowerCase() !== 'blank' && getValues('location')?.length) || 1;
+
+    return (setupCharge?.chargePrices?.[0]?.price ?? 0) * setupChargeTimes;
+  }, [watch('itemQty'), watch('selectedPriceType'), watch('location')]);
 
   const getCartId = () => {
     let cartId;
@@ -366,6 +416,31 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     });
   };
 
+  const handleLocationChange = (locationId: string) => {
+    let updateLocations = getValues('location') ?? [];
+
+    updateLocations =
+      updateLocations.includes(locationId) && updateLocations.length > 1
+        ? updateLocations.filter(item => item !== locationId)
+        : [...updateLocations, locationId];
+
+    setValue('location', updateLocations);
+  };
+
+  const getAvailableOptions = useMemo((): StringItem[] => {
+    const sorted = (items: StringItem[]) => items.sort((a, b) => a.name.localeCompare(b.name));
+
+    if (availableDecorationTypes.length > 0) {
+      const hasBlank = priceTypes.some(item => item.name.toLowerCase() === 'blank');
+      const options = hasBlank
+        ? [...availableDecorationTypes, {id: uuidv4(), name: 'Blank'}]
+        : availableDecorationTypes;
+      return sorted(options);
+    }
+
+    return priceTypes.length > 0 ? sorted(priceTypes) : [];
+  }, [availableDecorationTypes, priceTypes]);
+
   return (
     <>
       <Breadcrumb list={[]} prefixTitle="Order Now" />
@@ -430,24 +505,38 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     <div>
                       <div className="hidden md:grid grid-cols-3">
                         <div className="col-span-2">
-                          {priceTypes.length > 0 ? (
-                            <>
-                              <FormHeading text="Item Type" />
-                              <div className="flex justify-start items-center flex-wrap gap-6 mb-5">
-                                {priceTypes.map(row => (
-                                  <div
-                                    key={row}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('selectedPriceType', row)}
-                                  >
-                                    {row}
-                                  </div>
-                                ))}
-                              </div>
-                            </>
+                          {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
+                            <DecorationType
+                              availableOptions={getAvailableOptions}
+                              handleClick={(value: string) => setValue('selectedPriceType', value)}
+                              selectedValue={watch('selectedPriceType') ?? ''}
+                            />
                           ) : null}
 
-                          <div className="flex justify-between items-center gap-8">
+                          {watch('selectedPriceType')?.toLowerCase() !== 'blank' ? (
+                            <div className="hidden md:block">
+                              {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                              <div className="flex items-center flex-wrap">
+                                {locations?.length > 0 ? (
+                                  <>
+                                    <div className="flex justify-start items-center flex-wrap gap-4">
+                                      {locations.map(location => (
+                                        <div
+                                          key={location.id}
+                                          className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                          onClick={() => handleLocationChange(location.id)}
+                                        >
+                                          {location.locationName}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </>
+                                ) : null}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          <div className="flex justify-between items-center gap-8 mt-3">
                             <FormControlInput
                               fieldType="number"
                               name="itemQty"
@@ -473,7 +562,10 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               </h2>
                             ) : (
                               <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                                ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                $
+                                {(getValues('itemQty') ? getValues('itemQty') * calculatedPrice + setupFee : 0).toFixed(
+                                  2
+                                )}
                               </h2>
                             )}
                           </div>
@@ -481,25 +573,40 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
 
                       {/*  quantity pricing mobile view*/}
+
                       <div className="md:hidden">
-                        {priceTypes.length > 0 ? (
-                          <>
-                            <FormHeading text="Item Type" />
-                            <div className="flex justify-start items-center flex-wrap gap-2">
-                              {priceTypes.map(row => (
-                                <div
-                                  key={row}
-                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                  onClick={() => setValue('selectedPriceType', row)}
-                                >
-                                  {row}
-                                </div>
-                              ))}
-                            </div>
-                          </>
+                        {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
+                          <DecorationType
+                            availableOptions={getAvailableOptions}
+                            handleClick={(value: string) => setValue('selectedPriceType', value)}
+                            selectedValue={watch('selectedPriceType') ?? ''}
+                          />
                         ) : null}
-                        <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
-                        <div className="flex ">
+
+                        {watch('selectedPriceType')?.toLowerCase() !== 'blank' ? (
+                          <div className="md:hidden">
+                            {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                            <div className="flex items-center flex-wrap">
+                              {locations?.length > 0 ? (
+                                <>
+                                  <div className="flex justify-start items-center flex-wrap gap-4">
+                                    {locations.map(location => (
+                                      <div
+                                        key={location.id}
+                                        className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                        onClick={() => handleLocationChange(location.id)}
+                                      >
+                                        {location.locationName}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </>
+                              ) : null}
+                            </div>
+                          </div>
+                        ) : null}
+
+                        <div className="flex my-3">
                           <FormControlInput
                             fieldType="number"
                             name="itemQty"
@@ -521,7 +628,10 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                               </h5>
                             ) : (
                               <h5 className="text-primary-500 text-2xl font-bold">
-                                ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                $
+                                {(getValues('itemQty') ? getValues('itemQty') * calculatedPrice + setupFee : 0).toFixed(
+                                  2
+                                )}
                               </h5>
                             )}
                           </div>
@@ -864,25 +974,39 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       <div>
                         <div className="hidden tablet:grid md:grid grid-cols-3">
                           <div className="col-span-2">
-                            {priceTypes.length > 0 ? (
-                              <>
-                                <FormHeading text="Item Type" />
-                                <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
-                                  {priceTypes.map(row => (
-                                    <div
-                                      key={row}
-                                      className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                      onClick={() => setValue('selectedPriceType', row)}
-                                    >
-                                      {row}
-                                    </div>
-                                  ))}
+                            {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
+                              <DecorationType
+                                availableOptions={getAvailableOptions}
+                                handleClick={(value: string) => setValue('selectedPriceType', value)}
+                                selectedValue={watch('selectedPriceType') ?? ''}
+                              />
+                            ) : null}
+
+                            {watch('selectedPriceType')?.toLowerCase() !== 'blank' ? (
+                              <div>
+                                {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                                <div className="flex items-center flex-wrap">
+                                  {locations.length > 0 ? (
+                                    <>
+                                      <div className="flex justify-start items-center flex-wrap gap-4">
+                                        {locations.map(location => (
+                                          <div
+                                            key={location.id}
+                                            className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                            onClick={() => handleLocationChange(location.id)}
+                                          >
+                                            {location.locationName}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </>
+                                  ) : null}
                                 </div>
-                              </>
+                              </div>
                             ) : null}
 
                             <div
-                              className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} `}
+                              className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} mt-3`}
                             >
                               <FormControlInput
                                 fieldType="number"
@@ -909,56 +1033,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                 </h2>
                               ) : (
                                 <h2 className="text-primary-500 text-2xl font-bold flex justify-end items-center">
-                                  ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
+                                  $
+                                  {(getValues('itemQty')
+                                    ? getValues('itemQty') * calculatedPrice + setupFee
+                                    : 0
+                                  ).toFixed(2)}
                                 </h2>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/*  quantity pricing mobile view*/}
-                        <div className="md:hidden">
-                          {priceTypes.length > 0 ? (
-                            <>
-                              <FormHeading text="Item Type" />
-                              <div className="flex justify-start items-center flex-wrap gap-2">
-                                {priceTypes.map(row => (
-                                  <div
-                                    key={row}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('selectedPriceType') === row ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('selectedPriceType', row)}
-                                  >
-                                    {row}
-                                  </div>
-                                ))}
-                              </div>
-                            </>
-                          ) : null}
-                          <h4 className="my-3 text-lg font-semibold capitalize ">Quantity</h4>
-                          <div className="flex ">
-                            <FormControlInput
-                              fieldType="number"
-                              name="itemQty"
-                              label="Quantity"
-                              isRequired={true}
-                              disabled={isSubmitting}
-                              control={control}
-                              errors={errors}
-                              onBlur={() => trigger('itemQty')}
-                              onFocus={e => e.target.select()}
-                            />
-                          </div>
-                          <div className="flex justify-between items-center gap-2">
-                            <h4 className="my-3 text-lg font-semibold capitalize ">Sub Total</h4>
-                            <div className="">
-                              {watch('itemQty') < product?.sortedPrices[0]?.countFrom ? (
-                                <h5 className="text-red-500 text-lg lg:text-2xl font-bold">
-                                  Min Qty is {product?.sortedPrices[0].countFrom}
-                                </h5>
-                              ) : (
-                                <h5 className="text-primary-500 text-2xl font-bold">
-                                  ${(getValues('itemQty') ? getValues('itemQty') * calculatedPrice : 0).toFixed(2)}
-                                </h5>
                               )}
                             </div>
                           </div>
@@ -1182,3 +1262,26 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     </>
   );
 };
+
+interface DecorationTypeProps {
+  availableOptions: StringItem[];
+  selectedValue: string;
+  handleClick: (_: string) => void;
+}
+
+const DecorationType: FC<DecorationTypeProps> = memo(({availableOptions, selectedValue, handleClick}) => (
+  <>
+    <FormHeading text="Decoration Types" />
+    <div className="flex justify-start items-center flex-wrap gap-2">
+      {availableOptions.map(row => (
+        <div
+          key={row.id}
+          className={`px-3 py-2 cursor-pointer text-sm border rounded-md uppercase ${selectedValue === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+          onClick={() => handleClick(row.name)}
+        >
+          {row.name}
+        </div>
+      ))}
+    </div>
+  </>
+));
