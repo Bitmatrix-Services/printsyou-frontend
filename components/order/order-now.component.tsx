@@ -275,12 +275,11 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         reset();
       }, 2000);
     },
-    onError: (error) => {
-        console.log('error',error);
+    onError: () => {
       setTimeout(() => {
         setLoading(false);
-        // setIsSuccessModalOpen('error');
-        // setApiError(true);
+        setIsSuccessModalOpen('error');
+        setApiError(true);
       }, 2000);
     }
   });
