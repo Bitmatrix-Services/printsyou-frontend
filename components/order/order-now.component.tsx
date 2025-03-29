@@ -122,7 +122,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       itemColor: undefined,
       size: undefined,
       selectedPriceType: null,
-      location: null,
+      location: [],
       minQty: 0
     }
   });
@@ -152,19 +152,19 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       availableDecorationTypes.length > 0 ? availableDecorationTypes[0].name : types.length > 0 ? types[0].name : null;
     setValue('selectedPriceType', selectedPriceTypeName);
 
-    if (locations?.length > 0 && !watch('location')) {
-      setValue('location', locations[0]?.id);
+    if (locations?.length > 0 && watch('location')?.length === 0) {
+      setValue('location', [locations[0]?.id]);
     }
   }, [product.priceGrids, selectedProduct, locations]);
 
   useEffect(() => {
     if (!locations?.length) return;
 
-    const selectedLocation = locations.find(item => item.id === getValues('location'));
-    setAvailableDecorationTypes(
-      selectedLocation?.decorations.sort((a, b) => a.name.localeCompare(b.name)) ??
-        locations[0].decorations.sort((a, b) => a.name.localeCompare(b.name))
-    );
+    const locationValue = getValues('location')?.[0];
+    const selectedLocation = locations.find(item => item.id === locationValue) || locations[0];
+
+    const sortedDecorations = selectedLocation?.decorations || [];
+    setAvailableDecorationTypes(sortedDecorations);
   }, [watch('location'), locations]);
 
   useEffect(() => {
@@ -326,7 +326,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       ? product.groupedByPricing[getValues('selectedPriceType') as string]
       : product.sortedPrices;
 
-    const priceGrid = priceGridsFinalSelected.find(
+    const priceGrid = priceGridsFinalSelected?.find(
       (grid, index) =>
         quantity >= grid.countFrom &&
         (index === priceGridsFinalSelected.length - 1 || quantity < priceGridsFinalSelected[index + 1].countFrom)
@@ -341,7 +341,10 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       .find(item => item.name === selectedPriceType)
       ?.charges?.find(charge => charge.type === 'SETUP');
 
-    return setupCharge?.chargePrices?.[0]?.price || 0;
+    // multiple locations selected
+    const setupChargeTimes = (selectedPriceType?.toLowerCase() !== 'blank' && getValues('location')?.length) || 1;
+
+    return (setupCharge?.chargePrices?.[0]?.price ?? 0) * setupChargeTimes;
   }, [watch('itemQty'), watch('selectedPriceType'), watch('location')]);
 
   const getCartId = () => {
@@ -413,6 +416,31 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     });
   };
 
+  const handleLocationChange = (locationId: string) => {
+    let updateLocations = getValues('location') ?? [];
+
+    updateLocations =
+      updateLocations.includes(locationId) && updateLocations.length > 1
+        ? updateLocations.filter(item => item !== locationId)
+        : [...updateLocations, locationId];
+
+    setValue('location', updateLocations);
+  };
+
+  const getAvailableOptions = useMemo((): StringItem[] => {
+    const sorted = (items: StringItem[]) => items.sort((a, b) => a.name.localeCompare(b.name));
+
+    if (availableDecorationTypes.length > 0) {
+      const hasBlank = priceTypes.some(item => item.name.toLowerCase() === 'blank');
+      const options = hasBlank
+        ? [...availableDecorationTypes, {id: uuidv4(), name: 'Blank'}]
+        : availableDecorationTypes;
+      return sorted(options);
+    }
+
+    return priceTypes.length > 0 ? sorted(priceTypes) : [];
+  }, [availableDecorationTypes, priceTypes]);
+
   return (
     <>
       <Breadcrumb list={[]} prefixTitle="Order Now" />
@@ -474,47 +502,41 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       </div>
                     ) : null}
 
-                    <div className="hidden md:block">
-                      {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
-                      <div className="flex items-center flex-wrap">
-                        {locations?.length > 0 ? (
-                          <>
-                            <div className="flex justify-start items-center flex-wrap gap-4">
-                              {locations.map(location => (
-                                <div
-                                  key={location.id}
-                                  className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location') === location.id ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                  onClick={() => {
-                                    setValue('location', location.id);
-                                  }}
-                                >
-                                  {location.locationName}
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        ) : null}
-                      </div>
-                    </div>
-
                     <div>
                       <div className="hidden md:grid grid-cols-3">
                         <div className="col-span-2">
                           {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
                             <DecorationType
-                              availableOptions={
-                                availableDecorationTypes.length > 0
-                                  ? availableDecorationTypes
-                                  : priceTypes.length > 0
-                                    ? priceTypes
-                                    : []
-                              }
+                              availableOptions={getAvailableOptions}
                               handleClick={(value: string) => setValue('selectedPriceType', value)}
                               selectedValue={watch('selectedPriceType') ?? ''}
                             />
                           ) : null}
 
-                          <div className="flex justify-between items-center gap-8">
+                          {watch('selectedPriceType')?.toLowerCase() !== 'blank' ? (
+                            <div className="hidden md:block">
+                              {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                              <div className="flex items-center flex-wrap">
+                                {locations?.length > 0 ? (
+                                  <>
+                                    <div className="flex justify-start items-center flex-wrap gap-4">
+                                      {locations.map(location => (
+                                        <div
+                                          key={location.id}
+                                          className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                          onClick={() => handleLocationChange(location.id)}
+                                        >
+                                          {location.locationName}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </>
+                                ) : null}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          <div className="flex justify-between items-center gap-8 mt-3">
                             <FormControlInput
                               fieldType="number"
                               name="itemQty"
@@ -553,40 +575,37 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       {/*  quantity pricing mobile view*/}
 
                       <div className="md:hidden">
-                        {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
-                        <div className="flex items-center flex-wrap">
-                          {locations?.length > 0 ? (
-                            <>
-                              <div className="flex justify-start items-center flex-wrap gap-4">
-                                {locations.map(location => (
-                                  <div
-                                    key={location.id}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location') === location.id ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('location', location.id)}
-                                  >
-                                    {location.locationName}
-                                  </div>
-                                ))}
-                              </div>
-                            </>
-                          ) : null}
-                        </div>
-                      </div>
-
-                      <div className="md:hidden">
                         {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
                           <DecorationType
-                            availableOptions={
-                              availableDecorationTypes.length > 0
-                                ? availableDecorationTypes
-                                : priceTypes.length > 0
-                                  ? priceTypes
-                                  : []
-                            }
+                            availableOptions={getAvailableOptions}
                             handleClick={(value: string) => setValue('selectedPriceType', value)}
                             selectedValue={watch('selectedPriceType') ?? ''}
                           />
                         ) : null}
+
+                        {watch('selectedPriceType')?.toLowerCase() !== 'blank' ? (
+                          <div className="md:hidden">
+                            {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                            <div className="flex items-center flex-wrap">
+                              {locations?.length > 0 ? (
+                                <>
+                                  <div className="flex justify-start items-center flex-wrap gap-4">
+                                    {locations.map(location => (
+                                      <div
+                                        key={location.id}
+                                        className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                        onClick={() => handleLocationChange(location.id)}
+                                      >
+                                        {location.locationName}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </>
+                              ) : null}
+                            </div>
+                          </div>
+                        ) : null}
+
                         <div className="flex my-3">
                           <FormControlInput
                             fieldType="number"
@@ -953,45 +972,41 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       ) : null}
 
                       <div>
-                        {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
-                        <div className="flex items-center flex-wrap">
-                          {locations.length > 0 ? (
-                            <>
-                              <div className="flex justify-start items-center flex-wrap gap-4">
-                                {locations.map(location => (
-                                  <div
-                                    key={location.id}
-                                    className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location') === location.id ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
-                                    onClick={() => setValue('location', location.id)}
-                                  >
-                                    {location.locationName}
-                                  </div>
-                                ))}
-                              </div>
-                            </>
-                          ) : null}
-                        </div>
-                      </div>
-
-                      <div>
                         <div className="hidden tablet:grid md:grid grid-cols-3">
                           <div className="col-span-2">
                             {availableDecorationTypes?.length > 0 || priceTypes?.length > 0 ? (
                               <DecorationType
-                                availableOptions={
-                                  availableDecorationTypes.length > 0
-                                    ? availableDecorationTypes
-                                    : priceTypes.length > 0
-                                      ? priceTypes
-                                      : []
-                                }
+                                availableOptions={getAvailableOptions}
                                 handleClick={(value: string) => setValue('selectedPriceType', value)}
                                 selectedValue={watch('selectedPriceType') ?? ''}
                               />
                             ) : null}
 
+                            {watch('selectedPriceType')?.toLowerCase() !== 'blank' ? (
+                              <div>
+                                {locations?.length > 0 ? <FormHeading text="Locations" /> : null}
+                                <div className="flex items-center flex-wrap">
+                                  {locations.length > 0 ? (
+                                    <>
+                                      <div className="flex justify-start items-center flex-wrap gap-4">
+                                        {locations.map(location => (
+                                          <div
+                                            key={location.id}
+                                            className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                            onClick={() => handleLocationChange(location.id)}
+                                          >
+                                            {location.locationName}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </>
+                                  ) : null}
+                                </div>
+                              </div>
+                            ) : null}
+
                             <div
-                              className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} `}
+                              className={`${priceTypes.length > 0 ? 'col-span-1 flex justify-between items-center gap-8' : 'grid col-span-2'} mt-3`}
                             >
                               <FormControlInput
                                 fieldType="number"
@@ -1255,18 +1270,18 @@ interface DecorationTypeProps {
 }
 
 const DecorationType: FC<DecorationTypeProps> = memo(({availableOptions, selectedValue, handleClick}) => (
-  <div className='mb-3'>
+  <>
     <FormHeading text="Decoration Types" />
     <div className="flex justify-start items-center flex-wrap gap-2">
       {availableOptions.map(row => (
         <div
           key={row.id}
-          className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${selectedValue === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+          className={`px-3 py-2 cursor-pointer text-sm border rounded-md uppercase ${selectedValue === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
           onClick={() => handleClick(row.name)}
         >
           {row.name}
         </div>
       ))}
     </div>
-  </div>
+  </>
 ));

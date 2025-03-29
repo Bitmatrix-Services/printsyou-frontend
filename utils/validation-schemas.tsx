@@ -1,4 +1,4 @@
-import {boolean, InferType, number, object, ref, string} from 'yup';
+import {array, boolean, InferType, number, object, ref, string} from 'yup';
 
 export const contactUsSchema = object({
   fullName: string().required('Please enter your name'),
@@ -130,7 +130,7 @@ export const orderNowSchema = object({
     .positive()
     .min(ref('minQty'), 'Quantity must be greater than or equal to minimum quantity'),
   selectedPriceType: string().notRequired(),
-  location: string().notRequired(),
+  location: array().notRequired(),
   minQty: number().optional()
 });
 
