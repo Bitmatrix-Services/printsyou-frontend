@@ -1285,3 +1285,4 @@ const DecorationType: FC<DecorationTypeProps> = memo(({availableOptions, selecte
     </div>
   </>
 ));
+DecorationType.displayName = 'DecorationType';
