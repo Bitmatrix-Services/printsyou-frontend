@@ -263,7 +263,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       delete orderData.minQty;
 
       //@ts-ignore
-      gtag_report_conversion('https://printsyou.com/order-now');
+      // gtag_report_conversion('https://printsyou.com/order-now');
 
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/create-order`, orderData);
     },
@@ -275,11 +275,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         reset();
       }, 2000);
     },
-    onError: () => {
+    onError: (error) => {
+        console.log('error',error);
       setTimeout(() => {
         setLoading(false);
-        setIsSuccessModalOpen('error');
-        setApiError(true);
+        // setIsSuccessModalOpen('error');
+        // setApiError(true);
       }, 2000);
     }
   });
