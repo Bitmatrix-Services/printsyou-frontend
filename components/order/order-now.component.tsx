@@ -523,7 +523,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                       {locations.map(location => (
                                         <div
                                           key={location.id}
-                                          className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                          className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-primary-500 bg-primary-500/40' : 'border-gray-500'}`}
                                           onClick={() => handleLocationChange(location.id)}
                                         >
                                           {location.locationName}
@@ -593,7 +593,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                     {locations.map(location => (
                                       <div
                                         key={location.id}
-                                        className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                        className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-primary-500 bg-primary-500/40' : 'border-gray-500'}`}
                                         onClick={() => handleLocationChange(location.id)}
                                       >
                                         {location.locationName}
@@ -992,7 +992,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                         {locations.map(location => (
                                           <div
                                             key={location.id}
-                                            className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+                                            className={`px-3 py-2 cursor-pointer text-sm border rounded-md ${watch('location')?.includes(location.id) ? 'border-primary-500 bg-primary-500/40' : 'border-gray-500'}`}
                                             onClick={() => handleLocationChange(location.id)}
                                           >
                                             {location.locationName}
@@ -1276,7 +1276,7 @@ const DecorationType: FC<DecorationTypeProps> = memo(({availableOptions, selecte
       {availableOptions.map(row => (
         <div
           key={row.id}
-          className={`px-3 py-2 cursor-pointer text-sm border rounded-md uppercase ${selectedValue === row.name ? 'border-green-400 bg-green-200' : 'border-gray-400 bg-gray-100'}`}
+          className={`px-3 py-2 cursor-pointer text-sm border rounded-md uppercase ${selectedValue === row.name ? 'border-primary-500 bg-primary-500/40' : 'border-gray-500'}`}
           onClick={() => handleClick(row.name)}
         >
           {row.name}
