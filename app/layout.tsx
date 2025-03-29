@@ -46,6 +46,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
               id="parttown-script"
               dangerouslySetInnerHTML={{
                 __html: ` partytown = {
+                lib: "/_next/static/~partytown/",
                 forward: [
                 'chatwootSettings',
                 'chatwootSDK.run',
@@ -55,8 +56,9 @@ export default async function RootLayout({children}: PropsWithChildren) {
               }}
             ></Script>
             {/* Google Tag Manager - Lazy Load */}
-            <Script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script type="text/partytown" strategy="worker" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
             <Script
+                async={true}
               id="gtag-integration"
               type="text/partytown"
               dangerouslySetInnerHTML={{
