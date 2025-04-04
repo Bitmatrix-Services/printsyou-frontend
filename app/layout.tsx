@@ -56,11 +56,10 @@ export default async function RootLayout({children}: PropsWithChildren) {
               }}
             ></Script>
             {/* Google Tag Manager - Lazy Load */}
-            <Script type="text/partytown" strategy="worker" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script strategy="worker" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
             <Script
-                async={true}
+              async={true}
               id="gtag-integration"
-              type="text/partytown"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
@@ -72,7 +71,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
             />
             <Script
               id="gtag-conversion"
-              type="text/partytown"
               dangerouslySetInnerHTML={{
                 __html: `
                   function gtag_report_conversion(url) {
