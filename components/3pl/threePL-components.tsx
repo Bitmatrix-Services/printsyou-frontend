@@ -388,19 +388,32 @@ export const ThreePLServicesDetails = () => {
                 {/* Call to Action */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white text-center">
                     <h2 className="text-3xl font-bold mb-4">Ready to Streamline Your Fulfillment?</h2>
-                    <p className="text-xl mb-6 opacity-90">Join hundreds of businesses who trust us with their 3PL needs.</p>
+                    <p className="text-xl mb-6 opacity-90">Join hundreds of businesses who trust us with their 3PL
+                        needs.</p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="bg-white text-blue-600 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors text-lg">
-                            <a href="/contact-us">Get Quote Now</a>
-                        </button>
-                        <button className="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-colors text-lg">
-                            📞 <Link href="tel:4694347035">Call (469) 434-7035</Link>
-                        </button>
-                    </div>
+                        <a href="/contact-us"
+                           className="bg-white text-blue-600 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors text-lg">Get
+                            Quote Now</a>
+                        <a href="https://wa.me/14694347035" target="_blank" rel="noopener noreferrer"
+                           className="flex items-center justify-center gap-2 bg-green-500 border-2 border-green-500 text-white font-bold py-4 px-8 rounded-lg hover:bg-green-600 hover:border-green-600 transition-colors text-lg"
+                           aria-label="Chat with us on WhatsApp">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                 className="w-6 h-6">
+                                <path
+                                    d="M12 .5C5.73.5.5 5.73.5 12c0 2.11.55 4.08 1.6 5.86L.5 23.5l5.79-1.55A11.46 11.46 0 0012 23.5c6.27 0 11.5-5.23 11.5-11.5S18.27.5 12 .5zm0 20.77c-1.88 0-3.71-.5-5.3-1.44l-.38-.22-3.44.92.92-3.36-.25-.39a9.5 9.5 0 01-1.47-5.18c0-5.27 4.28-9.55 9.55-9.55s9.55 4.28 9.55 9.55-4.28 9.55-9.55 9.55zm5.43-7.13c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15s-.77.97-.95 1.18c-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.5-1.76-1.68-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5-.17 0-.37-.02-.57-.02s-.52.07-.8.37c-.27.3-1.05 1.02-1.05 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.2 5.07 4.49.71.3 1.27.47 1.7.6.72.23 1.37.2 1.88.12.57-.08 1.76-.72 2.01-1.41.25-.7.25-1.3.17-1.41-.07-.1-.27-.17-.57-.32z"/>
+                            </svg>
+                            WhatsApp (469) 434-7035
+                        </a>
+                        <a href="tel:14694347035"
+                           className="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-colors text-lg">📞
+                            Call (469) 434-7035</a>
+
                 </div>
-            </Container>
-        </section>
-    );
+            </div>
+        </Container>
+</section>
+)
+    ;
 };
 
 export default ThreePLServicesDetails;
