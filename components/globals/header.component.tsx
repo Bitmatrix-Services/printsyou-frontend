@@ -42,16 +42,19 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                   <Image width={200} height={38} className="object-contain" src="/assets/logo-full.png" alt="logo" />
                 </Link>
               </div>
-              <div className="flex items-center gap-5 md:gap-2">
+              <div className="flex items-center gap-6 md:gap-2">
                   <div className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer">
-                  <RiWhatsappFill size={22} color="#25d366" />
+                      <Link  href="https://wa.me/14694347035"
+                             target="_blank">
+                          <RiWhatsappFill size={30} color="#25d366" />
+                      </Link>
                   <span className="hidden md:block">WhatsApp</span>
                 </div>
 
                 <div className="">
                   <Link href="tel:4694347035">
                     <div className="flex items-center gap-1 font-semibold hover:text-primary ">
-                      <TfiHeadphoneAlt size={20} color="#019ce0" />
+                      <TfiHeadphoneAlt size={30} color="#019ce0" />
                       <span className="hidden md:block">(469) 434-7035</span>
                     </div>
                   </Link>
