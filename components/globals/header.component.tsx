@@ -43,17 +43,9 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                 </Link>
               </div>
               <div className="flex items-center gap-5 md:gap-2">
-                <div
-                  className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer"
-                  onClick={() => {
-                    if (typeof window !== undefined && '$chatwoot' in window) {
-                      // @ts-ignore
-                      window.$chatwoot.toggle();
-                    }
-                  }}
-                >
-                  <IoChatbubblesOutline size={22} color="#019ce0" />
-                  <span className="hidden md:block">Chat with Us</span>
+                  <div className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer">
+                  <RiWhatsappFill size={22} color="#25d366" />
+                  <span className="hidden md:block">WhatsApp</span>
                 </div>
 
                 <div className="">
