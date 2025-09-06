@@ -137,7 +137,7 @@ export const ThreePLServicesDetails = () => {
 
                         {/* CTA Button */}
                         <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg">
-                            Get a Quote 🚀
+                            <a href="/contact-us">Get a Quote 🚀</a>
                         </button>
                     </div>
 
@@ -393,7 +393,7 @@ export const ThreePLServicesDetails = () => {
                             <a href="/contact-us">Get Quote Now</a>
                         </button>
                         <button className="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white hover:text-blue-600 transition-colors text-lg">
-                            📞 Call (469) 434-7035
+                            📞 <Link href="tel:4694347035">Call (469) 434-7035</Link>
                         </button>
                     </div>
                 </div>
