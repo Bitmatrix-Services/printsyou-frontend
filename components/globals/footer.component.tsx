@@ -89,7 +89,8 @@ FooterLinks.displayName = 'FooterLinks';
 
 const helpList: listType[] = [
   {name: 'how to order', url: '/how-to-order'},
-  {name: 'blogs', url: '/blog'}
+  {name: 'blogs', url: '/blog'},
+  {name: '3PL + Fulfillment', url: '/3pl'}
 ];
 
 const companyList: listType[] = [

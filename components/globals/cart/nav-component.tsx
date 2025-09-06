@@ -19,7 +19,8 @@ const navList: listType[] = [
   // {name: 'shop by', url: '/how-to-order', menuItems: [{name: 'USA only', url: '/'}]},
   {name: 'About Us', url: '/about-us'},
   {name: 'Contact Us', url: '/contact-us'},
-  {name: 'blogs', url: '/blog'}
+  {name: 'blogs', url: '/blog'},
+  {name: '3PL + Fulfillment', url: '/3pl'}
 ];
 
 export const NavComponent: FC<INavComponentProps> = ({categories}) => {

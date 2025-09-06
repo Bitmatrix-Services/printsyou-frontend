@@ -1,11 +1,8 @@
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
-import {AboutPrintsYouSection} from '@components/about-us/about-prints-you-section.component';
-import {HeadlineSection} from '@components/about-us/headline-section.component';
-import {IconBoxesSection} from '@components/about-us/icon-boxes.section.component';
-import {OffersSection} from '@components/about-us/offers-section.component';
+import {ThreePLServicesDetails} from '@components/3pl/threePL-components';
 import React from 'react';
 
-export const AboutUsComponent = () => {
+export const ThreePLComponent = () => {
   return (
     <>
       <script
@@ -42,11 +39,8 @@ export const AboutUsComponent = () => {
           })
         }}
       />
-      <Breadcrumb list={[]} prefixTitle="About Us" />
-      <AboutPrintsYouSection />
-      <HeadlineSection />
-      <IconBoxesSection />
-      <OffersSection />
+      <Breadcrumb list={[]} prefixTitle="3PL + Fulfillment" />
+      <ThreePLServicesDetails />
     </>
   );
 };

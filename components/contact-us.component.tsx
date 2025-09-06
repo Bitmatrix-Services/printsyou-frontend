@@ -77,7 +77,7 @@ export const ContactUsComponent = () => {
             email: 'info@printsyou.com',
             url: 'https://printsYou.com',
             logo: 'https://printsyou.com/assets/logo-full.png',
-            telephone: '+1-888-299-2940',
+            telephone: '+1-469-434-7035',
             address: {
               '@type': 'PostalAddress',
               streetAddress: '8602 Royal Star Rd',
@@ -89,8 +89,8 @@ export const ContactUsComponent = () => {
             sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
             contactPoint: {
               '@type': 'ContactPoint',
-              telephone: '+1-888-299-2940',
-              contactOption: 'TollFree',
+              telephone: '+1-469-434-7035',
+              contactOption: 'Phone',
               contactType: 'customer service',
               areaServed: 'US',
               availableLanguage: ['English'],

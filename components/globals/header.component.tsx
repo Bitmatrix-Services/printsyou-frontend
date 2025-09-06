@@ -56,10 +56,10 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                 </div>
 
                 <div className="">
-                  <Link href="tel:8882992940">
+                  <Link href="tel:4694347035">
                     <div className="flex items-center gap-1 font-semibold hover:text-primary ">
                       <TfiHeadphoneAlt size={20} color="#019ce0" />
-                      <span className="hidden md:block">(888) 299-2940</span>
+                      <span className="hidden md:block">(469) 434-7035</span>
                     </div>
                   </Link>
                 </div>
@@ -98,10 +98,10 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             </div>
           </div>
 
-          <Link href="tel:8882992940" className="hidden lg:flex items-center justify-end gap-1">
+          <Link href="tel:4694347035" className="hidden lg:flex items-center justify-end gap-1">
             <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
               <TfiHeadphoneAlt size={20} color="#019ce0" />
-              <span>Toll Free (888) 299-2940</span>
+              <span>(469) 434-7035</span>
             </div>
           </Link>
         </header>
