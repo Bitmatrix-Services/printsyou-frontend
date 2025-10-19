@@ -135,7 +135,8 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     watch,
     setValue,
     trigger,
-    getValues
+    getValues,
+    clearErrors
   } = methods;
 
   useEffect(() => {
@@ -247,11 +248,11 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         .catch(() => {});
 
       // creating order
-      let orderData: any = {
-        ...data,
-        shippingAddressSame: data.shippingAddress.shippingAddressSame,
-        cartId: cartId
-      };
+      let orderData: any = structuredClone(data);
+
+      orderData.shippingAddressSame = data.shippingAddress.shippingAddressSame;
+      orderData.cartId = cartId;
+      
       delete orderData.newsLetter;
       delete orderData.shippingAddress.shippingAddressSame;
       delete orderData.termsAndConditions;
@@ -846,6 +847,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                 phoneNumber: '',
                                 shippingAddressSame: true
                               });
+                              clearErrors(['shippingAddress.fullname', 'shippingAddress.addressLineOne', 'shippingAddress.city', 'shippingAddress.state', 'shippingAddress.zipCode']);
                             }
                           }}
                         >
