@@ -252,7 +252,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
       orderData.shippingAddressSame = data.shippingAddress.shippingAddressSame;
       orderData.cartId = cartId;
-      
+
       delete orderData.newsLetter;
       delete orderData.shippingAddress.shippingAddressSame;
       delete orderData.termsAndConditions;
@@ -847,7 +847,13 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                                 phoneNumber: '',
                                 shippingAddressSame: true
                               });
-                              clearErrors(['shippingAddress.fullname', 'shippingAddress.addressLineOne', 'shippingAddress.city', 'shippingAddress.state', 'shippingAddress.zipCode']);
+                              clearErrors([
+                                'shippingAddress.fullname',
+                                'shippingAddress.addressLineOne',
+                                'shippingAddress.city',
+                                'shippingAddress.state',
+                                'shippingAddress.zipCode'
+                              ]);
                             }
                           }}
                         >

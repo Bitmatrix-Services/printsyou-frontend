@@ -8,10 +8,10 @@ import {Category} from '@components/home/home.types';
 import React, {FC, useState} from 'react';
 import {GiHamburgerMenu} from 'react-icons/gi';
 import Drawer from '@mui/joy/Drawer';
-import {IoChatbubblesOutline, IoClose} from 'react-icons/io5';
+import {IoClose} from 'react-icons/io5';
 import {DialogContent} from '@mui/joy';
 import {TfiHeadphoneAlt} from 'react-icons/tfi';
-import {RiWhatsappFill} from "react-icons/ri";
+import {RiWhatsappFill} from 'react-icons/ri';
 
 interface IHeaderProps {
   categories: Category[];
@@ -43,11 +43,10 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                 </Link>
               </div>
               <div className="flex items-center gap-6 md:gap-2">
-                  <div className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer">
-                      <Link  href="https://wa.me/14694347035"
-                             target="_blank">
-                          <RiWhatsappFill size={30} color="#25d366" />
-                      </Link>
+                <div className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer">
+                  <Link href="https://wa.me/14694347035" target="_blank">
+                    <RiWhatsappFill size={30} color="#25d366" />
+                  </Link>
                   <span className="hidden md:block">WhatsApp</span>
                 </div>
 
@@ -93,14 +92,17 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
           {/*    <span>Chat with Us</span>*/}
           {/*  </div>*/}
           {/*</div>*/}
-            <Link  href="https://wa.me/14694347035"
-                      target="_blank"
-                      rel="noopener noreferrer" className="hidden lg:flex items-center justify-end gap-1 ml-2 mr-2">
-                <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
-                    <RiWhatsappFill size={20} color="#25d366" />
-                    <span>WhatsApp</span>
-                </div>
-            </Link>
+          <Link
+            href="https://wa.me/14694347035"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:flex items-center justify-end gap-1 ml-2 mr-2"
+          >
+            <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
+              <RiWhatsappFill size={20} color="#25d366" />
+              <span>WhatsApp</span>
+            </div>
+          </Link>
 
           <Link href="tel:4694347035" className="hidden lg:flex items-center justify-end gap-1">
             <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">
