@@ -4,8 +4,7 @@ import {notFound, useRouter} from 'next/navigation';
 import axios, {AxiosResponse} from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
-import {shippingFormFields, statesList} from '@utils/constants';
-import {Radio, RadioGroup} from '@mui/joy';
+import {statesList} from '@utils/constants';
 import {IoClose} from 'react-icons/io5';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {Controller, FormProvider, SubmitHandler, useForm} from 'react-hook-form';
@@ -100,17 +99,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         zipCode: '',
         phoneNumber: ''
       },
-      shippingAddress: {
-        fullname: '',
-        company: '',
-        addressLineOne: '',
-        addressLineTwo: '',
-        city: '',
-        state: 'NONE',
-        zipCode: '',
-        phoneNumber: '',
-        shippingAddressSame: true
-      },
       emailAddress: '',
       inHandDate: getInHandDateEst(),
       salesRep: '',
@@ -135,8 +123,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     watch,
     setValue,
     trigger,
-    getValues,
-    clearErrors
+    getValues
   } = methods;
 
   useEffect(() => {
@@ -245,16 +232,17 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       await axios
         .post(`${API_BASE_URL}/cart/add?cartId=${cartId}`, cartData)
         .then((_: AxiosResponse) => {})
-        .catch(() => {});
+        .catch(err => {
+          throw err;
+        });
 
       // creating order
       let orderData: any = structuredClone(data);
 
-      orderData.shippingAddressSame = data.shippingAddress.shippingAddressSame;
+      orderData.shippingAddressSame = true;
       orderData.cartId = cartId;
 
       delete orderData.newsLetter;
-      delete orderData.shippingAddress.shippingAddressSame;
       delete orderData.termsAndConditions;
       delete orderData.itemQty;
       delete orderData.imprintColor;
@@ -738,7 +726,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                   </div>
                 </div>
                 <div className="w-full">
-                  <FormHeading text="Billing Information" />
+                  <FormHeading text="Shipping Information" />
                   <div className="grid md:grid-cols-2 gap-6">
                     <FormControlInput
                       label="Your Name"
@@ -824,98 +812,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                       />
                     </div>
                   </div>
-                  <FormHeading text="Shipping Information" />
-                  <div className="flex flex-col gap-2">
-                    <Controller
-                      name="shippingAddress.shippingAddressSame"
-                      control={control}
-                      render={({field: {onChange, value, ...otherProps}}) => (
-                        <RadioGroup
-                          value={value}
-                          {...otherProps}
-                          onChange={e => {
-                            onChange(e.target.value === 'true');
-                            if (e.target.value === 'true') {
-                              setValue('shippingAddress', {
-                                fullname: '',
-                                company: '',
-                                addressLineOne: '',
-                                addressLineTwo: '',
-                                city: '',
-                                state: 'NONE',
-                                zipCode: '',
-                                phoneNumber: '',
-                                shippingAddressSame: true
-                              });
-                              clearErrors([
-                                'shippingAddress.fullname',
-                                'shippingAddress.addressLineOne',
-                                'shippingAddress.city',
-                                'shippingAddress.state',
-                                'shippingAddress.zipCode'
-                              ]);
-                            }
-                          }}
-                        >
-                          <Radio
-                            value="true"
-                            label="Same as my billing address"
-                            variant="outlined"
-                            checked={value === true}
-                          />
-                          <Radio
-                            value="false"
-                            label="Different shipping address"
-                            variant="outlined"
-                            checked={value === false}
-                          />
-                        </RadioGroup>
-                      )}
-                    />
-                  </div>
-                  {!watch('shippingAddress.shippingAddressSame') && (
-                    <div className="grid md:grid-cols-2 gap-6 mt-6">
-                      {shippingFormFields.map(field =>
-                        field.label === 'State' ? (
-                          <FormControlSelect
-                            key={field.name}
-                            name={field.name}
-                            label={field.label}
-                            isRequired={field.required}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                          >
-                            {statesList.map(state => (
-                              <Option key={state.name} value={state.value}>
-                                {state.name}
-                              </Option>
-                            ))}
-                          </FormControlSelect>
-                        ) : field.label === 'Phone' ? (
-                          <MaskInput
-                            key={field.name}
-                            name={field.name}
-                            label={field.label}
-                            isRequired={field.required}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                          />
-                        ) : (
-                          <FormControlInput
-                            key={field.name}
-                            name={field.name}
-                            label={field.label}
-                            isRequired={field.required}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                          />
-                        )
-                      )}
-                    </div>
-                  )}
                   <FormHeading text="Payment Information" />
 
                   <ul className="list-disc ml-4">

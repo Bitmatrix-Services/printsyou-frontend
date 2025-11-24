@@ -82,38 +82,6 @@ export const orderNowSchema = object({
     phoneNumber: string().nullable()
   }),
 
-  shippingAddress: object({
-    shippingAddressSame: boolean().default(true).required(),
-    fullname: string().when('shippingAddressSame', {
-      is: false,
-      then: schema => schema.required('Please enter name'),
-      otherwise: schema => schema.nullable()
-    }),
-    company: string().optional(),
-    addressLineOne: string().when('shippingAddressSame', {
-      is: false,
-      then: schema => schema.required('Please enter address'),
-      otherwise: schema => schema.nullable()
-    }),
-    addressLineTwo: string().optional(),
-    city: string().when('shippingAddressSame', {
-      is: false,
-      then: schema => schema.required('Please enter city'),
-      otherwise: schema => schema.nullable()
-    }),
-    state: string().when('shippingAddressSame', {
-      is: false,
-      then: schema => schema.required('Please enter state')
-      // otherwise: schema => schema.nullable()
-    }),
-    zipCode: string().when('shippingAddressSame', {
-      is: false,
-      then: schema => schema.required('Please enter zip code'),
-      otherwise: schema => schema.nullable()
-    }),
-    phoneNumber: string().nullable()
-  }),
-
   inHandDate: string().optional(),
   salesRep: string().optional(),
   additionalInformation: string().optional(),
