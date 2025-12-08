@@ -21,7 +21,7 @@ const ldJsonData = [
       postalCode: '75089',
       addressCountry: 'US'
     },
-    sameAs: ['https://www.facebook.com/PrintsYouPromotional', 'https://www.linkedin.com/company/printsyou'],
+    sameAs: ['https://www.facebook.com/printsyoupromo', 'https://www.linkedin.com/company/printsyou'],
     contactPoint: {
       '@type': 'ContactPoint',
       telephone: '+1-469-434-7035',
