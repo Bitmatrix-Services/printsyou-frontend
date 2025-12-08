@@ -105,7 +105,7 @@ const supportList: listType[] = [{name: 'help center', url: '/'}];
 const social = [
   {
     name: 'Facebook',
-    href: 'https://www.facebook.com/PrintsYouPromotional',
+    href: 'https://www.facebook.com/printsyoupromo',
     icon: (props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) => (
       <svg fill="black" viewBox="0 0 24 24" {...props}>
         <path
