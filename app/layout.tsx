@@ -70,7 +70,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '850875120645150');
+            fbq('init', '852560867505438');
             fbq('track', 'PageView');
           `,
                 }}
