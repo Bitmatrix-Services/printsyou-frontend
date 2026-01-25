@@ -26,7 +26,7 @@
     "chroma-js": "^3.1.1",
     "dayjs": "^1.11.12",
     "lightgallery": "^2.7.2",
-    "next": "15.1.5",
+    "next": "15.1.11",
     "nextjs-toploader": "^3.7.15",
     "posthog-js": "^1.155.2",
     "react": "^19.0.0",
