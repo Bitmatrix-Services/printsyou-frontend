@@ -178,41 +178,35 @@ const generateProductCatalogSchema = (category: Category, productsByCategoryPage
       name: category.categoryName,
       url: currentUrl,
       offerCount: productsByCategoryPaged.totalElements,
-      itemOffered: {
-          '@type': "OfferCatalog",
-          '@id': "https://printsyou.com/categories/apparel/hi-vis-custom-safety-vests#catalog",
-          name: category.categoryName,
-          url: "https://printsyou.com/categories/apparel/hi-vis-custom-safety-vests",
-          numberOfItems: productsByCategoryPaged.totalElements,
-          itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
-              '@type': 'Product',
-              '@id': `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-              url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-              name: product.productName,
-              description: product.metaDescription,
-              sku: product.sku,
-              image: {
-                  '@type': "ImageObject",
-                  url: `${process.env.ASSETS_SERVER_URL}${product?.imageUrl}`,
-                  width: 800,
-                  height: 800,
-                  caption: product?.productName
-              },
-              offers: {
-                  price: [...(product.priceGrids ?? [])]
-                      .filter(item => item.price !== 0)
-                      .sort((a, b) => a.price - b.price)
-                      .shift()?.price,
-                  priceCurrency: 'USD',
-                  availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
-                  itemCondition: 'http://schema.org/NewCondition',
-                  seller: {
-                      '@type': 'Organization',
-                      name: 'PrintsYou'
-                  }
-              }
-          }))
-      }
+      numberOfItems: productsByCategoryPaged.totalElements,
+      itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct) => ({
+            '@type': 'Product',
+            '@id': `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+            url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+            name: product.productName,
+            description: product.metaDescription,
+            sku: product.sku,
+            image: {
+                '@type': "ImageObject",
+                url: `${process.env.ASSETS_SERVER_URL}${product?.imageUrl}`,
+                width: 800,
+                height: 800,
+                caption: product?.productName
+            },
+            offers: {
+                price: [...(product.priceGrids ?? [])]
+                    .filter(item => item.price !== 0)
+                    .sort((a, b) => a.price - b.price)
+                    .shift()?.price,
+                priceCurrency: 'USD',
+                availability: product.outOfStock ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock',
+                itemCondition: 'http://schema.org/NewCondition',
+                seller: {
+                    '@type': 'Organization',
+                    name: 'PrintsYou'
+                }
+            }
+        }))
     },
     primaryImageOfPage: {
         '@type': "ImageObject",
