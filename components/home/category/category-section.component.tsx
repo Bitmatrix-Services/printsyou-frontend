@@ -5,7 +5,7 @@ import {Swiper, SwiperRef, SwiperSlide} from 'swiper/react';
 import {Navigation} from 'swiper/modules';
 import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {CategoryCard} from '@components/home/category/category-card.component';
-import {Category} from '@components/home/home.types';
+import {Category, Crumbs} from '@components/home/home.types';
 
 interface ICategorySection {
   categoryList: Category[];
@@ -24,6 +24,21 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
     if (!sliderRef.current) return;
     sliderRef.current.swiper.slideNext();
   }, []);
+
+    const hiVisSafetyVestCategory: Category = {
+        categoryName: "Hi-Vis Custom Safety Vests",
+        id: "75217bbf-205b-4b6e-bcf2-fb9d0415cc29",
+        categoryDescription: "This is a dummy category description.",
+        imageUrl: "category/8cad2710-e87b-4a86-871e-de4e1fb475dc/custom-safety-vest-ansi-class2.jpg",
+        level: "1",
+        prefix: "dummy-prefix",
+        suffix: "dummy-suffix",
+        uniqueCategoryName: "apparel/hi-vis-custom-safety-vests",
+        subCategories: [],
+        metaTitle: "Dummy Meta Title",
+        metaDescription: "Dummy Meta Description",
+        crumbs: [],
+    };
 
   return (
     <>
@@ -55,6 +70,10 @@ export const CategorySection: FC<ICategorySection> = ({categoryList = [], navNum
           ref={sliderRef}
           slidesPerView="auto"
         >
+            <SwiperSlide key="hi-vis-safety-vests-category" className="w-44">
+                <CategoryCard category={hiVisSafetyVestCategory} />
+            </SwiperSlide>
+
           {categoryList?.map(category => (
             <SwiperSlide key={category.id} className="w-44">
               <CategoryCard category={category} />
