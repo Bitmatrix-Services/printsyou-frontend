@@ -98,7 +98,7 @@ const generateProductSchema = (
     url: `${process.env.FE_URL}products/${product.uniqueProductName}`,
     category: [
       ...(product.crumbs ?? []),
-      {sequenceNumber: 1, uniqueCategoryName: 'categories', name: 'Promotional Products'},
+      {sequenceNumber: 1, uniqueCategoryName: 'categories', name: 'Categories'},
       {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
     ]
       .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
@@ -175,7 +175,7 @@ const generateBreadcrumbSchema = (product: Product | null) => {
     '@type': 'BreadcrumbList',
     itemListElement: [
       ...(product.crumbs ?? []),
-      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Promotional Products'},
+      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Products'},
       {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
     ]
       .sort((a, b) => a.sequenceNumber - b.sequenceNumber)

@@ -74,7 +74,7 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
 
   return (
     <>
-      <Breadcrumb prefixTitle="Promotional Products" list={product.crumbs ?? []} />
+      <Breadcrumb prefixTitle="Products" list={product.crumbs ?? []} />
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
           <ProductImageComponent

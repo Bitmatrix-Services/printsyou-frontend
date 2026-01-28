@@ -15,7 +15,7 @@ export const Breadcrumb: FC<IBreadcrumb> = ({prefixTitle, list}) => {
   const sortedList = useMemo(() => [...list].sort((a, b) => a.sequenceNumber - b.sequenceNumber), [list]);
 
   const isPromotional = useMemo(
-    () => prefixTitle === 'Promotional Categories' || prefixTitle === 'Promotional Products',
+    () => prefixTitle === 'Categories' || prefixTitle === 'Products',
     [prefixTitle]
   );
 

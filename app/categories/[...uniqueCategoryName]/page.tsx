@@ -150,7 +150,7 @@ const generateBreadcrumbSchema = (category: Category | null) => {
     '@type': 'BreadcrumbList',
     itemListElement: [
       ...(category.crumbs ?? []),
-      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Promotional Products'},
+      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Categories'},
       {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
     ]
       .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
