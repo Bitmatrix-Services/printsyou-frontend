@@ -35,7 +35,7 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
 
   return (
     <div>
-      <Breadcrumb prefixTitle="Promotional Categories" list={category.crumbs ?? []} />
+      <Breadcrumb prefixTitle="Categories" list={category.crumbs ?? []} />
       <div className="w-full max-w-[120rem] mx-auto px-3 md:px-[3rem] tablet:px-[4rem] lg:px-[4rem] xl:px-[8rem] 2xl:px-[10rem] relative">
         <div className="flex flex-col md:flex-row mt-10 gap-8">
           <div className="hidden lg:block">
