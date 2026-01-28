@@ -237,6 +237,26 @@ const nextConfig = {
       destination: '/products/leisure-amp-outdoor/beverage-coolers-amp-holders/12by16-oz-brumate-hopsulator-trio',
       permanent: true
     },
+    {
+        source: '/products/apparel/jackets-hooded/outdoor-sports-windproof-and-waterproof-jacket',
+        destination: '/products/apparel/promotional-jackets/outdoor-sports-windproof-and-waterproof-jacket',
+        permanent: true
+    },
+    {
+        source: '/products/apparel/jackets-hooded/windproof-fashionable-minimalist-hooded-outdoor-jacket',
+        destination: '/products/apparel/promotional-jackets/windproof-fashionable-minimalist-hooded-outdoor-jacket',
+        permanent: true
+    },
+    {
+        source: '/products/apparel/jackets-hooded/mens-casual-and-versatile-outdoor-jacket',
+        destination: '/products/apparel/promotional-jackets/mens-casual-and-versatile-outdoor-jacket',
+        permanent: true
+    },
+    {
+      source: '/products/worker-safety-products/high-visibility-safety-vest-with-pockets',
+      destination: '/products/apparel/hi-vis-custom-safety-vests/high-visibility-safety-vest-with-pockets',
+      permanent: true
+    },
     // END OF COVERAGE 22-1-2024
     {
       destination: '/categories/amenities',
