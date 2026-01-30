@@ -98,7 +98,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
                                 id="sort-select"
                                 value={currentSort}
                                 onChange={(e) => handleQueryUpdate(e.target.value, 'filter')}
-                                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white min-w-[160px]"
+                                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white min-w-[160px]"
                             >
                                 {sortList.map(item => (
                                     <option key={item.value} value={item.value}>{item.label}</option>
@@ -113,7 +113,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
                                 id="size-select"
                                 value={currentSize}
                                 onChange={(e) => handleQueryUpdate(e.target.value, 'size')}
-                                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                             >
                                 <option value="24">24</option>
                                 <option value="48">48</option>
@@ -236,7 +236,7 @@ const PaginationOnly: FC<PaginationOnlyProps> = memo(({currentPage, totalPages, 
                         onClick={(e) => handlePageClick(e, page)}
                         className={`flex items-center justify-center w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
                             currentPage === page
-                                ? 'bg-blue-600 text-white border border-blue-600'
+                                ? 'bg-primary-500 text-white border border-primary-500'
                                 : 'border border-gray-300 text-gray-700 hover:bg-gray-100'
                         }`}
                         aria-current={currentPage === page ? 'page' : undefined}
