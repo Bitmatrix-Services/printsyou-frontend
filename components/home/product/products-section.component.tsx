@@ -131,7 +131,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
             {/* Product Grid - 3 columns on desktop, left-aligned for uneven rows */}
             <div
                 id="product-card-container"
-                className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-fr min-h-[600px]"
+                className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-fr"
             >
                 {isLoading
                     ? Array.from({length: 12}, (_, index) => (
@@ -146,7 +146,7 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
                         </div>
                     ))
                     : productsByCategory?.map((product, index) => (
-                        <ProductCard key={product.id} product={product} imagePriority={index < 2} />
+                        <ProductCard key={product.id} product={product} imagePriority={index < 4} />
                     ))}
             </div>
 
