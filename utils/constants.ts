@@ -173,5 +173,8 @@ export const allowableSearchParams = [
   'category',
   'filter',
   'size',
+  'sizes',
+  'materials',
+  'rushShipping',
   'tag'
 ];

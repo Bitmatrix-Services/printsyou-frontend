@@ -1,12 +1,12 @@
 'use client';
 import * as React from 'react';
 import {Dispatch, FC, Fragment, SetStateAction, useMemo, useState} from 'react';
-import {MdArrowForward, MdInfo} from 'react-icons/md';
+import {MdArrowForward} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import Link from 'next/link';
 import {Product, productColors, ProductImage} from '@components/home/product/product.types';
 import {colorNameToHex, extractColorsArray, getColorsWithHex} from '@utils/utils';
-import {RiShoppingBag4Fill} from 'react-icons/ri';
+import {RiShoppingBag4Fill, RiFileList3Line} from 'react-icons/ri';
 import {Chip} from '@mui/joy';
 import {ColorSwatch} from '@components/home/product/color-swatch.component';
 
@@ -156,12 +156,11 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           <RiShoppingBag4Fill className="ml-3 h-6 w-6" />
         </Link>
         <Link
-          rel="preload"
           className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary text-primary hover:bg-primary hover:text-white w-full lg:w-auto"
-          href={`/more-info?item_id=${product.id}`}
+          href={`/request-quote?product=${product.id}`}
         >
-          Request More Info
-          <MdInfo className="ml-3 h-6 w-6" />
+          Get Quote
+          <RiFileList3Line className="ml-3 h-6 w-6" />
         </Link>
       </div>
 

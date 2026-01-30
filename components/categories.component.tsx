@@ -49,7 +49,7 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                           <AccordionSummary>
                             <Avatar color="primary">
                               <ImageWithFallback
-                                src={category.imageUrl}
+                                src={category.imageUrl || ''}
                                 alt={category.categoryName}
                                 className="object-contain"
                                 fill
@@ -81,7 +81,7 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                               <div className="flex items-center px-5 py-2" key={subCategory.id}>
                                 <Avatar color="primary" sx={{marginRight: '1rem'}}>
                                   <ImageWithFallback
-                                    src={subCategory.imageUrl}
+                                    src={subCategory.imageUrl || ''}
                                     alt={subCategory.categoryName}
                                     className="object-contain"
                                     fill

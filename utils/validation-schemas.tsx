@@ -102,7 +102,24 @@ export const orderNowSchema = object({
   minQty: number().optional()
 });
 
+export const quoteRequestSchema = object({
+  fullName: string().required('Please enter your name'),
+  emailAddress: string().email('Please enter a valid email').required('Please enter your email address'),
+  phoneNumber: string().nullable(),
+  companyName: string().nullable(),
+  productCategory: string().nullable(),
+  quantity: number()
+    .transform((_, value) => (value === '' || value === undefined || value === null ? undefined : +value))
+    .min(1, 'Quantity must be at least 1')
+    .nullable(),
+  notes: string().nullable(),
+  needByDate: string().nullable(),
+  source: string().nullable(),
+  sourceUrl: string().nullable()
+});
+
 export type NewsletterFormSchemaType = InferType<typeof newsletterSchema>;
 export type ContactUsFormSchemaType = InferType<typeof contactUsSchema>;
 export type OrderFormSchemaType = InferType<typeof orderCheckoutSchema>;
 export type OrderNowFormSchemaType = InferType<typeof orderNowSchema>;
+export type QuoteRequestFormSchemaType = InferType<typeof quoteRequestSchema>;

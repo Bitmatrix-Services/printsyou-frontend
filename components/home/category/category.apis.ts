@@ -44,12 +44,33 @@ export const getProductByCategoryWithFilers = async (
   categoryId: string,
   searchParams: any
 ): Promise<ApiResponse<any> | null> => {
-  const {page, size, filter, maxPrice, minPrice} = searchParams;
+  const {page, size, filter, maxPrice, minPrice, colors, sizes, materials, rushShipping} = searchParams;
   try {
-    let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 24}&filter=${filter ?? 'priceLowToHigh'}&minPrice=0&maxPrice=10000`;
-    if (maxPrice && minPrice) {
-      query += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    let query = `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}?page=${page ?? 1}&size=${size ?? 24}&filter=${filter ?? 'priceLowToHigh'}&minPrice=${minPrice ?? 0}&maxPrice=${maxPrice ?? 10000}`;
+
+    // Add filter parameters
+    if (colors) {
+      const colorList = Array.isArray(colors) ? colors : colors.split(',');
+      colorList.forEach((color: string) => {
+        query += `&colors=${encodeURIComponent(color)}`;
+      });
     }
+    if (sizes) {
+      const sizeList = Array.isArray(sizes) ? sizes : sizes.split(',');
+      sizeList.forEach((s: string) => {
+        query += `&sizes=${encodeURIComponent(s)}`;
+      });
+    }
+    if (materials) {
+      const materialList = Array.isArray(materials) ? materials : materials.split(',');
+      materialList.forEach((material: string) => {
+        query += `&materials=${encodeURIComponent(material)}`;
+      });
+    }
+    if (rushShipping === 'true' || rushShipping === true) {
+      query += `&rushShipping=true`;
+    }
+
     const response = await axios.get(query);
 
     if (response.data.payload.content.length > 0) {

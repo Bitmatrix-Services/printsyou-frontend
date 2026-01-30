@@ -33,6 +33,11 @@ const nextConfig = {
   },
   redirects: async () => [
     {
+      source: '/sitemap.xml',
+      destination: '/api/sitemap.xml',
+      permanent: true
+    },
+    {
       source: '/home-amp-auto/food-containers/harvest-bento-box',
       destination: '/products/home-amp-auto/food-containers/harvest-bento-box',
       permanent: true

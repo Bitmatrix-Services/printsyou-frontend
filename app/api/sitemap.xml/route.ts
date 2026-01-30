@@ -2,30 +2,39 @@ import {getSitemapStuff} from '@utils/utils';
 
 export async function GET(_: Request) {
   const feUrl = process.env.FE_URL;
+  const today = new Date().toISOString().split('T')[0];
 
   const response: number = await getSitemapStuff('product-chunks');
-  let map: string = '';
+
+  // Generate product sitemap entries with lastmod
+  let productSitemaps = '';
   Array.from({length: response}).forEach((_, index) => {
-    map += `<sitemap><loc>${feUrl}sitemap_products/sitemap/${index}.xml</loc></sitemap>`;
+    productSitemaps += `
+    <sitemap>
+      <loc>${feUrl}sitemap_products/sitemap/${index}.xml</loc>
+      <lastmod>${today}</lastmod>
+    </sitemap>`;
   });
 
-  const sitemap = `<sitemapindex
-        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        <sitemap>
-            <loc>${feUrl}sitemap_blogs/sitemap.xml</loc>
-        </sitemap>
-        <sitemap>
-            <loc>${feUrl}sitemap_categories/sitemap.xml</loc>
-        </sitemap>
-        ${map}
-        <sitemap>
-            <loc>${feUrl}sitemap_static/sitemap.xml</loc>
-        </sitemap>
-    </sitemapindex>`;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${feUrl}sitemap_categories/sitemap.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>${productSitemaps}
+  <sitemap>
+    <loc>${feUrl}sitemap_blogs/sitemap.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>${feUrl}sitemap_static/sitemap.xml</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+</sitemapindex>`;
 
   return new Response(sitemap, {
     headers: {
-      'Content-Type': 'application/xml',
+      'Content-Type': 'application/xml; charset=utf-8',
       'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400'
     }
   });

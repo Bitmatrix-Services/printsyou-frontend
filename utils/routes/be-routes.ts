@@ -20,7 +20,8 @@ export const ProductRoutes = Object.freeze({
 export const CategoryRoutes = Object.freeze({
   CategoryById: ``,
   CategoryByUniqueName: `/category?uCategoryName`,
-  CategoriesByParentId: `/category/subCategories`
+  CategoriesByParentId: `/category/subCategories`,
+  CategoryFilters: `/category/{0}/filters`
 });
 
 export const NewsletterRoutes = Object.freeze({
@@ -43,4 +44,8 @@ export const BlogRoutes = Object.freeze({
   allBlogs: `/blog/all`,
   blogById: `/blog`,
   blogByUniqueName: `/blog/unique`
+});
+
+export const QuoteRequestRoutes = Object.freeze({
+  createQuote: `/quote-request`
 });

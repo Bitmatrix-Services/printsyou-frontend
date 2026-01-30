@@ -5,16 +5,20 @@ const feUrl = process.env.FE_URL;
 
 interface ISitemapBlogs {
   loc: string;
+  lastModified?: string;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogs: ISitemapBlogs[] = await getSitemapStuff('blog');
-  return blogs.map(url => {
-    return {
-      url: `${feUrl}blogs/${url.loc}.xml`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5
-    };
-  });
+
+  if (!blogs || blogs.length === 0) {
+    return [];
+  }
+
+  return blogs.map(blog => ({
+    url: `${feUrl}blog/${blog.loc}`,
+    lastModified: blog.lastModified ? new Date(blog.lastModified) : new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.6
+  }));
 }

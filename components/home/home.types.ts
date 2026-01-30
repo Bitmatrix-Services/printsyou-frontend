@@ -1,16 +1,85 @@
-export type Category = {
-  categoryName: string;
-  id: string;
-  categoryDescription: string;
-  imageUrl: string;
-  level: string;
-  prefix: string;
-  suffix: string;
-  uniqueCategoryName: string;
-  subCategories: Category[];
-  metaTitle: string | null;
-  metaDescription: string | null;
-  crumbs: Crumbs[];
+// Add these to your existing home.types.ts
+
+export interface Category {
+    id: string;
+    categoryName: string;
+    uniqueCategoryName: string;
+    keywords?: string;
+    active?: boolean;
+    metaTitle?: string;
+    metaDescription?: string;
+    categoryDescription: string;
+    level: string;
+    imageUrl?: string;
+    prefix?: string;
+    suffix?: string;
+    subCategories: Category[];
+    crumbs?: Crumbs[];
+
+    // NEW UX/SEO FIELDS
+    heroSubtitle?: string;
+    trustBadgesJson?: string;
+    keyFeaturesJson?: string;
+    contentSectionsJson?: string;
+    faqsJson?: string;
+    ctaSectionJson?: string;
+    sidebarBoxesJson?: string;
+    showHeroSection?: boolean;
+    showKeyFeatures?: boolean;
+    showFaqSection?: boolean;
+    showCtaSection?: boolean;
+    showSidebar?: boolean;
+    layoutType?: string;
+    customCssClasses?: string;
+    featuredSnippet?: string;
+    richSnippetJson?: string;
+}
+
+// NEW: Parsed UX/SEO types
+export interface TrustBadge {
+    icon: string;
+    title: string;
+    subtitle: string;
+}
+
+export interface KeyFeature {
+    title: string;
+    description: string;
+    icon: string;
+}
+
+export interface FAQ {
+    question: string;
+    answer: string;
+    order: number;
+}
+
+export interface CTASection {
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonLink: string;
+}
+
+export interface SidebarBox {
+    title: string;
+    type: 'links' | 'cta' | 'info' | 'html';
+    content?: string;
+    links?: Array<{text: string; link: string}>;
+    buttonText?: string;
+    buttonLink?: string;
+    order: number;
+}
+
+// Helper function to parse JSON fields
+export const parseCategoryUxSeo = (category: Category) => {
+    return {
+        trustBadges: category.trustBadgesJson ? JSON.parse(category.trustBadgesJson) : [] as TrustBadge[],
+        keyFeatures: category.keyFeaturesJson ? JSON.parse(category.keyFeaturesJson) : [] as KeyFeature[],
+        faqs: category.faqsJson ? JSON.parse(category.faqsJson) : [] as FAQ[],
+        ctaSection: category.ctaSectionJson ? JSON.parse(category.ctaSectionJson) as CTASection : null,
+        sidebarBoxes: category.sidebarBoxesJson ? JSON.parse(category.sidebarBoxesJson) : [] as SidebarBox[]
+    };
 };
 
 export type Crumbs = {
