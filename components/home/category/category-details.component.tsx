@@ -19,11 +19,11 @@ interface ICategoryDetails {
 
 const ProductSectionSkeleton = <div className="h-96 animate-pulse bg-gray-100 rounded-lg" />;
 
-// Enable SSR for ProductsSection to improve LCP - products render on server
+// Keep SSR disabled - enabling it increases TBT significantly due to hydration
 const ProductsSection = dynamic(
     () => import('@components/home/product/products-section.component').then(mod => mod.ProductsSection),
     {
-        ssr: true,
+        ssr: false,
         loading: () => ProductSectionSkeleton
     }
 );

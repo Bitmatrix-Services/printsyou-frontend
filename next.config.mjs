@@ -68,21 +68,6 @@ const nextConfig = {
       'lightgallery'
     ]
   },
-  // Enable modularizeImports for better tree-shaking
-  modularizeImports: {
-    'react-icons/hi': {
-      transform: 'react-icons/hi/{{member}}'
-    },
-    'react-icons/io': {
-      transform: 'react-icons/io/{{member}}'
-    },
-    'react-icons/io5': {
-      transform: 'react-icons/io5/{{member}}'
-    },
-    'react-icons/ri': {
-      transform: 'react-icons/ri/{{member}}'
-    }
-  },
   redirects: async () => [
     {
       source: '/sitemap.xml',
