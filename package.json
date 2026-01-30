@@ -45,12 +45,11 @@
     "yup": "^1.4.0"
   },
   "browserslist": [
-    "last 2 Chrome versions",
-    "last 2 Firefox versions",
-    "last 2 Safari versions",
-    "last 2 Edge versions",
-    "not dead",
-    "not op_mini all"
+    "Chrome >= 90",
+    "Firefox >= 90",
+    "Safari >= 14",
+    "Edge >= 90",
+    "not dead"
   ],
   "devDependencies": {
     "@types/aos": "^3.0.7",

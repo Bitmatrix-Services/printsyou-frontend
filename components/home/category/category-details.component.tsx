@@ -19,10 +19,11 @@ interface ICategoryDetails {
 
 const ProductSectionSkeleton = <div className="h-96 animate-pulse bg-gray-100 rounded-lg" />;
 
+// Enable SSR for ProductsSection to improve LCP - products render on server
 const ProductsSection = dynamic(
     () => import('@components/home/product/products-section.component').then(mod => mod.ProductsSection),
     {
-        ssr: false,
+        ssr: true,
         loading: () => ProductSectionSkeleton
     }
 );
