@@ -9,6 +9,36 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: responseHeaders
+      },
+      // Cache static assets (JS, CSS, images) for 1 year
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      // Cache images
+      {
+        source: '/assets/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      // Cache fonts
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
       }
     ];
   },
@@ -18,8 +48,15 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'printsyouassets.s3.amazonaws.com'
       }
-    ]
+    ],
+    // Optimize image formats and quality
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 31536000, // 1 year cache for optimized images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384]
   },
+  // Enable compression
+  compress: true,
   experimental: {
     optimizePackageImports: [
       '@mui/base',

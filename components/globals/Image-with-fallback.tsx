@@ -9,9 +9,9 @@ interface ImageWithFallbackProps extends ImageProps {
 }
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
-  const {src, fallbackSrc = '/assets/logo-full.png', skeletonRounded, priority, alt, ...rest} = props;
+  const {src, fallbackSrc = '/assets/logo-full.png', skeletonRounded, priority, loading: loadingProp, alt, ...rest} = props;
   const [imgSrc, setImgSrc] = useState(`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${src}`);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!priority); // Don't show skeleton for priority images
 
   useEffect(() => {
     setImgSrc(`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${src}`);
@@ -19,7 +19,8 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
 
   return (
     <>
-      {loading && (
+      {/* Only show skeleton for non-priority images to avoid blocking LCP */}
+      {isLoading && !priority && (
         <Skeleton
           sx={{borderRadius: skeletonRounded ? '1rem' : ''}}
           variant="overlay"
@@ -32,8 +33,10 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
         alt={alt}
         src={src ? imgSrc : '/assets/logo-full.png'}
         priority={priority}
+        loading={priority ? 'eager' : loadingProp}
         onError={() => setImgSrc(fallbackSrc)}
-        onLoad={() => setLoading(false)}
+        onLoad={() => setIsLoading(false)}
+        fetchPriority={priority ? 'high' : 'auto'}
         {...rest}
       />
     </>

@@ -1,5 +1,6 @@
-import type {Metadata} from 'next';
+import type {Metadata, Viewport} from 'next';
 import React, {PropsWithChildren} from 'react';
+import {Lato} from 'next/font/google';
 import {ReactQueryClientProvider} from './query-client-provider';
 import 'swiper/css';
 import 'swiper/css/thumbs';
@@ -17,6 +18,21 @@ import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';
 // @ts-ignore
 import {Partytown} from '@builder.io/partytown/react';
+
+// Optimize font loading with next/font
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['300', '400', '700', '900'],
+  display: 'swap',
+  preload: true,
+  variable: '--font-lato'
+});
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#019ce0'
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -41,6 +57,15 @@ export default async function RootLayout({children}: PropsWithChildren) {
       <ReactQueryClientProvider>
         <CSPostHogProvider>
           <html lang="en">
+            <head>
+              {/* Preconnect to critical third-party origins for faster resource loading */}
+              <link rel="preconnect" href="https://printsyouassets.s3.amazonaws.com" />
+              <link rel="dns-prefetch" href="https://printsyouassets.s3.amazonaws.com" />
+              <link rel="preconnect" href="https://connect.facebook.net" crossOrigin="anonymous" />
+              <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+              <link rel="preconnect" href="https://chatwoot.printsyou.com" crossOrigin="anonymous" />
+              <link rel="preconnect" href="https://www.facebook.com" crossOrigin="anonymous" />
+            </head>
             <Partytown debug={true} forward={['dataLayer.push']} />
             <Script
               id="parttown-script"
@@ -56,10 +81,42 @@ export default async function RootLayout({children}: PropsWithChildren) {
               }}
             ></Script>
 
-            {/* Meta Pixel Base Code */}
+            {/* Google Tag Manager - Load with worker strategy via Partytown */}
+            <Script strategy="worker" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
+            <Script
+              id="gtag-integration"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', 'AW-16709127988');
+                `
+              }}
+            />
+
+            <Script
+              id="gtag-conversion"
+              strategy="lazyOnload"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  function gtag_report_conversion(url) {
+                    gtag('event', 'conversion', {
+                      send_to: 'AW-16709127988/pXIgCID20IQaELSexJ8-',
+                      transaction_id: '',
+                      event_callback: () => {}
+                    });
+                    return false;
+                  }
+                `
+              }}
+            />
+
+            {/* Meta Pixel - Load after page is interactive */}
             <Script
                 id="facebook-pixel"
-                strategy="afterInteractive"
+                strategy="lazyOnload"
                 dangerouslySetInnerHTML={{
                     __html: `
             !function(f,b,e,v,n,t,s)
@@ -76,74 +133,34 @@ export default async function RootLayout({children}: PropsWithChildren) {
                 }}
             />
 
-            {/* Noscript fallback */}
-            <noscript>
-                <img
-                    height="1"
-                    width="1"
-                    style={{ display: "none" }}
-                    src="https://www.facebook.com/tr?id=850875120645150&ev=PageView&noscript=1"
-                />
-            </noscript>
-
-            {/* Google Tag Manager - Lazy Load */}
-            <Script strategy="worker" src="https://www.googletagmanager.com/gtag/js?id=AW-16709127988" />
-            <Script
-              async={true}
-              id="gtag-integration"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', 'AW-16709127988');
-                `
-              }}
-            />
-
-            <Script
-              id="gtag-conversion"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  function gtag_report_conversion(url) {
-                    gtag('event', 'conversion', {
-                      send_to: 'AW-16709127988/pXIgCID20IQaELSexJ8-',
-                      transaction_id: '',
-                      event_callback: () => {}
-                    });
-                    return false;
-                  }
-                `
-              }}
-            />
-
-            {/* Chatwoot - Defer & Lazy Load */}
+            {/* Chatwoot - Load after user interaction or idle */}
             <Script
               id="chatwoot-integration"
+              strategy="lazyOnload"
               dangerouslySetInnerHTML={{
                 __html: `
-                  (function(d, t) {
+                  setTimeout(function() {
                     if (!window.chatwootSDK) {
                       window.chatwootSettings = { position: "right", type: "standard", launcherTitle: "Chat" };
                       var BASE_URL = "https://chatwoot.printsyou.com/";
-                      var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                      var g = document.createElement("script");
                       g.src = BASE_URL + "/packs/js/sdk.js";
                       g.defer = true;
                       g.async = true;
-                      s.parentNode.insertBefore(g, s);
                       g.onload = function() {
                         window.chatwootSDK.run({
                           websiteToken: "LQKAw5skqedd5h5WWeUAFvQR",
                           baseUrl: BASE_URL,
                         });
                       };
+                      document.body.appendChild(g);
                     }
-                  })(document, "script");
+                  }, 3000);
                 `
               }}
             />
 
-            <body className="overflow-x-hidden">
+            <body className={`${lato.className} overflow-x-hidden`}>
               <NextTopLoader color="#019ce0" showSpinner={false} />
               <NotificationComponent />
               <Header categories={categoriesData.payload} />
