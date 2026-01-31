@@ -33,7 +33,31 @@ export interface Category {
     customCssClasses?: string;
     featuredSnippet?: string;
     richSnippetJson?: string;
+
+    // SEO INDEXING FIELDS
+    seoIndexable?: boolean;
+    seoReasonCode?: SeoReasonCode;
+    absorptionParentId?: string;
+    absorptionParentSlug?: string;
+    isAttributeCategory?: boolean;
+    isBrandCategory?: boolean;
+    canonicalToParent?: boolean;
+    productCountCache?: number;
+    uniqueContentLength?: number;
 }
+
+// SEO Reason Codes (matching backend enum)
+export type SeoReasonCode =
+    | 'SIZE'
+    | 'MATERIAL'
+    | 'STYLE'
+    | 'PACKAGING'
+    | 'THIN'
+    | 'BRAND'
+    | 'DUPLICATE'
+    | 'OK_INDEX'
+    | 'FORCE_INDEX'
+    | 'FORCE_NOINDEX';
 
 // NEW: Parsed UX/SEO types
 export interface TrustBadge {

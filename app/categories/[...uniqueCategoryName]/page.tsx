@@ -193,17 +193,25 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
     const activeFilters = parseFiltersFromSearchParams(searchParams);
     const hasFilters = hasActiveFilters(activeFilters);
 
-    // Canonical URL always points to base category (without filters)
-    const baseCanonicalURL = `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`;
+    // SEO: Determine canonical URL
+    // If canonicalToParent is true, point to the absorption parent category
+    // Otherwise, canonical is self (base category URL without filters)
+    const baseCanonicalURL = category?.canonicalToParent && category?.absorptionParentSlug
+        ? `${process.env.FE_URL}categories/${category.absorptionParentSlug}`
+        : `${process.env.FE_URL}categories/${category?.uniqueCategoryName}`;
 
-    // For pagination on base pages, include page in canonical
-    const canonicalURL = !hasFilters && currentPage > 1
+    // For pagination on base pages, include page in canonical (only if not redirecting to parent)
+    const canonicalURL = !hasFilters && currentPage > 1 && !category?.canonicalToParent
         ? `${baseCanonicalURL}?page=${currentPage}`
         : baseCanonicalURL;
 
-    // SEO: Filtered pages get noindex by default to prevent thin content indexing
-    // Pagination pages (page > 1) also get noindex
-    const shouldNoIndex = hasFilters || currentPage > 1;
+    // SEO: Determine if page should be noindexed
+    // Priority order:
+    // 1. Backend seoIndexable=false → noindex (based on automated rules: thin content, attribute pages, etc.)
+    // 2. Filtered pages → noindex (prevents duplicate content from filter combinations)
+    // 3. Pagination pages (page > 1) → noindex (prevents duplicate content)
+    const backendNoIndex = category?.seoIndexable === false;
+    const shouldNoIndex = backendNoIndex || hasFilters || currentPage > 1;
 
     const descriptors: IconDescriptor[] = [];
     if (currentPage > 1) {
