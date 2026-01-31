@@ -14,7 +14,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/api/sitemap.xml' // Allow sitemap index
+        ],
         disallow: [
           // Transactional pages (should not be indexed)
           '/more-info',
@@ -26,7 +29,7 @@ export default function robots(): MetadataRoute.Robots {
           // Search and filtered URLs (prevent crawl waste)
           '/search-results',
 
-          // API and internal paths
+          // API and internal paths (except sitemap)
           '/api/',
           '/_next/',
 
