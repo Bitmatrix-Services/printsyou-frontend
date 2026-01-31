@@ -14,10 +14,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: [
-          '/',
-          '/api/sitemap.xml' // Allow sitemap index
-        ],
+        allow: '/',
         disallow: [
           // Transactional pages (should not be indexed)
           '/more-info',
@@ -29,7 +26,7 @@ export default function robots(): MetadataRoute.Robots {
           // Search and filtered URLs (prevent crawl waste)
           '/search-results',
 
-          // API and internal paths (except sitemap)
+          // API and internal paths
           '/api/',
           '/_next/',
 
@@ -51,6 +48,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/']
       }
     ],
-    sitemap: 'https://printsyou.com/api/sitemap.xml'
+    sitemap: 'https://printsyou.com/sitemap.xml'
   };
 }
