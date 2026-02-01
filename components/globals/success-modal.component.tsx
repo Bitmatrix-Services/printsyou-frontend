@@ -1,27 +1,86 @@
 import React, {Dispatch, FC, SetStateAction} from 'react';
 import {Modal, ModalDialog} from '@mui/joy';
-import {FiCheckCircle} from 'react-icons/fi';
-import {BiSolidErrorCircle} from 'react-icons/bi';
 import {useEffect} from 'react';
+import {FaCheckCircle, FaExclamationCircle, FaInfoCircle, FaTimesCircle} from 'react-icons/fa';
 
 interface ISuccessModal {
   open: string;
-  onClose: Dispatch<SetStateAction<'success' | 'error' | ''>>;
+  onClose: Dispatch<SetStateAction<'success' | 'error' | 'warning' | 'info' | ''>>;
   title: string;
-  note?: String;
+  note?: string;
   htmlNote?: string;
+  buttonText?: string;
+  onButtonClick?: () => void;
 }
 
-export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htmlNote}) => {
+export const SuccessModal: FC<ISuccessModal> = ({
+  open,
+  onClose,
+  title,
+  note,
+  htmlNote,
+  buttonText,
+  onButtonClick
+}) => {
   const handleModalClose = () => {
+    if (onButtonClick) {
+      onButtonClick();
+    }
     onClose('');
   };
 
   useEffect(() => {
-    if (typeof (window as any).gtag_report_conversion === 'function') {
-      (window as any).gtag_report_conversion(); // Call the function by casting to any
+    if (open === 'success' && typeof (window as any).gtag_report_conversion === 'function') {
+      (window as any).gtag_report_conversion();
     }
-  }, []);
+  }, [open]);
+
+  const getIconAndColors = () => {
+    switch (open) {
+      case 'success':
+        return {
+          icon: <FaCheckCircle className="w-16 h-16" />,
+          iconBg: 'bg-green-100',
+          iconColor: 'text-green-500',
+          buttonBg: 'bg-green-600 hover:bg-green-700',
+          borderColor: 'border-green-200'
+        };
+      case 'error':
+        return {
+          icon: <FaTimesCircle className="w-16 h-16" />,
+          iconBg: 'bg-red-100',
+          iconColor: 'text-red-500',
+          buttonBg: 'bg-red-600 hover:bg-red-700',
+          borderColor: 'border-red-200'
+        };
+      case 'warning':
+        return {
+          icon: <FaExclamationCircle className="w-16 h-16" />,
+          iconBg: 'bg-orange-100',
+          iconColor: 'text-orange-500',
+          buttonBg: 'bg-orange-600 hover:bg-orange-700',
+          borderColor: 'border-orange-200'
+        };
+      case 'info':
+        return {
+          icon: <FaInfoCircle className="w-16 h-16" />,
+          iconBg: 'bg-blue-100',
+          iconColor: 'text-blue-500',
+          buttonBg: 'bg-blue-600 hover:bg-blue-700',
+          borderColor: 'border-blue-200'
+        };
+      default:
+        return {
+          icon: <FaCheckCircle className="w-16 h-16" />,
+          iconBg: 'bg-gray-100',
+          iconColor: 'text-gray-500',
+          buttonBg: 'bg-gray-600 hover:bg-gray-700',
+          borderColor: 'border-gray-200'
+        };
+    }
+  };
+
+  const {icon, iconBg, iconColor, buttonBg, borderColor} = getIconAndColors();
 
   return (
     <Modal open={!!open} onClose={handleModalClose}>
@@ -29,44 +88,53 @@ export const SuccessModal: FC<ISuccessModal> = ({open, onClose, title, note, htm
         sx={{
           height: 'auto',
           width: '90%',
-          maxWidth: '60rem',
+          maxWidth: '28rem',
           margin: 'auto',
-          overflowY: 'auto',
+          padding: 0,
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           '@media (max-width: 600px)': {
             width: '95%',
             maxWidth: '95%'
           }
         }}
       >
-        <div className="flex flex-col justify-center items-center gap-4">
-          {open === 'success' ? (
-            <>
-              <h2 className="text-xl text-center font-bold">{title}</h2>
-              {note ? <p className="text-base font-light text-center max-w-sm ">{note}</p> : null}
-              {htmlNote ? (
-                <p className="text-base font-light text-left " dangerouslySetInnerHTML={{__html: htmlNote}}></p>
-              ) : null}
-            </>
-          ) : open === 'error' ? (
-            <h2>something went wrong , please try again later</h2>
-          ) : null}
-          <div className="flex justify-center items-center mt-2">
-            {open === 'success' ? (
-              <FiCheckCircle className="w-10 h-10 text-primary" />
-            ) : open === 'error' ? (
-              <BiSolidErrorCircle className="w-10 h-10 text-red-600" />
-            ) : null}
+        <div className="flex flex-col">
+          {/* Icon Section */}
+          <div className={`${iconBg} py-8 flex justify-center items-center`}>
+            <div className={`${iconColor} animate-scale-in`}>
+              {icon}
+            </div>
           </div>
-          {/*<h2 className="text-lg font-semibold">In the meantime, you can</h2>*/}
-          {/*<p className="text-sm text-center font-light">*/}
-          {/*  Check our <u>Help Center</u> for FAQs and tutorials*/}
-          {/*</p>*/}
-          <button
-            className="px-8 py-2 text-sm bg-primary-500 text-white font-bold rounded-full"
-            onClick={handleModalClose}
-          >
-            Continue
-          </button>
+
+          {/* Content Section */}
+          <div className="px-6 py-6 bg-white">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-3">
+              {title}
+            </h2>
+
+            {note && (
+              <p className="text-gray-600 text-center leading-relaxed mb-6">
+                {note}
+              </p>
+            )}
+
+            {htmlNote && (
+              <div
+                className="text-gray-600 text-center leading-relaxed mb-6"
+                dangerouslySetInnerHTML={{__html: htmlNote}}
+              />
+            )}
+
+            {/* Button */}
+            <button
+              className={`w-full py-3 px-6 ${buttonBg} text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg`}
+              onClick={handleModalClose}
+            >
+              {buttonText || 'Continue'}
+            </button>
+          </div>
         </div>
       </ModalDialog>
     </Modal>

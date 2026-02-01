@@ -71,65 +71,51 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
   };
 
   return (
-    <div className="col flex flex-col">
-      <div className="text-sm mb-2 flex flex-wrap items-start">
-        <div className="flex flex-wrap items-center">
-          <span className="text-mute4 mr-1 whitespace-nowrap">Category:</span>
-          {sortedCategories.map((category, index) => (
-            <Fragment key={category.id}>
-              {index > 0 && <MdArrowForward className="mx-2 h-5 w-6" />}
-              <span className="font-semibold capitalize">{category.name}</span>
-            </Fragment>
-          ))}
-        </div>
-      </div>
-
-      <div className="text-sm mb-2 flex items-center">
-        <span className="text-mute4 mr-1 capitalize">SKU:</span>
-        <span className="font-semibold text-primary-500">{product.sku}</span>
-      </div>
-
-      <h1 className="text-xl md:text-2xl font-bold capitalize min-h-[32px]">
+    <div className="flex flex-col">
+      {/* Product Title */}
+      <h1 className="text-xl md:text-2xl font-bold text-gray-900 capitalize leading-tight">
         <span dangerouslySetInnerHTML={{__html: product?.productName ?? ''}} />
       </h1>
 
-      <div className="mt-2 text-sm font-normal text-mute3">{product.metaDescription}</div>
+      {/* Meta description */}
+      <p className="mt-2 text-sm text-gray-600 leading-relaxed">{product.metaDescription}</p>
+
+      {handleScroll && (
+        <button
+          className="mt-2 text-sm text-primary-500 hover:text-primary-600 underline underline-offset-2"
+          onClick={handleScroll}
+        >
+          See Details
+        </button>
+      )}
 
       {isOutOfStock && (
-        <div className="flex items-center my-2">
+        <div className="flex items-center mt-3 gap-2">
           <Chip size="sm" color="danger" variant="solid">
             Out of Stock
           </Chip>
           {relatedProductsLink && (
-            <span
-              className="ml-2 text-sm underline text-[#16467b] cursor-pointer hover:text-primary-500"
+            <button
+              className="text-sm text-primary-500 hover:text-primary-600 underline"
               onClick={scrollToRelatedProducts}
             >
               Checkout Related Products
-            </span>
+            </button>
           )}
         </div>
-      )}
-
-      {handleScroll && (
-        <h3 className="text-sm underline cursor-pointer hover:text-primary-500 mt-2" onClick={handleScroll}>
-          See Details
-        </h3>
       )}
 
       {/* Product Colors */}
       {productColors.length > 0 && (
         <div className="mt-4">
-          <div className="text-mute text-sm font-normal">
+          <p className="text-sm text-gray-600 mb-2">
             {selectedColor ? (
-              <>
-                Color: <span className="text-black font-bold">{selectedColor}</span>
-              </>
+              <>Colors: <span className="font-semibold text-gray-900">{selectedColor}</span></>
             ) : (
               'Colors:'
             )}
-          </div>
-          <div className="flex flex-wrap gap-3 my-2">
+          </p>
+          <div className="flex flex-wrap gap-2">
             {productColors.map(color => (
               <ColorSwatch
                 key={color?.colorName}
@@ -142,54 +128,60 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         </div>
       )}
 
-      <div className="flex flex-wrap lg:flex-row lg:items-center gap-4 mt-3">
-        <Link
-          rel="preload"
-          className={`py-2 px-6 border-2 flex items-center justify-center rounded-md text-white ${
-            isOutOfStock
-              ? 'border-mute4 bg-mute4 pointer-events-none'
-              : 'border-primary bg-primary hover:bg-primary-400'
-          } w-full lg:w-auto`}
-          href={`/order-now?product_id=${product.id}`}
-        >
-          Order Now
-          <RiShoppingBag4Fill className="ml-3 h-6 w-6" />
-        </Link>
-        <Link
-          className="py-2 px-6 border-2 flex items-center justify-center rounded-md border-primary text-primary hover:bg-primary hover:text-white w-full lg:w-auto"
-          href={`/request-quote?product=${product.id}`}
-        >
-          Get Quote
-          <RiFileList3Line className="ml-3 h-6 w-6" />
-        </Link>
+      {/* CTA Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 mt-6">
+        {(product.orderType === 'CHECKOUT' || product.orderType === 'BOTH') && (
+          <Link
+            rel="preload"
+            className={`py-3 px-6 flex items-center justify-center rounded-lg text-white font-medium transition-all duration-200 ${
+              isOutOfStock
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-primary-500 hover:bg-primary-600'
+            } flex-1 sm:flex-none`}
+            href={`/checkout?product_id=${product.id}`}
+          >
+            Order Now
+            <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
+          </Link>
+        )}
+        {(product.orderType === 'QUOTE_ONLY' || product.orderType === 'BOTH' || !product.orderType) && (
+          <Link
+            className={`py-3 px-6 flex items-center justify-center rounded-lg font-medium transition-all duration-200 flex-1 sm:flex-none ${
+              product.orderType === 'QUOTE_ONLY' || !product.orderType
+                ? 'bg-primary-500 text-white hover:bg-primary-600'
+                : 'bg-white border-2 border-primary-500 text-primary-500 hover:bg-primary-50'
+            }`}
+            href={`/request-quote?product=${product.id}`}
+          >
+            Get a Free Quote
+            <RiFileList3Line className="ml-2 h-5 w-5" />
+          </Link>
+        )}
       </div>
 
-      <div className="min-h-[150px]">
-        <PricingTable product={product} />
-      </div>
+      {/* Pricing Table */}
+      <PricingTable product={product} />
 
-      {/* Additional Rows */}
+      {/* Setup/Additional Fees */}
       {product.additionalRows.length > 0 && (
-        <div className="mt-2 p-4 bg-[#f6f7f8] rounded-xl transition-all duration-300">
-          <ul className={`text-xs text-mute3 ${isExpanded ? '' : 'max-h-[3.5rem] see-less-more'}`}>
+        <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+          <ul className={`text-sm text-gray-600 space-y-1 ${isExpanded ? '' : 'max-h-[3rem] overflow-hidden'}`}>
             {product.additionalRows
               .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
               .map(row => (
-                <li key={`${row.id}${row.name}`}>
-                  <span className="block pt-[2px]">
-                    <span className="text-mute3 font-base">{row.name}</span>
-                    <span className="ml-2 text-primary-500 font-semibold">${row.priceDiff.toFixed(2)}</span>
-                  </span>
+                <li key={`${row.id}${row.name}`} className="flex items-center justify-between">
+                  <span className="text-gray-600">{row.name}</span>
+                  <span className="text-primary-500 font-semibold">${row.priceDiff.toFixed(2)}</span>
                 </li>
               ))}
           </ul>
-          {product.additionalRows.length > 3 && (
-            <span
+          {product.additionalRows.length > 2 && (
+            <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-blue-500 text-sm font-medium cursor-pointer"
+              className="text-primary-500 text-sm font-medium mt-2 hover:underline"
             >
               {isExpanded ? 'Show Less' : 'Show More'}
-            </span>
+            </button>
           )}
         </div>
       )}

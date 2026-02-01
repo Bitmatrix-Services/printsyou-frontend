@@ -35,18 +35,31 @@ export const FormControlCheckbox: FC<IFormControlCheckbox> = ({
       }}
       render={({field: {onChange, value}}) => (
         <div className="flex flex-col">
-          <div className="flex items-center gap-1 flex-wrap break-words">
+          <div className="flex items-start gap-2">
             <Checkbox
               sx={{
-                color: isRequired && errors[name]?.message ? 'red' : 'inherit'
+                color: isRequired && errors?.[name]?.message ? 'red' : 'inherit'
               }}
-              label={label}
               size="md"
               name={name}
               disabled={disabled}
-              value={value}
+              checked={!!value}
               onChange={onChange}
             />
+            <span
+              className="text-sm pt-0.5 cursor-pointer select-none"
+              onClick={(e) => {
+                const target = e.target as HTMLElement;
+                if (target.tagName === 'A' || target.closest('a')) {
+                  // Clicking on link - don't toggle, let link work
+                  return;
+                }
+                // Clicking on text - toggle checkbox
+                onChange({target: {checked: !value}});
+              }}
+            >
+              {label}
+            </span>
           </div>
           {linkUrl ? (
             <FormHelperText sx={{marginLeft: '1.9rem'}}>
@@ -57,7 +70,7 @@ export const FormControlCheckbox: FC<IFormControlCheckbox> = ({
               </Typography>
             </FormHelperText>
           ) : null}
-          {isRequired && errors[name]?.message ? (
+          {isRequired && errors?.[name]?.message ? (
             <div className="flex justify-start mt-2">
               <p className="text-red-600">{errors[name]?.message}</p>
             </div>

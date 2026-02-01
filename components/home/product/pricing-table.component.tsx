@@ -21,56 +21,58 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
   if (!hasValidCountFrom) return null;
 
   return (
-    <div className="overflow-auto mt-6 px-6 pb-10 shadow-pricingTableShadow rounded-lg">
-      <h4 className="text-2xl font-semibold mb-3 capitalize">Pricing</h4>
+    <div className="mt-4">
+      <h4 className="text-lg font-semibold text-gray-900 mb-3">Pricing</h4>
 
-      <table className="w-full">
-        <tbody>
-          <tr className="one">
-            {pricingTable.byRowTypeObjects && !pricingTable.byRowTypeObjects[''] && (
-              <td className="headcell">Decoration Type</td>
-            )}
-            {pricingTable.countFrom.map(row => (
-              <td key={row} className="headcell">
-                {row} Items
-              </td>
-            ))}
-          </tr>
-
-          {Object.entries(pricingTable.byRowTypeObjects).map(([priceType, prices]) => (
-            <tr key={priceType} className="two">
-              {priceType && priceType !== 'null' && (
-                <td className="pricecell text-left capitalize" style={{fontWeight: 500}}>
-                  {priceType.toLowerCase()}
-                </td>
+      <div className="overflow-x-auto border border-gray-200 rounded-lg">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              {pricingTable.byRowTypeObjects && !pricingTable.byRowTypeObjects[''] && (
+                <th className="px-3 py-2 text-xs font-medium text-gray-600 text-left">Type</th>
               )}
-              {prices.map(({price, salePrice}) => (
-                <td key={price} className="pricecell">
-                  {isSaleActive && salePrice ? (
-                    <div className="flex justify-evenly flex-col">
-                      {price > 0 && <span className="line-through font-bold text-xl">${price.toFixed(2)}</span>}
-                      {salePrice > 0 && <span className="font-bold text-2xl">${salePrice.toFixed(2)}</span>}
-                    </div>
-                  ) : (
-                    <span className="font-bold text-2xl">
-                      {price > 0 ? `$${price.toFixed(2)}` : <span className="font-normal text-xl">-</span>}
-                    </span>
-                  )}
-                </td>
+              {pricingTable.countFrom.map(row => (
+                <th key={row} className="px-3 py-2 text-xs font-medium text-gray-600 text-center whitespace-nowrap">
+                  {row} Items
+                </th>
               ))}
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {Object.entries(pricingTable.byRowTypeObjects).map(([priceType, prices]) => (
+              <tr key={priceType} className="border-b border-gray-100 last:border-b-0">
+                {priceType && priceType !== 'null' && (
+                  <td className="px-3 py-3 text-sm text-gray-700 capitalize font-medium">
+                    {priceType.toLowerCase()}
+                  </td>
+                )}
+                {prices.map(({price, salePrice}, idx) => (
+                  <td key={idx} className="px-3 py-3 text-center">
+                    {isSaleActive && salePrice ? (
+                      <div className="flex flex-col">
+                        {price > 0 && <span className="line-through text-gray-400 text-sm">${price.toFixed(2)}</span>}
+                        {salePrice > 0 && <span className="font-bold text-lg text-gray-900">${salePrice.toFixed(2)}</span>}
+                      </div>
+                    ) : (
+                      <span className="font-bold text-lg text-gray-900">
+                        {price > 0 ? `$${price.toFixed(2)}` : <span className="text-gray-400">-</span>}
+                      </span>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
 
-          {isSaleActive && (
-            <tr className="h-[3rem] px-3 text-center text-base border border-[#eceef1]">
-              <td colSpan={product.priceGrids.length + 1}>
-                Sale Ends:{' '}
-                <span className="text-lg font-semibold">{dayjs(product.saleEndDate).format('MM/DD/YYYY')}</span>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            {isSaleActive && (
+              <tr className="bg-yellow-50">
+                <td colSpan={product.priceGrids.length + 1} className="px-3 py-2 text-center text-sm">
+                  Sale Ends: <span className="font-semibold">{dayjs(product.saleEndDate).format('MM/DD/YYYY')}</span>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

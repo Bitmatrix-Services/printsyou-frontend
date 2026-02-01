@@ -42,6 +42,8 @@ export interface AllCategoryNameAndIds {
   name: string;
 }
 
+export type OrderType = 'CHECKOUT' | 'QUOTE_ONLY' | 'BOTH';
+
 export interface Product {
   id: string;
   productName: string;
@@ -66,6 +68,9 @@ export interface Product {
   crumbs: Crumbs[];
   allCategoryNameAndIds: AllCategoryNameAndIds[];
   productColors: productColors[];
+  reviewCount?: number;
+  averageRating?: number;
+  orderType?: OrderType;
 }
 
 export interface EnclosureProduct {

@@ -5,6 +5,11 @@ import {EnclosureProduct, Product, ProductImage} from '@components/home/product/
 import {Container} from '@components/globals/container.component';
 import {ProductImageComponent} from '@components/home/product/product-image-section.component';
 import {ProductDescriptionComponent} from '@components/home/product/product-description-section.component';
+import {OrderTimeline} from '@components/home/product/order-timeline.component';
+import {TrustBadges} from '@components/home/product/trust-badges.component';
+import {ProductFAQ} from '@components/home/product/product-faq.component';
+import {CustomerReviews} from '@components/home/product/customer-reviews.component';
+import {MobileStickyCta} from '@components/home/product/mobile-sticky-cta.component';
 import sanitizeHtml from 'sanitize-html';
 import dynamic from 'next/dynamic';
 import {SliderSkeleton} from '@components/home/home-component';
@@ -72,26 +77,66 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
     return sanitizeHtml(description);
   }, [product?.productDescription]);
 
+  // Extract production time from additional fields
+  const productionTime = useMemo(() => {
+    const productionField = product?.additionalFieldProductValues?.find(
+      f => f.fieldName.toLowerCase().includes('production')
+    );
+    if (productionField) {
+      const match = productionField.fieldValue.match(/(\d+)/);
+      return match ? parseInt(match[1]) : 4;
+    }
+    return 4;
+  }, [product?.additionalFieldProductValues]);
+
+  const shippingTime = useMemo(() => {
+    const shippingField = product?.additionalFieldProductValues?.find(
+      f => f.fieldName.toLowerCase().includes('shipping')
+    );
+    if (shippingField) {
+      const match = shippingField.fieldValue.match(/(\d+)-?(\d+)?/);
+      return match ? `${match[1]}-${match[2] || match[1]}` : '8-10';
+    }
+    return '8-10';
+  }, [product?.additionalFieldProductValues]);
+
   return (
     <>
       <Breadcrumb prefixTitle="Products" list={product.crumbs ?? []} />
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
-          <ProductImageComponent
-            productName={product.productName}
-            productImages={sortedImages}
-            outOfStock={product.outOfStock}
-          />
-
-          <Suspense fallback={<SliderSkeleton />}>
-            <ProductDescriptionComponent
-              product={product}
-              handleScroll={scrollToElement}
-              images={sortedImages}
-              setImages={setImages}
-              relatedProductsLink
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 my-8 items-start">
+          <div className="space-y-4">
+            <ProductImageComponent
+              productName={product.productName}
+              productImages={sortedImages}
+              outOfStock={product.outOfStock}
             />
-          </Suspense>
+
+            {/* Trust Badges - Desktop only, under gallery */}
+            <div className="hidden lg:block">
+              <TrustBadges />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <Suspense fallback={<SliderSkeleton />}>
+              <ProductDescriptionComponent
+                product={product}
+                handleScroll={scrollToElement}
+                images={sortedImages}
+                setImages={setImages}
+                relatedProductsLink
+              />
+            </Suspense>
+
+            {/* Order Timeline */}
+            <OrderTimeline productionDays={productionTime} shippingDays={shippingTime} />
+          </div>
+        </div>
+
+        {/* Trust Badges - Mobile only */}
+        <div className="my-8 lg:hidden">
+          <TrustBadges />
         </div>
 
         {/* Description Section */}
@@ -141,10 +186,27 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
           </div>
         </div>
 
+        {/* FAQ Section */}
+        <div className="my-8">
+          <ProductFAQ productId={product.id} />
+        </div>
+
+        {/* Customer Reviews */}
+        <div className="my-8">
+          <CustomerReviews
+            productId={product.id}
+            averageRating={product.averageRating}
+            totalReviews={product.reviewCount}
+          />
+        </div>
+
         <Suspense fallback={<SliderSkeleton />}>
           <RelatedProductsSection relatedProducts={relatedProducts} />
         </Suspense>
       </Container>
+
+      {/* Mobile Sticky CTA */}
+      <MobileStickyCta product={product} />
     </>
   );
 };

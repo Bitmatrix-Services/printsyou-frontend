@@ -69,6 +69,26 @@ const config: Config = {
       boxShadow: {
         category: '0px 4px 4px 0px #00000040',
         pricingTableShadow: '0px 1px 2px 0px rgba(142, 150, 185, 0.25)'
+      },
+      animation: {
+        'scale-in': 'scaleIn 0.3s ease-out forwards',
+        'fade-in': 'fadeIn 0.3s ease-out forwards',
+        'slide-up': 'slideUp 0.3s ease-out forwards'
+      },
+      keyframes: {
+        scaleIn: {
+          '0%': {transform: 'scale(0)', opacity: '0'},
+          '50%': {transform: 'scale(1.1)'},
+          '100%': {transform: 'scale(1)', opacity: '1'}
+        },
+        fadeIn: {
+          '0%': {opacity: '0', transform: 'translateY(10px)'},
+          '100%': {opacity: '1', transform: 'translateY(0)'}
+        },
+        slideUp: {
+          '0%': {opacity: '0', transform: 'translateY(20px)'},
+          '100%': {opacity: '1', transform: 'translateY(0)'}
+        }
       }
     }
   },

@@ -12,6 +12,7 @@ import {getAllCategories} from '@components/home/home-apis';
 import {ReduxProvider} from './redux-provider';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
+import {WhatsAppButton} from '@components/globals/whatsapp-button.component';
 import {CSPostHogProvider} from './provider';
 import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';
@@ -48,8 +49,6 @@ export default async function RootLayout({children}: PropsWithChildren) {
                 __html: ` partytown = {
                 lib: "/_next/static/~partytown/",
                 forward: [
-                'chatwootSettings',
-                'chatwootSDK.run',
                 'dataLayer.push'
                 ]
             }`
@@ -117,7 +116,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
               }}
             />
 
-            {/* Chatwoot - Defer & Lazy Load */}
+            {/* Chatwoot - Disabled
             <Script
               id="chatwoot-integration"
               dangerouslySetInnerHTML={{
@@ -142,6 +141,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
                 `
               }}
             />
+            */}
 
             <body className="overflow-x-hidden">
               <NextTopLoader color="#019ce0" showSpinner={false} />
@@ -149,6 +149,10 @@ export default async function RootLayout({children}: PropsWithChildren) {
               <Header categories={categoriesData.payload} />
               {children}
               <Footer categories={footerCategories} />
+              <WhatsAppButton
+                phoneNumber="14694347035"
+                defaultMessage="Hi! I'm interested in custom printing and have a question."
+              />
             </body>
           </html>
         </CSPostHogProvider>

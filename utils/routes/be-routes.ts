@@ -49,3 +49,25 @@ export const BlogRoutes = Object.freeze({
 export const QuoteRequestRoutes = Object.freeze({
   createQuote: `/quote-request`
 });
+
+export const ProofRoutes = Object.freeze({
+  getProof: `/proofs`,
+  approveProof: `/proofs/{id}/approve`,
+  requestChanges: `/proofs/{id}/request-changes`
+});
+
+export const FaqRoutes = Object.freeze({
+  globalFaqs: `/faqs/all`,
+  productFaqs: `/faqs/product`
+});
+
+export const ReviewRoutes = Object.freeze({
+  productReviews: `/reviews/product`,
+  createReview: `/reviews`
+});
+
+export const CheckoutRoutes = Object.freeze({
+  createSession: `/checkout/create-session`,
+  getSession: `/checkout/session`,
+  getSessionByStripeId: `/checkout/session/stripe`
+});

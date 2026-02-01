@@ -118,8 +118,30 @@ export const quoteRequestSchema = object({
   sourceUrl: string().nullable()
 });
 
+export const stripeCheckoutSchema = object({
+  email: string().email('Please enter a valid email').required('Please enter your email address'),
+  firstName: string()
+    .min(1, 'First name is required')
+    .max(50, 'First name must be at most 50 characters')
+    .required('Please enter your first name'),
+  lastName: string()
+    .min(1, 'Last name is required')
+    .max(50, 'Last name must be at most 50 characters')
+    .required('Please enter your last name'),
+  phone: string().nullable(),
+  company: string().nullable(),
+  address: string().required('Please enter your address'),
+  addressLine2: string().nullable(),
+  city: string().required('Please enter city'),
+  state: string().required('Please select state'),
+  zipCode: string().required('Please enter zip code'),
+  specialInstructions: string().nullable(),
+  termsAndConditions: boolean().oneOf([true], 'You must agree to the terms and conditions')
+});
+
 export type NewsletterFormSchemaType = InferType<typeof newsletterSchema>;
 export type ContactUsFormSchemaType = InferType<typeof contactUsSchema>;
 export type OrderFormSchemaType = InferType<typeof orderCheckoutSchema>;
 export type OrderNowFormSchemaType = InferType<typeof orderNowSchema>;
 export type QuoteRequestFormSchemaType = InferType<typeof quoteRequestSchema>;
+export type StripeCheckoutFormSchemaType = InferType<typeof stripeCheckoutSchema>;

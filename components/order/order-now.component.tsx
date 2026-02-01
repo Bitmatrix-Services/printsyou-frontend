@@ -1,7 +1,7 @@
 'use client';
 import React, {ChangeEvent, FC, memo, useEffect, useMemo, useState} from 'react';
 import {notFound, useRouter} from 'next/navigation';
-import axios, {AxiosResponse} from 'axios';
+import axios from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {statesList} from '@utils/constants';
@@ -30,8 +30,10 @@ import {CustomProduct, UploadedFileType} from '@components/globals/cart/cart-typ
 import {v4 as uuidv4} from 'uuid';
 import Option from '@mui/joy/Option';
 import {MdOutlineFileDownload} from 'react-icons/md';
+import {FaLock} from 'react-icons/fa';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
+import {CheckoutRoutes, QuoteRequestRoutes} from '@utils/routes/be-routes';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -56,6 +58,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   const [priceTypes, setPriceTypes] = useState<StringItem[]>([]);
   const [progress, setProgress] = useState<number>(0);
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
+  const [uploadId] = useState<string>(uuidv4()); // Unique ID for file uploads
   const [product, setProduct] = useState<CustomProduct>({
     id: '',
     sku: '',
@@ -117,7 +120,6 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
   const {
     control,
-    reset,
     handleSubmit,
     formState: {errors, isSubmitting},
     watch,
@@ -198,78 +200,97 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         behavior: 'smooth'
       });
 
-      const cartId = getCartId();
       setApiError(false);
 
-      const cartData = {
+      // Calculate total price
+      const unitPrice = calculatedPrice;
+      const quantity = data.itemQty;
+      const setup = setupFee;
+      const totalPrice = (unitPrice * quantity) + setup;
+
+      // Build product notes with specs
+      const specs = [
+        data.itemColor ? `Item Color: ${data.itemColor}` : null,
+        data.imprintColor ? `Imprint Colors: ${data.imprintColor}` : null,
+        data.size ? `Size: ${data.size}` : null,
+        data.selectedPriceType ? `Decoration Type: ${data.selectedPriceType}` : null,
+        data.location?.length ? `Locations: ${data.location.join(', ')}` : null,
+        data.additionalInformation ? `Special Instructions: ${data.additionalInformation}` : null,
+        data.inHandDate ? `In-Hand Date: ${data.inHandDate}` : null,
+        data.salesRep ? `Sales Rep: ${data.salesRep}` : null
+      ].filter(Boolean).join('\n');
+
+      // Create quote request with product details and calculated price
+      const quoteRequestData = {
+        fullName: data.billingAddress.fullname,
+        emailAddress: data.emailAddress,
+        phoneNumber: data.billingAddress.phoneNumber || null,
+        companyName: data.billingAddress.company || null,
+        productCategory: selectedProduct?.allCategoryNameAndIds?.[0]?.name || 'Promotional Products',
+        quantity: quantity,
+        notes: specs,
+        needByDate: data.inHandDate || null,
+        source: 'order-now',
+        sourceUrl: window.location.href,
+        // Product details for direct checkout
+        quotedAmount: totalPrice,
         productId: product.id,
-        qtyRequested: data.itemQty,
-        priceType: data.selectedPriceType,
-        specs: [
-          {
-            fieldName: 'Item Color',
-            fieldValue: data.itemColor
-          },
-          {
-            fieldName: 'Imprint Colors',
-            fieldValue: data.imprintColor
-          },
-          {
-            fieldName: 'Size',
-            fieldValue: data.size
-          }
-        ],
-        files: artWorkFiles
+        productSku: product.sku,
+        productName: selectedProduct?.productName || product.productName,
+        // Shipping address
+        shippingAddress: {
+          addressLine1: data.billingAddress.addressLineOne,
+          addressLine2: data.billingAddress.addressLineTwo || null,
+          city: data.billingAddress.city,
+          state: data.billingAddress.state,
+          zipCode: data.billingAddress.zipCode,
+          country: 'USA'
+        },
+        // Artwork files
+        artworkFiles: artWorkFiles.map(file => ({
+          filename: file.filename,
+          fileType: file.fileType,
+          fileKey: file.fileKey
+        }))
       };
-      cartData.specs = cartData.specs
-        .filter(spec => spec.fieldValue !== '' && spec.fieldValue !== null && spec.fieldValue !== undefined)
-        .map(spec => ({
-          fieldName: spec.fieldName,
-          fieldValue: spec.fieldValue
-        }));
 
-      // add to cart first
-      await axios
-        .post(`${API_BASE_URL}/cart/add?cartId=${cartId}`, cartData)
-        .then((_: AxiosResponse) => {})
-        .catch(err => {
-          throw err;
-        });
+      // Step 1: Create the quote request
+      const quoteResponse = await axios.post(`${API_BASE_URL}${QuoteRequestRoutes.createQuote}`, quoteRequestData);
+      const quoteRequestId = quoteResponse.data.payload.id;
 
-      // creating order
-      let orderData: any = structuredClone(data);
-
-      orderData.shippingAddressSame = true;
-      orderData.cartId = cartId;
-
-      delete orderData.newsLetter;
-      delete orderData.termsAndConditions;
-      delete orderData.itemQty;
-      delete orderData.imprintColor;
-      delete orderData.itemColor;
-      delete orderData.size;
-      delete orderData.selectedPriceType;
-      delete orderData.minQty;
+      if (!quoteRequestId) {
+        throw new Error('Failed to create order request');
+      }
 
       //@ts-ignore
-      gtag_report_conversion('https://printsyou.com/order-now');
+      gtag_report_conversion && gtag_report_conversion('https://printsyou.com/order-now');
 
-      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/cart/create-order`, orderData);
+      // Step 2: Create Stripe checkout session
+      const checkoutData = {
+        quoteRequestId: quoteRequestId,
+        successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${window.location.origin}/checkout/cancel`
+      };
+
+      const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData);
+      return response.data;
     },
-    onSuccess: () => {
-      setTimeout(() => {
+    onSuccess: (responseData) => {
+      if (responseData?.payload?.checkoutUrl) {
+        // Redirect to Stripe
+        window.location.href = responseData.payload.checkoutUrl;
+      } else {
         setLoading(false);
-        setIsSuccessModalOpen('success');
-        localStorage.removeItem('orderId');
-        reset();
-      }, 2000);
+        setIsSuccessModalOpen('error');
+        setApiError(true);
+      }
     },
     onError: () => {
       setTimeout(() => {
         setLoading(false);
         setIsSuccessModalOpen('error');
         setApiError(true);
-      }, 2000);
+      }, 1000);
     }
   });
 
@@ -336,27 +357,15 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     return (setupCharge?.chargePrices?.[0]?.price ?? 0) * setupChargeTimes;
   }, [watch('itemQty'), watch('selectedPriceType'), watch('location')]);
 
-  const getCartId = () => {
-    let cartId;
-    try {
-      cartId = localStorage.getItem('orderId');
-      if (!cartId) {
-        cartId = uuidv4();
-        localStorage.setItem('orderId', cartId);
-      }
-      return cartId;
-    } catch (error) {}
-  };
-
   const handleFileUpload = async (file: File) => {
-    let data = {
-      type: 'CART',
+    const uploadData = {
+      type: 'QUOTE',
       fileName: file.name,
-      id: getCartId()
+      id: uploadId
     };
 
     try {
-      const res = await axios.get(`${API_BASE_URL}/s3/signedUrl`, {params: data});
+      const res = await axios.get(`${API_BASE_URL}/s3/signedUrl`, {params: uploadData});
       await axios.put(res.data.payload.url, file, {
         onUploadProgress: event => {
           const percent = Math.floor((event.loaded / (event.total as number)) * 100);
@@ -629,8 +638,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
                       <div className="flex flex-col md:flex-row gap-2 justify-between mt-4">
                         <div className="text-xs">
-                          *Final total including shipping and any additional charges will be sent with the artwork proof
-                          after the order is placed.
+                          *Final total including shipping and any additional charges will be calculated at checkout.
                         </div>
 
                         <hr className="my-4 border border-black-100" />
@@ -814,19 +822,26 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                   </div>
                   <FormHeading text="Payment Information" />
 
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-center gap-2 text-blue-800">
+                      <FaLock className="w-4 h-4" />
+                      <span className="font-medium">Secure Payment via Stripe</span>
+                    </div>
+                    <p className="text-blue-700 text-sm mt-2">
+                      After submitting, you will be redirected to Stripe for secure payment processing.
+                      Your order will be confirmed once payment is complete.
+                    </p>
+                  </div>
+
                   <ul className="list-disc ml-4">
                     <li className=" text-[14px] mb-2">
-                      After submitting your order, PrintsYou will follow up with any questions, a confirmation, and an
-                      artwork proof. The confirmation will include shipping charges, any applicable taxes, and any
-                      additional charges that may be required based on your artwork.
+                      After payment, PrintsYou will review your order and send you a digital artwork proof for approval.
                     </li>
                     <li className=" text-[14px] mb-2">
-                      You have nothing to worry about by submitting your order. The order is not firm until your artwork
-                      proof along with the pricing breakdown has been approved and we begin production. The order may be
-                      canceled any time before that.
+                      Production begins only after you approve the proof. You can request changes if needed.
                     </li>
                     <li className=" text-[14px] mb-2">
-                      {`We do not request payment until we receive approvals, so if you're nervous about placing your order with us, don't be . There will be plenty of communication before we begin production.`}
+                      Final shipping charges and any artwork setup fees will be included in your invoice.
                     </li>
                   </ul>
                 </div>
@@ -950,8 +965,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
                         <div className="flex flex-col md:flex-row gap-2 justify-between mt-4">
                           <div className="text-xs">
-                            *Final total including shipping and any additional charges will be sent with the artwork
-                            proof after the order is placed.
+                            *Final total including shipping and any additional charges will be calculated at checkout.
                           </div>
 
                           <hr className="my-4 border border-black-100" />
@@ -1133,11 +1147,21 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
                     <div className="my-6 flex w-full justify-center items-center">
                       <button
                         type="submit"
-                        className={`w-full py-5 px-32 text-sm font-bold ${selectedProduct.outOfStock ? 'border-mute4 bg-mute4 pointer-events-none' : 'bg-primary hover:bg-primary-400'} text-white`}
+                        className={`w-full py-5 px-32 text-sm font-bold ${selectedProduct.outOfStock ? 'border-mute4 bg-mute4 pointer-events-none' : 'bg-green-600 hover:bg-green-700'} text-white flex items-center justify-center gap-3 rounded-lg`}
                       >
-                        {isSubmitting ? <CircularLoader /> : 'SUBMIT'}
+                        {isSubmitting ? (
+                          <CircularLoader />
+                        ) : (
+                          <>
+                            <FaLock className="w-4 h-4" />
+                            Continue to Payment
+                          </>
+                        )}
                       </button>
                     </div>
+                    <p className="text-xs text-center text-gray-500">
+                      You will be redirected to Stripe for secure payment processing.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -1153,14 +1177,11 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
             setIsSuccessModalOpen('');
             setApiError(false);
           }}
-          title="Thank you for placing an order with PrintsYou!"
-          htmlNote={`<p>If you submit a request during our business hours (Monday to Friday, 9 AM - 5 PM CST), you'll hear back from a sales associate within 24 hours. Requests placed outside of these hours will be processed the next business day.</p>
+          title="Checkout Error"
+          htmlNote={`<p>There was an issue creating your checkout session. Please try again or contact us for assistance.</p>
 <br/>
-<p>To complete your order, we need your artwork. If it wasn't attached to your request, simply reply to the email with your artwork. A sales associate will review it and send a digital proof along with your order confirmation.</p>
-<br/>
-<p>Once you approve the artwork and sales confirmation, we'll send an invoice and a secure payment link. Complete the payment, and your order will move to production quickly.</p>
-<br/>
-<p>Feel free to reach out with any questions during the process.</p>`}
+<p>Email: <a href="mailto:info@printsyou.com" class="text-blue-600">info@printsyou.com</a></p>
+<p>Phone: (469) 434-7035</p>`}
         />
       </Container>
     </>
