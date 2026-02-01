@@ -327,7 +327,7 @@ export const DirectCheckoutComponent: FC = () => {
             <div className="text-center max-w-md">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
               <p className="text-gray-600 mb-6">
-                The product you're looking for doesn't exist or may have been removed.
+                The product you&apos;re looking for doesn&apos;t exist or may have been removed.
               </p>
               <Link
                 href="/"
@@ -456,7 +456,7 @@ export const DirectCheckoutComponent: FC = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Your Artwork</h3>
                     <p className="text-sm text-gray-600 mb-4">
                       Upload your logo or design files. We accept all formats, but prefer vector files (.ai, .eps, .svg).
-                      We'll send a digital proof for your approval before production.
+                      We&apos;ll send a digital proof for your approval before production.
                     </p>
                     <ArtworkUploader
                       files={artworkFiles}

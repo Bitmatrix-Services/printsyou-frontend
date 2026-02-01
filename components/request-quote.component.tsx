@@ -16,7 +16,7 @@ import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaClock, FaShieldAlt} from 'react-icons/fa';
 import {RiMessengerLine} from 'react-icons/ri';
-import {MdOutlineFileDownload, MdOutlineUploadFile} from 'react-icons/md';
+import {MdOutlineUploadFile} from 'react-icons/md';
 import {IoClose} from 'react-icons/io5';
 import {HiOutlineLightBulb} from 'react-icons/hi';
 import {useSearchParams, useRouter} from 'next/navigation';
@@ -291,7 +291,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
               Get Your Free Custom Quote
             </h1>
             <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
-              Tell us about your project and we'll create a personalized quote with a free virtual proof — no payment or commitment required.
+              Tell us about your project and we&apos;ll create a personalized quote with a free virtual proof — no payment or commitment required.
             </p>
 
             {/* Trust Badges Row */}
@@ -340,7 +340,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                             </p>
                             <h3 className="font-bold text-gray-900 text-lg md:text-xl">{itemData.name}</h3>
                             <p className="text-sm text-gray-500 mt-1">
-                              Complete the form below and we'll prepare your custom quote
+                              Complete the form below and we&apos;ll prepare your custom quote
                             </p>
                           </div>
                         </div>
@@ -353,7 +353,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                         <span className="w-6 h-6 bg-primary-500 text-white rounded-full text-sm flex items-center justify-center">1</span>
                         Contact Information
                       </h2>
-                      <p className="text-sm text-gray-500 mb-4 ml-8">We'll use this to send your quote and proof</p>
+                      <p className="text-sm text-gray-500 mb-4 ml-8">We&apos;ll use this to send your quote and proof</p>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <FormControlInput
@@ -592,7 +592,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                         )}
 
                         <p className="text-xs text-center text-gray-400 mt-4">
-                          Don't have artwork yet? No problem — we can work with you to create it.
+                          Don&apos;t have artwork yet? No problem — we can work with you to create it.
                         </p>
                       </div>
                     </div>
@@ -607,7 +607,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                         {isSubmitting ? 'Submitting Your Request...' : 'Get My Free Quote & Proof'}
                       </button>
                       <p className="text-center text-xs text-gray-500 mt-3">
-                        No payment required. No obligation. We'll respond within 1 business day.
+                        No payment required. No obligation. We&apos;ll respond within 1 business day.
                       </p>
                     </div>
                   </form>

@@ -17,7 +17,7 @@ interface FilterSidebarProps {
   categoryUniqueName: string;
 }
 
-const FilterSidebar: FC<FilterSidebarProps> = memo(({filters, categoryUniqueName}) => {
+const FilterSidebar: FC<FilterSidebarProps> = memo(({filters, categoryUniqueName: _categoryUniqueName}) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
