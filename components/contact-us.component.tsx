@@ -18,7 +18,7 @@ import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 
 export const ContactUsComponent = () => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const methods = useForm<ContactUsFormSchemaType>({
