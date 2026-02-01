@@ -480,7 +480,7 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                     {needsPayment ? (
                       <button
                         onClick={handleApproveAndPay}
-                        disabled={isProcessingPayment || (showSizeBreakdown && !isSizeBreakdownValid)}
+                        disabled={isProcessingPayment || !!(showSizeBreakdown && !isSizeBreakdownValid)}
                         className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mb-3"
                       >
                         {isProcessingPayment ? (
@@ -603,7 +603,7 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
             {needsPayment ? (
               <button
                 onClick={handleApproveAndPay}
-                disabled={isProcessingPayment || (showSizeBreakdown && !isSizeBreakdownValid)}
+                disabled={isProcessingPayment || !!(showSizeBreakdown && !isSizeBreakdownValid)}
                 className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isProcessingPayment ? (

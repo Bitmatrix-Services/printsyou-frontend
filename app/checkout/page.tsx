@@ -1,9 +1,15 @@
 import {Metadata} from 'next';
+import {Suspense} from 'react';
 import {metaConstants} from '@utils/constants';
 import {CheckoutComponent} from '@components/checkout.component';
+import {CircularLoader} from '@components/globals/circular-loader.component';
 
 const CheckoutPage = () => {
-  return <CheckoutComponent />;
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><CircularLoader /></div>}>
+      <CheckoutComponent />
+    </Suspense>
+  );
 };
 
 export default CheckoutPage;

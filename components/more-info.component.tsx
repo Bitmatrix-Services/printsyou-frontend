@@ -24,7 +24,7 @@ interface IMoreInfoComponent {
 }
 
 export const MoreInfoComponent: FC<IMoreInfoComponent> = ({product}) => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const methods = useForm<ContactUsFormSchemaType>({

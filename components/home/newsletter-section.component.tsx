@@ -15,7 +15,7 @@ import {NewsletterFormSchemaType, newsletterSchema} from '@utils/validation-sche
 import {CircularLoader} from '@components/globals/circular-loader.component';
 
 export const Newsletter = () => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
 
   const {
     control,

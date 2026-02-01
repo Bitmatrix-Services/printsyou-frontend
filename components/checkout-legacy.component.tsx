@@ -44,7 +44,7 @@ export const CheckoutComponent: FC = () => {
 
   const cartRoot = useAppSelector(selectCartRootState);
 
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [apiError, setApiError] = useState<boolean>(false);
   const [artWorkFiles, setArtWorkFiles] = useState<CartItemFile[]>([]);
   const [progress, setProgress] = useState<number>(0);

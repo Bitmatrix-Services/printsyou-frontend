@@ -33,7 +33,7 @@ export const CheckoutFlowComponent: FC = () => {
   const [checkoutId] = useState<string>(uuidv4());
   const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [modalState, setModalState] = useState<'success' | 'error' | ''>('');
+  const [modalState, setModalState] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [modalMessage, setModalMessage] = useState<string>('');
 
   const methods = useForm<StripeCheckoutFormSchemaType>({

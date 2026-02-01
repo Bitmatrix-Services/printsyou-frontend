@@ -57,7 +57,7 @@ export const DirectCheckoutComponent: FC = () => {
   const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
   const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [modalState, setModalState] = useState<'success' | 'error' | ''>('');
+  const [modalState, setModalState] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [modalMessage, setModalMessage] = useState<string>('');
 
   // Fetch product data

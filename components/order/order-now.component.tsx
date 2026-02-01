@@ -53,7 +53,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [apiError, setApiError] = useState<boolean>(false);
   const [priceTypes, setPriceTypes] = useState<StringItem[]>([]);
   const [progress, setProgress] = useState<number>(0);

@@ -53,7 +53,7 @@ interface RequestQuoteComponentProps {
 }
 
 export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}) => {
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | ''>('');
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [artWorkFiles, setArtWorkFiles] = useState<ArtworkFile[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
