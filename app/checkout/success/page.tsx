@@ -53,9 +53,17 @@ const CheckoutSuccessContent = () => {
         const data = verifyResponse.data.payload;
         setSessionData(data);
 
-        // Track successful payment
+        // Track successful payment - Google Analytics
         if (typeof window !== 'undefined' && (window as any).gtag) {
           (window as any).gtag('event', 'purchase', {
+            transaction_id: data.stripeSessionId,
+            value: data.amountTotal,
+            currency: data.currency || 'USD'
+          });
+
+          // Google Ads Purchase Conversion
+          (window as any).gtag('event', 'conversion', {
+            send_to: 'AW-16709127988/SI9-CNz_w_EbELSexJ8-',
             transaction_id: data.stripeSessionId,
             value: data.amountTotal,
             currency: data.currency || 'USD'

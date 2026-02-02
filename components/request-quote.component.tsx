@@ -2,7 +2,7 @@
 import React, {ChangeEvent, FC, useState, useEffect, useCallback} from 'react';
 import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
-import {FormProvider, SubmitHandler, useForm, Controller} from 'react-hook-form';
+import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@tanstack/react-query';
 import axios from 'axios';
@@ -18,11 +18,7 @@ import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaClock, FaShieldAlt} from 'react-
 import {RiMessengerLine} from 'react-icons/ri';
 import {MdOutlineUploadFile} from 'react-icons/md';
 import {IoClose} from 'react-icons/io5';
-import {HiOutlineLightBulb} from 'react-icons/hi';
 import {useSearchParams, useRouter} from 'next/navigation';
-import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
-import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 import Image from 'next/image';
 import {v4 as uuidv4} from 'uuid';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
@@ -347,192 +343,81 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                       </div>
                     )}
 
-                    {/* ========== SECTION 1: CONTACT INFORMATION ========== */}
-                    <div className="mb-8">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <span className="w-6 h-6 bg-primary-500 text-white rounded-full text-sm flex items-center justify-center">1</span>
-                        Contact Information
-                      </h2>
-                      <p className="text-sm text-gray-500 mb-4 ml-8">We&apos;ll use this to send your quote and proof</p>
+                    {/* ========== MINIMAL FORM LAYOUT ========== */}
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <FormControlInput
-                          label="Your Name"
-                          name="fullName"
-                          isRequired={true}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                          placeholder="Jane Smith"
-                        />
-
-                        <FormControlInput
-                          label="Work Email"
-                          name="emailAddress"
-                          isRequired={true}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                          placeholder="jane@yourcompany.com"
-                        />
-
-                        <FormControlInput
-                          label="Company / Organization"
-                          name="companyName"
-                          isRequired={false}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                          placeholder="Acme Corporation"
-                        />
-
-                        <MaskInput
-                          label="Phone Number"
-                          name="phoneNumber"
-                          isRequired={false}
-                          disabled={isSubmitting}
-                          control={control}
-                          errors={errors}
-                        />
-                      </div>
-                    </div>
-
-                    {/* ========== SECTION 2: ORDER DETAILS ========== */}
-                    <div className="mb-8">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <span className="w-6 h-6 bg-primary-500 text-white rounded-full text-sm flex items-center justify-center">2</span>
-                        Order Details
-                      </h2>
-                      <p className="text-sm text-gray-500 mb-4 ml-8">Help us understand your needs for accurate pricing</p>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        {/* Product/Category - Only show if not pre-filled */}
-                        {!itemData?.name && (
-                          <FormControlInput
-                            label="Product Type"
-                            name="productCategory"
-                            isRequired={false}
-                            disabled={isSubmitting}
-                            control={control}
-                            errors={errors}
-                            placeholder="e.g., Safety Vests, Custom T-Shirts, Pens"
-                          />
-                        )}
-
-                        {/* Quantity - REQUIRED */}
-                        <div className={!itemData?.name ? '' : 'md:col-span-1'}>
-                          <FormControlInput
-                            label="Estimated Quantity"
-                            name="quantity"
-                            isRequired={true}
-                            disabled={isSubmitting}
-                            control={control}
-                            fieldType="number"
-                            errors={errors}
-                            placeholder="e.g., 250"
-                          />
-                          <p className="text-xs text-gray-400 mt-1">
-                            Tip: Higher quantities = lower per-unit cost. We can quote multiple quantities.
-                          </p>
-                        </div>
-
-                        {/* Need-by Date */}
-                        <div className="md:col-span-1">
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            When Do You Need This? <span className="text-gray-400 font-normal">(Optional)</span>
-                          </label>
-                          <Controller
-                            name="needByDate"
-                            control={control}
-                            render={({field: {onChange, value}}) => (
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                  value={value ? dayjs(value) : null}
-                                  onChange={date => onChange(date ? date.format('YYYY-MM-DD') : '')}
-                                  disabled={isSubmitting}
-                                  minDate={dayjs().add(7, 'day')}
-                                  slotProps={{
-                                    textField: {
-                                      fullWidth: true,
-                                      size: 'small',
-                                      placeholder: 'Select your event or deadline date',
-                                      sx: {
-                                        '& .MuiOutlinedInput-root': {
-                                          borderRadius: '0.5rem',
-                                          backgroundColor: 'white'
-                                        }
-                                      }
-                                    }
-                                  }}
-                                />
-                              </LocalizationProvider>
-                            )}
-                          />
-                          <p className="text-xs text-gray-400 mt-1">
-                            Standard production: 2-3 weeks. Rush options available for urgent orders.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* ========== SECTION 3: PROJECT DETAILS ========== */}
-                    <div className="mb-8">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <span className="w-6 h-6 bg-primary-500 text-white rounded-full text-sm flex items-center justify-center">3</span>
-                        Project Details
-                      </h2>
-                      <p className="text-sm text-gray-500 mb-4 ml-8">The more details you provide, the faster we can prepare your quote</p>
-
-                      {/* Helper prompt */}
-                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-                        <div className="flex gap-3">
-                          <HiOutlineLightBulb className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                          <div className="text-sm text-amber-800">
-                            <p className="font-medium mb-1">Help us quote accurately by including:</p>
-                            <ul className="list-disc list-inside text-amber-700 space-y-0.5">
-                              <li>Logo placement location (front, back, sleeve, etc.)</li>
-                              <li>Size breakdown if known (e.g., 10 S, 20 M, 15 L, 5 XL)</li>
-                              <li>Specific colors or Pantone numbers</li>
-                              <li>Any special requirements or deadlines</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+                    {/* Contact & Quantity Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                      <FormControlInput
+                        label="Your Name"
+                        name="fullName"
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                        placeholder="Jane Smith"
+                      />
 
                       <FormControlInput
-                        label="Project Description"
+                        label="Work Email"
+                        name="emailAddress"
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                        placeholder="jane@yourcompany.com"
+                      />
+
+                      <MaskInput
+                        label="Phone Number"
+                        name="phoneNumber"
+                        isRequired={false}
+                        disabled={isSubmitting}
+                        control={control}
+                        errors={errors}
+                      />
+
+                      <FormControlInput
+                        label="Estimated Quantity"
+                        name="quantity"
+                        isRequired={true}
+                        disabled={isSubmitting}
+                        control={control}
+                        fieldType="number"
+                        errors={errors}
+                        placeholder="e.g., 250"
+                      />
+                    </div>
+
+                    {/* Project Details */}
+                    <div className="mb-6">
+                      <FormControlInput
+                        label="Project Details"
                         name="notes"
                         isRequired={false}
                         disabled={isSubmitting}
                         control={control}
                         inputType="textarea"
                         errors={errors}
-                        placeholder="Example: Need 250 safety vests for our construction crew. Logo on front left chest (about 4 inches) and large logo on back. Company colors are navy blue (Pantone 289C) and white. Need a mix of sizes: 50 M, 100 L, 75 XL, 25 2XL. Event is March 15th - is rush production possible?"
+                        placeholder="Tell us about your project: quantity breakdown by size, logo placement, colors, deadline, etc."
                       />
+                      <p className="text-xs text-gray-400 mt-1">
+                        Include size breakdown, logo placement, colors, and any deadlines if known.
+                      </p>
                     </div>
 
-                    {/* ========== SECTION 4: ARTWORK UPLOAD ========== */}
-                    <div className="mb-8">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <span className="w-6 h-6 bg-gray-300 text-white rounded-full text-sm flex items-center justify-center">4</span>
-                        Upload Your Artwork
-                        <span className="text-sm font-normal text-gray-400 ml-1">(Optional)</span>
-                      </h2>
-                      <p className="text-sm text-gray-500 mb-4 ml-8">
-                        Have your logo ready? Upload it now for a faster, more accurate proof.
-                      </p>
-
-                      <div className="bg-blue-50 border-2 border-dashed border-blue-200 rounded-lg p-6">
-                        <div className="text-center">
-                          <MdOutlineUploadFile className="w-10 h-10 text-blue-400 mx-auto mb-3" />
-                          <label
-                            htmlFor="quoteArtworkInput"
-                            className="cursor-pointer"
-                          >
-                            <span className="text-blue-600 font-medium hover:text-blue-700">
+                    {/* Artwork Upload - Compact */}
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Upload Artwork <span className="text-gray-400 font-normal">(Optional)</span>
+                      </label>
+                      <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                        <div className="flex items-center justify-center gap-3">
+                          <MdOutlineUploadFile className="w-6 h-6 text-gray-400" />
+                          <label htmlFor="quoteArtworkInput" className="cursor-pointer">
+                            <span className="text-primary-600 font-medium hover:text-primary-700">
                               Click to upload
                             </span>
-                            <span className="text-gray-500"> or drag and drop</span>
+                            <span className="text-gray-500 text-sm"> — AI, EPS, SVG, PDF, PNG, JPG</span>
                             <input
                               id="quoteArtworkInput"
                               type="file"
@@ -542,60 +427,52 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                               disabled={isSubmitting}
                             />
                           </label>
-                          <p className="text-xs text-gray-500 mt-2">
-                            <span className="font-medium">Best formats:</span> AI, EPS, SVG, PDF (vector)
-                          </p>
-                          <p className="text-xs text-gray-400">
-                            Also accepts: PNG, JPG, PSD (300+ DPI recommended)
-                          </p>
                         </div>
 
                         {uploadProgress > 0 && (
-                          <div className="mt-4">
+                          <div className="mt-3">
                             <LinearProgressWithLabel progress={uploadProgress} />
                           </div>
                         )}
 
                         {artWorkFiles.length > 0 && (
-                          <ul className="mt-4 space-y-2">
+                          <ul className="mt-3 space-y-2">
                             {artWorkFiles.map((file, index) => (
-                              <li key={file.fileKey} className="flex items-center p-3 bg-white rounded-lg border border-gray-200">
+                              <li key={file.fileKey} className="flex items-center p-2 bg-white rounded border border-gray-200">
                                 {allowedImageTypes.some(type => type === file.fileType) ? (
-                                  <div className="w-10 h-10 flex-shrink-0 overflow-hidden rounded">
+                                  <div className="w-8 h-8 flex-shrink-0 overflow-hidden rounded">
                                     <Image
                                       className="object-cover w-full h-full"
-                                      width={40}
-                                      height={40}
+                                      width={32}
+                                      height={32}
                                       src={`${ASSETS_SERVER_URL}${file.fileKey}`}
                                       alt={file.filename}
                                     />
                                   </div>
                                 ) : (
-                                  <div className="w-10 h-10 flex-shrink-0 bg-gray-100 rounded flex items-center justify-center">
-                                    <FaFileAlt className="text-gray-400" />
+                                  <div className="w-8 h-8 flex-shrink-0 bg-gray-100 rounded flex items-center justify-center">
+                                    <FaFileAlt className="text-gray-400 text-sm" />
                                   </div>
                                 )}
-                                <div className="flex-grow pl-3 min-w-0">
-                                  <span className="text-sm font-medium text-gray-700 truncate block">{file.filename}</span>
-                                  <span className="text-xs text-gray-400 uppercase">{file.fileType}</span>
-                                </div>
+                                <span className="flex-grow pl-2 text-sm text-gray-700 truncate">{file.filename}</span>
                                 <button
                                   type="button"
                                   onClick={() => handleFileRemove(index)}
-                                  className="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                                  className="ml-2 p-1 text-red-500 hover:text-red-700 rounded"
                                 >
-                                  <IoClose className="w-5 h-5" />
+                                  <IoClose className="w-4 h-4" />
                                 </button>
                               </li>
                             ))}
                           </ul>
                         )}
-
-                        <p className="text-xs text-center text-gray-400 mt-4">
-                          Don&apos;t have artwork yet? No problem — we can work with you to create it.
-                        </p>
                       </div>
                     </div>
+
+                    {/* Hidden fields for product context */}
+                    {!itemData?.name && (
+                      <input type="hidden" {...methods.register('productCategory')} />
+                    )}
 
                     {/* ========== SUBMIT BUTTON ========== */}
                     <div className="mt-8">
