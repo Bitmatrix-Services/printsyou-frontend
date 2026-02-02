@@ -69,7 +69,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '852560867505438');
+            fbq('init', '850875120645150');
             fbq('track', 'PageView');
           `,
                 }}
@@ -81,7 +81,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
                     height="1"
                     width="1"
                     style={{ display: "none" }}
-                    src="https://www.facebook.com/tr?id=852560867505438&ev=PageView&noscript=1"
+                    src="https://www.facebook.com/tr?id=850875120645150&ev=PageView&noscript=1"
                 />
             </noscript>
 
