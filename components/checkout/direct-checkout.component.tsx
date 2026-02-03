@@ -47,6 +47,30 @@ interface Product {
   allCategoryNameAndIds?: Array<{id: string; name: string}>;
 }
 
+// Shipping configuration - moved outside component for stable reference
+const SHIPPING_CONFIG = {
+  freeShippingThreshold: 500, // Free shipping for orders $500+
+  rates: [
+    {maxQty: 50, fee: 12.99},
+    {maxQty: 100, fee: 15.99},
+    {maxQty: 250, fee: 19.99},
+    {maxQty: 500, fee: 29.99},
+    {maxQty: 1000, fee: 49.99},
+    {maxQty: Infinity, fee: 79.99}
+  ]
+};
+
+// Calculate shipping based on quantity
+const calculateShipping = (qty: number, subtotal: number): number => {
+  // Free shipping if subtotal exceeds threshold
+  if (subtotal >= SHIPPING_CONFIG.freeShippingThreshold) {
+    return 0;
+  }
+  // Find applicable shipping rate based on quantity
+  const rate = SHIPPING_CONFIG.rates.find(r => qty <= r.maxQty);
+  return rate?.fee || SHIPPING_CONFIG.rates[SHIPPING_CONFIG.rates.length - 1].fee;
+};
+
 export const DirectCheckoutComponent: FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -106,7 +130,7 @@ export const DirectCheckoutComponent: FC = () => {
   // Calculate pricing based on quantity
   const pricing = useMemo(() => {
     if (!product?.priceGrids?.length || quantity <= 0) {
-      return {unitPrice: 0, subtotal: 0, setupFee: product?.setupFee || 0, total: 0};
+      return {unitPrice: 0, subtotal: 0, setupFee: product?.setupFee || 0, shippingFee: 0, total: 0, freeShipping: false};
     }
 
     const sortedPrices = [...product.priceGrids].sort((a, b) => a.countFrom - b.countFrom);
@@ -126,9 +150,11 @@ export const DirectCheckoutComponent: FC = () => {
     const unitPrice = applicablePrice?.salePrice || applicablePrice?.price || 0;
     const subtotal = unitPrice * quantity;
     const setupFee = product?.setupFee || 0;
-    const total = subtotal + setupFee;
+    const shippingFee = calculateShipping(quantity, subtotal);
+    const freeShipping = subtotal >= SHIPPING_CONFIG.freeShippingThreshold;
+    const total = subtotal + setupFee + shippingFee;
 
-    return {unitPrice, subtotal, setupFee, total};
+    return {unitPrice, subtotal, setupFee, shippingFee, freeShipping, total};
   }, [product, quantity]);
 
   // Get min/max quantity
@@ -232,7 +258,7 @@ export const DirectCheckoutComponent: FC = () => {
         // Pricing breakdown
         unitPrice: pricing.unitPrice,
         setupFee: pricing.setupFee,
-        shippingFee: 0, // Shipping calculated after proof
+        shippingFee: pricing.shippingFee,
         shippingAddress: {
           addressLine1: data.address,
           addressLine2: data.addressLine2 || null,
@@ -578,9 +604,13 @@ export const DirectCheckoutComponent: FC = () => {
                             <span className="font-medium">${pricing.setupFee.toFixed(2)}</span>
                           </div>
                         )}
-                        <div className="flex justify-between text-gray-500">
-                          <span>Shipping</span>
-                          <span>Calculated after proof</span>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Shipping</span>
+                          {pricing.freeShipping ? (
+                            <span className="font-medium text-green-600">FREE</span>
+                          ) : (
+                            <span className="font-medium">${pricing.shippingFee.toFixed(2)}</span>
+                          )}
                         </div>
                         <hr className="my-3" />
                         <div className="flex justify-between text-lg font-bold">
@@ -593,6 +623,11 @@ export const DirectCheckoutComponent: FC = () => {
                       <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                         <p className="text-xs text-gray-500">
                           <strong>Tip:</strong> Order more to save! Pricing updates based on quantity.
+                          {!pricing.freeShipping && pricing.subtotal > 0 && (
+                            <span className="block mt-1">
+                              Add ${(500 - pricing.subtotal).toFixed(2)} more for FREE shipping!
+                            </span>
+                          )}
                         </p>
                       </div>
                     </div>
