@@ -14,6 +14,7 @@ export interface QuoteItemData {
   name: string;
   imageUrl: string;
   productId?: string;
+  uniqueProductName?: string;
 }
 
 const RequestQuotePage = async ({searchParams}: PageProps) => {
@@ -34,7 +35,8 @@ const RequestQuotePage = async ({searchParams}: PageProps) => {
           type: 'product',
           name: productRes.payload.productName,
           imageUrl: firstImage,
-          productId: productRes.payload.id
+          productId: productRes.payload.id,
+          uniqueProductName: productRes.payload.uniqueProductName
         };
       }
     } catch (error) {

@@ -19,6 +19,7 @@ import {RiMessengerLine} from 'react-icons/ri';
 import {MdOutlineUploadFile} from 'react-icons/md';
 import {IoClose} from 'react-icons/io5';
 import {useSearchParams, useRouter} from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
 import {v4 as uuidv4} from 'uuid';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
@@ -42,6 +43,7 @@ export interface QuoteItemData {
   name: string;
   imageUrl: string;
   productId?: string;
+  uniqueProductName?: string;
 }
 
 interface RequestQuoteComponentProps {
@@ -317,7 +319,15 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
 
                     {/* ========== PRODUCT CONTEXT CARD ========== */}
                     {itemData?.name && (
-                      <div className="mb-8 p-4 bg-gradient-to-r from-primary-50 to-blue-50 rounded-lg border border-primary-100">
+                      <Link
+                        href={itemData.type === 'product' && itemData.uniqueProductName ? `/products/${itemData.uniqueProductName}` : '#'}
+                        className={`block mb-8 p-4 bg-gradient-to-r from-primary-50 to-blue-50 rounded-lg border border-primary-100 ${itemData.type === 'product' && itemData.uniqueProductName ? 'cursor-pointer hover:border-primary-300 hover:shadow-md transition-all' : ''}`}
+                        onClick={e => {
+                          if (!(itemData.type === 'product' && itemData.uniqueProductName)) {
+                            e.preventDefault();
+                          }
+                        }}
+                      >
                         <div className="flex items-start gap-5">
                           {itemData.imageUrl && (
                             <div className="relative w-24 h-24 md:w-32 md:h-32 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-gray-200 shadow-sm">
@@ -338,9 +348,14 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                             <p className="text-sm text-gray-500 mt-1">
                               Complete the form below and we&apos;ll prepare your custom quote
                             </p>
+                            {itemData.type === 'product' && itemData.uniqueProductName && (
+                              <p className="text-xs text-primary-500 mt-2 font-medium">
+                                Click to view product details →
+                              </p>
+                            )}
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     )}
 
                     {/* ========== MINIMAL FORM LAYOUT ========== */}
