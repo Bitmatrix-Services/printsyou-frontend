@@ -122,7 +122,20 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       };
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${QuoteRequestRoutes.createQuote}`, requestData);
     },
-    onSuccess: () => {
+    onSuccess: response => {
+      // Extract quote ID from response for Meta deduplication
+      const quoteId = response?.data?.payload?.id || response?.data?.id;
+
+      // Fire Meta Pixel with same event_id as server event for deduplication
+      if (typeof window !== 'undefined' && (window as any).fbq && quoteId) {
+        const productCategory = watch('productCategory') || itemName || 'Quote Request';
+        (window as any).fbq('track', 'Lead', {
+          content_name: productCategory,
+          content_category: 'Quote Request'
+        }, {eventID: quoteId});
+        console.log('[Meta Pixel] Lead event fired with eventID:', quoteId);
+      }
+
       setTimeout(() => {
         setLoading(false);
         setIsSuccessModalOpen('success');
