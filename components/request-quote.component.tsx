@@ -127,6 +127,10 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         setLoading(false);
         setIsSuccessModalOpen('success');
         reset();
+        // Add query param for Meta conversion tracking
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('submitted', 'true');
+        router.replace(currentUrl.pathname + currentUrl.search, {scroll: false});
       }, 1500);
     },
     onError: () => {

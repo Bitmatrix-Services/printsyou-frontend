@@ -111,11 +111,14 @@ export const DirectCheckoutComponent: FC = () => {
 
     const sortedPrices = [...product.priceGrids].sort((a, b) => a.countFrom - b.countFrom);
 
-    // Find applicable price tier
-    let applicablePrice = sortedPrices[sortedPrices.length - 1]; // Default to highest tier
-    for (const tier of sortedPrices) {
-      if (quantity >= tier.countFrom && quantity <= tier.countTo) {
+    // Find the correct price tier for the entered quantity
+    // Iterate through tiers (sorted by countFrom ascending) and find the highest tier where quantity >= countFrom
+    let applicablePrice = sortedPrices[0]; // Default to first (lowest quantity = highest price) tier
+    for (let i = 0; i < sortedPrices.length; i++) {
+      const tier = sortedPrices[i];
+      if (quantity >= tier.countFrom) {
         applicablePrice = tier;
+      } else {
         break;
       }
     }
@@ -138,6 +141,13 @@ export const DirectCheckoutComponent: FC = () => {
     };
   }, [product]);
 
+  const [quantityInput, setQuantityInput] = useState<string>('');
+
+  // Sync quantityInput with quantity state
+  useEffect(() => {
+    setQuantityInput(quantity.toString());
+  }, [quantity]);
+
   const handleQuantityChange = (delta: number) => {
     const newQty = quantity + delta;
     if (newQty >= quantityLimits.min && newQty <= quantityLimits.max) {
@@ -146,8 +156,19 @@ export const DirectCheckoutComponent: FC = () => {
   };
 
   const handleQuantityInput = (value: string) => {
-    const numValue = parseInt(value, 10);
-    if (!isNaN(numValue) && numValue >= quantityLimits.min && numValue <= quantityLimits.max) {
+    // Allow typing any number (including empty for clearing)
+    setQuantityInput(value);
+  };
+
+  const handleQuantityBlur = () => {
+    const numValue = parseInt(quantityInput, 10);
+    if (isNaN(numValue) || numValue < quantityLimits.min) {
+      // Reset to minimum if invalid or below min
+      setQuantity(quantityLimits.min);
+    } else if (numValue > quantityLimits.max) {
+      // Cap at maximum
+      setQuantity(quantityLimits.max);
+    } else {
       setQuantity(numValue);
     }
   };
@@ -413,11 +434,12 @@ export const DirectCheckoutComponent: FC = () => {
                             </button>
                             <input
                               type="number"
-                              value={quantity}
+                              value={quantityInput}
                               onChange={(e) => handleQuantityInput(e.target.value)}
+                              onBlur={handleQuantityBlur}
                               min={quantityLimits.min}
                               max={quantityLimits.max}
-                              className="w-24 h-10 text-center border border-gray-300 rounded-lg font-medium"
+                              className="w-24 h-10 text-center border border-gray-300 rounded-lg font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             />
                             <button
                               type="button"

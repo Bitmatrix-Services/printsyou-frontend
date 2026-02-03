@@ -326,36 +326,50 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     mutate(data);
   };
 
+  const watchedQty = watch('itemQty');
+  const watchedPriceType = watch('selectedPriceType');
+
   const calculatedPrice = useMemo(() => {
-    const quantity = getValues('itemQty');
-    if (quantity === 0 || !product?.priceGrids || !product.sortedPrices) {
+    const quantity = watchedQty || 0;
+    if (quantity === 0 || !product?.priceGrids || !product.sortedPrices?.length) {
       return 0;
     }
 
     const priceGridsFinalSelected = product.priceTypeExists
-      ? product.groupedByPricing[getValues('selectedPriceType') as string]
+      ? product.groupedByPricing[watchedPriceType as string]
       : product.sortedPrices;
 
-    const priceGrid = priceGridsFinalSelected?.find(
-      (grid, index) =>
-        quantity >= grid.countFrom &&
-        (index === priceGridsFinalSelected.length - 1 || quantity < priceGridsFinalSelected[index + 1].countFrom)
-    );
+    if (!priceGridsFinalSelected?.length) {
+      return 0;
+    }
 
-    return priceGrid ? (priceGrid.salePrice > 0 ? priceGrid.salePrice : priceGrid.price) : 0;
-  }, [watch('itemQty'), watch('selectedPriceType'), priceTypes]);
+    // Find the correct price tier for the entered quantity
+    // Tiers are sorted ascending by countFrom
+    let selectedGrid = priceGridsFinalSelected[0];
+    for (let i = 0; i < priceGridsFinalSelected.length; i++) {
+      const grid = priceGridsFinalSelected[i];
+      if (quantity >= grid.countFrom) {
+        selectedGrid = grid;
+      } else {
+        break;
+      }
+    }
+
+    return selectedGrid ? (selectedGrid.salePrice > 0 ? selectedGrid.salePrice : selectedGrid.price) : 0;
+  }, [watchedQty, watchedPriceType, product.priceGrids, product.sortedPrices, product.priceTypeExists, product.groupedByPricing]);
+
+  const watchedLocation = watch('location');
 
   const setupFee = useMemo(() => {
-    const selectedPriceType = getValues('selectedPriceType');
     const setupCharge = availableDecorationTypes
-      .find(item => item.name === selectedPriceType)
+      .find(item => item.name === watchedPriceType)
       ?.charges?.find(charge => charge.type === 'SETUP');
 
     // multiple locations selected
-    const setupChargeTimes = (selectedPriceType?.toLowerCase() !== 'blank' && getValues('location')?.length) || 1;
+    const setupChargeTimes = (watchedPriceType?.toLowerCase() !== 'blank' && watchedLocation?.length) || 1;
 
     return (setupCharge?.chargePrices?.[0]?.price ?? 0) * setupChargeTimes;
-  }, [watch('itemQty'), watch('selectedPriceType'), watch('location')]);
+  }, [watchedQty, watchedPriceType, watchedLocation, availableDecorationTypes]);
 
   const handleFileUpload = async (file: File) => {
     const uploadData = {
