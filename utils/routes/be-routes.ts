@@ -53,7 +53,8 @@ export const QuoteRequestRoutes = Object.freeze({
 export const ProofRoutes = Object.freeze({
   getProof: `/proofs`,
   approveProof: `/proofs/{id}/approve`,
-  requestChanges: `/proofs/{id}/request-changes`
+  requestChanges: `/proofs/{id}/request-changes`,
+  updateShippingAddress: `/proofs/{id}/shipping-address`
 });
 
 export const FaqRoutes = Object.freeze({

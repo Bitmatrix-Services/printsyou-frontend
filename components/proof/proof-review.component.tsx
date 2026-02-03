@@ -13,6 +13,7 @@ import {FaCheck, FaEdit, FaHistory, FaFileAlt, FaLock, FaTshirt} from 'react-ico
 import {IoClose} from 'react-icons/io5';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {SizeBreakdown, SizeQuantity, isApparelProduct} from '@components/checkout/size-breakdown.component';
+import {ShippingAddressModal} from './shipping-address-modal.component';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -48,6 +49,8 @@ interface ProofData {
   // Sizes for apparel
   availableSizes?: string[];
   sizeBreakdown?: SizeQuantity[];
+  // Flag for admin-whatsapp quotes that need shipping address
+  requiresShippingAddress?: boolean;
 }
 
 interface ProofRevision {
@@ -76,6 +79,7 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
   const [modalMessage, setModalMessage] = useState('');
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
+  const [showShippingModal, setShowShippingModal] = useState(false);
 
   // Show cancelled payment message on load
   useEffect(() => {
@@ -161,6 +165,20 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
       return;
     }
 
+    // Check if shipping address is required (admin-whatsapp flow)
+    if (data.requiresShippingAddress) {
+      setShowShippingModal(true);
+      return;
+    }
+
+    // Proceed directly to payment
+    await proceedToPayment();
+  };
+
+  // Proceed to Stripe payment
+  const proceedToPayment = async () => {
+    if (!data?.quoteRequestId) return;
+
     setIsProcessingPayment(true);
 
     try {
@@ -187,6 +205,13 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
       setModalState('error');
       setIsProcessingPayment(false);
     }
+  };
+
+  // Handle shipping address submission success
+  const handleShippingSuccess = () => {
+    setShowShippingModal(false);
+    // After shipping is saved, proceed to payment
+    proceedToPayment();
   };
 
   // Handle simple approve (no payment)
@@ -660,6 +685,16 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
         title={modalTitle}
         note={modalMessage}
         buttonText={modalState === 'success' ? 'Got it!' : modalState === 'warning' ? 'Okay' : 'Close'}
+      />
+
+      {/* Shipping Address Modal for Admin-Initiated Quotes */}
+      <ShippingAddressModal
+        open={showShippingModal}
+        onClose={() => setShowShippingModal(false)}
+        onSuccess={handleShippingSuccess}
+        proofId={proofId}
+        customerName={data?.customerName}
+        totalAmount={data?.quotedAmount}
       />
     </>
   );

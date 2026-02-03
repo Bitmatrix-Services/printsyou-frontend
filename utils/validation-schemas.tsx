@@ -139,9 +139,19 @@ export const stripeCheckoutSchema = object({
   termsAndConditions: boolean().oneOf([true], 'You must agree to the terms and conditions')
 });
 
+export const shippingAddressSchema = object({
+  phoneNumber: string().required('Please enter your phone number'),
+  shippingAddressLine1: string().required('Please enter your street address'),
+  shippingAddressLine2: string().nullable(),
+  shippingCity: string().required('Please enter your city'),
+  shippingState: string().required('Please select your state'),
+  shippingZipCode: string().required('Please enter your zip code')
+});
+
 export type NewsletterFormSchemaType = InferType<typeof newsletterSchema>;
 export type ContactUsFormSchemaType = InferType<typeof contactUsSchema>;
 export type OrderFormSchemaType = InferType<typeof orderCheckoutSchema>;
 export type OrderNowFormSchemaType = InferType<typeof orderNowSchema>;
 export type QuoteRequestFormSchemaType = InferType<typeof quoteRequestSchema>;
 export type StripeCheckoutFormSchemaType = InferType<typeof stripeCheckoutSchema>;
+export type ShippingAddressFormSchemaType = InferType<typeof shippingAddressSchema>;
