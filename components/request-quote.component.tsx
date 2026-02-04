@@ -14,7 +14,7 @@ import {MaskInput} from '@lib/form/mask-input.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
-import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaClock, FaShieldAlt} from 'react-icons/fa';
+import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaClock, FaShieldAlt, FaBolt} from 'react-icons/fa';
 import {RiMessengerLine} from 'react-icons/ri';
 import {MdOutlineUploadFile} from 'react-icons/md';
 import {IoClose} from 'react-icons/io5';
@@ -303,14 +303,18 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
           {/* ========== HEADER WITH VALUE PROPOSITION ========== */}
           <div className="text-center mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Get Your Free Custom Quote
+              {itemName ? `Custom ${itemName} — Free Quote in 30 Minutes` : 'Custom Promotional Products — Free Quote in 30 Minutes'}
             </h1>
             <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
-              Tell us about your project and we&apos;ll create a personalized quote with a free virtual proof — no payment or commitment required.
+              Tell us what you need. We&apos;ll send a detailed quote with a free virtual proof showing your logo — usually within 30 minutes during business hours.
             </p>
 
             {/* Trust Badges Row */}
             <div className="flex flex-wrap justify-center gap-4 md:gap-8 mt-6">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <FaBolt className="text-amber-500 w-4 h-4" />
+                <span>Quote in ~30 Min</span>
+              </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <FaCheckCircle className="text-green-500 w-4 h-4" />
                 <span>Free Virtual Proof</span>
@@ -318,10 +322,6 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <FaShieldAlt className="text-blue-500 w-4 h-4" />
                 <span>No Payment Required</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaClock className="text-primary-500 w-4 h-4" />
-                <span>Response Within 24 Hours</span>
               </div>
             </div>
           </div>
@@ -377,8 +377,8 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
 
                     {/* ========== MINIMAL FORM LAYOUT ========== */}
 
-                    {/* Contact & Quantity Row */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                    {/* Row 1: Name + Quantity (get commitment early) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                       <FormControlInput
                         label="Your Name"
                         name="fullName"
@@ -389,6 +389,25 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                         placeholder="Jane Smith"
                       />
 
+                      <div>
+                        <FormControlInput
+                          label="Estimated Quantity"
+                          name="quantity"
+                          isRequired={true}
+                          disabled={isSubmitting}
+                          control={control}
+                          fieldType="number"
+                          errors={errors}
+                          placeholder="How many do you need?"
+                        />
+                        <p className="text-xs text-gray-400 mt-1">
+                          Not sure yet? Enter your best estimate — we can adjust later.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Row 2: Email + Phone */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                       <FormControlInput
                         label="Work Email"
                         name="emailAddress"
@@ -400,41 +419,27 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                       />
 
                       <MaskInput
-                        label="Phone Number"
+                        label="Phone Number (Optional)"
                         name="phoneNumber"
                         isRequired={false}
                         disabled={isSubmitting}
                         control={control}
                         errors={errors}
                       />
-
-                      <FormControlInput
-                        label="Estimated Quantity"
-                        name="quantity"
-                        isRequired={true}
-                        disabled={isSubmitting}
-                        control={control}
-                        fieldType="number"
-                        errors={errors}
-                        placeholder="e.g., 250"
-                      />
                     </div>
 
                     {/* Project Details */}
                     <div className="mb-6">
                       <FormControlInput
-                        label="Project Details"
+                        label="Project Details (Optional)"
                         name="notes"
                         isRequired={false}
                         disabled={isSubmitting}
                         control={control}
                         inputType="textarea"
                         errors={errors}
-                        placeholder="Tell us about your project: quantity breakdown by size, logo placement, colors, deadline, etc."
+                        placeholder="Size breakdown, logo placement, colors, deadline — anything that helps us quote accurately"
                       />
-                      <p className="text-xs text-gray-400 mt-1">
-                        Include size breakdown, logo placement, colors, and any deadlines if known.
-                      </p>
                     </div>
 
                     {/* Artwork Upload - Compact */}
@@ -513,11 +518,15 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                         disabled={isSubmitting}
                         className="w-full py-4 px-6 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-lg rounded-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        {isSubmitting ? 'Submitting Your Request...' : 'Get My Free Quote & Proof'}
+                        {isSubmitting ? 'Submitting Your Request...' : 'Get My Free Quote & Proof →'}
                       </button>
-                      <p className="text-center text-xs text-gray-500 mt-3">
-                        No payment required. No obligation. We&apos;ll respond within 1 business day.
-                      </p>
+                      <div className="text-center text-xs text-gray-500 mt-3 space-y-1">
+                        <p className="flex items-center justify-center gap-1">
+                          <FaBolt className="text-amber-500 w-3 h-3" />
+                          Response within 30 minutes during office hours
+                        </p>
+                        <p>🔒 No payment info needed · No obligation</p>
+                      </div>
                     </div>
                   </form>
                 </FormProvider>
@@ -531,12 +540,12 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                 <h3 className="font-bold text-gray-900 mb-4">What Happens Next?</h3>
                 <div className="space-y-4">
                   <div className="flex gap-3">
-                    <div className="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                    <div className="w-8 h-8 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
                       1
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">We Review Your Request</p>
-                      <p className="text-xs text-gray-500">Our team reviews your details within hours</p>
+                      <p className="font-medium text-gray-900 text-sm">Quote + Proof in ~30 Min</p>
+                      <p className="text-xs text-gray-500">During office hours (Mon–Fri, 8am–5pm CST)</p>
                     </div>
                   </div>
                   <div className="flex gap-3">
@@ -544,8 +553,8 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                       2
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">Receive Your Free Proof</p>
-                      <p className="text-xs text-gray-500">We create a digital mockup of your product</p>
+                      <p className="font-medium text-gray-900 text-sm">Review Your Virtual Proof</p>
+                      <p className="text-xs text-gray-500">See your logo on the product before committing</p>
                     </div>
                   </div>
                   <div className="flex gap-3">
@@ -554,7 +563,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                     </div>
                     <div>
                       <p className="font-medium text-gray-900 text-sm">Approve & Pay Online</p>
-                      <p className="text-xs text-gray-500">Review, request changes, or approve to proceed</p>
+                      <p className="text-xs text-gray-500">Request changes or approve when ready</p>
                     </div>
                   </div>
                   <div className="flex gap-3">
@@ -627,13 +636,13 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
             </p>
             <p style="font-weight: 600; color: #1F2937; margin-bottom: 8px;">Here's what happens next:</p>
             <ol style="color: #4B5563; padding-left: 20px; margin-bottom: 16px;">
-              <li style="margin-bottom: 4px;">Our team will review your project details</li>
-              <li style="margin-bottom: 4px;">We'll create a custom quote with pricing</li>
-              <li style="margin-bottom: 4px;">You'll receive a free virtual proof to review</li>
+              <li style="margin-bottom: 4px;">We'll review your project details</li>
+              <li style="margin-bottom: 4px;">You'll receive a quote + free virtual proof</li>
+              <li style="margin-bottom: 4px;">Review the mockup showing your logo on the product</li>
               <li>Approve online when you're ready to proceed</li>
             </ol>
             <p style="color: #6B7280; font-size: 14px;">
-              <strong>Response time:</strong> Within 1 business day (usually much faster!)
+              <strong>⚡ Response time:</strong> ~30 minutes during office hours (Mon–Fri, 8am–5pm CST)
             </p>
           </div>
         `}
