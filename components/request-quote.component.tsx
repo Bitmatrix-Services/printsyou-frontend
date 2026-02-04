@@ -14,7 +14,7 @@ import {MaskInput} from '@lib/form/mask-input.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
-import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaClock, FaShieldAlt, FaBolt} from 'react-icons/fa';
+import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaShieldAlt, FaBolt} from 'react-icons/fa';
 import {RiMessengerLine} from 'react-icons/ri';
 import {MdOutlineUploadFile} from 'react-icons/md';
 import {IoClose} from 'react-icons/io5';
@@ -110,31 +110,66 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     }
   }, [setValue, itemData, categoryParam, productParam]);
 
+  // Fire Meta Pixel Lead event with deduplication
+  const fireMetaPixelLead = useCallback((eventId: string, productCategory: string) => {
+    if (typeof window === 'undefined') {
+      console.warn('[Meta Pixel] Window not available');
+      return false;
+    }
+
+    const fbq = (window as any).fbq;
+
+    if (!fbq) {
+      console.warn('[Meta Pixel] fbq not loaded - check if Meta Pixel is installed');
+      return false;
+    }
+
+    try {
+      fbq('track', 'Lead', {
+        content_name: productCategory || 'Quote Request',
+        content_category: 'Quote Request',
+        value: 0,
+        currency: 'USD'
+      }, {eventID: eventId});
+
+      console.log('[Meta Pixel] Lead event fired successfully', {
+        eventID: eventId,
+        content_name: productCategory,
+        timestamp: new Date().toISOString()
+      });
+      return true;
+    } catch (error) {
+      console.error('[Meta Pixel] Error firing Lead event:', error);
+      return false;
+    }
+  }, []);
+
   const {mutate} = useMutation({
-    mutationFn: (data: QuoteRequestFormSchemaType) => {
+    mutationFn: (data: QuoteRequestFormSchemaType & {metaEventId: string}) => {
       setLoading(true);
+
       // Analytics event
-      trackEvent('quote_form_submit', {category: data.productCategory, quantity: data.quantity, artworkCount: artWorkFiles.length});
-      // Include artwork files in the request
+      trackEvent('quote_form_submit', {
+        category: data.productCategory,
+        quantity: data.quantity,
+        artworkCount: artWorkFiles.length,
+        metaEventId: data.metaEventId
+      });
+
+      // Include artwork files and meta event ID in the request
       const requestData = {
         ...data,
-        artworkFiles: artWorkFiles
+        artworkFiles: artWorkFiles,
+        metaEventId: data.metaEventId // Server uses this for CAPI deduplication
       };
+
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${QuoteRequestRoutes.createQuote}`, requestData);
     },
-    onSuccess: response => {
-      // Extract quote ID from response for Meta deduplication
-      const quoteId = response?.data?.payload?.id || response?.data?.id;
-
-      // Fire Meta Pixel with same event_id as server event for deduplication
-      if (typeof window !== 'undefined' && (window as any).fbq && quoteId) {
-        const productCategory = watch('productCategory') || itemName || 'Quote Request';
-        (window as any).fbq('track', 'Lead', {
-          content_name: productCategory,
-          content_category: 'Quote Request'
-        }, {eventID: quoteId});
-        console.log('[Meta Pixel] Lead event fired with eventID:', quoteId);
-      }
+    onSuccess: (response, variables) => {
+      console.log('[Quote] Form submitted successfully', {
+        metaEventId: variables.metaEventId,
+        responseId: response?.data?.payload?.id || response?.data?.id
+      });
 
       setTimeout(() => {
         setLoading(false);
@@ -146,7 +181,12 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         router.replace(currentUrl.pathname + currentUrl.search, {scroll: false});
       }, 1500);
     },
-    onError: () => {
+    onError: (error, variables) => {
+      console.error('[Quote] Form submission failed', {
+        metaEventId: variables.metaEventId,
+        error
+      });
+
       setTimeout(() => {
         setLoading(false);
         setIsSuccessModalOpen('error');
@@ -155,7 +195,21 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
   });
 
   const onSubmit: SubmitHandler<QuoteRequestFormSchemaType> = data => {
-    mutate(data);
+    // Generate unique event ID for Meta deduplication BEFORE any API calls
+    const metaEventId = uuidv4();
+    const productCategory = data.productCategory || itemName || 'Quote Request';
+
+    console.log('[Meta Dedup] Starting submission with eventId:', metaEventId);
+
+    // STEP 1: Fire browser pixel FIRST with the event ID
+    const pixelFired = fireMetaPixelLead(metaEventId, productCategory);
+    console.log('[Meta Dedup] Browser pixel fired:', pixelFired);
+
+    // STEP 2: Send to server with SAME event ID for CAPI deduplication
+    mutate({
+      ...data,
+      metaEventId
+    });
   };
 
   // Scroll to first error on form validation failure
