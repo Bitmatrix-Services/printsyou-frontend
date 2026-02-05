@@ -9,11 +9,17 @@ interface MobileStickyCtaProps {
 
 export const MobileStickyCta: FC<MobileStickyCtaProps> = ({product}) => {
   const priceRange = useMemo(() => {
-    const sortedPrices = [...product.priceGrids].sort((a, b) => b.countFrom - a.countFrom);
-    if (sortedPrices.length === 0) return null;
+    if (!product.priceGrids?.length) return null;
 
-    const lowestPrice = sortedPrices[0]?.price || sortedPrices[0]?.salePrice;
-    return lowestPrice;
+    const sortedByQty = [...product.priceGrids].sort((a, b) => a.countFrom - b.countFrom);
+
+    // Price at MOQ (highest price - first tier)
+    const highestPrice = sortedByQty[0]?.salePrice || sortedByQty[0]?.price;
+
+    // Price at max qty (lowest price - last tier)
+    const lowestPrice = sortedByQty[sortedByQty.length - 1]?.salePrice || sortedByQty[sortedByQty.length - 1]?.price;
+
+    return { lowestPrice, highestPrice };
   }, [product.priceGrids]);
 
   const minQuantity = useMemo(() => {
@@ -21,13 +27,18 @@ export const MobileStickyCta: FC<MobileStickyCtaProps> = ({product}) => {
     return sortedPrices[0]?.countFrom || 10;
   }, [product.priceGrids]);
 
-  if (!priceRange) return null;
+  if (!priceRange || !priceRange.lowestPrice) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-3 md:hidden z-50">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <div className="text-lg font-bold text-primary">From ${priceRange.toFixed(2)}/unit</div>
+          <div className="text-lg font-bold text-primary">
+            {priceRange.lowestPrice === priceRange.highestPrice
+              ? `$${priceRange.lowestPrice.toFixed(2)}/unit`
+              : `$${priceRange.lowestPrice.toFixed(2)} - $${priceRange.highestPrice.toFixed(2)}/unit`
+            }
+          </div>
           <div className="text-xs text-gray-500">Min: {minQuantity} units</div>
         </div>
         <div className="flex gap-2">

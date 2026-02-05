@@ -38,6 +38,15 @@ interface ArtworkFile {
 const WHATSAPP_NUMBER = '14694347035';
 const MESSENGER_PAGE_ID = 'printsyoupromo';
 
+// Helper to get cookie value by name
+const getCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
+};
+
 export interface QuoteItemData {
   type: 'category' | 'product';
   name: string;
@@ -145,7 +154,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
   }, []);
 
   const {mutate} = useMutation({
-    mutationFn: (data: QuoteRequestFormSchemaType & {metaEventId: string}) => {
+    mutationFn: (data: QuoteRequestFormSchemaType & {metaEventId: string; fbc: string | null; fbp: string | null}) => {
       setLoading(true);
 
       // Analytics event
@@ -156,11 +165,13 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         metaEventId: data.metaEventId
       });
 
-      // Include artwork files and meta event ID in the request
+      // Include artwork files, meta event ID, and Facebook cookies for CAPI
       const requestData = {
         ...data,
         artworkFiles: artWorkFiles,
-        metaEventId: data.metaEventId // Server uses this for CAPI deduplication
+        metaEventId: data.metaEventId, // Server uses this for CAPI deduplication
+        fbc: data.fbc,  // Facebook Click ID for attribution
+        fbp: data.fbp   // Facebook Browser ID for matching
       };
 
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${QuoteRequestRoutes.createQuote}`, requestData);
@@ -197,18 +208,27 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
   const onSubmit: SubmitHandler<QuoteRequestFormSchemaType> = data => {
     // Generate unique event ID for Meta deduplication BEFORE any API calls
     const metaEventId = uuidv4();
-    const productCategory = data.productCategory || itemName || 'Quote Request';
 
-    console.log('[Meta Dedup] Starting submission with eventId:', metaEventId);
+    // Compute the SAME productCategory value for both Pixel and CAPI to ensure matching
+    const resolvedProductCategory = data.productCategory || itemName || 'Quote Request';
+
+    // Capture Facebook cookies for Conversions API event matching
+    const fbc = getCookie('_fbc');
+    const fbp = getCookie('_fbp');
+
+    console.log('[Meta Dedup] Starting submission with eventId:', metaEventId, 'fbc:', fbc ? 'present' : 'missing', 'fbp:', fbp ? 'present' : 'missing');
 
     // STEP 1: Fire browser pixel FIRST with the event ID
-    const pixelFired = fireMetaPixelLead(metaEventId, productCategory);
+    const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory);
     console.log('[Meta Dedup] Browser pixel fired:', pixelFired);
 
-    // STEP 2: Send to server with SAME event ID for CAPI deduplication
+    // STEP 2: Send to server with SAME event ID, Facebook cookies, and resolved productCategory for CAPI
     mutate({
       ...data,
-      metaEventId
+      productCategory: resolvedProductCategory, // Use same resolved value as Pixel
+      metaEventId,
+      fbc,
+      fbp
     });
   };
 
