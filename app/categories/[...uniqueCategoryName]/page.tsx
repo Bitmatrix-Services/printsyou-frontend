@@ -96,11 +96,13 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     return (
         <section key={uniqueName}>
             {/* Existing Schemas */}
-            <script
-                id="breadcrumb-schema"
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
-            />
+            {breadcrumbSchema && (
+                <script
+                    id="breadcrumb-schema"
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
+                />
+            )}
             {productCatalogSchema && (
                 <script
                     id="product-catalog-schema"
@@ -276,6 +278,7 @@ const generateBreadcrumbSchema = (category: Category | null) => {
     return {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
+        '@id': `${process.env.FE_URL}categories/${category.uniqueCategoryName}#breadcrumb`,
         itemListElement: [
             ...(category.crumbs ?? []),
             {sequenceNumber: 1, uniqueCategoryName: '', name: 'Categories'},
@@ -349,24 +352,6 @@ const generateProductCatalogSchema = (category: Category, productsByCategoryPage
             width: 1200,
             height: 630,
             caption: category.metaTitle || category.categoryName
-        },
-        breadcrumb: {
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-                ...(category.crumbs ?? []),
-                {sequenceNumber: 1, uniqueCategoryName: '', name: 'Categories'},
-                {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
-            ]
-                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-                .map(item => ({
-                    '@type': 'ListItem',
-                    position: item.sequenceNumber + 1,
-                    name: item.name,
-                    item:
-                        item.sequenceNumber === 0
-                            ? `${process.env.FE_URL}`
-                            : `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
-                }))
         },
         isPartOf: {
             '@type': 'CollectionPage',
@@ -473,7 +458,7 @@ const generateCollectionPageSchema = (category: Category, currentUrl: string) =>
             }
         }),
         breadcrumb: {
-            '@id': `${currentUrl}#breadcrumb`
+            '@id': `${process.env.FE_URL}categories/${category.uniqueCategoryName}#breadcrumb`
         },
         ...(category.subCategories?.length > 0 && {
             hasPart: category.subCategories.slice(0, 10).map(sub => ({
