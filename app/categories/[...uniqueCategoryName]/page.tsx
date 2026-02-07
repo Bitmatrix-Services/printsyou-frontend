@@ -7,6 +7,7 @@ import {
 import {getCategoryFilters} from '@components/home/category/filter.apis';
 import {CategoryFilters, hasActiveFilters, parseFiltersFromSearchParams} from '@components/home/category/filter.types';
 import {CategoryDetails} from '@components/home/category/category-details.component';
+import {CategoryReviews} from '@components/home/category/category-reviews.component';
 import {Category, parseCategoryUxSeo} from '@components/home/home.types';
 import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
@@ -172,6 +173,9 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 siblingCategories={siblingCategories}
                 filters={filters}
             />
+
+            {/* Google Reviews Section - only renders if reviews exist for this category */}
+            {category?.id && <CategoryReviews categoryId={category.id} />}
         </section>
     );
 };
