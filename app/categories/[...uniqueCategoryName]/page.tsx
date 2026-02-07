@@ -1,6 +1,7 @@
 import {
     getAllSiblingCategories,
     getCategoryDetailsByUniqueName,
+    getCategoryReviews,
     getProductByCategoryWithFilers,
     getProductsLdForCategoryPage
 } from '@components/home/category/category.apis';
@@ -42,15 +43,19 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     let productsByCategoryPaged: any | null = null;
     let filters: CategoryFilters | null = null;
 
+    let reviewSummary: Awaited<ReturnType<typeof getCategoryReviews>> = null;
+
     if (response?.payload) {
         category = response.payload;
-        // Fetch products and filters in parallel
-        const [productsResult, filtersResult] = await Promise.all([
+        // Fetch products, filters, and reviews in parallel
+        const [productsResult, filtersResult, reviewsResult] = await Promise.all([
             getProductByCategoryWithFilers(category.id, searchParams),
-            getCategoryFilters(category.id)
+            getCategoryFilters(category.id),
+            getCategoryReviews(category.id)
         ]);
         productsByCategoryPaged = productsResult;
         filters = filtersResult;
+        reviewSummary = reviewsResult;
     }
 
     let allCategories: Category[] = [];
@@ -93,6 +98,9 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
         category && productsByCategoryPaged?.content?.length > 0
             ? generateAggregateOfferSchema(category, productsByCategoryPaged, currentUrl)
             : null;
+
+    // NEW: Review Schema with AggregateRating for Google reviews
+    const reviewSchema = reviewSummary ? generateReviewSchema(reviewSummary, currentUrl) : null;
 
     return (
         <section key={uniqueName}>
@@ -163,6 +171,15 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     id="aggregate-offer-schema"
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{__html: JSON.stringify(aggregateOfferSchema)}}
+                />
+            )}
+
+            {/* NEW: Review Schema with AggregateRating */}
+            {reviewSchema && (
+                <script
+                    id="review-schema"
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{__html: JSON.stringify(reviewSchema)}}
                 />
             )}
 
@@ -612,5 +629,65 @@ const generateAggregateOfferSchema = (category: Category, productsByCategoryPage
                 url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${sub.uniqueCategoryName}`
             }))
         })
+    };
+};
+
+// NEW: Review Schema with AggregateRating - for Google reviews display in search results
+interface ReviewSummary {
+    reviews: Array<{
+        id: string;
+        reviewerName: string;
+        rating: number;
+        reviewText: string;
+        reviewDate: string | null;
+        googleReviewUrl: string | null;
+        reviewerPhotoUrl: string | null;
+    }>;
+    averageRating: number;
+    totalReviews: number;
+}
+
+const generateReviewSchema = (reviewSummary: ReviewSummary, currentUrl: string) => {
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        '@id': `${process.env.NEXT_PUBLIC_FE_URL}#localbusiness`,
+        name: 'PrintsYou',
+        url: process.env.NEXT_PUBLIC_FE_URL,
+        telephone: '+1-469-434-7035',
+        image: `${process.env.NEXT_PUBLIC_FE_URL}/logo.png`,
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: reviewSummary.averageRating.toFixed(1),
+            bestRating: '5',
+            worstRating: '1',
+            ratingCount: reviewSummary.totalReviews,
+            reviewCount: reviewSummary.reviews.length
+        },
+        review: reviewSummary.reviews.slice(0, 10).map(review => ({
+            '@type': 'Review',
+            '@id': `${currentUrl}#review-${review.id}`,
+            author: {
+                '@type': 'Person',
+                name: review.reviewerName
+            },
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: review.rating,
+                bestRating: '5',
+                worstRating: '1'
+            },
+            reviewBody: review.reviewText,
+            ...(review.reviewDate && {
+                datePublished: review.reviewDate
+            }),
+            ...(review.googleReviewUrl && {
+                url: review.googleReviewUrl
+            }),
+            publisher: {
+                '@type': 'Organization',
+                name: 'Google'
+            }
+        }))
     };
 };

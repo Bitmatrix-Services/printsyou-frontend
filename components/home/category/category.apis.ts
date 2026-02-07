@@ -40,6 +40,36 @@ export const getProductsLdForCategoryPage = async (id: string, page: string): Pr
   }
 };
 
+interface CategoryReviewSummary {
+  reviews: Array<{
+    id: string;
+    reviewerName: string;
+    rating: number;
+    reviewText: string;
+    reviewDate: string | null;
+    googleReviewUrl: string | null;
+    reviewerPhotoUrl: string | null;
+  }>;
+  averageRating: number;
+  totalReviews: number;
+}
+
+export const getCategoryReviews = async (categoryId: string): Promise<CategoryReviewSummary | null> => {
+  try {
+    const response = await axios.get<ApiResponse<CategoryReviewSummary>>(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/${categoryId}/reviews`
+    );
+    const summary = response.data.payload;
+    if (summary && summary.reviews && summary.reviews.length > 0) {
+      return summary;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching category reviews:', error);
+    return null;
+  }
+};
+
 export const getProductByCategoryWithFilers = async (
   categoryId: string,
   searchParams: any
