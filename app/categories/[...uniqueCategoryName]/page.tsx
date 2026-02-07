@@ -650,12 +650,17 @@ interface ReviewSummary {
 const generateReviewSchema = (reviewSummary: ReviewSummary, currentUrl: string) => {
     return {
         '@context': 'https://schema.org',
-        '@type': 'LocalBusiness',
-        '@id': `${process.env.NEXT_PUBLIC_FE_URL}#localbusiness`,
+        '@type': 'Organization',
+        '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization-reviews`,
         name: 'PrintsYou',
         url: process.env.NEXT_PUBLIC_FE_URL,
-        telephone: '+1-469-434-7035',
-        image: `${process.env.NEXT_PUBLIC_FE_URL}/logo.png`,
+        logo: `${process.env.NEXT_PUBLIC_FE_URL}/logo.png`,
+        contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+1-469-434-7035',
+            contactType: 'customer service',
+            availableLanguage: 'English'
+        },
         aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: reviewSummary.averageRating.toFixed(1),
