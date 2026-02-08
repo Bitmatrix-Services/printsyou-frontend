@@ -111,7 +111,7 @@ export const quoteRequestSchema = object({
   quantity: number()
     .transform((_, value) => (value === '' || value === undefined || value === null ? undefined : +value))
     .min(1, 'Quantity must be at least 1')
-    .nullable(),
+    .required('Please enter the estimated quantity'),
   notes: string().nullable(),
   needByDate: string().nullable(),
   source: string().nullable(),
