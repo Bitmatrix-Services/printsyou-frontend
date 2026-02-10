@@ -1,15 +1,33 @@
 import {array, boolean, InferType, number, object, ref, string} from 'yup';
 
+// Email validation with TLD check - prevents emails like "user@gmail" without .com
+const emailWithTLD = () =>
+  string()
+    .email('Please enter a valid email address')
+    .test(
+      'has-valid-tld',
+      'Please enter a complete email address (e.g., name@example.com)',
+      (value) => {
+        if (!value) return true; // Let required() handle empty values
+        const parts = value.split('@');
+        if (parts.length !== 2) return false;
+        const domain = parts[1];
+        const domainParts = domain.split('.');
+        // Must have at least one dot and TLD must be at least 2 characters
+        return domainParts.length >= 2 && domainParts[domainParts.length - 1].length >= 2;
+      }
+    );
+
 export const contactUsSchema = object({
   fullName: string().required('Please enter your name'),
-  emailAddress: string().email().required('Please enter your email address'),
+  emailAddress: emailWithTLD().required('Please enter your email address'),
   phoneNumber: string().nullable(),
   subject: string().nullable(),
   message: string().required('Please enter message')
 });
 
 export const newsletterSchema = object({
-  email: string().email().required('please enter your email address')
+  email: emailWithTLD().required('Please enter your email address')
 });
 
 export const orderCheckoutSchema = object({
@@ -63,7 +81,7 @@ export const orderCheckoutSchema = object({
   salesRep: string().optional(),
   additionalInformation: string().optional(),
   newsLetter: boolean().optional(),
-  emailAddress: string().email('Email is not valid').required('Please enter your email address'),
+  emailAddress: emailWithTLD().required('Please enter your email address'),
   termsAndConditions: boolean().oneOf([true], 'You must agree to the terms')
 });
 
@@ -86,7 +104,7 @@ export const orderNowSchema = object({
   salesRep: string().optional(),
   additionalInformation: string().optional(),
   newsLetter: boolean().optional(),
-  emailAddress: string().email('Email is not valid').required('Please enter your email address'),
+  emailAddress: emailWithTLD().required('Please enter your email address'),
   termsAndConditions: boolean().oneOf([true], 'You must agree to the our terms and conditions'),
 
   imprintColor: string().notRequired(),
@@ -104,7 +122,7 @@ export const orderNowSchema = object({
 
 export const quoteRequestSchema = object({
   fullName: string().required('Please enter your name'),
-  emailAddress: string().email('Please enter a valid email').required('Please enter your email address'),
+  emailAddress: emailWithTLD().required('Please enter your email address'),
   phoneNumber: string().nullable(),
   companyName: string().nullable(),
   productCategory: string().nullable(),
@@ -119,7 +137,7 @@ export const quoteRequestSchema = object({
 });
 
 export const stripeCheckoutSchema = object({
-  email: string().email('Please enter a valid email').required('Please enter your email address'),
+  email: emailWithTLD().required('Please enter your email address'),
   firstName: string()
     .min(1, 'First name is required')
     .max(50, 'First name must be at most 50 characters')

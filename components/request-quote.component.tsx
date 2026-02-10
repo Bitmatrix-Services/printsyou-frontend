@@ -120,7 +120,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
   }, [setValue, itemData, categoryParam, productParam]);
 
   // Fire Meta Pixel Lead event with deduplication
-  const fireMetaPixelLead = useCallback((eventId: string, productCategory: string) => {
+  const fireMetaPixelLead = useCallback((eventId: string, productCategory: string, quantity?: number) => {
     if (typeof window === 'undefined') {
       console.warn('[Meta Pixel] Window not available');
       return false;
@@ -133,17 +133,24 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       return false;
     }
 
+    // Estimate lead value based on quantity
+    // Using average unit price of $5 as conservative estimate for promotional products
+    const estimatedUnitPrice = 5;
+    const estimatedValue = quantity && quantity > 0 ? quantity * estimatedUnitPrice : 50; // Default $50 if no quantity
+
     try {
       fbq('track', 'Lead', {
         content_name: productCategory || 'Quote Request',
         content_category: 'Quote Request',
-        value: 0,
+        value: estimatedValue,
         currency: 'USD'
       }, {eventID: eventId});
 
       console.log('[Meta Pixel] Lead event fired successfully', {
         eventID: eventId,
         content_name: productCategory,
+        estimated_value: estimatedValue,
+        quantity: quantity,
         timestamp: new Date().toISOString()
       });
       return true;
@@ -218,9 +225,9 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
 
     console.log('[Meta Dedup] Starting submission with eventId:', metaEventId, 'fbc:', fbc ? 'present' : 'missing', 'fbp:', fbp ? 'present' : 'missing');
 
-    // STEP 1: Fire browser pixel FIRST with the event ID
-    const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory);
-    console.log('[Meta Dedup] Browser pixel fired:', pixelFired);
+    // STEP 1: Fire browser pixel FIRST with the event ID and quantity for value estimation
+    const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory, data.quantity);
+    console.log('[Meta Dedup] Browser pixel fired:', pixelFired, 'quantity:', data.quantity);
 
     // STEP 2: Send to server with SAME event ID, Facebook cookies, and resolved productCategory for CAPI
     mutate({
