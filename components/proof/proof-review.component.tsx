@@ -362,14 +362,12 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                     </a>
                   )}
                 </div>
-                <div className="relative aspect-square bg-gray-50 flex items-center justify-center">
+                <div className="bg-gray-50 flex items-center justify-center p-2">
                   {data.proofImageUrl ? (
-                    <Image
+                    <img
                       src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${data.proofImageUrl}`}
                       alt="Proof Preview"
-                      fill
-                      className="object-contain p-4"
-                      sizes="(max-width: 768px) 100vw, 66vw"
+                      className="max-w-full h-auto"
                     />
                   ) : (
                     <div className="text-gray-400 text-center">
