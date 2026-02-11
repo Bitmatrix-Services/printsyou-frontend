@@ -333,6 +333,16 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
             </div>
           </div>
 
+          {/* Admin Notes - Shown prominently at top so customer sees it immediately */}
+          {data.adminNotes && (
+            <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-5 mb-6 shadow-sm">
+              <h3 className="font-bold text-blue-900 mb-2 text-lg flex items-center gap-2">
+                <span className="text-xl">📝</span> Notes from Our Team
+              </h3>
+              <p className="text-blue-800 whitespace-pre-wrap">{data.adminNotes}</p>
+            </div>
+          )}
+
           {/* Proof Display */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main Proof Image */}
@@ -370,14 +380,6 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                   )}
                 </div>
               </div>
-
-              {/* Admin Notes */}
-              {data.adminNotes && (
-                <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-900 mb-2">Notes from Our Team</h3>
-                  <p className="text-blue-800 text-sm whitespace-pre-wrap">{data.adminNotes}</p>
-                </div>
-              )}
 
               {/* Special Instructions from Customer */}
               {data.specialInstructions && (
