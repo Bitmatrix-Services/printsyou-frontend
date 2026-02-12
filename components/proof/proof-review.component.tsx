@@ -479,15 +479,31 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
 
                 {/* Size Breakdown for Apparel Products */}
                 {showSizeBreakdown && canTakeAction && (
-                  <div className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FaTshirt className="w-4 h-4 text-blue-700" />
-                      <span className="text-sm font-semibold text-blue-900">Select Sizes</span>
+                  <div className={`mb-4 rounded-lg p-4 border-2 transition-all ${
+                    isSizeBreakdownValid
+                      ? 'bg-green-50 border-green-300'
+                      : 'bg-amber-50 border-amber-400 shadow-lg shadow-amber-200'
+                  }`}>
+                    {/* Step indicator */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className={`flex items-center justify-center w-7 h-7 rounded-full text-sm font-bold ${
+                        isSizeBreakdownValid ? 'bg-green-500 text-white' : 'bg-amber-500 text-white'
+                      }`}>
+                        {isSizeBreakdownValid ? '✓' : '1'}
+                      </div>
+                      <div>
+                        <span className={`text-sm font-bold ${isSizeBreakdownValid ? 'text-green-800' : 'text-amber-800'}`}>
+                          {isSizeBreakdownValid ? 'Sizes Selected ✓' : 'Step 1: Select Your Sizes'}
+                        </span>
+                        {!isSizeBreakdownValid && (
+                          <p className="text-xs text-amber-700">
+                            Choose how many of each size you need, then proceed to payment
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-xs text-blue-700 mb-3">
-                      Please specify how many of each size you need. Total must equal {data.quantity} units.
-                    </p>
-                    <div className="bg-white rounded-lg p-3 border border-blue-100">
+
+                    <div className="bg-white rounded-lg p-3 border border-gray-200">
                       <SizeBreakdown
                         availableSizes={availableSizes}
                         totalQuantity={data.quantity || 0}
@@ -495,6 +511,17 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                         disabled={isProcessingPayment}
                       />
                     </div>
+
+                    {!isSizeBreakdownValid && (
+                      <div className="mt-3 flex items-center gap-2 text-amber-800">
+                        <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-xs font-medium">
+                          After selecting sizes, click the green button below to complete your order
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -503,23 +530,42 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                   <div className="hidden lg:block">
                     {/* Approve & Pay Button (Quote Requests that need payment) */}
                     {needsPayment ? (
-                      <button
-                        onClick={handleApproveAndPay}
-                        disabled={isProcessingPayment || !!(showSizeBreakdown && !isSizeBreakdownValid)}
-                        className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mb-3"
-                      >
-                        {isProcessingPayment ? (
-                          <>
-                            <CircularLoader />
-                            Processing...
-                          </>
-                        ) : (
-                          <>
-                            <FaLock className="w-4 h-4" />
-                            Approve & Pay - {formatCurrency(data.quotedAmount!)}
-                          </>
+                      <>
+                        {/* Show message when sizes need to be completed */}
+                        {showSizeBreakdown && !isSizeBreakdownValid && (
+                          <div className="mb-2 p-2 bg-amber-100 border border-amber-300 rounded-lg text-center">
+                            <span className="text-sm text-amber-800 font-medium">
+                              ↑ Please complete the size selection above first
+                            </span>
+                          </div>
                         )}
-                      </button>
+                        <button
+                          onClick={handleApproveAndPay}
+                          disabled={isProcessingPayment || !!(showSizeBreakdown && !isSizeBreakdownValid)}
+                          className={`w-full py-3 px-4 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 mb-3 ${
+                            showSizeBreakdown && !isSizeBreakdownValid
+                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                              : 'bg-green-600 hover:bg-green-700 text-white'
+                          }`}
+                        >
+                          {isProcessingPayment ? (
+                            <>
+                              <CircularLoader />
+                              Processing...
+                            </>
+                          ) : showSizeBreakdown && !isSizeBreakdownValid ? (
+                            <>
+                              <FaLock className="w-4 h-4" />
+                              Complete Sizes to Continue
+                            </>
+                          ) : (
+                            <>
+                              <FaLock className="w-4 h-4" />
+                              Approve & Pay - {formatCurrency(data.quotedAmount!)}
+                            </>
+                          )}
+                        </button>
+                      </>
                     ) : (
                       /* Approve Proof Button (Direct Orders or already paid Quote Requests) */
                       <button
@@ -626,23 +672,42 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
           <div className="max-w-lg mx-auto space-y-2">
             {/* Approve & Pay Button (Quote Requests that need payment) */}
             {needsPayment ? (
-              <button
-                onClick={handleApproveAndPay}
-                disabled={isProcessingPayment || !!(showSizeBreakdown && !isSizeBreakdownValid)}
-                className="w-full py-3 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {isProcessingPayment ? (
-                  <>
-                    <CircularLoader />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <FaLock className="w-4 h-4" />
-                    Approve & Pay - {formatCurrency(data.quotedAmount!)}
-                  </>
+              <>
+                {/* Show message when sizes need to be completed */}
+                {showSizeBreakdown && !isSizeBreakdownValid && (
+                  <div className="mb-2 p-2 bg-amber-100 border border-amber-300 rounded-lg text-center">
+                    <span className="text-sm text-amber-800 font-medium">
+                      ↑ Scroll up to select your sizes first
+                    </span>
+                  </div>
                 )}
-              </button>
+                <button
+                  onClick={handleApproveAndPay}
+                  disabled={isProcessingPayment || !!(showSizeBreakdown && !isSizeBreakdownValid)}
+                  className={`w-full py-3 px-4 font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                    showSizeBreakdown && !isSizeBreakdownValid
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-green-600 hover:bg-green-700 text-white'
+                  }`}
+                >
+                  {isProcessingPayment ? (
+                    <>
+                      <CircularLoader />
+                      Processing...
+                    </>
+                  ) : showSizeBreakdown && !isSizeBreakdownValid ? (
+                    <>
+                      <FaLock className="w-4 h-4" />
+                      Complete Sizes to Continue
+                    </>
+                  ) : (
+                    <>
+                      <FaLock className="w-4 h-4" />
+                      Approve & Pay - {formatCurrency(data.quotedAmount!)}
+                    </>
+                  )}
+                </button>
+              </>
             ) : (
               /* Approve Proof Button (Direct Orders or already paid Quote Requests) */
               <button

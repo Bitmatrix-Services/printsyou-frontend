@@ -66,7 +66,8 @@ export const extractSizesFromProduct = (additionalFields: Array<{fieldName: stri
 // Check if product is apparel based on category or name
 export const isApparelProduct = (productName: string, categories: Array<{name: string}>): boolean => {
   const apparelKeywords = ['shirt', 't-shirt', 'tee', 'polo', 'jacket', 'hoodie', 'vest', 'sweater',
-    'sweatshirt', 'fleece', 'cap', 'hat', 'apron', 'uniform', 'apparel', 'clothing', 'wear'];
+    'sweatshirt', 'fleece', 'cap', 'hat', 'apron', 'uniform', 'apparel', 'clothing', 'wear',
+    'safety', 'hi-vis', 'high-vis', 'visibility', 'reflective', 'workwear', 'coverall', 'overall'];
 
   const nameLower = productName.toLowerCase();
   const categoryNames = categories.map(c => c.name.toLowerCase()).join(' ');
