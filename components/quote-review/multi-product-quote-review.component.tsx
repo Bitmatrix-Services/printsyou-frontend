@@ -470,6 +470,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                 {/* Proof Image */}
                 <div className="bg-gray-50 p-4">
                   {item.proof?.proofImageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={`${ASSETS_URL}${item.proof.proofImageUrl}`}
                       alt={`Proof for ${item.productName}`}
@@ -805,7 +806,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                   <div className="mt-6 pt-6 border-t border-gray-200">
                     <h3 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
                       <FaTruck className="text-gray-500" />
-                      What's Next?
+                      What&apos;s Next?
                     </h3>
                     <ul className="space-y-2 text-sm text-gray-600">
                       <li className="flex items-start gap-2">
@@ -814,11 +815,11 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-green-500">2.</span>
-                        We'll begin production of your items
+                        We&apos;ll begin production of your items
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-green-500">3.</span>
-                        You'll receive tracking when your order ships
+                        You&apos;ll receive tracking when your order ships
                       </li>
                     </ul>
                   </div>

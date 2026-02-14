@@ -9,7 +9,7 @@ interface ISearchProductCard {
   imagePriority?: boolean;
 }
 
-export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriority}) => {
+export const SearchProductCard: FC<ISearchProductCard> = ({product, imagePriority: _imagePriority}) => {
   const [quickViewModalOpen, setQuickViewModal] = useState<boolean>(false);
 
   return (

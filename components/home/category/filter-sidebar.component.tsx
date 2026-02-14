@@ -400,7 +400,7 @@ interface PriceRangeFilterProps {
   maxPrice: number;
   currentMin: number | null;
   currentMax: number | null;
-  onFilterChange: (filters: Partial<ActiveFilters>) => void;
+  onFilterChange: (_filters: Partial<ActiveFilters>) => void;
 }
 
 const PriceRangeFilter: FC<PriceRangeFilterProps> = memo(({
@@ -530,7 +530,7 @@ PriceRangeFilter.displayName = 'PriceRangeFilter';
 interface RushShippingFilterProps {
   isActive: boolean;
   productCount: number;
-  onFilterChange: (filters: Partial<ActiveFilters>) => void;
+  onFilterChange: (_filters: Partial<ActiveFilters>) => void;
 }
 
 const RushShippingFilter: FC<RushShippingFilterProps> = memo(({isActive, productCount, onFilterChange}) => {
