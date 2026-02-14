@@ -24,7 +24,7 @@ const sortList = [
     {label: 'Z to A', value: 'ZToA'}
 ];
 
-export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData}) => {
+export const ProductsSection: FC<ProductsSectionProps> = ({pagedData}) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -58,15 +58,6 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
         setIsLoading(false);
     }, [pagedData, page]);
 
-    const handleQueryUpdate = useCallback((value: string | number, queryName: string) => {
-        const currentQuery = getUpdatedQueryParams();
-        let updatedQuery = {...currentQuery, [queryName]: value};
-        if (queryName === 'size' || queryName === 'filter') {
-            updatedQuery.page = '1';
-        }
-        router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`, {scroll: false});
-    }, [pathname, router, searchParams]);
-
     const getUpdatedQueryParams = useCallback((): Record<string, any> => {
         let updatedQuery: Record<string, any> = {};
         searchParams.forEach((value, key) => {
@@ -76,6 +67,15 @@ export const ProductsSection: FC<ProductsSectionProps> = ({category, pagedData})
         });
         return updatedQuery;
     }, [searchParams]);
+
+    const handleQueryUpdate = useCallback((value: string | number, queryName: string) => {
+        const currentQuery = getUpdatedQueryParams();
+        let updatedQuery = {...currentQuery, [queryName]: value};
+        if (queryName === 'size' || queryName === 'filter') {
+            updatedQuery.page = '1';
+        }
+        router.push(`${pathname}?${new URLSearchParams(updatedQuery)}`, {scroll: false});
+    }, [pathname, router, getUpdatedQueryParams]);
 
     const pagesToShow = useMemo(() => {
         return Array.from({length: totalPages}, (_, index) => index + 1).filter(
@@ -184,7 +184,7 @@ interface PaginationOnlyProps {
     currentPage: number;
     totalPages: number;
     pagesToShow: number[];
-    onPageChange: (page: number) => void;
+    onPageChange: (_page: number) => void;
     pathname: string;
 }
 

@@ -142,11 +142,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       availableDecorationTypes.length > 0 ? availableDecorationTypes[0].name : types.length > 0 ? types[0].name : null;
     setValue('selectedPriceType', selectedPriceTypeName);
 
-    if (locations?.length > 0 && watch('location')?.length === 0) {
+    if (locations?.length > 0 && getValues('location')?.length === 0) {
       setValue('location', [locations[0]?.id]);
     }
-  }, [product.priceGrids, selectedProduct, locations]);
+  }, [product.priceGrids, selectedProduct, locations, availableDecorationTypes, setValue, getValues]);
 
+  const watchedLocationForEffect = watch('location');
   useEffect(() => {
     if (!locations?.length) return;
 
@@ -155,7 +156,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
     const sortedDecorations = selectedLocation?.decorations || [];
     setAvailableDecorationTypes(sortedDecorations);
-  }, [watch('location'), locations]);
+  }, [watchedLocationForEffect, locations, getValues]);
 
   useEffect(() => {
     if (selectedProduct) {

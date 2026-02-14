@@ -5,7 +5,7 @@ import {PriceGrids} from '@components/home/product/product.types';
 interface QuantitySelectorProps {
   priceGrids: PriceGrids[];
   selectedQuantity: number;
-  onQuantitySelect: (quantity: number) => void;
+  onQuantitySelect: (_quantity: number) => void;
 }
 
 export const QuantitySelector: FC<QuantitySelectorProps> = ({priceGrids, selectedQuantity, onQuantitySelect}) => {
@@ -15,7 +15,6 @@ export const QuantitySelector: FC<QuantitySelectorProps> = ({priceGrids, selecte
   );
 
   const highestPriceItem = sortedPrices[0];
-  const lowestPriceItem = sortedPrices[sortedPrices.length - 1];
 
   const calculateSavings = (price: number) => {
     if (!highestPriceItem || price >= highestPriceItem.price) return 0;
