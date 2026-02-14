@@ -26,18 +26,6 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
   const [images, setImages] = useState<ProductImage[]>([]);
   const [product, setProduct] = useState<Product | null>(null);
 
-  useEffect(() => {
-    if (productId) {
-      getProductDetail();
-    }
-  }, [productId]);
-
-  useEffect(() => {
-    if (product && product?.productImages?.length > 0) {
-      setImages(product.productImages);
-    }
-  }, [product?.productImages]);
-
   const getProductDetail = async () => {
     const res = await getProductDetailsById(productId);
 
@@ -45,6 +33,19 @@ export const ProductQuickViewModal: FC<IProductQuickViewModal> = ({open, onClose
       setProduct(res.payload);
     }
   };
+
+  useEffect(() => {
+    if (productId) {
+      getProductDetail();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productId]);
+
+  useEffect(() => {
+    if (product && product?.productImages?.length > 0) {
+      setImages(product.productImages);
+    }
+  }, [product]);
 
   return (
     <Modal open={open} onClose={() => onClose(false)}>

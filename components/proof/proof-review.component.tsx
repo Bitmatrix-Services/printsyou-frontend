@@ -8,7 +8,6 @@ import axios from 'axios';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {CircularLoader} from '@components/globals/circular-loader.component';
-import Image from 'next/image';
 import {FaCheck, FaEdit, FaHistory, FaFileAlt, FaLock, FaTshirt} from 'react-icons/fa';
 import {IoClose} from 'react-icons/io5';
 import {CheckoutRoutes} from '@utils/routes/be-routes';

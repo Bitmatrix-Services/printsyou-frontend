@@ -190,7 +190,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       setProduct(productState);
       setValue('minQty', productState.sortedPrices[0].countFrom);
     }
-  }, [selectedProduct]);
+  }, [selectedProduct, getLocations, setValue]);
 
   const {mutate} = useMutation({
     mutationFn: async (data: OrderNowFormSchemaType) => {
@@ -370,7 +370,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     const setupChargeTimes = (watchedPriceType?.toLowerCase() !== 'blank' && watchedLocation?.length) || 1;
 
     return (setupCharge?.chargePrices?.[0]?.price ?? 0) * setupChargeTimes;
-  }, [watchedQty, watchedPriceType, watchedLocation, availableDecorationTypes]);
+  }, [watchedPriceType, watchedLocation, availableDecorationTypes]);
 
   const handleFileUpload = async (file: File) => {
     const uploadData = {

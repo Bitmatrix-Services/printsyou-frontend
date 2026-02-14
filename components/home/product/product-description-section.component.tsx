@@ -1,7 +1,6 @@
 'use client';
 import * as React from 'react';
 import {Dispatch, FC, Fragment, SetStateAction, useMemo, useState} from 'react';
-import {MdArrowForward} from 'react-icons/md';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import Link from 'next/link';
 import {Product, productColors, ProductImage} from '@components/home/product/product.types';
@@ -41,7 +40,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       .filter(color => color?.colorName);
   }, [product.productColors, product.additionalFieldProductValues]);
 
-  const sortedCategories = useMemo(
+  const _sortedCategories = useMemo(
     () => [...(product.crumbs ?? [])].sort((a, b) => b.sequenceNumber - a.sequenceNumber),
     [product.crumbs]
   );
