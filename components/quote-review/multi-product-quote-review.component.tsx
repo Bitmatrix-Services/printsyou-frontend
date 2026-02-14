@@ -3,7 +3,7 @@
 import React, {FC, useState, useEffect} from 'react';
 import {useSearchParams} from 'next/navigation';
 import {Container} from '@components/globals/container.component';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import axios from 'axios';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 import {SuccessModal} from '@components/globals/success-modal.component';
@@ -89,7 +89,6 @@ interface MultiProductQuoteReviewComponentProps {
 
 export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewComponentProps> = ({quoteRequestId}) => {
   const searchParams = useSearchParams();
-  const queryClient = useQueryClient();
   const wasCancelled = searchParams.get('cancelled') === 'true';
 
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
@@ -448,7 +447,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
           {hasChangesRequested && (
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6">
               <p className="text-orange-700 text-sm">
-                <strong>Note:</strong> One or more items have changes requested. Our team is working on updated proofs. You'll receive an email when they're ready.
+                <strong>Note:</strong> One or more items have changes requested. Our team is working on updated proofs. You&apos;ll receive an email when they&apos;re ready.
               </p>
             </div>
           )}

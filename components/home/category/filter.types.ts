@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 export enum FilterType {
   COLOR = 'COLOR',
   MATERIAL = 'MATERIAL',
@@ -6,6 +6,7 @@ export enum FilterType {
   PRICE_RANGE = 'PRICE_RANGE',
   RUSH_SHIPPING = 'RUSH_SHIPPING'
 }
+/* eslint-enable no-unused-vars */
 
 export interface FilterOption {
   value: string;

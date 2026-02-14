@@ -1,5 +1,5 @@
 'use client';
-import React, {ChangeEvent, FC, memo, useEffect, useMemo, useState} from 'react';
+import React, {ChangeEvent, FC, memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {notFound, useRouter} from 'next/navigation';
 import axios from 'axios';
 import {OrderNowFormSchemaType, orderNowSchema} from '@utils/validation-schemas';
@@ -73,7 +73,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
 
   if (!selectedProduct) notFound();
 
-  const getLocations = async () => {
+  const getLocations = useCallback(async () => {
     try {
       const {data} = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/product/fetchLocations/${selectedProduct.id}`
@@ -82,7 +82,7 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
     } catch (err) {
       console.log('error', err);
     }
-  };
+  }, [selectedProduct.id]);
 
   const getInHandDateEst = () => {
     const currentDay = new Date();

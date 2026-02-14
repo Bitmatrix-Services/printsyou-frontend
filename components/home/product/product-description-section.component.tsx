@@ -40,11 +40,6 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       .filter(color => color?.colorName);
   }, [product.productColors, product.additionalFieldProductValues]);
 
-  const _sortedCategories = useMemo(
-    () => [...(product.crumbs ?? [])].sort((a, b) => b.sequenceNumber - a.sequenceNumber),
-    [product.crumbs]
-  );
-
   const isOutOfStock = useMemo(() => Boolean(product.outOfStock), [product.outOfStock]);
 
   const handleColorSelect = (color: productColors | null) => {

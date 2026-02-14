@@ -8,7 +8,7 @@ import axios from 'axios';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {CircularLoader} from '@components/globals/circular-loader.component';
-import {FaCheck, FaEdit, FaHistory, FaFileAlt, FaLock, FaTshirt} from 'react-icons/fa';
+import {FaCheck, FaEdit, FaHistory, FaFileAlt, FaLock} from 'react-icons/fa';
 import {IoClose} from 'react-icons/io5';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {SizeBreakdown, SizeQuantity, isApparelProduct} from '@components/checkout/size-breakdown.component';
@@ -363,6 +363,7 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                 </div>
                 <div className="bg-gray-50 flex items-center justify-center p-2">
                   {data.proofImageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${data.proofImageUrl}`}
                       alt="Proof Preview"
