@@ -48,8 +48,17 @@ interface ProofData {
   // Sizes for apparel
   availableSizes?: string[];
   sizeBreakdown?: SizeQuantity[];
+  // Additional line items (Logo Design, Rush Fee, etc.)
+  additionalItems?: AdditionalItem[];
   // Flag for admin-whatsapp quotes that need shipping address
   requiresShippingAddress?: boolean;
+}
+
+interface AdditionalItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
 }
 
 interface ProofRevision {
@@ -430,10 +439,21 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
                           <span>{formatCurrency(data.shippingFee)}</span>
                         </div>
                       )}
-                      {/* Adjustment */}
-                      {data.priceAdjustment != null && data.priceAdjustment !== 0 && (
+                      {/* Additional Items with descriptions */}
+                      {data.additionalItems && data.additionalItems.length > 0 && (
+                        <>
+                          {data.additionalItems.map((item, index) => (
+                            <div key={index} className="flex justify-between text-gray-700">
+                              <span>{item.description}</span>
+                              <span>{formatCurrency(item.total)}</span>
+                            </div>
+                          ))}
+                        </>
+                      )}
+                      {/* Adjustment (if no detailed items but has adjustment) */}
+                      {data.priceAdjustment != null && data.priceAdjustment !== 0 && (!data.additionalItems || data.additionalItems.length === 0) && (
                         <div className="flex justify-between text-gray-700">
-                          <span>Adjustment</span>
+                          <span>{data.priceAdjustment > 0 ? 'Additional Items' : 'Discount'}</span>
                           <span>{data.priceAdjustment > 0 ? '+' : ''}{formatCurrency(data.priceAdjustment)}</span>
                         </div>
                       )}
