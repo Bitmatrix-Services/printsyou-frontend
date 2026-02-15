@@ -509,18 +509,21 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                       />
                     </div>
 
-                    {/* Project Details */}
+                    {/* Personalization & Project Details */}
                     <div className="mb-6">
                       <FormControlInput
-                        label="Project Details (Optional)"
+                        label="What Would You Like Printed?"
                         name="notes"
                         isRequired={false}
                         disabled={isSubmitting}
                         control={control}
                         inputType="textarea"
                         errors={errors}
-                        placeholder="Size breakdown, logo placement, colors, deadline — anything that helps us quote accurately"
+                        placeholder="e.g., Company logo on front left chest, 'ABC Company 2026' text on back, size breakdown, colors, deadline..."
                       />
+                      <p className="text-xs text-gray-400 mt-1">
+                        Don&apos;t have a logo yet? No problem — just describe what you want and we&apos;ll help.
+                      </p>
                     </div>
 
                     {/* Artwork Upload - Compact */}
