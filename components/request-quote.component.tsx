@@ -119,8 +119,13 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     }
   }, [setValue, itemData, categoryParam, productParam]);
 
-  // Fire Meta Pixel Lead event with deduplication
-  const fireMetaPixelLead = useCallback((eventId: string, productCategory: string, quantity?: number) => {
+  // Fire Meta Pixel Lead event with deduplication and advanced matching
+  const fireMetaPixelLead = useCallback((
+    eventId: string,
+    productCategory: string,
+    quantity?: number,
+    userData?: { email?: string; phone?: string; firstName?: string; lastName?: string }
+  ) => {
     if (typeof window === 'undefined') {
       console.warn('[Meta Pixel] Window not available');
       return false;
@@ -136,9 +141,24 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     // Estimate lead value based on quantity
     // Using average unit price of $5 as conservative estimate for promotional products
     const estimatedUnitPrice = 5;
-    const estimatedValue = quantity && quantity > 0 ? quantity * estimatedUnitPrice : 50; // Default $50 if no quantity
+    // Ensure value is always at least $10 (Meta requires valid price > 0)
+    const estimatedValue = Math.max(10, quantity && quantity > 0 ? quantity * estimatedUnitPrice : 50);
 
     try {
+      // Set advanced matching user data if available
+      // Meta will automatically hash this data (email, phone, names)
+      if (userData && (userData.email || userData.phone)) {
+        const advancedMatchingData: Record<string, string> = {};
+        if (userData.email) advancedMatchingData.em = userData.email.toLowerCase().trim();
+        if (userData.phone) advancedMatchingData.ph = userData.phone.replace(/\D/g, ''); // Remove non-digits
+        if (userData.firstName) advancedMatchingData.fn = userData.firstName.toLowerCase().trim();
+        if (userData.lastName) advancedMatchingData.ln = userData.lastName.toLowerCase().trim();
+
+        // Re-init with advanced matching data
+        fbq('init', '850875120645150', advancedMatchingData);
+        console.log('[Meta Pixel] Advanced matching data set:', Object.keys(advancedMatchingData));
+      }
+
       fbq('track', 'Lead', {
         content_name: productCategory || 'Quote Request',
         content_category: 'Quote Request',
@@ -151,6 +171,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         content_name: productCategory,
         estimated_value: estimatedValue,
         quantity: quantity,
+        hasAdvancedMatching: !!(userData?.email || userData?.phone),
         timestamp: new Date().toISOString()
       });
       return true;
@@ -225,9 +246,19 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
 
     console.log('[Meta Dedup] Starting submission with eventId:', metaEventId, 'fbc:', fbc ? 'present' : 'missing', 'fbp:', fbp ? 'present' : 'missing');
 
-    // STEP 1: Fire browser pixel FIRST with the event ID and quantity for value estimation
-    const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory, data.quantity);
-    console.log('[Meta Dedup] Browser pixel fired:', pixelFired, 'quantity:', data.quantity);
+    // Extract first and last name from fullName
+    const nameParts = data.fullName?.trim().split(' ') || [];
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    // STEP 1: Fire browser pixel FIRST with the event ID, quantity, and user data for advanced matching
+    const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory, data.quantity, {
+      email: data.emailAddress,
+      phone: data.phoneNumber,
+      firstName,
+      lastName
+    });
+    console.log('[Meta Dedup] Browser pixel fired:', pixelFired, 'quantity:', data.quantity, 'hasUserData:', !!(data.emailAddress || data.phoneNumber));
 
     // STEP 2: Send to server with SAME event ID, Facebook cookies, and resolved productCategory for CAPI
     mutate({
