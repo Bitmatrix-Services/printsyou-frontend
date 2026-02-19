@@ -254,7 +254,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     // STEP 1: Fire browser pixel FIRST with the event ID, quantity, and user data for advanced matching
     const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory, data.quantity, {
       email: data.emailAddress,
-      phone: data.phoneNumber,
+      phone: data.phoneNumber || undefined,
       firstName,
       lastName
     });
