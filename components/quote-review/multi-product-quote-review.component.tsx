@@ -81,6 +81,7 @@ interface QuoteData {
   items?: QuoteRequestItem[];
   createdAt?: number;
   requiresShippingAddress?: boolean;
+  source?: string; // 'product-sourcing' for sourcing requests
 }
 
 interface MultiProductQuoteReviewComponentProps {
@@ -387,12 +388,14 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
   const items = data.items || [];
   const approvedCount = items.filter(item => item.proof?.status === 'APPROVED').length;
   const totalItems = items.length;
-  const allApproved = approvedCount === totalItems && totalItems > 0;
+  const isSourcingQuote = data.source === 'product-sourcing';
+  // For sourcing quotes, no approval needed - can pay directly
+  const allApproved = isSourcingQuote || (approvedCount === totalItems && totalItems > 0);
   const hasQuotedAmount = data.quotedAmount && data.quotedAmount > 0;
   const isPaid = data.paymentStatus === 'PAID';
   const needsPayment = hasQuotedAmount && !isPaid;
-  const canProceedToPayment = allApproved && needsPayment;
-  const hasChangesRequested = items.some(item => item.proof?.status === 'CHANGES_REQUESTED');
+  const canProceedToPayment = (isSourcingQuote || allApproved) && needsPayment;
+  const hasChangesRequested = !isSourcingQuote && items.some(item => item.proof?.status === 'CHANGES_REQUESTED');
 
   return (
     <>
@@ -409,7 +412,9 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                   allApproved ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                 }`}>
-                  {approvedCount}/{totalItems} Items Approved
+                  {isSourcingQuote
+                    ? `${totalItems} Product${totalItems !== 1 ? 's' : ''}`
+                    : `${approvedCount}/${totalItems} Items Approved`}
                 </span>
               </div>
             </div>
@@ -464,25 +469,42 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                     </span>
                     <h3 className="font-semibold text-gray-900">{item.productName || 'Product'}</h3>
                   </div>
-                  {item.proof && getStatusBadge(item.proof.status)}
-                </div>
-
-                {/* Proof Image */}
-                <div className="bg-gray-50 p-4">
-                  {item.proof?.proofImageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={`${ASSETS_URL}${item.proof.proofImageUrl}`}
-                      alt={`Proof for ${item.productName}`}
-                      className="max-w-full h-auto mx-auto max-h-64 object-contain"
-                    />
-                  ) : (
-                    <div className="text-gray-400 text-center py-12">
-                      <FaFileAlt className="w-12 h-12 mx-auto mb-2" />
-                      <p>No proof image available</p>
-                    </div>
+                  {!isSourcingQuote && item.proof && getStatusBadge(item.proof.status)}
+                  {isSourcingQuote && (
+                    <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                      Ready
+                    </span>
                   )}
                 </div>
+
+                {/* Proof Image - only show for non-sourcing quotes */}
+                {!isSourcingQuote && (
+                  <div className="bg-gray-50 p-4">
+                    {item.proof?.proofImageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`${ASSETS_URL}${item.proof.proofImageUrl}`}
+                        alt={`Proof for ${item.productName}`}
+                        className="max-w-full h-auto mx-auto max-h-64 object-contain"
+                      />
+                    ) : (
+                      <div className="text-gray-400 text-center py-12">
+                        <FaFileAlt className="w-12 h-12 mx-auto mb-2" />
+                        <p>No proof image available</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Product info for sourcing quotes */}
+                {isSourcingQuote && (
+                  <div className="bg-gray-50 p-4">
+                    <div className="text-center py-4">
+                      <FaBoxOpen className="w-12 h-12 mx-auto mb-2 text-blue-500" />
+                      <p className="text-gray-600">{item.productCategory || 'Custom Sourced Product'}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Item Details */}
                 <div className="p-4 border-t border-gray-100">
@@ -584,8 +606,8 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                     </div>
                   )}
 
-                  {/* Action Buttons */}
-                  {item.proof?.status === 'SENT' && (
+                  {/* Action Buttons - Only show for non-sourcing quotes */}
+                  {!isSourcingQuote && item.proof?.status === 'SENT' && (
                     <>
                       {activeItemId === item.id ? (
                         <div className="space-y-3">
@@ -637,7 +659,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                     </>
                   )}
 
-                  {item.proof?.status === 'APPROVED' && (
+                  {!isSourcingQuote && item.proof?.status === 'APPROVED' && (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
                       <p className="text-green-700 text-sm flex items-center justify-center gap-2">
                         <FaCheck />
@@ -646,7 +668,17 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                     </div>
                   )}
 
-                  {item.proof?.status === 'CHANGES_REQUESTED' && (
+                  {/* Sourcing quote - ready to pay indicator */}
+                  {isSourcingQuote && (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+                      <p className="text-green-700 text-sm flex items-center justify-center gap-2">
+                        <FaCheck />
+                        Ready for payment
+                      </p>
+                    </div>
+                  )}
+
+                  {!isSourcingQuote && item.proof?.status === 'CHANGES_REQUESTED' && (
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
                       <p className="text-orange-700 text-sm font-medium mb-1">Changes Requested</p>
                       {item.proof.customerFeedback && (
@@ -671,16 +703,27 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
 
                 {/* Items List */}
                 <div className="space-y-3 mb-4">
+                  {items.length === 0 && (
+                    <div className="text-gray-500 text-sm text-center py-4">
+                      No items found - this quote may need to be refreshed.
+                    </div>
+                  )}
                   {items.map((item, index) => (
-                    <div key={item.id} className="flex justify-between items-center text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="text-gray-400">#{index + 1}</span>
-                        <span className="text-gray-700">{item.productName}</span>
-                        <span className="text-gray-500">({item.quantity} units)</span>
+                    <div key={item.id} className="py-2 border-b border-gray-100 last:border-0">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400 text-sm">#{index + 1}</span>
+                            <span className="text-gray-900 font-medium">{item.productName}</span>
+                          </div>
+                          <div className="text-sm text-gray-500 mt-1">
+                            {item.quantity} units × {formatCurrency(item.unitPrice || 0)} each
+                          </div>
+                        </div>
+                        <span className="text-gray-900 font-semibold">
+                          {formatCurrency(item.itemSubtotal || 0)}
+                        </span>
                       </div>
-                      <span className="text-gray-900 font-medium">
-                        {formatCurrency(item.itemSubtotal || 0)}
-                      </span>
                     </div>
                   ))}
                 </div>
@@ -724,19 +767,31 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
               <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm sticky top-4">
                 <h2 className="font-semibold text-gray-900 mb-4">Actions</h2>
 
-                {/* Progress Indicator */}
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Approval Progress</span>
-                    <span className="text-sm font-medium text-gray-900">{approvedCount}/{totalItems}</span>
+                {/* Progress Indicator - Only for non-sourcing quotes */}
+                {!isSourcingQuote && (
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-gray-600">Approval Progress</span>
+                      <span className="text-sm font-medium text-gray-900">{approvedCount}/{totalItems}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full transition-all ${allApproved ? 'bg-green-500' : 'bg-blue-500'}`}
+                        style={{width: `${totalItems > 0 ? (approvedCount / totalItems) * 100 : 0}%`}}
+                      />
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full transition-all ${allApproved ? 'bg-green-500' : 'bg-blue-500'}`}
-                      style={{width: `${totalItems > 0 ? (approvedCount / totalItems) * 100 : 0}%`}}
-                    />
+                )}
+
+                {/* Sourcing Quote - Ready to pay indicator */}
+                {isSourcingQuote && (
+                  <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+                    <p className="text-green-700 text-sm flex items-center gap-2">
+                      <FaCheck className="text-green-600" />
+                      Your quote is ready! Proceed to payment below.
+                    </p>
                   </div>
-                </div>
+                )}
 
                 {isPaid ? (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
@@ -747,8 +802,8 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                   </div>
                 ) : (
                   <>
-                    {/* Approve All Button - Show when not all approved */}
-                    {!allApproved && items.some(item => item.proof?.status === 'SENT') && (
+                    {/* Approve All Button - Show when not all approved (not for sourcing quotes) */}
+                    {!isSourcingQuote && !allApproved && items.some(item => item.proof?.status === 'SENT') && (
                       <button
                         onClick={handleApproveAll}
                         disabled={approveAllMutation.isPending || hasChangesRequested}
@@ -787,7 +842,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                       </p>
                     )}
 
-                    {!allApproved && !hasChangesRequested && (
+                    {!isSourcingQuote && !allApproved && !hasChangesRequested && (
                       <p className="text-sm text-gray-500 text-center">
                         Review and approve all items above to proceed to payment.
                       </p>
@@ -868,7 +923,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                   Secure payment via Stripe
                 </p>
               </>
-            ) : (
+            ) : !isSourcingQuote ? (
               <div className="text-center">
                 <p className="text-sm text-gray-600 mb-2">
                   {approvedCount}/{totalItems} items approved
@@ -883,7 +938,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
                   Approve all items to proceed to payment
                 </p>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}
