@@ -124,7 +124,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     eventId: string,
     productCategory: string,
     quantity?: number,
-    userData?: { email?: string; phone?: string; firstName?: string; lastName?: string }
+    userData?: { email?: string; phone?: string; firstName?: string; lastName?: string; externalId?: string }
   ) => {
     if (typeof window === 'undefined') {
       console.warn('[Meta Pixel] Window not available');
@@ -145,20 +145,38 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     const estimatedValue = Math.max(10, quantity && quantity > 0 ? quantity * estimatedUnitPrice : 50);
 
     try {
-      // Set advanced matching user data if available
+      // Build advanced matching data for better Event Match Quality
       // Meta will automatically hash this data (email, phone, names)
-      if (userData && (userData.email || userData.phone)) {
-        const advancedMatchingData: Record<string, string> = {};
-        if (userData.email) advancedMatchingData.em = userData.email.toLowerCase().trim();
-        if (userData.phone) advancedMatchingData.ph = userData.phone.replace(/\D/g, ''); // Remove non-digits
-        if (userData.firstName) advancedMatchingData.fn = userData.firstName.toLowerCase().trim();
-        if (userData.lastName) advancedMatchingData.ln = userData.lastName.toLowerCase().trim();
+      const advancedMatchingData: Record<string, string> = {};
 
-        // Re-init with advanced matching data
+      if (userData?.email) {
+        advancedMatchingData.em = userData.email.toLowerCase().trim();
+      }
+      if (userData?.phone) {
+        // Clean phone and ensure US country code prefix for better matching
+        const cleanPhone = userData.phone.replace(/\D/g, '');
+        advancedMatchingData.ph = cleanPhone.length === 10 ? '1' + cleanPhone : cleanPhone;
+      }
+      if (userData?.firstName) {
+        advancedMatchingData.fn = userData.firstName.toLowerCase().trim();
+      }
+      if (userData?.lastName) {
+        advancedMatchingData.ln = userData.lastName.toLowerCase().trim();
+      }
+      if (userData?.externalId) {
+        advancedMatchingData.external_id = userData.externalId;
+      }
+      // Default to US country for better matching
+      advancedMatchingData.country = 'us';
+
+      // Set advanced matching data via init (Meta Pixel SDK will auto-hash)
+      // Calling init with user data updates the user properties for subsequent events
+      if (Object.keys(advancedMatchingData).length > 0) {
         fbq('init', '850875120645150', advancedMatchingData);
         console.log('[Meta Pixel] Advanced matching data set:', Object.keys(advancedMatchingData));
       }
 
+      // Fire Lead event with eventID for deduplication with server CAPI
       fbq('track', 'Lead', {
         content_name: productCategory || 'Quote Request',
         content_category: 'Quote Request',
@@ -171,7 +189,8 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         content_name: productCategory,
         estimated_value: estimatedValue,
         quantity: quantity,
-        hasAdvancedMatching: !!(userData?.email || userData?.phone),
+        hasAdvancedMatching: Object.keys(advancedMatchingData).length > 0,
+        matchingFields: Object.keys(advancedMatchingData),
         timestamp: new Date().toISOString()
       });
       return true;
@@ -252,11 +271,13 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     const lastName = nameParts.slice(1).join(' ') || '';
 
     // STEP 1: Fire browser pixel FIRST with the event ID, quantity, and user data for advanced matching
+    // Use metaEventId as external_id to ensure consistency with server CAPI
     const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory, data.quantity, {
       email: data.emailAddress,
       phone: data.phoneNumber || undefined,
       firstName,
-      lastName
+      lastName,
+      externalId: metaEventId // Use same ID as server CAPI for cross-device matching
     });
     console.log('[Meta Dedup] Browser pixel fired:', pixelFired, 'quantity:', data.quantity, 'hasUserData:', !!(data.emailAddress || data.phoneNumber));
 
