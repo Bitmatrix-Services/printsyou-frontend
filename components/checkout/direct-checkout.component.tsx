@@ -499,6 +499,22 @@ export const DirectCheckoutComponent: FC = () => {
                     />
                   )}
 
+                  {/* Notes & Color Selection - Placed right after Size Breakdown */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Notes & Color</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Please specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
+                      logo placement, imprint colors, and any other special requirements.
+                    </p>
+                    <FormControlInput
+                      name="specialInstructions"
+                      inputType="textarea"
+                      placeholder="E.g., Vest color: Lime Green, Logo on front left chest (4 inches), imprint color: black. Company name on back..."
+                      disabled={isSubmitting || isProcessing}
+                      control={control}
+                    />
+                  </div>
+
                   {/* Contact & Shipping Form */}
                   <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                     <ContactShippingForm control={control} errors={errors} disabled={isSubmitting || isProcessing} />
@@ -517,22 +533,6 @@ export const DirectCheckoutComponent: FC = () => {
                       uploadId={checkoutId}
                       uploadType="CART"
                       disabled={isSubmitting || isProcessing}
-                    />
-                  </div>
-
-                  {/* Notes & Color Selection */}
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Notes & Color</h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Please specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
-                      logo placement, imprint colors, and any other special requirements.
-                    </p>
-                    <FormControlInput
-                      name="specialInstructions"
-                      inputType="textarea"
-                      placeholder="E.g., Vest color: Lime Green, Logo on front left chest (4 inches), imprint color: black. Company name on back..."
-                      disabled={isSubmitting || isProcessing}
-                      control={control}
                     />
                   </div>
 
