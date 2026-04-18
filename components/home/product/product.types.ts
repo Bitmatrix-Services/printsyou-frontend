@@ -9,6 +9,8 @@ export interface ProductImage {
   imageUrl: string;
   sequenceNumber: number;
   altText?: string | null;
+  mediaType?: 'IMAGE' | 'VIDEO';
+  videoThumbnail?: string | null;
 }
 
 export interface AdditionalRow {
