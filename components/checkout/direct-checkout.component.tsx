@@ -520,16 +520,17 @@ export const DirectCheckoutComponent: FC = () => {
                     />
                   </div>
 
-                  {/* Special Instructions */}
+                  {/* Notes & Color Selection */}
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Special Instructions</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Notes & Color</h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      Any specific requirements? Logo placement, colors, size breakdown, etc.
+                      Please specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
+                      logo placement, imprint colors, and any other special requirements.
                     </p>
                     <FormControlInput
                       name="specialInstructions"
                       inputType="textarea"
-                      placeholder="E.g., Logo on front left chest (4 inches), company colors are navy blue and white. Sizes: 10 S, 20 M, 15 L, 5 XL..."
+                      placeholder="E.g., Vest color: Lime Green, Logo on front left chest (4 inches), imprint color: black. Company name on back..."
                       disabled={isSubmitting || isProcessing}
                       control={control}
                     />
