@@ -51,6 +51,10 @@ interface Product {
 const SHIPPING_CONFIG = {
   freeShippingThreshold: 500, // Free shipping for orders $500+
   rates: [
+    {maxQty: 1, fee: 5.0},
+    {maxQty: 7, fee: 7.0},
+    {maxQty: 8, fee: 8.0},
+    {maxQty: 9, fee: 10.0},
     {maxQty: 50, fee: 12.99},
     {maxQty: 100, fee: 15.99},
     {maxQty: 250, fee: 19.99},
