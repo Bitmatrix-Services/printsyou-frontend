@@ -82,6 +82,7 @@ export const DirectCheckoutComponent: FC = () => {
   const initialQuantity = searchParams.get('quantity');
   const initialNotes = searchParams.get('notes');
   const initialSizesParam = searchParams.get('sizes');
+  const proofParam = searchParams.get('proof');
 
   // Parse sizes query param (format: "S:5,M:10,L:8")
   const initialSizes = useMemo(() => {
@@ -102,6 +103,12 @@ export const DirectCheckoutComponent: FC = () => {
       return undefined;
     }
   }, [initialSizesParam]);
+
+  // Parse proof URLs (can be comma-separated for multiple proofs)
+  const proofImages = useMemo(() => {
+    if (!proofParam) return [];
+    return proofParam.split(',').map(url => url.trim()).filter(url => url.length > 0);
+  }, [proofParam]);
 
   const [checkoutId] = useState<string>(uuidv4());
   const [quantity, setQuantity] = useState<number>(0);
@@ -521,6 +528,48 @@ export const DirectCheckoutComponent: FC = () => {
                     </div>
                   </div>
 
+                  {/* Virtual Proof Section - Only shown when proof URL is provided */}
+                  {proofImages.length > 0 && (
+                    <div className="bg-green-50 border-2 border-green-300 rounded-lg p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <FaCheckCircle className="w-5 h-5 text-green-600" />
+                        <h3 className="text-lg font-semibold text-gray-900">Your Virtual Proof</h3>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Here&apos;s your custom design proof. Review it carefully before completing your order.
+                      </p>
+                      <div className={`grid gap-4 ${proofImages.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
+                        {proofImages.map((proofUrl, index) => (
+                          <div key={index} className="relative bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+                            <a href={proofUrl} target="_blank" rel="noopener noreferrer" className="block">
+                              <img
+                                src={proofUrl}
+                                alt={`Virtual Proof ${proofImages.length > 1 ? index + 1 : ''}`}
+                                className="w-full h-auto object-contain max-h-96"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = '/assets/logo-full.png';
+                                }}
+                              />
+                            </a>
+                            <div className="absolute top-2 right-2">
+                              <a
+                                href={proofUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-white/90 hover:bg-white text-gray-700 text-xs px-2 py-1 rounded shadow flex items-center gap-1"
+                              >
+                                View Full Size
+                              </a>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-3 text-center">
+                        Click image to view full size. By proceeding with payment, you approve this proof.
+                      </p>
+                    </div>
+                  )}
+
                   {/* Size Breakdown for Apparel */}
                   {showSizeBreakdown && (
                     <SizeBreakdown
@@ -533,16 +582,25 @@ export const DirectCheckoutComponent: FC = () => {
                   )}
 
                   {/* Notes & Color Selection - Placed right after Size Breakdown */}
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Notes & Color</h3>
+                  <div className={`border rounded-lg p-6 ${proofImages.length > 0 ? 'bg-gray-50 border-gray-200' : 'bg-yellow-50 border-yellow-200'}`}>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      {proofImages.length > 0 ? 'Additional Notes (Optional)' : 'Notes & Color'}
+                    </h3>
                     <p className="text-sm text-gray-600 mb-4">
-                      Please specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
-                      logo placement, imprint colors, and any other special requirements.
+                      {proofImages.length > 0 ? (
+                        <>Any additional instructions or comments about your order.</>
+                      ) : (
+                        <>Please specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
+                        logo placement, imprint colors, and any other special requirements.</>
+                      )}
                     </p>
                     <FormControlInput
                       name="specialInstructions"
                       inputType="textarea"
-                      placeholder="E.g., Vest color: Lime Green, Logo on front left chest (4 inches), imprint color: black. Company name on back..."
+                      placeholder={proofImages.length > 0
+                        ? "Any additional notes or special requests..."
+                        : "E.g., Vest color: Lime Green, Logo on front left chest (4 inches), imprint color: black. Company name on back..."
+                      }
                       disabled={isSubmitting || isProcessing}
                       control={control}
                     />
@@ -553,21 +611,23 @@ export const DirectCheckoutComponent: FC = () => {
                     <ContactShippingForm control={control} errors={errors} disabled={isSubmitting || isProcessing} />
                   </div>
 
-                  {/* Artwork Upload Section */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Your Artwork</h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Upload your logo or design files. We accept all formats, but prefer vector files (.ai, .eps, .svg).
-                      We&apos;ll send a digital proof for your approval before production.
-                    </p>
-                    <ArtworkUploader
-                      files={artworkFiles}
-                      onFilesChange={setArtworkFiles}
-                      uploadId={checkoutId}
-                      uploadType="CART"
-                      disabled={isSubmitting || isProcessing}
-                    />
-                  </div>
+                  {/* Artwork Upload Section - Hidden when proof is already provided */}
+                  {proofImages.length === 0 && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Your Artwork</h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Upload your logo or design files. We accept all formats, but prefer vector files (.ai, .eps, .svg).
+                        We&apos;ll send a digital proof for your approval before production.
+                      </p>
+                      <ArtworkUploader
+                        files={artworkFiles}
+                        onFilesChange={setArtworkFiles}
+                        uploadId={checkoutId}
+                        uploadType="CART"
+                        disabled={isSubmitting || isProcessing}
+                      />
+                    </div>
+                  )}
 
                   {/* Terms & Submit (Mobile) */}
                   <div className="lg:hidden bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
@@ -730,24 +790,45 @@ export const DirectCheckoutComponent: FC = () => {
                     {/* What happens next */}
                     <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                       <h4 className="font-semibold text-gray-900 mb-3">What Happens Next?</h4>
-                      <ol className="text-sm text-gray-600 space-y-2">
-                        <li className="flex gap-2">
-                          <span className="font-bold text-primary-500">1.</span>
-                          Complete secure payment
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="font-bold text-primary-500">2.</span>
-                          We create your digital proof
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="font-bold text-primary-500">3.</span>
-                          Review & approve your proof
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="font-bold text-primary-500">4.</span>
-                          Production & shipping
-                        </li>
-                      </ol>
+                      {proofImages.length > 0 ? (
+                        <ol className="text-sm text-gray-600 space-y-2">
+                          <li className="flex gap-2">
+                            <span className="font-bold text-green-500">✓</span>
+                            <span className="text-green-700">Your proof is ready above</span>
+                          </li>
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">1.</span>
+                            Complete secure payment
+                          </li>
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">2.</span>
+                            Production begins immediately
+                          </li>
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">3.</span>
+                            Shipping & delivery
+                          </li>
+                        </ol>
+                      ) : (
+                        <ol className="text-sm text-gray-600 space-y-2">
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">1.</span>
+                            Complete secure payment
+                          </li>
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">2.</span>
+                            We create your digital proof
+                          </li>
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">3.</span>
+                            Review & approve your proof
+                          </li>
+                          <li className="flex gap-2">
+                            <span className="font-bold text-primary-500">4.</span>
+                            Production & shipping
+                          </li>
+                        </ol>
+                      )}
                     </div>
                   </div>
                 </div>
