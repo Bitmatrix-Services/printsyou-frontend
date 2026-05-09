@@ -81,6 +81,27 @@ export const DirectCheckoutComponent: FC = () => {
   const productId = searchParams.get('product_id');
   const initialQuantity = searchParams.get('quantity');
   const initialNotes = searchParams.get('notes');
+  const initialSizesParam = searchParams.get('sizes');
+
+  // Parse sizes query param (format: "S:5,M:10,L:8")
+  const initialSizes = useMemo(() => {
+    if (!initialSizesParam) return undefined;
+    try {
+      const sizes: Record<string, number> = {};
+      initialSizesParam.split(',').forEach(pair => {
+        const [size, qty] = pair.split(':');
+        if (size && qty) {
+          const quantity = parseInt(qty.trim(), 10);
+          if (!isNaN(quantity) && quantity > 0) {
+            sizes[size.trim().toUpperCase()] = quantity;
+          }
+        }
+      });
+      return Object.keys(sizes).length > 0 ? sizes : undefined;
+    } catch {
+      return undefined;
+    }
+  }, [initialSizesParam]);
 
   const [checkoutId] = useState<string>(uuidv4());
   const [quantity, setQuantity] = useState<number>(0);
@@ -507,6 +528,7 @@ export const DirectCheckoutComponent: FC = () => {
                       totalQuantity={quantity}
                       onChange={setSizeBreakdown}
                       disabled={isSubmitting || isProcessing}
+                      initialSizes={initialSizes}
                     />
                   )}
 

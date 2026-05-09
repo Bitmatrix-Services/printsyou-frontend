@@ -16,6 +16,7 @@ interface SizeBreakdownProps {
   totalQuantity: number;
   onChange: (sizeBreakdown: SizeQuantity[]) => void;
   disabled?: boolean;
+  initialSizes?: Record<string, number>;
 }
 
 // Helper to extract sizes from product additional fields
@@ -81,9 +82,10 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
   availableSizes,
   totalQuantity,
   onChange,
-  disabled = false
+  disabled = false,
+  initialSizes
 }) => {
-  const [sizeQuantities, setSizeQuantities] = useState<Record<string, number>>({});
+  const [sizeQuantities, setSizeQuantities] = useState<Record<string, number>>(initialSizes || {});
 
   // Sort sizes in standard order
   const sortedSizes = useMemo(() => {
