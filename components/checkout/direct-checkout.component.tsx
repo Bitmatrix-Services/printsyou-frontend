@@ -2,7 +2,7 @@
 
 import React, {FC, useState, useEffect, useMemo, Fragment} from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {useSearchParams, useRouter} from 'next/navigation';
 import axios from 'axios';
 import {v4 as uuidv4} from 'uuid';
@@ -25,7 +25,6 @@ import {HiMinus, HiPlus} from 'react-icons/hi';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from './size-breakdown.component';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 
 interface PriceGrid {
   id: string;
@@ -80,6 +79,8 @@ export const DirectCheckoutComponent: FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productId = searchParams.get('product_id');
+  const initialQuantity = searchParams.get('quantity');
+  const initialNotes = searchParams.get('notes');
 
   const [checkoutId] = useState<string>(uuidv4());
   const [quantity, setQuantity] = useState<number>(0);
@@ -99,14 +100,24 @@ export const DirectCheckoutComponent: FC = () => {
     enabled: !!productId
   });
 
-  // Set initial quantity from minimum in price grid
+  // Set initial quantity from query param or minimum in price grid
   useEffect(() => {
     if (product?.priceGrids?.length) {
       const sortedPrices = [...product.priceGrids].sort((a, b) => a.countFrom - b.countFrom);
       const minQty = sortedPrices[0]?.countFrom || 10;
+      const maxQty = sortedPrices[sortedPrices.length - 1]?.countTo || 10000;
+
+      // Use query param quantity if provided and valid
+      if (initialQuantity) {
+        const parsedQty = parseInt(initialQuantity, 10);
+        if (!isNaN(parsedQty) && parsedQty >= minQty && parsedQty <= maxQty) {
+          setQuantity(parsedQty);
+          return;
+        }
+      }
       setQuantity(minQty);
     }
-  }, [product]);
+  }, [product, initialQuantity]);
 
   const methods = useForm<StripeCheckoutFormSchemaType>({
     resolver: yupResolver(stripeCheckoutSchema),
@@ -121,7 +132,7 @@ export const DirectCheckoutComponent: FC = () => {
       city: '',
       state: '',
       zipCode: '',
-      specialInstructions: '',
+      specialInstructions: initialNotes || '',
       termsAndConditions: false
     }
   });
@@ -438,8 +449,8 @@ export const DirectCheckoutComponent: FC = () => {
                     <div className="flex gap-4">
                       {productImage && (
                         <div className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 border">
-                          <Image
-                            src={`${ASSETS_SERVER_URL}${productImage}`}
+                          <ImageWithFallback
+                            src={productImage}
                             alt={product.productName}
                             width={128}
                             height={128}
