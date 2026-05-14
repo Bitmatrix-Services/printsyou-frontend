@@ -316,7 +316,9 @@ export const DirectCheckoutComponent: FC = () => {
           fileKey: f.fileKey
         })),
         // Size breakdown for apparel
-        sizeBreakdown: showSizeBreakdown ? sizeBreakdown : null
+        sizeBreakdown: showSizeBreakdown ? sizeBreakdown : null,
+        // Pre-approved proof from checkout link (customer already reviewed and accepted)
+        approvedProofUrls: proofImages.length > 0 ? proofImages : null
       };
 
       // Create the quote request first
