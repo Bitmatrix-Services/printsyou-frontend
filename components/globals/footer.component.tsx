@@ -39,6 +39,19 @@ export const Footer: FC<IFooter> = memo(({categories}) => {
                 priority
               />
               <p className="text-sm lg:text-left">© 2024 PrintsYou. All rights reserved.</p>
+              <div className="mt-4 text-sm space-y-1">
+                <p className="text-gray-700">8602 Royal Star Rd, Rowlett, TX 75089</p>
+                <p>
+                  <a href="tel:+14694347035" className="text-gray-700 hover:text-secondary-500">
+                    (469) 434-7035
+                  </a>
+                </p>
+                <p>
+                  <a href="mailto:info@printsyou.com" className="text-gray-700 hover:text-secondary-500">
+                    info@printsyou.com
+                  </a>
+                </p>
+              </div>
               <div className="mt-6 flex space-x-6">
                 {social.map(({name, href, icon: Icon}) => (
                   <Link key={name} href={href} target="_blank" aria-label={name}>
@@ -49,7 +62,7 @@ export const Footer: FC<IFooter> = memo(({categories}) => {
             </div>
             <FooterLinks title="help" list={helpList} />
             <FooterLinks title="company" list={companyList} />
-            <FooterLinks title="support" list={supportList} />
+            <FooterLinks title="policies" list={supportList} />
             <FooterLinks
               title="shop"
               list={categories?.map(category => {
@@ -100,7 +113,11 @@ const companyList: listType[] = [
   {name: 'Terms & Conditions', url: '/terms-and-conditions'}
 ];
 
-const supportList: listType[] = [{name: 'help center', url: '/'}];
+const supportList: listType[] = [
+  {name: 'Privacy Policy', url: '/privacy-policy'},
+  {name: 'Return Policy', url: '/return-policy'},
+  {name: 'Shipping Policy', url: '/shipping-policy'}
+];
 
 const social = [
   {
