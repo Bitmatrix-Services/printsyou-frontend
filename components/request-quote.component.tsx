@@ -229,6 +229,17 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         responseId: response?.data?.payload?.id || response?.data?.id
       });
 
+      // Fire Google Ads conversion event with estimated value
+      // Using average unit price of $5 as estimate for promotional products
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'conversion', {
+          'send_to': 'AW-16709127988/-VMfCNDiobEcELSexJ8-',
+          'value': 1.0,
+          'currency': 'USD'
+        });
+        console.log('[Google Ads] Quote form conversion event fired');
+      }
+
       setTimeout(() => {
         setLoading(false);
         setIsSuccessModalOpen('success');
