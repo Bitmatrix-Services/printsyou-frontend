@@ -13,9 +13,11 @@ import {ReduxProvider} from './redux-provider';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {WhatsAppButton} from '@components/globals/whatsapp-button.component';
+import {GoogleAdsTracker} from '@components/globals/google-ads-tracker.component';
 import {CSPostHogProvider} from './provider';
 import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';
+import {Suspense} from 'react';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -99,6 +101,9 @@ export default async function RootLayout({children}: PropsWithChildren) {
               />
             </head>
             <body className="overflow-x-hidden">
+              <Suspense fallback={null}>
+                <GoogleAdsTracker />
+              </Suspense>
               <NextTopLoader color="#019ce0" showSpinner={false} />
               <NotificationComponent />
               <Header categories={categoriesData.payload} />

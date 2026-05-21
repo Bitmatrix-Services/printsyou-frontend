@@ -13,6 +13,7 @@ import {IoClose} from 'react-icons/io5';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {SizeBreakdown, SizeQuantity, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {ShippingAddressModal} from './shipping-address-modal.component';
+import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -195,7 +196,9 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
         successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancelUrl: `${window.location.origin}/proof/${proofId}?cancelled=true`,
         // Include size breakdown for apparel
-        sizeBreakdown: showSizeBreakdown ? sizeBreakdown : null
+        sizeBreakdown: showSizeBreakdown ? sizeBreakdown : null,
+        // Enhanced Conversions data for Google Ads
+        ...getEnhancedConversionsData()
       });
 
       if (response.data?.payload?.checkoutUrl) {

@@ -20,6 +20,7 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {stripeCheckoutSchema, StripeCheckoutFormSchemaType} from '@utils/validation-schemas';
 import {CheckoutRoutes, ProductRoutes, QuoteRequestRoutes} from '@utils/routes/be-routes';
+import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 import {FaArrowLeft, FaLock, FaCheckCircle, FaShieldAlt, FaClock} from 'react-icons/fa';
 import {HiMinus, HiPlus} from 'react-icons/hi';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from './size-breakdown.component';
@@ -333,7 +334,9 @@ export const DirectCheckoutComponent: FC = () => {
       const checkoutData = {
         quoteRequestId: quoteRequestId,
         successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/checkout/cancel`
+        cancelUrl: `${window.location.origin}/checkout/cancel`,
+        // Enhanced Conversions data for Google Ads
+        ...getEnhancedConversionsData()
       };
 
       const checkoutResponse = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData);

@@ -12,6 +12,7 @@ import {FaCheck, FaEdit, FaFileAlt, FaLock, FaBoxOpen, FaTruck, FaClipboardCheck
 import {IoClose} from 'react-icons/io5';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {ShippingAddressModal} from '@components/proof/shipping-address-modal.component';
+import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL;
@@ -321,7 +322,9 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
       const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, {
         quoteRequestId: data.id,
         successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/quote-review/${quoteRequestId}?cancelled=true`
+        cancelUrl: `${window.location.origin}/quote-review/${quoteRequestId}?cancelled=true`,
+        // Enhanced Conversions data for Google Ads
+        ...getEnhancedConversionsData()
       });
 
       if (response.data?.payload?.checkoutUrl) {

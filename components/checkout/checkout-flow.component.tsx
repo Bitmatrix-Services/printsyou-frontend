@@ -22,6 +22,7 @@ import {CircularLoader} from '@components/globals/circular-loader.component';
 import {SuccessModal} from '@components/globals/success-modal.component';
 import {stripeCheckoutSchema, StripeCheckoutFormSchemaType} from '@utils/validation-schemas';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
+import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 import {FaArrowLeft, FaLock} from 'react-icons/fa';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -102,7 +103,9 @@ export const CheckoutFlowComponent: FC = () => {
         specialInstructions: data.specialInstructions || null,
         artworkFiles: artworkFiles,
         successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/checkout/cancel`
+        cancelUrl: `${window.location.origin}/checkout/cancel`,
+        // Enhanced Conversions data for Google Ads
+        ...getEnhancedConversionsData()
       };
 
       // Create Stripe checkout session

@@ -34,6 +34,7 @@ import {FaLock} from 'react-icons/fa';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 import {CheckoutRoutes, QuoteRequestRoutes} from '@utils/routes/be-routes';
+import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -270,7 +271,9 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       const checkoutData = {
         quoteRequestId: quoteRequestId,
         successUrl: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancelUrl: `${window.location.origin}/checkout/cancel`
+        cancelUrl: `${window.location.origin}/checkout/cancel`,
+        // Enhanced Conversions data for Google Ads
+        ...getEnhancedConversionsData()
       };
 
       const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData);
