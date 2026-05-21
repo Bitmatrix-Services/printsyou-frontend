@@ -9,12 +9,20 @@ interface PageProps {
   searchParams: Promise<{category?: string; product?: string}>;
 }
 
+export interface PriceGrid {
+  countFrom: number;
+  price: number;
+  salePrice?: number;
+}
+
 export interface QuoteItemData {
   type: 'category' | 'product';
   name: string;
   imageUrl: string;
   productId?: string;
   uniqueProductName?: string;
+  priceGrids?: PriceGrid[];
+  setupCharge?: number;
 }
 
 const RequestQuotePage = async ({searchParams}: PageProps) => {
@@ -31,12 +39,28 @@ const RequestQuotePage = async ({searchParams}: PageProps) => {
       if (productRes?.payload) {
         // Get the first image from productImages array
         const firstImage = productRes.payload.productImages?.[0]?.imageUrl || '';
+
+        // Extract price grids for value calculation
+        const priceGrids = productRes.payload.priceGrids?.map((pg: any) => ({
+          countFrom: pg.countFrom,
+          price: pg.salePrice && pg.salePrice > 0 ? pg.salePrice : pg.price,
+          salePrice: pg.salePrice
+        })) || [];
+
+        // Find setup charge from additionalRows if exists
+        const setupRow = productRes.payload.additionalRows?.find(
+          (row: any) => row.name?.toLowerCase().includes('setup')
+        );
+        const setupCharge = setupRow?.priceDiff || 30; // Default $30 if not found
+
         itemData = {
           type: 'product',
           name: productRes.payload.productName,
           imageUrl: firstImage,
           productId: productRes.payload.id,
-          uniqueProductName: productRes.payload.uniqueProductName
+          uniqueProductName: productRes.payload.uniqueProductName,
+          priceGrids,
+          setupCharge
         };
       }
     } catch (error) {

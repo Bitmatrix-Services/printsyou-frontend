@@ -47,12 +47,72 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
+/**
+ * Calculate estimated quote value based on quantity and actual product pricing
+ * Uses actual priceGrids from product data when available
+ * Falls back to default estimates for category quotes
+ */
+const calculateQuoteValue = (
+  quantity: number | undefined,
+  priceGrids?: PriceGrid[],
+  setupCharge: number = 30
+): number => {
+  // Default estimate for unknown quantity (assume ~50 units at ~$12/unit)
+  if (!quantity || quantity <= 0) {
+    return 50 * 12; // ~$630
+  }
+
+  let unitPrice: number;
+
+  // Use actual product pricing if available
+  if (priceGrids && priceGrids.length > 0) {
+    // Sort by countFrom descending to find the applicable tier
+    const sortedGrids = [...priceGrids].sort((a, b) => b.countFrom - a.countFrom);
+
+    // Find the first tier where quantity >= countFrom
+    const applicableTier = sortedGrids.find(grid => quantity >= grid.countFrom);
+
+    if (applicableTier) {
+      unitPrice = applicableTier.price;
+    } else {
+      // Use the lowest tier if quantity is below all tiers
+      unitPrice = priceGrids[0]?.price || 10;
+    }
+  } else {
+    // Fallback to default estimates (for category quotes or when pricing not available)
+    // Using average promotional product pricing
+    if (quantity >= 500) {
+      unitPrice = 8;
+    } else if (quantity >= 100) {
+      unitPrice = 10;
+    } else if (quantity >= 50) {
+      unitPrice = 12;
+    } else if (quantity >= 10) {
+      unitPrice = 15;
+    } else {
+      unitPrice = 20;
+    }
+  }
+
+  const subtotal = quantity * unitPrice;
+
+  return Math.round((subtotal) * 100) / 100; // Round to 2 decimals
+};
+
+export interface PriceGrid {
+  countFrom: number;
+  price: number;
+  salePrice?: number;
+}
+
 export interface QuoteItemData {
   type: 'category' | 'product';
   name: string;
   imageUrl: string;
   productId?: string;
   uniqueProductName?: string;
+  priceGrids?: PriceGrid[];
+  setupCharge?: number;
 }
 
 interface RequestQuoteComponentProps {
@@ -124,7 +184,9 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     eventId: string,
     productCategory: string,
     quantity?: number,
-    userData?: { email?: string; phone?: string; firstName?: string; lastName?: string; externalId?: string }
+    userData?: { email?: string; phone?: string; firstName?: string; lastName?: string; externalId?: string },
+    priceGrids?: PriceGrid[],
+    setupCharge?: number
   ) => {
     if (typeof window === 'undefined') {
       console.warn('[Meta Pixel] Window not available');
@@ -138,11 +200,8 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       return false;
     }
 
-    // Estimate lead value based on quantity
-    // Using average unit price of $5 as conservative estimate for promotional products
-    const estimatedUnitPrice = 5;
-    // Ensure value is always at least $10 (Meta requires valid price > 0)
-    const estimatedValue = Math.max(10, quantity && quantity > 0 ? quantity * estimatedUnitPrice : 50);
+    // Calculate actual lead value based on quantity and product pricing
+    const estimatedValue = calculateQuoteValue(quantity, priceGrids, setupCharge);
 
     try {
       // Build advanced matching data for better Event Match Quality
@@ -229,15 +288,15 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         responseId: response?.data?.payload?.id || response?.data?.id
       });
 
-      // Fire Google Ads conversion event with estimated value
-      // Using average unit price of $5 as estimate for promotional products
+      // Fire Google Ads conversion event with actual estimated value based on product pricing
+      const quoteValue = calculateQuoteValue(variables.quantity, itemData?.priceGrids, itemData?.setupCharge);
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'conversion', {
           'send_to': 'AW-16709127988/-VMfCNDiobEcELSexJ8-',
-          'value': 1.0,
+          'value': quoteValue,
           'currency': 'USD'
         });
-        console.log('[Google Ads] Quote form conversion event fired');
+        console.log('[Google Ads] Quote form conversion fired, quantity:', variables.quantity, 'value: $' + quoteValue);
       }
 
       setTimeout(() => {
@@ -283,14 +342,22 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
 
     // STEP 1: Fire browser pixel FIRST with the event ID, quantity, and user data for advanced matching
     // Use metaEventId as external_id to ensure consistency with server CAPI
-    const pixelFired = fireMetaPixelLead(metaEventId, resolvedProductCategory, data.quantity, {
-      email: data.emailAddress,
-      phone: data.phoneNumber || undefined,
-      firstName,
-      lastName,
-      externalId: metaEventId // Use same ID as server CAPI for cross-device matching
-    });
-    console.log('[Meta Dedup] Browser pixel fired:', pixelFired, 'quantity:', data.quantity, 'hasUserData:', !!(data.emailAddress || data.phoneNumber));
+    const pixelFired = fireMetaPixelLead(
+      metaEventId,
+      resolvedProductCategory,
+      data.quantity,
+      {
+        email: data.emailAddress,
+        phone: data.phoneNumber || undefined,
+        firstName,
+        lastName,
+        externalId: metaEventId // Use same ID as server CAPI for cross-device matching
+      },
+      itemData?.priceGrids,
+      itemData?.setupCharge
+    );
+    const quoteValue = calculateQuoteValue(data.quantity, itemData?.priceGrids, itemData?.setupCharge);
+    console.log('[Meta Dedup] Browser pixel fired:', pixelFired, 'quantity:', data.quantity, 'value: $' + quoteValue, 'hasUserData:', !!(data.emailAddress || data.phoneNumber));
 
     // STEP 2: Send to server with SAME event ID, Facebook cookies, and resolved productCategory for CAPI
     mutate({
