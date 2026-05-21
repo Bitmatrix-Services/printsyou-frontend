@@ -252,9 +252,12 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
         });
     }
 
+    const categoryTitle = category?.metaTitle || category?.categoryName || 'Custom Products';
+    const defaultDescription = `Shop custom ${categoryTitle} at PrintsYou. Fast turnaround, competitive pricing, and quality guaranteed. Free quotes available!`;
+
     return {
-        title: `${category?.metaTitle || category?.categoryName} ${category?.suffix ?? ''} | PrintsYou`,
-        description: category?.metaDescription || '',
+        title: `${categoryTitle}${category?.suffix ? ` ${category.suffix}` : ''} | Custom Printing | PrintsYou`,
+        description: category?.metaDescription || defaultDescription,
         keywords: category?.keywords || category?.categoryName,
         // SEO: Add robots directive for filtered/paginated pages
         robots: shouldNoIndex

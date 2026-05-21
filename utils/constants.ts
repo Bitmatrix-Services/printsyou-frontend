@@ -1,7 +1,7 @@
 export const metaConstants = {
-  SITE_NAME: 'PrintsYou - Custom Printed Products',
+  SITE_NAME: 'PrintsYou | Custom T-Shirts, Promotional Products & Printing Services',
   DESCRIPTION:
-    'Discover top-quality promotional products. Perfect for trade shows, conventions or office swag. Elevate your brand with unique promotional products today!'
+    'Order custom printed t-shirts, promotional products, stickers, banners & more. Fast turnaround, competitive prices, free shipping on qualifying orders. Get a free quote today!'
 };
 
 export const breakpoints = {

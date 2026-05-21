@@ -64,9 +64,12 @@ export async function generateMetadata(props: {params: Params}) {
 
   const minimumPrice = lowestPrice.length > 0 ? lowestPrice[0].price : 0;
 
+  const productTitle = product?.metaTitle || product?.productName || 'Custom Product';
+  const priceText = minimumPrice > 0 ? ` | From $${minimumPrice.toFixed(2)}` : '';
+
   return {
-    title: `${product?.prefix ?? 'Promotional'} ${product?.metaTitle || product?.productName}${product?.suffix ? ` ${product?.suffix}` : ''} ${minimumPrice}$`,
-    description: product?.metaDescription || '',
+    title: `${productTitle}${priceText} | Custom Printing | PrintsYou`,
+    description: product?.metaDescription || `Order custom ${productTitle} with fast turnaround. High-quality printing, competitive prices, and free shipping on qualifying orders. Get a quote today!`,
     robots: {index: true, follow: true},
     alternates: {canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`},
     openGraph: {
