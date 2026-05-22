@@ -91,11 +91,17 @@ const generateProductSchema = (
 ) => {
   if (!product) return null;
 
+  // Filter out video files from images (Google schema only accepts images)
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif'];
+  const validImages = (product.productImages ?? [])
+    .filter(item => imageExtensions.some(ext => item.imageUrl?.toLowerCase().endsWith(ext)))
+    .map(item => `https://printsyouassets.s3.amazonaws.com/${item.imageUrl}`);
+
   return {
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product.productName,
-    image: (product.productImages ?? []).map(item => `${process.env.ASSETS_SERVER_URL}${item.imageUrl}`),
+    image: validImages.length > 0 ? validImages : [`https://printsyouassets.s3.amazonaws.com/${product.productImages?.[0]?.imageUrl}`],
     description: (product.metaDescription ?? product.description ?? '').replace(/<[^>]+>/g, ''),
     sku: product.sku,
     url: `${process.env.FE_URL}products/${product.uniqueProductName}`,
