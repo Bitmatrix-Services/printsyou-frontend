@@ -68,7 +68,7 @@ export async function generateMetadata(props: {params: Params}) {
   const priceText = minimumPrice > 0 ? ` | From $${minimumPrice.toFixed(2)}` : '';
 
   return {
-    title: `${productTitle}${priceText} | Custom Printing | PrintsYou`,
+    title: `${productTitle}${priceText} | PrintsYou`,
     description: product?.metaDescription || `Order custom ${productTitle} with fast turnaround. High-quality printing, competitive prices, and free shipping on qualifying orders. Get a quote today!`,
     robots: {index: true, follow: true},
     alternates: {canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`},
