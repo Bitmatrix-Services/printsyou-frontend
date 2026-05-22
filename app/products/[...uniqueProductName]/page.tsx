@@ -154,12 +154,7 @@ const generateProductSchema = (
           handlingTime: {'@type': 'QuantitativeValue', minValue: 0, maxValue: 3, unitCode: 'DAY'},
           transitTime: {'@type': 'QuantitativeValue', minValue: 1, maxValue: 7, unitCode: 'DAY'}
         }
-      },
-      additionalProperty: (product.additionalRows ?? []).map(item => ({
-        '@type': 'PropertyValue',
-        name: item.name,
-        value: `$${item.priceDiff}`
-      }))
+      }
     }
   };
 };
