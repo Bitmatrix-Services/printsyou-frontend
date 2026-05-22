@@ -141,24 +141,12 @@ const generateProductSchema = (
       availability: 'https://schema.org/InStock',
       shippingDetails: {
         '@type': 'OfferShippingDetails',
-        shippingRate: {'@type': 'MonetaryAmount', minValue: 3.49, maxValue: 50.0, currency: 'USD'},
+        shippingRate: {'@type': 'MonetaryAmount', value: 5.00, currency: 'USD'},
         shippingDestination: {'@type': 'DefinedRegion', addressCountry: 'US'},
         deliveryTime: {
           '@type': 'ShippingDeliveryTime',
           handlingTime: {'@type': 'QuantitativeValue', minValue: 0, maxValue: 3, unitCode: 'DAY'},
-          transitTime: {'@type': 'QuantitativeValue', minValue: 1, maxValue: 7, unitCode: 'DAY'},
-          cutOffTime: '23:30:00-05:00',
-          businessDays: {
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: [
-              'https://schema.org/Monday',
-              'https://schema.org/Tuesday',
-              'https://schema.org/Wednesday',
-              'https://schema.org/Thursday',
-              'https://schema.org/Friday',
-              'https://schema.org/Saturday'
-            ]
-          }
+          transitTime: {'@type': 'QuantitativeValue', minValue: 1, maxValue: 7, unitCode: 'DAY'}
         }
       },
       additionalProperty: (product.additionalRows ?? []).map(item => ({
