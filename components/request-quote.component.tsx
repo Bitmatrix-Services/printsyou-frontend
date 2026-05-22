@@ -291,12 +291,24 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       // Fire Google Ads conversion event with actual estimated value based on product pricing
       const quoteValue = calculateQuoteValue(variables.quantity, itemData?.priceGrids, itemData?.setupCharge);
       if (typeof window !== 'undefined' && (window as any).gtag) {
+        // Prepare user data for Enhanced Conversions (Google hashes automatically)
+        const userData: Record<string, string> = {};
+        if (variables.emailAddress) {
+          userData.email = variables.emailAddress.toLowerCase().trim();
+        }
+        if (variables.phoneNumber) {
+          // Format phone: remove non-digits, add US country code if needed
+          const cleanPhone = variables.phoneNumber.replace(/\D/g, '');
+          userData.phone_number = cleanPhone.length === 10 ? '+1' + cleanPhone : '+' + cleanPhone;
+        }
+
         (window as any).gtag('event', 'conversion', {
           'send_to': 'AW-16709127988/-VMfCNDiobEcELSexJ8-',
           'value': quoteValue,
-          'currency': 'USD'
+          'currency': 'USD',
+          'user_data': userData
         });
-        console.log('[Google Ads] Quote form conversion fired, quantity:', variables.quantity, 'value: $' + quoteValue);
+        console.log('[Google Ads] Quote form conversion fired, quantity:', variables.quantity, 'value: $' + quoteValue, 'user_data:', Object.keys(userData));
       }
 
       setTimeout(() => {

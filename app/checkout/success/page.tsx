@@ -20,6 +20,7 @@ interface SessionData {
   currency: string;
   status: string;
   customerEmail: string;
+  customerPhone?: string;
 }
 
 const CheckoutSuccessContent = () => {
@@ -53,21 +54,35 @@ const CheckoutSuccessContent = () => {
         const data = verifyResponse.data.payload;
         setSessionData(data);
 
-        // Track successful payment - Google Analytics
+        // Track successful payment - Google Analytics & Google Ads
         if (typeof window !== 'undefined' && (window as any).gtag) {
+          // Prepare user data for Enhanced Conversions
+          const userData: Record<string, string> = {};
+          if (data.customerEmail) {
+            userData.email = data.customerEmail.toLowerCase().trim();
+          }
+          if (data.customerPhone) {
+            const cleanPhone = data.customerPhone.replace(/\D/g, '');
+            userData.phone_number = cleanPhone.length === 10 ? '+1' + cleanPhone : '+' + cleanPhone;
+          }
+
+          // Google Analytics purchase event
           (window as any).gtag('event', 'purchase', {
             transaction_id: data.stripeSessionId,
             value: data.amountTotal,
             currency: data.currency || 'USD'
           });
 
-          // Google Ads Purchase Conversion
+          // Google Ads Purchase Conversion with Enhanced Conversions data
           (window as any).gtag('event', 'conversion', {
             send_to: 'AW-16709127988/SI9-CNz_w_EbELSexJ8-',
             transaction_id: data.stripeSessionId,
             value: data.amountTotal,
-            currency: data.currency || 'USD'
+            currency: data.currency || 'USD',
+            user_data: userData
           });
+
+          console.log('[Google Ads] Purchase conversion fired, value: $' + data.amountTotal, 'user_data:', Object.keys(userData));
         }
       } catch (err: any) {
         console.error('Error verifying session:', err);
