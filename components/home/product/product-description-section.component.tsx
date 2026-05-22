@@ -128,12 +128,12 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
 
       {/* =====================================================
           CTA SECTION - Primary conversion area
-          Goal: Guide users to Order Now (primary) or Get Quote (secondary)
+          Goal: Guide users to Buy Now (primary) or Get Quote (secondary)
           ===================================================== */}
       <div className="mt-6 space-y-4">
         {/* Primary & Secondary CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-3">
-          {/* PRIMARY CTA: Order Now - Most prominent */}
+          {/* PRIMARY CTA: Buy Now - Most prominent */}
           {(product.orderType === 'CHECKOUT' || product.orderType === 'BOTH') && (
             <div className="flex-1">
               <Link
@@ -145,7 +145,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
                 }`}
                 href={`/checkout?product_id=${product.id}`}
               >
-                Order Now
+                Buy Now
                 <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
               </Link>
               <p className="text-xs text-gray-500 text-center mt-1.5">
@@ -161,7 +161,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
                 className={`w-full py-4 px-6 flex items-center justify-center rounded-lg font-semibold transition-all duration-200 ${
                   product.orderType === 'QUOTE_ONLY' || !product.orderType
                     ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-lg hover:shadow-xl text-lg'
-                    : 'bg-white border-2 border-primary-500 text-primary-500 hover:bg-primary-50'
+                    : 'bg-white border-2 border-green-600 text-green-600 hover:bg-green-50'
                 }`}
                 href={`/request-quote?product=${product.id}`}
               >
@@ -175,12 +175,12 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           )}
         </div>
 
-        {/* WhatsApp CTA - Quick contact option */}
+        {/* WhatsApp CTA - Secondary contact option */}
         <a
           href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in ${encodeURIComponent(product.productName)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full py-3 px-6 flex items-center justify-center rounded-lg bg-[#25D366] hover:bg-[#20BD5A] text-white font-medium transition-all duration-200"
+          className="w-full py-3 px-6 flex items-center justify-center rounded-lg border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white font-medium transition-all duration-200"
         >
           <FaWhatsapp className="mr-2 h-5 w-5" />
           Chat on WhatsApp
