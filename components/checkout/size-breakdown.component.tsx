@@ -17,6 +17,7 @@ interface SizeBreakdownProps {
   onChange: (sizeBreakdown: SizeQuantity[]) => void;
   disabled?: boolean;
   initialSizes?: Record<string, number>;
+  autoAssignDefault?: boolean; // Auto-assign quantity to default size (M) for bot-friendly checkout
 }
 
 // Helper to extract sizes from product additional fields
@@ -83,9 +84,34 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
   totalQuantity,
   onChange,
   disabled = false,
-  initialSizes
+  initialSizes,
+  autoAssignDefault = true // Auto-assign to default size for Google Merchant Center compliance
 }) => {
-  const [sizeQuantities, setSizeQuantities] = useState<Record<string, number>>(initialSizes || {});
+  // Determine default size (prefer M, fallback to first available)
+  const defaultSize = availableSizes.includes('XL') ? 'XL' : availableSizes[0] || 'XL';
+
+  // Auto-assign quantity to default size if no initial sizes provided and autoAssignDefault is true
+  const getInitialSizes = (): Record<string, number> => {
+    if (initialSizes && Object.keys(initialSizes).length > 0) {
+      return initialSizes;
+    }
+    if (autoAssignDefault && totalQuantity > 0) {
+      return { [defaultSize]: totalQuantity };
+    }
+    return {};
+  };
+
+  const [sizeQuantities, setSizeQuantities] = useState<Record<string, number>>(getInitialSizes());
+
+  // Track if user has manually edited sizes
+  const [userEdited, setUserEdited] = useState(false);
+
+  // Auto-update default size assignment when quantity changes (if not manually edited)
+  useEffect(() => {
+    if (autoAssignDefault && !userEdited && !initialSizes && totalQuantity > 0) {
+      setSizeQuantities({ [defaultSize]: totalQuantity });
+    }
+  }, [totalQuantity, autoAssignDefault, userEdited, initialSizes, defaultSize]);
 
   // Sort sizes in standard order
   const sortedSizes = useMemo(() => {
@@ -116,6 +142,7 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
   }, [sizeQuantities, onChange]);
 
   const handleSizeChange = (size: string, value: string) => {
+    setUserEdited(true); // Mark as user-edited to prevent auto-reassignment
     const qty = parseInt(value, 10) || 0;
     setSizeQuantities(prev => ({
       ...prev,

@@ -154,7 +154,9 @@ export const stripeCheckoutSchema = object({
   state: string().required('Please select state'),
   zipCode: string().required('Please enter zip code'),
   specialInstructions: string().nullable(),
-  termsAndConditions: boolean().oneOf([true], 'You must agree to the terms and conditions')
+  // Terms defaulted to true for Google Merchant Center bot-friendly checkout
+  // Users still see the checkbox but checkout is not blocked for bots
+  termsAndConditions: boolean().default(true)
 });
 
 export const shippingAddressSchema = object({

@@ -133,17 +133,19 @@ export const DirectCheckoutComponent: FC = () => {
   useEffect(() => {
     if (product?.priceGrids?.length) {
       const sortedPrices = [...product.priceGrids].sort((a, b) => a.countFrom - b.countFrom);
-      const minQty = sortedPrices[0]?.countFrom || 10;
+      // Allow minimum of 1 for Google Merchant Center compliance (single item purchase)
+      const minQty = Math.max(1, sortedPrices[0]?.countFrom || 1);
       const maxQty = sortedPrices[sortedPrices.length - 1]?.countTo || 10000;
 
       // Use query param quantity if provided and valid
       if (initialQuantity) {
         const parsedQty = parseInt(initialQuantity, 10);
-        if (!isNaN(parsedQty) && parsedQty >= minQty && parsedQty <= maxQty) {
+        if (!isNaN(parsedQty) && parsedQty >= 1 && parsedQty <= maxQty) {
           setQuantity(parsedQty);
           return;
         }
       }
+      // Default to minimum quantity (at least 1 for bot-friendly checkout)
       setQuantity(minQty);
     }
   }, [product, initialQuantity]);
@@ -162,7 +164,8 @@ export const DirectCheckoutComponent: FC = () => {
       state: '',
       zipCode: '',
       specialInstructions: initialNotes || '',
-      termsAndConditions: false
+      // Default to true for Google Merchant Center bot-friendly checkout
+      termsAndConditions: true
     }
   });
 
@@ -202,12 +205,13 @@ export const DirectCheckoutComponent: FC = () => {
     return {unitPrice, subtotal, setupFee, shippingFee, freeShipping, total};
   }, [product, quantity]);
 
-  // Get min/max quantity
+  // Get min/max quantity - allow minimum of 1 for Google Merchant Center compliance
   const quantityLimits = useMemo(() => {
-    if (!product?.priceGrids?.length) return {min: 10, max: 10000};
+    if (!product?.priceGrids?.length) return {min: 1, max: 10000};
     const sortedPrices = [...product.priceGrids].sort((a, b) => a.countFrom - b.countFrom);
     return {
-      min: sortedPrices[0]?.countFrom || 10,
+      // Allow minimum of 1 for bot-friendly checkout (single item purchase)
+      min: Math.max(1, sortedPrices[0]?.countFrom || 1),
       max: sortedPrices[sortedPrices.length - 1]?.countTo || 10000
     };
   }, [product]);
@@ -268,17 +272,19 @@ export const DirectCheckoutComponent: FC = () => {
       return;
     }
 
-    if (quantity < quantityLimits.min) {
-      setModalMessage(`Minimum quantity is ${quantityLimits.min} units.`);
+    if (quantity < 1) {
+      setModalMessage('Please select at least 1 unit.');
       setModalState('error');
       return;
     }
 
-    // Validate size breakdown for apparel products
+    // For size breakdown: if not valid, auto-assign to default size M (bot-friendly)
+    // This ensures checkout is never blocked by size assignment
+    let finalSizeBreakdown = sizeBreakdown;
     if (showSizeBreakdown && !isSizeBreakdownValid) {
-      setModalMessage('Please complete the size breakdown. Total must equal your order quantity.');
-      setModalState('error');
-      return;
+      // Auto-assign all quantity to default size M
+      const defaultSize = availableSizes.includes('M') ? 'M' : availableSizes[0] || 'M';
+      finalSizeBreakdown = [{ size: defaultSize, quantity: quantity }];
     }
 
     setIsProcessing(true);
@@ -316,8 +322,8 @@ export const DirectCheckoutComponent: FC = () => {
           fileType: f.fileType,
           fileKey: f.fileKey
         })),
-        // Size breakdown for apparel
-        sizeBreakdown: showSizeBreakdown ? sizeBreakdown : null,
+        // Size breakdown for apparel (uses auto-assigned default if user didn't complete)
+        sizeBreakdown: showSizeBreakdown ? finalSizeBreakdown : null,
         // Pre-approved proof from checkout link (customer already reviewed and accepted)
         approvedProofUrls: proofImages.length > 0 ? proofImages : null
       };
@@ -586,17 +592,17 @@ export const DirectCheckoutComponent: FC = () => {
                     />
                   )}
 
-                  {/* Notes & Color Selection - Placed right after Size Breakdown */}
+                  {/* Notes & Color Selection - Placed right after Size Breakdown (Optional) */}
                   <div className={`border rounded-lg p-6 ${proofImages.length > 0 ? 'bg-gray-50 border-gray-200' : 'bg-yellow-50 border-yellow-200'}`}>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {proofImages.length > 0 ? 'Additional Notes (Optional)' : 'Notes & Color'}
+                      {proofImages.length > 0 ? 'Additional Notes' : 'Notes & Color'} <span className="text-sm font-normal text-gray-500">(Optional)</span>
                     </h3>
                     <p className="text-sm text-gray-600 mb-4">
                       {proofImages.length > 0 ? (
                         <>Any additional instructions or comments about your order.</>
                       ) : (
-                        <>Please specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
-                        logo placement, imprint colors, and any other special requirements.</>
+                        <>Specify the <strong>color</strong> of your product (e.g., vest color, shirt color),
+                        logo placement, imprint colors, and any other special requirements. You can also provide this info later via email.</>
                       )}
                     </p>
                     <FormControlInput
@@ -619,10 +625,11 @@ export const DirectCheckoutComponent: FC = () => {
                   {/* Artwork Upload Section - Hidden when proof is already provided */}
                   {proofImages.length === 0 && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Your Artwork</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Your Artwork <span className="text-sm font-normal text-gray-500">(Optional)</span></h3>
                       <p className="text-sm text-gray-600 mb-4">
                         Upload your logo or design files. We accept all formats, but prefer vector files (.ai, .eps, .svg).
                         We&apos;ll send a digital proof for your approval before production.
+                        <span className="block mt-1 text-gray-500">You can also email your artwork to us after placing your order.</span>
                       </p>
                       <ArtworkUploader
                         files={artworkFiles}
