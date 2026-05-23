@@ -130,14 +130,20 @@ export const CategoryReviews: FC<CategoryReviewsProps> = ({categoryId}) => {
 
     setIsLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/${categoryId}/reviews`)
-      .then(res => res.json())
+      .then(res => {
+        // Silently fail for non-200 responses (reviews are optional)
+        if (!res.ok) return { payload: { reviews: [] } };
+        return res.json();
+      })
       .then(response => {
         const summary = response.payload || response;
         if (summary && summary.reviews && summary.reviews.length > 0) {
           setData(summary);
         }
       })
-      .catch(err => console.error('Error fetching category reviews:', err))
+      .catch(() => {
+        // Silently fail - reviews are optional, don't pollute console
+      })
       .finally(() => setIsLoading(false));
   }, [categoryId]);
 

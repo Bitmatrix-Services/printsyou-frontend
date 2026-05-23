@@ -53,7 +53,11 @@ export const CustomerReviews: FC<CustomerReviewsProps> = ({
     if (productId) {
       setIsLoading(true);
       fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${ReviewRoutes.productReviews}/${productId}`)
-        .then(res => res.json())
+        .then(res => {
+          // Silently fail for non-200 responses (reviews are optional)
+          if (!res.ok) return { payload: [] };
+          return res.json();
+        })
         .then(data => {
           // Handle both direct array and wrapped response
           const reviewData = Array.isArray(data) ? data : (data.payload || data.content || []);
@@ -64,7 +68,10 @@ export const CustomerReviews: FC<CustomerReviewsProps> = ({
             setTotalReviews(reviewData.length);
           }
         })
-        .catch(err => console.error('Error fetching reviews:', err))
+        .catch(() => {
+          // Silently fail - reviews are optional, don't pollute console
+          setReviews([]);
+        })
         .finally(() => setIsLoading(false));
     } else {
       setIsLoading(false);
