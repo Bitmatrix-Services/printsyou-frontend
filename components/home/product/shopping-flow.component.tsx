@@ -5,8 +5,9 @@ import {Product, PriceGrids} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
-import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle} from 'react-icons/fa';
+import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList} from 'react-icons/fa';
 import axios from 'axios';
+import Link from 'next/link';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -291,45 +292,63 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       {/* Error Message */}
       {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
 
-      {/* Buy Now Button */}
-      <button
-        type="button"
-        onClick={handleCheckout}
-        disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)}
-        className={`w-full py-4 px-6 flex items-center justify-center rounded-lg text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
-          isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-green-600 hover:bg-green-700'
-        }`}
-      >
-        {isProcessing ? (
-          <>
-            <svg
-              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            Processing...
-          </>
-        ) : (
-          <>
-            Buy Now - ${totalPrice.toFixed(2)}
-            <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
-          </>
-        )}
-      </button>
+      {/* CTA Buttons */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Buy Now Button */}
+        <div className="flex flex-col">
+          <button
+            type="button"
+            onClick={handleCheckout}
+            disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)}
+            className={`w-full min-h-[60px] py-3 px-3 flex items-center justify-center rounded-lg text-white font-bold text-base transition-all duration-200 shadow-lg hover:shadow-xl ${
+              isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-green-600 hover:bg-green-700'
+            }`}
+          >
+            {isProcessing ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Processing...
+              </>
+            ) : (
+              <>
+                Buy Now
+                <RiShoppingBag4Fill className="ml-2 h-5 w-5 flex-shrink-0" />
+              </>
+            )}
+          </button>
+          <p className="text-xs text-gray-500 text-center mt-2">
+            Fast checkout for ready-to-order customers
+          </p>
+        </div>
 
-      <p className="text-xs text-gray-500 text-center">
-        Secure checkout. Tax calculated at checkout.
-      </p>
+        {/* Get Quote Button */}
+        <div className="flex flex-col">
+          <Link
+            href={`/request-quote?product=${product.id}`}
+            className="w-full min-h-[60px] py-3 px-3 flex items-center justify-center rounded-lg border-2 border-green-600 text-green-600 font-bold text-sm transition-all duration-200 hover:bg-green-50 text-center"
+          >
+            <span>Get Free Quote + Mockup</span>
+            <FaClipboardList className="ml-2 h-4 w-4 flex-shrink-0" />
+          </Link>
+          <p className="text-xs text-gray-500 text-center mt-2">
+            Best for bulk orders & custom requirements
+          </p>
+        </div>
+      </div>
 
       {/* Trust Indicators */}
       <div className="grid grid-cols-2 gap-2 pt-2">

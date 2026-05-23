@@ -39,6 +39,9 @@ export const MobileStickyCta: FC<MobileStickyCtaProps> = ({product}) => {
     return sortedPrices[0]?.countFrom || 10;
   }, [product.priceGrids]);
 
+  // Don't show for Shopping Flow products - they have their own Buy Now button
+  if (product.shoppingFlowEnabled) return null;
+
   if (!priceRange || !priceRange.lowestPrice) return null;
 
   const showOrderButton = product.orderType === 'CHECKOUT' || product.orderType === 'BOTH';
