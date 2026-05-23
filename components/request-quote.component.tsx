@@ -66,18 +66,21 @@ const calculateQuoteValue = (
 
   // Use actual product pricing if available
   if (priceGrids && priceGrids.length > 0) {
-    // Sort by countFrom descending to find the applicable tier
-    const sortedGrids = [...priceGrids].sort((a, b) => b.countFrom - a.countFrom);
+    // Sort by countFrom ascending to find tiers properly
+    const sortedGrids = [...priceGrids].sort((a, b) => a.countFrom - b.countFrom);
 
-    // Find the first tier where quantity >= countFrom
-    const applicableTier = sortedGrids.find(grid => quantity >= grid.countFrom);
-
-    if (applicableTier) {
-      unitPrice = applicableTier.price;
-    } else {
-      // Use the lowest tier if quantity is below all tiers
-      unitPrice = priceGrids[0]?.price || 10;
+    // Find the applicable tier (highest tier where quantity >= countFrom)
+    let applicableTier = sortedGrids[0]; // Start with minimum tier
+    for (const grid of sortedGrids) {
+      if (quantity >= grid.countFrom) {
+        applicableTier = grid;
+      } else {
+        break;
+      }
     }
+
+    unitPrice = applicableTier.price;
+    console.log('[QuoteValue] Using product pricing:', {quantity, unitPrice, tier: applicableTier.countFrom, totalGrids: priceGrids.length});
   } else {
     // Fallback to default estimates (for category quotes or when pricing not available)
     // Using average promotional product pricing
@@ -92,9 +95,11 @@ const calculateQuoteValue = (
     } else {
       unitPrice = 20;
     }
+    console.log('[QuoteValue] Using fallback pricing (no priceGrids):', {quantity, unitPrice});
   }
 
   const subtotal = quantity * unitPrice;
+  console.log('[QuoteValue] Final calculation:', {quantity, unitPrice, subtotal});
 
   return Math.round((subtotal) * 100) / 100; // Round to 2 decimals
 };
