@@ -100,6 +100,52 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
     return '8-10';
   }, [product?.additionalFieldProductValues]);
 
+  // Overview section component
+  const OverviewSection = () => (
+    <div>
+      <h4 className="text-2xl font-semibold mb-6">Overview</h4>
+      <div
+        id="product-overview"
+        data-productid={product.id}
+        className="product-description"
+        dangerouslySetInnerHTML={{__html: formattedDescription}}
+      />
+    </div>
+  );
+
+  // Additional Information section component
+  const AdditionalInfoSection = () => (
+    <div>
+      <h4 className="text-2xl font-semibold mb-6">Additional Information</h4>
+      <div className="space-y-2">
+        {product.additionalFieldProductValues?.map(({fieldName, fieldValue}) => (
+          <Fragment key={fieldValue}>
+            <div className="product-additional-info-heading capitalize">
+              <strong>{fieldName.toLowerCase()}:</strong>
+            </div>
+            <ul>
+              <li className="text-mute2">
+                {fieldValue.includes('<table') ? (
+                  <span
+                    className="font-normal text-md text-base description-table"
+                    dangerouslySetInnerHTML={{__html: fieldValue}}
+                  />
+                ) : fieldValue ? (
+                  <div
+                    className="product-additional-info-value capitalize"
+                    dangerouslySetInnerHTML={{__html: fieldValue.toLowerCase()}}
+                  />
+                ) : (
+                  <span className="font-normal text-md text-base text-mute2">N/A</span>
+                )}
+              </li>
+            </ul>
+          </Fragment>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Breadcrumb prefixTitle="Products" list={product.crumbs ?? []} />
@@ -116,6 +162,14 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
             <div className="hidden lg:block">
               <TrustBadges />
             </div>
+
+            {/* For Shopping Flow: Show Overview & Additional Info under gallery on desktop */}
+            {product.shoppingFlowEnabled && (
+              <div ref={productDescriptionRef} className="hidden lg:block space-y-8 pt-4">
+                <OverviewSection />
+                <AdditionalInfoSection />
+              </div>
+            )}
           </div>
 
           <div className="space-y-4">
@@ -139,52 +193,29 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
           <TrustBadges />
         </div>
 
-        {/* Description Section */}
-        <div ref={productDescriptionRef} className="flex flex-col md:flex-row gap-12 my-6">
-          <div className="flex-1">
-            <h4 className="text-2xl font-semibold mb-6">Overview</h4>
-            <div
-              id="product-overview"
-              data-productid={product.id}
-              className="product-description"
-              dangerouslySetInnerHTML={{__html: formattedDescription}}
-            />
+        {/* Description Section - Standard layout for non-shopping-flow OR mobile for shopping-flow */}
+        {product.shoppingFlowEnabled ? (
+          /* Mobile only for Shopping Flow products */
+          <div ref={!product.shoppingFlowEnabled ? productDescriptionRef : undefined} className="lg:hidden flex flex-col gap-8 my-6">
+            <OverviewSection />
+            <AdditionalInfoSection />
           </div>
+        ) : (
+          /* Standard two-column layout for non-Shopping Flow products */
+          <div ref={productDescriptionRef} className="flex flex-col md:flex-row gap-12 my-6">
+            <div className="flex-1">
+              <OverviewSection />
+            </div>
 
-          <div className="hidden md:flex flex-col w-12">
-            <div className="flex-1 bg-mute4/10 h-full w-1" />
-          </div>
+            <div className="hidden md:flex flex-col w-12">
+              <div className="flex-1 bg-mute4/10 h-full w-1" />
+            </div>
 
-          <div className="flex-1">
-            <h4 className="text-2xl font-semibold mb-6">Additional Information</h4>
-            <div className="space-y-2">
-              {product.additionalFieldProductValues?.map(({fieldName, fieldValue}) => (
-                <Fragment key={fieldValue}>
-                  <div className="product-additional-info-heading capitalize">
-                    <strong>{fieldName.toLowerCase()}:</strong>
-                  </div>
-                  <ul>
-                    <li className="text-mute2">
-                      {fieldValue.includes('<table') ? (
-                        <span
-                          className="font-normal text-md text-base description-table"
-                          dangerouslySetInnerHTML={{__html: fieldValue}}
-                        />
-                      ) : fieldValue ? (
-                        <div
-                          className="product-additional-info-value capitalize"
-                          dangerouslySetInnerHTML={{__html: fieldValue.toLowerCase()}}
-                        />
-                      ) : (
-                        <span className="font-normal text-md text-base text-mute2">N/A</span>
-                      )}
-                    </li>
-                  </ul>
-                </Fragment>
-              ))}
+            <div className="flex-1">
+              <AdditionalInfoSection />
             </div>
           </div>
-        </div>
+        )}
 
         {/* FAQ Section */}
         <div className="my-8">

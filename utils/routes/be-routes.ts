@@ -70,5 +70,6 @@ export const ReviewRoutes = Object.freeze({
 export const CheckoutRoutes = Object.freeze({
   createSession: `/checkout/create-session`,
   getSession: `/checkout/session`,
-  getSessionByStripeId: `/checkout/session/stripe`
+  getSessionByStripeId: `/checkout/session/stripe`,
+  createShoppingFlow: `/checkout/shopping-flow`
 });

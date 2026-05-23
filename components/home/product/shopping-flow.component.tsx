@@ -1,0 +1,355 @@
+'use client';
+
+import React, {FC, useMemo, useState, useCallback} from 'react';
+import {Product, PriceGrids} from '@components/home/product/product.types';
+import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
+import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
+import {RiShoppingBag4Fill} from 'react-icons/ri';
+import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle} from 'react-icons/fa';
+import axios from 'axios';
+import {CheckoutRoutes} from '@utils/routes/be-routes';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+// Helper to get cookie value by name
+const getCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
+};
+
+interface ShoppingFlowProps {
+  product: Product;
+}
+
+export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
+  // Sort price grids by quantity (lowest first)
+  const sortedPriceGrids = useMemo(
+    () => [...product.priceGrids].filter(pg => pg.price > 0).sort((a, b) => a.countFrom - b.countFrom),
+    [product.priceGrids]
+  );
+
+  const firstTier = sortedPriceGrids[0];
+
+  // State
+  const [selectedTier, setSelectedTier] = useState<PriceGrids | null>(firstTier || null);
+  const [quantity, setQuantity] = useState<number>(firstTier?.countFrom || 1);
+  const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
+  const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
+  const [notes, setNotes] = useState<string>('');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string>('');
+
+  // Determine if this is an apparel product that needs size breakdown
+  const availableSizes = useMemo(
+    () => extractSizesFromProduct(product.additionalFieldProductValues || []),
+    [product.additionalFieldProductValues]
+  );
+
+  const needsSizeBreakdown = useMemo(
+    () =>
+      availableSizes.length > 0 &&
+      isApparelProduct(product.productName, product.allCategoryNameAndIds || []),
+    [availableSizes, product.productName, product.allCategoryNameAndIds]
+  );
+
+  // Calculate current unit price based on quantity
+  const currentUnitPrice = useMemo(() => {
+    if (!selectedTier) return 0;
+
+    // Find the applicable tier for the current quantity
+    let applicableTier = selectedTier;
+    for (const tier of sortedPriceGrids) {
+      if (quantity >= tier.countFrom) {
+        applicableTier = tier;
+      } else {
+        break;
+      }
+    }
+
+    // Use sale price if available, otherwise regular price
+    return applicableTier.salePrice && applicableTier.salePrice > 0
+      ? applicableTier.salePrice
+      : applicableTier.price;
+  }, [selectedTier, quantity, sortedPriceGrids]);
+
+  // Calculate total price
+  const totalPrice = useMemo(() => currentUnitPrice * quantity, [currentUnitPrice, quantity]);
+
+  // Handle tier selection
+  const handleTierSelect = useCallback((tier: PriceGrids) => {
+    setSelectedTier(tier);
+    setQuantity(tier.countFrom);
+    setError('');
+  }, []);
+
+  // Handle quantity change
+  const handleQuantityChange = useCallback(
+    (newQty: number) => {
+      if (newQty < 1) return;
+
+      // Find the appropriate tier for this quantity
+      let newTier = sortedPriceGrids[0];
+      for (const tier of sortedPriceGrids) {
+        if (newQty >= tier.countFrom) {
+          newTier = tier;
+        } else {
+          break;
+        }
+      }
+
+      setSelectedTier(newTier);
+      setQuantity(newQty);
+      setError('');
+    },
+    [sortedPriceGrids]
+  );
+
+  // Handle size breakdown change
+  const handleSizeBreakdownChange = useCallback((breakdown: SizeQuantity[]) => {
+    setSizeBreakdown(breakdown);
+  }, []);
+
+  // Validate size breakdown
+  const isSizeBreakdownValid = useMemo(() => {
+    if (!needsSizeBreakdown) return true;
+    const totalSizeQty = sizeBreakdown.reduce((sum, s) => sum + s.quantity, 0);
+    return totalSizeQty === quantity;
+  }, [needsSizeBreakdown, sizeBreakdown, quantity]);
+
+  // Handle checkout
+  const handleCheckout = async () => {
+    setError('');
+
+    // Validation
+    if (needsSizeBreakdown && !isSizeBreakdownValid) {
+      setError('Please complete the size breakdown to match your quantity.');
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Get tracking cookies
+      const gclid = getCookie('_gcl_aw')?.split('.').pop() || new URLSearchParams(window.location.search).get('gclid') || undefined;
+      const fbp = getCookie('_fbp') || undefined;
+      const fbclid = new URLSearchParams(window.location.search).get('fbclid');
+      const fbc = getCookie('_fbc') || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined);
+
+      const payload = {
+        productId: product.id,
+        quantity,
+        artworkFiles: artworkFiles.map(f => ({
+          fileUrl: f.fileKey,  // Send just the S3 key, not full URL
+          fileName: f.filename,
+          fileType: f.fileType
+        })),
+        sizeBreakdown: needsSizeBreakdown ? sizeBreakdown : undefined,
+        notes: notes || undefined,
+        sourceUrl: window.location.href,
+        gclid,
+        fbp,
+        fbc
+      };
+
+      const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createShoppingFlow}`, payload);
+
+      const checkoutUrl = response.data?.payload?.checkoutUrl;
+      if (checkoutUrl) {
+        window.location.href = checkoutUrl;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (err: any) {
+      console.error('Shopping flow checkout error:', err);
+      setError(err.response?.data?.message || 'Failed to create checkout. Please try again.');
+      setIsProcessing(false);
+    }
+  };
+
+  const isOutOfStock = Boolean(product.outOfStock);
+
+  if (!firstTier) {
+    return null;
+  }
+
+  return (
+    <div className="mt-6 space-y-5">
+      {/* Tier Selector */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Quantity</h4>
+        <div className="flex flex-wrap gap-2">
+          {sortedPriceGrids.map(tier => {
+            const price = tier.salePrice && tier.salePrice > 0 ? tier.salePrice : tier.price;
+            const isSelected = selectedTier?.id === tier.id;
+
+            return (
+              <button
+                key={tier.id}
+                type="button"
+                onClick={() => handleTierSelect(tier)}
+                disabled={isOutOfStock}
+                className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
+                  isSelected
+                    ? 'border-green-600 bg-green-50 text-green-700'
+                    : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <div className="font-semibold">{tier.countFrom}+ PCS</div>
+                <div className="text-xs text-gray-500">${price.toFixed(2)}/ea</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Quantity Input */}
+      <div>
+        <label htmlFor="quantity" className="text-sm font-semibold text-gray-900 mb-2 block">
+          Quantity
+        </label>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => handleQuantityChange(quantity - 1)}
+            disabled={quantity <= (firstTier?.countFrom || 1) || isOutOfStock}
+            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            -
+          </button>
+          <input
+            type="number"
+            id="quantity"
+            min={firstTier?.countFrom || 1}
+            value={quantity}
+            onChange={e => handleQuantityChange(parseInt(e.target.value, 10) || firstTier?.countFrom || 1)}
+            disabled={isOutOfStock}
+            className="w-20 h-10 text-center border border-gray-300 rounded-lg font-semibold focus:ring-2 focus:ring-green-500 focus:border-green-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+          <button
+            type="button"
+            onClick={() => handleQuantityChange(quantity + 1)}
+            disabled={isOutOfStock}
+            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            +
+          </button>
+          <div className="flex-1 text-right">
+            <div className="text-sm text-gray-500">${currentUnitPrice.toFixed(2)} each</div>
+            <div className="text-lg font-bold text-gray-900">${totalPrice.toFixed(2)}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Size Breakdown (for apparel) */}
+      {needsSizeBreakdown && (
+        <div className="bg-gray-50 rounded-lg p-4">
+          <SizeBreakdown
+            availableSizes={availableSizes}
+            totalQuantity={quantity}
+            onChange={handleSizeBreakdownChange}
+            disabled={isOutOfStock}
+            autoAssignDefault={true}
+          />
+        </div>
+      )}
+
+      {/* Artwork Uploader */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-900 mb-2">Upload Your Artwork (Optional)</h4>
+        <p className="text-xs text-gray-500 mb-3">
+          You can upload your logo/design now or send it later via email.
+        </p>
+        <ArtworkUploader
+          files={artworkFiles}
+          onFilesChange={setArtworkFiles}
+          uploadId={product.id}
+          uploadType="QUOTE"
+          disabled={isOutOfStock}
+          maxFiles={5}
+        />
+      </div>
+
+      {/* Notes */}
+      <div>
+        <label htmlFor="notes" className="text-sm font-semibold text-gray-900 mb-2 block">
+          Special Instructions (Optional)
+        </label>
+        <textarea
+          id="notes"
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+          disabled={isOutOfStock}
+          placeholder="Any specific requirements or notes..."
+          rows={2}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none"
+        />
+      </div>
+
+      {/* Error Message */}
+      {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
+
+      {/* Buy Now Button */}
+      <button
+        type="button"
+        onClick={handleCheckout}
+        disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)}
+        className={`w-full py-4 px-6 flex items-center justify-center rounded-lg text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
+          isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-green-600 hover:bg-green-700'
+        }`}
+      >
+        {isProcessing ? (
+          <>
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+            Processing...
+          </>
+        ) : (
+          <>
+            Buy Now - ${totalPrice.toFixed(2)}
+            <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
+          </>
+        )}
+      </button>
+
+      <p className="text-xs text-gray-500 text-center">
+        Secure checkout. Tax calculated at checkout.
+      </p>
+
+      {/* Trust Indicators */}
+      <div className="grid grid-cols-2 gap-2 pt-2">
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <FaTruck className="w-4 h-4 text-blue-500 flex-shrink-0" />
+          <span>Free Shipping $500+</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <FaClock className="w-4 h-4 text-orange-500 flex-shrink-0" />
+          <span>Proof in 30 Minutes</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <FaShieldAlt className="w-4 h-4 text-green-500 flex-shrink-0" />
+          <span>Secure Checkout</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <FaCheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
+          <span>Trusted by US Businesses</span>
+        </div>
+      </div>
+    </div>
+  );
+};

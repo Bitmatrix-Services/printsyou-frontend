@@ -73,6 +73,7 @@ export interface Product {
   reviewCount?: number;
   averageRating?: number;
   orderType?: OrderType;
+  shoppingFlowEnabled?: boolean;
 }
 
 export interface EnclosureProduct {

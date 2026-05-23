@@ -2,6 +2,7 @@
 import * as React from 'react';
 import {Dispatch, FC, Fragment, SetStateAction, useMemo, useState} from 'react';
 import {PricingTable} from '@components/home/product/pricing-table.component';
+import {ShoppingFlow} from '@components/home/product/shopping-flow.component';
 import Link from 'next/link';
 import {Product, productColors, ProductImage} from '@components/home/product/product.types';
 import {colorNameToHex, extractColorsArray, getColorsWithHex} from '@utils/utils';
@@ -130,84 +131,90 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
           CTA SECTION - Primary conversion area
           Goal: Guide users to Buy Now (primary) or Get Quote (secondary)
           ===================================================== */}
-      <div className="mt-6 space-y-4">
-        {/* Primary & Secondary CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          {/* PRIMARY CTA: Buy Now - Most prominent */}
-          {(product.orderType === 'CHECKOUT' || product.orderType === 'BOTH') && (
-            <div className="flex-1">
-              <Link
-                rel="preload"
-                className={`w-full py-4 px-6 flex items-center justify-center rounded-lg text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
-                  isOutOfStock
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-green-600 hover:bg-green-700'
-                }`}
-                href={`/checkout?product_id=${product.id}`}
-              >
-                Buy Now
-                <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
-              </Link>
-              <p className="text-xs text-gray-500 text-center mt-1.5">
-                Fast checkout for ready-to-order customers
-              </p>
+      {product.shoppingFlowEnabled ? (
+        /* Shopping Flow UI - E-commerce style checkout for Google Merchant Center compliance */
+        <ShoppingFlow product={product} />
+      ) : (
+        /* Standard CTA Buttons */
+        <div className="mt-6 space-y-4">
+          {/* Primary & Secondary CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* PRIMARY CTA: Buy Now - Most prominent */}
+            {(product.orderType === 'CHECKOUT' || product.orderType === 'BOTH') && (
+              <div className="flex-1">
+                <Link
+                  rel="preload"
+                  className={`w-full py-4 px-6 flex items-center justify-center rounded-lg text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
+                    isOutOfStock
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-green-600 hover:bg-green-700'
+                  }`}
+                  href={`/checkout?product_id=${product.id}`}
+                >
+                  Buy Now
+                  <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
+                </Link>
+                <p className="text-xs text-gray-500 text-center mt-1.5">
+                  Fast checkout for ready-to-order customers
+                </p>
+              </div>
+            )}
+
+            {/* SECONDARY CTA: Get Quote - For bulk/custom orders */}
+            {(product.orderType === 'QUOTE_ONLY' || product.orderType === 'BOTH' || !product.orderType) && (
+              <div className="flex-1">
+                <Link
+                  className={`w-full py-4 px-6 flex items-center justify-center rounded-lg font-semibold transition-all duration-200 ${
+                    product.orderType === 'QUOTE_ONLY' || !product.orderType
+                      ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-lg hover:shadow-xl text-lg'
+                      : 'bg-white border-2 border-green-600 text-green-600 hover:bg-green-50'
+                  }`}
+                  href={`/request-quote?product=${product.id}`}
+                >
+                  Get Free Quote + Mockup
+                  <RiFileList3Line className="ml-2 h-5 w-5" />
+                </Link>
+                <p className="text-xs text-gray-500 text-center mt-1.5">
+                  Best for bulk orders & custom requirements
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* WhatsApp CTA - Secondary contact option */}
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in ${encodeURIComponent(product.productName)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full py-3 px-6 flex items-center justify-center rounded-lg border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white font-medium transition-all duration-200"
+          >
+            <FaWhatsapp className="mr-2 h-5 w-5" />
+            Chat on WhatsApp
+          </a>
+
+          {/* =====================================================
+              TRUST INDICATORS - Build confidence near CTAs
+              ===================================================== */}
+          <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <FaTruck className="w-4 h-4 text-blue-500 flex-shrink-0" />
+              <span>Free Shipping $500+</span>
             </div>
-          )}
-
-          {/* SECONDARY CTA: Get Quote - For bulk/custom orders */}
-          {(product.orderType === 'QUOTE_ONLY' || product.orderType === 'BOTH' || !product.orderType) && (
-            <div className="flex-1">
-              <Link
-                className={`w-full py-4 px-6 flex items-center justify-center rounded-lg font-semibold transition-all duration-200 ${
-                  product.orderType === 'QUOTE_ONLY' || !product.orderType
-                    ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-lg hover:shadow-xl text-lg'
-                    : 'bg-white border-2 border-green-600 text-green-600 hover:bg-green-50'
-                }`}
-                href={`/request-quote?product=${product.id}`}
-              >
-                Get Free Quote + Mockup
-                <RiFileList3Line className="ml-2 h-5 w-5" />
-              </Link>
-              <p className="text-xs text-gray-500 text-center mt-1.5">
-                Best for bulk orders & custom requirements
-              </p>
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <FaClock className="w-4 h-4 text-orange-500 flex-shrink-0" />
+              <span>Proof in 30 Minutes</span>
             </div>
-          )}
-        </div>
-
-        {/* WhatsApp CTA - Secondary contact option */}
-        <a
-          href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in ${encodeURIComponent(product.productName)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full py-3 px-6 flex items-center justify-center rounded-lg border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white font-medium transition-all duration-200"
-        >
-          <FaWhatsapp className="mr-2 h-5 w-5" />
-          Chat on WhatsApp
-        </a>
-
-        {/* =====================================================
-            TRUST INDICATORS - Build confidence near CTAs
-            ===================================================== */}
-        <div className="grid grid-cols-2 gap-2 pt-2">
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <FaTruck className="w-4 h-4 text-blue-500 flex-shrink-0" />
-            <span>Free Shipping $500+</span>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <FaClock className="w-4 h-4 text-orange-500 flex-shrink-0" />
-            <span>Proof in 30 Minutes</span>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <FaShieldAlt className="w-4 h-4 text-green-500 flex-shrink-0" />
-            <span>Secure Checkout</span>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-gray-600">
-            <FaCheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
-            <span>Trusted by US Businesses</span>
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <FaShieldAlt className="w-4 h-4 text-green-500 flex-shrink-0" />
+              <span>Secure Checkout</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <FaCheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
+              <span>Trusted by US Businesses</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Pricing Table */}
       <PricingTable product={product} />
