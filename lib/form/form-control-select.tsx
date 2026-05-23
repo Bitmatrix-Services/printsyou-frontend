@@ -13,6 +13,7 @@ interface IFormControlSelect {
   isRequired?: boolean;
   errors?: any;
   children?: ReactNode;
+  autoComplete?: string;
 }
 
 export const FormControlSelect: FC<IFormControlSelect> = ({
@@ -23,7 +24,8 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
   isRequired = false,
   disabled = false,
   errors,
-  children
+  children,
+  autoComplete
 }) => {
   return (
     <Controller
@@ -61,6 +63,13 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
             disabled={disabled}
             value={value}
             onChange={(event, value) => onChange(value)}
+            name={name}
+            aria-label={label || name}
+            slotProps={{
+              button: {
+                'aria-labelledby': undefined
+              }
+            }}
           >
             {children}
           </Select>

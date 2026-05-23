@@ -19,8 +19,8 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
   return (
     <div className="space-y-6">
       {/* Contact Information */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+      <fieldset>
+        <legend className="text-lg font-semibold text-gray-900 mb-4">Contact Information</legend>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
             <FormControlInput
@@ -31,6 +31,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
               control={control}
               errors={errors}
               placeholder="your@email.com"
+              autoComplete="email"
             />
           </div>
 
@@ -42,6 +43,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             control={control}
             errors={errors}
             placeholder="John"
+            autoComplete="given-name"
           />
 
           <FormControlInput
@@ -52,6 +54,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             control={control}
             errors={errors}
             placeholder="Smith"
+            autoComplete="family-name"
           />
 
           <MaskInput
@@ -61,6 +64,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             disabled={disabled}
             control={control}
             errors={errors}
+            autoComplete="tel"
           />
 
           <FormControlInput
@@ -71,13 +75,14 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             control={control}
             errors={errors}
             placeholder="Company Name (optional)"
+            autoComplete="organization"
           />
         </div>
-      </div>
+      </fieldset>
 
       {/* Shipping Address */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h3>
+      <fieldset>
+        <legend className="text-lg font-semibold text-gray-900 mb-4">Shipping Address</legend>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
             <FormControlInput
@@ -88,6 +93,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
               control={control}
               errors={errors}
               placeholder="123 Main St"
+              autoComplete="shipping address-line1"
             />
           </div>
 
@@ -100,6 +106,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
               control={control}
               errors={errors}
               placeholder="Apt 4B"
+              autoComplete="shipping address-line2"
             />
           </div>
 
@@ -111,6 +118,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             control={control}
             errors={errors}
             placeholder="Dallas"
+            autoComplete="shipping address-level2"
           />
 
           <FormControlSelect
@@ -120,6 +128,7 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             disabled={disabled}
             control={control}
             errors={errors}
+            autoComplete="shipping address-level1"
           >
             {statesList.map(state => (
               <Option key={state.value} value={state.value}>
@@ -136,9 +145,10 @@ export const ContactShippingForm: FC<ContactShippingFormProps> = ({control, erro
             control={control}
             errors={errors}
             placeholder="75001"
+            autoComplete="shipping postal-code"
           />
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 };

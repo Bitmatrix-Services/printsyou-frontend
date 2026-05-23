@@ -404,15 +404,58 @@ export const DirectCheckoutComponent: FC = () => {
 
   const isSizeBreakdownValid = !showSizeBreakdown || sizeBreakdownTotal === quantity;
 
-  // Loading state
+  // Loading state - show skeleton form structure for bot accessibility
   if (isLoadingProduct) {
     return (
       <>
         <Breadcrumb list={[]} prefixTitle="Checkout" />
         <Container>
-          <div className="flex flex-col items-center justify-center min-h-[60vh] py-12">
-            <CircularLoader />
-            <p className="text-gray-600 mt-4">Loading product...</p>
+          <div className="py-8 max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Secure Checkout</h1>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-6">
+                {/* Skeleton form structure visible to bots */}
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm animate-pulse">
+                  <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
+                  <div className="flex gap-4">
+                    <div className="w-24 h-24 bg-gray-200 rounded"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                      <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm animate-pulse">
+                  <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="h-10 bg-gray-200 rounded"></div>
+                    <div className="h-10 bg-gray-200 rounded"></div>
+                    <div className="h-10 bg-gray-200 rounded col-span-2"></div>
+                  </div>
+                </div>
+              </div>
+              <div className="lg:col-span-1">
+                <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                  <div className="h-6 bg-gray-200 rounded w-1/2 mb-4 animate-pulse"></div>
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                  {/* Payment button placeholder - always visible */}
+                  <button
+                    type="button"
+                    disabled
+                    aria-label="Loading checkout"
+                    className="w-full mt-6 py-4 px-6 bg-gray-300 text-gray-500 font-semibold rounded-lg flex items-center justify-center gap-3"
+                  >
+                    <CircularLoader />
+                    Loading...
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </Container>
       </>
@@ -470,15 +513,22 @@ export const DirectCheckoutComponent: FC = () => {
 
           {/* Back button */}
           <button
+            type="button"
             onClick={() => router.back()}
+            aria-label="Go back to product page"
             className="flex items-center gap-2 text-primary-500 hover:text-primary-600 font-medium mb-6"
           >
-            <FaArrowLeft className="w-4 h-4" />
-            Back to Product
+            <FaArrowLeft className="w-4 h-4" aria-hidden="true" />
+            <span>Back to Product</span>
           </button>
 
           <ReactQueryClientProvider>
-            <form onSubmit={handleSubmit(onSubmit, handleFormError)}>
+            <form
+              onSubmit={handleSubmit(onSubmit, handleFormError)}
+              aria-label="Checkout form"
+              noValidate
+              autoComplete="on"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Form Area */}
                 <div className="lg:col-span-2 space-y-6">
@@ -503,32 +553,36 @@ export const DirectCheckoutComponent: FC = () => {
 
                         {/* Quantity Selector */}
                         <div className="mt-4">
-                          <label className="text-sm font-medium text-gray-700 block mb-2">Quantity</label>
+                          <label htmlFor="quantity-input" className="text-sm font-medium text-gray-700 block mb-2">Quantity</label>
                           <div className="flex items-center gap-3">
                             <button
                               type="button"
                               onClick={() => handleQuantityChange(-10)}
                               disabled={quantity <= quantityLimits.min}
+                              aria-label="Decrease quantity by 10"
                               className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              <HiMinus className="w-4 h-4" />
+                              <HiMinus className="w-4 h-4" aria-hidden="true" />
                             </button>
                             <input
+                              id="quantity-input"
                               type="number"
                               value={quantityInput}
                               onChange={(e) => handleQuantityInput(e.target.value)}
                               onBlur={handleQuantityBlur}
                               min={quantityLimits.min}
                               max={quantityLimits.max}
+                              aria-label="Order quantity"
                               className="w-24 h-10 text-center border border-gray-300 rounded-lg font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                             />
                             <button
                               type="button"
                               onClick={() => handleQuantityChange(10)}
                               disabled={quantity >= quantityLimits.max}
+                              aria-label="Increase quantity by 10"
                               className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              <HiPlus className="w-4 h-4" />
+                              <HiPlus className="w-4 h-4" aria-hidden="true" />
                             </button>
                           </div>
                           <p className="text-xs text-gray-500 mt-1">
@@ -672,17 +726,19 @@ export const DirectCheckoutComponent: FC = () => {
                     <button
                       type="submit"
                       disabled={isSubmitting || isProcessing}
+                      aria-label={`Pay ${pricing.total.toFixed(2)} dollars securely with Stripe`}
+                      aria-busy={isSubmitting || isProcessing}
                       className="w-full mt-4 py-4 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                     >
                       {isSubmitting || isProcessing ? (
                         <>
                           <CircularLoader />
-                          Processing...
+                          <span>Processing...</span>
                         </>
                       ) : (
                         <>
-                          <FaLock className="w-4 h-4" />
-                          Pay ${pricing.total.toFixed(2)} with Stripe
+                          <FaLock className="w-4 h-4" aria-hidden="true" />
+                          <span>Pay ${pricing.total.toFixed(2)} with Stripe</span>
                         </>
                       )}
                     </button>
@@ -772,17 +828,19 @@ export const DirectCheckoutComponent: FC = () => {
                       <button
                         type="submit"
                         disabled={isSubmitting || isProcessing}
+                        aria-label={`Pay ${pricing.total.toFixed(2)} dollars securely with Stripe`}
+                        aria-busy={isSubmitting || isProcessing}
                         className="w-full mt-4 py-4 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                       >
                         {isSubmitting || isProcessing ? (
                           <>
                             <CircularLoader />
-                            Processing...
+                            <span>Processing...</span>
                           </>
                         ) : (
                           <>
-                            <FaLock className="w-4 h-4" />
-                            Pay ${pricing.total.toFixed(2)}
+                            <FaLock className="w-4 h-4" aria-hidden="true" />
+                            <span>Pay ${pricing.total.toFixed(2)}</span>
                           </>
                         )}
                       </button>

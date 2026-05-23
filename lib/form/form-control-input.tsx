@@ -17,6 +17,7 @@ interface IFormControlInput {
   errors?: any;
   onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   onFocus?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  autoComplete?: string;
 }
 
 export const FormControlInput: FC<IFormControlInput> = ({
@@ -30,7 +31,8 @@ export const FormControlInput: FC<IFormControlInput> = ({
   fieldType = 'text',
   errors,
   onBlur,
-  onFocus
+  onFocus,
+  autoComplete
 }) => {
   return (
     <Controller
@@ -68,6 +70,11 @@ export const FormControlInput: FC<IFormControlInput> = ({
               onChange={onChange}
               onBlur={onBlur}
               onFocus={onFocus}
+              slotProps={{
+                input: {
+                  autoComplete: autoComplete
+                }
+              }}
             />
           ) : inputType === 'textarea' ? (
             <Textarea

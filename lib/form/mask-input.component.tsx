@@ -3,7 +3,7 @@ import React, {FC} from 'react';
 import {deepFind} from '@utils/utils';
 import {IMaskInput} from 'react-imask';
 
-interface IMaskInput {
+interface IMaskInputProps {
   label?: string;
   name: string;
   control: any;
@@ -12,9 +12,10 @@ interface IMaskInput {
   disabled?: boolean;
   isRequired?: boolean;
   errors?: any;
+  autoComplete?: string;
 }
 
-export const MaskInput: FC<IMaskInput> = ({label, name, control, isRequired = false, errors}) => {
+export const MaskInput: FC<IMaskInputProps> = ({label, name, control, isRequired = false, errors, autoComplete}) => {
   return (
     <Controller
       name={name}
@@ -45,6 +46,7 @@ export const MaskInput: FC<IMaskInput> = ({label, name, control, isRequired = fa
             radix="-"
             unmask="typed"
             onAccept={onChange}
+            autoComplete={autoComplete || 'tel'}
           />
           {isRequired && deepFind(errors ?? {}, name)?.message ? (
             <div className="flex justify-start mt-2">
