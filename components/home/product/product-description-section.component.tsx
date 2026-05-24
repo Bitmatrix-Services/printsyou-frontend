@@ -77,16 +77,21 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       </h1>
 
       {/* Meta description */}
-      <p className="mt-2 text-sm text-gray-600 leading-relaxed">{product.metaDescription}</p>
-
-      {handleScroll && (
-        <button
-          className="mt-2 text-sm text-primary-500 hover:text-primary-600 underline underline-offset-2"
-          onClick={handleScroll}
-        >
-          See Details
-        </button>
-      )}
+      <p className="mt-2 text-sm text-gray-600 leading-relaxed">
+        {product.metaDescription}
+        {/* See Details - only show for non-Shopping Flow products (they have details in left column) */}
+        {handleScroll && !product.shoppingFlowEnabled && (
+          <>
+            {' '}
+            <button
+              className="text-primary-500 hover:text-primary-600 underline underline-offset-2"
+              onClick={handleScroll}
+            >
+              See Details
+            </button>
+          </>
+        )}
+      </p>
 
       {isOutOfStock && (
         <div className="flex items-center mt-3 gap-2">
