@@ -35,7 +35,7 @@ import Image from 'next/image';
 import {UploadedFileType} from '@components/globals/cart/cart-types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
+const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 const allowedImageTypes = ['jpeg', 'png', 'webp', 'gif', 'avif', 'svg+xml'];
 
 export const CheckoutComponent: FC = () => {

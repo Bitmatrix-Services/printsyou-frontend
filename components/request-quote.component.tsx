@@ -25,7 +25,7 @@ import {v4 as uuidv4} from 'uuid';
 import {LinearProgressWithLabel} from '@components/globals/linear-progress-with-label.component';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
+const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 const allowedImageTypes = ['jpeg', 'png', 'webp', 'gif', 'avif', 'svg+xml'];
 
 interface ArtworkFile {

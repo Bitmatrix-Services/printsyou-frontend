@@ -37,7 +37,7 @@ import {CheckoutRoutes, QuoteRequestRoutes} from '@utils/routes/be-routes';
 import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const ASSETS_SERVER_URL = process.env.ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
+const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 
 interface IOrderNowComponentProps {
   selectedProduct: Product | null;

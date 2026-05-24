@@ -26,9 +26,9 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     let uniqueName = params.uniqueCategoryName.join('/');
 
     const finalUrl = decodeURIComponent(uniqueName)
-        .replace(/[™,®©'”‘’".]/g, '')
+        .replace(/[™,®©'"''".]/g, '')
         .replace(/---|--|–/g, '-')
-        .replace(/[½%+’&]/g, '')
+        .replace(/[½%+'&]/g, '')
         .replace(/\s+/g, '');
 
     if (uniqueName !== finalUrl) {
@@ -63,48 +63,26 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     let siblingCategories: Category[] = [];
     if (siblingCat?.payload) siblingCategories = siblingCat.payload;
 
-    let currentUrl: any = category && `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`;
-    if (productsByCategoryPaged?.number > 0) {
-        currentUrl = `${currentUrl}?page=${productsByCategoryPaged?.number + 1}`;
-    }
+    // Build canonical URL (page 1 = no query param, page 2+ = ?page=N)
+    const currentPage = productsByCategoryPaged?.number ?? 0; // 0-indexed
+    const baseUrl = `${process.env.NEXT_PUBLIC_FE_URL}categories/${category?.uniqueCategoryName}`;
+    const canonicalUrl = currentPage > 0 ? `${baseUrl}?page=${currentPage + 1}` : baseUrl;
 
     // Parse UX/SEO data for schema generation
-    const {trustBadges, keyFeatures, faqs} = category ? parseCategoryUxSeo(category) : {trustBadges: [], keyFeatures: [], faqs: []};
+    const {faqs} = category ? parseCategoryUxSeo(category) : {faqs: []};
 
-    // Generate all schemas
-    const breadcrumbSchema = generateBreadcrumbSchema(category);
-    const productCatalogSchema =
-        category && productsByCategoryPaged
-            ? generateProductCatalogSchema(category, productsByCategoryPaged, currentUrl)
-            : null;
+    // Generate simplified schemas
+    const breadcrumbSchema = category ? generateBreadcrumbSchema(category, canonicalUrl) : null;
+    const collectionPageSchema = category && productsByCategoryPaged
+        ? generateCollectionPageSchema(category, productsByCategoryPaged, canonicalUrl)
+        : null;
 
-    // NEW: FAQ Schema
-    const faqSchema = generateFAQSchema(faqs);
-
-    // NEW: Organization Schema
-    const organizationSchema = generateOrganizationSchema(trustBadges);
-
-    // NEW: CollectionPage Schema
-    const collectionPageSchema = category ? generateCollectionPageSchema(category, currentUrl) : null;
-
-    // NEW: ItemList Schema (for sub-categories)
-    const itemListSchema = category && (category.subCategories?.length ?? 0) > 0 ? generateItemListSchema(category) : null;
-
-    // NEW: Service Schema for printing services
-    const serviceSchema = category ? generateServiceSchema(category, currentUrl) : null;
-
-    // NEW: AggregateOffer Schema for price range visibility
-    const aggregateOfferSchema =
-        category && productsByCategoryPaged?.content?.length > 0
-            ? generateAggregateOfferSchema(category, productsByCategoryPaged, currentUrl)
-            : null;
-
-    // NEW: Review Schema with AggregateRating for Google reviews
-    const reviewSchema = reviewSummary ? generateReviewSchema(reviewSummary, currentUrl) : null;
+    // FAQ Schema - only if FAQs exist and are visible
+    const faqSchema = faqs && faqs.length > 0 ? generateFAQSchema(faqs) : null;
 
     return (
         <section key={uniqueName}>
-            {/* Existing Schemas */}
+            {/* BreadcrumbList Schema */}
             {breadcrumbSchema && (
                 <script
                     id="breadcrumb-schema"
@@ -112,33 +90,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                     dangerouslySetInnerHTML={{__html: JSON.stringify(breadcrumbSchema)}}
                 />
             )}
-            {productCatalogSchema && (
-                <script
-                    id="product-catalog-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(productCatalogSchema)}}
-                />
-            )}
 
-            {/* NEW: FAQ Schema */}
-            {faqSchema && (
-                <script
-                    id="faq-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(faqSchema)}}
-                />
-            )}
-
-            {/* NEW: Organization Schema */}
-            {organizationSchema && (
-                <script
-                    id="organization-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(organizationSchema)}}
-                />
-            )}
-
-            {/* NEW: CollectionPage Schema */}
+            {/* CollectionPage Schema (includes ItemList) */}
             {collectionPageSchema && (
                 <script
                     id="collection-page-schema"
@@ -147,39 +100,12 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
                 />
             )}
 
-            {/* NEW: ItemList Schema */}
-            {itemListSchema && (
+            {/* FAQ Schema - only when FAQs are visible on page */}
+            {faqSchema && (
                 <script
-                    id="itemlist-schema"
+                    id="faq-schema"
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(itemListSchema)}}
-                />
-            )}
-
-            {/* NEW: Service Schema */}
-            {serviceSchema && (
-                <script
-                    id="service-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(serviceSchema)}}
-                />
-            )}
-
-            {/* NEW: AggregateOffer Schema */}
-            {aggregateOfferSchema && (
-                <script
-                    id="aggregate-offer-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(aggregateOfferSchema)}}
-                />
-            )}
-
-            {/* NEW: Review Schema with AggregateRating */}
-            {reviewSchema && (
-                <script
-                    id="review-schema"
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{__html: JSON.stringify(reviewSchema)}}
+                    dangerouslySetInnerHTML={{__html: JSON.stringify(faqSchema)}}
                 />
             )}
 
@@ -276,7 +202,7 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
             images: category?.imageUrl
                 ? [
                     {
-                        url: `${process.env.ASSETS_SERVER_URL}${category?.imageUrl}`,
+                        url: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category?.imageUrl}`,
                         width: 1200,
                         height: 630,
                         alt: category?.categoryName
@@ -290,122 +216,116 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
             card: 'summary_large_image',
             title: `${category?.metaTitle || category?.categoryName} | PrintsYou`,
             description: category?.metaDescription ?? '',
-            images: category?.imageUrl ? [`${process.env.ASSETS_SERVER_URL}${category?.imageUrl}`] : []
+            images: category?.imageUrl ? [`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category?.imageUrl}`] : []
         }
     };
 }
 
-// Existing breadcrumb schema (kept as is)
-const generateBreadcrumbSchema = (category: Category | null) => {
+// ============================================
+// SCHEMA GENERATORS (Simplified)
+// ============================================
+
+/**
+ * BreadcrumbList Schema
+ * Standard breadcrumb navigation for category pages
+ */
+const generateBreadcrumbSchema = (category: Category, canonicalUrl: string) => {
     if (!category?.crumbs) return null;
+
+    const breadcrumbItems = [
+        {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'},
+        {sequenceNumber: 1, uniqueCategoryName: '', name: 'Categories'},
+        ...(category.crumbs ?? [])
+    ].sort((a, b) => a.sequenceNumber - b.sequenceNumber);
 
     return {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
-        '@id': `${process.env.FE_URL}categories/${category.uniqueCategoryName}#breadcrumb`,
-        itemListElement: [
-            ...(category.crumbs ?? []),
-            {sequenceNumber: 1, uniqueCategoryName: '', name: 'Categories'},
-            {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
-        ]
-            .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-            .map(item => ({
-                '@type': 'ListItem',
-                position: item.sequenceNumber + 1,
-                name: item.name,
-                item:
-                    item.sequenceNumber === 0
-                        ? `${process.env.FE_URL}`
-                        : `${process.env.FE_URL}categories/${item.uniqueCategoryName}`
-            }))
+        '@id': `${canonicalUrl}#breadcrumb`,
+        itemListElement: breadcrumbItems.map((item, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: item.name,
+            item: item.sequenceNumber === 0
+                ? process.env.NEXT_PUBLIC_FE_URL
+                : item.sequenceNumber === 1
+                    ? `${process.env.NEXT_PUBLIC_FE_URL}categories`
+                    : `${process.env.NEXT_PUBLIC_FE_URL}categories/${item.uniqueCategoryName}`
+        }))
     };
 };
 
-// Enhanced product catalog schema with better product data
-const generateProductCatalogSchema = (category: Category, productsByCategoryPaged: any, currentUrl: string) => {
+/**
+ * CollectionPage Schema
+ * Main schema for category pages - includes ItemList of visible products
+ */
+const generateCollectionPageSchema = (
+    category: Category,
+    productsByCategoryPaged: any,
+    canonicalUrl: string
+) => {
+    const products: EnclosureProduct[] = productsByCategoryPaged?.content ?? [];
+
+    // Filter out out-of-stock products for schema
+    const inStockProducts = products.filter(p => !p.outOfStock);
+
+    // Build lightweight ItemList with only visible products on current page
+    const itemList = inStockProducts.length > 0 ? {
+        '@type': 'ItemList',
+        '@id': `${canonicalUrl}#itemlist`,
+        numberOfItems: inStockProducts.length,
+        itemListElement: inStockProducts.map((product, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+            name: product.productName
+        }))
+    } : null;
+
     return {
         '@context': 'https://schema.org',
-        '@type': 'WebPage',
-        '@id': currentUrl,
-        url: currentUrl,
+        '@type': 'CollectionPage',
+        '@id': `${canonicalUrl}#collection`,
+        url: canonicalUrl,
         name: category.categoryName,
-        description: category.metaDescription || category.heroSubtitle,
-        mainEntity: {
-            '@context': 'https://schema.org',
-            '@type': 'OfferCatalog',
-            '@id': `${currentUrl}#catalog`,
-            name: category.categoryName,
-            url: currentUrl,
-            offerCount: productsByCategoryPaged.totalElements,
-            numberOfItems: productsByCategoryPaged.totalElements,
-            itemListElement: (productsByCategoryPaged.content ?? []).map((product: EnclosureProduct, index: number) => ({
-                '@type': 'Product',
-                '@id': `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                name: product.productName,
-                description: product.metaDescription,
-                sku: product.sku,
-                image: {
-                    '@type': 'ImageObject',
-                    url: `${process.env.ASSETS_SERVER_URL}${product?.imageUrl}`,
-                    width: 800,
-                    height: 800,
-                    caption: product?.productName
-                },
-                offers: {
-                    '@type': 'Offer',
-                    price: [...(product.priceGrids ?? [])]
-                        .filter(item => item.price !== 0)
-                        .sort((a, b) => a.price - b.price)
-                        .shift()?.price,
-                    priceCurrency: 'USD',
-                    availability: product.outOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
-                    itemCondition: 'https://schema.org/NewCondition',
-                    seller: {
-                        '@type': 'Organization',
-                        name: 'PrintsYou',
-                        url: process.env.NEXT_PUBLIC_FE_URL
-                    }
-                },
-                category: category.categoryName
-            }))
+        description: category.metaDescription || category.heroSubtitle || category.categoryDescription?.substring(0, 160),
+        inLanguage: 'en-US',
+
+        // Reference to breadcrumb
+        breadcrumb: {
+            '@id': `${canonicalUrl}#breadcrumb`
         },
-        primaryImageOfPage: {
-            '@type': 'ImageObject',
-            url: `${process.env.ASSETS_SERVER_URL}${category?.imageUrl}`,
-            width: 1200,
-            height: 630,
-            caption: category.metaTitle || category.categoryName
-        },
+
+        // Part of the main website
         isPartOf: {
-            '@type': 'CollectionPage',
-            name: category.categoryName,
-            url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
+            '@type': 'WebSite',
+            '@id': `${process.env.NEXT_PUBLIC_FE_URL}#website`,
+            name: 'PrintsYou',
+            url: process.env.NEXT_PUBLIC_FE_URL
         },
-        hasPart: [
-            {
-                '@type': 'WebPage',
-                name: 'Previous Page',
-                url:
-                    productsByCategoryPaged.number > 1
-                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number}`
-                        : productsByCategoryPaged.number === 1
-                            ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}`
-                            : null
-            },
-            {
-                '@type': 'WebPage',
-                name: 'Next Page',
-                url:
-                    productsByCategoryPaged.number + 1 < productsByCategoryPaged.totalPages
-                        ? `${process.env.NEXT_PUBLIC_FE_URL}categories/${category.uniqueCategoryName}?page=${productsByCategoryPaged.number + 2}`
-                        : null
+
+        // Primary image if exists
+        ...(category.imageUrl && {
+            primaryImageOfPage: {
+                '@type': 'ImageObject',
+                url: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${category.imageUrl}`,
+                width: 1200,
+                height: 630,
+                caption: category.categoryName
             }
-        ].filter(page => page.url !== null)
+        }),
+
+        // Main entity is the ItemList of products
+        ...(itemList && {
+            mainEntity: itemList
+        })
     };
 };
 
-// NEW: FAQ Schema Generator
+/**
+ * FAQPage Schema
+ * Only generated when FAQs are actually visible on the page
+ */
 const generateFAQSchema = (faqs: Array<{question: string; answer: string; order: number}>) => {
     if (!faqs || faqs.length === 0) return null;
 
@@ -422,280 +342,5 @@ const generateFAQSchema = (faqs: Array<{question: string; answer: string; order:
                     text: faq.answer
                 }
             }))
-    };
-};
-
-// NEW: Organization Schema Generator
-const generateOrganizationSchema = (trustBadges: Array<{icon: string; title: string; subtitle: string}>) => {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization`,
-        name: 'PrintsYou',
-        url: process.env.NEXT_PUBLIC_FE_URL,
-        logo: {
-            '@type': 'ImageObject',
-            url: `${process.env.NEXT_PUBLIC_FE_URL}/logo.png`,
-            width: 250,
-            height: 60
-        },
-        description: 'Premium custom printing services with fast delivery, competitive rates, and quality guaranteed products.',
-        contactPoint: {
-            '@type': 'ContactPoint',
-            telephone: '+1-469-434-7035',
-            contactType: 'Customer Service',
-            availableLanguage: 'English',
-            areaServed: 'US'
-        },
-        address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'US'
-        },
-        sameAs: [
-            // Add your social media URLs here if available
-            'https://www.facebook.com/printsyoupromo',
-            'https://www.linkedin.com/company/printsyou'
-        ].filter(Boolean),
-        ...(trustBadges.length > 0 && {
-            slogan: trustBadges.map(b => b.title).join(' • ')
-        })
-    };
-};
-
-// NEW: CollectionPage Schema Generator
-const generateCollectionPageSchema = (category: Category, currentUrl: string) => {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        '@id': `${currentUrl}#collectionpage`,
-        name: category.categoryName,
-        description: category.metaDescription || category.heroSubtitle || category.categoryDescription?.substring(0, 160),
-        url: currentUrl,
-        inLanguage: 'en-US',
-        ...(category.imageUrl && {
-            image: {
-                '@type': 'ImageObject',
-                url: `${process.env.ASSETS_SERVER_URL}${category.imageUrl}`,
-                width: 1200,
-                height: 630,
-                caption: category.categoryName
-            }
-        }),
-        breadcrumb: {
-            '@id': `${process.env.FE_URL}categories/${category.uniqueCategoryName}#breadcrumb`
-        },
-        ...(category.subCategories?.length > 0 && {
-            hasPart: category.subCategories.slice(0, 10).map(sub => ({
-                '@type': 'CollectionPage',
-                name: sub.categoryName,
-                url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${sub.uniqueCategoryName}`,
-                ...(sub.imageUrl && {
-                    image: `${process.env.ASSETS_SERVER_URL}${sub.imageUrl}`
-                })
-            }))
-        }),
-        isPartOf: {
-            '@type': 'WebSite',
-            '@id': `${process.env.NEXT_PUBLIC_FE_URL}#website`,
-            name: 'PrintsYou',
-            url: process.env.NEXT_PUBLIC_FE_URL
-        }
-    };
-};
-
-// NEW: ItemList Schema for Sub-Categories
-const generateItemListSchema = (category: Category) => {
-    if (!category.subCategories || category.subCategories.length === 0) return null;
-
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'ItemList',
-        name: `${category.categoryName} Categories`,
-        description: `Browse all ${category.categoryName} sub-categories`,
-        numberOfItems: category.subCategories.length,
-        itemListElement: category.subCategories.map((sub, index) => ({
-            '@type': 'ListItem',
-            position: index + 1,
-            name: sub.categoryName,
-            url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${sub.uniqueCategoryName}`,
-            ...(sub.imageUrl && {
-                image: {
-                    '@type': 'ImageObject',
-                    url: `${process.env.ASSETS_SERVER_URL}${sub.imageUrl}`,
-                    caption: sub.categoryName
-                }
-            })
-        }))
-    };
-};
-
-// NEW: Service Schema for printing services - helps with local SEO and service visibility
-const generateServiceSchema = (category: Category, currentUrl: string) => {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'Service',
-        '@id': `${currentUrl}#service`,
-        name: `${category.categoryName} Printing Services`,
-        description: category.metaDescription || category.heroSubtitle || `Professional ${category.categoryName} printing and customization services`,
-        url: currentUrl,
-        provider: {
-            '@type': 'Organization',
-            '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization`,
-            name: 'PrintsYou',
-            url: process.env.NEXT_PUBLIC_FE_URL
-        },
-        serviceType: 'Custom Printing',
-        areaServed: {
-            '@type': 'Country',
-            name: 'United States'
-        },
-        hasOfferCatalog: {
-            '@type': 'OfferCatalog',
-            '@id': `${currentUrl}#catalog`,
-            name: category.categoryName
-        },
-        ...(category.imageUrl && {
-            image: {
-                '@type': 'ImageObject',
-                url: `${process.env.ASSETS_SERVER_URL}${category.imageUrl}`,
-                width: 800,
-                height: 800,
-                caption: category.categoryName
-            }
-        }),
-        termsOfService: `${process.env.NEXT_PUBLIC_FE_URL}terms-and-conditions`,
-        availableChannel: {
-            '@type': 'ServiceChannel',
-            serviceUrl: currentUrl,
-            servicePhone: '+1-469-434-7035',
-            availableLanguage: {
-                '@type': 'Language',
-                name: 'English'
-            }
-        }
-    };
-};
-
-// NEW: AggregateOffer Schema for price range visibility in search results
-const generateAggregateOfferSchema = (category: Category, productsByCategoryPaged: any, currentUrl: string) => {
-    const products = productsByCategoryPaged.content || [];
-    if (products.length === 0) return null;
-
-    // Calculate price range from all products
-    const prices = products
-        .flatMap((product: EnclosureProduct) => (product.priceGrids ?? []).map((pg: {price: number}) => pg.price))
-        .filter((price: number) => price > 0);
-
-    if (prices.length === 0) return null;
-
-    const lowPrice = Math.min(...prices);
-    const highPrice = Math.max(...prices);
-
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'Product',
-        '@id': `${currentUrl}#aggregate-product`,
-        name: category.categoryName,
-        description: category.metaDescription || category.heroSubtitle || `Browse our collection of ${category.categoryName}`,
-        url: currentUrl,
-        brand: {
-            '@type': 'Brand',
-            name: 'PrintsYou'
-        },
-        ...(category.imageUrl && {
-            image: {
-                '@type': 'ImageObject',
-                url: `${process.env.ASSETS_SERVER_URL}${category.imageUrl}`,
-                width: 800,
-                height: 800
-            }
-        }),
-        offers: {
-            '@type': 'AggregateOffer',
-            '@id': `${currentUrl}#aggregate-offer`,
-            priceCurrency: 'USD',
-            lowPrice: lowPrice.toFixed(2),
-            highPrice: highPrice.toFixed(2),
-            offerCount: productsByCategoryPaged.totalElements,
-            availability: 'https://schema.org/InStock',
-            seller: {
-                '@type': 'Organization',
-                '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization`,
-                name: 'PrintsYou'
-            }
-        },
-        category: category.categoryName,
-        ...(category.subCategories?.length > 0 && {
-            isRelatedTo: category.subCategories.slice(0, 5).map(sub => ({
-                '@type': 'Product',
-                name: sub.categoryName,
-                url: `${process.env.NEXT_PUBLIC_FE_URL}categories/${sub.uniqueCategoryName}`
-            }))
-        })
-    };
-};
-
-// NEW: Review Schema with AggregateRating - for Google reviews display in search results
-interface ReviewSummary {
-    reviews: Array<{
-        id: string;
-        reviewerName: string;
-        rating: number;
-        reviewText: string;
-        reviewDate: string | null;
-        googleReviewUrl: string | null;
-        reviewerPhotoUrl: string | null;
-    }>;
-    averageRating: number;
-    totalReviews: number;
-}
-
-const generateReviewSchema = (reviewSummary: ReviewSummary, currentUrl: string) => {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization-reviews`,
-        name: 'PrintsYou',
-        url: process.env.NEXT_PUBLIC_FE_URL,
-        logo: `${process.env.NEXT_PUBLIC_FE_URL}/logo.png`,
-        contactPoint: {
-            '@type': 'ContactPoint',
-            telephone: '+1-469-434-7035',
-            contactType: 'customer service',
-            availableLanguage: 'English'
-        },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: reviewSummary.averageRating.toFixed(1),
-            bestRating: '5',
-            worstRating: '1',
-            ratingCount: reviewSummary.totalReviews,
-            reviewCount: reviewSummary.reviews.length
-        },
-        review: reviewSummary.reviews.slice(0, 10).map(review => ({
-            '@type': 'Review',
-            '@id': `${currentUrl}#review-${review.id}`,
-            author: {
-                '@type': 'Person',
-                name: review.reviewerName
-            },
-            reviewRating: {
-                '@type': 'Rating',
-                ratingValue: review.rating,
-                bestRating: '5',
-                worstRating: '1'
-            },
-            reviewBody: review.reviewText,
-            ...(review.reviewDate && {
-                datePublished: review.reviewDate
-            }),
-            ...(review.googleReviewUrl && {
-                url: review.googleReviewUrl
-            }),
-            publisher: {
-                '@type': 'Organization',
-                name: 'Google'
-            }
-        }))
     };
 };

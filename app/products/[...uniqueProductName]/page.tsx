@@ -74,7 +74,7 @@ export async function generateMetadata(props: {params: Params}) {
     alternates: {canonical: `${process.env.FE_URL}products/${product?.uniqueProductName}`},
     openGraph: {
       images: (product?.productImages || []).map((value, index) => ({
-        url: `${process.env.ASSETS_SERVER_URL}${value.imageUrl}`,
+        url: `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${value.imageUrl}`,
         alt: value.altText ?? `${product?.productName} ${index + 1}`
       })),
       description: product?.metaDescription ?? '',

@@ -99,6 +99,70 @@ export default async function RootLayout({children}: PropsWithChildren) {
                   `
                 }}
               />
+
+              {/* Global Organization Schema - sitewide */}
+              <script
+                id="organization-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@type': 'Organization',
+                    '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization`,
+                    name: 'PrintsYou',
+                    url: process.env.NEXT_PUBLIC_FE_URL,
+                    logo: {
+                      '@type': 'ImageObject',
+                      url: `${process.env.NEXT_PUBLIC_FE_URL}assets/logo-full.png`,
+                      width: 250,
+                      height: 60
+                    },
+                    description: 'Premium custom printing services for promotional products, apparel, and business merchandise. Fast turnaround, competitive pricing, and quality guaranteed.',
+                    contactPoint: {
+                      '@type': 'ContactPoint',
+                      telephone: '+1-469-434-7035',
+                      contactType: 'Customer Service',
+                      availableLanguage: 'English',
+                      areaServed: 'US'
+                    },
+                    address: {
+                      '@type': 'PostalAddress',
+                      addressCountry: 'US'
+                    },
+                    sameAs: [
+                      'https://www.facebook.com/printsyoupromo',
+                      'https://www.linkedin.com/company/printsyou'
+                    ]
+                  })
+                }}
+              />
+
+              {/* Global WebSite Schema - sitewide with SearchAction */}
+              <script
+                id="website-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    '@context': 'https://schema.org',
+                    '@type': 'WebSite',
+                    '@id': `${process.env.NEXT_PUBLIC_FE_URL}#website`,
+                    name: 'PrintsYou',
+                    url: process.env.NEXT_PUBLIC_FE_URL,
+                    publisher: {
+                      '@id': `${process.env.NEXT_PUBLIC_FE_URL}#organization`
+                    },
+                    potentialAction: {
+                      '@type': 'SearchAction',
+                      target: {
+                        '@type': 'EntryPoint',
+                        urlTemplate: `${process.env.NEXT_PUBLIC_FE_URL}search?q={search_term_string}`
+                      },
+                      'query-input': 'required name=search_term_string'
+                    },
+                    inLanguage: 'en-US'
+                  })
+                }}
+              />
             </head>
             <body className="overflow-x-hidden">
               <Suspense fallback={null}>
