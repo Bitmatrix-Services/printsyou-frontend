@@ -12,16 +12,16 @@ export const BlogsComponent: FC<IBlogsComponent> = ({allBlogs}) => {
   return (
     <>
       <Breadcrumb list={[]} prefixTitle="Blogs" />
-      <div className="bg-white pt-12">
+      <div className="bg-white py-12">
         <Container>
           {allBlogs?.length > 0 ? (
-            allBlogs
-              .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-              .map(blog => (
-                <div key={blog.id} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-                  <BlogCardItem blog={blog} />
-                </div>
-              ))
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {allBlogs
+                .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+                .map(blog => (
+                  <BlogCardItem key={blog.id} blog={blog} />
+                ))}
+            </div>
           ) : (
             <div className="flex justify-center w-full items-center my-8">
               <h2 className="my-4 font-bold text-3xl text-primary">No blog found!</h2>
