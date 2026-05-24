@@ -43,10 +43,11 @@ export const BlogDetailsComponent: FC<IBlogDetailsComponent> = ({blog}) => {
 
           {/* Featured Image */}
           {blog?.metaImage && (
-            <div className="relative h-[16rem] md:h-[24rem] lg:h-[28rem] mb-10 rounded-lg overflow-hidden">
+            <div className="mb-10">
               <ImageWithFallback
-                fill
-                className="object-cover"
+                width={900}
+                height={500}
+                className="w-full h-auto rounded-lg"
                 src={blog.metaImage}
                 alt={blog?.title ?? 'blog'}
               />
