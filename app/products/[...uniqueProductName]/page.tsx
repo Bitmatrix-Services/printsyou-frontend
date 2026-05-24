@@ -147,7 +147,19 @@ const generateProductSchema = (
       availability: 'https://schema.org/InStock',
       shippingDetails: {
         '@type': 'OfferShippingDetails',
-        shippingRate: {'@type': 'MonetaryAmount', value: 5.00, currency: 'USD'},
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: minPrice && minPrice.price >= 500 ? 0 : 5.00,
+          currency: 'USD'
+        },
+        freeShippingThreshold: {
+          '@type': 'DeliveryChargeSpecification',
+          freeShippingThreshold: {
+            '@type': 'MonetaryAmount',
+            value: 500,
+            currency: 'USD'
+          }
+        },
         shippingDestination: {'@type': 'DefinedRegion', addressCountry: 'US'},
         deliveryTime: {
           '@type': 'ShippingDeliveryTime',
