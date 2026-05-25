@@ -210,8 +210,8 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
             {/* Below-Grid Content - Collapsed sections */}
             <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-4">
 
-                {/* About Section - Collapsed by default */}
-                <CollapsibleSection title={`About ${category.categoryName}`} defaultOpen={false}>
+                {/* About Section - Open by default */}
+                <CollapsibleSection title={`About ${category.categoryName}`} defaultOpen={true}>
                     <div
                         className="prose prose-sm max-w-none text-gray-700"
                         dangerouslySetInnerHTML={{__html: category.categoryDescription}}
