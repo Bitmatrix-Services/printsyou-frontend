@@ -3,8 +3,7 @@ import {
     getCategoryDetailsByUniqueName,
     getCategoryReviews,
     getProductByCategoryWithFilers,
-    getProductsLdForCategoryPage,
-    CategoryReviewSummary
+    getProductsLdForCategoryPage
 } from '@components/home/category/category.apis';
 import {getCategoryFilters} from '@components/home/category/filter.apis';
 import {CategoryFilters, hasActiveFilters, parseFiltersFromSearchParams} from '@components/home/category/filter.types';
@@ -75,7 +74,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     // Generate simplified schemas
     const breadcrumbSchema = category ? generateBreadcrumbSchema(category, canonicalUrl) : null;
     const collectionPageSchema = category && productsByCategoryPaged
-        ? generateCollectionPageSchema(category, productsByCategoryPaged, canonicalUrl, aboutConcepts, reviewSummary)
+        ? generateCollectionPageSchema(category, productsByCategoryPaged, canonicalUrl, aboutConcepts)
         : null;
 
     // FAQ Schema - only if FAQs exist and are visible
@@ -264,8 +263,7 @@ const generateCollectionPageSchema = (
     category: Category,
     productsByCategoryPaged: any,
     canonicalUrl: string,
-    aboutConcepts: AboutConcept[] = [],
-    reviewSummary: CategoryReviewSummary | null = null
+    aboutConcepts: AboutConcept[] = []
 ) => {
     const products: EnclosureProduct[] = productsByCategoryPaged?.content ?? [];
 
@@ -291,8 +289,6 @@ const generateCollectionPageSchema = (
             return {
                 '@type': 'ListItem',
                 position: index + 1,
-                url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-                name: product.productName,
                 item: {
                     '@type': 'Product',
                     name: product.productName,
@@ -360,15 +356,6 @@ const generateCollectionPageSchema = (
                 width: 1200,
                 height: 630,
                 caption: category.categoryName
-            }
-        }),
-
-        // Aggregate rating for the category (from Google reviews)
-        ...(reviewSummary && reviewSummary.totalReviews > 0 && {
-            aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: reviewSummary.averageRating.toFixed(1),
-                reviewCount: reviewSummary.totalReviews.toString()
             }
         }),
 
