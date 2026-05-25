@@ -106,11 +106,12 @@ const generateProductSchema = (
     sku: product.sku,
     url: `${process.env.FE_URL}products/${product.uniqueProductName}`,
     category: [
-      ...(product.crumbs ?? []),
+      {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'},
       {sequenceNumber: 1, uniqueCategoryName: 'categories', name: 'Categories'},
-      {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
+      ...(product.crumbs ?? []),
+      {sequenceNumber: 100, uniqueCategoryName: product.uniqueProductName, name: product.productName}
     ]
-      .sort((a, b) => b.sequenceNumber - a.sequenceNumber)
+      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
       .map(item => item.name)
       .join(' > '),
     size:
@@ -142,31 +143,9 @@ const generateProductSchema = (
             isProductOnSale && product.saleEndDate
               ? dayjs(product.saleEndDate).format('YYYY-MM-DD')
               : dayjs().add(1, 'year').format('YYYY-MM-DD'),
-          eligibleQuantity: {'@type': 'QuantitativeValue', minValue: item.countFrom}
+          eligibleQuantity: {'@type': 'QuantitativeValue', minValue: item.countFrom, unitCode: 'C62'}
         })),
-      availability: 'https://schema.org/InStock',
-      shippingDetails: {
-        '@type': 'OfferShippingDetails',
-        shippingRate: {
-          '@type': 'MonetaryAmount',
-          value: minPrice && minPrice.price >= 500 ? 0 : 5.00,
-          currency: 'USD'
-        },
-        freeShippingThreshold: {
-          '@type': 'DeliveryChargeSpecification',
-          freeShippingThreshold: {
-            '@type': 'MonetaryAmount',
-            value: 500,
-            currency: 'USD'
-          }
-        },
-        shippingDestination: {'@type': 'DefinedRegion', addressCountry: 'US'},
-        deliveryTime: {
-          '@type': 'ShippingDeliveryTime',
-          handlingTime: {'@type': 'QuantitativeValue', minValue: 0, maxValue: 3, unitCode: 'DAY'},
-          transitTime: {'@type': 'QuantitativeValue', minValue: 1, maxValue: 7, unitCode: 'DAY'}
-        }
-      }
+      availability: 'https://schema.org/InStock'
     }
   };
 };
