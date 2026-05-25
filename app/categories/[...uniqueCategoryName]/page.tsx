@@ -3,13 +3,14 @@ import {
     getCategoryDetailsByUniqueName,
     getCategoryReviews,
     getProductByCategoryWithFilers,
-    getProductsLdForCategoryPage
+    getProductsLdForCategoryPage,
+    CategoryReviewSummary
 } from '@components/home/category/category.apis';
 import {getCategoryFilters} from '@components/home/category/filter.apis';
 import {CategoryFilters, hasActiveFilters, parseFiltersFromSearchParams} from '@components/home/category/filter.types';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {CategoryReviews} from '@components/home/category/category-reviews.component';
-import {Category, parseCategoryUxSeo} from '@components/home/home.types';
+import {Category, parseCategoryUxSeo, AboutConcept} from '@components/home/home.types';
 import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import {getAllCategories} from '@components/home/home-apis';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
@@ -69,12 +70,12 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     const canonicalUrl = currentPage > 0 ? `${baseUrl}?page=${currentPage + 1}` : baseUrl;
 
     // Parse UX/SEO data for schema generation
-    const {faqs} = category ? parseCategoryUxSeo(category) : {faqs: []};
+    const {faqs, aboutConcepts} = category ? parseCategoryUxSeo(category) : {faqs: [], aboutConcepts: []};
 
     // Generate simplified schemas
     const breadcrumbSchema = category ? generateBreadcrumbSchema(category, canonicalUrl) : null;
     const collectionPageSchema = category && productsByCategoryPaged
-        ? generateCollectionPageSchema(category, productsByCategoryPaged, canonicalUrl)
+        ? generateCollectionPageSchema(category, productsByCategoryPaged, canonicalUrl, aboutConcepts, reviewSummary)
         : null;
 
     // FAQ Schema - only if FAQs exist and are visible
@@ -257,30 +258,72 @@ const generateBreadcrumbSchema = (category: Category, canonicalUrl: string) => {
 
 /**
  * CollectionPage Schema
- * Main schema for category pages - includes ItemList of visible products
+ * Main schema for category pages - includes ItemList with full Product entities
  */
 const generateCollectionPageSchema = (
     category: Category,
     productsByCategoryPaged: any,
-    canonicalUrl: string
+    canonicalUrl: string,
+    aboutConcepts: AboutConcept[] = [],
+    reviewSummary: CategoryReviewSummary | null = null
 ) => {
     const products: EnclosureProduct[] = productsByCategoryPaged?.content ?? [];
 
     // Filter out out-of-stock products for schema
     const inStockProducts = products.filter(p => !p.outOfStock);
 
-    // Build lightweight ItemList with only visible products on current page
+    // Build rich ItemList with full Product entities including AggregateOffer
     const itemList = inStockProducts.length > 0 ? {
         '@type': 'ItemList',
         '@id': `${canonicalUrl}#itemlist`,
         numberOfItems: inStockProducts.length,
-        itemListElement: inStockProducts.map((product, index) => ({
-            '@type': 'ListItem',
-            position: index + 1,
-            url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
-            name: product.productName
-        }))
+        itemListElement: inStockProducts.map((product, index) => {
+            // Sort price grids by countFrom (ascending) to get MOQ and price range
+            const sortedPrices = [...(product.priceGrids || [])].sort((a, b) => a.countFrom - b.countFrom);
+            const lowestTier = sortedPrices[0]; // First tier (MOQ)
+            const highestTier = sortedPrices[sortedPrices.length - 1]; // Last tier (bulk price)
+
+            // Calculate prices - salePrice takes priority, fallback to price
+            const highPrice = lowestTier ? (lowestTier.salePrice || lowestTier.price) : product.salePrice || product.minPrice;
+            const lowPrice = highestTier ? (highestTier.salePrice || highestTier.price) : product.salePrice || product.minPrice;
+            const moq = lowestTier?.countFrom || 1;
+
+            return {
+                '@type': 'ListItem',
+                position: index + 1,
+                url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+                name: product.productName,
+                item: {
+                    '@type': 'Product',
+                    name: product.productName,
+                    image: product.imageUrl ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${product.imageUrl}` : undefined,
+                    description: product.metaDescription || `Custom ${product.productName} with bulk tier pricing`,
+                    url: `${process.env.NEXT_PUBLIC_FE_URL}products/${product.uniqueProductName}`,
+                    sku: product.sku,
+                    offers: {
+                        '@type': 'AggregateOffer',
+                        priceCurrency: 'USD',
+                        lowPrice: lowPrice.toFixed(2),
+                        highPrice: highPrice.toFixed(2),
+                        offerCount: sortedPrices.length.toString(),
+                        availability: 'https://schema.org/InStock',
+                        eligibleQuantity: {
+                            '@type': 'QuantitativeValue',
+                            minValue: moq.toString(),
+                            unitCode: 'C62' // UN/CEFACT code for "pieces/units"
+                        }
+                    }
+                }
+            };
+        })
     } : null;
+
+    // Build "about" property for topical authority (Wikipedia/Wikidata links)
+    const aboutProperty = aboutConcepts.length > 0 ? aboutConcepts.map(concept => ({
+        '@type': 'Thing',
+        name: concept.name,
+        sameAs: concept.sameAs
+    })) : null;
 
     return {
         '@context': 'https://schema.org',
@@ -304,6 +347,11 @@ const generateCollectionPageSchema = (
             url: process.env.NEXT_PUBLIC_FE_URL
         },
 
+        // About property - links to Wikipedia/Wikidata concepts for topical authority
+        ...(aboutProperty && {
+            about: aboutProperty
+        }),
+
         // Primary image if exists
         ...(category.imageUrl && {
             primaryImageOfPage: {
@@ -312,6 +360,15 @@ const generateCollectionPageSchema = (
                 width: 1200,
                 height: 630,
                 caption: category.categoryName
+            }
+        }),
+
+        // Aggregate rating for the category (from Google reviews)
+        ...(reviewSummary && reviewSummary.totalReviews > 0 && {
+            aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: reviewSummary.averageRating.toFixed(1),
+                reviewCount: reviewSummary.totalReviews.toString()
             }
         }),
 

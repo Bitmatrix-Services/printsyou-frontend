@@ -40,7 +40,7 @@ export const getProductsLdForCategoryPage = async (id: string, page: string): Pr
   }
 };
 
-interface CategoryReviewSummary {
+export interface CategoryReviewSummary {
   reviews: Array<{
     id: string;
     reviewerName: string;

@@ -33,6 +33,7 @@ export interface Category {
     customCssClasses?: string;
     featuredSnippet?: string;
     richSnippetJson?: string;
+    aboutConceptsJson?: string;
 
     // SEO INDEXING FIELDS
     seoIndexable?: boolean;
@@ -95,6 +96,11 @@ export interface SidebarBox {
     order: number;
 }
 
+export interface AboutConcept {
+    name: string;
+    sameAs: string;
+}
+
 // Helper function to parse JSON fields
 export const parseCategoryUxSeo = (category: Category) => {
     return {
@@ -102,7 +108,8 @@ export const parseCategoryUxSeo = (category: Category) => {
         keyFeatures: category.keyFeaturesJson ? JSON.parse(category.keyFeaturesJson) : [] as KeyFeature[],
         faqs: category.faqsJson ? JSON.parse(category.faqsJson) : [] as FAQ[],
         ctaSection: category.ctaSectionJson ? JSON.parse(category.ctaSectionJson) as CTASection : null,
-        sidebarBoxes: category.sidebarBoxesJson ? JSON.parse(category.sidebarBoxesJson) : [] as SidebarBox[]
+        sidebarBoxes: category.sidebarBoxesJson ? JSON.parse(category.sidebarBoxesJson) : [] as SidebarBox[],
+        aboutConcepts: category.aboutConceptsJson ? JSON.parse(category.aboutConceptsJson) : [] as AboutConcept[]
     };
 };
 
