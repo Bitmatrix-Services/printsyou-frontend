@@ -8,6 +8,7 @@ import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {FaCheckCircle} from 'react-icons/fa';
+import {getGoogleAdsParams} from '@utils/google-ads-tracking';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -55,7 +56,13 @@ const CheckoutSuccessContent = () => {
         setSessionData(data);
 
         // Track successful payment - Google Analytics & Google Ads
-        if (typeof window !== 'undefined' && (window as any).gtag) {
+        // Use retry logic since gtag may not be ready immediately after Stripe redirect
+        const fireConversions = () => {
+          if (typeof window === 'undefined' || !(window as any).gtag) {
+            console.warn('[Google Ads] gtag not ready, will retry...');
+            return false;
+          }
+
           // Prepare user data for Enhanced Conversions
           const userData: Record<string, string> = {};
           if (data.customerEmail) {
@@ -66,6 +73,9 @@ const CheckoutSuccessContent = () => {
             userData.phone_number = cleanPhone.length === 10 ? '+1' + cleanPhone : '+' + cleanPhone;
           }
 
+          // Get stored gclid for better attribution
+          const googleAdsParams = getGoogleAdsParams();
+
           // Google Analytics purchase event
           (window as any).gtag('event', 'purchase', {
             transaction_id: data.stripeSessionId,
@@ -74,15 +84,47 @@ const CheckoutSuccessContent = () => {
           });
 
           // Google Ads Purchase Conversion with Enhanced Conversions data
-          (window as any).gtag('event', 'conversion', {
+          const conversionData: Record<string, any> = {
             send_to: 'AW-16709127988/SI9-CNz_w_EbELSexJ8-',
             transaction_id: data.stripeSessionId,
             value: data.amountTotal,
             currency: data.currency || 'USD',
             user_data: userData
+          };
+
+          // Include gclid if available for better attribution
+          if (googleAdsParams?.gclid) {
+            conversionData.gclid = googleAdsParams.gclid;
+          }
+
+          (window as any).gtag('event', 'conversion', conversionData);
+
+          console.log('[Google Ads] Purchase conversion fired:', {
+            value: data.amountTotal,
+            transaction_id: data.stripeSessionId,
+            gclid: googleAdsParams?.gclid || 'none',
+            user_data_keys: Object.keys(userData)
           });
 
-          console.log('[Google Ads] Purchase conversion fired, value: $' + data.amountTotal, 'user_data:', Object.keys(userData));
+          return true;
+        };
+
+        // Try immediately, then retry with delays if gtag not ready
+        if (!fireConversions()) {
+          const retryDelays = [500, 1000, 2000];
+          let retryIndex = 0;
+
+          const retryFire = () => {
+            if (fireConversions()) return;
+            retryIndex++;
+            if (retryIndex < retryDelays.length) {
+              setTimeout(retryFire, retryDelays[retryIndex]);
+            } else {
+              console.error('[Google Ads] Failed to fire conversion after retries - gtag not available');
+            }
+          };
+
+          setTimeout(retryFire, retryDelays[0]);
         }
       } catch (err: any) {
         console.error('Error verifying session:', err);
