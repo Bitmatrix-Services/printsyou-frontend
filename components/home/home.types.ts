@@ -11,8 +11,8 @@ export interface Category {
     categoryDescription: string;
     level: string;
     imageUrl?: string;
-    prefix?: string;
-    suffix?: string;
+    prefix?: { id: string; prefixName: string } | null;
+    suffix?: { id: string; prefixName: string } | null;
     subCategories: Category[];
     crumbs?: Crumbs[];
 
