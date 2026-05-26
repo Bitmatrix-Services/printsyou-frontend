@@ -182,7 +182,7 @@ export async function generateMetadata(props: {params: Params; searchParams: Sea
     const defaultDescription = `Shop custom ${categoryTitle} at PrintsYou. Fast turnaround, competitive pricing, and quality guaranteed. Free quotes available!`;
 
     return {
-        title: `${categoryTitle}${category?.suffix ? ` ${category.suffix}` : ''} | Custom Printing | PrintsYou`,
+        title: `${categoryTitle}${category?.suffix?.prefixName ? ` ${category.suffix.prefixName}` : ''} | Custom Printing | PrintsYou`,
         description: category?.metaDescription || defaultDescription,
         keywords: category?.keywords || category?.categoryName,
         // SEO: Add robots directive for filtered/paginated pages
