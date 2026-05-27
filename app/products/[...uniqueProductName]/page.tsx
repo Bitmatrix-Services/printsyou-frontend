@@ -101,15 +101,17 @@ const generateProductSchema = (
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product.productName,
-    image: validImages.length > 0 ? validImages : [`https://printsyouassets.s3.amazonaws.com/${product.productImages?.[0]?.imageUrl}`],
+    image:
+      validImages.length > 0
+        ? validImages
+        : [`https://printsyouassets.s3.amazonaws.com/${product.productImages?.[0]?.imageUrl}`],
     description: (product.metaDescription ?? product.description ?? '').replace(/<[^>]+>/g, ''),
     sku: product.sku,
     url: `${process.env.FE_URL}products/${product.uniqueProductName}`,
     category: [
       {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'},
-      {sequenceNumber: 1, uniqueCategoryName: 'categories', name: 'Categories'},
-      ...(product.crumbs ?? []),
-      {sequenceNumber: 100, uniqueCategoryName: product.uniqueProductName, name: product.productName}
+      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Products'},
+      ...(product.crumbs ?? [])
     ]
       .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
       .map(item => item.name)
@@ -145,7 +147,29 @@ const generateProductSchema = (
               : dayjs().add(1, 'year').format('YYYY-MM-DD'),
           eligibleQuantity: {'@type': 'QuantitativeValue', minValue: item.countFrom, unitCode: 'C62'}
         })),
-      availability: 'https://schema.org/InStock'
+      availability: 'https://schema.org/InStock',
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: minPrice && minPrice.price >= 500 ? 0 : 5.0,
+          currency: 'USD'
+        },
+        freeShippingThreshold: {
+          '@type': 'DeliveryChargeSpecification',
+          freeShippingThreshold: {
+            '@type': 'MonetaryAmount',
+            value: 500,
+            currency: 'USD'
+          }
+        },
+        shippingDestination: {'@type': 'DefinedRegion', addressCountry: 'US'},
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {'@type': 'QuantitativeValue', minValue: 0, maxValue: 3, unitCode: 'DAY'},
+          transitTime: {'@type': 'QuantitativeValue', minValue: 1, maxValue: 7, unitCode: 'DAY'}
+        }
+      }
     }
   };
 };
