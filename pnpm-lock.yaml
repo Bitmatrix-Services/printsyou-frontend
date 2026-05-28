@@ -59,6 +59,9 @@ importers:
       lightgallery:
         specifier: ^2.7.2
         version: 2.7.2
+      lru-cache:
+        specifier: ^10.4.3
+        version: 10.4.3
       next:
         specifier: 15.1.11
         version: 15.1.11(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.77.8)
