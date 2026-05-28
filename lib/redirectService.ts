@@ -15,8 +15,17 @@ export interface InternalRedirect {
   isActive: boolean;
 }
 
+// Sentinel value to represent "no redirect found" (since LRUCache doesn't allow null)
+const NO_REDIRECT: InternalRedirect = {
+  id: '__NO_REDIRECT__',
+  sourceUrl: '',
+  targetUrl: '',
+  redirectType: 0,
+  isActive: false,
+};
+
 // Cache for redirect lookups (15 minute TTL)
-const redirectCache = new LRUCache<string, InternalRedirect | null>({
+const redirectCache = new LRUCache<string, InternalRedirect>({
   max: 5000, // Maximum number of entries
   ttl: 15 * 60 * 1000, // 15 minutes in milliseconds
 });
@@ -152,7 +161,12 @@ export async function lookupRedirect(urlPath: string): Promise<InternalRedirect 
 
   // Check LRU cache first
   if (redirectCache.has(normalizedUrl)) {
-    return redirectCache.get(normalizedUrl) ?? null;
+    const cached = redirectCache.get(normalizedUrl);
+    // Return null if it's the sentinel value
+    if (cached?.id === '__NO_REDIRECT__') {
+      return null;
+    }
+    return cached ?? null;
   }
 
   // Check bulk cache
@@ -165,8 +179,8 @@ export async function lookupRedirect(urlPath: string): Promise<InternalRedirect 
   // Fetch from API
   const redirect = await fetchRedirect(normalizedUrl);
 
-  // Cache the result (even if null to prevent repeated API calls)
-  redirectCache.set(normalizedUrl, redirect);
+  // Cache the result (use sentinel for null to prevent repeated API calls)
+  redirectCache.set(normalizedUrl, redirect ?? NO_REDIRECT);
 
   return redirect;
 }
