@@ -12,6 +12,7 @@ interface IFormControlInput {
   placeholder?: string;
   inputType?: 'textField' | 'textarea';
   fieldType?: 'text' | 'number';
+  inputMode?: 'text' | 'numeric' | 'decimal' | 'tel' | 'email' | 'url';
   disabled?: boolean;
   isRequired?: boolean;
   errors?: any;
@@ -29,6 +30,7 @@ export const FormControlInput: FC<IFormControlInput> = ({
   disabled = false,
   inputType = 'textField',
   fieldType = 'text',
+  inputMode,
   errors,
   onBlur,
   onFocus,
@@ -72,7 +74,9 @@ export const FormControlInput: FC<IFormControlInput> = ({
               onFocus={onFocus}
               slotProps={{
                 input: {
-                  autoComplete: autoComplete
+                  autoComplete: autoComplete,
+                  inputMode: inputMode,
+                  pattern: inputMode === 'numeric' ? '[0-9]*' : undefined
                 }
               }}
             />

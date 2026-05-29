@@ -66,6 +66,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   // State
   const [selectedTier, setSelectedTier] = useState<PriceGrids | null>(firstTier || null);
   const [quantity, setQuantity] = useState<number>(firstTier?.countFrom || 1);
+  const [quantityInput, setQuantityInput] = useState<string>(String(firstTier?.countFrom || 1));
   const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
   const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
   const [notes, setNotes] = useState<string>('');
@@ -118,10 +119,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const handleTierSelect = useCallback((tier: PriceGrids) => {
     setSelectedTier(tier);
     setQuantity(tier.countFrom);
+    setQuantityInput(String(tier.countFrom));
     setError('');
   }, []);
 
-  // Handle quantity change
+  // Handle quantity change (from +/- buttons or blur)
   const handleQuantityChange = useCallback(
     (newQty: number) => {
       if (newQty < 1) return;
@@ -138,6 +140,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
       setSelectedTier(newTier);
       setQuantity(newQty);
+      setQuantityInput(String(newQty));
       setError('');
     },
     [sortedPriceGrids]
@@ -256,13 +259,25 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             -
           </button>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             id="quantity"
-            min={firstTier?.countFrom || 1}
-            value={quantity}
-            onChange={e => handleQuantityChange(parseInt(e.target.value, 10) || firstTier?.countFrom || 1)}
+            value={quantityInput}
+            onChange={e => setQuantityInput(e.target.value.replace(/[^0-9]/g, ''))}
+            onBlur={() => {
+              const parsed = parseInt(quantityInput, 10);
+              const minQty = firstTier?.countFrom || 1;
+              const validQty = isNaN(parsed) || parsed < minQty ? minQty : parsed;
+              handleQuantityChange(validQty);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                e.currentTarget.blur();
+              }
+            }}
             disabled={isOutOfStock}
-            className="w-20 h-10 text-center border border-gray-300 rounded-lg font-semibold focus:ring-2 focus:ring-green-500 focus:border-green-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-20 h-10 text-center border border-gray-300 rounded-lg font-semibold focus:ring-2 focus:ring-green-500 focus:border-green-500"
           />
           <button
             type="button"

@@ -624,7 +624,8 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                           isRequired={true}
                           disabled={isSubmitting}
                           control={control}
-                          fieldType="number"
+                          fieldType="text"
+                          inputMode="numeric"
                           errors={errors}
                           placeholder="How many do you need?"
                         />

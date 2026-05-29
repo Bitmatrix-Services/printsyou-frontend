@@ -228,8 +228,8 @@ export const DirectCheckoutComponent: FC = () => {
   };
 
   const handleQuantityInput = (value: string) => {
-    // Allow typing any number (including empty for clearing)
-    setQuantityInput(value);
+    // Allow typing any number (including empty for clearing), filter non-numeric
+    setQuantityInput(value.replace(/[^0-9]/g, ''));
   };
 
   const handleQuantityBlur = () => {
@@ -563,14 +563,19 @@ export const DirectCheckoutComponent: FC = () => {
                             </button>
                             <input
                               id="quantity-input"
-                              type="number"
+                              type="text"
+                              inputMode="numeric"
+                              pattern="[0-9]*"
                               value={quantityInput}
                               onChange={(e) => handleQuantityInput(e.target.value)}
                               onBlur={handleQuantityBlur}
-                              min={quantityLimits.min}
-                              max={quantityLimits.max}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.currentTarget.blur();
+                                }
+                              }}
                               aria-label="Order quantity"
-                              className="w-24 h-10 text-center border border-gray-300 rounded-lg font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              className="w-24 h-10 text-center border border-gray-300 rounded-lg font-medium"
                             />
                             <button
                               type="button"
