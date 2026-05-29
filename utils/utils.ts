@@ -71,8 +71,13 @@ export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<s
   const apiKey = process.env.API_KEY;
   const apikeySecret = process.env.API_KEY_SECRET;
 
+  // TODO: Change back to https://api.printsyou.com for production
+  const baseUrl = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8090'
+    : 'https://api.printsyou.com';
+
   return (
-    await axios.get(`https://api.printsyou.com/sitemap/${sitemapPath}`, {
+    await axios.get(`${baseUrl}/sitemap/${sitemapPath}`, {
       headers: {
         'X-API-KEY': apiKey,
         'X-API-SECRET': apikeySecret
