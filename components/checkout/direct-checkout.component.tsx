@@ -55,13 +55,10 @@ const SHIPPING_CONFIG = {
     {maxQty: 7, fee: 7.0},
     {maxQty: 8, fee: 8.0},
     {maxQty: 9, fee: 12.0},
-    {maxQty: 10, fee: 15.00},
+    {maxQty: 10, fee: 15.0},
     {maxQty: 50, fee: 20.99},
     {maxQty: 100, fee: 25.99},
-    {maxQty: 250, fee: 29.99},
-    {maxQty: 500, fee: 34.99},
-    {maxQty: 1000, fee: 49.99},
-    {maxQty: Infinity, fee: 79.99}
+    {maxQty: Infinity, fee: 29.99}
   ]
 };
 
