@@ -12,6 +12,35 @@ import {CheckoutRoutes} from '@utils/routes/be-routes';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+// Shipping configuration - same as direct-checkout
+const SHIPPING_CONFIG = {
+  freeShippingThreshold: 500, // Free shipping for orders $500+
+  rates: [
+    {maxQty: 1, fee: 5.0},
+    {maxQty: 7, fee: 7.0},
+    {maxQty: 8, fee: 8.0},
+    {maxQty: 9, fee: 12.0},
+    {maxQty: 10, fee: 15.0},
+    {maxQty: 50, fee: 20.99},
+    {maxQty: 100, fee: 25.99},
+    {maxQty: 250, fee: 29.99},
+    {maxQty: 500, fee: 34.99},
+    {maxQty: 1000, fee: 49.99},
+    {maxQty: Infinity, fee: 79.99}
+  ]
+};
+
+// Calculate shipping based on quantity
+const calculateShipping = (qty: number, subtotal: number): number => {
+  // Free shipping if subtotal exceeds threshold
+  if (subtotal >= SHIPPING_CONFIG.freeShippingThreshold) {
+    return 0;
+  }
+  // Find applicable shipping rate based on quantity
+  const rate = SHIPPING_CONFIG.rates.find(r => qty <= r.maxQty);
+  return rate?.fee || SHIPPING_CONFIG.rates[SHIPPING_CONFIG.rates.length - 1].fee;
+};
+
 // Helper to get cookie value by name
 const getCookie = (name: string): string | null => {
   if (typeof document === 'undefined') return null;
@@ -76,8 +105,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       : applicableTier.price;
   }, [selectedTier, quantity, sortedPriceGrids]);
 
-  // Calculate total price
-  const totalPrice = useMemo(() => currentUnitPrice * quantity, [currentUnitPrice, quantity]);
+  // Calculate subtotal
+  const subtotal = useMemo(() => currentUnitPrice * quantity, [currentUnitPrice, quantity]);
+
+  // Calculate shipping cost based on quantity (free for orders $500+)
+  const shippingCost = useMemo(() => calculateShipping(quantity, subtotal), [quantity, subtotal]);
+
+  // Calculate total price including shipping
+  const totalPrice = useMemo(() => subtotal + shippingCost, [subtotal, shippingCost]);
 
   // Handle tier selection
   const handleTierSelect = useCallback((tier: PriceGrids) => {
@@ -239,6 +274,10 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           </button>
           <div className="flex-1 text-right">
             <div className="text-sm text-gray-500">${currentUnitPrice.toFixed(2)} each</div>
+            <div className="text-sm text-gray-500">Subtotal: ${subtotal.toFixed(2)}</div>
+            <div className="text-sm text-gray-500">
+              Shipping: {shippingCost === 0 ? <span className="text-green-600 font-medium">FREE</span> : `$${shippingCost.toFixed(2)}`}
+            </div>
             <div className="text-lg font-bold text-gray-900">${totalPrice.toFixed(2)}</div>
           </div>
         </div>
