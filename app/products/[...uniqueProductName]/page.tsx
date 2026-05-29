@@ -92,19 +92,24 @@ const generateProductSchema = (
   if (!product) return null;
 
   // Filter out video files from images (Google schema only accepts images)
+  // Sort by sequence_number to ensure correct order (sequence_number 1 = primary)
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif'];
-  const validImages = (product.productImages ?? [])
+  const sortedImages = (product.productImages ?? [])
     .filter(item => imageExtensions.some(ext => item.imageUrl?.toLowerCase().endsWith(ext)))
-    .map(item => `https://printsyouassets.s3.amazonaws.com/${item.imageUrl}`);
+    .sort((a, b) => (a.sequenceNumber ?? 999) - (b.sequenceNumber ?? 999));
+
+  // Primary image (sequence_number 1) as string, rest as additional images array
+  const primaryImage = sortedImages[0]
+    ? `https://printsyouassets.s3.amazonaws.com/${sortedImages[0].imageUrl}`
+    : `https://printsyouassets.s3.amazonaws.com/${product.productImages?.[0]?.imageUrl}`;
+  const additionalImages = sortedImages.slice(1).map(item => `https://printsyouassets.s3.amazonaws.com/${item.imageUrl}`);
 
   return {
     '@context': 'https://schema.org/',
     '@type': 'Product',
     name: product.productName,
-    image:
-      validImages.length > 0
-        ? validImages
-        : [`https://printsyouassets.s3.amazonaws.com/${product.productImages?.[0]?.imageUrl}`],
+    image: primaryImage,
+    ...(additionalImages.length > 0 && {additionalImage: additionalImages}),
     description: (product.metaDescription ?? product.description ?? '').replace(/<[^>]+>/g, ''),
     sku: product.sku,
     url: `${process.env.FE_URL}products/${product.uniqueProductName}`,
