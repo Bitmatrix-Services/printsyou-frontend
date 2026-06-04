@@ -35,6 +35,13 @@ interface PriceGrid {
   salePrice?: number;
 }
 
+interface ProductColor {
+  id: string;
+  colorName: string;
+  colorHex?: string;
+  coloredProductImage?: string;
+}
+
 interface Product {
   id: string;
   productName: string;
@@ -45,6 +52,7 @@ interface Product {
   setupFee?: number;
   additionalFieldProductValues?: Array<{fieldName: string; fieldValue: string}>;
   allCategoryNameAndIds?: Array<{id: string; name: string}>;
+  productColors?: ProductColor[];
 }
 
 // Shipping configuration - moved outside component for stable reference
@@ -112,6 +120,7 @@ export const DirectCheckoutComponent: FC = () => {
   const [quantity, setQuantity] = useState<number>(0);
   const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
   const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [modalState, setModalState] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [modalMessage, setModalMessage] = useState<string>('');
@@ -302,6 +311,7 @@ export const DirectCheckoutComponent: FC = () => {
         productId: product.id,
         productSku: product.sku,
         productName: product.productName,
+        selectedColor: selectedColor || null,
         quotedAmount: pricing.total,
         // Pricing breakdown
         unitPrice: pricing.unitPrice,
@@ -393,6 +403,35 @@ export const DirectCheckoutComponent: FC = () => {
     // Show size breakdown for any apparel product
     return isApparel && availableSizes.length > 0;
   }, [isApparel, availableSizes]);
+
+  // Extract available colors from product data
+  const availableColors = useMemo(() => {
+    if (!product) return [];
+
+    // First check productColors array
+    if (product.productColors && product.productColors.length > 0) {
+      return product.productColors.map(c => c.colorName);
+    }
+
+    // Fallback to additionalFieldProductValues
+    if (product.additionalFieldProductValues) {
+      const colorsField = product.additionalFieldProductValues.find(
+        item => item.fieldName.toLowerCase() === 'colors available' || item.fieldName.toLowerCase() === 'color available'
+      );
+      if (colorsField?.fieldValue) {
+        // Strip HTML and split by comma
+        const colorsText = colorsField.fieldValue.replace(/<\/?[^>]+(>|$)/g, '');
+        return colorsText
+          .replace(' or ', ', ')
+          .replace('.', '')
+          .split(',')
+          .map(color => color.trim())
+          .filter(color => color.length > 0);
+      }
+    }
+
+    return [];
+  }, [product]);
 
   // Validate size breakdown total matches quantity
   const sizeBreakdownTotal = useMemo(() => {
@@ -646,6 +685,37 @@ export const DirectCheckoutComponent: FC = () => {
                       disabled={isSubmitting || isProcessing}
                       initialSizes={initialSizes}
                     />
+                  )}
+
+                  {/* Color Selection - Show when product has colors */}
+                  {availableColors.length > 0 && (
+                    <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        Select Product Color
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Choose the color for your product. This is the base color of the item (not the imprint/logo color).
+                      </p>
+                      <select
+                        value={selectedColor}
+                        onChange={(e) => setSelectedColor(e.target.value)}
+                        disabled={isSubmitting || isProcessing}
+                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Select product color"
+                      >
+                        <option value="">-- Select a color --</option>
+                        {availableColors.map((color, index) => (
+                          <option key={index} value={color}>
+                            {color}
+                          </option>
+                        ))}
+                      </select>
+                      {!selectedColor && (
+                        <p className="text-xs text-amber-600 mt-2">
+                          If you don&apos;t select a color, please specify it in the notes below or we&apos;ll contact you.
+                        </p>
+                      )}
+                    </div>
                   )}
 
                   {/* Notes & Color Selection - Placed right after Size Breakdown (Optional) */}
