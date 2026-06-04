@@ -9,6 +9,7 @@ import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {CircularLoader} from '@components/globals/circular-loader.component';
 import {FaCheckCircle} from 'react-icons/fa';
 import {getGoogleAdsParams} from '@utils/google-ads-tracking';
+import {paymentAnalytics, identifyUser} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -54,6 +55,20 @@ const CheckoutSuccessContent = () => {
         const verifyResponse = await axios.post(`${API_BASE_URL}/checkout/verify-payment/${sessionId}`);
         const data = verifyResponse.data.payload;
         setSessionData(data);
+
+        // Track payment completed in PostHog
+        paymentAnalytics.completed({
+          quoteId: data.quoteRequestId || data.orderId || '',
+          amount: data.amountTotal,
+          method: 'stripe'
+        });
+
+        // Identify user in PostHog
+        if (data.customerEmail) {
+          identifyUser(data.customerEmail, {
+            phone: data.customerPhone
+          });
+        }
 
         // Track successful payment - Google Analytics & Google Ads
         // Use retry logic since gtag may not be ready immediately after Stripe redirect

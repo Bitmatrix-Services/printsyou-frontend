@@ -24,6 +24,7 @@ import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
 import {FaArrowLeft, FaLock, FaCheckCircle, FaShieldAlt, FaClock} from 'react-icons/fa';
 import {HiMinus, HiPlus} from 'react-icons/hi';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from './size-breakdown.component';
+import {checkoutAnalytics, identifyUser} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -155,6 +156,20 @@ export const DirectCheckoutComponent: FC = () => {
       setQuantity(minQty);
     }
   }, [product, initialQuantity]);
+
+  // Track checkout started when product loads
+  useEffect(() => {
+    if (product) {
+      const category = product.allCategoryNameAndIds?.[0]?.name;
+      checkoutAnalytics.started({
+        productId: product.id,
+        productName: product.productName,
+        productSku: product.sku,
+        category,
+        source: 'direct_checkout'
+      });
+    }
+  }, [product]);
 
   const methods = useForm<StripeCheckoutFormSchemaType>({
     resolver: yupResolver(stripeCheckoutSchema),
@@ -295,6 +310,28 @@ export const DirectCheckoutComponent: FC = () => {
 
     setIsProcessing(true);
 
+    // Track checkout submitted
+    const category = product.allCategoryNameAndIds?.[0]?.name;
+    checkoutAnalytics.submitted({
+      productId: product.id,
+      productName: product.productName,
+      quantity,
+      total: pricing.total,
+      category,
+      color: selectedColor || undefined,
+      hasArtwork: artworkFiles.length > 0,
+      hasSizeBreakdown: showSizeBreakdown && finalSizeBreakdown.length > 0
+    });
+
+    // Identify user in PostHog for tracking
+    identifyUser(data.email, {
+      name: `${data.firstName} ${data.lastName}`,
+      phone: data.phone || undefined,
+      company: data.company || undefined,
+      first_checkout_product: product.productName,
+      first_checkout_category: category
+    });
+
     try {
       // Step 1: Create a quote request with product details
       const quoteRequestData = {
@@ -343,6 +380,16 @@ export const DirectCheckoutComponent: FC = () => {
         throw new Error('Failed to create order request');
       }
 
+      // Track checkout success (quote created, proceeding to payment)
+      checkoutAnalytics.success({
+        quoteId: quoteRequestId,
+        productId: product.id,
+        productName: product.productName,
+        quantity,
+        total: pricing.total,
+        category
+      });
+
       // Step 2: Create Stripe checkout session
       const checkoutData = {
         quoteRequestId: quoteRequestId,
@@ -362,9 +409,16 @@ export const DirectCheckoutComponent: FC = () => {
       }
     } catch (error: any) {
       console.error('Checkout error:', error);
-      setModalMessage(
-        error.response?.data?.message || 'Failed to create checkout session. Please try again.'
-      );
+      const errorMessage = error.response?.data?.message || 'Failed to create checkout session. Please try again.';
+
+      // Track checkout error
+      checkoutAnalytics.error({
+        productId: product.id,
+        errorMessage,
+        step: 'checkout_submission'
+      });
+
+      setModalMessage(errorMessage);
       setModalState('error');
       setIsProcessing(false);
     }
@@ -698,7 +752,16 @@ export const DirectCheckoutComponent: FC = () => {
                       </p>
                       <select
                         value={selectedColor}
-                        onChange={(e) => setSelectedColor(e.target.value)}
+                        onChange={(e) => {
+                          const color = e.target.value;
+                          setSelectedColor(color);
+                          if (color && product) {
+                            checkoutAnalytics.colorSelected({
+                              productId: product.id,
+                              color
+                            });
+                          }
+                        }}
                         disabled={isSubmitting || isProcessing}
                         className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         aria-label="Select product color"
@@ -759,7 +822,17 @@ export const DirectCheckoutComponent: FC = () => {
                       </p>
                       <ArtworkUploader
                         files={artworkFiles}
-                        onFilesChange={setArtworkFiles}
+                        onFilesChange={(files) => {
+                          setArtworkFiles(files);
+                          // Track artwork upload when files are added
+                          if (files.length > artworkFiles.length && product) {
+                            checkoutAnalytics.artworkUploaded({
+                              productId: product.id,
+                              fileCount: files.length,
+                              fileTypes: files.map(f => f.fileType || 'unknown')
+                            });
+                          }
+                        }}
                         uploadId={checkoutId}
                         uploadType="CART"
                         disabled={isSubmitting || isProcessing}

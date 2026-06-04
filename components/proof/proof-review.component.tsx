@@ -14,6 +14,7 @@ import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {SizeBreakdown, SizeQuantity, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {ShippingAddressModal} from './shipping-address-modal.component';
 import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
+import {proofAnalytics, paymentAnalytics, identifyUser} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -109,6 +110,24 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
     enabled: !!proofId
   });
 
+  // Track proof view when data loads
+  useEffect(() => {
+    if (data) {
+      proofAnalytics.viewed({
+        proofId: data.id,
+        quoteId: data.quoteRequestId,
+        version: data.version
+      });
+
+      // Identify user when they view their proof
+      if (data.customerEmail) {
+        identifyUser(data.customerEmail, {
+          name: data.customerName
+        });
+      }
+    }
+  }, [data]);
+
   // Approve mutation (for proofs - Direct Orders that are already paid)
   const approveMutation = useMutation({
     mutationFn: async () => {
@@ -116,6 +135,15 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
       return response.data.payload;
     },
     onSuccess: () => {
+      // Track proof approved
+      if (data) {
+        proofAnalytics.approved({
+          proofId: data.id,
+          quoteId: data.quoteRequestId,
+          version: data.version
+        });
+      }
+
       // For Direct Orders (already paid), production begins immediately
       // For Quote Requests without payment, this button wouldn't be shown
       setModalTitle('Proof Approved!');
@@ -141,6 +169,16 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
       return response.data.payload;
     },
     onSuccess: () => {
+      // Track changes requested
+      if (data) {
+        proofAnalytics.changesRequested({
+          proofId: data.id,
+          quoteId: data.quoteRequestId,
+          version: data.version,
+          feedback
+        });
+      }
+
       setModalTitle('Feedback Submitted');
       setModalMessage(
         'Thank you for your feedback! Our design team will review your comments and create an updated proof. You\'ll receive an email when the new version is ready.'
@@ -190,6 +228,13 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
 
     setIsProcessingPayment(true);
 
+    // Track payment started
+    paymentAnalytics.started({
+      quoteId: data.quoteRequestId,
+      amount: data.quotedAmount || 0,
+      method: 'stripe'
+    });
+
     try {
       const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, {
         quoteRequestId: data.quoteRequestId,
@@ -209,6 +254,14 @@ export const ProofReviewComponent: FC<ProofReviewComponentProps> = ({proofId}) =
       }
     } catch (error: any) {
       console.error('Payment error:', error);
+
+      // Track payment failed
+      paymentAnalytics.failed({
+        quoteId: data.quoteRequestId,
+        amount: data.quotedAmount || 0,
+        errorMessage: error.response?.data?.message || 'No checkout URL received'
+      });
+
       setModalTitle('Payment Setup Failed');
       setModalMessage(
         error.response?.data?.message || 'We couldn\'t set up your payment. Please try again or contact our support team.'
