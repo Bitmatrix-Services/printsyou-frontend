@@ -288,7 +288,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       // PostHog - Quote submitted
       quoteAnalytics.submitted({
         quantity: data.quantity || 0,
-        category: data.productCategory,
+        category: data.productCategory || undefined,
         hasArtwork: artWorkFiles.length > 0
       });
 
