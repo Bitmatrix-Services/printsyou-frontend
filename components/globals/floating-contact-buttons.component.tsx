@@ -2,6 +2,7 @@
 import React, {FC, useState, useCallback} from 'react';
 import {FaWhatsapp} from 'react-icons/fa';
 import {HiX} from 'react-icons/hi';
+import {trackEvent, ANALYTICS_EVENTS} from '@utils/analytics';
 
 const WHATSAPP_NUMBER = '14694347035';
 
@@ -12,17 +13,14 @@ interface FloatingContactButtonsProps {
 export const FloatingContactButtons: FC<FloatingContactButtonsProps> = ({show = true}) => {
   const [isMinimized, setIsMinimized] = useState(false);
 
-  // Analytics helper
-  const trackEvent = useCallback((eventName: string, params?: Record<string, any>) => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', eventName, params);
-    }
-    console.log('[Analytics]', eventName, params);
-  }, []);
-
   const handleWhatsAppClick = useCallback(() => {
-    trackEvent('whatsapp_click', {source: 'floating_button'});
-  }, [trackEvent]);
+    // Track in PostHog
+    trackEvent(ANALYTICS_EVENTS.WHATSAPP_CLICKED, {source: 'floating_button'});
+    // Also track in Google Analytics
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'whatsapp_click', {source: 'floating_button'});
+    }
+  }, []);
 
   const getWhatsAppLink = () => {
     const message = `Hi, I'm interested in your promotional products. Can you help me with a quote?`;

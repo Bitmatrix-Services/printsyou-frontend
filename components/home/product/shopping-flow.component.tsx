@@ -9,6 +9,7 @@ import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList} from 'rea
 import axios from 'axios';
 import Link from 'next/link';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
+import {checkoutAnalytics} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -170,6 +171,17 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
     setIsProcessing(true);
 
+    // Track checkout submitted in PostHog
+    checkoutAnalytics.submitted({
+      productId: product.id,
+      productName: product.productName,
+      quantity,
+      total: totalPrice,
+      category: product.allCategoryNameAndIds?.[0]?.name,
+      hasArtwork: artworkFiles.length > 0,
+      hasSizeBreakdown: sizeBreakdown.length > 0
+    });
+
     try {
       // Get tracking cookies
       const gclid = getCookie('_gcl_aw')?.split('.').pop() || new URLSearchParams(window.location.search).get('gclid') || undefined;
@@ -197,12 +209,27 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
       const checkoutUrl = response.data?.payload?.checkoutUrl;
       if (checkoutUrl) {
+        // Track checkout success (redirecting to Stripe)
+        checkoutAnalytics.success({
+          quoteId: response.data?.payload?.quoteId || '',
+          productId: product.id,
+          productName: product.productName,
+          quantity,
+          total: totalPrice,
+          category: product.allCategoryNameAndIds?.[0]?.name
+        });
         window.location.href = checkoutUrl;
       } else {
         throw new Error('No checkout URL returned');
       }
     } catch (err: any) {
       console.error('Shopping flow checkout error:', err);
+      // Track checkout error in PostHog
+      checkoutAnalytics.error({
+        productId: product.id,
+        errorMessage: err.response?.data?.message || err.message || 'Unknown error',
+        step: 'checkout_creation'
+      });
       setError(err.response?.data?.message || 'Failed to create checkout. Please try again.');
       setIsProcessing(false);
     }

@@ -1,5 +1,5 @@
 'use client';
-import React, {FC, memo, Suspense, useState} from 'react';
+import React, {FC, memo, Suspense, useState, useEffect} from 'react';
 import {Category, parseCategoryUxSeo, FAQ} from '@components/home/home.types';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
@@ -8,6 +8,7 @@ import FilterSidebar from '@components/home/category/filter-sidebar.component';
 import {CategoryFilters} from '@components/home/category/filter.types';
 import dynamic from 'next/dynamic';
 import {HiChevronDown, HiChevronUp, HiFilter, HiX} from 'react-icons/hi';
+import {trackEvent, ANALYTICS_EVENTS} from '@utils/analytics';
 
 interface ICategoryDetails {
     allCategories: Category[];
@@ -33,6 +34,18 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
 
     const {faqs, ctaSection} = parseCategoryUxSeo(category);
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+    // Track category view in PostHog
+    useEffect(() => {
+        if (category) {
+            trackEvent(ANALYTICS_EVENTS.CATEGORY_VIEWED, {
+                category_id: category.id,
+                category_name: category.categoryName,
+                category_slug: category.uniqueCategoryName,
+                product_count: pagedData?.totalElements || 0
+            });
+        }
+    }, [category, pagedData?.totalElements]);
 
     return (
         <div className="bg-gray-50 min-h-screen">

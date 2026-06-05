@@ -14,6 +14,7 @@ import sanitizeHtml from 'sanitize-html';
 import dynamic from 'next/dynamic';
 import {SliderSkeleton} from '@components/home/home-component';
 import {notFound} from 'next/navigation';
+import {productAnalytics} from '@utils/analytics';
 
 const RelatedProductsSection = dynamic(
   () => import('@components/home/product/related-products.component').then(mod => mod.RelatedProductsSection),
@@ -51,6 +52,23 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
       setImages(imagesFromColors);
     }
   }, [product.productImages, product.productColors]);
+
+  // Track product view in PostHog
+  useEffect(() => {
+    if (product) {
+      const lowestPrice = product.priceGrids
+        ?.filter(pg => pg.price > 0)
+        .sort((a, b) => a.price - b.price)[0]?.price;
+
+      productAnalytics.viewed({
+        productId: product.id,
+        productName: product.productName,
+        productSku: product.sku,
+        category: product.allCategoryNameAndIds?.[0]?.name,
+        price: lowestPrice
+      });
+    }
+  }, [product]);
 
   const sortedImages = useMemo(() => {
     return images.sort((a, b) => a.sequenceNumber - b.sequenceNumber);

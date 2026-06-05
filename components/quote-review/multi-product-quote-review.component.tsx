@@ -13,6 +13,7 @@ import {IoClose} from 'react-icons/io5';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {ShippingAddressModal} from '@components/proof/shipping-address-modal.component';
 import {getEnhancedConversionsData} from '@utils/google-ads-tracking';
+import {proofAnalytics, paymentAnalytics, identifyUser} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL;
@@ -123,7 +124,7 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
     enabled: !!quoteRequestId
   });
 
-  // Initialize sizes from loaded data
+  // Initialize sizes from loaded data and track page view
   useEffect(() => {
     if (data?.items) {
       const initialSizes: Record<string, SizeQuantity[]> = {};
@@ -133,6 +134,26 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
         }
       });
       setItemSizes(initialSizes);
+
+      // Identify user and track multi-product quote view
+      if (data.emailAddress) {
+        identifyUser(data.emailAddress, {
+          name: data.fullName,
+          phone: data.phoneNumber || undefined,
+          company: data.companyName || undefined
+        });
+      }
+
+      // Track proof viewed for each item with a proof
+      data.items.forEach(item => {
+        if (item.proof) {
+          proofAnalytics.viewed({
+            proofId: item.proof.id,
+            quoteId: data.id,
+            version: item.proof.version
+          });
+        }
+      });
     }
   }, [data]);
 
@@ -159,7 +180,17 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
       const response = await axios.post(`${API_BASE_URL}/quote-review/${quoteRequestId}/items/${itemId}/approve`);
       return response.data.payload;
     },
-    onSuccess: () => {
+    onSuccess: (_data, itemId) => {
+      // Track proof approved in PostHog
+      const item = data?.items?.find(i => i.id === itemId);
+      if (item?.proof) {
+        proofAnalytics.approved({
+          proofId: item.proof.id,
+          quoteId: quoteRequestId,
+          version: item.proof.version
+        });
+      }
+
       setModalTitle('Item Approved!');
       setModalMessage('This item has been approved. Please review and approve other items to proceed to payment.');
       setModalState('success');
@@ -180,7 +211,18 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
       });
       return response.data.payload;
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
+      // Track proof changes requested in PostHog
+      const item = data?.items?.find(i => i.id === variables.itemId);
+      if (item?.proof) {
+        proofAnalytics.changesRequested({
+          proofId: item.proof.id,
+          quoteId: quoteRequestId,
+          version: item.proof.version,
+          feedback: variables.feedback
+        });
+      }
+
       setModalTitle('Feedback Submitted');
       setModalMessage('Thank you for your feedback! Our design team will review your comments and create an updated proof. You\'ll receive an email when the new version is ready.');
       setModalState('success');
@@ -318,6 +360,13 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
 
     setIsProcessingPayment(true);
 
+    // Track payment started in PostHog
+    paymentAnalytics.started({
+      quoteId: data.id,
+      amount: data.quotedAmount || 0,
+      method: 'stripe'
+    });
+
     try {
       const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, {
         quoteRequestId: data.id,
@@ -334,6 +383,14 @@ export const MultiProductQuoteReviewComponent: FC<MultiProductQuoteReviewCompone
       }
     } catch (error: any) {
       console.error('Payment error:', error);
+
+      // Track payment failed in PostHog
+      paymentAnalytics.failed({
+        quoteId: data.id,
+        amount: data.quotedAmount || 0,
+        errorMessage: error.response?.data?.message || error.message || 'Unknown error'
+      });
+
       setModalTitle('Payment Setup Failed');
       setModalMessage(error.response?.data?.message || 'We couldn\'t set up your payment. Please try again or contact our support team.');
       setModalState('error');

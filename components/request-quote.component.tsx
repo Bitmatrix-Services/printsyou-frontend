@@ -14,6 +14,7 @@ import {MaskInput} from '@lib/form/mask-input.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
+import {quoteAnalytics, identifyUser} from '@utils/analytics';
 import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaShieldAlt, FaBolt} from 'react-icons/fa';
 import {RiMessengerLine} from 'react-icons/ri';
 import {MdOutlineUploadFile} from 'react-icons/md';
@@ -181,6 +182,14 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       } else if (itemData?.type === 'category' || categoryParam) {
         setValue('source', 'category_page');
       }
+
+      // Track quote started in PostHog
+      quoteAnalytics.started({
+        productId: itemData?.productId,
+        productName: itemData?.name,
+        category: categoryParam || undefined,
+        source: itemData?.type === 'product' ? 'product_page' : itemData?.type === 'category' ? 'category_page' : 'direct'
+      });
     }
   }, [setValue, itemData, categoryParam, productParam]);
 
@@ -268,13 +277,29 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     mutationFn: (data: QuoteRequestFormSchemaType & {metaEventId: string; fbc: string | null; fbp: string | null}) => {
       setLoading(true);
 
-      // Analytics event
+      // Analytics event - Google Analytics
       trackEvent('quote_form_submit', {
         category: data.productCategory,
         quantity: data.quantity,
         artworkCount: artWorkFiles.length,
         metaEventId: data.metaEventId
       });
+
+      // PostHog - Quote submitted
+      quoteAnalytics.submitted({
+        quantity: data.quantity || 0,
+        category: data.productCategory,
+        hasArtwork: artWorkFiles.length > 0
+      });
+
+      // PostHog - Identify user
+      if (data.emailAddress) {
+        identifyUser(data.emailAddress, {
+          name: data.fullName,
+          phone: data.phoneNumber || undefined,
+          company: data.companyName || undefined
+        });
+      }
 
       // Include artwork files, meta event ID, and Facebook cookies for CAPI
       const requestData = {
@@ -291,6 +316,12 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       console.log('[Quote] Form submitted successfully', {
         metaEventId: variables.metaEventId,
         responseId: response?.data?.payload?.id || response?.data?.id
+      });
+
+      // PostHog - Quote success
+      quoteAnalytics.success({
+        quoteId: response?.data?.payload?.id || response?.data?.id || '',
+        quantity: variables.quantity || 0
       });
 
       // Fire Google Ads conversion event with actual estimated value based on product pricing
@@ -326,10 +357,15 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         router.replace(currentUrl.pathname + currentUrl.search, {scroll: false});
       }, 1500);
     },
-    onError: (error, variables) => {
+    onError: (error: any, variables) => {
       console.error('[Quote] Form submission failed', {
         metaEventId: variables.metaEventId,
         error
+      });
+
+      // PostHog - Quote error
+      quoteAnalytics.error({
+        errorMessage: error?.message || 'Unknown error'
       });
 
       setTimeout(() => {

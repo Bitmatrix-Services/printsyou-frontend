@@ -16,6 +16,7 @@ import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {MaskInput} from '@lib/form/mask-input.component';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
+import {trackEvent, ANALYTICS_EVENTS, identifyUser} from '@utils/analytics';
 
 export const ContactUsComponent = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
@@ -42,6 +43,21 @@ export const ContactUsComponent = () => {
   const {mutate} = useMutation({
     mutationFn: (data: ContactUsFormSchemaType) => {
       setLoading(true);
+
+      // Track contact form submission in PostHog
+      trackEvent(ANALYTICS_EVENTS.CONTACT_FORM_SUBMITTED, {
+        subject: data.subject,
+        has_phone: !!data.phoneNumber
+      });
+
+      // Identify user
+      if (data.emailAddress) {
+        identifyUser(data.emailAddress, {
+          name: data.fullName,
+          phone: data.phoneNumber || undefined
+        });
+      }
+
       return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${ContactUsRoutes.contactUs}`, data);
     },
     onSuccess: () => {
