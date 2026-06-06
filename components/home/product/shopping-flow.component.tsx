@@ -1,9 +1,9 @@
 'use client';
 
 import React, {FC, useMemo, useState, useCallback} from 'react';
-import {Product, PriceGrids} from '@components/home/product/product.types';
+import {Product, PriceGrids, productColors} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
-import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
+import {SizeBreakdown, SizeQuantity, extractSizesFromProduct} from '@components/checkout/size-breakdown.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList} from 'react-icons/fa';
 import axios from 'axios';
@@ -70,9 +70,17 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [quantityInput, setQuantityInput] = useState<string>(String(firstTier?.countFrom || 1));
   const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
   const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const [notes, setNotes] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string>('');
+
+  // Available colors from product
+  const availableColors = useMemo(() => {
+    return product.productColors || [];
+  }, [product.productColors]);
+
+  const hasColors = availableColors.length > 0;
 
   // Determine if this is an apparel product that needs size breakdown
   const availableSizes = useMemo(
@@ -80,11 +88,10 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     [product.additionalFieldProductValues]
   );
 
+  // Show size breakdown if sizes are available (not limited to apparel)
   const needsSizeBreakdown = useMemo(
-    () =>
-      availableSizes.length > 0 &&
-      isApparelProduct(product.productName, product.allCategoryNameAndIds || []),
-    [availableSizes, product.productName, product.allCategoryNameAndIds]
+    () => availableSizes.length > 0,
+    [availableSizes]
   );
 
   // Calculate current unit price based on quantity
@@ -163,7 +170,13 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const handleCheckout = async () => {
     setError('');
 
-    // Validation
+    // Validation - Color required if colors are available
+    if (hasColors && !selectedColor) {
+      setError('Please select a color before proceeding.');
+      return;
+    }
+
+    // Validation - Size breakdown required for apparel
     if (needsSizeBreakdown && !isSizeBreakdownValid) {
       setError('Please complete the size breakdown to match your quantity.');
       return;
@@ -178,6 +191,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       quantity,
       total: totalPrice,
       category: product.allCategoryNameAndIds?.[0]?.name,
+      color: selectedColor || undefined,
       hasArtwork: artworkFiles.length > 0,
       hasSizeBreakdown: sizeBreakdown.length > 0
     });
@@ -192,6 +206,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       const payload = {
         productId: product.id,
         quantity,
+        selectedColor: selectedColor || undefined,
         artworkFiles: artworkFiles.map(f => ({
           fileUrl: f.fileKey,  // Send just the S3 key, not full URL
           fileName: f.filename,
@@ -325,6 +340,48 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         </div>
       </div>
 
+      {/* Color Selector */}
+      {hasColors && (
+        <div>
+          <label className="text-sm font-semibold text-gray-900 mb-2 block">
+            Select Color <span className="text-red-500">*</span>
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {availableColors.map((color: productColors) => {
+              const isSelected = selectedColor === color.colorName;
+              return (
+                <button
+                  key={color.id}
+                  type="button"
+                  onClick={() => setSelectedColor(color.colorName)}
+                  disabled={isOutOfStock}
+                  className={`group relative flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm transition-all ${
+                    isSelected
+                      ? 'border-green-600 bg-green-50'
+                      : 'border-gray-200 bg-white hover:border-gray-300'
+                  } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title={color.colorName}
+                >
+                  <span
+                    className={`w-5 h-5 rounded-full border ${isSelected ? 'ring-2 ring-green-500 ring-offset-1' : 'border-gray-300'}`}
+                    style={{backgroundColor: color.colorHex || '#ccc'}}
+                  />
+                  <span className={`font-medium ${isSelected ? 'text-green-700' : 'text-gray-700'}`}>
+                    {color.colorName}
+                  </span>
+                  {isSelected && (
+                    <FaCheckCircle className="w-4 h-4 text-green-600" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          {!selectedColor && (
+            <p className="text-xs text-amber-600 mt-2">Please select a color to proceed</p>
+          )}
+        </div>
+      )}
+
       {/* Size Breakdown (for apparel) */}
       {needsSizeBreakdown && (
         <div className="bg-gray-50 rounded-lg p-4">
@@ -380,9 +437,9 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           <button
             type="button"
             onClick={handleCheckout}
-            disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)}
+            disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid) || (hasColors && !selectedColor)}
             className={`w-full min-h-[60px] py-3 px-3 flex items-center justify-center rounded-lg text-white font-bold text-base transition-all duration-200 shadow-lg hover:shadow-xl ${
-              isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid)
+              isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid) || (hasColors && !selectedColor)
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-green-600 hover:bg-green-700'
             }`}
