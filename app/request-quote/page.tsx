@@ -15,6 +15,14 @@ export interface PriceGrid {
   salePrice?: number;
 }
 
+export interface ProductColor {
+  id: string;
+  colorName: string;
+  colorHex: string;
+  onlyColorImage?: string;
+  coloredProductImage?: string;
+}
+
 export interface QuoteItemData {
   type: 'category' | 'product';
   name: string;
@@ -23,6 +31,7 @@ export interface QuoteItemData {
   uniqueProductName?: string;
   priceGrids?: PriceGrid[];
   setupCharge?: number;
+  productColors?: ProductColor[];
 }
 
 const RequestQuotePage = async ({searchParams}: PageProps) => {
@@ -60,7 +69,8 @@ const RequestQuotePage = async ({searchParams}: PageProps) => {
           productId: productRes.payload.id,
           uniqueProductName: productRes.payload.uniqueProductName,
           priceGrids,
-          setupCharge
+          setupCharge,
+          productColors: productRes.payload.productColors || []
         };
       }
     } catch (error) {

@@ -16,6 +16,7 @@ import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
 import {quoteAnalytics, identifyUser} from '@utils/analytics';
 import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaShieldAlt, FaBolt} from 'react-icons/fa';
+import {productColors} from '@components/home/product/product.types';
 import {RiMessengerLine} from 'react-icons/ri';
 import {MdOutlineUploadFile} from 'react-icons/md';
 import {IoClose} from 'react-icons/io5';
@@ -119,6 +120,7 @@ export interface QuoteItemData {
   uniqueProductName?: string;
   priceGrids?: PriceGrid[];
   setupCharge?: number;
+  productColors?: productColors[];
 }
 
 interface RequestQuoteComponentProps {
@@ -132,8 +134,12 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [quoteId] = useState<string>(uuidv4());
   const [referrerUrl, setReferrerUrl] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Check if product has colors
+  const hasColors = itemData?.productColors && itemData.productColors.length > 0;
 
   // Get pre-filled category/product from URL or props
   const categoryParam = searchParams.get('category');
@@ -301,10 +307,11 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         });
       }
 
-      // Include artwork files, meta event ID, and Facebook cookies for CAPI
+      // Include artwork files, meta event ID, selected color, and Facebook cookies for CAPI
       const requestData = {
         ...data,
         artworkFiles: artWorkFiles,
+        selectedColor: selectedColor || undefined,
         metaEventId: data.metaEventId, // Server uses this for CAPI deduplication
         fbc: data.fbc,  // Facebook Click ID for attribution
         fbp: data.fbp   // Facebook Browser ID for matching
@@ -637,6 +644,82 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
                           </div>
                         </div>
                       </Link>
+                    )}
+
+                    {/* Color Selector - show if product has colors */}
+                    {hasColors && itemData?.productColors && (
+                      <div className="mb-6">
+                        <label className="text-sm font-semibold text-gray-900 mb-2 block">
+                          Color: {selectedColor ? <span className="text-green-600">{selectedColor}</span> : <span className="text-gray-500">Select a color (optional)</span>}
+                        </label>
+                        <div className="grid gap-2" style={{
+                          gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))'
+                        }}>
+                          {itemData.productColors.map((color) => {
+                            const isSelected = selectedColor === color.colorName;
+                            const colorImagePath = color.coloredProductImage || color.onlyColorImage;
+                            const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
+
+                            return (
+                              <button
+                                key={color.id}
+                                type="button"
+                                onClick={() => setSelectedColor(isSelected ? '' : color.colorName)}
+                                disabled={isSubmitting}
+                                className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
+                                  isSelected
+                                    ? 'border-green-600 ring-2 ring-green-200'
+                                    : 'border-gray-200 hover:border-gray-400'
+                                } disabled:opacity-50`}
+                                title={color.colorName}
+                              >
+                                {imageUrl ? (
+                                  <div className="relative w-full aspect-square overflow-hidden">
+                                    <img
+                                      src={imageUrl}
+                                      alt={color.colorName}
+                                      className="w-full h-full object-cover"
+                                    />
+                                    {/* Color name overlay - hidden by default, shows on hover or selection */}
+                                    <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity duration-200 ${
+                                      isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                    }`}>
+                                      <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
+                                        {color.colorName}
+                                      </span>
+                                    </div>
+                                    {isSelected && (
+                                      <div className="absolute top-1 right-1">
+                                        <FaCheckCircle className="w-5 h-5 text-green-500 drop-shadow-lg" />
+                                      </div>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="relative w-full aspect-square">
+                                    <div
+                                      className="w-full h-full"
+                                      style={{backgroundColor: color.colorHex || '#ccc'}}
+                                    />
+                                    {/* Color name overlay - hidden by default, shows on hover or selection */}
+                                    <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity duration-200 ${
+                                      isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                    }`}>
+                                      <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
+                                        {color.colorName}
+                                      </span>
+                                    </div>
+                                    {isSelected && (
+                                      <div className="absolute top-1 right-1">
+                                        <FaCheckCircle className="w-5 h-5 text-white drop-shadow-lg" />
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     )}
 
                     {/* ========== MINIMAL FORM LAYOUT ========== */}
