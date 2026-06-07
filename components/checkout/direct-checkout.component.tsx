@@ -402,6 +402,8 @@ export const DirectCheckoutComponent: FC = () => {
       const checkoutResponse = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData);
 
       if (checkoutResponse.data?.payload?.checkoutUrl) {
+        // Small delay to ensure analytics events are sent before redirect
+        await new Promise(resolve => setTimeout(resolve, 100));
         // Redirect to Stripe
         window.location.href = checkoutResponse.data.payload.checkoutUrl;
       } else {
@@ -458,16 +460,16 @@ export const DirectCheckoutComponent: FC = () => {
     return isApparel && availableSizes.length > 0;
   }, [isApparel, availableSizes]);
 
-  // Extract available colors from product data
-  const availableColors = useMemo(() => {
+  // Extract available colors from product data (full objects with images)
+  const availableColorObjects = useMemo(() => {
     if (!product) return [];
 
-    // First check productColors array
+    // First check productColors array - keep full objects
     if (product.productColors && product.productColors.length > 0) {
-      return product.productColors.map(c => c.colorName);
+      return product.productColors;
     }
 
-    // Fallback to additionalFieldProductValues
+    // Fallback to additionalFieldProductValues - create basic color objects
     if (product.additionalFieldProductValues) {
       const colorsField = product.additionalFieldProductValues.find(
         item => item.fieldName.toLowerCase() === 'colors available' || item.fieldName.toLowerCase() === 'color available'
@@ -479,14 +481,20 @@ export const DirectCheckoutComponent: FC = () => {
           .replace(' or ', ', ')
           .replace('.', '')
           .split(',')
-          .map(color => color.trim())
-          .filter(color => color.length > 0);
+          .map((color, index) => ({
+            id: `color-${index}`,
+            colorName: color.trim(),
+            colorHex: undefined,
+            coloredProductImage: undefined
+          }))
+          .filter(c => c.colorName.length > 0);
       }
     }
 
     return [];
   }, [product]);
 
+  
   // Validate size breakdown total matches quantity
   const sizeBreakdownTotal = useMemo(() => {
     return sizeBreakdown.reduce((sum, item) => sum + item.quantity, 0);
@@ -741,40 +749,79 @@ export const DirectCheckoutComponent: FC = () => {
                     />
                   )}
 
-                  {/* Color Selection - Show when product has colors */}
-                  {availableColors.length > 0 && (
+                  {/* Color Selection with Product Images */}
+                  {availableColorObjects.length > 0 && (
                     <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        Select Product Color
+                        Color: {selectedColor ? <span className="text-green-600">{selectedColor}</span> : <span className="text-gray-500">Select a color</span>}
                       </h3>
                       <p className="text-sm text-gray-600 mb-4">
                         Choose the color for your product. This is the base color of the item (not the imprint/logo color).
                       </p>
-                      <select
-                        value={selectedColor}
-                        onChange={(e) => {
-                          const color = e.target.value;
-                          setSelectedColor(color);
-                          if (color && product) {
-                            checkoutAnalytics.colorSelected({
-                              productId: product.id,
-                              color
-                            });
-                          }
-                        }}
-                        disabled={isSubmitting || isProcessing}
-                        className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        aria-label="Select product color"
-                      >
-                        <option value="">-- Select a color --</option>
-                        {availableColors.map((color, index) => (
-                          <option key={index} value={color}>
-                            {color}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="flex flex-wrap gap-3">
+                        {availableColorObjects.map((color) => {
+                          const isSelected = selectedColor === color.colorName;
+                          const imageUrl = color.coloredProductImage;
+
+                          return (
+                            <button
+                              key={color.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedColor(color.colorName);
+                                if (product) {
+                                  checkoutAnalytics.colorSelected({
+                                    productId: product.id,
+                                    color: color.colorName
+                                  });
+                                }
+                              }}
+                              disabled={isSubmitting || isProcessing}
+                              className={`group relative flex flex-col items-center p-1.5 rounded-lg border-2 transition-all ${
+                                isSelected
+                                  ? 'border-green-600 bg-green-50 shadow-md'
+                                  : 'border-gray-200 bg-white hover:border-gray-400 hover:shadow'
+                              } disabled:opacity-50 disabled:cursor-not-allowed`}
+                              title={color.colorName}
+                            >
+                              {/* Product Image or Color Swatch */}
+                              {imageUrl ? (
+                                <div className="relative w-20 h-20 overflow-hidden rounded">
+                                  <img
+                                    src={imageUrl}
+                                    alt={color.colorName}
+                                    className="w-full h-full object-cover"
+                                  />
+                                  {isSelected && (
+                                    <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center">
+                                      <FaCheckCircle className="w-7 h-7 text-green-600 drop-shadow-lg" />
+                                    </div>
+                                  )}
+                                </div>
+                              ) : (
+                                <div
+                                  className={`w-20 h-20 rounded flex items-center justify-center border ${
+                                    isSelected ? 'ring-2 ring-green-500' : 'border-gray-300'
+                                  }`}
+                                  style={{backgroundColor: color.colorHex || '#e5e7eb'}}
+                                >
+                                  {isSelected && (
+                                    <FaCheckCircle className="w-7 h-7 text-white drop-shadow-lg" />
+                                  )}
+                                </div>
+                              )}
+                              {/* Color Name */}
+                              <span className={`text-xs mt-1.5 font-medium text-center leading-tight max-w-[85px] ${
+                                isSelected ? 'text-green-700' : 'text-gray-600'
+                              }`}>
+                                {color.colorName}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
                       {!selectedColor && (
-                        <p className="text-xs text-amber-600 mt-2">
+                        <p className="text-xs text-amber-600 mt-3">
                           If you don&apos;t select a color, please specify it in the notes below or we&apos;ll contact you.
                         </p>
                       )}

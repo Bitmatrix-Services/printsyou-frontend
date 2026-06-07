@@ -3,7 +3,7 @@
 import React, {FC, useMemo, useState, useCallback} from 'react';
 import {Product, PriceGrids, productColors} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
-import {SizeBreakdown, SizeQuantity, extractSizesFromProduct} from '@components/checkout/size-breakdown.component';
+import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList} from 'react-icons/fa';
 import axios from 'axios';
@@ -82,16 +82,25 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   const hasColors = availableColors.length > 0;
 
-  // Determine if this is an apparel product that needs size breakdown
-  const availableSizes = useMemo(
-    () => extractSizesFromProduct(product.additionalFieldProductValues || []),
-    [product.additionalFieldProductValues]
-  );
+  // Check if product is apparel
+  const isApparel = useMemo(() => {
+    return isApparelProduct(product.productName, product.allCategoryNameAndIds || []);
+  }, [product.productName, product.allCategoryNameAndIds]);
 
-  // Show size breakdown if sizes are available (not limited to apparel)
+  // Determine available sizes - use defaults for apparel if not specified
+  const availableSizes = useMemo(() => {
+    const extracted = extractSizesFromProduct(product.additionalFieldProductValues || []);
+    // If it's apparel but no sizes found in data, use default sizes
+    if (extracted.length === 0 && isApparel) {
+      return ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+    }
+    return extracted;
+  }, [product.additionalFieldProductValues, isApparel]);
+
+  // Show size breakdown for apparel products with sizes
   const needsSizeBreakdown = useMemo(
-    () => availableSizes.length > 0,
-    [availableSizes]
+    () => isApparel && availableSizes.length > 0,
+    [isApparel, availableSizes]
   );
 
   // Calculate current unit price based on quantity
@@ -233,6 +242,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           total: totalPrice,
           category: product.allCategoryNameAndIds?.[0]?.name
         });
+        // Small delay to ensure analytics event is sent before redirect
+        await new Promise(resolve => setTimeout(resolve, 100));
         window.location.href = checkoutUrl;
       } else {
         throw new Error('No checkout URL returned');
@@ -340,45 +351,66 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         </div>
       </div>
 
-      {/* Color Selector */}
+      {/* Color Selector with Product Images */}
       {hasColors && (
         <div>
           <label className="text-sm font-semibold text-gray-900 mb-2 block">
-            Select Color <span className="text-red-500">*</span>
+            Color: {selectedColor ? <span className="text-green-600">{selectedColor}</span> : <span className="text-red-500">* Select a color</span>}
           </label>
           <div className="flex flex-wrap gap-2">
             {availableColors.map((color: productColors) => {
               const isSelected = selectedColor === color.colorName;
+              const imageUrl = color.coloredProductImage || color.onlyColorImage;
+
               return (
                 <button
                   key={color.id}
                   type="button"
                   onClick={() => setSelectedColor(color.colorName)}
                   disabled={isOutOfStock}
-                  className={`group relative flex items-center gap-2 px-3 py-2 rounded-lg border-2 text-sm transition-all ${
+                  className={`group relative flex flex-col items-center p-1 rounded-lg border-2 transition-all ${
                     isSelected
                       ? 'border-green-600 bg-green-50'
-                      : 'border-gray-200 bg-white hover:border-gray-300'
+                      : 'border-gray-200 bg-white hover:border-gray-400'
                   } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
                   title={color.colorName}
                 >
-                  <span
-                    className={`w-5 h-5 rounded-full border ${isSelected ? 'ring-2 ring-green-500 ring-offset-1' : 'border-gray-300'}`}
-                    style={{backgroundColor: color.colorHex || '#ccc'}}
-                  />
-                  <span className={`font-medium ${isSelected ? 'text-green-700' : 'text-gray-700'}`}>
+                  {/* Product Image or Color Swatch */}
+                  {imageUrl ? (
+                    <div className="relative w-16 h-16 overflow-hidden rounded">
+                      <img
+                        src={imageUrl}
+                        alt={color.colorName}
+                        className="w-full h-full object-cover"
+                      />
+                      {isSelected && (
+                        <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center">
+                          <FaCheckCircle className="w-6 h-6 text-green-600 drop-shadow-lg" />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-16 h-16 rounded border ${isSelected ? 'ring-2 ring-green-500' : 'border-gray-300'}`}
+                      style={{backgroundColor: color.colorHex || '#ccc'}}
+                    >
+                      {isSelected && (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <FaCheckCircle className="w-6 h-6 text-white drop-shadow-lg" />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {/* Color Name */}
+                  <span className={`text-xs mt-1 font-medium text-center leading-tight max-w-[70px] truncate ${
+                    isSelected ? 'text-green-700' : 'text-gray-600'
+                  }`}>
                     {color.colorName}
                   </span>
-                  {isSelected && (
-                    <FaCheckCircle className="w-4 h-4 text-green-600" />
-                  )}
                 </button>
               );
             })}
           </div>
-          {!selectedColor && (
-            <p className="text-xs text-amber-600 mt-2">Please select a color to proceed</p>
-          )}
         </div>
       )}
 

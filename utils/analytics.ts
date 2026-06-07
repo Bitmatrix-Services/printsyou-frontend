@@ -44,12 +44,19 @@ export const ANALYTICS_EVENTS = {
 } as const;
 
 // Track an event with properties
+// Use sendInstantly: true for events that happen right before page redirects
 export function trackEvent(
   eventName: string,
-  properties?: Record<string, unknown>
+  properties?: Record<string, unknown>,
+  options?: { sendInstantly?: boolean }
 ) {
   if (typeof window !== 'undefined' && posthog) {
     posthog.capture(eventName, properties);
+
+    // Log critical events for debugging
+    if (options?.sendInstantly) {
+      console.log(`[PostHog] Critical event captured: ${eventName}`, properties);
+    }
   }
 }
 
@@ -155,6 +162,7 @@ export const checkoutAnalytics = {
     hasArtwork: boolean;
     hasSizeBreakdown: boolean;
   }) => {
+    // Send instantly since this happens right before API call and redirect
     trackEvent(ANALYTICS_EVENTS.CHECKOUT_SUBMITTED, {
       product_id: data.productId,
       product_name: data.productName,
@@ -164,7 +172,7 @@ export const checkoutAnalytics = {
       color: data.color,
       has_artwork: data.hasArtwork,
       has_size_breakdown: data.hasSizeBreakdown
-    });
+    }, { sendInstantly: true });
   },
 
   success: (data: {
@@ -175,6 +183,7 @@ export const checkoutAnalytics = {
     total: number;
     category?: string;
   }) => {
+    // Send instantly since this happens right before redirect to Stripe
     trackEvent(ANALYTICS_EVENTS.CHECKOUT_SUCCESS, {
       quote_id: data.quoteId,
       product_id: data.productId,
@@ -182,7 +191,7 @@ export const checkoutAnalytics = {
       quantity: data.quantity,
       total: data.total,
       category: data.category
-    });
+    }, { sendInstantly: true });
   },
 
   error: (data: {
@@ -219,21 +228,23 @@ export const quoteAnalytics = {
     category?: string;
     hasArtwork: boolean;
   }) => {
+    // Send instantly to ensure capture before any redirects
     trackEvent(ANALYTICS_EVENTS.QUOTE_SUBMITTED, {
       quantity: data.quantity,
       category: data.category,
       has_artwork: data.hasArtwork
-    });
+    }, { sendInstantly: true });
   },
 
   success: (data: {
     quoteId: string;
     quantity: number;
   }) => {
+    // Send instantly to ensure capture before any redirects
     trackEvent(ANALYTICS_EVENTS.QUOTE_SUCCESS, {
       quote_id: data.quoteId,
       quantity: data.quantity
-    });
+    }, { sendInstantly: true });
   },
 
   error: (data: {
