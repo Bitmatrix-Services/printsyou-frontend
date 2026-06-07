@@ -759,16 +759,14 @@ export const DirectCheckoutComponent: FC = () => {
                       <p className="text-sm text-gray-600 mb-4">
                         Choose the color for your product. This is the base color of the item (not the imprint/logo color).
                       </p>
-                      {/* Dynamic grid: all colors in one row, smaller if many */}
-                      <div className="grid gap-1.5" style={{
-                        gridTemplateColumns: `repeat(${availableColorObjects.length}, minmax(0, 1fr))`,
-                        maxWidth: availableColorObjects.length <= 6 ? `${availableColorObjects.length * 80}px` : '100%'
+                      {/* Grid with auto-fit: wraps to multiple rows, min 80px per item */}
+                      <div className="grid gap-2" style={{
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))'
                       }}>
                         {availableColorObjects.map((color) => {
                           const isSelected = selectedColor === color.colorName;
                           const colorImagePath = color.coloredProductImage;
                           const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
-                          const sizeClass = availableColorObjects.length > 6 ? 'h-16' : 'h-20';
 
                           return (
                             <button
@@ -793,39 +791,39 @@ export const DirectCheckoutComponent: FC = () => {
                             >
                               {/* Product Image with Color Name Overlay */}
                               {imageUrl ? (
-                                <div className={`relative w-full ${sizeClass} overflow-hidden`}>
+                                <div className="relative w-full aspect-square overflow-hidden">
                                   <img
                                     src={imageUrl}
                                     alt={color.colorName}
                                     className="w-full h-full object-cover"
                                   />
                                   {/* Color name overlay at bottom */}
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
-                                    <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                                    <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
                                       {color.colorName}
                                     </span>
                                   </div>
                                   {isSelected && (
-                                    <div className="absolute top-0.5 right-0.5">
-                                      <FaCheckCircle className="w-4 h-4 text-green-500 drop-shadow-lg" />
+                                    <div className="absolute top-1 right-1">
+                                      <FaCheckCircle className="w-5 h-5 text-green-500 drop-shadow-lg" />
                                     </div>
                                   )}
                                 </div>
                               ) : (
-                                <div className={`relative w-full ${sizeClass}`}>
+                                <div className="relative w-full aspect-square">
                                   <div
                                     className="w-full h-full"
                                     style={{backgroundColor: color.colorHex || '#e5e7eb'}}
                                   />
                                   {/* Color name overlay at bottom */}
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
-                                    <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                                    <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
                                       {color.colorName}
                                     </span>
                                   </div>
                                   {isSelected && (
-                                    <div className="absolute top-0.5 right-0.5">
-                                      <FaCheckCircle className="w-4 h-4 text-white drop-shadow-lg" />
+                                    <div className="absolute top-1 right-1">
+                                      <FaCheckCircle className="w-5 h-5 text-white drop-shadow-lg" />
                                     </div>
                                   )}
                                 </div>

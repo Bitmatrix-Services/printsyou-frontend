@@ -358,17 +358,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           <label className="text-sm font-semibold text-gray-900 mb-2 block">
             Color: {selectedColor ? <span className="text-green-600">{selectedColor}</span> : <span className="text-red-500">* Select a color</span>}
           </label>
-          {/* Dynamic grid: more colors = smaller images to fit in one row */}
-          <div className="grid gap-1.5" style={{
-            gridTemplateColumns: `repeat(${availableColors.length}, minmax(0, 1fr))`,
-            maxWidth: availableColors.length <= 5 ? `${availableColors.length * 70}px` : '100%'
+          {/* Grid with auto-fit: wraps to multiple rows, min 70px per item */}
+          <div className="grid gap-2" style={{
+            gridTemplateColumns: 'repeat(auto-fill, minmax(70px, 1fr))'
           }}>
             {availableColors.map((color: productColors) => {
               const isSelected = selectedColor === color.colorName;
               const colorImagePath = color.coloredProductImage || color.onlyColorImage;
               const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
-              // Smaller size when many colors
-              const sizeClass = availableColors.length > 6 ? 'h-16' : 'h-20';
 
               return (
                 <button
@@ -385,39 +382,39 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                 >
                   {/* Product Image with Color Name Overlay */}
                   {imageUrl ? (
-                    <div className={`relative w-full ${sizeClass} overflow-hidden`}>
+                    <div className="relative w-full aspect-square overflow-hidden">
                       <img
                         src={imageUrl}
                         alt={color.colorName}
                         className="w-full h-full object-cover"
                       />
                       {/* Color name overlay at bottom */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
-                        <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                        <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
                           {color.colorName}
                         </span>
                       </div>
                       {isSelected && (
-                        <div className="absolute top-0.5 right-0.5">
-                          <FaCheckCircle className="w-4 h-4 text-green-500 drop-shadow-lg" />
+                        <div className="absolute top-1 right-1">
+                          <FaCheckCircle className="w-5 h-5 text-green-500 drop-shadow-lg" />
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className={`relative w-full ${sizeClass}`}>
+                    <div className="relative w-full aspect-square">
                       <div
                         className="w-full h-full"
                         style={{backgroundColor: color.colorHex || '#ccc'}}
                       />
                       {/* Color name overlay at bottom */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
-                        <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                        <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
                           {color.colorName}
                         </span>
                       </div>
                       {isSelected && (
-                        <div className="absolute top-0.5 right-0.5">
-                          <FaCheckCircle className="w-4 h-4 text-white drop-shadow-lg" />
+                        <div className="absolute top-1 right-1">
+                          <FaCheckCircle className="w-5 h-5 text-white drop-shadow-lg" />
                         </div>
                       )}
                     </div>
