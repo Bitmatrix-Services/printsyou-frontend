@@ -206,6 +206,26 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       hasSizeBreakdown: sizeBreakdown.length > 0
     });
 
+    // Fire Meta Pixel InitiateCheckout event with properly formatted value
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      const checkoutValue = Math.round(totalPrice * 100) / 100; // Ensure 2 decimal places
+      (window as any).fbq('track', 'InitiateCheckout', {
+        value: checkoutValue,
+        currency: 'USD',
+        content_name: product.productName,
+        content_category: product.allCategoryNameAndIds?.[0]?.name || 'Promotional Products',
+        content_ids: [product.id],
+        content_type: 'product',
+        contents: [{
+          id: product.id,
+          quantity: quantity,
+          item_price: Math.round((totalPrice / quantity) * 100) / 100
+        }],
+        num_items: quantity
+      });
+      console.log('[Meta Pixel] InitiateCheckout fired:', { value: checkoutValue, product: product.productName, quantity });
+    }
+
     try {
       // Get tracking cookies
       const gclid = getCookie('_gcl_aw')?.split('.').pop() || new URLSearchParams(window.location.search).get('gclid') || undefined;

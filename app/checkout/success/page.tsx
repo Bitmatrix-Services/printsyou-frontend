@@ -23,6 +23,11 @@ interface SessionData {
   status: string;
   customerEmail: string;
   customerPhone?: string;
+  // Additional fields for enhanced tracking
+  productName?: string;
+  productId?: string;
+  productCategory?: string;
+  quantity?: number;
 }
 
 const CheckoutSuccessContent = () => {
@@ -131,19 +136,34 @@ const CheckoutSuccessContent = () => {
 
           // === META PIXEL TRACKING ===
           if (fbq) {
-            // Ensure value is a valid number
-            const purchaseValue = typeof data.amountTotal === 'number'
+            // Ensure value is always a valid positive number with 2 decimal places
+            const rawValue = typeof data.amountTotal === 'number'
               ? data.amountTotal
-              : parseFloat(data.amountTotal) || 0;
+              : parseFloat(data.amountTotal);
+            const purchaseValue = !isNaN(rawValue) && rawValue > 0
+              ? Math.round(rawValue * 100) / 100
+              : 1; // Fallback to $1 if invalid (Meta requires positive value)
 
-            // Fire Purchase event with actual order value
-            // Note: User data for advanced matching is handled by the server-side CAPI
+            const itemQuantity = data.quantity && data.quantity > 0 ? data.quantity : 1;
+            const itemPrice = Math.round((purchaseValue / itemQuantity) * 100) / 100;
+
+            // Build contents array for better ROAS calculation
+            const contents = [{
+              id: data.productId || data.quoteRequestId || data.stripeSessionId,
+              quantity: itemQuantity,
+              item_price: itemPrice
+            }];
+
+            // Fire Purchase event with enhanced product data for better ROAS
             fbq('track', 'Purchase', {
               value: purchaseValue,
               currency: (data.currency || 'USD').toUpperCase(),
               content_type: 'product',
-              content_ids: [data.quoteRequestId || data.orderId || data.stripeSessionId],
-              num_items: 1
+              content_ids: [data.productId || data.quoteRequestId || data.orderId || data.stripeSessionId],
+              content_name: data.productName || 'Custom Order',
+              content_category: data.productCategory || 'Promotional Products',
+              contents: contents,
+              num_items: itemQuantity
             }, {
               eventID: data.stripeSessionId // For deduplication with server CAPI
             });
@@ -151,7 +171,10 @@ const CheckoutSuccessContent = () => {
             console.log('[Meta Pixel] Purchase event fired:', {
               value: purchaseValue,
               currency: (data.currency || 'USD').toUpperCase(),
-              content_ids: [data.quoteRequestId || data.orderId],
+              content_name: data.productName,
+              content_category: data.productCategory,
+              contents: contents,
+              num_items: itemQuantity,
               eventID: data.stripeSessionId
             });
           }

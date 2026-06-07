@@ -221,7 +221,9 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     }
 
     // Calculate actual lead value based on quantity and product pricing
-    const estimatedValue = calculateQuoteValue(quantity, priceGrids, setupCharge);
+    // Ensure value is always a valid positive number for Meta
+    const rawValue = calculateQuoteValue(quantity, priceGrids, setupCharge);
+    const estimatedValue = typeof rawValue === 'number' && rawValue > 0 ? Math.round(rawValue * 100) / 100 : 100;
 
     try {
       // Build advanced matching data for better Event Match Quality

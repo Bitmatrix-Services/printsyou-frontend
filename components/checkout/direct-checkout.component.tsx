@@ -333,6 +333,26 @@ export const DirectCheckoutComponent: FC = () => {
       first_checkout_category: category
     });
 
+    // Fire Meta Pixel InitiateCheckout event with properly formatted value
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      const checkoutValue = Math.round(pricing.total * 100) / 100; // Ensure 2 decimal places
+      (window as any).fbq('track', 'InitiateCheckout', {
+        value: checkoutValue,
+        currency: 'USD',
+        content_name: product.productName,
+        content_category: category || 'Promotional Products',
+        content_ids: [product.id],
+        content_type: 'product',
+        contents: [{
+          id: product.id,
+          quantity: quantity,
+          item_price: Math.round(pricing.unitPrice * 100) / 100
+        }],
+        num_items: quantity
+      });
+      console.log('[Meta Pixel] InitiateCheckout fired:', { value: checkoutValue, product: product.productName, quantity });
+    }
+
     try {
       // Step 1: Create a quote request with product details
       const quoteRequestData = {
