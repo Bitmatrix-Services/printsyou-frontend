@@ -70,11 +70,18 @@ const CheckoutSuccessContent = () => {
           });
         }
 
-        // Track successful payment - Google Analytics & Google Ads
-        // Use retry logic since gtag may not be ready immediately after Stripe redirect
+        // Track successful payment - Google Analytics, Google Ads & Meta Pixel
+        // Use retry logic since tracking scripts may not be ready immediately after Stripe redirect
         const fireConversions = () => {
-          if (typeof window === 'undefined' || !(window as any).gtag) {
-            console.warn('[Google Ads] gtag not ready, will retry...');
+          if (typeof window === 'undefined') {
+            return false;
+          }
+
+          const gtag = (window as any).gtag;
+          const fbq = (window as any).fbq;
+
+          if (!gtag && !fbq) {
+            console.warn('[Tracking] Neither gtag nor fbq ready, will retry...');
             return false;
           }
 
@@ -91,35 +98,63 @@ const CheckoutSuccessContent = () => {
           // Get stored gclid for better attribution
           const googleAdsParams = getGoogleAdsParams();
 
-          // Google Analytics purchase event
-          (window as any).gtag('event', 'purchase', {
-            transaction_id: data.stripeSessionId,
-            value: data.amountTotal,
-            currency: data.currency || 'USD'
-          });
+          // === GOOGLE TRACKING ===
+          if (gtag) {
+            // Google Analytics purchase event
+            gtag('event', 'purchase', {
+              transaction_id: data.stripeSessionId,
+              value: data.amountTotal,
+              currency: data.currency || 'USD'
+            });
 
-          // Google Ads Purchase Conversion with Enhanced Conversions data
-          const conversionData: Record<string, any> = {
-            send_to: 'AW-16709127988/SI9-CNz_w_EbELSexJ8-',
-            transaction_id: data.stripeSessionId,
-            value: data.amountTotal,
-            currency: data.currency || 'USD',
-            user_data: userData
-          };
+            // Google Ads Purchase Conversion with Enhanced Conversions data
+            const conversionData: Record<string, any> = {
+              send_to: 'AW-16709127988/SI9-CNz_w_EbELSexJ8-',
+              transaction_id: data.stripeSessionId,
+              value: data.amountTotal,
+              currency: data.currency || 'USD',
+              user_data: userData
+            };
 
-          // Include gclid if available for better attribution
-          if (googleAdsParams?.gclid) {
-            conversionData.gclid = googleAdsParams.gclid;
+            if (googleAdsParams?.gclid) {
+              conversionData.gclid = googleAdsParams.gclid;
+            }
+
+            gtag('event', 'conversion', conversionData);
+
+            console.log('[Google Ads] Purchase conversion fired:', {
+              value: data.amountTotal,
+              transaction_id: data.stripeSessionId,
+              gclid: googleAdsParams?.gclid || 'none'
+            });
           }
 
-          (window as any).gtag('event', 'conversion', conversionData);
+          // === META PIXEL TRACKING ===
+          if (fbq) {
+            // Ensure value is a valid number
+            const purchaseValue = typeof data.amountTotal === 'number'
+              ? data.amountTotal
+              : parseFloat(data.amountTotal) || 0;
 
-          console.log('[Google Ads] Purchase conversion fired:', {
-            value: data.amountTotal,
-            transaction_id: data.stripeSessionId,
-            gclid: googleAdsParams?.gclid || 'none',
-            user_data_keys: Object.keys(userData)
-          });
+            // Fire Purchase event with actual order value
+            // Note: User data for advanced matching is handled by the server-side CAPI
+            fbq('track', 'Purchase', {
+              value: purchaseValue,
+              currency: (data.currency || 'USD').toUpperCase(),
+              content_type: 'product',
+              content_ids: [data.quoteRequestId || data.orderId || data.stripeSessionId],
+              num_items: 1
+            }, {
+              eventID: data.stripeSessionId // For deduplication with server CAPI
+            });
+
+            console.log('[Meta Pixel] Purchase event fired:', {
+              value: purchaseValue,
+              currency: (data.currency || 'USD').toUpperCase(),
+              content_ids: [data.quoteRequestId || data.orderId],
+              eventID: data.stripeSessionId
+            });
+          }
 
           return true;
         };
