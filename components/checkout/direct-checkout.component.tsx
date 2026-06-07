@@ -27,6 +27,7 @@ import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} 
 import {checkoutAnalytics, identifyUser} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 
 interface PriceGrid {
   id: string;
@@ -761,7 +762,8 @@ export const DirectCheckoutComponent: FC = () => {
                       <div className="flex flex-wrap gap-3">
                         {availableColorObjects.map((color) => {
                           const isSelected = selectedColor === color.colorName;
-                          const imageUrl = color.coloredProductImage;
+                          const colorImagePath = color.coloredProductImage;
+                          const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
 
                           return (
                             <button

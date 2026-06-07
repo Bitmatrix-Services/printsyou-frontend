@@ -12,6 +12,7 @@ import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {checkoutAnalytics} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
 
 // Shipping configuration - same as direct-checkout
 const SHIPPING_CONFIG = {
@@ -360,7 +361,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           <div className="flex flex-wrap gap-2">
             {availableColors.map((color: productColors) => {
               const isSelected = selectedColor === color.colorName;
-              const imageUrl = color.coloredProductImage || color.onlyColorImage;
+              const colorImagePath = color.coloredProductImage || color.onlyColorImage;
+              const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
 
               return (
                 <button
