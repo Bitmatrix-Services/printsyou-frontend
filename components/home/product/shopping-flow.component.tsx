@@ -358,11 +358,17 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           <label className="text-sm font-semibold text-gray-900 mb-2 block">
             Color: {selectedColor ? <span className="text-green-600">{selectedColor}</span> : <span className="text-red-500">* Select a color</span>}
           </label>
-          <div className="flex flex-wrap gap-2">
+          {/* Dynamic grid: more colors = smaller images to fit in one row */}
+          <div className="grid gap-1.5" style={{
+            gridTemplateColumns: `repeat(${availableColors.length}, minmax(0, 1fr))`,
+            maxWidth: availableColors.length <= 5 ? `${availableColors.length * 70}px` : '100%'
+          }}>
             {availableColors.map((color: productColors) => {
               const isSelected = selectedColor === color.colorName;
               const colorImagePath = color.coloredProductImage || color.onlyColorImage;
               const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
+              // Smaller size when many colors
+              const sizeClass = availableColors.length > 6 ? 'h-16' : 'h-20';
 
               return (
                 <button
@@ -370,45 +376,52 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                   type="button"
                   onClick={() => setSelectedColor(color.colorName)}
                   disabled={isOutOfStock}
-                  className={`group relative flex flex-col items-center p-1 rounded-lg border-2 transition-all ${
+                  className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
                     isSelected
-                      ? 'border-green-600 bg-green-50'
-                      : 'border-gray-200 bg-white hover:border-gray-400'
+                      ? 'border-green-600 ring-2 ring-green-200'
+                      : 'border-gray-200 hover:border-gray-400'
                   } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
                   title={color.colorName}
                 >
-                  {/* Product Image or Color Swatch */}
+                  {/* Product Image with Color Name Overlay */}
                   {imageUrl ? (
-                    <div className="relative w-16 h-16 overflow-hidden rounded">
+                    <div className={`relative w-full ${sizeClass} overflow-hidden`}>
                       <img
                         src={imageUrl}
                         alt={color.colorName}
                         className="w-full h-full object-cover"
                       />
+                      {/* Color name overlay at bottom */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
+                        <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                          {color.colorName}
+                        </span>
+                      </div>
                       {isSelected && (
-                        <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center">
-                          <FaCheckCircle className="w-6 h-6 text-green-600 drop-shadow-lg" />
+                        <div className="absolute top-0.5 right-0.5">
+                          <FaCheckCircle className="w-4 h-4 text-green-500 drop-shadow-lg" />
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div
-                      className={`w-16 h-16 rounded border ${isSelected ? 'ring-2 ring-green-500' : 'border-gray-300'}`}
-                      style={{backgroundColor: color.colorHex || '#ccc'}}
-                    >
+                    <div className={`relative w-full ${sizeClass}`}>
+                      <div
+                        className="w-full h-full"
+                        style={{backgroundColor: color.colorHex || '#ccc'}}
+                      />
+                      {/* Color name overlay at bottom */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
+                        <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                          {color.colorName}
+                        </span>
+                      </div>
                       {isSelected && (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <FaCheckCircle className="w-6 h-6 text-white drop-shadow-lg" />
+                        <div className="absolute top-0.5 right-0.5">
+                          <FaCheckCircle className="w-4 h-4 text-white drop-shadow-lg" />
                         </div>
                       )}
                     </div>
                   )}
-                  {/* Color Name */}
-                  <span className={`text-xs mt-1 font-medium text-center leading-tight max-w-[70px] truncate ${
-                    isSelected ? 'text-green-700' : 'text-gray-600'
-                  }`}>
-                    {color.colorName}
-                  </span>
                 </button>
               );
             })}

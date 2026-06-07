@@ -759,11 +759,16 @@ export const DirectCheckoutComponent: FC = () => {
                       <p className="text-sm text-gray-600 mb-4">
                         Choose the color for your product. This is the base color of the item (not the imprint/logo color).
                       </p>
-                      <div className="flex flex-wrap gap-3">
+                      {/* Dynamic grid: all colors in one row, smaller if many */}
+                      <div className="grid gap-1.5" style={{
+                        gridTemplateColumns: `repeat(${availableColorObjects.length}, minmax(0, 1fr))`,
+                        maxWidth: availableColorObjects.length <= 6 ? `${availableColorObjects.length * 80}px` : '100%'
+                      }}>
                         {availableColorObjects.map((color) => {
                           const isSelected = selectedColor === color.colorName;
                           const colorImagePath = color.coloredProductImage;
                           const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
+                          const sizeClass = availableColorObjects.length > 6 ? 'h-16' : 'h-20';
 
                           return (
                             <button
@@ -779,45 +784,52 @@ export const DirectCheckoutComponent: FC = () => {
                                 }
                               }}
                               disabled={isSubmitting || isProcessing}
-                              className={`group relative flex flex-col items-center p-1.5 rounded-lg border-2 transition-all ${
+                              className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
                                 isSelected
-                                  ? 'border-green-600 bg-green-50 shadow-md'
-                                  : 'border-gray-200 bg-white hover:border-gray-400 hover:shadow'
+                                  ? 'border-green-600 ring-2 ring-green-200'
+                                  : 'border-gray-200 hover:border-gray-400'
                               } disabled:opacity-50 disabled:cursor-not-allowed`}
                               title={color.colorName}
                             >
-                              {/* Product Image or Color Swatch */}
+                              {/* Product Image with Color Name Overlay */}
                               {imageUrl ? (
-                                <div className="relative w-20 h-20 overflow-hidden rounded">
+                                <div className={`relative w-full ${sizeClass} overflow-hidden`}>
                                   <img
                                     src={imageUrl}
                                     alt={color.colorName}
                                     className="w-full h-full object-cover"
                                   />
+                                  {/* Color name overlay at bottom */}
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
+                                    <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                                      {color.colorName}
+                                    </span>
+                                  </div>
                                   {isSelected && (
-                                    <div className="absolute inset-0 bg-green-600/20 flex items-center justify-center">
-                                      <FaCheckCircle className="w-7 h-7 text-green-600 drop-shadow-lg" />
+                                    <div className="absolute top-0.5 right-0.5">
+                                      <FaCheckCircle className="w-4 h-4 text-green-500 drop-shadow-lg" />
                                     </div>
                                   )}
                                 </div>
                               ) : (
-                                <div
-                                  className={`w-20 h-20 rounded flex items-center justify-center border ${
-                                    isSelected ? 'ring-2 ring-green-500' : 'border-gray-300'
-                                  }`}
-                                  style={{backgroundColor: color.colorHex || '#e5e7eb'}}
-                                >
+                                <div className={`relative w-full ${sizeClass}`}>
+                                  <div
+                                    className="w-full h-full"
+                                    style={{backgroundColor: color.colorHex || '#e5e7eb'}}
+                                  />
+                                  {/* Color name overlay at bottom */}
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-0.5 py-0.5">
+                                    <span className="text-[9px] text-white font-medium text-center block leading-tight line-clamp-2">
+                                      {color.colorName}
+                                    </span>
+                                  </div>
                                   {isSelected && (
-                                    <FaCheckCircle className="w-7 h-7 text-white drop-shadow-lg" />
+                                    <div className="absolute top-0.5 right-0.5">
+                                      <FaCheckCircle className="w-4 h-4 text-white drop-shadow-lg" />
+                                    </div>
                                   )}
                                 </div>
                               )}
-                              {/* Color Name */}
-                              <span className={`text-xs mt-1.5 font-medium text-center leading-tight max-w-[85px] ${
-                                isSelected ? 'text-green-700' : 'text-gray-600'
-                              }`}>
-                                {color.colorName}
-                              </span>
                             </button>
                           );
                         })}

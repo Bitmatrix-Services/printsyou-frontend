@@ -200,11 +200,16 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
         Specify how many of each size you need. Total must equal {totalQuantity} units.
       </p>
 
-      {/* Size Grid - responsive for narrow containers */}
-      <div className="grid grid-cols-5 gap-2 mb-3">
-        {sortedSizes.slice(0, 5).map(size => (
+      {/* Size Grid - all sizes in one row */}
+      <div
+        className="grid gap-1.5 mb-3"
+        style={{ gridTemplateColumns: `repeat(${sortedSizes.length}, minmax(0, 1fr))` }}
+      >
+        {sortedSizes.map(size => (
           <div key={size} className="flex flex-col">
-            <label className="text-xs font-medium text-gray-700 mb-1 text-center">
+            <label className={`font-medium text-gray-700 mb-1 text-center ${
+              sortedSizes.length > 6 ? 'text-[10px]' : 'text-xs'
+            }`}>
               {size}
             </label>
             <input
@@ -215,34 +220,13 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
               onChange={(e) => handleSizeChange(size, e.target.value)}
               placeholder="0"
               disabled={disabled}
-              className="w-full h-9 text-center text-sm border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className={`w-full text-center border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                sortedSizes.length > 6 ? 'h-8 text-xs' : 'h-9 text-sm'
+              }`}
             />
           </div>
         ))}
       </div>
-
-      {/* Second row for additional sizes (2XL, 3XL, 4XL, etc.) */}
-      {sortedSizes.length > 5 && (
-        <div className="grid grid-cols-5 gap-2 mb-3">
-          {sortedSizes.slice(5).map(size => (
-            <div key={size} className="flex flex-col">
-              <label className="text-xs font-medium text-gray-700 mb-1 text-center">
-                {size}
-              </label>
-              <input
-                type="number"
-                min="0"
-                max={totalQuantity}
-                value={sizeQuantities[size] || ''}
-                onChange={(e) => handleSizeChange(size, e.target.value)}
-                placeholder="0"
-                disabled={disabled}
-                className="w-full h-9 text-center text-sm border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Status Bar */}
       <div className={`p-2 rounded flex items-center justify-between text-xs ${

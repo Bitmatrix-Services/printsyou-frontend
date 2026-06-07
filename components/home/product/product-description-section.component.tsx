@@ -109,8 +109,8 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         </div>
       )}
 
-      {/* Product Colors */}
-      {productColors.length > 0 && (
+      {/* Product Colors - Only show when shopping flow is disabled (shopping flow has its own color selector) */}
+      {productColors.length > 0 && !product.shoppingFlowEnabled && (
         <div className="mt-4">
           <p className="text-sm text-gray-600 mb-2">
             {selectedColor ? (
