@@ -789,7 +789,7 @@ export const DirectCheckoutComponent: FC = () => {
                               } disabled:opacity-50 disabled:cursor-not-allowed`}
                               title={color.colorName}
                             >
-                              {/* Product Image with Color Name Overlay */}
+                              {/* Product Image with Color Name Overlay (shows on hover/selection) */}
                               {imageUrl ? (
                                 <div className="relative w-full aspect-square overflow-hidden">
                                   <img
@@ -797,8 +797,10 @@ export const DirectCheckoutComponent: FC = () => {
                                     alt={color.colorName}
                                     className="w-full h-full object-cover"
                                   />
-                                  {/* Color name overlay at bottom */}
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                                  {/* Color name overlay - hidden by default, shows on hover or selection */}
+                                  <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity duration-200 ${
+                                    isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                  }`}>
                                     <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
                                       {color.colorName}
                                     </span>
@@ -815,8 +817,10 @@ export const DirectCheckoutComponent: FC = () => {
                                     className="w-full h-full"
                                     style={{backgroundColor: color.colorHex || '#e5e7eb'}}
                                   />
-                                  {/* Color name overlay at bottom */}
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+                                  {/* Color name overlay - hidden by default, shows on hover or selection */}
+                                  <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity duration-200 ${
+                                    isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                  }`}>
                                     <span className="text-[10px] text-white font-medium text-center block leading-tight truncate">
                                       {color.colorName}
                                     </span>
