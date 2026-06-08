@@ -74,6 +74,7 @@ export interface Product {
   averageRating?: number;
   orderType?: OrderType;
   shoppingFlowEnabled?: boolean;
+  leadTimeDays?: number; // Production lead time in days (for urgency widget)
 }
 
 export interface EnclosureProduct {

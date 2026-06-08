@@ -1,11 +1,12 @@
 'use client';
 
-import React, {FC, useMemo, useState, useCallback} from 'react';
+import React, {FC, useMemo, useState, useCallback, useEffect} from 'react';
 import {Product, PriceGrids, productColors} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
-import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList} from 'react-icons/fa';
+import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList, FaBolt, FaFire} from 'react-icons/fa';
+import {HiLightningBolt} from 'react-icons/hi';
 import axios from 'axios';
 import Link from 'next/link';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
@@ -13,6 +14,12 @@ import {checkoutAnalytics} from '@utils/analytics';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
+
+// B2B bulk threshold - above this quantity, highlight Get Quote as recommended path
+const B2B_BULK_THRESHOLD = 500;
+
+// Production cutoff hour (2 PM CST = 14:00, converted to local timezone detection)
+const PRODUCTION_CUTOFF_HOUR = 14; // 2 PM
 
 // Shipping configuration - same as direct-checkout
 const SHIPPING_CONFIG = {
@@ -52,6 +59,102 @@ const getCookie = (name: string): string | null => {
   return null;
 };
 
+/**
+ * Hook for calculating time until production cutoff
+ * Returns hours and minutes until 2 PM CST (next business day if past cutoff)
+ */
+const useProductionCountdown = () => {
+  const [timeLeft, setTimeLeft] = useState<{hours: number; minutes: number; isToday: boolean} | null>(null);
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      // Convert to CST (UTC-6)
+      const cstOffset = -6 * 60;
+      const localOffset = now.getTimezoneOffset();
+      const cstTime = new Date(now.getTime() + (localOffset + cstOffset) * 60000);
+
+      const currentHour = cstTime.getHours();
+      const currentMinute = cstTime.getMinutes();
+      const dayOfWeek = cstTime.getDay(); // 0 = Sunday, 6 = Saturday
+
+      // Check if it's a business day and before cutoff
+      const isBusinessDay = dayOfWeek >= 1 && dayOfWeek <= 5;
+      const isBeforeCutoff = currentHour < PRODUCTION_CUTOFF_HOUR;
+
+      if (isBusinessDay && isBeforeCutoff) {
+        // Calculate time until 2 PM today
+        const minutesLeft = (PRODUCTION_CUTOFF_HOUR * 60) - (currentHour * 60 + currentMinute);
+        const hours = Math.floor(minutesLeft / 60);
+        const minutes = minutesLeft % 60;
+        return {hours, minutes, isToday: true};
+      } else {
+        // Calculate time until 2 PM next business day
+        let daysToAdd = 1;
+        if (dayOfWeek === 5 && !isBeforeCutoff) daysToAdd = 3; // Friday after cutoff -> Monday
+        if (dayOfWeek === 6) daysToAdd = 2; // Saturday -> Monday
+        if (dayOfWeek === 0) daysToAdd = 1; // Sunday -> Monday
+
+        const nextBusinessDay = new Date(cstTime);
+        nextBusinessDay.setDate(nextBusinessDay.getDate() + daysToAdd);
+        nextBusinessDay.setHours(PRODUCTION_CUTOFF_HOUR, 0, 0, 0);
+
+        const msLeft = nextBusinessDay.getTime() - cstTime.getTime();
+        const totalMinutes = Math.floor(msLeft / 60000);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        return {hours, minutes, isToday: false};
+      }
+    };
+
+    setTimeLeft(calculateTimeLeft());
+    const interval = setInterval(() => setTimeLeft(calculateTimeLeft()), 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  return timeLeft;
+};
+
+/**
+ * Urgency countdown widget component
+ */
+const UrgencyCountdown: FC<{leadTimeDays?: number}> = ({leadTimeDays = 3}) => {
+  const timeLeft = useProductionCountdown();
+
+  if (!timeLeft) return null;
+
+  // Fast-track production active if lead time is 3 days or less
+  const isFastTrack = leadTimeDays <= 3;
+
+  return (
+    <div className={`rounded-lg p-3 ${isFastTrack ? 'bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200' : 'bg-blue-50 border border-blue-200'}`}>
+      <div className="flex items-center gap-2">
+        {isFastTrack ? (
+          <FaBolt className="w-4 h-4 text-orange-500 animate-pulse" />
+        ) : (
+          <FaClock className="w-4 h-4 text-blue-500" />
+        )}
+        <div className="flex-1">
+          {timeLeft.isToday ? (
+            <p className="text-sm font-semibold text-gray-800">
+              Order within <span className="text-orange-600">{timeLeft.hours}h {timeLeft.minutes}m</span> for production to start today!
+            </p>
+          ) : (
+            <p className="text-sm font-semibold text-gray-800">
+              Order now for production to start {timeLeft.hours < 24 ? 'tomorrow' : 'next business day'}!
+            </p>
+          )}
+          {isFastTrack && (
+            <p className="text-xs text-orange-600 font-medium flex items-center gap-1 mt-0.5">
+              <HiLightningBolt className="w-3 h-3" /> Fast-Track Production Active
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface ShoppingFlowProps {
   product: Product;
 }
@@ -75,6 +178,13 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [notes, setNotes] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string>('');
+
+  // Auto-select first color on mount to eliminate friction
+  useEffect(() => {
+    if (product.productColors && product.productColors.length > 0 && !selectedColor) {
+      setSelectedColor(product.productColors[0].colorName);
+    }
+  }, [product.productColors, selectedColor]);
 
   // Available colors from product
   const availableColors = useMemo(() => {
@@ -132,6 +242,46 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   // Calculate total price including shipping
   const totalPrice = useMemo(() => subtotal + shippingCost, [subtotal, shippingCost]);
+
+  // Calculate next tier info for dynamic micro-copy
+  const nextTierInfo = useMemo(() => {
+    // Find current tier index
+    let currentTierIndex = 0;
+    for (let i = 0; i < sortedPriceGrids.length; i++) {
+      if (quantity >= sortedPriceGrids[i].countFrom) {
+        currentTierIndex = i;
+      } else {
+        break;
+      }
+    }
+
+    // Check if there's a next tier
+    if (currentTierIndex < sortedPriceGrids.length - 1) {
+      const nextTier = sortedPriceGrids[currentTierIndex + 1];
+      const nextPrice = nextTier.salePrice && nextTier.salePrice > 0 ? nextTier.salePrice : nextTier.price;
+      const unitsNeeded = nextTier.countFrom - quantity;
+      const currentPrice = currentUnitPrice;
+      const savings = currentPrice - nextPrice;
+
+      return {
+        nextTier,
+        nextPrice,
+        unitsNeeded,
+        savings,
+        savingsPercent: Math.round((savings / currentPrice) * 100)
+      };
+    }
+    return null;
+  }, [sortedPriceGrids, quantity, currentUnitPrice]);
+
+  // Check if quantity is above B2B bulk threshold - if so, recommend quote flow
+  const isBulkOrder = useMemo(() => quantity >= B2B_BULK_THRESHOLD, [quantity]);
+
+  // Get lead time from product data (default to 3 days)
+  const leadTimeDays = useMemo(() => {
+    // Try to extract lead time from product data if available
+    return product.leadTimeDays || 3;
+  }, [product]);
 
   // Handle tier selection
   const handleTierSelect = useCallback((tier: PriceGrids) => {
@@ -233,6 +383,9 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       const fbclid = new URLSearchParams(window.location.search).get('fbclid');
       const fbc = getCookie('_fbc') || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined);
 
+      // Determine artwork status for backend handling
+      const artworkStatus = artworkFiles.length > 0 ? 'uploaded' : 'pending_email';
+
       const payload = {
         productId: product.id,
         quantity,
@@ -242,6 +395,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           fileName: f.filename,
           fileType: f.fileType
         })),
+        artworkStatus, // Flag for backend: 'uploaded' or 'pending_email'
         sizeBreakdown: needsSizeBreakdown ? sizeBreakdown : undefined,
         notes: notes || undefined,
         sourceUrl: window.location.href,
@@ -290,13 +444,42 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   return (
     <div className="mt-6 space-y-5">
+      {/* Dynamic Tier Micro-Copy - Encourages quantity increase */}
+      {nextTierInfo && !isOutOfStock && (
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-3">
+          <div className="flex items-center gap-2">
+            <FaFire className="w-4 h-4 text-orange-500 flex-shrink-0" />
+            <p className="text-sm text-gray-800">
+              {needsSizeBreakdown ? (
+                // Apparel-specific messaging
+                <>
+                  <span className="font-semibold">Mix and match sizes freely</span> to unlock the{' '}
+                  <span className="font-bold text-green-600">${nextTierInfo.nextPrice.toFixed(2)}/ea</span> tier!{' '}
+                  <span className="text-gray-600">Add {nextTierInfo.unitsNeeded} more to save {nextTierInfo.savingsPercent}%</span>
+                </>
+              ) : (
+                // Standard product messaging
+                <>
+                  Add <span className="font-bold text-green-600">{nextTierInfo.unitsNeeded} more</span> to unlock{' '}
+                  <span className="font-bold text-green-600">${nextTierInfo.nextPrice.toFixed(2)}/ea</span>{' '}
+                  <span className="text-gray-600">(save {nextTierInfo.savingsPercent}%!)</span>
+                </>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Tier Selector */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Quantity</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Quantity Tier</h4>
         <div className="flex flex-wrap gap-2">
           {sortedPriceGrids.map(tier => {
             const price = tier.salePrice && tier.salePrice > 0 ? tier.salePrice : tier.price;
             const isSelected = selectedTier?.id === tier.id;
+            const isCurrentTier = quantity >= tier.countFrom &&
+              (sortedPriceGrids.indexOf(tier) === sortedPriceGrids.length - 1 ||
+               quantity < sortedPriceGrids[sortedPriceGrids.indexOf(tier) + 1]?.countFrom);
 
             return (
               <button
@@ -305,30 +488,34 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                 onClick={() => handleTierSelect(tier)}
                 disabled={isOutOfStock}
                 className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-                  isSelected
-                    ? 'border-green-600 bg-green-50 text-green-700'
+                  isCurrentTier
+                    ? 'border-green-600 bg-green-50 text-green-700 ring-2 ring-green-200'
+                    : isSelected
+                    ? 'border-green-400 bg-green-50/50 text-green-600'
                     : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
                 } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="font-semibold">{tier.countFrom}+ PCS</div>
-                <div className="text-xs text-gray-500">${price.toFixed(2)}/ea</div>
+                <div className={`text-xs ${isCurrentTier ? 'text-green-600 font-semibold' : 'text-gray-500'}`}>
+                  ${price.toFixed(2)}/ea
+                </div>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Quantity Input */}
+      {/* Quantity Input with Enhanced Pricing Display */}
       <div>
         <label htmlFor="quantity" className="text-sm font-semibold text-gray-900 mb-2 block">
-          Quantity
+          Enter Exact Quantity
         </label>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => handleQuantityChange(quantity - 1)}
             disabled={quantity <= (firstTier?.countFrom || 1) || isOutOfStock}
-            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-lg"
           >
             -
           </button>
@@ -351,13 +538,13 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               }
             }}
             disabled={isOutOfStock}
-            className="w-20 h-10 text-center border border-gray-300 rounded-lg font-semibold focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="w-24 h-10 text-center border border-gray-300 rounded-lg font-bold text-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
           />
           <button
             type="button"
             onClick={() => handleQuantityChange(quantity + 1)}
             disabled={isOutOfStock}
-            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-lg"
           >
             +
           </button>
@@ -367,7 +554,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             <div className="text-sm text-gray-500">
               Shipping: {shippingCost === 0 ? <span className="text-green-600 font-medium">FREE</span> : `$${shippingCost.toFixed(2)}`}
             </div>
-            <div className="text-lg font-bold text-gray-900">${totalPrice.toFixed(2)}</div>
+            <div className="text-xl font-bold text-gray-900">${totalPrice.toFixed(2)}</div>
           </div>
         </div>
       </div>
@@ -463,12 +650,12 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         </div>
       )}
 
-      {/* Artwork Uploader */}
-      <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-2">Upload Your Artwork (Optional)</h4>
-        <p className="text-xs text-gray-500 mb-3">
-          You can upload your logo/design now or send it later via email.
-        </p>
+      {/* Artwork Uploader - Frictionless with Skip Option */}
+      <div className="bg-gray-50 rounded-lg p-4">
+        <div className="flex items-start justify-between mb-2">
+          <h4 className="text-sm font-semibold text-gray-900">Upload Your Artwork</h4>
+          <span className="text-xs text-green-600 font-medium bg-green-100 px-2 py-0.5 rounded">Optional</span>
+        </div>
         <ArtworkUploader
           files={artworkFiles}
           onFilesChange={setArtworkFiles}
@@ -477,6 +664,18 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           disabled={isOutOfStock}
           maxFiles={5}
         />
+        {/* Reassuring micro-copy for skipping artwork */}
+        {artworkFiles.length === 0 && (
+          <div className="mt-3 p-2 bg-blue-50 border border-blue-100 rounded-lg">
+            <p className="text-xs text-blue-700 flex items-start gap-2">
+              <FaCheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0 text-blue-500" />
+              <span>
+                <strong>Don't have your artwork handy?</strong> No problem! Place your order now, and you can upload or email us your logo later at{' '}
+                <a href="mailto:orders@printsyou.com" className="underline font-medium">orders@printsyou.com</a>
+              </span>
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Notes */}
@@ -498,24 +697,62 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       {/* Error Message */}
       {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
 
-      {/* CTA Buttons */}
-      <div className="grid grid-cols-2 gap-3">
-        {/* Buy Now Button */}
-        <div className="flex flex-col">
+      {/* Urgency Countdown Widget */}
+      <UrgencyCountdown leadTimeDays={leadTimeDays} />
+
+      {/* CTA Buttons - Dynamic hierarchy based on order size */}
+      {isBulkOrder ? (
+        // B2B Bulk Order (500+ units) - Highlight Quote as smart path
+        <div className="space-y-3">
+          {/* B2B Recommendation Banner */}
+          <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-3">
+            <p className="text-sm text-purple-800 font-medium flex items-center gap-2">
+              <FaClipboardList className="w-4 h-4 text-purple-600" />
+              For orders of {B2B_BULK_THRESHOLD}+ units, we recommend getting a custom quote for the best pricing!
+            </p>
+          </div>
+
+          {/* Get Quote - Primary CTA for bulk orders */}
+          <Link
+            href={`/request-quote?product=${product.id}&qty=${quantity}`}
+            className="w-full min-h-[56px] py-4 px-4 flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl hover:from-purple-700 hover:to-indigo-700"
+          >
+            <FaClipboardList className="mr-2 h-5 w-5" />
+            Get Custom Quote for {quantity} Units
+          </Link>
+
+          {/* Buy Now - Secondary for bulk */}
           <button
             type="button"
             onClick={handleCheckout}
             disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid) || (hasColors && !selectedColor)}
-            className={`w-full min-h-[60px] py-3 px-3 flex items-center justify-center rounded-lg text-white font-bold text-base transition-all duration-200 shadow-lg hover:shadow-xl ${
+            className={`w-full py-3 px-4 flex items-center justify-center rounded-lg border-2 font-semibold text-sm transition-all ${
+              isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid) || (hasColors && !selectedColor)
+                ? 'border-gray-300 text-gray-400 cursor-not-allowed'
+                : 'border-green-600 text-green-600 hover:bg-green-50'
+            }`}
+          >
+            {isProcessing ? 'Processing...' : `Or Buy Now at $${totalPrice.toFixed(2)}`}
+          </button>
+        </div>
+      ) : (
+        // Standard Order - Buy Now is primary, Quote is secondary ghost button
+        <div className="space-y-3">
+          {/* Buy Now - Primary CTA */}
+          <button
+            type="button"
+            onClick={handleCheckout}
+            disabled={isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid) || (hasColors && !selectedColor)}
+            className={`w-full min-h-[56px] py-4 px-4 flex items-center justify-center rounded-xl text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
               isOutOfStock || isProcessing || (needsSizeBreakdown && !isSizeBreakdownValid) || (hasColors && !selectedColor)
                 ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700'
+                : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
             }`}
           >
             {isProcessing ? (
               <>
                 <svg
-                  className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -531,48 +768,47 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               </>
             ) : (
               <>
-                Buy Now
-                <RiShoppingBag4Fill className="ml-2 h-5 w-5 flex-shrink-0" />
+                <RiShoppingBag4Fill className="mr-2 h-6 w-6" />
+                Buy Now - ${totalPrice.toFixed(2)}
               </>
             )}
           </button>
-          <p className="text-xs text-gray-500 text-center mt-2">
-            Fast checkout for ready-to-order customers
-          </p>
-        </div>
 
-        {/* Get Quote Button */}
-        <div className="flex flex-col">
-          <Link
-            href={`/request-quote?product=${product.id}`}
-            className="w-full min-h-[60px] py-3 px-3 flex items-center justify-center rounded-lg border-2 border-green-600 text-green-600 font-bold text-sm transition-all duration-200 hover:bg-green-50 text-center"
-          >
-            <span>Get Free Quote + Mockup</span>
-            <FaClipboardList className="ml-2 h-4 w-4 flex-shrink-0" />
-          </Link>
-          <p className="text-xs text-gray-500 text-center mt-2">
-            Best for bulk orders & custom requirements
+          {/* Instant checkout messaging */}
+          <p className="text-xs text-gray-500 text-center">
+            Secure checkout • Proof within 30 minutes • No hidden fees
           </p>
-        </div>
-      </div>
 
-      {/* Trust Indicators */}
-      <div className="grid grid-cols-2 gap-2 pt-2">
-        <div className="flex items-center gap-2 text-xs text-gray-600">
-          <FaTruck className="w-4 h-4 text-blue-500 flex-shrink-0" />
+          {/* Get Quote - Ghost/Secondary Link */}
+          <div className="pt-2 border-t border-gray-200">
+            <Link
+              href={`/request-quote?product=${product.id}&qty=${quantity}`}
+              className="w-full py-2 flex items-center justify-center text-sm text-gray-600 hover:text-green-600 transition-colors"
+            >
+              <FaClipboardList className="mr-2 h-4 w-4" />
+              Need a custom quote or free mockup?
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Trust Indicators - Clean horizontal strip */}
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 pt-3 border-t border-gray-100">
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <FaTruck className="w-3.5 h-3.5 text-blue-500" />
           <span>Free Shipping $500+</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-600">
-          <FaClock className="w-4 h-4 text-orange-500 flex-shrink-0" />
-          <span>Proof in 30 Minutes</span>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <FaClock className="w-3.5 h-3.5 text-orange-500" />
+          <span>Proof in 30 Min</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-600">
-          <FaShieldAlt className="w-4 h-4 text-green-500 flex-shrink-0" />
-          <span>Secure Checkout</span>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <FaShieldAlt className="w-3.5 h-3.5 text-green-500" />
+          <span>256-bit SSL</span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-gray-600">
-          <FaCheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
-          <span>Trusted by US Businesses</span>
+        <div className="flex items-center gap-1.5 text-xs text-gray-500">
+          <FaCheckCircle className="w-3.5 h-3.5 text-primary-500" />
+          <span>10,000+ Orders</span>
         </div>
       </div>
     </div>

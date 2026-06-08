@@ -141,9 +141,10 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
   // Check if product has colors
   const hasColors = itemData?.productColors && itemData.productColors.length > 0;
 
-  // Get pre-filled category/product from URL or props
+  // Get pre-filled category/product/quantity from URL or props
   const categoryParam = searchParams.get('category');
   const productParam = searchParams.get('product');
+  const qtyParam = searchParams.get('qty'); // Pre-fill quantity from shopping flow redirect
   const itemName = itemData?.name || categoryParam || '';
 
   const methods = useForm<QuoteRequestFormSchemaType>({
@@ -154,7 +155,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       phoneNumber: '',
       companyName: '',
       productCategory: itemName,
-      quantity: undefined,
+      quantity: qtyParam ? parseInt(qtyParam, 10) : undefined, // Pre-fill from URL if provided
       notes: '',
       needByDate: '',
       source: 'website',
