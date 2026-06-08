@@ -179,16 +179,22 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string>('');
 
-  // Auto-select first color on mount to eliminate friction
+  // Auto-select first color (by sequence order) on mount to eliminate friction
   useEffect(() => {
-    if (product.productColors && product.productColors.length > 0 && !selectedColor) {
-      setSelectedColor(product.productColors[0].colorName);
+    if (availableColors.length > 0 && !selectedColor) {
+      setSelectedColor(availableColors[0].colorName);
     }
-  }, [product.productColors, selectedColor]);
+  }, [availableColors, selectedColor]);
 
-  // Available colors from product
+  // Available colors from product - sorted by sequenceNumber
   const availableColors = useMemo(() => {
-    return product.productColors || [];
+    if (!product.productColors) return [];
+    // Sort by sequenceNumber (nulls/undefined go last)
+    return [...product.productColors].sort((a, b) => {
+      const seqA = a.sequenceNumber ?? 999;
+      const seqB = b.sequenceNumber ?? 999;
+      return seqA - seqB;
+    });
   }, [product.productColors]);
 
   const hasColors = availableColors.length > 0;

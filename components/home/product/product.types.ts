@@ -97,6 +97,7 @@ export interface productColors {
   colorHex: string;
   onlyColorImage?: string;
   coloredProductImage?: string;
+  sequenceNumber?: number; // For ordering colors in UI
 }
 
 export interface Locations {
