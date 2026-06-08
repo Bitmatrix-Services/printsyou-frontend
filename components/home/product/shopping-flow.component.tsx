@@ -670,7 +670,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             <p className="text-xs text-blue-700 flex items-start gap-2">
               <FaCheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0 text-blue-500" />
               <span>
-                <strong>Don't have your artwork handy?</strong> No problem! Place your order now, and you can upload or email us your logo later at{' '}
+                <strong>Don&apos;t have your artwork handy?</strong> No problem! Place your order now, and you can upload or email us your logo later at{' '}
                 <a href="mailto:orders@printsyou.com" className="underline font-medium">orders@printsyou.com</a>
               </span>
             </p>
