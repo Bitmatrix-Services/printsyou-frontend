@@ -179,13 +179,6 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string>('');
 
-  // Auto-select first color (by sequence order) on mount to eliminate friction
-  useEffect(() => {
-    if (availableColors.length > 0 && !selectedColor) {
-      setSelectedColor(availableColors[0].colorName);
-    }
-  }, [availableColors, selectedColor]);
-
   // Available colors from product - sorted by sequenceNumber
   const availableColors = useMemo(() => {
     if (!product.productColors) return [];
@@ -198,6 +191,13 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   }, [product.productColors]);
 
   const hasColors = availableColors.length > 0;
+
+  // Auto-select first color (by sequence order) on mount to eliminate friction
+  useEffect(() => {
+    if (availableColors.length > 0 && !selectedColor) {
+      setSelectedColor(availableColors[0].colorName);
+    }
+  }, [availableColors, selectedColor]);
 
   // Check if product is apparel
   const isApparel = useMemo(() => {
@@ -457,18 +457,17 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             <FaFire className="w-4 h-4 text-orange-500 flex-shrink-0" />
             <p className="text-sm text-gray-800">
               {needsSizeBreakdown ? (
-                // Apparel-specific messaging
+                // Apparel-specific messaging - direct tier price focus
                 <>
-                  <span className="font-semibold">Mix and match sizes freely</span> to unlock the{' '}
-                  <span className="font-bold text-green-600">${nextTierInfo.nextPrice.toFixed(2)}/ea</span> tier!{' '}
-                  <span className="text-gray-600">Add {nextTierInfo.unitsNeeded} more to save {nextTierInfo.savingsPercent}%</span>
+                  Add <span className="font-bold text-green-600">{nextTierInfo.unitsNeeded} more {nextTierInfo.unitsNeeded === 1 ? 'item' : 'items'}</span> to unlock the{' '}
+                  <span className="font-bold text-green-600">${nextTierInfo.nextPrice.toFixed(2)}/ea</span> bulk price tier!{' '}
+                  <span className="text-gray-600">(Mix sizes freely)</span>
                 </>
               ) : (
-                // Standard product messaging
+                // Standard product messaging - direct tier price focus
                 <>
-                  Add <span className="font-bold text-green-600">{nextTierInfo.unitsNeeded} more</span> to unlock{' '}
-                  <span className="font-bold text-green-600">${nextTierInfo.nextPrice.toFixed(2)}/ea</span>{' '}
-                  <span className="text-gray-600">(save {nextTierInfo.savingsPercent}%!)</span>
+                  Add <span className="font-bold text-green-600">{nextTierInfo.unitsNeeded} more {nextTierInfo.unitsNeeded === 1 ? 'item' : 'items'}</span> to unlock the{' '}
+                  <span className="font-bold text-green-600">${nextTierInfo.nextPrice.toFixed(2)}/ea</span> bulk price tier!
                 </>
               )}
             </p>
@@ -782,7 +781,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
           {/* Instant checkout messaging */}
           <p className="text-xs text-gray-500 text-center">
-            Secure checkout • Proof within 30 minutes • No hidden fees
+            Secure checkout • Shipping included • Proof within 30 minutes • No hidden fees
           </p>
 
           {/* Get Quote - Ghost/Secondary Link */}

@@ -200,58 +200,61 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
         Specify how many of each size you need. Total must equal {totalQuantity} units.
       </p>
 
-      {/* Size Grid - all sizes in one row */}
-      <div
-        className="grid gap-1.5 mb-3"
-        style={{ gridTemplateColumns: `repeat(${sortedSizes.length}, minmax(0, 1fr))` }}
-      >
-        {sortedSizes.map(size => (
-          <div key={size} className="flex flex-col">
-            <label className={`font-medium text-gray-700 mb-1 text-center ${
-              sortedSizes.length > 6 ? 'text-[10px]' : 'text-xs'
-            }`}>
-              {size}
-            </label>
-            <input
-              type="number"
-              min="0"
-              max={totalQuantity}
-              value={sizeQuantities[size] || ''}
-              onChange={(e) => handleSizeChange(size, e.target.value)}
-              placeholder="0"
-              disabled={disabled}
-              className={`w-full text-center border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                sortedSizes.length > 6 ? 'h-8 text-xs' : 'h-9 text-sm'
-              }`}
-            />
-          </div>
-        ))}
-      </div>
-
-      {/* Status Bar */}
-      <div className={`p-2 rounded flex items-center justify-between text-xs ${
-        isValid
-          ? 'bg-green-50 border border-green-200'
-          : remaining > 0
-            ? 'bg-yellow-50 border border-yellow-200'
-            : 'bg-red-50 border border-red-200'
-      }`}>
-        <div className="flex items-center gap-1.5">
-          {!isValid && <FaExclamationTriangle className={`w-3 h-3 ${remaining > 0 ? 'text-yellow-600' : 'text-red-600'}`} />}
-          <span className={`font-medium ${
-            isValid ? 'text-green-700' : remaining > 0 ? 'text-yellow-700' : 'text-red-700'
-          }`}>
-            {isValid
-              ? 'Complete!'
-              : remaining > 0
-                ? `${remaining} more units to assign`
-                : `${Math.abs(remaining)} units over`
-            }
-          </span>
+      {/* Size Grid and Status Bar Container - aligned on desktop */}
+      <div className="inline-block w-full md:w-auto">
+        {/* Size Grid - all sizes in one row */}
+        <div
+          className="grid gap-1.5 mb-3"
+          style={{ gridTemplateColumns: `repeat(${sortedSizes.length}, minmax(48px, 1fr))` }}
+        >
+          {sortedSizes.map(size => (
+            <div key={size} className="flex flex-col">
+              <label className={`font-medium text-gray-700 mb-1 text-center ${
+                sortedSizes.length > 6 ? 'text-[10px]' : 'text-xs'
+              }`}>
+                {size}
+              </label>
+              <input
+                type="number"
+                min="0"
+                max={totalQuantity}
+                value={sizeQuantities[size] || ''}
+                onChange={(e) => handleSizeChange(size, e.target.value)}
+                placeholder="0"
+                disabled={disabled}
+                className={`w-full text-center border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                  sortedSizes.length > 6 ? 'h-8 text-xs' : 'h-9 text-sm'
+                }`}
+              />
+            </div>
+          ))}
         </div>
-        <div>
-          <span className="font-medium">{currentTotal}</span>
-          <span className="text-gray-500"> / {totalQuantity}</span>
+
+        {/* Status Bar - constrained to match size grid width on desktop */}
+        <div className={`p-2 rounded flex items-center justify-between text-xs ${
+          isValid
+            ? 'bg-green-50 border border-green-200'
+            : remaining > 0
+              ? 'bg-yellow-50 border border-yellow-200'
+              : 'bg-red-50 border border-red-200'
+        }`}>
+          <div className="flex items-center gap-1.5">
+            {!isValid && <FaExclamationTriangle className={`w-3 h-3 ${remaining > 0 ? 'text-yellow-600' : 'text-red-600'}`} />}
+            <span className={`font-medium ${
+              isValid ? 'text-green-700' : remaining > 0 ? 'text-yellow-700' : 'text-red-700'
+            }`}>
+              {isValid
+                ? 'Complete!'
+                : remaining > 0
+                  ? `${remaining} more units to assign`
+                  : `${Math.abs(remaining)} units over`
+              }
+            </span>
+          </div>
+          <div>
+            <span className="font-medium">{currentTotal}</span>
+            <span className="text-gray-500"> / {totalQuantity}</span>
+          </div>
         </div>
       </div>
     </div>
