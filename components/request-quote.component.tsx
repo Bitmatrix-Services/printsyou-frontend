@@ -320,7 +320,12 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         fbp: data.fbp   // Facebook Browser ID for matching
       };
 
-      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${QuoteRequestRoutes.createQuote}`, requestData);
+      return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}${QuoteRequestRoutes.createQuote}`, requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
     },
     onSuccess: (response, variables) => {
       console.log('[Quote] Form submitted successfully', {

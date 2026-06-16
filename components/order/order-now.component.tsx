@@ -257,7 +257,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
       };
 
       // Step 1: Create the quote request
-      const quoteResponse = await axios.post(`${API_BASE_URL}${QuoteRequestRoutes.createQuote}`, quoteRequestData);
+      const quoteResponse = await axios.post(`${API_BASE_URL}${QuoteRequestRoutes.createQuote}`, quoteRequestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
       const quoteRequestId = quoteResponse.data.payload.id;
 
       if (!quoteRequestId) {
@@ -276,7 +281,12 @@ export const OrderNowComponent: FC<IOrderNowComponentProps> = ({selectedProduct}
         ...getEnhancedConversionsData()
       };
 
-      const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData);
+      const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
       return response.data;
     },
     onSuccess: (responseData) => {

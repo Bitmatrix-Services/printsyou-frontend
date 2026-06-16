@@ -107,7 +107,11 @@ export const SearchResult = () => {
 
     try {
       setIsLoading(true);
-      const {data} = await axios.get(queryString);
+      const {data} = await axios.get(queryString, {
+        headers: {
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
       setUpdatedSearchResults({
         products: data.payload.products,
         totalPages: data.payload.totalPages,

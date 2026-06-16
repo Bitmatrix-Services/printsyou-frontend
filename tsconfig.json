@@ -15,13 +15,16 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": ["./*"],
       "@components/*": ["components/*"],
       "@state/*": ["state/*"],
       "@lib/*": ["lib/*"],
       "@utils/*": ["utils/*"],
       "@services/*": ["services/*"],
       "@svg-components/*": ["svg-components/*"],
-      "@styles/*": ["styles/*"]
+      "@styles/*": ["styles/*"],
+      "@providers/*": ["providers/*"],
+      "@config/*": ["config/*"]
     },
     "plugins": [
       {

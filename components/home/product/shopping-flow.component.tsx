@@ -11,6 +11,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import {CheckoutRoutes} from '@utils/routes/be-routes';
 import {checkoutAnalytics} from '@utils/analytics';
+import {useStore, useHasFeature} from '@/providers/store-provider';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -160,6 +161,18 @@ interface ShoppingFlowProps {
 }
 
 export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
+  // Get store context for feature flags
+  const {store, isB2B, isRetail} = useStore();
+  const hasTierPricing = useHasFeature('tierPricing');
+  const hasArtworkUpload = useHasFeature('artworkUpload');
+  const hasQuoteRequests = useHasFeature('quoteRequests');
+  const showBulkThreshold = useHasFeature('showBulkThreshold');
+  const showProductionCountdown = useHasFeature('showProductionCountdown');
+
+  // Get store-specific checkout config
+  const bulkThreshold = store.checkout.bulkThreshold || B2B_BULK_THRESHOLD;
+  const freeShippingThreshold = store.checkout.freeShippingThreshold;
+
   // Sort price grids by quantity (lowest first)
   const sortedPriceGrids = useMemo(
     () => [...product.priceGrids].filter(pg => pg.price > 0).sort((a, b) => a.countFrom - b.countFrom),
@@ -281,7 +294,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   }, [sortedPriceGrids, quantity, currentUnitPrice]);
 
   // Check if quantity is above B2B bulk threshold - if so, recommend quote flow
-  const isBulkOrder = useMemo(() => quantity >= B2B_BULK_THRESHOLD, [quantity]);
+  // Only applies if store has bulk threshold feature enabled
+  const isBulkOrder = useMemo(() => {
+    if (!showBulkThreshold || !bulkThreshold) return false;
+    return quantity >= bulkThreshold;
+  }, [quantity, showBulkThreshold, bulkThreshold]);
 
   // Get lead time from product data (default to 3 days)
   const leadTimeDays = useMemo(() => {
@@ -450,8 +467,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   return (
     <div className="mt-6 space-y-5">
-      {/* Dynamic Tier Micro-Copy - Encourages quantity increase */}
-      {nextTierInfo && !isOutOfStock && (
+      {/* Dynamic Tier Micro-Copy - Encourages quantity increase (B2B only) */}
+      {hasTierPricing && nextTierInfo && !isOutOfStock && (
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-3">
           <div className="flex items-center gap-2">
             <FaFire className="w-4 h-4 text-orange-500 flex-shrink-0" />
@@ -475,7 +492,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         </div>
       )}
 
-      {/* Tier Selector */}
+      {/* Tier Selector (B2B only - Retail uses fixed pricing) */}
+      {hasTierPricing && (
       <div>
         <h4 className="text-sm font-semibold text-gray-900 mb-2">Select Quantity Tier</h4>
         <div className="flex flex-wrap gap-2">
@@ -509,6 +527,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           })}
         </div>
       </div>
+      )}
 
       {/* Quantity Input with Enhanced Pricing Display */}
       <div>
@@ -655,7 +674,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         </div>
       )}
 
-      {/* Artwork Uploader - Frictionless with Skip Option */}
+      {/* Artwork Uploader - Frictionless with Skip Option (B2B only) */}
+      {hasArtworkUpload && (
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex items-start justify-between mb-2">
           <h4 className="text-sm font-semibold text-gray-900">Upload Your Artwork</h4>
@@ -682,6 +702,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           </div>
         )}
       </div>
+      )}
 
       {/* Notes */}
       <div>
@@ -702,18 +723,18 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       {/* Error Message */}
       {error && <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>}
 
-      {/* Urgency Countdown Widget */}
-      <UrgencyCountdown leadTimeDays={leadTimeDays} />
+      {/* Urgency Countdown Widget (B2B only) */}
+      {showProductionCountdown && <UrgencyCountdown leadTimeDays={leadTimeDays} />}
 
-      {/* CTA Buttons - Dynamic hierarchy based on order size */}
-      {isBulkOrder ? (
+      {/* CTA Buttons - Dynamic hierarchy based on store type and order size */}
+      {isB2B && isBulkOrder ? (
         // B2B Bulk Order (500+ units) - Highlight Quote as smart path
         <div className="space-y-3">
           {/* B2B Recommendation Banner */}
           <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-3">
             <p className="text-sm text-purple-800 font-medium flex items-center gap-2">
               <FaClipboardList className="w-4 h-4 text-purple-600" />
-              For orders of {B2B_BULK_THRESHOLD}+ units, we recommend getting a custom quote for the best pricing!
+              For orders of {bulkThreshold}+ units, we recommend getting a custom quote for the best pricing!
             </p>
           </div>
 
@@ -784,7 +805,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             Secure checkout • Shipping included • Proof within 30 minutes • No hidden fees
           </p>
 
-          {/* Get Quote - Ghost/Secondary Link */}
+          {/* Get Quote - Ghost/Secondary Link (only for stores that support quotes) */}
+          {hasQuoteRequests && (
           <div className="pt-2 border-t border-gray-200">
             <Link
               href={`/request-quote?product=${product.id}&qty=${quantity}`}
@@ -794,6 +816,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               Need a custom quote or free mockup?
             </Link>
           </div>
+          )}
         </div>
       )}
 
@@ -801,12 +824,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 pt-3 border-t border-gray-100">
         <div className="flex items-center gap-1.5 text-xs text-gray-500">
           <FaTruck className="w-3.5 h-3.5 text-blue-500" />
-          <span>Free Shipping $500+</span>
+          <span>Free Shipping ${freeShippingThreshold}+</span>
         </div>
+        {isB2B && (
         <div className="flex items-center gap-1.5 text-xs text-gray-500">
           <FaClock className="w-3.5 h-3.5 text-orange-500" />
           <span>Proof in 30 Min</span>
         </div>
+        )}
         <div className="flex items-center gap-1.5 text-xs text-gray-500">
           <FaShieldAlt className="w-3.5 h-3.5 text-green-500" />
           <span>256-bit SSL</span>

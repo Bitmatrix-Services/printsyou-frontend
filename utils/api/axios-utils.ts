@@ -33,5 +33,6 @@ export const openEndpoints: string[] = [HomePageRoutes.AllCategories];
 
 export const commonHeaders: RawAxiosRequestHeaders = {
   'Content-Type': 'application/json',
-  Accept: 'application/json'
+  Accept: 'application/json',
+  'X-Store-Id': 'default-printsyou-store'
 };

@@ -394,7 +394,12 @@ export const DirectCheckoutComponent: FC = () => {
       };
 
       // Create the quote request first
-      const quoteResponse = await axios.post(`${API_BASE_URL}${QuoteRequestRoutes.createQuote}`, quoteRequestData);
+      const quoteResponse = await axios.post(`${API_BASE_URL}${QuoteRequestRoutes.createQuote}`, quoteRequestData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
       const quoteRequestId = quoteResponse.data?.payload?.id;
 
       if (!quoteRequestId) {
@@ -420,7 +425,12 @@ export const DirectCheckoutComponent: FC = () => {
         ...getEnhancedConversionsData()
       };
 
-      const checkoutResponse = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData);
+      const checkoutResponse = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createSession}`, checkoutData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
 
       if (checkoutResponse.data?.payload?.checkoutUrl) {
         // Small delay to ensure analytics events are sent before redirect

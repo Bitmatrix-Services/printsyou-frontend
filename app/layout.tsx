@@ -10,6 +10,7 @@ import {Header} from '@components/globals/header.component';
 import {Footer} from '@components/globals/footer.component';
 import {getAllCategories} from '@components/home/home-apis';
 import {ReduxProvider} from './redux-provider';
+import {StoreProvider} from '@/providers/store-provider';
 import {metaConstants} from '@utils/constants';
 import {NotificationComponent} from '@components/notification/notification.component';
 import {WhatsAppButton} from '@components/globals/whatsapp-button.component';
@@ -40,8 +41,9 @@ export default async function RootLayout({children}: PropsWithChildren) {
   return (
     <ReduxProvider>
       <ReactQueryClientProvider>
-        <CSPostHogProvider>
-          <html lang="en">
+        <StoreProvider>
+          <CSPostHogProvider>
+            <html lang="en">
             <head>
               {/* Google Tag Manager */}
               <Script
@@ -180,7 +182,8 @@ export default async function RootLayout({children}: PropsWithChildren) {
             </body>
           </html>
         </CSPostHogProvider>
-      </ReactQueryClientProvider>
-    </ReduxProvider>
+      </StoreProvider>
+    </ReactQueryClientProvider>
+  </ReduxProvider>
   );
 }

@@ -80,7 +80,8 @@ export const getSitemapStuff = async (sitemapPath: string, queryParams: Record<s
     await axios.get(`${baseUrl}/sitemap/${sitemapPath}`, {
       headers: {
         'X-API-KEY': apiKey,
-        'X-API-SECRET': apikeySecret
+        'X-API-SECRET': apikeySecret,
+        'X-Store-Id': 'default-printsyou-store'
       },
       params: queryParams
     })

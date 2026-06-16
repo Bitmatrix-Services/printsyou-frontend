@@ -4,10 +4,16 @@ import axios from 'axios';
 import {ProductRoutes} from '@utils/routes/be-routes';
 import {PagedData} from '@utils/util-types';
 
+// Store header for multi-tenant API calls
+const storeHeaders = {
+  'X-Store-Id': 'default-printsyou-store'
+};
+
 export const getProductDetailsByUniqueName = async (uniqueName: string): Promise<ApiResponse<Product> | null> => {
   try {
     const response = await axios.get<ApiResponse<Product>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByUniqueName}=${uniqueName}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByUniqueName}=${uniqueName}`,
+      {headers: storeHeaders}
     );
     return response.data;
   } catch (error) {
@@ -20,7 +26,8 @@ export const fetchRelatedProductDetails = async (
 ): Promise<ApiResponse<EnclosureProduct[]> | null> => {
   try {
     const response = await axios.get<ApiResponse<EnclosureProduct[]>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.FetchRelatedProducts}?productId=${productId}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.FetchRelatedProducts}?productId=${productId}`,
+      {headers: storeHeaders}
     );
     return response.data;
   } catch (error) {
@@ -31,7 +38,8 @@ export const fetchRelatedProductDetails = async (
 export const getProductDetailsById = async (productId: string): Promise<ApiResponse<Product> | null> => {
   try {
     const response = await axios.get<ApiResponse<Product>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductById}/${productId}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductById}/${productId}`,
+      {headers: storeHeaders}
     );
     return response.data;
   } catch (error) {
@@ -43,7 +51,8 @@ export const getProductDetailsById = async (productId: string): Promise<ApiRespo
 export const getProductByCategoryId = async (categoryId: string): Promise<ApiResponse<PagedData<Product>>> => {
   try {
     const response = await axios.get<ApiResponse<PagedData<Product>>>(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}${ProductRoutes.ProductByCategoryId}/${categoryId}`,
+      {headers: storeHeaders}
     );
     return response.data;
   } catch (error) {

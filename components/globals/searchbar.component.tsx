@@ -39,7 +39,11 @@ export const Searchbar = () => {
 
   const handleSearch = async () => {
     try {
-      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/search?query=${searchQuery}`);
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/search?query=${searchQuery}`, {
+        headers: {
+          'X-Store-Id': 'default-printsyou-store'
+        }
+      });
       if (data.payload?.categories || data.payload?.products) {
         let result = data.payload;
         setSearchResult(result);
