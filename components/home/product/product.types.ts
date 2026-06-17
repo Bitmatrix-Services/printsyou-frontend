@@ -46,6 +46,21 @@ export interface AllCategoryNameAndIds {
 
 export type OrderType = 'CHECKOUT' | 'QUOTE_ONLY' | 'BOTH';
 
+// Position configuration for customization zones (from admin zone editor)
+export interface PositionConfig {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  chargeDescription?: string;
+  chargeAmount?: number;
+  enabled?: boolean;
+  fontFamily?: string;
+  fontColor?: string;
+}
+
+export type ImageViewType = 'FRONT' | 'BACK' | 'SIDE';
+
 export interface Product {
   id: string;
   productName: string;
@@ -75,6 +90,10 @@ export interface Product {
   orderType?: OrderType;
   shoppingFlowEnabled?: boolean;
   leadTimeDays?: number; // Production lead time in days (for urgency widget)
+  // Default customization zones (fallback when image doesn't have zones)
+  defaultLogoPosition?: PositionConfig;
+  defaultNumberPosition?: PositionConfig;
+  defaultNamePosition?: PositionConfig;
 }
 
 export interface EnclosureProduct {
@@ -98,6 +117,50 @@ export interface productColors {
   onlyColorImage?: string;
   coloredProductImage?: string;
   sequenceNumber?: number; // For ordering colors in UI
+}
+
+// Extended product image with customization zones
+export interface ProductImageWithZones extends ProductImage {
+  viewType?: ImageViewType;
+  logoPosition?: PositionConfig;
+  numberPosition?: PositionConfig;
+  namePosition?: PositionConfig;
+}
+
+// Customization data for a single view
+export interface ViewCustomization {
+  playerName?: string;
+  playerNumber?: string;
+  customText?: string;
+  logoDataUrl?: string;
+}
+
+// Full customization data for cart/checkout
+export interface CustomizationData {
+  playerName?: string;
+  playerNumber?: string;
+  customText?: string;
+  logoDataUrl?: string;
+  backLogoDataUrl?: string; // Separate logo for back view
+  useDifferentLogos?: boolean; // Flag to indicate different logos for front/back
+  viewCustomizations?: {
+    FRONT?: ViewCustomization;
+    BACK?: ViewCustomization;
+    SIDE?: ViewCustomization;
+  };
+  fontStyle?: 'product-default' | 'varsity' | 'modern';
+  userFontColor?: string;
+  logoPosition?: { x: number; y: number; maxSize?: number };
+  selectedColor?: { name: string; hex: string };
+  previewDataUrl?: string;
+  frontPreviewDataUrl?: string;
+  backPreviewDataUrl?: string;
+  sidePreviewDataUrl?: string;
+  currentView?: ImageViewType;
+  availableViews?: ImageViewType[];
+  viewProductImages?: Record<ImageViewType, string | undefined>;
+  viewZoneConfigs?: Record<ImageViewType, { name: PositionConfig | null; number: PositionConfig | null; logo: PositionConfig | null } | null>;
+  additionalCharges?: number;
 }
 
 export interface Locations {

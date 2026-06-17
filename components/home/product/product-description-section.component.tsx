@@ -1,13 +1,15 @@
 'use client';
 import * as React from 'react';
-import {Dispatch, FC, Fragment, SetStateAction, useMemo, useState} from 'react';
+import {Dispatch, FC, Fragment, SetStateAction, useMemo, useState, useCallback} from 'react';
+import {useRouter} from 'next/navigation';
 import {PricingTable} from '@components/home/product/pricing-table.component';
 import {ShoppingFlow} from '@components/home/product/shopping-flow.component';
+import {ProductCustomizer} from '@components/home/product/product-customizer.component';
 import Link from 'next/link';
-import {Product, productColors, ProductImage} from '@components/home/product/product.types';
+import {Product, productColors, ProductImage, ProductImageWithZones, CustomizationData} from '@components/home/product/product.types';
 import {colorNameToHex, extractColorsArray, getColorsWithHex} from '@utils/utils';
 import {RiShoppingBag4Fill, RiFileList3Line} from 'react-icons/ri';
-import {FaWhatsapp, FaTruck, FaClock, FaShieldAlt, FaCheckCircle} from 'react-icons/fa';
+import {FaWhatsapp, FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaMagic} from 'react-icons/fa';
 import {Chip} from '@mui/joy';
 import {ColorSwatch} from '@components/home/product/color-swatch.component';
 
@@ -31,6 +33,66 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
 }) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showCustomizer, setShowCustomizer] = useState(false);
+  const [customizationData, setCustomizationData] = useState<CustomizationData | null>(null);
+
+  // Check if product has customization zones configured
+  const hasCustomizationZones = useMemo(() => {
+    const productImages = (product as any)?.productImages as ProductImageWithZones[] | undefined;
+
+    // Debug logging
+    if (typeof window !== 'undefined') {
+      console.log('🔍 Product Customization Check:');
+      console.log('  - Product Images:', productImages?.length || 0);
+      productImages?.forEach((img, i) => {
+        console.log(`  - Image ${i}:`, {
+          url: img.imageUrl?.substring(0, 50),
+          logoPosition: img.logoPosition,
+          numberPosition: img.numberPosition,
+          namePosition: img.namePosition
+        });
+      });
+    }
+
+    if (productImages && productImages.length > 0) {
+      const hasZones = productImages.some(img =>
+        (img.logoPosition?.enabled) ||
+        (img.numberPosition?.enabled) ||
+        (img.namePosition?.enabled)
+      );
+      console.log('  - Has Image Zones:', hasZones);
+      return hasZones;
+    }
+    const defaultLogo = (product as any)?.defaultLogoPosition;
+    const defaultNumber = (product as any)?.defaultNumberPosition;
+    const defaultName = (product as any)?.defaultNamePosition;
+    const hasDefaultZones = defaultLogo?.enabled || defaultNumber?.enabled || defaultName?.enabled;
+    console.log('  - Has Default Zones:', hasDefaultZones);
+    return hasDefaultZones;
+  }, [product]);
+
+  const productImagesForCustomizer = useMemo(() => {
+    return (product as any)?.productImages as ProductImageWithZones[] | undefined;
+  }, [product]);
+
+  const router = useRouter();
+
+  // Handle checkout with customization data
+  const handleCheckout = useCallback(() => {
+    if (customizationData) {
+      // Store customization data in sessionStorage for checkout page
+      sessionStorage.setItem(`customization_${product.id}`, JSON.stringify(customizationData));
+    }
+    router.push(`/checkout?product_id=${product.id}`);
+  }, [customizationData, product.id, router]);
+
+  // Handle quote request with customization data
+  const handleQuoteRequest = useCallback(() => {
+    if (customizationData) {
+      sessionStorage.setItem(`customization_${product.id}`, JSON.stringify(customizationData));
+    }
+    router.push(`/request-quote?product=${product.id}`);
+  }, [customizationData, product.id, router]);
 
   const productColors = useMemo(() => {
     const colorsFromAdditionalFields = extractColorsArray(product.additionalFieldProductValues).map(color =>
@@ -142,23 +204,83 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       ) : (
         /* Standard CTA Buttons */
         <div className="mt-6 space-y-4">
+          {/* Personalize Button - Show only if product has customization zones */}
+          {hasCustomizationZones && (
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowCustomizer(true)}
+                disabled={isOutOfStock}
+                className={`w-full py-3 px-4 flex items-center justify-center rounded-lg border-2 font-semibold text-sm transition-all ${
+                  customizationData
+                    ? 'border-green-600 bg-green-50 text-green-700'
+                    : 'border-purple-500 bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 hover:from-purple-100 hover:to-indigo-100'
+                } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <FaMagic className="mr-2 h-5 w-5" />
+                {customizationData ? (
+                  <>
+                    <span>Customized</span>
+                    {customizationData.additionalCharges && customizationData.additionalCharges > 0 && (
+                      <span className="ml-1 text-xs">(+${customizationData.additionalCharges.toFixed(2)})</span>
+                    )}
+                    <span className="ml-2 text-xs underline">Edit</span>
+                  </>
+                ) : (
+                  'Personalize with Name/Number/Logo'
+                )}
+              </button>
+
+              {/* Customization Preview - Show if any customization exists */}
+              {customizationData && (customizationData.playerName || customizationData.playerNumber || customizationData.logoDataUrl) && (
+                <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                  <p className="text-xs font-semibold text-green-700 mb-2">Your Personalization:</p>
+                  <div className="flex items-center gap-3">
+                    {customizationData.previewDataUrl && (
+                      <img
+                        src={customizationData.previewDataUrl}
+                        alt="Customization preview"
+                        className="w-20 h-20 object-contain rounded border border-gray-300 bg-white"
+                      />
+                    )}
+                    <div className="flex-1 text-sm text-gray-700">
+                      {customizationData.playerName && (
+                        <p><span className="font-medium">Name:</span> {customizationData.playerName}</p>
+                      )}
+                      {customizationData.playerNumber && (
+                        <p><span className="font-medium">Number:</span> #{customizationData.playerNumber}</p>
+                      )}
+                      {customizationData.logoDataUrl && (
+                        <div className="flex items-center gap-2 mt-1">
+                          <img src={customizationData.logoDataUrl} alt="Logo" className="w-8 h-8 object-contain rounded" />
+                          <span className="text-green-600 font-medium">Logo added</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Primary & Secondary CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3">
             {/* PRIMARY CTA: Buy Now - Most prominent */}
             {(product.orderType === 'CHECKOUT' || product.orderType === 'BOTH') && (
               <div className="flex-1">
-                <Link
-                  rel="preload"
+                <button
+                  type="button"
+                  onClick={handleCheckout}
+                  disabled={isOutOfStock}
                   className={`w-full py-4 px-6 flex items-center justify-center rounded-lg text-white font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
                     isOutOfStock
                       ? 'bg-gray-400 cursor-not-allowed'
                       : 'bg-green-600 hover:bg-green-700'
                   }`}
-                  href={`/checkout?product_id=${product.id}`}
                 >
                   Buy Now
                   <RiShoppingBag4Fill className="ml-2 h-5 w-5" />
-                </Link>
+                </button>
                 <p className="text-xs text-gray-500 text-center mt-1.5">
                   Fast checkout for ready-to-order customers
                 </p>
@@ -168,17 +290,18 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
             {/* SECONDARY CTA: Get Quote - For bulk/custom orders */}
             {(product.orderType === 'QUOTE_ONLY' || product.orderType === 'BOTH' || !product.orderType) && (
               <div className="flex-1">
-                <Link
+                <button
+                  type="button"
+                  onClick={handleQuoteRequest}
                   className={`w-full py-4 px-6 flex items-center justify-center rounded-lg font-semibold transition-all duration-200 ${
                     product.orderType === 'QUOTE_ONLY' || !product.orderType
                       ? 'bg-primary-500 text-white hover:bg-primary-600 shadow-lg hover:shadow-xl text-lg'
                       : 'bg-white border-2 border-green-600 text-green-600 hover:bg-green-50'
                   }`}
-                  href={`/request-quote?product=${product.id}`}
                 >
                   Get Free Quote + Mockup
                   <RiFileList3Line className="ml-2 h-5 w-5" />
-                </Link>
+                </button>
                 <p className="text-xs text-gray-500 text-center mt-1.5">
                   Best for bulk orders & custom requirements
                 </p>
@@ -245,6 +368,31 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
               {isExpanded ? 'Show Less' : 'Show More'}
             </button>
           )}
+        </div>
+      )}
+
+      {/* Product Customizer Modal */}
+      {showCustomizer && hasCustomizationZones && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-6xl max-h-[95vh] overflow-y-auto">
+            <ProductCustomizer
+              productType="default"
+              baseImageUrl={product.productImages?.[0]?.imageUrl || ''}
+              productImages={productImagesForCustomizer}
+              productColor={productColors.find(c => c?.colorName === selectedColor)?.colorHex || '#FFFFFF'}
+              productColorName={selectedColor || ''}
+              initialData={customizationData || undefined}
+              onCustomizationChange={setCustomizationData}
+              onAddToCart={(data) => {
+                setCustomizationData(data || null);
+                setShowCustomizer(false);
+              }}
+              onClose={() => setShowCustomizer(false)}
+              defaultLogoPosition={(product as any)?.defaultLogoPosition}
+              defaultNumberPosition={(product as any)?.defaultNumberPosition}
+              defaultNamePosition={(product as any)?.defaultNamePosition}
+            />
+          </div>
         </div>
       )}
     </div>

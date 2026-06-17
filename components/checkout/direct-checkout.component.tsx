@@ -9,6 +9,7 @@ import {v4 as uuidv4} from 'uuid';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useQuery} from '@tanstack/react-query';
+import {CustomizationData} from '@components/home/product/product.types';
 import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
 import {ReactQueryClientProvider} from '../../app/query-client-provider';
@@ -126,6 +127,7 @@ export const DirectCheckoutComponent: FC = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [modalState, setModalState] = useState<'success' | 'error' | 'warning' | 'info' | ''>('');
   const [modalMessage, setModalMessage] = useState<string>('');
+  const [customizationData, setCustomizationData] = useState<CustomizationData | null>(null);
 
   // Fetch product data
   const {data: product, isLoading: isLoadingProduct, error: productError} = useQuery<Product>({
@@ -169,6 +171,18 @@ export const DirectCheckoutComponent: FC = () => {
         category,
         source: 'direct_checkout'
       });
+
+      // Load customization data from sessionStorage if available
+      try {
+        const storedCustomization = sessionStorage.getItem(`customization_${product.id}`);
+        if (storedCustomization) {
+          const parsed = JSON.parse(storedCustomization) as CustomizationData;
+          setCustomizationData(parsed);
+          console.log('Loaded customization data for checkout:', parsed);
+        }
+      } catch (e) {
+        console.error('Failed to parse customization data:', e);
+      }
     }
   }, [product]);
 
@@ -390,7 +404,12 @@ export const DirectCheckoutComponent: FC = () => {
         // Size breakdown for apparel (uses auto-assigned default if user didn't complete)
         sizeBreakdown: showSizeBreakdown ? finalSizeBreakdown : null,
         // Pre-approved proof from checkout link (customer already reviewed and accepted)
-        approvedProofUrls: proofImages.length > 0 ? proofImages : null
+        approvedProofUrls: proofImages.length > 0 ? proofImages : null,
+        // Customization data from product customizer (player name, number, logo, preview)
+        customizationPlayerName: customizationData?.playerName || null,
+        customizationPlayerNumber: customizationData?.playerNumber || null,
+        customizationLogoUrl: customizationData?.logoDataUrl || null,
+        customizationPreviewUrl: customizationData?.previewDataUrl || null
       };
 
       // Create the quote request first
@@ -679,6 +698,36 @@ export const DirectCheckoutComponent: FC = () => {
                       <div className="flex-grow">
                         <h3 className="font-semibold text-gray-900" dangerouslySetInnerHTML={{__html: product.productName}} />
                         <p className="text-sm text-gray-500 mt-1">SKU: {product.sku}</p>
+
+                        {/* Customization Preview */}
+                        {customizationData && (
+                          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <p className="text-xs font-semibold text-green-700 mb-2">Personalization Added:</p>
+                            <div className="flex items-start gap-3">
+                              {customizationData.previewDataUrl && (
+                                <img
+                                  src={customizationData.previewDataUrl}
+                                  alt="Customization preview"
+                                  className="w-16 h-16 object-contain rounded border border-gray-200 bg-white"
+                                />
+                              )}
+                              <div className="text-xs text-gray-700 space-y-0.5">
+                                {customizationData.playerName && (
+                                  <p><span className="font-medium">Name:</span> {customizationData.playerName}</p>
+                                )}
+                                {customizationData.playerNumber && (
+                                  <p><span className="font-medium">Number:</span> #{customizationData.playerNumber}</p>
+                                )}
+                                {customizationData.logoDataUrl && (
+                                  <p className="text-green-600 font-medium">Custom logo added</p>
+                                )}
+                                {customizationData.additionalCharges && customizationData.additionalCharges > 0 && (
+                                  <p className="text-green-700 font-semibold">+${customizationData.additionalCharges.toFixed(2)} customization</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        )}
 
                         {/* Quantity Selector */}
                         <div className="mt-4">
