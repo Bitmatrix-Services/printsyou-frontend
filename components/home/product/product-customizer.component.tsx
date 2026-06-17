@@ -24,6 +24,16 @@ import {
   CustomizationData,
 } from './product.types';
 
+// Dynamic import for background removal (loaded on demand to reduce bundle size)
+const removeBackground = async (imageBlob: Blob): Promise<Blob> => {
+  const { removeBackground: removeBg } = await import('@imgly/background-removal');
+  return removeBg(imageBlob, {
+    progress: (key, current, total) => {
+      console.log(`[BG Removal] ${key}: ${Math.round((current / total) * 100)}%`);
+    },
+  });
+};
+
 // =============================================================================
 // TYPE DEFINITIONS
 // =============================================================================
@@ -364,6 +374,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [imageLoadError, setImageLoadError] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isRemovingBackground, setIsRemovingBackground] = useState(false);
   const [dpr, setDpr] = useState(1);
 
   // Primary logo (shared across all views by default)
@@ -848,7 +859,6 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       const reader = new FileReader();
       reader.onload = event => {
         const dataUrl = event.target?.result as string;
-        // Set primary logo (shared across all views by default)
         setPrimaryLogoDataUrl(dataUrl);
       };
       reader.onerror = () => {
@@ -865,6 +875,45 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     setPrimaryLogoDataUrl(null);
     setLogoImage(null);
   }, []);
+
+  // Remove background from logo
+  const handleRemoveLogoBackground = useCallback(async (isBackLogo = false) => {
+    const logoUrl = isBackLogo ? backLogoDataUrl : primaryLogoDataUrl;
+    if (!logoUrl) return;
+
+    setIsRemovingBackground(true);
+    setUploadError(null);
+
+    try {
+      // Convert data URL to blob
+      const response = await fetch(logoUrl);
+      const blob = await response.blob();
+
+      // Remove background
+      const resultBlob = await removeBackground(blob);
+
+      // Convert result back to data URL
+      const reader = new FileReader();
+      reader.onload = () => {
+        const newDataUrl = reader.result as string;
+        if (isBackLogo) {
+          setBackLogoDataUrl(newDataUrl);
+        } else {
+          setPrimaryLogoDataUrl(newDataUrl);
+        }
+        setIsRemovingBackground(false);
+      };
+      reader.onerror = () => {
+        setUploadError('Failed to process image');
+        setIsRemovingBackground(false);
+      };
+      reader.readAsDataURL(resultBlob);
+    } catch (error) {
+      console.error('Background removal failed:', error);
+      setUploadError('Failed to remove background. Please try again.');
+      setIsRemovingBackground(false);
+    }
+  }, [primaryLogoDataUrl, backLogoDataUrl]);
 
   // Handle back logo upload (when using different logos)
   const handleBackLogoUpload = useCallback(
@@ -1188,24 +1237,59 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
               </label>
 
               {logoDataUrl ? (
-                <div className="flex items-center gap-3 p-2 md:p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <img src={logoDataUrl} alt="Logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs md:text-sm font-medium text-gray-900">Logo uploaded</p>
-                    <p className="text-xs text-gray-500">Click to replace</p>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 p-2 md:p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <img src={logoDataUrl} alt="Logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded bg-white" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs md:text-sm font-medium text-gray-900">Logo uploaded</p>
+                      <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="text-xs text-blue-600 hover:text-blue-700"
+                      >
+                        Replace
+                      </button>
+                    </div>
+                    <button
+                      onClick={handleRemoveLogo}
+                      className="p-1.5 md:p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                      title="Remove logo"
+                    >
+                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
                   </div>
+                  {/* Remove Background Button */}
                   <button
-                    onClick={handleRemoveLogo}
-                    className="p-1.5 md:p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                    onClick={() => handleRemoveLogoBackground(false)}
+                    disabled={isRemovingBackground}
+                    className={`w-full py-2 px-3 rounded-lg text-xs md:text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                      isRemovingBackground
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                    }`}
                   >
-                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg>
+                    {isRemovingBackground ? (
+                      <>
+                        <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        Removing background...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Remove Background
+                      </>
+                    )}
                   </button>
                 </div>
               ) : (
@@ -1255,24 +1339,59 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                   </label>
 
                   {backLogoDataUrl ? (
-                    <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                      <img src={backLogoDataUrl} alt="Back logo preview" className="w-14 h-14 object-contain rounded" />
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">Back logo uploaded</p>
-                        <p className="text-xs text-gray-500">Click to replace</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3 p-2 md:p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <img src={backLogoDataUrl} alt="Back logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded bg-white" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs md:text-sm font-medium text-gray-900">Back logo uploaded</p>
+                          <button
+                            onClick={() => backFileInputRef.current?.click()}
+                            className="text-xs text-blue-600 hover:text-blue-700"
+                          >
+                            Replace
+                          </button>
+                        </div>
+                        <button
+                          onClick={handleRemoveBackLogo}
+                          className="p-1.5 md:p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                          title="Remove back logo"
+                        >
+                          <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
                       </div>
+                      {/* Remove Background Button for Back Logo */}
                       <button
-                        onClick={handleRemoveBackLogo}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        onClick={() => handleRemoveLogoBackground(true)}
+                        disabled={isRemovingBackground}
+                        className={`w-full py-2 px-3 rounded-lg text-xs md:text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                          isRemovingBackground
+                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+                        }`}
                       >
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
+                        {isRemovingBackground ? (
+                          <>
+                            <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Removing background...
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Remove Background
+                          </>
+                        )}
                       </button>
                     </div>
                   ) : (
