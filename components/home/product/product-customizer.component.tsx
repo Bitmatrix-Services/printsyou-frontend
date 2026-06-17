@@ -1026,7 +1026,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-between">
           <div>
             <h2 className="text-xl font-bold text-white">Customize Your Product</h2>
-            <p className="text-green-100 text-sm">Add your name, number, or logo</p>
+            <p className="text-green-100 text-sm">Add your logo</p>
           </div>
           {onClose && (
             <button onClick={onClose} className="text-white/80 hover:text-white transition-colors">
@@ -1066,7 +1066,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-white">Customize Your Product</h2>
-          <p className="text-green-100 text-sm">Add your name, number, or logo</p>
+          <p className="text-green-100 text-sm">Add your logo</p>
         </div>
         {onClose && (
           <button onClick={onClose} className="text-white/80 hover:text-white transition-colors">
@@ -1171,7 +1171,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
           {printConfig.logo && (
             <div>
               <label className="block text-sm font-semibold text-gray-900 mb-2">
-                {useDifferentLogos ? 'Front Logo' : 'Team Logo'}
+                {useDifferentLogos ? 'Front Logo' : 'Your Logo'}
                 {printConfig.logo.charge && printConfig.logo.charge > 0 && (
                   <span className="ml-2 text-xs text-green-600 font-normal">(+${printConfig.logo.charge.toFixed(2)})</span>
                 )}
