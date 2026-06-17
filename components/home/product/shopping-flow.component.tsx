@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable @next/next/no-img-element */
+
 /**
  * =============================================================================
  * SHOPPING FLOW COMPONENT - CRO-Optimized "Design-First" Layout
@@ -195,7 +197,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [error, setError] = useState<string>('');
   const [showCustomizer, setShowCustomizer] = useState(false);
   const [customizationData, setCustomizationData] = useState<CustomizationData | null>(null);
-  const [hoveredPreview, setHoveredPreview] = useState<{view: string; imageUrl: string; logoUrl?: string; logoZone?: any} | null>(null);
+  const [hoveredPreview, setHoveredPreview] = useState<{view: string; imageUrl: string; logoUrl?: string} | null>(null);
 
   // ==========================================================================
   // DERIVED STATE
@@ -506,83 +508,75 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             <div className="flex items-start gap-4">
               {/* Thumbnail previews */}
               <div className="flex gap-3 relative">
-                {customizationData.availableViews?.length ? (
-                  customizationData.availableViews.map((view) => {
-                    const viewImage = customizationData.viewProductImages?.[view];
-                    const logoZone = customizationData.viewZoneConfigs?.[view]?.logo;
-                    const logoToShow = (customizationData.useDifferentLogos && view === 'BACK' && customizationData.backLogoDataUrl)
-                      ? customizationData.backLogoDataUrl
-                      : customizationData.logoDataUrl;
-                    if (!viewImage) return null;
-                    return (
-                      <div key={view} className="text-center">
-                        <div
-                          className="w-28 h-28 rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
-                          onMouseEnter={() => setHoveredPreview({view, imageUrl: viewImage, logoUrl: logoToShow || undefined, logoZone})}
-                          onMouseLeave={() => setHoveredPreview(null)}
-                        >
-                          <img src={viewImage} alt={view} className="w-full h-full object-contain" />
-                          {logoToShow && logoZone && (
-                            <img
-                              src={logoToShow}
-                              alt="Logo"
-                              className="absolute object-contain"
-                              style={{
-                                left: `${((logoZone.x || 0) + (logoZone.width || 0.15) / 2) * 100}%`,
-                                top: `${((logoZone.y || 0) + (logoZone.height || 0.15) / 2) * 100}%`,
-                                width: `${(logoZone.width || 0.15) * 100}%`,
-                                height: `${(logoZone.height || 0.15) * 100}%`,
-                                transform: 'translate(-50%, -50%)',
-                              }}
-                            />
-                          )}
+                {/* Use availableViews if we have valid viewProductImages, otherwise fallback to product.productImages */}
+                {(() => {
+                  const hasValidViewImages = customizationData.availableViews?.length &&
+                    customizationData.viewProductImages &&
+                    Object.values(customizationData.viewProductImages).some(v => v);
+
+                  if (hasValidViewImages) {
+                    return customizationData.availableViews!.map((view) => {
+                      const viewImage = customizationData.viewProductImages?.[view];
+                      const logoToShow = (customizationData.useDifferentLogos && view === 'BACK' && customizationData.backLogoDataUrl)
+                        ? customizationData.backLogoDataUrl
+                        : customizationData.logoDataUrl;
+                      if (!viewImage) return null;
+                      return (
+                        <div key={view} className="text-center">
+                          <div
+                            className="w-28 h-28 rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
+                            onMouseEnter={() => setHoveredPreview({view, imageUrl: viewImage, logoUrl: logoToShow || undefined})}
+                            onMouseLeave={() => setHoveredPreview(null)}
+                          >
+                            <img src={viewImage} alt={view} className="w-full h-full object-contain" />
+                            {/* Logo overlay - use simple centered position for thumbnails since zone-based CSS positioning doesn't account for object-contain letterboxing */}
+                            {logoToShow && (
+                              <img
+                                src={logoToShow}
+                                alt="Logo"
+                                className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-6 h-6 object-contain"
+                              />
+                            )}
+                          </div>
+                          <span className="text-xs text-gray-500 mt-1 block capitalize">{view.toLowerCase()}</span>
                         </div>
-                        <span className="text-xs text-gray-500 mt-1 block capitalize">{view.toLowerCase()}</span>
-                      </div>
-                    );
-                  })
-                ) : (
-                  product.productImages?.slice(0, 2).map((img, idx) => {
-                    const imgUrl = `${ASSETS_SERVER_URL}${img.imageUrl}`;
-                    return (
-                      <div key={idx} className="text-center">
-                        <div
-                          className="w-28 h-28 rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
-                          onMouseEnter={() => setHoveredPreview({view: idx === 0 ? 'Front' : 'Back', imageUrl: imgUrl, logoUrl: customizationData.logoDataUrl || undefined, logoZone: null})}
-                          onMouseLeave={() => setHoveredPreview(null)}
-                        >
-                          <img src={imgUrl} alt={idx === 0 ? 'Front' : 'Back'} className="w-full h-full object-contain" />
-                          {customizationData.logoDataUrl && (
-                            <img src={customizationData.logoDataUrl} alt="Logo" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 object-contain" />
-                          )}
+                      );
+                    });
+                  } else {
+                    // Fallback: use product.productImages directly
+                    return product.productImages?.slice(0, 2).map((img, idx) => {
+                      const imgUrl = img.imageUrl?.startsWith('http') ? img.imageUrl : `${ASSETS_SERVER_URL}${img.imageUrl}`;
+                      return (
+                        <div key={idx} className="text-center">
+                          <div
+                            className="w-28 h-28 rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
+                            onMouseEnter={() => setHoveredPreview({view: idx === 0 ? 'Front' : 'Back', imageUrl: imgUrl, logoUrl: customizationData.logoDataUrl || undefined})}
+                            onMouseLeave={() => setHoveredPreview(null)}
+                          >
+                            <img src={imgUrl} alt={idx === 0 ? 'Front' : 'Back'} className="w-full h-full object-contain" />
+                            {customizationData.logoDataUrl && (
+                              <img src={customizationData.logoDataUrl} alt="Logo" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 object-contain" />
+                            )}
+                          </div>
+                          <span className="text-xs text-gray-500 mt-1 block">{idx === 0 ? 'Front' : 'Back'}</span>
                         </div>
-                        <span className="text-xs text-gray-500 mt-1 block">{idx === 0 ? 'Front' : 'Back'}</span>
-                      </div>
-                    );
-                  })
-                )}
+                      );
+                    });
+                  }
+                })()}
 
                 {/* Hover zoom popup */}
                 {hoveredPreview && (
                   <div className="absolute left-0 bottom-full mb-3 z-50 pointer-events-none">
                     <div className="w-72 h-72 rounded-xl border-2 border-gray-300 bg-white shadow-2xl overflow-hidden relative">
                       <img src={hoveredPreview.imageUrl} alt={hoveredPreview.view} className="w-full h-full object-contain" />
-                      {hoveredPreview.logoUrl && hoveredPreview.logoZone && (
+                      {/* Logo overlay - centered position for consistent display */}
+                      {hoveredPreview.logoUrl && (
                         <img
                           src={hoveredPreview.logoUrl}
                           alt="Logo"
-                          className="absolute object-contain"
-                          style={{
-                            left: `${((hoveredPreview.logoZone.x || 0) + (hoveredPreview.logoZone.width || 0.15) / 2) * 100}%`,
-                            top: `${((hoveredPreview.logoZone.y || 0) + (hoveredPreview.logoZone.height || 0.15) / 2) * 100}%`,
-                            width: `${(hoveredPreview.logoZone.width || 0.15) * 100}%`,
-                            height: `${(hoveredPreview.logoZone.height || 0.15) * 100}%`,
-                            transform: 'translate(-50%, -50%)',
-                          }}
+                          className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-16 h-16 object-contain"
                         />
-                      )}
-                      {hoveredPreview.logoUrl && !hoveredPreview.logoZone && (
-                        <img src={hoveredPreview.logoUrl} alt="Logo" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 object-contain" />
                       )}
                       <div className="absolute bottom-0 left-0 right-0 bg-gray-900/80 px-3 py-2">
                         <span className="text-sm text-white font-medium capitalize">{hoveredPreview.view.toLowerCase()} view</span>

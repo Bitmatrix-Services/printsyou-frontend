@@ -25,7 +25,7 @@ export const FormControlSelect: FC<IFormControlSelect> = ({
   disabled = false,
   errors,
   children,
-  autoComplete
+  autoComplete: _autoComplete
 }) => {
   return (
     <Controller

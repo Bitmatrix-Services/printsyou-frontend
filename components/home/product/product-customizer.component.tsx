@@ -1044,7 +1044,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
           </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Customization Not Available</h3>
           <p className="text-gray-600 mb-4">
-            This product doesn't have customization zones configured yet.
+            This product does not have customization zones configured yet.
           </p>
           <p className="text-sm text-gray-500 mb-6">
             Debug: printConfig = {JSON.stringify({name: !!printConfig.name, number: !!printConfig.number, logo: !!printConfig.logo})}
@@ -1298,6 +1298,13 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
               )}
             </div>
           )}
+
+          {/* Preview Note */}
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-xs text-blue-700 leading-relaxed">
+              <span className="font-semibold">Note:</span> This color is for preview only. You can select your preferred product color in the next step. Add any special instructions (Pantone colors, placement preferences) in the notes field.
+            </p>
+          </div>
 
           {/* Add to Cart Button */}
           {onAddToCart && (

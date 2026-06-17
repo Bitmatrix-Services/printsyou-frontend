@@ -1,4 +1,5 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 import React, {ChangeEvent, FC, useState, useEffect, useCallback} from 'react';
 import {Container} from '@components/globals/container.component';
 import {Breadcrumb} from '@components/globals/breadcrumb.component';
@@ -57,7 +58,7 @@ const getCookie = (name: string): string | null => {
 const calculateQuoteValue = (
   quantity: number | undefined,
   priceGrids?: PriceGrid[],
-  setupCharge: number = 30
+  _setupCharge: number = 30
 ): number => {
   // Default estimate for unknown quantity (assume ~50 units at ~$12/unit)
   if (!quantity || quantity <= 0) {
