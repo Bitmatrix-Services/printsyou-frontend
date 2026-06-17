@@ -308,6 +308,16 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
   defaultNamePosition,
   onClose,
 }) => {
+  // Mobile detection for responsive canvas
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // View selection state
   const [currentView, setCurrentView] = useState<ImageViewType>('FRONT');
 
@@ -633,10 +643,15 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     const logicalWidth = canvasWidth;
     const logicalHeight = canvasHeight;
 
+    // Set internal canvas resolution (for drawing)
     canvas.width = logicalWidth * dpr;
     canvas.height = logicalHeight * dpr;
-    canvas.style.width = `${logicalWidth}px`;
-    canvas.style.height = `${logicalHeight}px`;
+
+    // Set display size - smaller on mobile to fit in modal
+    const displayWidth = isMobile ? Math.min(200, window.innerWidth - 60) : logicalWidth;
+    const displayHeight = displayWidth * (logicalHeight / logicalWidth);
+    canvas.style.width = `${displayWidth}px`;
+    canvas.style.height = `${displayHeight}px`;
 
     ctx.scale(dpr, dpr);
     ctx.imageSmoothingEnabled = true;
@@ -774,6 +789,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     effectiveNumberFontColor,
     effectiveNameFontFamily,
     effectiveNumberFontFamily,
+    isMobile,
   ]);
 
   // Animation loop
@@ -1061,15 +1077,15 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-xl overflow-hidden w-full">
+    <div className="bg-white rounded-xl shadow-xl overflow-hidden w-full max-h-[95vh] overflow-y-auto">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-green-600 to-green-700 px-4 py-3 md:px-6 md:py-4 flex items-center justify-between sticky top-0 z-10">
         <div>
-          <h2 className="text-xl font-bold text-white">Customize Your Product</h2>
-          <p className="text-green-100 text-sm">Add your logo</p>
+          <h2 className="text-lg md:text-xl font-bold text-white">Customize Your Product</h2>
+          <p className="text-green-100 text-xs md:text-sm">Add your logo</p>
         </div>
         {onClose && (
-          <button onClick={onClose} className="text-white/80 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-white/80 hover:text-white transition-colors p-1">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -1078,16 +1094,16 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       </div>
 
       <div className="flex flex-col lg:flex-row">
-        {/* Canvas Preview - 60% width for larger image */}
-        <div className="lg:w-3/5 p-6 bg-gray-50 flex flex-col items-center justify-center">
+        {/* Canvas Preview - Very compact on mobile, 60% on desktop */}
+        <div className="lg:w-3/5 p-2 md:p-6 bg-gray-50 flex flex-col items-center">
           {/* View Selector Tabs */}
           {availableViews.length > 1 && (
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-1 mb-1 md:mb-4">
               {availableViews.map(view => (
                 <button
                   key={view}
                   onClick={() => setCurrentView(view)}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                  className={`px-2.5 py-0.5 md:px-4 md:py-2 rounded-md md:rounded-lg font-medium text-xs md:text-sm transition-all ${
                     currentView === view
                       ? 'bg-green-600 text-white shadow-md'
                       : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
@@ -1099,36 +1115,30 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
             </div>
           )}
 
-          {/* Canvas */}
-          <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
+          {/* Canvas - Much smaller on mobile, full size on desktop */}
+          <div className="relative bg-white rounded-lg shadow overflow-hidden">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
-                <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent" />
+                <div className="animate-spin rounded-full h-6 w-6 md:h-12 md:w-12 border-4 border-green-500 border-t-transparent" />
               </div>
             )}
-            <canvas
-              ref={canvasRef}
-              style={{
-                width: canvasWidth,
-                maxWidth: '100%',
-              }}
-            />
+            <canvas ref={canvasRef} />
           </div>
 
           {/* Additional Charges */}
           {totalCharges > 0 && (
-            <div className="mt-4 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
-              <p className="text-amber-800 text-sm font-medium">Customization Fee: +${totalCharges.toFixed(2)}</p>
+            <div className="mt-1 md:mt-4 px-2 py-0.5 md:px-4 md:py-2 bg-amber-50 border border-amber-200 rounded">
+              <p className="text-amber-800 text-[10px] md:text-xs font-medium">+${totalCharges.toFixed(2)}</p>
             </div>
           )}
         </div>
 
-        {/* Customization Form - 40% width */}
-        <div className="lg:w-2/5 p-6 space-y-6">
+        {/* Customization Form - Full width on mobile, 40% on desktop */}
+        <div className="lg:w-2/5 p-4 md:p-6 space-y-4 md:space-y-6">
           {/* Player Name */}
           {printConfig.name && (
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
+              <label className="block text-xs md:text-sm font-semibold text-gray-900 mb-1.5 md:mb-2">
                 Player Name
                 {printConfig.name.charge && printConfig.name.charge > 0 && (
                   <span className="ml-2 text-xs text-green-600 font-normal">(+${printConfig.name.charge.toFixed(2)})</span>
@@ -1140,7 +1150,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                 onChange={handleNameChange}
                 placeholder="Enter name (max 12 characters)"
                 maxLength={MAX_NAME_LENGTH}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg font-medium uppercase"
+                className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-base md:text-lg font-medium uppercase"
               />
               <p className="mt-1 text-xs text-gray-500">{playerName.length}/{MAX_NAME_LENGTH} characters</p>
             </div>
@@ -1149,7 +1159,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
           {/* Player Number */}
           {printConfig.number && (
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
+              <label className="block text-xs md:text-sm font-semibold text-gray-900 mb-1.5 md:mb-2">
                 Player Number
                 {printConfig.number.charge && printConfig.number.charge > 0 && (
                   <span className="ml-2 text-xs text-green-600 font-normal">(+${printConfig.number.charge.toFixed(2)})</span>
@@ -1162,7 +1172,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                 placeholder="00"
                 maxLength={MAX_NUMBER_LENGTH}
                 inputMode="numeric"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-4xl font-bold text-center"
+                className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-2xl md:text-4xl font-bold text-center"
               />
             </div>
           )}
@@ -1170,7 +1180,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
           {/* Logo Upload */}
           {printConfig.logo && (
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
+              <label className="block text-xs md:text-sm font-semibold text-gray-900 mb-1.5 md:mb-2">
                 {useDifferentLogos ? 'Front Logo' : 'Your Logo'}
                 {printConfig.logo.charge && printConfig.logo.charge > 0 && (
                   <span className="ml-2 text-xs text-green-600 font-normal">(+${printConfig.logo.charge.toFixed(2)})</span>
@@ -1178,17 +1188,17 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
               </label>
 
               {logoDataUrl ? (
-                <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <img src={logoDataUrl} alt="Logo preview" className="w-14 h-14 object-contain rounded" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">Logo uploaded</p>
+                <div className="flex items-center gap-3 p-2 md:p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <img src={logoDataUrl} alt="Logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs md:text-sm font-medium text-gray-900">Logo uploaded</p>
                     <p className="text-xs text-gray-500">Click to replace</p>
                   </div>
                   <button
                     onClick={handleRemoveLogo}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-1.5 md:p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
                   >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -1201,9 +1211,9 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
               ) : (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-green-400 hover:bg-green-50 transition-colors"
+                  className="border-2 border-dashed border-gray-300 rounded-lg p-3 md:p-4 text-center cursor-pointer hover:border-green-400 hover:bg-green-50 transition-colors"
                 >
-                  <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="mx-auto h-8 w-8 md:h-10 md:w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -1211,7 +1221,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <p className="mt-1 text-sm font-medium text-gray-900">Click to upload logo</p>
+                  <p className="mt-1 text-xs md:text-sm font-medium text-gray-900">Click to upload logo</p>
                   <p className="mt-1 text-xs text-gray-500">PNG or JPEG, max {MAX_LOGO_SIZE_MB}MB</p>
                 </div>
               )}
@@ -1300,9 +1310,9 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
           )}
 
           {/* Preview Note */}
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-xs text-blue-700 leading-relaxed">
-              <span className="font-semibold">Note:</span> This color is for preview only. You can select your preferred product color in the next step. Add any special instructions (Pantone colors, placement preferences) in the notes field.
+          <div className="p-2 md:p-3 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-xs text-blue-700 leading-snug md:leading-relaxed">
+              <span className="font-semibold">Note:</span> Preview color only. Select your preferred color in the next step.
             </p>
           </div>
 
@@ -1311,7 +1321,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
-              className={`w-full py-4 px-6 rounded-xl text-white font-bold text-lg transition-all ${
+              className={`w-full py-3 md:py-4 px-4 md:px-6 rounded-xl text-white font-bold text-base md:text-lg transition-all ${
                 isAddingToCart
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg hover:shadow-xl'
@@ -1319,7 +1329,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
             >
               {isAddingToCart ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-4 w-4 md:h-5 md:w-5" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path
                       className="opacity-75"
@@ -1327,7 +1337,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     />
                   </svg>
-                  Adding to Cart...
+                  Adding...
                 </span>
               ) : (
                 <>

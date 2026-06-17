@@ -16,7 +16,7 @@
  * =============================================================================
  */
 
-import React, {FC, useMemo, useState, useCallback, useEffect} from 'react';
+import React, {FC, useMemo, useState, useCallback, useEffect, useRef} from 'react';
 import {Product, PriceGrids, productColors, ProductImageWithZones, CustomizationData} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
@@ -157,6 +157,141 @@ const UrgencyCountdown: FC<{leadTimeDays?: number}> = ({leadTimeDays = 3}) => {
 };
 
 // =============================================================================
+// PRODUCT THUMBNAIL WITH LOGO COMPONENT
+// Renders product image with logo overlay positioned according to zone config
+// =============================================================================
+interface ProductThumbnailWithLogoProps {
+  imageUrl: string;
+  logoUrl: string;
+  logoZone?: { x?: number; y?: number; width?: number; height?: number } | null;
+  alt: string;
+  size?: number; // Container size in pixels
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+}
+
+const ProductThumbnailWithLogo: FC<ProductThumbnailWithLogoProps> = ({
+  imageUrl,
+  logoUrl,
+  logoZone,
+  alt,
+  size = 112,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [imageBounds, setImageBounds] = useState<{x: number; y: number; width: number; height: number} | null>(null);
+
+  // Calculate actual image bounds within container when image loads
+  const handleImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    const container = containerRef.current;
+    if (!container) return;
+
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const imgNaturalWidth = img.naturalWidth;
+    const imgNaturalHeight = img.naturalHeight;
+
+    if (imgNaturalWidth === 0 || imgNaturalHeight === 0) return;
+
+    // Calculate how object-contain scales the image
+    const imgAspect = imgNaturalWidth / imgNaturalHeight;
+    const containerAspect = containerWidth / containerHeight;
+
+    let renderWidth: number;
+    let renderHeight: number;
+    let offsetX: number;
+    let offsetY: number;
+
+    if (imgAspect > containerAspect) {
+      // Image is wider - letterbox top/bottom
+      renderWidth = containerWidth;
+      renderHeight = containerWidth / imgAspect;
+      offsetX = 0;
+      offsetY = (containerHeight - renderHeight) / 2;
+    } else {
+      // Image is taller - letterbox left/right
+      renderHeight = containerHeight;
+      renderWidth = containerHeight * imgAspect;
+      offsetX = (containerWidth - renderWidth) / 2;
+      offsetY = 0;
+    }
+
+    setImageBounds({ x: offsetX, y: offsetY, width: renderWidth, height: renderHeight });
+  }, []);
+
+  // Calculate logo position within the actual image bounds
+  const logoStyle = useMemo(() => {
+    if (!imageBounds || !logoZone) {
+      // Fallback to center if no bounds or zone
+      return {
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: size * 0.25,
+        height: size * 0.25,
+      };
+    }
+
+    // Zone coordinates are normalized (0-1) relative to the image
+    const zoneX = logoZone.x ?? 0.5;
+    const zoneY = logoZone.y ?? 0.5;
+    const zoneWidth = logoZone.width ?? 0.15;
+    const zoneHeight = logoZone.height ?? 0.15;
+
+    // Calculate center of zone in pixels relative to container
+    const centerX = imageBounds.x + (zoneX + zoneWidth / 2) * imageBounds.width;
+    const centerY = imageBounds.y + (zoneY + zoneHeight / 2) * imageBounds.height;
+
+    // Logo size based on zone dimensions
+    const logoWidth = zoneWidth * imageBounds.width;
+    const logoHeight = zoneHeight * imageBounds.height;
+
+    return {
+      left: centerX,
+      top: centerY,
+      transform: 'translate(-50%, -50%)',
+      width: Math.max(logoWidth, 20), // Minimum 20px
+      height: Math.max(logoHeight, 20),
+    };
+  }, [imageBounds, logoZone, size]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
+      style={{ width: size, height: size }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <img
+        src={imageUrl}
+        alt={alt}
+        className="w-full h-full object-contain"
+        onLoad={handleImageLoad}
+      />
+      {logoUrl && (
+        <img
+          src={logoUrl}
+          alt="Logo"
+          className="absolute object-contain pointer-events-none"
+          style={{
+            left: typeof logoStyle.left === 'number' ? logoStyle.left : logoStyle.left,
+            top: typeof logoStyle.top === 'number' ? logoStyle.top : logoStyle.top,
+            transform: logoStyle.transform,
+            width: logoStyle.width,
+            height: logoStyle.height,
+            maxWidth: '40%',
+            maxHeight: '40%',
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+// =============================================================================
 // MAIN SHOPPING FLOW COMPONENT
 // =============================================================================
 interface ShoppingFlowProps {
@@ -197,7 +332,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [error, setError] = useState<string>('');
   const [showCustomizer, setShowCustomizer] = useState(false);
   const [customizationData, setCustomizationData] = useState<CustomizationData | null>(null);
-  const [hoveredPreview, setHoveredPreview] = useState<{view: string; imageUrl: string; logoUrl?: string} | null>(null);
+  const [hoveredPreview, setHoveredPreview] = useState<{view: string; imageUrl: string; logoUrl?: string; logoZone?: {x?: number; y?: number; width?: number; height?: number} | null} | null>(null);
 
   // ==========================================================================
   // DERIVED STATE
@@ -508,77 +643,74 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             <div className="flex items-start gap-4">
               {/* Thumbnail previews */}
               <div className="flex gap-3 relative">
-                {/* Use availableViews if we have valid viewProductImages, otherwise fallback to product.productImages */}
+                {/* Render thumbnails with zone-accurate logo positioning */}
                 {(() => {
                   const hasValidViewImages = customizationData.availableViews?.length &&
                     customizationData.viewProductImages &&
                     Object.values(customizationData.viewProductImages).some(v => v);
 
-                  if (hasValidViewImages) {
-                    return customizationData.availableViews!.map((view) => {
+                  if (hasValidViewImages && customizationData.availableViews) {
+                    // Use view images with zone configs
+                    return customizationData.availableViews.map((view) => {
                       const viewImage = customizationData.viewProductImages?.[view];
+                      const logoZone = customizationData.viewZoneConfigs?.[view]?.logo;
                       const logoToShow = (customizationData.useDifferentLogos && view === 'BACK' && customizationData.backLogoDataUrl)
                         ? customizationData.backLogoDataUrl
                         : customizationData.logoDataUrl;
                       if (!viewImage) return null;
                       return (
                         <div key={view} className="text-center">
-                          <div
-                            className="w-28 h-28 rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
-                            onMouseEnter={() => setHoveredPreview({view, imageUrl: viewImage, logoUrl: logoToShow || undefined})}
+                          <ProductThumbnailWithLogo
+                            imageUrl={viewImage}
+                            logoUrl={logoToShow || ''}
+                            logoZone={logoZone}
+                            alt={view}
+                            size={112}
+                            onMouseEnter={() => setHoveredPreview({view, imageUrl: viewImage, logoUrl: logoToShow || undefined, logoZone})}
                             onMouseLeave={() => setHoveredPreview(null)}
-                          >
-                            <img src={viewImage} alt={view} className="w-full h-full object-contain" />
-                            {/* Logo overlay - use simple centered position for thumbnails since zone-based CSS positioning doesn't account for object-contain letterboxing */}
-                            {logoToShow && (
-                              <img
-                                src={logoToShow}
-                                alt="Logo"
-                                className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-6 h-6 object-contain"
-                              />
-                            )}
-                          </div>
+                          />
                           <span className="text-xs text-gray-500 mt-1 block capitalize">{view.toLowerCase()}</span>
                         </div>
                       );
                     });
-                  } else {
-                    // Fallback: use product.productImages directly
-                    return product.productImages?.slice(0, 2).map((img, idx) => {
-                      const imgUrl = img.imageUrl?.startsWith('http') ? img.imageUrl : `${ASSETS_SERVER_URL}${img.imageUrl}`;
-                      return (
-                        <div key={idx} className="text-center">
-                          <div
-                            className="w-28 h-28 rounded-lg border-2 border-gray-200 bg-gray-50 overflow-hidden relative cursor-zoom-in hover:border-gray-400 transition-all"
-                            onMouseEnter={() => setHoveredPreview({view: idx === 0 ? 'Front' : 'Back', imageUrl: imgUrl, logoUrl: customizationData.logoDataUrl || undefined})}
-                            onMouseLeave={() => setHoveredPreview(null)}
-                          >
-                            <img src={imgUrl} alt={idx === 0 ? 'Front' : 'Back'} className="w-full h-full object-contain" />
-                            {customizationData.logoDataUrl && (
-                              <img src={customizationData.logoDataUrl} alt="Logo" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 object-contain" />
-                            )}
-                          </div>
-                          <span className="text-xs text-gray-500 mt-1 block">{idx === 0 ? 'Front' : 'Back'}</span>
-                        </div>
-                      );
-                    });
                   }
+
+                  // Fallback: use product.productImages with default zone or centered logo
+                  return product.productImages?.slice(0, 2).map((img, idx) => {
+                    const imgUrl = img.imageUrl?.startsWith('http') ? img.imageUrl : `${ASSETS_SERVER_URL}${img.imageUrl}`;
+                    // Try to get zone from product's default positions
+                    const defaultLogoZone = (product as any)?.defaultLogoPosition?.enabled
+                      ? (product as any).defaultLogoPosition
+                      : null;
+                    return (
+                      <div key={idx} className="text-center">
+                        <ProductThumbnailWithLogo
+                          imageUrl={imgUrl}
+                          logoUrl={customizationData.logoDataUrl || ''}
+                          logoZone={defaultLogoZone}
+                          alt={idx === 0 ? 'Front' : 'Back'}
+                          size={112}
+                          onMouseEnter={() => setHoveredPreview({view: idx === 0 ? 'Front' : 'Back', imageUrl: imgUrl, logoUrl: customizationData.logoDataUrl || undefined, logoZone: defaultLogoZone})}
+                          onMouseLeave={() => setHoveredPreview(null)}
+                        />
+                        <span className="text-xs text-gray-500 mt-1 block">{idx === 0 ? 'Front' : 'Back'}</span>
+                      </div>
+                    );
+                  });
                 })()}
 
                 {/* Hover zoom popup */}
                 {hoveredPreview && (
                   <div className="absolute left-0 bottom-full mb-3 z-50 pointer-events-none">
-                    <div className="w-72 h-72 rounded-xl border-2 border-gray-300 bg-white shadow-2xl overflow-hidden relative">
-                      <img src={hoveredPreview.imageUrl} alt={hoveredPreview.view} className="w-full h-full object-contain" />
-                      {/* Logo overlay - centered position for consistent display */}
-                      {hoveredPreview.logoUrl && (
-                        <img
-                          src={hoveredPreview.logoUrl}
-                          alt="Logo"
-                          className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-16 h-16 object-contain"
-                        />
-                      )}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gray-900/80 px-3 py-2">
+                    <div className="relative">
+                      <ProductThumbnailWithLogo
+                        imageUrl={hoveredPreview.imageUrl}
+                        logoUrl={hoveredPreview.logoUrl || ''}
+                        logoZone={hoveredPreview.logoZone}
+                        alt={hoveredPreview.view}
+                        size={288}
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gray-900/80 px-3 py-2 rounded-b-lg">
                         <span className="text-sm text-white font-medium capitalize">{hoveredPreview.view.toLowerCase()} view</span>
                       </div>
                     </div>
@@ -674,11 +806,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       </div>
 
       {/* ================================================================== */}
-      {/* STEP 2: SELECT SHIRT COLOR */}
+      {/* STEP 2: SELECT COLOR */}
       {/* ================================================================== */}
       {hasColors && (
         <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-          <StepHeader step={2} title="Select Shirt Color" isComplete={isStep2Complete} />
+          <StepHeader step={2} title="Select Color" isComplete={isStep2Complete} />
 
           <div className="mb-3">
             <span className="text-sm text-gray-600">
