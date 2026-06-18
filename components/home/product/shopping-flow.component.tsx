@@ -334,6 +334,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [customizationData, setCustomizationData] = useState<CustomizationData | null>(null);
   const [hoveredPreview, setHoveredPreview] = useState<{view: string; imageUrl: string; logoUrl?: string; logoZone?: {x?: number; y?: number; width?: number; height?: number} | null} | null>(null);
 
+  // Pre-checkout customer info modal
+  const [showCustomerInfoModal, setShowCustomerInfoModal] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState({
+    name: '',
+    email: '',
+    phone: ''
+  });
+
   // ==========================================================================
   // DERIVED STATE
   // ==========================================================================
@@ -448,7 +456,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     setSizeBreakdown(newBreakdown);
   }, [quantity, availableSizes]);
 
-  const handleCheckout = async () => {
+  // Open the customer info modal before checkout
+  const handleCheckout = () => {
     setError('');
     if (hasColors && !selectedColor) {
       setError('Please select a color before proceeding.');
@@ -458,7 +467,27 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       setError('Please complete the size breakdown to match your quantity.');
       return;
     }
+    // Show customer info modal
+    setShowCustomerInfoModal(true);
+  };
 
+  // Proceed with actual checkout after customer info is collected
+  const proceedToCheckout = async () => {
+    // Validate customer info
+    if (!customerInfo.name.trim()) {
+      setError('Please enter your name.');
+      return;
+    }
+    if (!customerInfo.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerInfo.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (!customerInfo.phone.trim() || customerInfo.phone.replace(/\D/g, '').length < 10) {
+      setError('Please enter a valid phone number.');
+      return;
+    }
+
+    setShowCustomerInfoModal(false);
     setIsProcessing(true);
     checkoutAnalytics.submitted({
       productId: product.id,
@@ -590,7 +619,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         customizationPlayerName: customizationData?.playerName || undefined,
         customizationPlayerNumber: customizationData?.playerNumber || undefined,
         customizationLogoUrl: customizationLogoS3Url || undefined,
-        customizationPreviewUrl: customizationPreviewS3Url || undefined
+        customizationPreviewUrl: customizationPreviewS3Url || undefined,
+        // Customer info for Stripe checkout pre-fill
+        fullName: customerInfo.name.trim(),
+        email: customerInfo.email.trim(),
+        phoneNumber: customerInfo.phone.trim()
       };
 
       const response = await axios.post(`${API_BASE_URL}${CheckoutRoutes.createShoppingFlow}`, payload);
@@ -1138,6 +1171,106 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               defaultNumberPosition={(product as any)?.defaultNumberPosition}
               defaultNamePosition={(product as any)?.defaultNamePosition}
             />
+          </div>
+        </div>
+      )}
+
+      {/* ================================================================== */}
+      {/* CUSTOMER INFO MODAL - Collect info before Stripe checkout */}
+      {/* ================================================================== */}
+      {showCustomerInfoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4">
+              <h3 className="text-xl font-bold text-white">Almost There!</h3>
+              <p className="text-green-100 text-sm mt-1">Enter your details to proceed to secure checkout</p>
+            </div>
+
+            {/* Form */}
+            <div className="p-6 space-y-4">
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={customerInfo.name}
+                  onChange={(e) => setCustomerInfo(prev => ({...prev, name: e.target.value}))}
+                  placeholder="John Smith"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  value={customerInfo.email}
+                  onChange={(e) => setCustomerInfo(prev => ({...prev, email: e.target.value}))}
+                  placeholder="john@example.com"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  value={customerInfo.phone}
+                  onChange={(e) => setCustomerInfo(prev => ({...prev, phone: e.target.value}))}
+                  placeholder="(555) 123-4567"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all"
+                />
+              </div>
+
+              <div className="pt-2 space-y-3">
+                <button
+                  type="button"
+                  onClick={proceedToCheckout}
+                  disabled={isProcessing}
+                  className="w-full py-4 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isProcessing ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <FaShieldAlt className="mr-2" />
+                      Continue to Secure Payment
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {setShowCustomerInfoModal(false); setError('');}}
+                  className="w-full py-3 px-4 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all"
+                >
+                  Go Back
+                </button>
+              </div>
+
+              <p className="text-xs text-gray-500 text-center pt-2">
+                <FaShieldAlt className="inline mr-1" />
+                Your information is secure and will only be used for this order.
+              </p>
+            </div>
           </div>
         </div>
       )}
