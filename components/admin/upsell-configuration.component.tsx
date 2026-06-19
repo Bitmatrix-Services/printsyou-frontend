@@ -387,7 +387,7 @@ export const UpsellConfigurationPanel: React.FC<UpsellConfigurationPanelProps> =
 
             {selectedProducts.length === 0 && (
               <div className="col-span-full text-center py-8 text-gray-500 border-2 border-dashed border-gray-200 rounded-lg">
-                No products selected. Click "Add Product" to get started.
+                No products selected. Click &quot;Add Product&quot; to get started.
               </div>
             )}
           </div>

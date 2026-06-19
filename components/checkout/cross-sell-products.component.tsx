@@ -1,8 +1,7 @@
 'use client';
 
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect} from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import {FaShoppingCart, FaStar, FaGift, FaClock, FaImage} from 'react-icons/fa';
 
 const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com';

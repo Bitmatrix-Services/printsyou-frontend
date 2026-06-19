@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import React, {useState} from 'react';
 
 // Mock Container component since it's not available
@@ -79,11 +78,6 @@ export const ThreePLServicesDetails = () => {
       <div className={`font-bold text-lg ${highlight ? 'text-green-600' : 'text-primary-600'}`}>{price}</div>
     </div>
   );
-
-  interface FreeServiceItemProps {
-    name: string;
-    icon: string;
-  }
 
   const FreeServiceItem: React.FC<{name: string; icon: string}> = ({name, icon}) => (
     <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">

@@ -43,7 +43,8 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
     let productsByCategoryPaged: any | null = null;
     let filters: CategoryFilters | null = null;
 
-    let reviewSummary: Awaited<ReturnType<typeof getCategoryReviews>> = null;
+    // eslint-disable-next-line no-unused-vars
+    let _reviewSummary: Awaited<ReturnType<typeof getCategoryReviews>> = null;
 
     if (response?.payload) {
         category = response.payload;
@@ -55,7 +56,7 @@ const CategoryPage = async (props: {params: Params; searchParams: SearchParams})
         ]);
         productsByCategoryPaged = productsResult;
         filters = filtersResult;
-        reviewSummary = reviewsResult;
+        _reviewSummary = reviewsResult;
     }
 
     let allCategories: Category[] = [];
