@@ -841,64 +841,114 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       {/* ================================================================== */}
       {/* STEP 2: SELECT COLOR */}
       {/* ================================================================== */}
-      {hasColors && (
-        <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-          <StepHeader step={2} title="Select Color" isComplete={isStep2Complete} />
+      {hasColors && (() => {
+        // Check if any color has a matching image
+        const hasColorImages = availableColors.some((color: productColors) =>
+          color.coloredProductImage || color.onlyColorImage
+        );
 
-          <div className="mb-3">
-            <span className="text-sm text-gray-600">
-              Color: {selectedColor ? <span className="font-semibold text-gray-900">{selectedColor}</span> : <span className="text-red-500 font-medium">Select a color</span>}
-            </span>
-          </div>
+        return (
+          <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <StepHeader step={2} title="Select Color" isComplete={isStep2Complete} />
 
-          <div className="grid gap-2" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))'}}>
-            {availableColors.map((color: productColors) => {
-              const isSelected = selectedColor === color.colorName;
-              const colorImagePath = color.coloredProductImage || color.onlyColorImage;
-              const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
+            <div className="mb-3">
+              <span className="text-sm text-gray-600">
+                Color: {selectedColor ? <span className="font-semibold text-gray-900">{selectedColor}</span> : <span className="text-red-500 font-medium">Select a color</span>}
+              </span>
+            </div>
 
-              return (
-                <button
-                  key={color.id}
-                  type="button"
-                  onClick={() => setSelectedColor(color.colorName)}
-                  disabled={isOutOfStock}
-                  className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
-                    isSelected ? 'border-gray-900 ring-2 ring-gray-300' : 'border-gray-200 hover:border-gray-400'
-                  } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  title={color.colorName}
-                >
-                  {imageUrl ? (
-                    <div className="relative w-full aspect-square overflow-hidden">
-                      <img src={imageUrl} alt={color.colorName} className="w-full h-full object-cover" />
-                      <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                        <span className="text-[10px] text-white font-medium text-center block truncate">{color.colorName}</span>
-                      </div>
-                      {isSelected && (
-                        <div className="absolute top-1 right-1">
-                          <FaCheckCircle className="w-5 h-5 text-green-500 drop-shadow-lg" />
+            {hasColorImages ? (
+              /* Grid layout with product images */
+              <div className="grid gap-2" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))'}}>
+                {availableColors.map((color: productColors) => {
+                  const isSelected = selectedColor === color.colorName;
+                  const colorImagePath = color.coloredProductImage || color.onlyColorImage;
+                  const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
+
+                  return (
+                    <button
+                      key={color.id}
+                      type="button"
+                      onClick={() => setSelectedColor(color.colorName)}
+                      disabled={isOutOfStock}
+                      className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
+                        isSelected ? 'border-gray-900 ring-2 ring-gray-300' : 'border-gray-200 hover:border-gray-400'
+                      } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={color.colorName}
+                    >
+                      {imageUrl ? (
+                        <div className="relative w-full aspect-square overflow-hidden">
+                          <img src={imageUrl} alt={color.colorName} className="w-full h-full object-cover" />
+                          <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                            <span className="text-[10px] text-white font-medium text-center block truncate">{color.colorName}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute top-1 right-1">
+                              <FaCheckCircle className="w-5 h-5 text-green-500 drop-shadow-lg" />
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="relative w-full aspect-square">
+                          <div className="w-full h-full" style={{backgroundColor: color.colorHex || '#ccc'}} />
+                          <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                            <span className="text-[10px] text-white font-medium text-center block truncate">{color.colorName}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute top-1 right-1">
+                              <FaCheckCircle className="w-5 h-5 text-white drop-shadow-lg" />
+                            </div>
+                          )}
                         </div>
                       )}
-                    </div>
-                  ) : (
-                    <div className="relative w-full aspect-square">
-                      <div className="w-full h-full" style={{backgroundColor: color.colorHex || '#ccc'}} />
-                      <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                        <span className="text-[10px] text-white font-medium text-center block truncate">{color.colorName}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              /* Color swatches/legend layout when no images available */
+              <div className="flex flex-wrap gap-3">
+                {availableColors.map((color: productColors) => {
+                  const isSelected = selectedColor === color.colorName;
+
+                  return (
+                    <button
+                      key={color.id}
+                      type="button"
+                      onClick={() => setSelectedColor(color.colorName)}
+                      disabled={isOutOfStock}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all ${
+                        isSelected
+                          ? 'border-gray-900 bg-gray-50 ring-2 ring-gray-300'
+                          : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
+                      } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={color.colorName}
+                    >
+                      {/* Color swatch circle */}
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex-shrink-0 ${
+                          isSelected ? 'border-gray-900' : 'border-gray-300'
+                        }`}
+                        style={{backgroundColor: color.colorHex || '#ccc'}}
+                      >
+                        {isSelected && (
+                          <FaCheckCircle className="w-full h-full text-white drop-shadow-md" style={{
+                            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.5))'
+                          }} />
+                        )}
                       </div>
-                      {isSelected && (
-                        <div className="absolute top-1 right-1">
-                          <FaCheckCircle className="w-5 h-5 text-white drop-shadow-lg" />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </button>
-              );
-            })}
+                      {/* Color name */}
+                      <span className={`text-sm font-medium ${isSelected ? 'text-gray-900' : 'text-gray-700'}`}>
+                        {color.colorName}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ================================================================== */}
       {/* STEP 3: QUANTITY & SIZE BREAKDOWN */}
