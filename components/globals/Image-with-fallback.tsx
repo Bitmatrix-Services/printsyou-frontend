@@ -1,7 +1,19 @@
 'use client';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import Image, {ImageProps} from 'next/image';
 import {Skeleton} from '@mui/joy';
+
+// Helper to build proper image URL with leading slash
+const buildImageUrl = (src: string | undefined): string => {
+  if (!src) return '/assets/logo-full.png';
+  // If already a full URL, return as-is
+  if (src.startsWith('http://') || src.startsWith('https://')) return src;
+  // Ensure leading slash
+  const normalizedPath = src.startsWith('/') ? src : `/${src}`;
+  // Get assets URL at runtime to ensure it's available
+  const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com';
+  return `${assetsUrl}${normalizedPath}`;
+};
 
 interface ImageWithFallbackProps extends ImageProps {
   fallbackSrc?: string;
@@ -10,12 +22,20 @@ interface ImageWithFallbackProps extends ImageProps {
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
   const {src, fallbackSrc = '/assets/logo-full.png', skeletonRounded, priority, alt, ...rest} = props;
-  const [imgSrc, setImgSrc] = useState(`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${src}`);
+
+  // Compute the final image URL
+  const computedSrc = useMemo(() => buildImageUrl(src as string), [src]);
+  const [imgSrc, setImgSrc] = useState(computedSrc);
   const [loading, setLoading] = useState(true);
 
+  // Update imgSrc when src prop changes
   useEffect(() => {
-    setImgSrc(`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${src}`);
+    const newSrc = buildImageUrl(src as string);
+    setImgSrc(newSrc);
   }, [src]);
+
+  // Use computed source directly to avoid stale state issues
+  const finalSrc = imgSrc || computedSrc || fallbackSrc;
 
   return (
     <>
@@ -30,7 +50,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
       )}
       <Image
         alt={alt}
-        src={src ? imgSrc : '/assets/logo-full.png'}
+        src={finalSrc}
         priority={priority}
         onError={() => setImgSrc(fallbackSrc)}
         onLoad={() => setLoading(false)}

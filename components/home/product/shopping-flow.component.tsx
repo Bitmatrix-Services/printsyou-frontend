@@ -17,12 +17,13 @@
  */
 
 import React, {FC, useMemo, useState, useCallback, useEffect, useRef} from 'react';
+import {useSearchParams} from 'next/navigation';
 import {Product, PriceGrids, productColors, ProductImageWithZones, CustomizationData} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {ProductCustomizer} from '@components/home/product/product-customizer.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
-import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList, FaBolt, FaUpload, FaPencilAlt, FaBalanceScale} from 'react-icons/fa';
+import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList, FaBolt, FaUpload, FaPencilAlt, FaBalanceScale, FaTag} from 'react-icons/fa';
 import {HiLightningBolt} from 'react-icons/hi';
 import axios from 'axios';
 import Link from 'next/link';
@@ -299,6 +300,13 @@ interface ShoppingFlowProps {
 }
 
 export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
+  // URL parameters for cross-sell discounts
+  const searchParams = useSearchParams();
+  const crossSellDiscount = useMemo(() => {
+    const discount = searchParams.get('cross_sell_discount');
+    return discount ? parseInt(discount, 10) : 0;
+  }, [searchParams]);
+
   // Store context
   const {store, isB2B} = useStore();
   const hasTierPricing = useHasFeature('tierPricing');
@@ -368,7 +376,8 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   const needsSizeBreakdown = isApparel && availableSizes.length > 0;
 
-  const currentUnitPrice = useMemo(() => {
+  // Calculate base unit price from selected tier
+  const baseUnitPrice = useMemo(() => {
     if (!selectedTier) return 0;
     let applicableTier = selectedTier;
     for (const tier of sortedPriceGrids) {
@@ -378,10 +387,19 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     return applicableTier.salePrice && applicableTier.salePrice > 0 ? applicableTier.salePrice : applicableTier.price;
   }, [selectedTier, quantity, sortedPriceGrids]);
 
+  // Apply cross-sell discount if present
+  const currentUnitPrice = useMemo(() => {
+    if (crossSellDiscount > 0 && baseUnitPrice > 0) {
+      return baseUnitPrice * (1 - crossSellDiscount / 100);
+    }
+    return baseUnitPrice;
+  }, [baseUnitPrice, crossSellDiscount]);
+
   const subtotal = currentUnitPrice * quantity;
   const shippingCost = calculateShipping(quantity, subtotal);
   const totalPrice = subtotal + shippingCost;
   const isFreeShipping = shippingCost === 0;
+  const hasCrossSellDiscount = crossSellDiscount > 0;
 
   const isSizeBreakdownValid = useMemo(() => {
     if (!needsSizeBreakdown) return true;
@@ -608,11 +626,16 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       const payload = {
         productId: product.id,
         quantity,
+        unitPrice: currentUnitPrice,
+        shippingCost: shippingCost,
+        crossSellDiscount: crossSellDiscount > 0 ? crossSellDiscount : undefined,
         selectedColor: selectedColor || undefined,
         artworkFiles: allArtworkFiles,
         artworkStatus: allArtworkFiles.length > 0 ? 'uploaded' : 'pending_email',
         sizeBreakdown: needsSizeBreakdown ? sizeBreakdown : undefined,
-        notes: notes || undefined,
+        notes: crossSellDiscount > 0
+          ? `[CROSS-SELL ${crossSellDiscount}% OFF] ${notes || ''}`
+          : (notes || undefined),
         sourceUrl: window.location.href,
         storeSlug: store.slug,
         gclid, fbp, fbc,
@@ -663,6 +686,21 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   // ==========================================================================
   return (
     <div className="mt-6 space-y-6">
+      {/* Cross-Sell Discount Banner */}
+      {hasCrossSellDiscount && (
+        <div className="bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl p-4 shadow-lg">
+          <div className="flex items-center gap-3">
+            <div className="bg-white/20 p-2 rounded-full">
+              <FaTag className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="font-bold text-lg">Exclusive {crossSellDiscount}% Off Applied!</p>
+              <p className="text-white/90 text-sm">Your cross-sell discount has been automatically applied to this order.</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ================================================================== */}
       {/* STEP 1: CUSTOMIZATION (THE HOOK) */}
       {/* ================================================================== */}
@@ -1083,10 +1121,30 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         {showProductionCountdown && <UrgencyCountdown leadTimeDays={leadTimeDays} />}
 
         {/* Pricing Summary */}
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+        <div className={`border rounded-xl p-5 ${hasCrossSellDiscount ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'}`}>
           <div className="space-y-2 mb-4">
+            {/* Show discount savings if cross-sell discount is applied */}
+            {hasCrossSellDiscount && (
+              <div className="flex justify-between text-sm bg-red-100 -mx-5 -mt-5 mb-3 px-5 py-2 rounded-t-xl">
+                <span className="text-red-700 font-medium flex items-center gap-1.5">
+                  <FaTag className="w-3 h-3" />
+                  {crossSellDiscount}% Cross-Sell Discount
+                </span>
+                <span className="text-red-700 font-bold">-${((baseUnitPrice * quantity) - subtotal).toFixed(2)}</span>
+              </div>
+            )}
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">{quantity} items × ${currentUnitPrice.toFixed(2)}</span>
+              <span className="text-gray-600">
+                {quantity} items ×
+                {hasCrossSellDiscount ? (
+                  <>
+                    <span className="line-through text-gray-400 mx-1">${baseUnitPrice.toFixed(2)}</span>
+                    <span className="text-red-600 font-medium">${currentUnitPrice.toFixed(2)}</span>
+                  </>
+                ) : (
+                  <span> ${currentUnitPrice.toFixed(2)}</span>
+                )}
+              </span>
               <span className="text-gray-900 font-medium">${subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm">
@@ -1102,7 +1160,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             )}
             <div className="border-t border-gray-300 pt-2 flex justify-between">
               <span className="text-lg font-bold text-gray-900">Total</span>
-              <span className="text-2xl font-bold text-gray-900">${totalPrice.toFixed(2)}</span>
+              <span className={`text-2xl font-bold ${hasCrossSellDiscount ? 'text-red-600' : 'text-gray-900'}`}>${totalPrice.toFixed(2)}</span>
             </div>
           </div>
 
