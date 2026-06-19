@@ -15,7 +15,7 @@ export const CategoryCard: FC<ICategoryCard> = ({category}) => {
           className="object-contain w-[90px] h-[90px]"
           width={90}
           height={90}
-          src={category.imageUrl}
+          src={category.imageUrl || ''}
           alt={`Image of ${category.categoryName}`}
           priority={true}
         />
