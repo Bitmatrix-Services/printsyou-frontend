@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import {FC} from 'react';
 import Link from 'next/link';
+import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 
 interface IPromotionalBannerProps {
   link?: string;
@@ -17,10 +17,10 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
 }) => {
   return (
     <div className="relative h-[480px] sm:h-[500px] md:h-[550px] lg:h-[600px] w-full">
-      <Image
+      <ImageWithFallback
         className="object-cover w-full h-full rounded-lg"
         sizes="(max-width: 768px) 50vw, 100vw"
-        src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${imageUrl}`}
+        src={imageUrl}
         alt={title}
         width={800}
         height={600}

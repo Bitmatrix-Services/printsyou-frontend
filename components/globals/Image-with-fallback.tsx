@@ -17,11 +17,11 @@ const buildImageUrl = (src: string | undefined | null): string => {
   // If it's a local path starting with /, return as-is
   if (src.startsWith('/assets/') || src.startsWith('/images/')) return src;
 
-  // Ensure leading slash for S3 paths
-  const normalizedPath = src.startsWith('/') ? src : `/${src}`;
-
   // Get assets URL - prefer env var, fallback to hardcoded
-  const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || ASSETS_URL;
+  const assetsUrl = (process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || ASSETS_URL).replace(/\/$/, '');
+
+  // Ensure leading slash for S3 paths (without double slashes)
+  const normalizedPath = src.startsWith('/') ? src : `/${src}`;
 
   return `${assetsUrl}${normalizedPath}`;
 };

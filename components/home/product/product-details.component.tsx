@@ -35,18 +35,26 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
   const productDescriptionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (product?.productImages?.length > 0) {
-      setImages(product.productImages);
+    // Filter productImages to only include those with valid imageUrl
+    const validProductImages = (product?.productImages || []).filter(
+      img => img.imageUrl && img.imageUrl.trim() !== ''
+    );
+
+    if (validProductImages.length > 0) {
+      setImages(validProductImages);
     } else if (product.productColors?.length > 0) {
+      // Fallback to images from productColors if no valid productImages
       const imagesFromColors = Array.from(
         new Map(
-          product.productColors.map((color, index) => [
-            color.coloredProductImage,
-            {
-              imageUrl: color.coloredProductImage ?? '',
-              sequenceNumber: index + 1
-            }
-          ])
+          product.productColors
+            .filter(color => color.coloredProductImage && color.coloredProductImage.trim() !== '')
+            .map((color, index) => [
+              color.coloredProductImage,
+              {
+                imageUrl: color.coloredProductImage ?? '',
+                sequenceNumber: index + 1
+              }
+            ])
         ).values()
       );
       setImages(imagesFromColors);

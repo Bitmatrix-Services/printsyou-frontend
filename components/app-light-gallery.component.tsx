@@ -3,6 +3,7 @@ import {createPortal} from 'react-dom';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {FaPlay, FaChevronLeft, FaChevronRight} from 'react-icons/fa';
 import {IoClose} from 'react-icons/io5';
+import {buildAssetUrl} from '@utils/utils';
 
 interface ProductMedia {
   imageUrl: string;
@@ -36,7 +37,7 @@ const LightboxModal: FC<{
 
   const currentMedia = media[currentIndex];
   const isVideo = currentMedia?.mediaType === 'VIDEO' || isVideoUrl(currentMedia?.imageUrl || '');
-  const mediaUrl = `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${currentMedia?.imageUrl}`;
+  const mediaUrl = buildAssetUrl(currentMedia?.imageUrl);
 
   const handlePrev = useCallback(() => {
     onNavigate(currentIndex > 0 ? currentIndex - 1 : media.length - 1);
@@ -221,9 +222,9 @@ const LightboxModal: FC<{
         {media.map((item, idx) => {
           const isItemVideo = item.mediaType === 'VIDEO' || isVideoUrl(item.imageUrl);
           const hasVideoThumbnail = isItemVideo && item.videoThumbnail;
-          const itemMediaUrl = `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${item.imageUrl}`;
+          const itemMediaUrl = buildAssetUrl(item.imageUrl);
           const thumbUrl = hasVideoThumbnail
-            ? `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${item.videoThumbnail}`
+            ? buildAssetUrl(item.videoThumbnail)
             : !isItemVideo
               ? itemMediaUrl
               : null;
@@ -309,7 +310,7 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
       <div className={showOne ? '' : 'flex gap-3 overflow-auto'}>
         {sortedProductImages.map((media, index) => {
           const isVideo = media.mediaType === 'VIDEO' || isVideoUrl(media.imageUrl);
-          const mediaUrl = `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${media.imageUrl}`;
+          const mediaUrl = buildAssetUrl(media.imageUrl);
           const altText =
             media?.altText ??
             (productName.startsWith('.')

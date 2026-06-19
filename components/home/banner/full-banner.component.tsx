@@ -1,7 +1,7 @@
 import {BannerList} from '@components/home/home.types';
 import {FC} from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 
 interface IFullBannerComponentProps {
   banner: BannerList;
@@ -10,9 +10,9 @@ interface IFullBannerComponentProps {
 export const FullBannerComponent: FC<IFullBannerComponentProps> = ({banner}) => {
   return (
     <div className="relative h-full w-fit">
-      <Image
+      <ImageWithFallback
         className="object-contain lg:object-none"
-        src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner.bannerUrl}`}
+        src={banner.bannerUrl}
         alt={banner.heading}
         loading="lazy"
         fill

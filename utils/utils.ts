@@ -209,3 +209,31 @@ export const buildPriceMatrix = (priceGrids: PriceGrid[]): PriceMatrix => {
     byRowTypeObjects: Object.fromEntries(sortedEntries.map(({type, row}) => [type, row]))
   };
 };
+
+// Default fallback values
+const FALLBACK_IMAGE = '/assets/logo-full.png';
+const DEFAULT_ASSETS_URL = 'https://printsyouassets.s3.amazonaws.com';
+
+/**
+ * Build a proper asset URL from an image path
+ * Handles: empty paths, full URLs, local paths, and S3 paths
+ * Ensures no double slashes between base URL and path
+ */
+export const buildAssetUrl = (path: string | undefined | null, fallback: string = FALLBACK_IMAGE): string => {
+  // Handle null/undefined/empty
+  if (!path || path.trim() === '') return fallback;
+
+  // If already a full URL, return as-is
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+
+  // If it's a local path, return as-is
+  if (path.startsWith('/assets/') || path.startsWith('/images/')) return path;
+
+  // Get assets URL and remove trailing slash
+  const assetsUrl = (process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || DEFAULT_ASSETS_URL).replace(/\/$/, '');
+
+  // Ensure leading slash for S3 paths
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+  return `${assetsUrl}${normalizedPath}`;
+};

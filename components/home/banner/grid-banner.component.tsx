@@ -1,8 +1,8 @@
 'use client';
 import React, {FC} from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import {BannerList} from '@components/home/home.types';
+import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 
 interface IGridBannerComponentProps {
   banner: BannerList[];
@@ -28,9 +28,9 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
 
         {/*  center image section */}
         <div className="relative min-h-[10.625rem] md:h-[20rem] lg:h-[25rem] w-full xl:col-span-4">
-          <Image
+          <ImageWithFallback
             className="object-fill w-full h-full"
-            src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${banner[1].bannerUrl}`}
+            src={banner[1].bannerUrl}
             alt={banner[1].heading}
             priority
             width={752}
@@ -66,9 +66,9 @@ interface IShortImageTitleSection {
 const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
   return (
     <div className="relative h-[12rem] md:h-[14.625rem] tablet:h-[12.5rem] lg:h-[12rem] lg:w-full">
-      <Image
+      <ImageWithFallback
         className="object-fill w-full h-full"
-        src={`${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${bannerUrl}`}
+        src={bannerUrl}
         alt={heading}
         priority
         width={800}
