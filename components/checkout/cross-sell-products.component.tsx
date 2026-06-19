@@ -1,9 +1,9 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import {FaShoppingCart, FaStar, FaGift, FaClock} from 'react-icons/fa';
+import {FaShoppingCart, FaStar, FaGift, FaClock, FaImage} from 'react-icons/fa';
 
 const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -129,7 +129,14 @@ export const CrossSellProducts: React.FC<CrossSellProductsProps> = ({
             const normalizedPath = rawImageUrl.startsWith('/') ? rawImageUrl : `/${rawImageUrl}`;
             const imageUrl = rawImageUrl
               ? `${ASSETS_SERVER_URL}${normalizedPath}`
-              : '/images/placeholder-product.png';
+              : '';
+
+            // Debug log
+            console.log('[CrossSell] Product image:', {
+              productName: product.productName,
+              rawImageUrl,
+              imageUrl
+            });
 
             const originalPrice = product.priceGrids?.[0]?.price || 0;
             const discountedPrice = getDiscountedPrice(originalPrice);
@@ -153,13 +160,21 @@ export const CrossSellProducts: React.FC<CrossSellProductsProps> = ({
                 }`}>
                   {/* Product Image with Badge */}
                   <div className="relative h-36 lg:h-40 bg-gray-100 overflow-hidden">
-                    <Image
-                      src={imageUrl}
-                      alt={product.productName}
-                      fill
-                      className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 80vw, (max-width: 1024px) 300px, 50vw"
-                    />
+                    {imageUrl && imageUrl !== '/images/placeholder-product.png' ? (
+                      <img
+                        src={imageUrl}
+                        alt={product.productName}
+                        className="absolute inset-0 w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          console.error('[CrossSell] Image failed to load:', imageUrl);
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <FaImage className="w-12 h-12 text-gray-300" />
+                      </div>
+                    )}
 
                     {/* ONE-TIME OFFER Badge */}
                     {isOneTimeOffer && (

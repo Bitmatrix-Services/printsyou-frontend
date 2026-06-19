@@ -1,17 +1,28 @@
 'use client';
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useState, useEffect} from 'react';
 import Image, {ImageProps} from 'next/image';
 import {Skeleton} from '@mui/joy';
 
+const FALLBACK_IMAGE = '/assets/logo-full.png';
+const ASSETS_URL = 'https://printsyouassets.s3.amazonaws.com';
+
 // Helper to build proper image URL with leading slash
-const buildImageUrl = (src: string | undefined): string => {
-  if (!src) return '/assets/logo-full.png';
+const buildImageUrl = (src: string | undefined | null): string => {
+  // Handle null/undefined/empty
+  if (!src || src.trim() === '') return FALLBACK_IMAGE;
+
   // If already a full URL, return as-is
   if (src.startsWith('http://') || src.startsWith('https://')) return src;
-  // Ensure leading slash
+
+  // If it's a local path starting with /, return as-is
+  if (src.startsWith('/assets/') || src.startsWith('/images/')) return src;
+
+  // Ensure leading slash for S3 paths
   const normalizedPath = src.startsWith('/') ? src : `/${src}`;
-  // Get assets URL at runtime to ensure it's available
-  const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com';
+
+  // Get assets URL - prefer env var, fallback to hardcoded
+  const assetsUrl = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || ASSETS_URL;
+
   return `${assetsUrl}${normalizedPath}`;
 };
 
@@ -21,25 +32,40 @@ interface ImageWithFallbackProps extends ImageProps {
 }
 
 export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
-  const {src, fallbackSrc = '/assets/logo-full.png', skeletonRounded, priority, alt, ...rest} = props;
+  const {src, fallbackSrc = FALLBACK_IMAGE, skeletonRounded, priority, alt, ...rest} = props;
 
-  // Compute the final image URL
-  const computedSrc = useMemo(() => buildImageUrl(src as string), [src]);
-  const [imgSrc, setImgSrc] = useState(computedSrc);
+  // Build the image URL immediately
+  const initialUrl = buildImageUrl(src as string);
+  const [imgSrc, setImgSrc] = useState(initialUrl);
   const [loading, setLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
-  // Update imgSrc when src prop changes
+  // Update when src prop changes
   useEffect(() => {
-    const newSrc = buildImageUrl(src as string);
-    setImgSrc(newSrc);
+    const newUrl = buildImageUrl(src as string);
+    if (newUrl !== imgSrc) {
+      setImgSrc(newUrl);
+      setHasError(false);
+      setLoading(true);
+    }
   }, [src]);
 
-  // Use computed source directly to avoid stale state issues
-  const finalSrc = imgSrc || computedSrc || fallbackSrc;
+  // Handle image load error
+  const handleError = () => {
+    console.error('[ImageWithFallback] Failed to load:', imgSrc);
+    setImgSrc(fallbackSrc);
+    setHasError(true);
+    setLoading(false);
+  };
+
+  // Handle successful image load
+  const handleLoad = () => {
+    setLoading(false);
+  };
 
   return (
     <>
-      {loading && (
+      {loading && !hasError && (
         <Skeleton
           sx={{borderRadius: skeletonRounded ? '1rem' : ''}}
           variant="overlay"
@@ -49,11 +75,11 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = props => {
         />
       )}
       <Image
-        alt={alt}
-        src={finalSrc}
+        alt={alt || 'Product Image'}
+        src={imgSrc}
         priority={priority}
-        onError={() => setImgSrc(fallbackSrc)}
-        onLoad={() => setLoading(false)}
+        onError={handleError}
+        onLoad={handleLoad}
         {...rest}
       />
     </>
