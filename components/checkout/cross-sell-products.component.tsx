@@ -3,8 +3,8 @@
 import {useState, useEffect} from 'react';
 import Link from 'next/link';
 import {FaShoppingCart, FaStar, FaGift, FaClock, FaImage} from 'react-icons/fa';
+import {buildAssetUrl} from '@utils/utils';
 
-const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface CrossSellProduct {
@@ -12,7 +12,7 @@ interface CrossSellProduct {
   productName: string;
   uniqueProductName: string;
   sku: string;
-  productImages?: Array<{imageUrl: string}>;
+  productImages?: Array<{imageUrl: string; sequenceNumber?: number}>;
   priceGrids?: Array<{price: number}>;
 }
 
@@ -123,19 +123,11 @@ export const CrossSellProducts: React.FC<CrossSellProductsProps> = ({
           style={{scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch'}}
         >
           {products.map(product => {
-            // Ensure proper URL construction - add leading slash if needed
-            const rawImageUrl = product.productImages?.[0]?.imageUrl || '';
-            const normalizedPath = rawImageUrl.startsWith('/') ? rawImageUrl : `/${rawImageUrl}`;
-            const imageUrl = rawImageUrl
-              ? `${ASSETS_SERVER_URL}${normalizedPath}`
-              : '';
-
-            // Debug log
-            console.log('[CrossSell] Product image:', {
-              productName: product.productName,
-              rawImageUrl,
-              imageUrl
-            });
+            // Find primary image (sequenceNumber 1) or first available image
+            const primaryImage = product.productImages?.find(img => img.sequenceNumber === 1)
+              || product.productImages?.[0];
+            const rawImageUrl = primaryImage?.imageUrl || '';
+            const imageUrl = rawImageUrl ? buildAssetUrl(rawImageUrl) : '';
 
             const originalPrice = product.priceGrids?.[0]?.price || 0;
             const discountedPrice = getDiscountedPrice(originalPrice);
