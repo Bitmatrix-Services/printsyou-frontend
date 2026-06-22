@@ -51,11 +51,17 @@ export function trackEvent(
   options?: { sendInstantly?: boolean }
 ) {
   if (typeof window !== 'undefined' && posthog) {
-    posthog.capture(eventName, properties);
-
-    // Log critical events for debugging
     if (options?.sendInstantly) {
-      console.log(`[PostHog] Critical event captured: ${eventName}`, properties);
+      // Use $set to mark this as a critical conversion event
+      // Then capture with send_instantly to bypass batching
+      posthog.capture(eventName, {
+        ...properties,
+        $set_once: { first_conversion_event: eventName }
+      }, { send_instantly: true });
+
+      console.log(`[PostHog] Critical event sent instantly: ${eventName}`, properties);
+    } else {
+      posthog.capture(eventName, properties);
     }
   }
 }
@@ -316,11 +322,12 @@ export const paymentAnalytics = {
     amount: number;
     method?: string;
   }) => {
+    // Send instantly to ensure capture - this is a critical conversion event
     trackEvent(ANALYTICS_EVENTS.PAYMENT_COMPLETED, {
       quote_id: data.quoteId,
       amount: data.amount,
       method: data.method
-    });
+    }, { sendInstantly: true });
   },
 
   failed: (data: {

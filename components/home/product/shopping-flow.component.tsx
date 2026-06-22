@@ -366,6 +366,17 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     }
   }, [availableColors, selectedColor]);
 
+  // Track checkout started when shopping flow loads
+  useEffect(() => {
+    checkoutAnalytics.started({
+      productId: product.id,
+      productName: product.productName,
+      productSku: product.sku,
+      category: product.allCategoryNameAndIds?.[0]?.name,
+      source: 'shopping_flow'
+    });
+  }, [product.id]); // Only fire once per product
+
   const isApparel = useMemo(() => isApparelProduct(product.productName, product.allCategoryNameAndIds || []), [product]);
 
   const availableSizes = useMemo(() => {

@@ -86,6 +86,13 @@ const CheckoutSuccessContent = () => {
             return false;
           }
 
+          // Prevent duplicate conversion fires on page refresh using localStorage
+          const conversionKey = `purchase_tracked_${data.stripeSessionId}`;
+          if (localStorage.getItem(conversionKey)) {
+            console.log('[Tracking] Conversion already fired for this session, skipping duplicate');
+            return true; // Return true so we don't retry
+          }
+
           const gtag = (window as any).gtag;
           const fbq = (window as any).fbq;
 
@@ -93,6 +100,9 @@ const CheckoutSuccessContent = () => {
             console.warn('[Tracking] Neither gtag nor fbq ready, will retry...');
             return false;
           }
+
+          // Mark as tracked BEFORE firing to prevent race conditions on refresh
+          localStorage.setItem(conversionKey, Date.now().toString());
 
           // Prepare user data for Enhanced Conversions
           const userData: Record<string, string> = {};
