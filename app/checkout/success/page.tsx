@@ -63,9 +63,23 @@ const CheckoutSuccessContent = () => {
         const data = verifyResponse.data.payload;
         console.log('[Checkout Success] Session data:', data);
         console.log('[Checkout Success] productId:', data.productId);
+        console.log('[Checkout Success] status:', data.status);
         setSessionData(data);
 
-        // Track payment completed in PostHog
+        // CRITICAL: Only track payment_completed if payment was actually successful
+        // Status should be 'COMPLETED' or payment_status should be 'paid'
+        const isPaymentSuccessful = data.status === 'COMPLETED' ||
+                                     data.paymentStatus === 'paid' ||
+                                     data.paymentStatus === 'PAID';
+
+        if (!isPaymentSuccessful) {
+          console.warn('[Checkout Success] Payment not successful, skipping tracking. Status:', data.status, 'PaymentStatus:', data.paymentStatus);
+          setError('Payment was not completed. Please try again or contact support.');
+          setLoading(false);
+          return;
+        }
+
+        // Track payment completed in PostHog (only for successful payments)
         paymentAnalytics.completed({
           quoteId: data.quoteRequestId || data.orderId || '',
           amount: data.amountTotal,
