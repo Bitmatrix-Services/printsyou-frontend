@@ -201,18 +201,13 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
         Specify how many of each size you need. Total must equal {totalQuantity} units.
       </p>
 
-      {/* Size Grid and Status Bar Container - aligned on desktop */}
-      <div className="inline-block w-full md:w-auto">
-        {/* Size Grid - all sizes in one row */}
-        <div
-          className="grid gap-1.5 mb-3"
-          style={{ gridTemplateColumns: `repeat(${sortedSizes.length}, minmax(48px, 1fr))` }}
-        >
+      {/* Size Grid and Status Bar Container */}
+      <div className="w-full">
+        {/* Size Grid - wraps to multiple rows on smaller containers */}
+        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-3">
           {sortedSizes.map(size => (
-            <div key={size} className="flex flex-col">
-              <label className={`font-medium text-gray-700 mb-1 text-center ${
-                sortedSizes.length > 6 ? 'text-[10px]' : 'text-xs'
-              }`}>
+            <div key={size} className="flex flex-col min-w-[50px]">
+              <label className="text-xs font-medium text-gray-700 mb-1 text-center">
                 {size}
               </label>
               <input
@@ -223,9 +218,7 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
                 onChange={(e) => handleSizeChange(size, e.target.value)}
                 placeholder="0"
                 disabled={disabled}
-                className={`w-full text-center border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                  sortedSizes.length > 6 ? 'h-8 text-xs' : 'h-9 text-sm'
-                }`}
+                className="w-full h-9 text-sm text-center border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           ))}
