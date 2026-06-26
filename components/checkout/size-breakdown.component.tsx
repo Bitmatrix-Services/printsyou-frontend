@@ -203,11 +203,11 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
 
       {/* Size Grid and Status Bar Container */}
       <div className="w-full">
-        {/* Size Grid - wraps to multiple rows on smaller containers */}
-        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-3">
+        {/* Size Grid - responsive grid with proper spacing */}
+        <div className="flex flex-wrap gap-3 mb-3 justify-start">
           {sortedSizes.map(size => (
-            <div key={size} className="flex flex-col min-w-[50px]">
-              <label className="text-xs font-medium text-gray-700 mb-1 text-center">
+            <div key={size} className="flex flex-col items-center" style={{ minWidth: '48px', width: '48px' }}>
+              <label className="text-xs font-semibold text-gray-700 mb-1 text-center">
                 {size}
               </label>
               <input
@@ -218,7 +218,7 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
                 onChange={(e) => handleSizeChange(size, e.target.value)}
                 placeholder="0"
                 disabled={disabled}
-                className="w-full h-9 text-sm text-center border border-gray-300 rounded font-medium focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="w-full h-10 text-base text-center border-2 border-gray-300 rounded-lg font-semibold focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             </div>
           ))}
