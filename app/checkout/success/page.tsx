@@ -163,49 +163,10 @@ const CheckoutSuccessContent = () => {
           }
 
           // === META PIXEL TRACKING ===
-          if (fbq) {
-            // Ensure value is always a valid positive number with 2 decimal places
-            const rawValue = typeof data.amountTotal === 'number'
-              ? data.amountTotal
-              : parseFloat(data.amountTotal);
-            const purchaseValue = !isNaN(rawValue) && rawValue > 0
-              ? Math.round(rawValue * 100) / 100
-              : 1; // Fallback to $1 if invalid (Meta requires positive value)
-
-            const itemQuantity = data.quantity && data.quantity > 0 ? data.quantity : 1;
-            const itemPrice = Math.round((purchaseValue / itemQuantity) * 100) / 100;
-
-            // Build contents array for better ROAS calculation
-            const contents = [{
-              id: data.productId || data.quoteRequestId || data.stripeSessionId,
-              quantity: itemQuantity,
-              item_price: itemPrice
-            }];
-
-            // Fire Purchase event with enhanced product data for better ROAS
-            fbq('track', 'Purchase', {
-              value: purchaseValue,
-              currency: (data.currency || 'USD').toUpperCase(),
-              content_type: 'product',
-              content_ids: [data.productId || data.quoteRequestId || data.orderId || data.stripeSessionId],
-              content_name: data.productName || 'Custom Order',
-              content_category: data.productCategory || 'Promotional Products',
-              contents: contents,
-              num_items: itemQuantity
-            }, {
-              eventID: data.stripeSessionId // For deduplication with server CAPI
-            });
-
-            console.log('[Meta Pixel] Purchase event fired:', {
-              value: purchaseValue,
-              currency: (data.currency || 'USD').toUpperCase(),
-              content_name: data.productName,
-              content_category: data.productCategory,
-              contents: contents,
-              num_items: itemQuantity,
-              eventID: data.stripeSessionId
-            });
-          }
+          // DISABLED: Server-side CAPI handles Purchase events via Stripe webhook
+          // This prevents duplicate Purchase events in Meta Ads Manager
+          // The webhook fires metaConversionService.sendPurchaseEvent() with stripeSessionId as eventId
+          console.log('[Meta Pixel] Purchase event SKIPPED - handled by server CAPI via webhook');
 
           return true;
         };

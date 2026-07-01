@@ -19,6 +19,7 @@ import {CSPostHogProvider} from './provider';
 import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';
 import {Suspense} from 'react';
+import {HolidayAnnouncementBar} from '@components/promotions/holiday-announcement-bar.component';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.FE_URL as string),
@@ -172,6 +173,10 @@ export default async function RootLayout({children}: PropsWithChildren) {
               </Suspense>
               <NextTopLoader color="#019ce0" showSpinner={false} />
               <NotificationComponent />
+              {/* Holiday Sale Announcement Bar - Remove when sale ends */}
+              <Suspense fallback={null}>
+                <HolidayAnnouncementBar />
+              </Suspense>
               <Header categories={categoriesData.payload} />
               {children}
               <Footer categories={footerCategories} />

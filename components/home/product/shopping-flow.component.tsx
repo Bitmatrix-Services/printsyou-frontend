@@ -32,6 +32,8 @@ import {checkoutAnalytics} from '@utils/analytics';
 import {useStore, useHasFeature} from '@/providers/store-provider';
 import {uploadBase64ToS3} from '@utils/s3-upload';
 import {createPreviewDataUrl} from '@utils/preview-renderer';
+import {HolidayUrgencyBadge} from '@components/promotions/holiday-urgency-badge.component';
+import {isHolidaySaleActive, getHolidayDiscountedPrice, HOLIDAY_SALE_CONFIG} from '@/config/holiday-sale.config';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ASSETS_SERVER_URL = process.env.NEXT_PUBLIC_ASSETS_SERVER_URL || 'https://printsyouassets.s3.amazonaws.com/';
@@ -398,12 +400,22 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     return applicableTier.salePrice && applicableTier.salePrice > 0 ? applicableTier.salePrice : applicableTier.price;
   }, [selectedTier, quantity, sortedPriceGrids]);
 
-  // Apply cross-sell discount if present
+  // Apply holiday discount first, then cross-sell discount if present
   const currentUnitPrice = useMemo(() => {
-    if (crossSellDiscount > 0 && baseUnitPrice > 0) {
-      return baseUnitPrice * (1 - crossSellDiscount / 100);
+    // Start with base price
+    let price = baseUnitPrice;
+
+    // Apply holiday sale discount if active
+    if (isHolidaySaleActive() && price > 0) {
+      price = getHolidayDiscountedPrice(price);
     }
-    return baseUnitPrice;
+
+    // Then apply cross-sell discount if present
+    if (crossSellDiscount > 0 && price > 0) {
+      price = price * (1 - crossSellDiscount / 100);
+    }
+
+    return price;
   }, [baseUnitPrice, crossSellDiscount]);
 
   const subtotal = currentUnitPrice * quantity;
@@ -411,6 +423,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const totalPrice = subtotal + shippingCost;
   const isFreeShipping = shippingCost === 0;
   const hasCrossSellDiscount = crossSellDiscount > 0;
+  const hasHolidayDiscount = isHolidaySaleActive();
 
   const isSizeBreakdownValid = useMemo(() => {
     if (!needsSizeBreakdown) return true;
@@ -1015,10 +1028,19 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         {/* Tier Selector */}
         {hasTierPricing && (
           <div className="mb-4">
-            <label className="text-sm font-medium text-gray-700 mb-2 block">Select Quantity Tier (Better pricing at higher quantities)</label>
+            <label className="text-sm font-medium text-gray-700 mb-2 block">
+              Select Quantity Tier (Better pricing at higher quantities)
+              {isHolidaySaleActive() && (
+                <span className="ml-2 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-semibold">
+                  🇺🇸 {HOLIDAY_SALE_CONFIG.DISCOUNT_PERCENT}% OFF
+                </span>
+              )}
+            </label>
             <div className="flex flex-wrap gap-2">
               {sortedPriceGrids.map(tier => {
-                const price = tier.salePrice && tier.salePrice > 0 ? tier.salePrice : tier.price;
+                const basePrice = tier.salePrice && tier.salePrice > 0 ? tier.salePrice : tier.price;
+                const holidayPrice = getHolidayDiscountedPrice(basePrice);
+                const showHolidayPricing = isHolidaySaleActive();
                 const isCurrentTier = quantity >= tier.countFrom &&
                   (sortedPriceGrids.indexOf(tier) === sortedPriceGrids.length - 1 || quantity < sortedPriceGrids[sortedPriceGrids.indexOf(tier) + 1]?.countFrom);
 
@@ -1028,14 +1050,31 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                     type="button"
                     onClick={() => handleTierSelect(tier)}
                     disabled={isOutOfStock}
-                    className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
+                    className={`relative px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                       isCurrentTier
                         ? 'border-gray-900 bg-gray-900 text-white'
                         : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400'
                     } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
+                    {/* Holiday sale badge */}
+                    {showHolidayPricing && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                        -{HOLIDAY_SALE_CONFIG.DISCOUNT_PERCENT}%
+                      </span>
+                    )}
                     <div className="font-bold">{tier.countFrom}+</div>
-                    <div className="text-xs opacity-80">${price.toFixed(2)}/ea</div>
+                    {showHolidayPricing ? (
+                      <div className="text-xs">
+                        <span className={`line-through ${isCurrentTier ? 'text-gray-400' : 'text-gray-400'} mr-1`}>
+                          ${basePrice.toFixed(2)}
+                        </span>
+                        <span className={isCurrentTier ? 'text-yellow-300 font-semibold' : 'text-red-600 font-semibold'}>
+                          ${holidayPrice.toFixed(2)}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="text-xs opacity-80">${basePrice.toFixed(2)}/ea</div>
+                    )}
                   </button>
                 );
               })}
@@ -1131,8 +1170,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         {/* Urgency Banner */}
         {showProductionCountdown && <UrgencyCountdown leadTimeDays={leadTimeDays} />}
 
+        {/* Holiday Sale Urgency Badge - Shows above pricing during sale */}
+        <HolidayUrgencyBadge categorySlug={product.productCategory?.slug} />
+
         {/* Pricing Summary */}
-        <div className={`border rounded-xl p-5 ${hasCrossSellDiscount ? 'bg-red-50 border-red-200' : 'bg-gray-50 border-gray-200'}`}>
+        <div className={`border rounded-xl p-5 ${hasCrossSellDiscount ? 'bg-red-50 border-red-200' : isHolidaySaleActive() ? 'bg-gradient-to-br from-blue-50 to-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}>
           <div className="space-y-2 mb-4">
             {/* Show discount savings if cross-sell discount is applied */}
             {hasCrossSellDiscount && (
