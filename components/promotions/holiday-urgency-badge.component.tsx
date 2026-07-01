@@ -4,7 +4,6 @@ import React from 'react';
 import {HOLIDAY_SALE_CONFIG, isHolidaySaleActive} from '@/config/holiday-sale.config';
 
 interface HolidayUrgencyBadgeProps {
-  categorySlug?: string;
   className?: string;
 }
 
@@ -15,13 +14,12 @@ interface HolidayUrgencyBadgeProps {
  * to create urgency and highlight the active discount.
  */
 export const HolidayUrgencyBadge: React.FC<HolidayUrgencyBadgeProps> = ({
-  categorySlug,
   className = ''
 }) => {
-  // Check if sale is active and product is eligible
+  // Check if sale is active
   const isActive = isHolidaySaleActive();
 
-  // Show badge for all products during sale period (remove category check for broader reach)
+  // Show badge for all products during sale period
   if (!isActive) return null;
 
   return (

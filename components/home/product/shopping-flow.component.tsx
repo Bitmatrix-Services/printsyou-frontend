@@ -1171,7 +1171,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         {showProductionCountdown && <UrgencyCountdown leadTimeDays={leadTimeDays} />}
 
         {/* Holiday Sale Urgency Badge - Shows above pricing during sale */}
-        <HolidayUrgencyBadge categorySlug={product.productCategory?.slug} />
+        <HolidayUrgencyBadge />
 
         {/* Pricing Summary */}
         <div className={`border rounded-xl p-5 ${hasCrossSellDiscount ? 'bg-red-50 border-red-200' : isHolidaySaleActive() ? 'bg-gradient-to-br from-blue-50 to-amber-50 border-amber-200' : 'bg-gray-50 border-gray-200'}`}>
