@@ -378,13 +378,22 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
   const [dpr, setDpr] = useState(1);
 
   // Primary logo (shared across all views by default)
+  // primaryLogoDataUrl is used for PREVIEW (may have background removed)
   const [primaryLogoDataUrl, setPrimaryLogoDataUrl] = useState<string | null>(
+    initialData.logoDataUrl || null
+  );
+  // originalPrimaryLogoDataUrl is the ORIGINAL uploaded logo (sent to backend, never modified by bg removal)
+  const [originalPrimaryLogoDataUrl, setOriginalPrimaryLogoDataUrl] = useState<string | null>(
     initialData.logoDataUrl || null
   );
 
   // Different logos for front/back
   const [useDifferentLogos, setUseDifferentLogos] = useState(initialData.useDifferentLogos || false);
   const [backLogoDataUrl, setBackLogoDataUrl] = useState<string | null>(
+    initialData.backLogoDataUrl || null
+  );
+  // Original back logo (sent to backend, never modified by bg removal)
+  const [originalBackLogoDataUrl, setOriginalBackLogoDataUrl] = useState<string | null>(
     initialData.backLogoDataUrl || null
   );
   const [backLogoImage, setBackLogoImage] = useState<HTMLImageElement | null>(null);
@@ -859,7 +868,9 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       const reader = new FileReader();
       reader.onload = event => {
         const dataUrl = event.target?.result as string;
+        // Save to both preview and original states
         setPrimaryLogoDataUrl(dataUrl);
+        setOriginalPrimaryLogoDataUrl(dataUrl);
       };
       reader.onerror = () => {
         setUploadError('Failed to read image file');
@@ -873,6 +884,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
 
   const handleRemoveLogo = useCallback(() => {
     setPrimaryLogoDataUrl(null);
+    setOriginalPrimaryLogoDataUrl(null);
     setLogoImage(null);
   }, []);
 
@@ -936,7 +948,9 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       const reader = new FileReader();
       reader.onload = event => {
         const dataUrl = event.target?.result as string;
+        // Save to both preview and original states
         setBackLogoDataUrl(dataUrl);
+        setOriginalBackLogoDataUrl(dataUrl);
       };
       reader.onerror = () => {
         setUploadError('Failed to read image file');
@@ -950,6 +964,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
 
   const handleRemoveBackLogo = useCallback(() => {
     setBackLogoDataUrl(null);
+    setOriginalBackLogoDataUrl(null);
     setBackLogoImage(null);
   }, []);
 
@@ -1014,8 +1029,9 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         playerNumber: playerNumber || undefined,
         customText: customText || undefined,
         fontStyle,
-        logoDataUrl: primaryLogoDataUrl || undefined,
-        backLogoDataUrl: useDifferentLogos ? (backLogoDataUrl || undefined) : undefined,
+        // Use ORIGINAL logo URLs (not background-removed) for the data sent to backend
+        logoDataUrl: originalPrimaryLogoDataUrl || undefined,
+        backLogoDataUrl: useDifferentLogos ? (originalBackLogoDataUrl || undefined) : undefined,
         useDifferentLogos,
         logoPosition,
         viewCustomizations: {
@@ -1042,8 +1058,8 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     playerNumber,
     customText,
     fontStyle,
-    primaryLogoDataUrl,
-    backLogoDataUrl,
+    originalPrimaryLogoDataUrl,
+    originalBackLogoDataUrl,
     useDifferentLogos,
     viewCustomizations,
     currentView,
@@ -1069,7 +1085,8 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         playerNumber: playerNumber || undefined,
         customText: customText || undefined,
         fontStyle,
-        logoDataUrl: primaryLogoDataUrl || undefined,
+        // Use ORIGINAL logo URL (not background-removed) for the data sent to backend
+        logoDataUrl: originalPrimaryLogoDataUrl || undefined,
         viewCustomizations: {
           FRONT: viewCustomizations.FRONT,
           BACK: viewCustomizations.BACK,
@@ -1082,7 +1099,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerName, playerNumber, customText, fontStyle, primaryLogoDataUrl, onCustomizationChange, currentView, totalCharges]);
+  }, [playerName, playerNumber, customText, fontStyle, originalPrimaryLogoDataUrl, onCustomizationChange, currentView, totalCharges]);
 
   // If no zones configured, show a message
   if (!hasConfiguredZones) {
