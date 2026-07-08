@@ -7,7 +7,7 @@
 
 export const HOLIDAY_SALE_CONFIG = {
   // Master toggle - set to false to disable all holiday sale features
-  HOLIDAY_SALE_ACTIVE: true,
+  HOLIDAY_SALE_ACTIVE: false,
 
   // Sale details
   SALE_NAME: '4th of July Bulk Sale',
