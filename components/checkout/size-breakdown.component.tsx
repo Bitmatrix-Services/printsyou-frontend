@@ -56,7 +56,12 @@ export const extractSizesFromProduct = (additionalFields: Array<{fieldName: stri
       if (trimmed.includes('SMALL') || trimmed === 'SM') return 'S';
       if (trimmed.includes('MEDIUM') || trimmed === 'MED') return 'M';
       if (trimmed.includes('LARGE') && !trimmed.includes('X')) return 'L';
-      if (trimmed.includes('XLARGE') || trimmed === 'EXTRA LARGE') return 'XL';
+      if (trimmed.includes('XLARGE') || trimmed.includes('X-Large') || trimmed === 'EXTRA LARGE') return 'XL';
+      if (trimmed.includes('2X-Large')) return '2XL';
+      if (trimmed.includes('3X-Large')) return '3XL';
+      if (trimmed.includes('4X-Large')) return '4XL';
+      if (trimmed.includes('5X-Large')) return '5XL';
+
       return trimmed;
     });
   }
