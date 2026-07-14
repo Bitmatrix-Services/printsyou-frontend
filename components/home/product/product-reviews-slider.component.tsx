@@ -3,7 +3,9 @@
 import React, {FC, useRef} from 'react';
 import {EmbeddedReview, ReviewSourcePlatform} from '@components/home/product/product.types';
 import {Swiper, SwiperSlide} from 'swiper/react';
+import type {Swiper as SwiperType} from 'swiper';
 import {Autoplay, Pagination, Navigation} from 'swiper/modules';
+import {FaChevronLeft, FaChevronRight} from 'react-icons/fa';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -75,6 +77,7 @@ const PLATFORM_CONFIG: Record<
  */
 export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperType | null>(null);
 
   // Filter to only show active reviews
   const activeReviews = reviews.filter(r => r.isActive !== false);
@@ -114,34 +117,54 @@ export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) =
           </div>
         </div>
 
-        {/* Reviews Carousel */}
-        <Swiper
-          modules={[Autoplay, Pagination, Navigation]}
-          spaceBetween={24}
-          slidesPerView={1}
-          pagination={{clickable: true}}
-          navigation
-          autoplay={{
-            delay: 6000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true
-          }}
-          breakpoints={{
-            640: {
-              slidesPerView: 2
-            },
-            1024: {
-              slidesPerView: 3
-            }
-          }}
-          className="pb-12"
-        >
-          {activeReviews.map((review) => (
-            <SwiperSlide key={review.id}>
-              <ReviewCard review={review} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {/* Reviews Carousel with Custom Navigation */}
+        <div className="relative">
+          {/* Custom Navigation Buttons */}
+          <button
+            onClick={() => swiperRef.current?.slidePrev()}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all -ml-2 md:-ml-5"
+            aria-label="Previous review"
+          >
+            <FaChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => swiperRef.current?.slideNext()}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all -mr-2 md:-mr-5"
+            aria-label="Next review"
+          >
+            <FaChevronRight className="w-4 h-4" />
+          </button>
+
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={24}
+            slidesPerView={1}
+            pagination={{clickable: true}}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+            }}
+            autoplay={{
+              delay: 6000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 2
+              },
+              1024: {
+                slidesPerView: 3
+              }
+            }}
+            className="pb-12 px-2"
+          >
+            {activeReviews.map((review) => (
+              <SwiperSlide key={review.id}>
+                <ReviewCard review={review} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
     </section>
   );
