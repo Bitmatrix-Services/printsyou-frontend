@@ -61,6 +61,30 @@ export interface PositionConfig {
 
 export type ImageViewType = 'FRONT' | 'BACK' | 'SIDE';
 
+// Source platform for embedded product reviews
+export type ReviewSourcePlatform =
+  | 'GOOGLE'
+  | 'ETSY'
+  | 'TIKTOK'
+  | 'AMAZON'
+  | 'FACEBOOK'
+  | 'YELP'
+  | 'TRUSTPILOT'
+  | 'WEBSITE_VERIFIED';
+
+// Embedded review stored directly on product
+export interface EmbeddedReview {
+  id: string;
+  reviewerName: string;
+  roleOrCompany?: string;
+  rating: number;
+  reviewText: string;
+  sourcePlatform: ReviewSourcePlatform;
+  reviewDate?: string;
+  isActive?: boolean;
+  displayOrder?: number;
+}
+
 export interface Product {
   id: string;
   productName: string;
@@ -90,6 +114,12 @@ export interface Product {
   orderType?: OrderType;
   shoppingFlowEnabled?: boolean;
   leadTimeDays?: number; // Production lead time in days (for urgency widget)
+  // Google Reviews configuration (global reviews by category)
+  googleReviewsEnabled?: boolean;
+  googleReviewCategory?: string;
+  // Product-specific reviews (embedded per-product)
+  productReviewsEnabled?: boolean;
+  embeddedReviews?: EmbeddedReview[];
   // Default customization zones (fallback when image doesn't have zones)
   defaultLogoPosition?: PositionConfig;
   defaultNumberPosition?: PositionConfig;

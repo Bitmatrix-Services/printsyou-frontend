@@ -10,6 +10,8 @@ import {TrustBadges} from '@components/home/product/trust-badges.component';
 import {ProductFAQ} from '@components/home/product/product-faq.component';
 import {CustomerReviews} from '@components/home/product/customer-reviews.component';
 import {MobileStickyCta} from '@components/home/product/mobile-sticky-cta.component';
+import {GoogleReviewsSlider} from '@components/home/product/google-reviews-slider.component';
+import {ProductReviewsSlider} from '@components/home/product/product-reviews-slider.component';
 import sanitizeHtml from 'sanitize-html';
 import dynamic from 'next/dynamic';
 import {SliderSkeleton} from '@components/home/home-component';
@@ -256,6 +258,16 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
             totalReviews={product.reviewCount}
           />
         </div>
+
+        {/* Google Reviews Slider - B2B social proof carousel (global reviews by category) */}
+        {product.googleReviewsEnabled && product.googleReviewCategory && (
+          <GoogleReviewsSlider googleReviewCategory={product.googleReviewCategory} />
+        )}
+
+        {/* Product-Specific Reviews Slider - Per-product embedded reviews */}
+        {product.productReviewsEnabled && product.embeddedReviews && product.embeddedReviews.length > 0 && (
+          <ProductReviewsSlider reviews={product.embeddedReviews} />
+        )}
 
         <Suspense fallback={<SliderSkeleton />}>
           <RelatedProductsSection relatedProducts={relatedProducts} />

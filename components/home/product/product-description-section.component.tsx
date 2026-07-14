@@ -12,6 +12,8 @@ import {RiShoppingBag4Fill, RiFileList3Line} from 'react-icons/ri';
 import {FaWhatsapp, FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaMagic} from 'react-icons/fa';
 import {Chip} from '@mui/joy';
 import {ColorSwatch} from '@components/home/product/color-swatch.component';
+import {ProductReviewStars} from '@components/home/product/product-review-stars.component';
+import {EmbeddedReviewStars} from '@components/home/product/embedded-review-stars.component';
 
 // WhatsApp number for direct contact
 const WHATSAPP_NUMBER = '14694347035';
@@ -137,6 +139,20 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 capitalize leading-tight">
         <span dangerouslySetInnerHTML={{__html: product?.productName ?? ''}} />
       </h1>
+
+      {/* Google Review Stars - Shows rating below title for social proof */}
+      {product.googleReviewsEnabled && product.googleReviewCategory && (
+        <div className="mt-2">
+          <ProductReviewStars googleReviewCategory={product.googleReviewCategory} />
+        </div>
+      )}
+
+      {/* Embedded Review Stars - Shows rating below title when product has reviews */}
+      {product.productReviewsEnabled && product.embeddedReviews && product.embeddedReviews.length > 0 && (
+        <div className="mt-2">
+          <EmbeddedReviewStars reviews={product.embeddedReviews} />
+        </div>
+      )}
 
       {/* Meta description */}
       <p className="mt-2 text-sm text-gray-600 leading-relaxed">
