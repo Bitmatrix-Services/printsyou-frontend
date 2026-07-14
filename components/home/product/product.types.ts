@@ -83,6 +83,7 @@ export interface EmbeddedReview {
   reviewDate?: string;
   isActive?: boolean;
   displayOrder?: number;
+  imageUrl?: string;
 }
 
 export interface Product {

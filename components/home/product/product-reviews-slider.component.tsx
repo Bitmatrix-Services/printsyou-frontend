@@ -156,10 +156,10 @@ export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) =
                 slidesPerView: 3
               }
             }}
-            className="pb-12 px-2"
+            className="pb-12 px-2 [&_.swiper-slide]:!h-auto [&_.swiper-wrapper]:items-stretch"
           >
             {activeReviews.map((review) => (
-              <SwiperSlide key={review.id}>
+              <SwiperSlide key={review.id} className="!h-auto">
                 <ReviewCard review={review} />
               </SwiperSlide>
             ))}
@@ -188,7 +188,7 @@ const ReviewCard: FC<{review: EmbeddedReview}> = ({review}) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 min-h-[320px] flex flex-col hover:shadow-lg transition-shadow duration-300">
       {/* Header with Platform Badge */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
@@ -230,12 +230,24 @@ const ReviewCard: FC<{review: EmbeddedReview}> = ({review}) => {
         )}
       </div>
 
-      {/* Review Text */}
-      <div className="flex-1">
+      {/* Review Text - Fixed height area */}
+      <div className="flex-1 min-h-[80px]">
         <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
           &ldquo;{review.reviewText}&rdquo;
         </p>
       </div>
+
+      {/* Review Image (if available) - Always at bottom before footer */}
+      {review.imageUrl && (
+        <div className="mt-3">
+          <img
+            src={review.imageUrl.startsWith('http') ? review.imageUrl : `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${review.imageUrl}`}
+            alt={`Review by ${review.reviewerName}`}
+            className="w-full max-h-40 object-contain rounded-lg border border-gray-100 bg-gray-50"
+            loading="lazy"
+          />
+        </div>
+      )}
 
       {/* "via Platform" footer */}
       <div className="mt-4 pt-3 border-t border-gray-100">
