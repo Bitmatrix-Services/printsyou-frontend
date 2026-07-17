@@ -383,7 +383,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   const availableSizes = useMemo(() => {
     const extracted = extractSizesFromProduct(product.additionalFieldProductValues || []);
-    if (extracted.length === 0 && isApparel) return ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+    if (extracted.length === 0 && isApparel) return ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
     return extracted;
   }, [product.additionalFieldProductValues, isApparel]);
 
