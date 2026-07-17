@@ -493,14 +493,14 @@ export const DirectCheckoutComponent: FC = () => {
     if (!product?.additionalFieldProductValues) {
       // If it's apparel but no sizes defined, use default sizes
       if (isApparel) {
-        return ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+        return ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
       }
       return [];
     }
     const extracted = extractSizesFromProduct(product.additionalFieldProductValues);
     // If it's apparel but no sizes found, use default sizes
     if (extracted.length === 0 && isApparel) {
-      return ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+      return ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'];
     }
     return extracted;
   }, [product, isApparel]);
