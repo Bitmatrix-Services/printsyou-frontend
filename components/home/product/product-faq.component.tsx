@@ -2,6 +2,7 @@
 import React, {FC, useState, useEffect} from 'react';
 import {FaQuestionCircle, FaChevronDown, FaChevronUp} from 'react-icons/fa';
 import {FaqRoutes} from '@utils/routes/be-routes';
+import Link from 'next/link';
 
 interface FAQItem {
   id?: string;
@@ -82,9 +83,9 @@ export const ProductFAQ: FC<ProductFAQProps> = ({productId, faqs: propFaqs}) => 
 
       <div className="mt-4 text-center text-sm text-gray-500">
         Still have questions?{' '}
-        <a href="/contact-us" className="text-primary hover:underline">
+        <Link href="/contact-us" className="text-primary hover:underline">
           Contact Us
-        </a>{' '}
+        </Link>{' '}
         or call{' '}
         <a href="tel:4694347035" className="text-primary hover:underline">
           (469) 434-7035
