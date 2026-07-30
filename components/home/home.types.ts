@@ -1,5 +1,7 @@
 // Add these to your existing home.types.ts
 
+import {UrlFormat} from '@utils/url-builder';
+
 export interface Category {
     id: string;
     categoryName: string;
@@ -15,6 +17,9 @@ export interface Category {
     suffix?: { id: string; prefixName: string } | null;
     subCategories: Category[];
     crumbs?: Crumbs[];
+
+    // URL FORMAT FIELD
+    urlFormat?: UrlFormat;
 
     // NEW UX/SEO FIELDS
     heroSubtitle?: string;

@@ -5,9 +5,14 @@ import React, {FC, useMemo} from 'react';
 import {Container} from '@components/globals/container.component';
 import {Crumbs} from '@components/home/home.types';
 import Link from 'next/link';
+import {buildCategoryUrl, UrlFormat} from '@utils/url-builder';
+
+interface CrumbWithUrlFormat extends Crumbs {
+  urlFormat?: UrlFormat;
+}
 
 interface IBreadcrumb {
-  list: Crumbs[];
+  list: CrumbWithUrlFormat[];
   prefixTitle?: string;
 }
 
@@ -58,21 +63,29 @@ export const Breadcrumb: FC<IBreadcrumb> = ({prefixTitle, list}) => {
   );
 };
 
-const BreadcrumbItem = React.memo(({item, isLast}: {item: any; isLast: boolean}) => (
-  <>
-    <div aria-hidden="true">
-      <MdOutlineChevronRight className="h-5 w-5 mr-1" />
-    </div>
-    <Link
-      href={`/categories/${item.uniqueCategoryName}`}
-      className={`text-sm capitalize ${
-        isLast ? 'font-medium text-primary-500' : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
-      }`}
-    >
-      {item.name}
-    </Link>
-  </>
-));
+const BreadcrumbItem = React.memo(({item, isLast}: {item: CrumbWithUrlFormat; isLast: boolean}) => {
+  // Use URL builder to respect LEGACY/CLEAN format
+  const href = buildCategoryUrl({
+    uniqueCategoryName: item.uniqueCategoryName,
+    urlFormat: item.urlFormat
+  });
+
+  return (
+    <>
+      <div aria-hidden="true">
+        <MdOutlineChevronRight className="h-5 w-5 mr-1" />
+      </div>
+      <Link
+        href={href}
+        className={`text-sm capitalize ${
+          isLast ? 'font-medium text-primary-500' : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
+        }`}
+      >
+        {item.name}
+      </Link>
+    </>
+  );
+});
 
 BreadcrumbItem.displayName = 'BreadcrumbItem';
 Breadcrumb.displayName = 'Breadcrumb';

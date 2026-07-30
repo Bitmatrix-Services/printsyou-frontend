@@ -14,14 +14,16 @@ export const ProductRoutes = Object.freeze({
   ProductByUniqueName: `/product?uProductName`,
   FetchRelatedProducts: `/product/fetchRelatedProducts`,
   ProductByCategoryId: `/product/byCategory`,
-  Ld: '/product/ld-products/{0}?page={1}'
+  Ld: '/product/ld-products/{0}?page={1}',
+  ResolveClean: `/product/resolve-clean`
 });
 
 export const CategoryRoutes = Object.freeze({
   CategoryById: ``,
   CategoryByUniqueName: `/category?uCategoryName`,
   CategoriesByParentId: `/category/subCategories`,
-  CategoryFilters: `/category/{0}/filters`
+  CategoryFilters: `/category/{0}/filters`,
+  ResolveClean: `/category/resolve-clean`
 });
 
 export const NewsletterRoutes = Object.freeze({

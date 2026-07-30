@@ -1,4 +1,5 @@
 import {Crumbs} from '@components/home/home.types';
+import {UrlFormat} from '@utils/url-builder';
 
 export interface ProductPrice {
   countFrom: number;
@@ -125,6 +126,8 @@ export interface Product {
   defaultLogoPosition?: PositionConfig;
   defaultNumberPosition?: PositionConfig;
   defaultNamePosition?: PositionConfig;
+  // URL FORMAT FIELD
+  urlFormat?: UrlFormat;
 }
 
 export interface EnclosureProduct {
@@ -139,6 +142,8 @@ export interface EnclosureProduct {
   imageUrl: string;
   priceGrids: PriceGrids[];
   outOfStock: boolean;
+  // URL FORMAT FIELD
+  urlFormat?: UrlFormat;
 }
 
 export interface productColors {

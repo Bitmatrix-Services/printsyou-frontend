@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
+import {buildProductUrl} from '@utils/url-builder';
 
 interface IProductCard {
     product: EnclosureProduct;
@@ -20,13 +21,16 @@ export const ProductCard = memo<IProductCard>(
             return {salePrice, price};
         }, [product.priceGrids]);
 
+        // Use URL builder to respect LEGACY/CLEAN format
+        const productHref = buildProductUrl(product);
+
         return (
             <div className="group relative bg-white h-full" key={product.id}>
                 {/* Card Container - Professional B2B styling, full height for grid alignment */}
                 <div className="h-full flex flex-col border border-gray-200 hover:border-gray-300 hover:shadow-lg rounded-lg overflow-hidden transition-all duration-300">
 
                     {/* Image Container */}
-                    <Link prefetch={false} href={`/products/${product.uniqueProductName}`} className="block relative flex-shrink-0">
+                    <Link prefetch={false} href={productHref} className="block relative flex-shrink-0">
                         <div className="relative bg-white aspect-square overflow-hidden">
                             <ImageWithFallback
                                 className="object-contain w-full h-full p-4 group-hover:scale-105 transition-transform duration-300"
@@ -76,7 +80,7 @@ export const ProductCard = memo<IProductCard>(
                     <div className="flex-1 flex flex-col p-4 border-t border-gray-200">
 
                         {/* Product Title */}
-                        <Link prefetch={false} href={`/products/${product.uniqueProductName}`} className="block mb-3">
+                        <Link prefetch={false} href={productHref} className="block mb-3">
                             <h2
                                 className="text-sm font-semibold text-gray-900 line-clamp-2 min-h-[2.5rem] group-hover:text-blue-600 transition-colors"
                                 dangerouslySetInnerHTML={{__html: product?.productName}}
