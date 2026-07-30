@@ -150,7 +150,11 @@ export async function generateCategoryPageMetadata(props: {params: CategoryPageP
     const ld = await getProductsLdForCategoryPage(category?.id ?? '', currentPage.toString());
     const totalPages: number = ld?.payload.totalPages ?? 1;
 
-    if (currentPage > totalPages) notFound();
+    // A category with 0 products is still a valid page (e.g. newly created via
+    // taxonomy restructuring, pending product migration) - only page 1 is allowed here,
+    // not an out-of-range 404. Only pages beyond an actual non-empty result set 404.
+    if (totalPages > 0 && currentPage > totalPages) notFound();
+    if (totalPages === 0 && currentPage > 1) notFound();
 
     // Parse active filters from search params
     const activeFilters = parseFiltersFromSearchParams(searchParams);
