@@ -1,6 +1,7 @@
 'use client';
 
 import React, {useState} from 'react';
+import Link from 'next/link';
 
 // Mock Container component since it's not available
 const Container = ({children}: {children: React.ReactNode}) => (
@@ -147,7 +148,7 @@ export const ThreePLServicesDetails = () => {
 
             {/* CTA Button */}
             <button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg">
-              <a href="/contact-us">Get a Quote 🚀</a>
+              <Link href="/contact-us">Get a Quote 🚀</Link>
             </button>
           </div>
 
@@ -282,7 +283,7 @@ export const ThreePLServicesDetails = () => {
               <div className="font-bold text-lg text-blue-600">Contact Us for Pricing</div>
             </div>
             <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
-              <a href="/contact-us">Get Custom Quote</a>
+              <Link href="/contact-us">Get Custom Quote</Link>
             </button>
           </ServiceCard>
 
@@ -399,12 +400,12 @@ export const ThreePLServicesDetails = () => {
           <h2 className="text-3xl font-bold mb-4">Ready to Streamline Your Fulfillment?</h2>
           <p className="text-xl mb-6 opacity-90">Join hundreds of businesses who trust us with their 3PL needs.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <Link
               href="/contact-us"
               className="bg-white text-blue-600 font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-colors text-lg"
             >
               Get Quote Now
-            </a>
+            </Link>
             <a
               href="https://wa.me/14694347035"
               target="_blank"
