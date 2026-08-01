@@ -52,15 +52,19 @@ export const extractSizesFromProduct = (additionalFields: Array<{fieldName: stri
   if (sizes.length === 0 && value.includes(',')) {
     sizes = value.split(',').map(s => {
       const trimmed = s.trim();
-      // Normalize common variations
-      if (trimmed.includes('SMALL') || trimmed === 'SM') return 'S';
-      if (trimmed.includes('MEDIUM') || trimmed === 'MED') return 'M';
-      if (trimmed.includes('LARGE') && !trimmed.includes('X')) return 'L';
-      if (trimmed.includes('XLARGE') || trimmed.includes('X-Large') || trimmed === 'EXTRA LARGE') return 'XL';
-      if (trimmed.includes('2X-Large')) return '2XL';
-      if (trimmed.includes('3X-Large')) return '3XL';
-      if (trimmed.includes('4X-Large')) return '4XL';
-      if (trimmed.includes('5X-Large')) return '5XL';
+      // Strip hyphens/spaces so both "2X-Large"/"2XL" (numeral style) and
+      // "XX-Large"/"XXLarge" (repeated-X style) normalize the same way - `value` is
+      // already uppercased above, so these comparisons are case-insensitive by construction.
+      const compact = trimmed.replace(/[-\s]/g, '');
+
+      if (compact === 'SMALL' || compact === 'SM' || compact === 'S') return 'S';
+      if (compact === 'MEDIUM' || compact === 'MED' || compact === 'M') return 'M';
+      if (compact === 'LARGE' || compact === 'L') return 'L';
+      if (compact === 'XLARGE' || compact === 'EXTRALARGE' || compact === 'XL') return 'XL';
+      if (compact === 'XXLARGE' || compact === '2XLARGE' || compact === '2XL') return '2XL';
+      if (compact === 'XXXLARGE' || compact === '3XLARGE' || compact === '3XL') return '3XL';
+      if (compact === 'XXXXLARGE' || compact === '4XLARGE' || compact === '4XL') return '4XL';
+      if (compact === 'XXXXXLARGE' || compact === '5XLARGE' || compact === '5XL') return '5XL';
 
       return trimmed;
     });
