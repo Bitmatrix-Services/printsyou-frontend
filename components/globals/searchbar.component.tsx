@@ -11,12 +11,14 @@ import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import {useRouter} from 'next/navigation';
 import {MdArrowForward, MdSearch} from 'react-icons/md';
+import {buildCategoryUrlBySlug, buildProductUrlBySlug, UrlFormat} from '@utils/url-builder';
 
 type ItemType = {
   id: string;
   imageUrl: string;
   name: string;
   uniqueName: string;
+  urlFormat?: UrlFormat;
 };
 
 interface SearchResult {
@@ -133,7 +135,7 @@ export const Searchbar = () => {
                       {searchResult.categories.map(category => (
                         <Link
                           className="hover:cursor-pointer"
-                          href={`/categories/${category.uniqueName}`}
+                          href={buildCategoryUrlBySlug(category.uniqueName, category.urlFormat)}
                           key={category.uniqueName}
                           onClick={() =>
                             setTimeout(() => {
@@ -171,7 +173,7 @@ export const Searchbar = () => {
                       {searchResult.products.map(product => (
                         <Link
                           className="hover:cursor-pointer"
-                          href={`/products/${product.uniqueName}`}
+                          href={buildProductUrlBySlug(product.uniqueName, product.urlFormat)}
                           key={product.uniqueName}
                           onClick={() =>
                             setTimeout(() => {
