@@ -4,7 +4,7 @@ import {ProductDetails} from '@components/home/product/product-details.component
 import {EnclosureProduct, PriceGrids, Product} from '@components/home/product/product.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import dayjs from 'dayjs';
-import {buildProductFullUrl, buildProductUrl, isCleanFormat} from '@utils/url-builder';
+import {buildProductFullUrl, buildProductUrl, buildProductUrlBySlug, buildCategoryUrlBySlug, isCleanFormat} from '@utils/url-builder';
 
 export type ProductPageParams = Promise<{uniqueProductName: string[]}>;
 
@@ -196,21 +196,38 @@ const generateProductSchema = (
 const generateBreadcrumbSchema = (product: Product | null) => {
   if (!product?.crumbs) return null;
 
+  const feUrl = process.env.FE_URL?.endsWith('/') ? process.env.FE_URL.slice(0, -1) : process.env.FE_URL;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
       ...(product.crumbs ?? []),
-      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Products'},
-      {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home'}
+      {sequenceNumber: 1, uniqueCategoryName: '', name: 'Products', urlFormat: undefined},
+      {sequenceNumber: 0, uniqueCategoryName: '', name: 'Home', urlFormat: undefined}
     ]
       .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
-      .map((item, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        name: item.name,
-        item: `${process.env.FE_URL}${index === 0 ? '' : index === 1 ? 'categories' : item.sequenceNumber === 100 ? `products/${item.uniqueCategoryName}` : `categories/${item.uniqueCategoryName}`}`
-      }))
+      .map((item, index) => {
+        // Use urlFormat-aware builders so this matches the actual page URL - a stale
+        // hardcoded /categories/ or /products/ prefix here misleads Google's rich results,
+        // even though (unlike a rendered <Link>) it can't cause a visible redirect flash.
+        let path: string;
+        if (index === 0) {
+          path = '/';
+        } else if (item.sequenceNumber === 1) {
+          path = '/categories';
+        } else if (item.sequenceNumber === 100) {
+          path = buildProductUrlBySlug(item.uniqueCategoryName, item.urlFormat);
+        } else {
+          path = buildCategoryUrlBySlug(item.uniqueCategoryName, item.urlFormat);
+        }
+        return {
+          '@type': 'ListItem',
+          position: index + 1,
+          name: item.name,
+          item: `${feUrl}${path}`
+        };
+      })
   };
 };
 
