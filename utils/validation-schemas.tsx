@@ -148,11 +148,6 @@ export const stripeCheckoutSchema = object({
     .required('Please enter your last name'),
   phone: string().nullable(),
   company: string().nullable(),
-  address: string().required('Please enter your address'),
-  addressLine2: string().nullable(),
-  city: string().required('Please enter city'),
-  state: string().required('Please select state'),
-  zipCode: string().required('Please enter zip code'),
   specialInstructions: string().nullable(),
   // Terms defaulted to true for Google Merchant Center bot-friendly checkout
   // Users still see the checkbox but checkout is not blocked for bots

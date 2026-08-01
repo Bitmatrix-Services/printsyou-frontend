@@ -194,11 +194,6 @@ export const DirectCheckoutComponent: FC = () => {
       lastName: '',
       phone: '',
       company: '',
-      address: '',
-      addressLine2: '',
-      city: '',
-      state: '',
-      zipCode: '',
       specialInstructions: initialNotes || '',
       // Default to true for Google Merchant Center bot-friendly checkout
       termsAndConditions: true
@@ -389,13 +384,8 @@ export const DirectCheckoutComponent: FC = () => {
         unitPrice: pricing.unitPrice,
         setupFee: pricing.setupFee,
         shippingFee: pricing.shippingFee,
-        shippingAddress: {
-          addressLine1: data.address,
-          addressLine2: data.addressLine2 || null,
-          city: data.city,
-          state: data.state,
-          zipCode: data.zipCode
-        },
+        // Shipping address is collected on Stripe's hosted checkout page, not here -
+        // matches the shopping-flow checkout pattern (see shopping-flow.component.tsx).
         artworkFiles: artworkFiles.map(f => ({
           filename: f.filename,
           fileType: f.fileType,
@@ -948,7 +938,7 @@ export const DirectCheckoutComponent: FC = () => {
                     />
                   </div>
 
-                  {/* Contact & Shipping Form */}
+                  {/* Contact Information - shipping/billing address is collected on Stripe's hosted checkout */}
                   <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
                     <ContactShippingForm control={control} errors={errors} disabled={isSubmitting || isProcessing} />
                   </div>
