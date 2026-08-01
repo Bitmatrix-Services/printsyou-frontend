@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {Container} from '@components/globals/container.component';
 import {Category} from '@components/home/home.types';
 import {listType} from '@utils/util-types';
+import {buildCategoryUrl} from '@utils/url-builder';
 import dynamic from 'next/dynamic';
 
 const Newsletter = dynamic(() => import('@components/home/newsletter-section.component').then(mod => mod.Newsletter), {
@@ -68,7 +69,7 @@ export const Footer: FC<IFooter> = memo(({categories}) => {
               list={categories?.map(category => {
                 return {
                   name: category.categoryName,
-                  url: `/categories/${category.uniqueCategoryName}`
+                  url: buildCategoryUrl(category)
                 };
               })}
             />

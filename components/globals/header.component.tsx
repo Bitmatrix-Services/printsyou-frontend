@@ -12,6 +12,7 @@ import {IoClose} from 'react-icons/io5';
 import {DialogContent} from '@mui/joy';
 import {TfiHeadphoneAlt} from 'react-icons/tfi';
 import {RiWhatsappFill} from 'react-icons/ri';
+import {buildCategoryUrl} from '@utils/url-builder';
 
 interface IHeaderProps {
   categories: Category[];
@@ -152,7 +153,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
                       <li key={category.id}>
                         <Link
                           className="text-white hover:text-primary-500 capitalize"
-                          href={`/categories/${category.uniqueCategoryName}`}
+                          href={buildCategoryUrl(category)}
                           onClick={handleMenuClose}
                         >
                           <span

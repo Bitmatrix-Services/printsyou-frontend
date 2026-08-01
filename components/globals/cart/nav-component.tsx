@@ -9,6 +9,7 @@ import 'aos/dist/aos.css';
 import {aosGlobalSetting} from '@utils/constants';
 import {listType} from '@utils/util-types';
 import {usePathname} from 'next/navigation';
+import {buildCategoryUrl} from '@utils/url-builder';
 
 interface INavComponentProps {
   categories: Category[];
@@ -86,7 +87,7 @@ export const NavComponent: FC<INavComponentProps> = ({categories}) => {
                                       onMouseLeave={() => setHoveredCategory(null)}
                                     >
                                       <Link
-                                        href={`/categories/${category.uniqueCategoryName}`}
+                                        href={buildCategoryUrl(category)}
                                         onClick={() => {
                                           setIsMenuOpen(false);
                                           setHoveredCategory(null);

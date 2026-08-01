@@ -1,6 +1,7 @@
 import React, {FC, memo} from 'react';
 import {Category} from '@components/home/home.types';
 import Link from 'next/link';
+import {buildCategoryUrl} from '@utils/url-builder';
 
 interface CategoriesSidebarProps {
     allCategories: Category[];
@@ -24,7 +25,7 @@ const CategoriesSidebar: FC<CategoriesSidebarProps> = memo(({
                 return (
                     <Link
                         key={category.id}
-                        href={`/categories/${category.uniqueCategoryName}`}
+                        href={buildCategoryUrl(category)}
                         className={`
               block px-3 py-2 text-sm font-medium rounded-md transition-colors
               ${isActive
