@@ -64,6 +64,21 @@ export const Breadcrumb: FC<IBreadcrumb> = ({prefixTitle, list}) => {
 };
 
 const BreadcrumbItem = React.memo(({item, isLast}: {item: CrumbWithUrlFormat; isLast: boolean}) => {
+  // The last crumb is the current page (category OR product - this list is shared between
+  // both) and isn't linked, so it never needs a category-vs-product URL decision here.
+  if (isLast) {
+    return (
+      <>
+        <div aria-hidden="true">
+          <MdOutlineChevronRight className="h-5 w-5 mr-1" />
+        </div>
+        <span className="text-sm capitalize font-medium text-primary-500" aria-current="page">
+          {item.name}
+        </span>
+      </>
+    );
+  }
+
   // Use URL builder to respect LEGACY/CLEAN format
   const href = buildCategoryUrl({
     uniqueCategoryName: item.uniqueCategoryName,
@@ -77,9 +92,7 @@ const BreadcrumbItem = React.memo(({item, isLast}: {item: CrumbWithUrlFormat; is
       </div>
       <Link
         href={href}
-        className={`text-sm capitalize ${
-          isLast ? 'font-medium text-primary-500' : 'text-mute4 hover:text-primary-500 hover:cursor-pointer'
-        }`}
+        className="text-sm capitalize text-mute4 hover:text-primary-500 hover:cursor-pointer"
       >
         {item.name}
       </Link>

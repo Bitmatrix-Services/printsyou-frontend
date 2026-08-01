@@ -1,9 +1,11 @@
 import {FC} from 'react';
 import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
+import {buildCategoryUrlBySlug, UrlFormat} from '@utils/url-builder';
 
 interface IPromotionalBannerProps {
   link?: string;
+  urlFormat?: UrlFormat;
   imageUrl: string;
   title?: string;
   description?: string;
@@ -13,7 +15,8 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
   title = 'Wear Your Creativity',
   description = 'Discover our range of customizable apparel. personalize your wardrobe with PrintsYou.',
   imageUrl,
-  link = '/categories/awards'
+  link = 'awards',
+  urlFormat
 }) => {
   return (
     <div className="relative h-[480px] sm:h-[500px] md:h-[550px] lg:h-[600px] w-full">
@@ -35,7 +38,7 @@ export const PromotionalBanner: FC<IPromotionalBannerProps> = ({
           ></h2>
           <p className="text-black text-base" dangerouslySetInnerHTML={{__html: description}}></p>
           <div className="mt-3 flex flex-wrap justify-start">
-            <Link href={`/categories/${link}`} className="px-4 py-1 text-white bg-primary-500 text-sm rounded-full">
+            <Link href={buildCategoryUrlBySlug(link, urlFormat)} className="px-4 py-1 text-white bg-primary-500 text-sm rounded-full">
               Explore Products
             </Link>
           </div>

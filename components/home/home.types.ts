@@ -123,6 +123,7 @@ export type Crumbs = {
   name: string;
   sequenceNumber: number;
   uniqueCategoryName: string;
+  urlFormat?: UrlFormat;
 };
 
 export type BannerList = {
@@ -136,6 +137,7 @@ export type BannerList = {
   bannerCategory: {
     categoryId: string;
     ucategoryName: string;
+    urlFormat?: UrlFormat;
   };
 };
 

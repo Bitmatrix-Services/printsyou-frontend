@@ -12,6 +12,7 @@ import Typography from '@mui/joy/Typography';
 import ListItemContent from '@mui/joy/ListItemContent';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
 import Link from 'next/link';
+import {buildCategoryUrl} from '@utils/url-builder';
 
 interface ICategoriesComponent {
   categoryList: Category[];
@@ -65,7 +66,7 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                                 <div className="flex items-center">
                                   <Link
                                     className="hover:text-primary-500"
-                                    href={`/categories/${category.uniqueCategoryName}`}
+                                    href={buildCategoryUrl(category)}
                                     onClick={e => e.stopPropagation()}
                                   >
                                     <span className="mr-2">{category.categoryName}</span>
@@ -97,7 +98,7 @@ export const CategoriesComponent: FC<ICategoriesComponent> = ({categoryList}) =>
                                     <div className="flex items-center">
                                       <Link
                                         className="hover:text-primary-500"
-                                        href={`/categories/${subCategory.uniqueCategoryName}`}
+                                        href={buildCategoryUrl(subCategory)}
                                         onClick={e => e.stopPropagation()}
                                       >
                                         <span className="mr-2">{subCategory.categoryName}</span>

@@ -3,6 +3,7 @@ import React, {FC} from 'react';
 import Link from 'next/link';
 import {BannerList} from '@components/home/home.types';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
+import {buildCategoryUrlBySlug, UrlFormat} from '@utils/url-builder';
 
 interface IGridBannerComponentProps {
   banner: BannerList[];
@@ -18,7 +19,7 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
             <h1 dangerouslySetInnerHTML={{__html: banner[0].heading}}></h1>
             <div className="mt-4 w-full">
               <Link
-                href={`/categories/${banner[0].bannerCategory.ucategoryName}`}
+                href={buildCategoryUrlBySlug(banner[0].bannerCategory.ucategoryName, banner[0].bannerCategory.urlFormat)}
                 className="block xl:inline-block text-lg text-[#005c90] align-middle text-center bg-white px-4 lg:px-8 py-2 md:py-2 xl:py-3 font-normal font-century-gothic hover:bg-blue-100"
                 dangerouslySetInnerHTML={{__html: banner[0].tagLines}}
               ></Link>
@@ -43,11 +44,13 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
             textColor={'white'}
             heading={banner[2].heading}
             ucategoryName={banner[2].bannerCategory.ucategoryName}
+            urlFormat={banner[2].bannerCategory.urlFormat}
             bannerUrl={banner[2].bannerUrl}
           />
           <ShortImageTitleSection
             heading={banner[3].heading}
             ucategoryName={banner[3].bannerCategory.ucategoryName}
+            urlFormat={banner[3].bannerCategory.urlFormat}
             bannerUrl={banner[3].bannerUrl}
           />
         </div>
@@ -58,12 +61,13 @@ export const GridBannerComponent: FC<IGridBannerComponentProps> = ({banner}) => 
 
 interface IShortImageTitleSection {
   ucategoryName: string;
+  urlFormat?: UrlFormat;
   heading: string;
   bannerUrl: string;
   textColor?: string;
 }
 
-const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, heading, bannerUrl, textColor}) => {
+const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, urlFormat, heading, bannerUrl, textColor}) => {
   return (
     <div className="relative h-[12rem] md:h-[14.625rem] tablet:h-[12.5rem] lg:h-[12rem] lg:w-full">
       <ImageWithFallback
@@ -78,7 +82,7 @@ const ShortImageTitleSection: FC<IShortImageTitleSection> = ({ucategoryName, hea
         className={`absolute font-century-gothic ${textColor === 'white' ? 'text-white' : 'text-[#3aa4dc]'} bottom-4 ml-6 mb-10 text-left font-normal`}
       >
         <div className="text-2xl mb-1 capitalize" dangerouslySetInnerHTML={{__html: heading}}></div>
-        <Link href={`/categories/${ucategoryName}`} className="text-lg underline ">
+        <Link href={buildCategoryUrlBySlug(ucategoryName, urlFormat)} className="text-lg underline ">
           Shop Now
         </Link>
       </div>

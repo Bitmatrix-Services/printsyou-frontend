@@ -2,6 +2,7 @@ import {BannerList} from '@components/home/home.types';
 import {FC} from 'react';
 import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
+import {buildCategoryUrlBySlug} from '@utils/url-builder';
 
 interface IFullBannerComponentProps {
   banner: BannerList;
@@ -20,7 +21,7 @@ export const FullBannerComponent: FC<IFullBannerComponentProps> = ({banner}) => 
       <div className="relative z-10">
         <div className="h-[11rem] md:h-[15rem] lg:h-[25rem] pb-8 lg:pb-16 flex flex-col justify-end items-center text-center">
           <Link
-            href={`/categories/${banner.bannerCategory.ucategoryName}`}
+            href={buildCategoryUrlBySlug(banner.bannerCategory.ucategoryName, banner.bannerCategory.urlFormat)}
             className="w-[7rem] md:w-[12rem] md:block py-1 text-[10px] md:py-3 md:text-sm text-white font-normal md:font-bold border border-white rounded-full"
           >
             SHOP NOW

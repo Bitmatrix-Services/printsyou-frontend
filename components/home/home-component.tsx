@@ -101,6 +101,7 @@ const HomeComponent: FC<IHome> = ({
             <Suspense key={banner.id} fallback={<BannerSkeleton />}>
               <PromotionalBanner
                 link={banner.bannerCategory.ucategoryName}
+                urlFormat={banner.bannerCategory.urlFormat}
                 imageUrl={banner.bannerUrl}
                 title={banner.heading}
                 description={banner.tagLines}
@@ -127,6 +128,7 @@ const HomeComponent: FC<IHome> = ({
             <Suspense key={banner.id} fallback={<BannerSkeleton />}>
               <PromotionalBanner
                 link={banner.bannerCategory.ucategoryName}
+                urlFormat={banner.bannerCategory.urlFormat}
                 imageUrl={banner.bannerUrl}
                 title={banner.heading}
                 description={banner.tagLines}

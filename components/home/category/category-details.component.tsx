@@ -9,6 +9,7 @@ import {CategoryFilters} from '@components/home/category/filter.types';
 import dynamic from 'next/dynamic';
 import {HiChevronDown, HiChevronUp, HiFilter, HiX} from 'react-icons/hi';
 import {trackEvent, ANALYTICS_EVENTS} from '@utils/analytics';
+import {buildCategoryUrlBySlug} from '@utils/url-builder';
 
 interface ICategoryDetails {
     allCategories: Category[];
@@ -71,7 +72,7 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
                                     {index === category.crumbs!.length - 1 ? (
                                         <span className="text-gray-900 font-medium">{crumb.name}</span>
                                     ) : (
-                                        <Link href={`/categories/${crumb.uniqueCategoryName}`} className="hover:text-gray-900 transition-colors">
+                                        <Link href={buildCategoryUrlBySlug(crumb.uniqueCategoryName, crumb.urlFormat)} className="hover:text-gray-900 transition-colors">
                                             {crumb.name}
                                         </Link>
                                     )}
