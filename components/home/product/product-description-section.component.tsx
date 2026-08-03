@@ -137,7 +137,9 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
     <div className="flex flex-col">
       {/* Product Title */}
       <h1 className="text-xl md:text-2xl font-bold text-gray-900 capitalize leading-tight">
+        {product?.prefix && <span>{product.prefix} </span>}
         <span dangerouslySetInnerHTML={{__html: product?.productName ?? ''}} />
+        {product?.suffix && <span> {product.suffix}</span>}
       </h1>
 
       {/* Google Review Stars - Shows rating below title for social proof */}

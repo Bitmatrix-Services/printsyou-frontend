@@ -36,7 +36,10 @@ export const extractSizesFromProduct = (additionalFields: Array<{fieldName: stri
   // Parse sizes from field value
   // Could be: "S, M, L, XL, 2XL" or "S-3XL" or "Small, Medium, Large"
   let sizes: string[] = [];
-  const value = sizeField.fieldValue.toUpperCase();
+  // additionalFieldProductValues store rich text (e.g. "<p>Small, Medium, ...</p>") - strip
+  // tags first, otherwise a leading/trailing tag glues onto the first/last token (e.g.
+  // "<P>SMALL" or "XXXX-LARGE</P>") and neither normalizes nor survives the final filter below.
+  const value = sizeField.fieldValue.replace(/<[^>]*>/g, '').toUpperCase();
 
   // Check for range format (S-3XL)
   if (value.includes('-') && !value.includes(',')) {

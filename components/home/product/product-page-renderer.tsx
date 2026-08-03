@@ -81,8 +81,14 @@ export async function generateProductPageMetadata(props: {params: ProductPagePar
   const productTitle = product?.metaTitle || product?.productName || 'Custom Product';
   const priceText = minimumPrice > 0 ? ` | From $${minimumPrice.toFixed(2)}` : '';
 
+  // Only decorate with prefix/suffix when falling back to the plain product name - an
+  // admin-authored metaTitle is already deliberately crafted and shouldn't get mangled.
+  const decoratedTitle = !product?.metaTitle
+    ? `${product?.prefix ? `${product.prefix} ` : ''}${productTitle}${product?.suffix ? ` ${product.suffix}` : ''}`
+    : productTitle;
+
   return {
-    title: `${productTitle}${priceText} | PrintsYou`,
+    title: `${decoratedTitle}${priceText} | PrintsYou`,
     description: product?.metaDescription || `Order custom ${productTitle} with fast turnaround. High-quality printing, competitive prices, and free shipping on qualifying orders. Get a quote today!`,
     robots: {index: true, follow: true},
     alternates: {canonical: product ? buildProductFullUrl(process.env.FE_URL || '', product) : undefined},
