@@ -85,7 +85,9 @@ export const CategoryDetails: FC<ICategoryDetails> = memo(({allCategories, paged
                         <div className="min-w-0 flex-1">
                             {/* Main Heading - Larger */}
                             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                                {category.prefix?.prefixName ? `${category.prefix.prefixName} ` : ''}
                                 {category.categoryName}
+                                {category.suffix?.prefixName ? ` ${category.suffix.prefixName}` : ''}
                             </h1>
 
                             {/* Subtitle */}

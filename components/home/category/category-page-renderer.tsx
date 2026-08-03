@@ -199,10 +199,16 @@ export async function generateCategoryPageMetadata(props: {params: CategoryPageP
     const categoryTitle = category?.metaTitle || category?.categoryName || 'Custom Products';
     const defaultDescription = `Shop custom ${categoryTitle} at PrintsYou. Fast turnaround, competitive pricing, and quality guaranteed. Free quotes available!`;
 
+    // Only decorate with prefix when falling back to the plain category name - an admin-authored
+    // metaTitle is already a deliberately crafted string and shouldn't get a prefix mangled onto it.
+    const prefixedTitle = !category?.metaTitle && category?.prefix?.prefixName
+        ? `${category.prefix.prefixName} ${categoryTitle}`
+        : categoryTitle;
+
     return {
         title: category?.suffix?.prefixName
-            ? `${categoryTitle} ${category.suffix.prefixName}`
-            : `${categoryTitle} | Custom Printing | PrintsYou`,
+            ? `${prefixedTitle} ${category.suffix.prefixName}`
+            : `${prefixedTitle} | Custom Printing | PrintsYou`,
         description: category?.metaDescription || defaultDescription,
         keywords: category?.keywords || category?.categoryName,
         // SEO: Add robots directive for filtered/paginated pages
