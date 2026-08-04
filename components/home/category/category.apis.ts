@@ -101,6 +101,21 @@ export const getProductByCategoryWithFilers = async (
       query += `&rushShipping=true`;
     }
 
+    // Custom filter selections arrive as literal "cf[<slug>]" keys - slugs aren't known ahead
+    // of time (they're admin-defined per category), so forward any matching key generically
+    // instead of listing them individually like the fixed fields above. The backend expects
+    // one comma-joined value per slug (it reads a single request param, not a repeated one),
+    // so this must NOT be split into multiple "&cf[x]=a&cf[x]=b" params like colors/sizes above.
+    Object.keys(searchParams ?? {}).forEach((key) => {
+      const match = key.match(/^cf\[(.+)]$/);
+      if (!match) return;
+      const raw = searchParams[key];
+      const values = (Array.isArray(raw) ? raw : String(raw).split(',')).filter(Boolean);
+      if (values.length > 0) {
+        query += `&${encodeURIComponent(key)}=${encodeURIComponent(values.join(','))}`;
+      }
+    });
+
     const response = await axios.get(query);
 
     if (response.data.payload.content.length > 0) {

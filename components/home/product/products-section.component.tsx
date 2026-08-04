@@ -61,7 +61,10 @@ export const ProductsSection: FC<ProductsSectionProps> = ({pagedData}) => {
     const getUpdatedQueryParams = useCallback((): Record<string, any> => {
         let updatedQuery: Record<string, any> = {};
         searchParams.forEach((value, key) => {
-            if (~allowableSearchParams.indexOf(key)) {
+            // Custom filter params ("cf[<slug>]") aren't in the static whitelist above since
+            // their slugs are admin-defined per category, not known ahead of time - without this,
+            // a custom filter selection would silently vanish the moment sort/page/size changes.
+            if (~allowableSearchParams.indexOf(key) || /^cf\[.+]$/.test(key)) {
                 updatedQuery[key] = value;
             }
         });

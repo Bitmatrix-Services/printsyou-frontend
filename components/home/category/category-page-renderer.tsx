@@ -6,7 +6,13 @@ import {
     getProductsLdForCategoryPage
 } from '@components/home/category/category.apis';
 import {getCategoryFilters} from '@components/home/category/filter.apis';
-import {CategoryFilters, hasActiveFilters, parseFiltersFromSearchParams} from '@components/home/category/filter.types';
+import {
+    CategoryFilters,
+    buildFilterQueryString,
+    hasActiveFilters,
+    isFilterSelectionIndexable,
+    parseFiltersFromSearchParams
+} from '@components/home/category/filter.types';
 import {CategoryDetails} from '@components/home/category/category-details.component';
 import {CategoryReviews} from '@components/home/category/category-reviews.component';
 import {Category, parseCategoryUxSeo, AboutConcept} from '@components/home/home.types';
@@ -160,6 +166,12 @@ export async function generateCategoryPageMetadata(props: {params: CategoryPageP
     const activeFilters = parseFiltersFromSearchParams(searchParams);
     const hasFilters = hasActiveFilters(activeFilters);
 
+    // Only fetch filter config when a filter is actually active - needed to check per-value
+    // isIndexable flags below, and otherwise this metadata call would duplicate a fetch the
+    // page render already makes for nothing.
+    const filterConfig = hasFilters ? await getCategoryFilters(category?.id ?? '') : null;
+    const isIndexableFilterSelection = hasFilters && isFilterSelectionIndexable(activeFilters, filterConfig);
+
     // SEO: Determine canonical URL
     // If canonicalToParent is true, point to the absorption parent category
     // Otherwise, canonical is self (base category URL without filters)
@@ -167,18 +179,26 @@ export async function generateCategoryPageMetadata(props: {params: CategoryPageP
         ? `${process.env.FE_URL}categories/${category.absorptionParentSlug}`
         : buildCategoryFullUrl(process.env.FE_URL || '', category ?? {});
 
-    // For pagination on base pages, include page in canonical (only if not redirecting to parent)
-    const canonicalURL = !hasFilters && currentPage > 1 && !category?.canonicalToParent
-        ? `${baseCanonicalURL}?page=${currentPage}`
-        : baseCanonicalURL;
+    // For pagination on base pages, include page in canonical (only if not redirecting to parent).
+    // A page we're deliberately indexing (single admin-marked-indexable filter selection, e.g.
+    // ?colors=orange on safety vests) must self-canonicalize to its own filtered URL - pointing
+    // its canonical at the unfiltered base page while indexing it would tell Google to ignore
+    // this variant entirely, defeating the point of marking it indexable.
+    const canonicalURL = isIndexableFilterSelection
+        ? `${baseCanonicalURL}?${buildFilterQueryString(activeFilters)}`
+        : !hasFilters && currentPage > 1 && !category?.canonicalToParent
+            ? `${baseCanonicalURL}?page=${currentPage}`
+            : baseCanonicalURL;
 
     // SEO: Determine if page should be noindexed
     // Priority order:
     // 1. Backend seoIndexable=false → noindex (based on automated rules: thin content, attribute pages, etc.)
-    // 2. Filtered pages → noindex (prevents duplicate content from filter combinations)
-    // 3. Pagination pages (page > 1) → noindex (prevents duplicate content)
+    // 2. Filtered pages → noindex by default, UNLESS exactly one filter group is active and every
+    //    selected value was explicitly marked indexable by an admin (isIndexableFilterSelection)
+    // 3. Pagination pages (page > 1) → always noindex, even on an otherwise-indexable filter
+    //    selection (prevents duplicate/thin paginated variants of a filtered page)
     const backendNoIndex = category?.seoIndexable === false;
-    const shouldNoIndex = backendNoIndex || hasFilters || currentPage > 1;
+    const shouldNoIndex = backendNoIndex || (hasFilters && !isIndexableFilterSelection) || currentPage > 1;
 
     const descriptors: IconDescriptor[] = [];
     if (currentPage > 1) {

@@ -82,6 +82,18 @@ const FilterSidebar: FC<FilterSidebarProps> = memo(({filters, categoryUniqueName
       }
     }
 
+    // Update custom filter groups - onFilterChange always passes the full merged custom map
+    // (see handleCheckboxChange below), so this just syncs each slug's param to match.
+    if (newFilters.custom !== undefined) {
+      Object.entries(newFilters.custom).forEach(([slug, values]) => {
+        if (values && values.length > 0) {
+          params.set(`cf[${slug}]`, values.join(','));
+        } else {
+          params.delete(`cf[${slug}]`);
+        }
+      });
+    }
+
     const queryString = params.toString();
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, {scroll: false});
   }, [router, pathname, searchParams]);
@@ -95,6 +107,10 @@ const FilterSidebar: FC<FilterSidebarProps> = memo(({filters, categoryUniqueName
     params.delete('maxPrice');
     params.delete('rushShipping');
     params.delete('page');
+    // Custom filter slugs aren't known statically - drop any "cf[...]" param present.
+    Array.from(params.keys())
+      .filter((key) => /^cf\[.+]$/.test(key))
+      .forEach((key) => params.delete(key));
 
     const queryString = params.toString();
     router.push(`${pathname}${queryString ? `?${queryString}` : ''}`, {scroll: false});
@@ -129,7 +145,7 @@ const FilterSidebar: FC<FilterSidebarProps> = memo(({filters, categoryUniqueName
           .sort((a, b) => a.displayOrder - b.displayOrder)
           .map((group) => (
             <FilterGroupComponent
-              key={group.filterType}
+              key={group.slug ?? group.filterType}
               group={group}
               currentFilters={currentFilters}
               onFilterChange={updateFilters}
@@ -166,6 +182,8 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
         return currentFilters.sizes;
       case FilterType.MATERIAL:
         return currentFilters.materials;
+      case FilterType.CUSTOM:
+        return group.slug ? currentFilters.custom[group.slug] ?? [] : [];
       default:
         return [];
     }
@@ -181,9 +199,12 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
       newValues = activeValues.filter(v => v !== value);
     }
 
-    // If ALL options are selected, treat as "no filter" to include products without data
-    // This prevents hiding products that don't have color/size/material data
-    const allOptionsSelected = newValues.length >= group.options.length;
+    // If ALL options are selected, treat as "no filter" to include products without data.
+    // This prevents hiding products that don't have color/size/material data - but it does NOT
+    // apply to CUSTOM filters: a product with no manual assignment to any value is a real,
+    // intentional signal (not missing data), so selecting every value must still exclude
+    // unassigned products.
+    const allOptionsSelected = group.filterType !== FilterType.CUSTOM && newValues.length >= group.options.length;
     const finalValues = allOptionsSelected ? [] : newValues;
 
     switch (group.filterType) {
@@ -195,6 +216,11 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
         break;
       case FilterType.MATERIAL:
         onFilterChange({materials: finalValues});
+        break;
+      case FilterType.CUSTOM:
+        if (group.slug) {
+          onFilterChange({custom: {...currentFilters.custom, [group.slug]: finalValues}});
+        }
         break;
     }
   };
@@ -209,7 +235,7 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
         aria-expanded={isExpanded}
-        aria-controls={`filter-group-${group.filterType}`}
+        aria-controls={`filter-group-${group.slug ?? group.filterType}`}
       >
         <span className="font-semibold text-gray-900 text-sm flex items-center gap-2">
           {group.displayName}
@@ -227,7 +253,7 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
       </button>
 
       {isExpanded && (
-        <div id={`filter-group-${group.filterType}`} className="px-4 pb-3">
+        <div id={`filter-group-${group.slug ?? group.filterType}`} className="px-4 pb-3">
           {group.filterType === FilterType.COLOR && (
             <ColorFilterOptions
               options={group.options}
@@ -241,7 +267,7 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
               options={group.options}
               activeValues={currentFilters.sizes}
               onChange={handleCheckboxChange}
-              filterType={group.filterType}
+              groupLabel={group.displayName}
             />
           )}
 
@@ -250,7 +276,16 @@ const FilterGroupComponent: FC<FilterGroupComponentProps> = memo(({
               options={group.options}
               activeValues={currentFilters.materials}
               onChange={handleCheckboxChange}
-              filterType={group.filterType}
+              groupLabel={group.displayName}
+            />
+          )}
+
+          {group.filterType === FilterType.CUSTOM && (
+            <CheckboxFilterOptions
+              options={group.options}
+              activeValues={getActiveValues()}
+              onChange={handleCheckboxChange}
+              groupLabel={group.displayName}
             />
           )}
 
@@ -349,10 +384,10 @@ interface CheckboxFilterOptionsProps {
   options: FilterOption[];
   activeValues: string[];
   onChange: (value: string, checked: boolean) => void;
-  filterType: FilterType;
+  groupLabel: string;
 }
 
-const CheckboxFilterOptions: FC<CheckboxFilterOptionsProps> = memo(({options, activeValues, onChange, filterType}) => {
+const CheckboxFilterOptions: FC<CheckboxFilterOptionsProps> = memo(({options, activeValues, onChange, groupLabel}) => {
   const [showAll, setShowAll] = useState(false);
   const displayOptions = showAll ? options : options.slice(0, 6);
 
@@ -370,7 +405,7 @@ const CheckboxFilterOptions: FC<CheckboxFilterOptionsProps> = memo(({options, ac
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
               checked={isActive}
               onChange={(e) => onChange(option.value, e.target.checked)}
-              aria-label={`Filter by ${filterType.toLowerCase()}: ${option.label}`}
+              aria-label={`Filter by ${groupLabel.toLowerCase()}: ${option.label}`}
             />
             <span className={`text-sm ${isActive ? 'text-gray-900 font-medium' : 'text-gray-700'} group-hover:text-gray-900`}>
               {option.label}
