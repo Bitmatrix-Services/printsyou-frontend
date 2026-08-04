@@ -1141,7 +1141,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               totalQuantity={quantity}
               onChange={handleSizeBreakdownChange}
               disabled={isOutOfStock}
-              autoAssignDefault={false}
+              // Must stay true (the component's own default): without it, Buy is disabled
+              // until the customer manually fills in the size grid, which is exactly the
+              // "user cannot complete purchase" failure Google's manual reviewer flagged -
+              // a visitor landing at the default quantity has no functioning Buy button.
+              autoAssignDefault
             />
 
             {/* Validation indicator */}
