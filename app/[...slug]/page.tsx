@@ -11,12 +11,14 @@
  * 3. Return 404 if neither matches
  */
 
-import {notFound} from 'next/navigation';
+import {notFound, permanentRedirect, RedirectType} from 'next/navigation';
 import axios from 'axios';
 import {ApiResponse} from '@utils/api/axios-utils';
 import {Category} from '@components/home/home.types';
 import {Product} from '@components/home/product/product.types';
 import {CategoryRoutes, ProductRoutes} from '@utils/routes/be-routes';
+import {buildCategoryUrl} from '@utils/url-builder';
+import {getCategoryDetailsByUniqueName} from '@components/home/category/category.apis';
 
 // Import the underlying renderers directly (not the page.tsx default exports,
 // which are typed strictly to Next's PageProps and can't accept skipCleanRedirect)
@@ -89,7 +91,23 @@ const CleanUrlPage = async (props: {params: Params; searchParams: SearchParams})
         return renderProductsPage({params: productParams, skipCleanRedirect: true});
     }
 
-    // 3. Not found
+    // 3. Guard: neither a category nor a product matched this path - it may have been
+    // deleted, or moved during taxonomy restructuring without a redirect being created
+    // (see the same guard in product-page-renderer.tsx). Walk up the path from most
+    // specific to least specific (immediate parent first, root last) and redirect to
+    // the first ancestor category that still resolves, so a Google-indexed link doesn't
+    // dead-end at a 404. Ancestor category may be CLEAN or still LEGACY format - try both.
+    for (let i = params.slug.length - 1; i > 0; i--) {
+        const ancestorCategoryPath = params.slug.slice(0, i).join('/');
+        const ancestorCategory = (await resolveCleanCategory(ancestorCategoryPath))
+            ?? (await getCategoryDetailsByUniqueName(ancestorCategoryPath))?.payload
+            ?? null;
+        if (ancestorCategory) {
+            permanentRedirect(buildCategoryUrl(ancestorCategory), RedirectType.replace);
+        }
+    }
+
+    // 4. Not found
     notFound();
 };
 

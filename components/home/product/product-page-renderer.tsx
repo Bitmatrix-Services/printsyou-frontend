@@ -1,10 +1,11 @@
 import React from 'react';
 import {fetchRelatedProductDetails, getProductDetailsByUniqueName} from '@components/home/product/product-apis';
+import {getCategoryDetailsByUniqueName} from '@components/home/category/category.apis';
 import {ProductDetails} from '@components/home/product/product-details.component';
 import {EnclosureProduct, PriceGrids, Product} from '@components/home/product/product.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import dayjs from 'dayjs';
-import {buildProductFullUrl, buildProductUrl, buildProductUrlBySlug, buildCategoryUrlBySlug, isCleanFormat} from '@utils/url-builder';
+import {buildCategoryUrl, buildProductFullUrl, buildProductUrl, buildProductUrlBySlug, buildCategoryUrlBySlug, isCleanFormat} from '@utils/url-builder';
 
 export type ProductPageParams = Promise<{uniqueProductName: string[]}>;
 
@@ -28,6 +29,24 @@ export const renderProductsPage = async ({
 
   const response = await getProductDetailsByUniqueName(uniqueName);
   const product: Product | null = response?.payload ?? null;
+
+  // Guard: a product can go missing at its indexed URL if it was deleted, or moved to a
+  // different category during taxonomy restructuring without a redirect being created
+  // (a known gap in the restructuring tool - see 31-jul-2026 backend migration). Rather
+  // than serving a bare 404 to a Google-indexed link, walk up the category path from most
+  // specific to least specific (immediate parent first, root last) and redirect to the
+  // first ancestor category that still resolves.
+  if (!product) {
+    const segments = finalUrl.split('/');
+    for (let i = segments.length - 1; i > 0; i--) {
+      const ancestorCategoryPath = segments.slice(0, i).join('/');
+      const ancestorCategoryResponse = await getCategoryDetailsByUniqueName(ancestorCategoryPath);
+      const ancestorCategory = ancestorCategoryResponse?.payload;
+      if (ancestorCategory) {
+        permanentRedirect(buildCategoryUrl(ancestorCategory), RedirectType.replace);
+      }
+    }
+  }
 
   // Migrated/new products use CLEAN format (no /products/ prefix) - redirect
   // legacy-prefixed visits to the canonical clean URL instead of serving both.
