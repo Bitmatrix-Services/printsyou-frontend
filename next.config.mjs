@@ -306,6 +306,11 @@ const nextConfig = {
       permanent: true
     },
     {
+      destination: '/blog/the-complete-guide-to-choosing-the-right-shirts-for-your-business',
+      source: '/blog/-The-Complete-Guide-to-Choosing-the-Right-Shirts-for-Your-Business-bNAyCKhDnEE',
+      permanent: true
+    },
+    {
       destination: '/products/blankets/weighted-blankets/sleep-tight-weighted-blanket',
       source: '/blankets/weighted-blankets/sleep-tight-weighted-blanket',
       permanent: true
