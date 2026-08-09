@@ -152,6 +152,24 @@ const removeUniformBackground = (imageBlob: Blob): Promise<Blob | null> => {
         tryPush(x, y - 1);
       }
 
+      // The border-seeded fill above only reaches background pixels connected
+      // to the image edge - background trapped inside a closed shape (e.g. the
+      // hole in a letter "O", or a gap between tree branches) never touches the
+      // border, so it's left untouched. Since the fill above already visited
+      // every background-colored pixel reachable from the edge, any pixel still
+      // opaque here that matches bgColor must be one of these enclosed islands -
+      // safe to clear unconditionally, since it can't be reached from the
+      // outside without crossing a run of clearly non-background pixels first.
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const idx = y * width + x;
+          if (data[idx * 4 + 3] === 0) continue;
+          if (colorDistance(colorAt(x, y), bgColor) > MATCH_THRESHOLD) continue;
+          data[idx * 4 + 3] = 0;
+          removedCount++;
+        }
+      }
+
       // The hard cutoff above leaves a thin halo ring: anti-aliased edge pixels
       // blend between the logo color and the background color, so they're often
       // too far from bgColor to clear outright, yet aren't really part of the
