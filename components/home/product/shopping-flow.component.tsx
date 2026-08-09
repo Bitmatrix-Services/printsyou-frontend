@@ -1370,7 +1370,15 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               productColor={availableColors.find(c => c.colorName === selectedColor)?.colorHex || '#FFFFFF'}
               productColorName={selectedColor || ''}
               initialData={customizationData || undefined}
-              onCustomizationChange={setCustomizationData}
+              // Live-typing updates from the customizer only carry a partial
+              // snapshot (name/number/text/currentView etc.) - NOT the rich
+              // per-view data (viewProductImages, viewZoneConfigs, frontPreviewDataUrl/
+              // backPreviewDataUrl) that onAddToCart builds on confirm. Merging onto
+              // the previous state (rather than replacing it outright) means those
+              // richer fields survive: without this, simply reopening "Change or
+              // Adjust Artwork" fires a live update on mount and silently wipes the
+              // zone-accurate confirmation thumbnails back to the generic fallback.
+              onCustomizationChange={data => setCustomizationData(prev => (prev ? {...prev, ...data} : data))}
               onAddToCart={(data) => {
                 setCustomizationData(data || null);
                 setShowCustomizer(false);
