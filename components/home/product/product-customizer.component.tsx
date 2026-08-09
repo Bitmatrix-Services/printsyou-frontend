@@ -550,6 +550,10 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
   const [imageLoadError, setImageLoadError] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isRemovingBackground, setIsRemovingBackground] = useState(false);
+  const [backgroundRemovedFor, setBackgroundRemovedFor] = useState<{primary: boolean; back: boolean}>({
+    primary: false,
+    back: false,
+  });
   const [dpr, setDpr] = useState(1);
 
   // Primary logo (shared across all views by default)
@@ -1046,6 +1050,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         // Save to both preview and original states
         setPrimaryLogoDataUrl(dataUrl);
         setOriginalPrimaryLogoDataUrl(dataUrl);
+        setBackgroundRemovedFor(prev => ({...prev, primary: false}));
       };
       reader.onerror = () => {
         setUploadError('Failed to read image file');
@@ -1061,6 +1066,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     setPrimaryLogoDataUrl(null);
     setOriginalPrimaryLogoDataUrl(null);
     setLogoImage(null);
+    setBackgroundRemovedFor(prev => ({...prev, primary: false}));
   }, []);
 
   // Remove background from logo
@@ -1091,6 +1097,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         } else {
           setPrimaryLogoDataUrl(newDataUrl);
         }
+        setBackgroundRemovedFor(prev => (isBackLogo ? {...prev, back: true} : {...prev, primary: true}));
         setIsRemovingBackground(false);
       };
       reader.onerror = () => {
@@ -1129,6 +1136,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         // Save to both preview and original states
         setBackLogoDataUrl(dataUrl);
         setOriginalBackLogoDataUrl(dataUrl);
+        setBackgroundRemovedFor(prev => ({...prev, back: false}));
       };
       reader.onerror = () => {
         setUploadError('Failed to read image file');
@@ -1144,6 +1152,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     setBackLogoDataUrl(null);
     setOriginalBackLogoDataUrl(null);
     setBackLogoImage(null);
+    setBackgroundRemovedFor(prev => ({...prev, back: false}));
   }, []);
 
   // Handle Add to Cart - generate previews for all views
@@ -1192,12 +1201,24 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
             ? viewImage.imageUrl
             : `${ASSETS_SERVER_URL}${viewImage.imageUrl}`;
         }
-        // Store zone config for each view
+        // Store zone config for each view - fall back to the product-level
+        // default position when this image doesn't have its own override,
+        // mirroring what the live customizer canvas does (see printConfig
+        // above). Without this fallback, products relying on the product-level
+        // default (the common case) lose their logo position entirely by the
+        // time it reaches the confirmation thumbnails, and the logo silently
+        // renders dead-center instead of at the position the customer saw.
         if (viewImage) {
           viewZoneConfigs[view] = {
-            name: viewImage.namePosition?.enabled ? viewImage.namePosition : null,
-            number: viewImage.numberPosition?.enabled ? viewImage.numberPosition : null,
-            logo: viewImage.logoPosition?.enabled ? viewImage.logoPosition : null,
+            name: viewImage.namePosition?.enabled
+              ? viewImage.namePosition
+              : (defaultNamePosition?.enabled ? defaultNamePosition : null),
+            number: viewImage.numberPosition?.enabled
+              ? viewImage.numberPosition
+              : (defaultNumberPosition?.enabled ? defaultNumberPosition : null),
+            logo: viewImage.logoPosition?.enabled
+              ? viewImage.logoPosition
+              : (defaultLogoPosition?.enabled ? defaultLogoPosition : null),
           };
         }
       });
@@ -1251,6 +1272,9 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     totalCharges,
     printConfig.logo,
     viewImages,
+    defaultNamePosition,
+    defaultNumberPosition,
+    defaultLogoPosition,
   ]);
 
   // Notify parent of changes
@@ -1492,6 +1516,11 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                       </>
                     )}
                   </button>
+                  {backgroundRemovedFor.primary && (
+                    <p className="text-xs text-gray-500 mt-1.5">
+                      This is just a preview - our design team will make sure the background is fully removed and the logo is transparent.
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div
@@ -1594,6 +1623,11 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                           </>
                         )}
                       </button>
+                      {backgroundRemovedFor.back && (
+                        <p className="text-xs text-gray-500 mt-1.5">
+                          This is just a preview - our design team will make sure the background is fully removed and the logo is transparent.
+                        </p>
+                      )}
                     </div>
                   ) : (
                     <div
