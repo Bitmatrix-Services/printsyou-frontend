@@ -34,6 +34,181 @@ const removeBackground = async (imageBlob: Blob): Promise<Blob> => {
   });
 };
 
+// Fast, pixel-exact background removal for logos with a uniform (typically white)
+// background - the common case for uploaded company logos. The ML saliency model
+// above is built for photos and often misreads a large solid-color badge shape
+// (e.g. a filled circle logo) as background, eating into the logo itself. This
+// flood-fills inward from the image border, clearing only pixels connected to a
+// uniform edge color, so solid badge shapes are left untouched. Returns null if
+// the border isn't uniform enough (e.g. a photographic logo) so the caller can
+// fall back to the ML-based removeBackground().
+const removeUniformBackground = (imageBlob: Blob): Promise<Blob | null> => {
+  return new Promise(resolve => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(imageBlob);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      if (!width || !height) {
+        resolve(null);
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) {
+        resolve(null);
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, width, height);
+      const { data } = imageData;
+
+      const colorAt = (x: number, y: number) => {
+        const i = (y * width + x) * 4;
+        return [data[i], data[i + 1], data[i + 2]];
+      };
+      const colorDistance = (a: number[], b: number[]) =>
+        Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2);
+
+      // Sample the border and use the per-channel MEDIAN as the reference
+      // background color - robust against a handful of outlier samples (e.g.
+      // the logo artwork itself touching the image edge at one point), unlike
+      // a plain average which a single such outlier can skew.
+      const borderSamples: number[][] = [];
+      const step = Math.max(1, Math.floor(Math.min(width, height) / 60));
+      for (let x = 0; x < width; x += step) {
+        borderSamples.push(colorAt(x, 0), colorAt(x, height - 1));
+      }
+      for (let y = 0; y < height; y += step) {
+        borderSamples.push(colorAt(0, y), colorAt(width - 1, y));
+      }
+      const median = (values: number[]) => {
+        const sorted = [...values].sort((a, b) => a - b);
+        return sorted[Math.floor(sorted.length / 2)];
+      };
+      const bgColor = [0, 1, 2].map(channel => median(borderSamples.map(sample => sample[channel])));
+
+      // Generous enough to tolerate a soft vignette/shadow baked into the
+      // background of a real-world logo export (observed up to ~120 units of
+      // drift on real uploads), while staying safely far below any plausible
+      // foreground/logo color, which differs by hundreds of units, not tens -
+      // so this can never "tunnel" through an anti-aliased edge into a solid
+      // foreground shape.
+      const MATCH_THRESHOLD = 150;
+
+      // Bail if the border mostly doesn't look background-like at all (e.g. a
+      // full-bleed photo) - most border samples should be reasonably close to
+      // the median, even allowing for that vignette/shadow.
+      const backgroundLikeCount = borderSamples.filter(sample => colorDistance(sample, bgColor) < MATCH_THRESHOLD).length;
+      if (backgroundLikeCount / borderSamples.length < 0.6) {
+        resolve(null);
+        return;
+      }
+
+      // Region-grow inward from background-colored border pixels. Every
+      // candidate - seed or expansion alike - is compared against the SAME
+      // fixed bgColor, never against an already-included neighbor. Comparing
+      // to a neighbor ("local tolerance") lets small per-step drifts chain
+      // together and silently tunnel straight through an anti-aliased edge
+      // into a large solid-color logo shape, wiping it out; anchoring every
+      // check to one fixed reference color makes that impossible.
+      const visited = new Uint8Array(width * height);
+      const stack: number[] = [];
+
+      const tryPush = (x: number, y: number) => {
+        if (x < 0 || y < 0 || x >= width || y >= height) return;
+        const idx = y * width + x;
+        if (visited[idx]) return;
+        if (colorDistance(colorAt(x, y), bgColor) > MATCH_THRESHOLD) return;
+        visited[idx] = 1;
+        stack.push(idx);
+      };
+      for (let x = 0; x < width; x++) {
+        tryPush(x, 0);
+        tryPush(x, height - 1);
+      }
+      for (let y = 0; y < height; y++) {
+        tryPush(0, y);
+        tryPush(width - 1, y);
+      }
+
+      let removedCount = 0;
+      while (stack.length) {
+        const idx = stack.pop() as number;
+        const x = idx % width;
+        const y = Math.floor(idx / width);
+        data[idx * 4 + 3] = 0;
+        removedCount++;
+        tryPush(x + 1, y);
+        tryPush(x - 1, y);
+        tryPush(x, y + 1);
+        tryPush(x, y - 1);
+      }
+
+      // The hard cutoff above leaves a thin halo ring: anti-aliased edge pixels
+      // blend between the logo color and the background color, so they're often
+      // too far from bgColor to clear outright, yet aren't really part of the
+      // logo either. Run a few passes fading any still-opaque pixel that borders
+      // a cleared one, proportional to how close its own color is to bgColor -
+      // this smooths the boundary instead of leaving a visible off-white fringe.
+      const FEATHER_THRESHOLD = 180;
+      const FEATHER_PASSES = 3;
+      const alphaAt = (x: number, y: number) => {
+        if (x < 0 || y < 0 || x >= width || y >= height) return 0; // out of bounds reads as cleared
+        return data[(y * width + x) * 4 + 3];
+      };
+      for (let pass = 0; pass < FEATHER_PASSES; pass++) {
+        const fades: Array<[number, number]> = [];
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            const idx = y * width + x;
+            const alpha = data[idx * 4 + 3];
+            if (alpha === 0) continue;
+            const bordersCleared =
+              alphaAt(x + 1, y) < alpha ||
+              alphaAt(x - 1, y) < alpha ||
+              alphaAt(x, y + 1) < alpha ||
+              alphaAt(x, y - 1) < alpha;
+            if (!bordersCleared) continue;
+            const dist = colorDistance(colorAt(x, y), bgColor);
+            if (dist >= FEATHER_THRESHOLD) continue;
+            fades.push([idx, Math.round((dist / FEATHER_THRESHOLD) * 255)]);
+          }
+        }
+        if (fades.length === 0) break;
+        fades.forEach(([idx, newAlpha]) => {
+          data[idx * 4 + 3] = Math.min(data[idx * 4 + 3], newAlpha);
+        });
+      }
+
+      // If almost nothing (or almost everything) got cleared, this heuristic
+      // isn't a good fit for the image - bail out to the ML-based fallback.
+      const removedRatio = removedCount / (width * height);
+      if (removedRatio < 0.02 || removedRatio > 0.98) {
+        resolve(null);
+        return;
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      canvas.toBlob(resultBlob => resolve(resultBlob), 'image/png');
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(null);
+    };
+
+    img.src = objectUrl;
+  });
+};
+
 // =============================================================================
 // TYPE DEFINITIONS
 // =============================================================================
@@ -901,8 +1076,11 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
       const response = await fetch(logoUrl);
       const blob = await response.blob();
 
-      // Remove background
-      const resultBlob = await removeBackground(blob);
+      // Prefer the fast, pixel-exact flood-fill removal for logos with a uniform
+      // background (the common case) - it doesn't misread solid-color badge shapes
+      // as background the way the ML model can. Fall back to the ML model only
+      // when the image doesn't have a clean uniform border to key off of.
+      const resultBlob = (await removeUniformBackground(blob)) ?? (await removeBackground(blob));
 
       // Convert result back to data URL
       const reader = new FileReader();
@@ -1032,6 +1210,10 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
         // Use ORIGINAL logo URLs (not background-removed) for the data sent to backend
         logoDataUrl: originalPrimaryLogoDataUrl || undefined,
         backLogoDataUrl: useDifferentLogos ? (originalBackLogoDataUrl || undefined) : undefined,
+        // Preview-only variants (may be background-removed) - used solely for the
+        // on-screen confirmation thumbnails, never sent downstream for production.
+        previewLogoDataUrl: primaryLogoDataUrl || undefined,
+        previewBackLogoDataUrl: useDifferentLogos ? (backLogoDataUrl || undefined) : undefined,
         useDifferentLogos,
         logoPosition,
         viewCustomizations: {
@@ -1060,6 +1242,8 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
     fontStyle,
     originalPrimaryLogoDataUrl,
     originalBackLogoDataUrl,
+    primaryLogoDataUrl,
+    backLogoDataUrl,
     useDifferentLogos,
     viewCustomizations,
     currentView,
@@ -1256,7 +1440,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
               {logoDataUrl ? (
                 <div className="space-y-2">
                   <div className="flex items-center gap-3 p-2 md:p-3 bg-gray-50 rounded-lg border border-gray-200">
-                    <img src={logoDataUrl} alt="Logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded bg-white" />
+                    <img src={logoDataUrl} alt="Logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded" />
                     <div className="flex-1 min-w-0">
                       <p className="text-xs md:text-sm font-medium text-gray-900">Logo uploaded</p>
                       <button
@@ -1358,7 +1542,7 @@ export const ProductCustomizer: FC<ProductCustomizerProps> = ({
                   {backLogoDataUrl ? (
                     <div className="space-y-2">
                       <div className="flex items-center gap-3 p-2 md:p-3 bg-gray-50 rounded-lg border border-gray-200">
-                        <img src={backLogoDataUrl} alt="Back logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded bg-white" />
+                        <img src={backLogoDataUrl} alt="Back logo preview" className="w-10 h-10 md:w-14 md:h-14 object-contain rounded" />
                         <div className="flex-1 min-w-0">
                           <p className="text-xs md:text-sm font-medium text-gray-900">Back logo uploaded</p>
                           <button

@@ -178,6 +178,13 @@ export interface CustomizationData {
   customText?: string;
   logoDataUrl?: string;
   backLogoDataUrl?: string; // Separate logo for back view
+  // Preview-only variants of the logos above (post background-removal, if the
+  // customer used it). Kept separate from logoDataUrl/backLogoDataUrl - which
+  // stay as the untouched original upload for backend/production - so an
+  // on-screen thumbnail can accurately reflect what the customer confirmed
+  // without changing what gets sent downstream for fulfillment.
+  previewLogoDataUrl?: string;
+  previewBackLogoDataUrl?: string;
   useDifferentLogos?: boolean; // Flag to indicate different logos for front/back
   viewCustomizations?: {
     FRONT?: ViewCustomization;

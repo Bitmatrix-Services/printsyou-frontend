@@ -18,7 +18,7 @@
 
 import React, {FC, useMemo, useState, useCallback, useEffect, useRef} from 'react';
 import {useSearchParams} from 'next/navigation';
-import {Product, PriceGrids, productColors, ProductImageWithZones, CustomizationData} from '@components/home/product/product.types';
+import {Product, PriceGrids, productColors, ProductImageWithZones, CustomizationData, ImageViewType} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {ProductCustomizer} from '@components/home/product/product-customizer.component';
@@ -446,7 +446,13 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     return defaultLogoPosition?.enabled || defaultNumberPosition?.enabled || defaultNamePosition?.enabled;
   }, [product]);
 
-  const productImagesForCustomizer = useMemo(() => (product as any)?.productImages as ProductImageWithZones[] | undefined, [product]);
+  // Sorted by sequenceNumber (not raw API order) so a multi-color "all colors"
+  // group/swatch shot can't end up ahead of the real per-item photos.
+  const productImagesForCustomizer = useMemo(() => {
+    const images = (product as any)?.productImages as ProductImageWithZones[] | undefined;
+    if (!images) return images;
+    return [...images].sort((a, b) => (a.sequenceNumber ?? 999) - (b.sequenceNumber ?? 999));
+  }, [product]);
 
   // Step completion states
   const isStep1Complete = !!(customizationData?.logoDataUrl || artworkFiles.length > 0);
@@ -738,21 +744,61 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             <div className="flex items-start gap-4">
               {/* Thumbnail previews */}
               <div className="flex gap-3 relative">
-                {/* Render thumbnails with zone-accurate logo positioning */}
+                {/* Render thumbnails with zone-accurate logo positioning.
+                    Each view (FRONT/BACK) is resolved independently, in priority order:
+                    1) the actual rendered canvas export for that exact view (only ever
+                       populated for whichever tab was active when "Confirm" was clicked -
+                       this is the literal image the customer confirmed, so it's never wrong)
+                    2) a live composite using THIS view's admin-tagged product image + zone
+                    3) last resort: the product's own images sorted by sequenceNumber (not
+                       raw API order, which can put a multi-color "all colors" group shot
+                       ahead of the real per-item photos) */}
                 {(() => {
-                  const hasValidViewImages = customizationData.availableViews?.length &&
-                    customizationData.viewProductImages &&
-                    Object.values(customizationData.viewProductImages).some(v => v);
+                  const viewsToShow: ImageViewType[] = (customizationData.availableViews && customizationData.availableViews.length > 0)
+                    ? customizationData.availableViews
+                    : (['FRONT', 'BACK'] as ImageViewType[]);
 
-                  if (hasValidViewImages && customizationData.availableViews) {
-                    // Use view images with zone configs
-                    return customizationData.availableViews.map((view) => {
-                      const viewImage = customizationData.viewProductImages?.[view];
-                      const logoZone = customizationData.viewZoneConfigs?.[view]?.logo;
-                      const logoToShow = (customizationData.useDifferentLogos && view === 'BACK' && customizationData.backLogoDataUrl)
-                        ? customizationData.backLogoDataUrl
-                        : customizationData.logoDataUrl;
-                      if (!viewImage) return null;
+                  const sortedProductImages = [...(product.productImages || [])].sort(
+                    (a, b) => (a.sequenceNumber ?? 999) - (b.sequenceNumber ?? 999)
+                  );
+                  const fallbackIndexByView: Record<ImageViewType, number> = {FRONT: 0, BACK: 1, SIDE: 2};
+
+                  return viewsToShow.map((view) => {
+                    const label = view === 'FRONT' ? 'Front' : view === 'BACK' ? 'Back' : 'Side';
+                    // Prefer the preview-only (possibly background-removed) logo variants
+                    // so this thumbnail matches what the customer actually confirmed in the
+                    // customizer - logoDataUrl/backLogoDataUrl stay as the untouched original
+                    // upload for backend/production and are only used here as a fallback.
+                    const logoToShow = (customizationData.useDifferentLogos && view === 'BACK')
+                      ? (customizationData.previewBackLogoDataUrl || customizationData.backLogoDataUrl)
+                      : (customizationData.previewLogoDataUrl || customizationData.logoDataUrl);
+
+                    const renderedPreview = view === 'FRONT'
+                      ? customizationData.frontPreviewDataUrl
+                      : view === 'BACK'
+                        ? customizationData.backPreviewDataUrl
+                        : customizationData.sidePreviewDataUrl;
+
+                    if (renderedPreview) {
+                      return (
+                        <div key={view} className="text-center">
+                          <img
+                            src={renderedPreview}
+                            alt={label}
+                            className="rounded-lg border border-gray-200 object-contain cursor-pointer"
+                            style={{width: 112, height: 112}}
+                            onMouseEnter={() => setHoveredPreview({view, imageUrl: renderedPreview})}
+                            onMouseLeave={() => setHoveredPreview(null)}
+                          />
+                          <span className="text-xs text-gray-500 mt-1 block capitalize">{view.toLowerCase()}</span>
+                        </div>
+                      );
+                    }
+
+                    const viewImage = customizationData.viewProductImages?.[view];
+                    const logoZone = customizationData.viewZoneConfigs?.[view]?.logo;
+
+                    if (viewImage) {
                       return (
                         <div key={view} className="text-center">
                           <ProductThumbnailWithLogo
@@ -767,28 +813,26 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                           <span className="text-xs text-gray-500 mt-1 block capitalize">{view.toLowerCase()}</span>
                         </div>
                       );
-                    });
-                  }
+                    }
 
-                  // Fallback: use product.productImages with default zone or centered logo
-                  return product.productImages?.slice(0, 2).map((img, idx) => {
+                    const img = sortedProductImages[fallbackIndexByView[view]];
+                    if (!img) return null;
                     const imgUrl = img.imageUrl?.startsWith('http') ? img.imageUrl : `${ASSETS_SERVER_URL}${img.imageUrl}`;
-                    // Try to get zone from product's default positions
                     const defaultLogoZone = (product as any)?.defaultLogoPosition?.enabled
                       ? (product as any).defaultLogoPosition
                       : null;
                     return (
-                      <div key={idx} className="text-center">
+                      <div key={view} className="text-center">
                         <ProductThumbnailWithLogo
                           imageUrl={imgUrl}
-                          logoUrl={customizationData.logoDataUrl || ''}
+                          logoUrl={logoToShow || ''}
                           logoZone={defaultLogoZone}
-                          alt={idx === 0 ? 'Front' : 'Back'}
+                          alt={label}
                           size={112}
-                          onMouseEnter={() => setHoveredPreview({view: idx === 0 ? 'Front' : 'Back', imageUrl: imgUrl, logoUrl: customizationData.logoDataUrl || undefined, logoZone: defaultLogoZone})}
+                          onMouseEnter={() => setHoveredPreview({view, imageUrl: imgUrl, logoUrl: logoToShow || undefined, logoZone: defaultLogoZone})}
                           onMouseLeave={() => setHoveredPreview(null)}
                         />
-                        <span className="text-xs text-gray-500 mt-1 block">{idx === 0 ? 'Front' : 'Back'}</span>
+                        <span className="text-xs text-gray-500 mt-1 block">{label}</span>
                       </div>
                     );
                   });
@@ -1321,7 +1365,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           <div className="w-full max-w-6xl max-h-[95vh] overflow-y-auto">
             <ProductCustomizer
               productType="default"
-              baseImageUrl={product.productImages?.[0]?.imageUrl || ''}
+              baseImageUrl={productImagesForCustomizer?.[0]?.imageUrl || ''}
               productImages={productImagesForCustomizer}
               productColor={availableColors.find(c => c.colorName === selectedColor)?.colorHex || '#FFFFFF'}
               productColorName={selectedColor || ''}
