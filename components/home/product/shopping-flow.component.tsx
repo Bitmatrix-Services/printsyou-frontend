@@ -136,21 +136,21 @@ const UrgencyCountdown: FC<{leadTimeDays?: number}> = ({leadTimeDays = 3}) => {
   const isFastTrack = leadTimeDays <= 3;
 
   return (
-    <div className="bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl p-4 shadow-lg">
+    <div className="bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-3">
       <div className="flex items-center gap-3">
-        <div className="bg-white/20 rounded-full p-2">
+        <div className="text-amber-500">
           {isFastTrack ? <FaBolt className="w-5 h-5 animate-pulse" /> : <FaClock className="w-5 h-5" />}
         </div>
         <div className="flex-1">
           {timeLeft.isToday ? (
             <p className="font-bold">
-              Order within <span className="bg-white/20 px-2 py-0.5 rounded">{timeLeft.hours}h {timeLeft.minutes}m</span> for production to start TODAY!
+              Order within <span className="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">{timeLeft.hours}h {timeLeft.minutes}m</span> for production to start TODAY!
             </p>
           ) : (
             <p className="font-bold">Order now for production to start {timeLeft.hours < 24 ? 'tomorrow' : 'next business day'}!</p>
           )}
           {isFastTrack && (
-            <p className="text-sm text-white/90 flex items-center gap-1 mt-1">
+            <p className="text-sm text-amber-700 flex items-center gap-1 mt-1">
               <HiLightningBolt className="w-4 h-4" /> Fast-Track Production Active
             </p>
           )}
