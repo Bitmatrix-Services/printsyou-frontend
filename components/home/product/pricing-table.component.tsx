@@ -22,7 +22,7 @@ export const PricingTable: FC<IPricingTableProps> = ({product}) => {
 
   return (
     <div className="mt-4">
-      <h4 className="text-lg font-semibold text-gray-900 mb-3">Pricing</h4>
+      <h2 className="text-lg font-semibold text-gray-900 mb-3">Pricing</h2>
 
       <div className="overflow-x-auto border border-gray-200 rounded-lg">
         <table className="w-full">

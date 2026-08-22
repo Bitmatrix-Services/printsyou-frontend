@@ -14,6 +14,7 @@ import {Chip} from '@mui/joy';
 import {ColorSwatch} from '@components/home/product/color-swatch.component';
 import {ProductReviewStars} from '@components/home/product/product-review-stars.component';
 import {EmbeddedReviewStars} from '@components/home/product/embedded-review-stars.component';
+import {trackWhatsAppLead} from '@utils/analytics';
 
 // WhatsApp number for direct contact
 const WHATSAPP_NUMBER = '14694347035';
@@ -332,6 +333,7 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
             href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in ${encodeURIComponent(product.productName)}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppLead({source: 'product_page', productName: product.productName})}
             className="w-full py-3 px-6 flex items-center justify-center rounded-lg border-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white font-medium transition-all duration-200"
           >
             <FaWhatsapp className="mr-2 h-5 w-5" />
@@ -362,8 +364,9 @@ export const ProductDescriptionComponent: FC<ProductDescriptionComponent> = ({
         </div>
       )}
 
-      {/* Pricing Table */}
-      <PricingTable product={product} />
+      {/* Pricing Table - Shopping Flow already shows interactive tier pricing above, so
+          rendering this too would just repeat the same tiers/prices a second time. */}
+      {!product.shoppingFlowEnabled && <PricingTable product={product} />}
 
       {/* Setup/Additional Fees */}
       {product.additionalRows.length > 0 && (

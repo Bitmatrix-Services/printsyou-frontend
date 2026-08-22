@@ -21,8 +21,8 @@ const PLATFORM_CONFIG: Record<
 > = {
   GOOGLE: {
     label: 'Google',
-    bgColor: 'bg-white',
-    textColor: 'text-gray-700',
+    bgColor: 'bg-blue-50',
+    textColor: 'text-blue-700',
     icon: <GoogleIcon />
   },
   ETSY: {
@@ -118,18 +118,22 @@ export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) =
         </div>
 
         {/* Reviews Carousel with Custom Navigation */}
-        <div className="relative">
+        {/* Gutter padding lives on this plain wrapper, not on the Swiper element itself -
+            Swiper measures its own container's clientWidth for slide-width math, and padding
+            applied directly to the Swiper root throws that off (manifested as slides rendering
+            at negative/overflowing offsets). */}
+        <div className="relative px-2 md:px-10">
           {/* Custom Navigation Buttons */}
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all -ml-2 md:-ml-5"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all"
             aria-label="Previous review"
           >
             <FaChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all -mr-2 md:-mr-5"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all"
             aria-label="Next review"
           >
             <FaChevronRight className="w-4 h-4" />
@@ -156,7 +160,7 @@ export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) =
                 slidesPerView: 3
               }
             }}
-            className="pb-12 px-2 [&_.swiper-slide]:!h-auto [&_.swiper-wrapper]:items-stretch"
+            className="reviews-swiper pb-12 [&_.swiper-slide]:!h-auto [&_.swiper-wrapper]:items-stretch"
           >
             {activeReviews.map((review) => (
               <SwiperSlide key={review.id} className="!h-auto">
@@ -173,6 +177,11 @@ export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) =
 // Individual Review Card Component
 const ReviewCard: FC<{review: EmbeddedReview}> = ({review}) => {
   const platformConfig = PLATFORM_CONFIG[review.sourcePlatform] || PLATFORM_CONFIG.WEBSITE_VERIFIED;
+
+  // Some source platforms (Etsy/Google) store review text in all-caps; normalize for
+  // display only so long shouted quotes stay readable without altering stored data.
+  const toReadableCase = (text: string) =>
+    text === text.toUpperCase() ? text.charAt(0) + text.slice(1).toLowerCase() : text;
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return null;
@@ -197,7 +206,7 @@ const ReviewCard: FC<{review: EmbeddedReview}> = ({review}) => {
             {review.reviewerName.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h4 className="font-semibold text-gray-900">{review.reviewerName}</h4>
+            <h3 className="font-semibold text-gray-900">{review.reviewerName}</h3>
             {review.roleOrCompany && (
               <p className="text-sm text-gray-500">{review.roleOrCompany}</p>
             )}
@@ -233,7 +242,7 @@ const ReviewCard: FC<{review: EmbeddedReview}> = ({review}) => {
       {/* Review Text - Fixed height area */}
       <div className="flex-1 min-h-[80px]">
         <p className="text-gray-600 text-sm leading-relaxed line-clamp-4">
-          &ldquo;{review.reviewText}&rdquo;
+          &ldquo;{toReadableCase(review.reviewText)}&rdquo;
         </p>
       </div>
 
@@ -243,14 +252,14 @@ const ReviewCard: FC<{review: EmbeddedReview}> = ({review}) => {
           <img
             src={review.imageUrl.startsWith('http') ? review.imageUrl : `${process.env.NEXT_PUBLIC_ASSETS_SERVER_URL}${review.imageUrl}`}
             alt={`Review by ${review.reviewerName}`}
-            className="w-full max-h-40 object-contain rounded-lg border border-gray-100 bg-gray-50"
+            className="w-full max-h-24 object-contain rounded-lg border border-gray-100 bg-gray-50"
             loading="lazy"
           />
         </div>
       )}
 
       {/* "via Platform" footer */}
-      <div className="mt-4 pt-3 border-t border-gray-100">
+      <div className="mt-auto pt-3 border-t border-gray-100">
         <span className="text-xs text-gray-400">
           via {platformConfig.label}
         </span>

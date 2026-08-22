@@ -34,6 +34,9 @@ interface IProductDetails {
 export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) => {
   if (!product) notFound();
   const [images, setImages] = useState<ProductImage[]>([]);
+  // Overview length varies a lot by product; capping it (with a toggle) keeps the
+  // left column from running far past the right column's height on text-heavy products.
+  const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
   const productDescriptionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -132,12 +135,24 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
   const OverviewSection = () => (
     <div>
       <h4 className="text-2xl font-semibold mb-6">Overview</h4>
-      <div
-        id="product-overview"
-        data-productid={product.id}
-        className="product-description"
-        dangerouslySetInnerHTML={{__html: formattedDescription}}
-      />
+      <div className={`relative ${isOverviewExpanded ? '' : 'max-h-[18rem] overflow-hidden'}`}>
+        <div
+          id="product-overview"
+          data-productid={product.id}
+          className="product-description"
+          dangerouslySetInnerHTML={{__html: formattedDescription}}
+        />
+        {!isOverviewExpanded && (
+          <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+        )}
+      </div>
+      <button
+        type="button"
+        onClick={() => setIsOverviewExpanded(prev => !prev)}
+        className="mt-2 text-sm font-medium text-primary-500 hover:text-primary-600 underline underline-offset-2"
+      >
+        {isOverviewExpanded ? 'Show less' : 'Show more'}
+      </button>
     </div>
   );
 
@@ -151,23 +166,26 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
             <div className="product-additional-info-heading capitalize">
               <strong>{fieldName.toLowerCase()}:</strong>
             </div>
-            <ul>
-              <li className="text-mute2">
-                {fieldValue.includes('<table') ? (
-                  <span
-                    className="font-normal text-md text-base description-table"
-                    dangerouslySetInnerHTML={{__html: fieldValue}}
-                  />
-                ) : fieldValue ? (
-                  <div
-                    className="product-additional-info-value capitalize"
-                    dangerouslySetInnerHTML={{__html: fieldValue.toLowerCase()}}
-                  />
-                ) : (
-                  <span className="font-normal text-md text-base text-mute2">N/A</span>
-                )}
-              </li>
-            </ul>
+            {/* Plain div, not a <ul>/<li> wrapper: fieldValue is admin-entered rich HTML and
+                can itself contain <li>/<table> markup - nesting that inside another <li>
+                produces invalid HTML that browsers silently repair on first paint, which
+                then mismatches React's hydration (no CSS here depends on the li/ul, so this
+                is a no-op for styling). */}
+            <div className="text-mute2">
+              {fieldValue.includes('<table') ? (
+                <span
+                  className="font-normal text-md text-base description-table"
+                  dangerouslySetInnerHTML={{__html: fieldValue}}
+                />
+              ) : fieldValue ? (
+                <div
+                  className="product-additional-info-value capitalize"
+                  dangerouslySetInnerHTML={{__html: fieldValue.toLowerCase()}}
+                />
+              ) : (
+                <span className="font-normal text-md text-base text-mute2">N/A</span>
+              )}
+            </div>
           </Fragment>
         ))}
       </div>
@@ -179,7 +197,7 @@ export const ProductDetails: FC<IProductDetails> = ({product, relatedProducts}) 
       <Breadcrumb prefixTitle="Products" list={product.crumbs ?? []} />
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 my-8 items-start">
-          <div className="space-y-4">
+          <div className="space-y-4 lg:sticky lg:top-8 lg:self-start lg:max-h-[calc(100vh-4rem)] lg:overflow-y-auto">
             <ProductImageComponent
               productName={product.productName}
               productImages={sortedImages}

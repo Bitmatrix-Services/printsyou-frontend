@@ -24,7 +24,7 @@ interface IProductImageSection {
 export const ProductImageComponent: FC<IProductImageSection> = ({productName, productImages, outOfStock}) => {
   return (
     <figure className="order-first">
-      <div className="sticky top-0">
+      <div>
         <div className="md:pt-8 border border-gray-200">
           <AppLightGallery productName={productName} productImages={productImages} showOne={true} />
           {outOfStock ? (

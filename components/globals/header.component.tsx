@@ -13,6 +13,7 @@ import {DialogContent} from '@mui/joy';
 import {TfiHeadphoneAlt} from 'react-icons/tfi';
 import {RiWhatsappFill} from 'react-icons/ri';
 import {buildCategoryUrl} from '@utils/url-builder';
+import {trackWhatsAppLead} from '@utils/analytics';
 
 interface IHeaderProps {
   categories: Category[];
@@ -45,7 +46,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
               </div>
               <div className="flex items-center gap-6 md:gap-2">
                 <div className="flex items-center gap-1 font-semibold hover:text-primary hover:cursor-pointer">
-                  <Link href="https://wa.me/14694347035" target="_blank">
+                  <Link href="https://wa.me/14694347035" target="_blank" onClick={() => trackWhatsAppLead({source: 'header_mobile'})}>
                     <RiWhatsappFill size={30} color="#25d366" />
                   </Link>
                   <span className="hidden md:block">WhatsApp</span>
@@ -97,6 +98,7 @@ export const Header: FC<IHeaderProps> = ({categories}) => {
             href="https://wa.me/14694347035"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => trackWhatsAppLead({source: 'header_desktop'})}
             className="hidden lg:flex items-center justify-end gap-1 ml-2 mr-2"
           >
             <div className="flex flex-col lg:flex-row items-center gap-1 font-semibold hover:text-primary">

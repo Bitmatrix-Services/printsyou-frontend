@@ -5,26 +5,30 @@ import {ProductDetails} from '@components/home/product/product-details.component
 import {EnclosureProduct, PriceGrids, Product} from '@components/home/product/product.types';
 import {permanentRedirect, RedirectType} from 'next/navigation';
 import dayjs from 'dayjs';
-import {buildCategoryUrl, buildProductFullUrl, buildProductUrl, buildProductUrlBySlug, buildCategoryUrlBySlug, isCleanFormat} from '@utils/url-builder';
+import {buildCategoryUrl, buildProductFullUrl, buildProductUrl, buildProductUrlBySlug, buildCategoryUrlBySlug, isCleanFormat, withPreservedQueryParams} from '@utils/url-builder';
 
 export type ProductPageParams = Promise<{uniqueProductName: string[]}>;
+export type ProductPageSearchParams = Promise<any>;
 
 // skipCleanRedirect: set by the /[...slug] catch-all route, which reuses this
 // renderer to show CLEAN products at their canonical (already-clean) URL -
 // without this, the redirect below would fire again and loop against itself.
 export const renderProductsPage = async ({
   params,
+  searchParams,
   skipCleanRedirect
 }: {
   params: ProductPageParams;
+  searchParams?: ProductPageSearchParams;
   skipCleanRedirect?: boolean;
 }) => {
   const {uniqueProductName} = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const uniqueName = uniqueProductName.join('/');
   const finalUrl = normalizeUrl(uniqueName);
 
   if (uniqueName !== finalUrl) {
-    permanentRedirect(`/products/${finalUrl}`, RedirectType.replace);
+    permanentRedirect(withPreservedQueryParams(`/products/${finalUrl}`, resolvedSearchParams), RedirectType.replace);
   }
 
   const response = await getProductDetailsByUniqueName(uniqueName);
@@ -43,7 +47,7 @@ export const renderProductsPage = async ({
       const ancestorCategoryResponse = await getCategoryDetailsByUniqueName(ancestorCategoryPath);
       const ancestorCategory = ancestorCategoryResponse?.payload;
       if (ancestorCategory) {
-        permanentRedirect(buildCategoryUrl(ancestorCategory), RedirectType.replace);
+        permanentRedirect(withPreservedQueryParams(buildCategoryUrl(ancestorCategory), resolvedSearchParams), RedirectType.replace);
       }
     }
   }
@@ -51,7 +55,7 @@ export const renderProductsPage = async ({
   // Migrated/new products use CLEAN format (no /products/ prefix) - redirect
   // legacy-prefixed visits to the canonical clean URL instead of serving both.
   if (!skipCleanRedirect && product && isCleanFormat(product.urlFormat)) {
-    permanentRedirect(buildProductUrl(product), RedirectType.replace);
+    permanentRedirect(withPreservedQueryParams(buildProductUrl(product), resolvedSearchParams), RedirectType.replace);
   }
 
   const relatedProductResponse = product ? await fetchRelatedProductDetails(product.id) : null;

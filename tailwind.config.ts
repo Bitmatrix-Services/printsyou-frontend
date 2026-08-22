@@ -59,7 +59,13 @@ const config: Config = {
         mute5: '#F2F4F5',
         lightGray: '#EEF1F7',
         grey: '#FAFAFA',
-        light: '#d0d5df'
+        light: '#d0d5df',
+        // Semantic state colors - use these instead of raw green-*/amber-*/red-*
+        // utilities for status/validation UI so new components don't keep adding
+        // one-off shades (see usability audit finding #1: 17 distinct text colors).
+        success: {DEFAULT: '#15803D', bg: '#F0FDF4', border: '#BBF7D0'},
+        warning: {DEFAULT: '#B45309', bg: '#FFFBEB', border: '#FDE68A'},
+        danger: {DEFAULT: '#DC2626', bg: '#FEF2F2', border: '#FECACA'}
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

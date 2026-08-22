@@ -106,6 +106,27 @@ export function trackPageView(properties?: Record<string, unknown>) {
   }
 }
 
+// Fire tracking for a WhatsApp/click-to-chat interaction - PrintsYou's primary
+// lead-gen channel for several ad campaigns, but historically none of the
+// WhatsApp buttons sent a Meta Lead event, meaning a large share of what the
+// business considers "leads" were invisible to Meta's ad optimization and
+// match-quality reporting. Fires both PostHog (existing behavior) and the Meta
+// Pixel Lead event (new) from one place so every WhatsApp CTA stays consistent.
+export function trackWhatsAppLead(context: {source: string; productName?: string; productCategory?: string}) {
+  trackEvent(ANALYTICS_EVENTS.WHATSAPP_CLICKED, {
+    source: context.source,
+    product_name: context.productName,
+    product_category: context.productCategory
+  });
+
+  if (typeof window !== 'undefined' && (window as any).fbq) {
+    (window as any).fbq('track', 'Lead', {
+      content_name: context.productName || context.productCategory || 'WhatsApp Inquiry',
+      content_category: context.productCategory || 'WhatsApp'
+    });
+  }
+}
+
 // Checkout-specific tracking functions
 export const checkoutAnalytics = {
   started: (data: {

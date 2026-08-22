@@ -21,7 +21,7 @@ import {getAllCategories} from '@components/home/home-apis';
 import {IconDescriptor} from 'next/dist/lib/metadata/types/metadata-types';
 import React from 'react';
 import {EnclosureProduct} from '@components/home/product/product.types';
-import {buildCategoryFullUrl, buildCategoryUrl, isCleanFormat} from '@utils/url-builder';
+import {buildCategoryFullUrl, buildCategoryUrl, isCleanFormat, withPreservedQueryParams} from '@utils/url-builder';
 
 export type CategoryPageParams = Promise<{uniqueCategoryName: string[]}>;
 export type CategoryPageSearchParams = Promise<any>;
@@ -46,7 +46,7 @@ export const renderCategoryPage = async (props: {
         .replace(/\s+/g, '');
 
     if (uniqueName !== finalUrl) {
-        permanentRedirect(`/categories/${finalUrl}`, RedirectType.replace);
+        permanentRedirect(withPreservedQueryParams(`/categories/${finalUrl}`, searchParams), RedirectType.replace);
     }
 
     const [categoriesRes, response] = await Promise.all([getAllCategories(), getCategoryDetailsByUniqueName(uniqueName)]);
@@ -66,7 +66,7 @@ export const renderCategoryPage = async (props: {
         // Migrated/new categories use CLEAN format (no /categories/ prefix) - redirect
         // legacy-prefixed visits to the canonical clean URL instead of serving both.
         if (!props.skipCleanRedirect && isCleanFormat(category.urlFormat)) {
-            permanentRedirect(buildCategoryUrl(category), RedirectType.replace);
+            permanentRedirect(withPreservedQueryParams(buildCategoryUrl(category), searchParams), RedirectType.replace);
         }
 
         // Fetch products, filters, and reviews in parallel

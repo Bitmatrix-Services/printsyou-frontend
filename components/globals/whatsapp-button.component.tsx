@@ -2,6 +2,7 @@
 import React, {FC, useState, useEffect} from 'react';
 import {FaWhatsapp} from 'react-icons/fa';
 import {IoClose} from 'react-icons/io5';
+import {trackWhatsAppLead} from '@utils/analytics';
 
 interface WhatsAppButtonProps {
   phoneNumber?: string;
@@ -31,6 +32,7 @@ export const WhatsAppButton: FC<WhatsAppButtonProps> = ({
   }, [hasScrolled]);
 
   const handleClick = () => {
+    trackWhatsAppLead({source: 'floating_whatsapp_button'});
     const encodedMessage = encodeURIComponent(defaultMessage);
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');

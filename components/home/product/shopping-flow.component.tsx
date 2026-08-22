@@ -23,7 +23,7 @@ import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploade
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
 import {ProductCustomizer} from '@components/home/product/product-customizer.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
-import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList, FaBolt, FaUpload, FaPencilAlt, FaBalanceScale, FaTag} from 'react-icons/fa';
+import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList, FaBolt, FaUpload, FaPencilAlt, FaTag} from 'react-icons/fa';
 import {HiLightningBolt} from 'react-icons/hi';
 import axios from 'axios';
 import Link from 'next/link';
@@ -88,7 +88,7 @@ const StepHeader: FC<{step: number; title: string; isComplete?: boolean}> = ({st
     }`}>
       {isComplete ? <FaCheckCircle className="w-4 h-4" /> : step}
     </div>
-    <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+    <h2 className="text-lg font-bold text-gray-900">{title}</h2>
   </div>
 );
 
@@ -337,6 +337,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const [artworkFiles, setArtworkFiles] = useState<ArtworkFile[]>([]);
   const [sizeBreakdown, setSizeBreakdown] = useState<SizeQuantity[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
+  // Tracks the swatch by id, not name: several products have multiple color
+  // variants that share the same display name, and matching selection by name
+  // would highlight all of them as "selected" at once.
+  const [selectedColorId, setSelectedColorId] = useState<string>('');
+  const [hasUserPickedColor, setHasUserPickedColor] = useState(false);
   const [notes, setNotes] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string>('');
@@ -365,6 +370,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   useEffect(() => {
     if (availableColors.length > 0 && !selectedColor) {
       setSelectedColor(availableColors[0].colorName);
+      setSelectedColorId(availableColors[0].id);
     }
   }, [availableColors, selectedColor]);
 
@@ -431,9 +437,6 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
     return totalSizeQty === quantity;
   }, [needsSizeBreakdown, sizeBreakdown, quantity]);
 
-  const totalSizeQty = sizeBreakdown.reduce((sum, s) => sum + s.quantity, 0);
-  const remainingQty = quantity - totalSizeQty;
-
   const isBulkOrder = showBulkThreshold && bulkThreshold && quantity >= bulkThreshold;
   const leadTimeDays = product.leadTimeDays || 3;
 
@@ -456,7 +459,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
   // Step completion states
   const isStep1Complete = !!(customizationData?.logoDataUrl || artworkFiles.length > 0);
-  const isStep2Complete = hasColors ? !!selectedColor : true;
+  const isStep2Complete = hasColors ? hasUserPickedColor : true;
   const isStep3Complete = isSizeBreakdownValid;
 
   // ==========================================================================
@@ -485,24 +488,6 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
   const handleSizeBreakdownChange = useCallback((breakdown: SizeQuantity[]) => {
     setSizeBreakdown(breakdown);
   }, []);
-
-  // Distribute evenly across sizes (S, M, L primarily)
-  const handleDistributeEvenly = useCallback(() => {
-    const primarySizes = ['S', 'M', 'L'].filter(s => availableSizes.includes(s));
-    const sizesToUse = primarySizes.length > 0 ? primarySizes : availableSizes.slice(0, 3);
-
-    if (sizesToUse.length === 0) return;
-
-    const perSize = Math.floor(quantity / sizesToUse.length);
-    const remainder = quantity % sizesToUse.length;
-
-    const newBreakdown: SizeQuantity[] = sizesToUse.map((size, idx) => ({
-      size,
-      quantity: perSize + (idx < remainder ? 1 : 0)
-    }));
-
-    setSizeBreakdown(newBreakdown);
-  }, [quantity, availableSizes]);
 
   // Open the customer info modal before checkout
   const handleCheckout = () => {
@@ -965,17 +950,17 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
             {hasColorImages ? (
               /* Grid layout with product images */
-              <div className="grid gap-2" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))'}}>
+              <div className="grid gap-2" style={{gridTemplateColumns: 'repeat(auto-fill, minmax(84px, 1fr))'}}>
                 {availableColors.map((color: productColors) => {
-                  const isSelected = selectedColor === color.colorName;
-                  const colorImagePath = color.coloredProductImage || color.onlyColorImage;
+                  const isSelected = selectedColorId === color.id;
+                  const colorImagePath = color.onlyColorImage || color.coloredProductImage;
                   const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
 
                   return (
                     <button
                       key={color.id}
                       type="button"
-                      onClick={() => setSelectedColor(color.colorName)}
+                      onClick={() => { setSelectedColor(color.colorName); setSelectedColorId(color.id); setHasUserPickedColor(true); }}
                       disabled={isOutOfStock}
                       className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
                         isSelected ? 'border-gray-900 ring-2 ring-gray-300' : 'border-gray-200 hover:border-gray-400'
@@ -986,7 +971,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                         <div className="relative w-full aspect-square overflow-hidden">
                           <img src={imageUrl} alt={color.colorName} className="w-full h-full object-cover" />
                           <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                            <span className="text-[10px] text-white font-medium text-center block truncate">{color.colorName}</span>
+                            <span className="text-[11px] text-white font-medium text-center block leading-tight line-clamp-2 break-words">{color.colorName}</span>
                           </div>
                           {isSelected && (
                             <div className="absolute top-1 right-1">
@@ -998,7 +983,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                         <div className="relative w-full aspect-square">
                           <div className="w-full h-full" style={{backgroundColor: color.colorHex || '#ccc'}} />
                           <div className={`absolute bottom-0 left-0 right-0 bg-black/70 px-1 py-1 transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
-                            <span className="text-[10px] text-white font-medium text-center block truncate">{color.colorName}</span>
+                            <span className="text-[11px] text-white font-medium text-center block leading-tight line-clamp-2 break-words">{color.colorName}</span>
                           </div>
                           {isSelected && (
                             <div className="absolute top-1 right-1">
@@ -1015,13 +1000,13 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               /* Color swatches/legend layout when no images available */
               <div className="flex flex-wrap gap-3">
                 {availableColors.map((color: productColors) => {
-                  const isSelected = selectedColor === color.colorName;
+                  const isSelected = selectedColorId === color.id;
 
                   return (
                     <button
                       key={color.id}
                       type="button"
-                      onClick={() => setSelectedColor(color.colorName)}
+                      onClick={() => { setSelectedColor(color.colorName); setSelectedColorId(color.id); setHasUserPickedColor(true); }}
                       disabled={isOutOfStock}
                       className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all ${
                         isSelected
@@ -1060,7 +1045,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       {/* STEP 3: QUANTITY & SIZE BREAKDOWN */}
       {/* ================================================================== */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-        <StepHeader step={hasColors ? 3 : 2} title="Choose Quantities & Sizes" isComplete={isStep3Complete} />
+        <StepHeader step={hasColors ? 3 : 2} title={needsSizeBreakdown ? 'Choose Quantities & Sizes' : 'Choose Quantity'} isComplete={isStep3Complete} />
 
         {/* Minimum order notice */}
         <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
@@ -1168,18 +1153,6 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         {/* Size Breakdown */}
         {needsSizeBreakdown && (
           <div className="border-t border-gray-200 pt-4">
-            <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-medium text-gray-700">Size Breakdown</label>
-              <button
-                type="button"
-                onClick={handleDistributeEvenly}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
-              >
-                <FaBalanceScale className="w-3 h-3" />
-                Distribute Evenly (S, M, L)
-              </button>
-            </div>
-
             <SizeBreakdown
               availableSizes={availableSizes}
               totalQuantity={quantity}
@@ -1191,22 +1164,6 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               // a visitor landing at the default quantity has no functioning Buy button.
               autoAssignDefault
             />
-
-            {/* Validation indicator */}
-            <div className={`mt-3 p-2 rounded-lg text-sm font-medium ${
-              isSizeBreakdownValid
-                ? 'bg-green-50 text-green-700 border border-green-200'
-                : 'bg-gray-100 text-gray-600'
-            }`}>
-              {isSizeBreakdownValid ? (
-                <span className="flex items-center gap-2">
-                  <FaCheckCircle className="w-4 h-4" />
-                  Complete! {totalSizeQty} / {quantity} sizes matched
-                </span>
-              ) : (
-                <span>{totalSizeQty} / {quantity} assigned ({remainingQty > 0 ? `${remainingQty} remaining` : `${Math.abs(remainingQty)} over`})</span>
-              )}
-            </div>
           </div>
         )}
       </div>

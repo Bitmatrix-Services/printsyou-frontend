@@ -15,7 +15,7 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
   return (
     <section className="bg-white">
       {relatedProducts && relatedProducts.length > 0 ? (
-        <div className="relative w-full mx-auto py-4">
+        <div className="relative w-full mx-auto py-4 px-12">
           <Typography id="related-products" className="font-bold text-lg">
             You may also like:
           </Typography>
@@ -45,29 +45,23 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
           >
             {relatedProducts.map(product => (
               <SwiperSlide key={product.id}>
-                <div className="relative max-w-full p-1" style={{overflow: 'visible', height: 'auto'}}>
+                <div className="relative max-w-full h-full p-1" style={{overflow: 'visible'}}>
                   <ProductCard product={product} imagePriority={false} />
                 </div>
               </SwiperSlide>
             ))}
           </Swiper>
           <button
-            className="swiper-nav-prev absolute -left-2.5 top-1/2 transform -translate-y-1/2 z-10"
+            className="swiper-nav-prev absolute left-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-primary hover:bg-primary hover:text-white transition"
             aria-label="Previous"
           >
-            <IoIosArrowBack
-              size={48}
-              className="p-2 bg-transparent text-primary rounded-full shadow-md hover:bg-primary hover:text-white transition"
-            />
+            <IoIosArrowBack size={20} />
           </button>
           <button
-            className="swiper-nav-next absolute -right-2.5 top-1/2 transform -translate-y-1/2 z-10"
+            className="swiper-nav-next absolute right-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-primary hover:bg-primary hover:text-white transition"
             aria-label="Next"
           >
-            <IoIosArrowForward
-              size={48}
-              className="p-2 bg-transparent text-primary rounded-full shadow-md hover:bg-primary hover:text-white transition"
-            />
+            <IoIosArrowForward size={20} />
           </button>
         </div>
       ) : (

@@ -2,6 +2,7 @@
 
 import React, {useState} from 'react';
 import Link from 'next/link';
+import {trackWhatsAppLead} from '@utils/analytics';
 
 // Mock Container component since it's not available
 const Container = ({children}: {children: React.ReactNode}) => (
@@ -410,6 +411,7 @@ export const ThreePLServicesDetails = () => {
               href="https://wa.me/14694347035"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackWhatsAppLead({source: '3pl_page'})}
               className="flex items-center justify-center gap-2 bg-green-500 border-2 border-green-500 text-white font-bold py-4 px-8 rounded-lg hover:bg-green-600 hover:border-green-600 transition-colors text-lg"
               aria-label="Chat with us on WhatsApp"
             >

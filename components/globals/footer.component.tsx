@@ -84,7 +84,7 @@ const FooterLinks: FC<FooterLinksProps> = memo(({title, list}) => {
   return (
     <div className="col-span-1 lg:col-span-2 mt-6">
       <div>
-        <h6 className="mb-4 text-lg lg:text-base font-bold text-headingColor capitalize">{title}</h6>
+        <h2 className="mb-4 text-lg lg:text-base font-bold text-headingColor capitalize">{title}</h2>
         <ul className="space-y-4">
           {(list ?? []).map(linkItem => (
             <li key={linkItem.url}>

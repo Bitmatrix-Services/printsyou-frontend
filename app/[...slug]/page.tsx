@@ -17,7 +17,7 @@ import {ApiResponse} from '@utils/api/axios-utils';
 import {Category} from '@components/home/home.types';
 import {Product} from '@components/home/product/product.types';
 import {CategoryRoutes, ProductRoutes} from '@utils/routes/be-routes';
-import {buildCategoryUrl} from '@utils/url-builder';
+import {buildCategoryUrl, withPreservedQueryParams} from '@utils/url-builder';
 import {getCategoryDetailsByUniqueName} from '@components/home/category/category.apis';
 
 // Import the underlying renderers directly (not the page.tsx default exports,
@@ -88,7 +88,7 @@ const CleanUrlPage = async (props: {params: Params; searchParams: SearchParams})
     if (product) {
         // Delegate to product page by creating params in expected format
         const productParams = Promise.resolve({uniqueProductName: params.slug});
-        return renderProductsPage({params: productParams, skipCleanRedirect: true});
+        return renderProductsPage({params: productParams, searchParams: props.searchParams, skipCleanRedirect: true});
     }
 
     // 3. Guard: neither a category nor a product matched this path - it may have been
@@ -103,7 +103,7 @@ const CleanUrlPage = async (props: {params: Params; searchParams: SearchParams})
             ?? (await getCategoryDetailsByUniqueName(ancestorCategoryPath))?.payload
             ?? null;
         if (ancestorCategory) {
-            permanentRedirect(buildCategoryUrl(ancestorCategory), RedirectType.replace);
+            permanentRedirect(withPreservedQueryParams(buildCategoryUrl(ancestorCategory), await props.searchParams), RedirectType.replace);
         }
     }
 

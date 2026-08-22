@@ -15,7 +15,7 @@ import {MaskInput} from '@lib/form/mask-input.component';
 import {ReactQueryClientProvider} from '../app/query-client-provider';
 import {UserInfoCapture} from '@components/user-info-capture';
 import {LoaderWithBackdrop} from '@components/globals/loader-with-backdrop.component';
-import {quoteAnalytics, identifyUser} from '@utils/analytics';
+import {quoteAnalytics, identifyUser, trackWhatsAppLead} from '@utils/analytics';
 import {FaWhatsapp, FaCheckCircle, FaFileAlt, FaShieldAlt, FaBolt} from 'react-icons/fa';
 import {productColors} from '@components/home/product/product.types';
 import {RiMessengerLine} from 'react-icons/ri';
@@ -48,6 +48,27 @@ const getCookie = (name: string): string | null => {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
   return null;
+};
+
+// Best-effort country inference from a phone number's country calling code - mirrors
+// MetaConversionService.inferCountryFromPhone on the backend. Kept intentionally small
+// (US plus the Spanish-speaking markets PrintsYou runs ad campaigns in) rather than a
+// full worldwide table, since a wrong guess is worse than omitting the field.
+const PHONE_COUNTRY_CODES: [string, string][] = [
+  ['1', 'us'], ['52', 'mx'], ['34', 'es'], ['54', 'ar'], ['57', 'co'], ['51', 'pe'],
+  ['56', 'cl'], ['593', 'ec'], ['502', 'gt'], ['503', 'sv'], ['504', 'hn'], ['505', 'ni'],
+  ['506', 'cr'], ['507', 'pa'], ['58', 've'], ['591', 'bo'], ['595', 'py'], ['598', 'uy']
+];
+
+const inferCountryFromPhone = (phone?: string): string | null => {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, '');
+  if (!digits) return null;
+  // No explicit country code and 10 digits - matches the "assume US" convention already
+  // used when normalizing the phone number for Meta's `ph` match key.
+  if (digits.length === 10) return 'us';
+  const match = PHONE_COUNTRY_CODES.find(([code]) => digits.startsWith(code));
+  return match ? match[1] : null;
 };
 
 /**
@@ -249,8 +270,14 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
       if (userData?.externalId) {
         advancedMatchingData.external_id = userData.externalId;
       }
-      // Default to US country for better matching
-      advancedMatchingData.country = 'us';
+      // Best-effort country from the phone's calling code, rather than blindly asserting
+      // "us" for every lead - actively wrong for non-US leads from the Spanish-language
+      // campaigns, and asserting the wrong country can hurt match confidence more than
+      // omitting it and letting Meta fall back to its own IP-based signal.
+      const inferredCountry = inferCountryFromPhone(userData?.phone);
+      if (inferredCountry) {
+        advancedMatchingData.country = inferredCountry;
+      }
 
       // Set advanced matching data via init (Meta Pixel SDK will auto-hash)
       // Calling init with user data updates the user properties for subsequent events
@@ -398,8 +425,13 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     // Compute the SAME productCategory value for both Pixel and CAPI to ensure matching
     const resolvedProductCategory = data.productCategory || itemName || 'Quote Request';
 
-    // Capture Facebook cookies for Conversions API event matching
-    const fbc = getCookie('_fbc');
+    // Capture Facebook cookies for Conversions API event matching. Falls back to
+    // reconstructing _fbc from the raw fbclid URL param (same pattern as
+    // shopping-flow.component.tsx's checkout flow) for the case where the Pixel hasn't
+    // had a chance to set the cookie yet - e.g. this form is submitted very soon after
+    // landing from an ad click, before the cookie write completes.
+    const fbclid = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('fbclid') : null;
+    const fbc = getCookie('_fbc') || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : null);
     const fbp = getCookie('_fbp');
 
     console.log('[Meta Dedup] Starting submission with eventId:', metaEventId, 'fbc:', fbc ? 'present' : 'missing', 'fbp:', fbp ? 'present' : 'missing');
@@ -410,7 +442,9 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
     const lastName = nameParts.slice(1).join(' ') || '';
 
     // STEP 1: Fire browser pixel FIRST with the event ID, quantity, and user data for advanced matching
-    // Use metaEventId as external_id to ensure consistency with server CAPI
+    // externalId uses email (a stable per-customer id), matching what the server CAPI call
+    // now sends too - a per-submission id here would give this customer's Lead and any
+    // later Purchase two different external_id values, defeating cross-event matching.
     const pixelFired = fireMetaPixelLead(
       metaEventId,
       resolvedProductCategory,
@@ -420,7 +454,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
         phone: data.phoneNumber || undefined,
         firstName,
         lastName,
-        externalId: metaEventId // Use same ID as server CAPI for cross-device matching
+        externalId: data.emailAddress || metaEventId
       },
       itemData?.priceGrids,
       itemData?.setupCharge
@@ -487,6 +521,7 @@ export const RequestQuoteComponent: FC<RequestQuoteComponentProps> = ({itemData}
 
   const handleWhatsAppClick = useCallback(() => {
     trackEvent('whatsapp_click', {source: 'quote_page', category: watch('productCategory')});
+    trackWhatsAppLead({source: 'quote_page', productCategory: watch('productCategory') || undefined});
   }, [trackEvent, watch]);
 
   const handleMessengerClick = useCallback(() => {

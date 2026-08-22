@@ -1,6 +1,7 @@
-import {generateProductPageMetadata, ProductPageParams, renderProductsPage} from '@components/home/product/product-page-renderer';
+import {generateProductPageMetadata, ProductPageParams, ProductPageSearchParams, renderProductsPage} from '@components/home/product/product-page-renderer';
 
-const ProductsPage = async ({params}: {params: ProductPageParams}) => renderProductsPage({params});
+const ProductsPage = async ({params, searchParams}: {params: ProductPageParams; searchParams: ProductPageSearchParams}) =>
+  renderProductsPage({params, searchParams});
 
 export default ProductsPage;
 

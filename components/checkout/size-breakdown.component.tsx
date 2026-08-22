@@ -216,13 +216,15 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
       {/* Size Grid and Status Bar Container */}
       <div className="w-full">
         {/* Size Grid - responsive grid with proper spacing */}
-        <div className="flex flex-wrap gap-3 mb-3 justify-start">
+        <div className="flex flex-wrap gap-4 mb-3 justify-start">
           {sortedSizes.map(size => (
             <div key={size} className="flex flex-col items-center" style={{ minWidth: '48px', width: '48px' }}>
-              <label className="text-xs font-semibold text-gray-700 mb-1 text-center">
+              <label htmlFor={`size-qty-${size}`} className="text-xs font-semibold text-gray-700 mb-1 text-center">
                 {size}
               </label>
               <input
+                id={`size-qty-${size}`}
+                aria-label={`Quantity for size ${size}`}
                 type="number"
                 min="0"
                 max={totalQuantity}

@@ -3,6 +3,7 @@ import React, {FC, useMemo} from 'react';
 import Link from 'next/link';
 import {Product} from '@components/home/product/product.types';
 import {FaWhatsapp} from 'react-icons/fa';
+import {trackWhatsAppLead} from '@utils/analytics';
 
 /**
  * =====================================================
@@ -65,6 +66,7 @@ export const MobileStickyCta: FC<MobileStickyCtaProps> = ({product}) => {
           href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'm interested in ${encodeURIComponent(product.productName)}`}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackWhatsAppLead({source: 'mobile_sticky_cta', productName: product.productName})}
           className="w-10 h-10 flex items-center justify-center rounded-full bg-[#25D366] text-white"
           aria-label="Chat on WhatsApp"
         >

@@ -58,12 +58,14 @@ export const ProductCard = memo<IProductCard>(
                                 </div>
                             )}
 
-                            {/* Quick View Overlay - Desktop Only */}
+                            {/* Quick View Overlay - Desktop Only. Semi-transparent by default so the
+                                affordance is discoverable without hover (touch/keyboard users), and
+                                becomes fully opaque on hover for the discrete "revealed" affordance. */}
                             <div className="hidden md:block absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors">
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="absolute inset-0 flex items-center justify-center">
                                     <button
                                         type="button"
-                                        className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-md shadow-lg transition-colors"
+                                        className="px-6 py-2.5 bg-blue-600/70 group-hover:bg-blue-700 text-white font-semibold text-sm rounded-md shadow-lg transition-colors"
                                         onClick={e => {
                                             setQuickViewModal(true);
                                             e.preventDefault();

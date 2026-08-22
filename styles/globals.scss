@@ -100,6 +100,18 @@ body {
   //width: 2rem;
 }
 
+// Swiper's default inactive bullet (black @ 20% opacity) is too low-contrast against
+// white section backgrounds to signal how many slides exist.
+.reviews-swiper .swiper-pagination-bullet {
+  background-color: #9ca3af;
+  opacity: 1;
+}
+
+.reviews-swiper .swiper-pagination-bullet-active {
+  background-color: #019ce0;
+  opacity: 1;
+}
+
 .featured-swiper .swiper-button-prev {
   left: -1.7rem;
 }

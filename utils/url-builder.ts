@@ -175,3 +175,36 @@ export function getProductResolvedPath(product: UrlAwareEntity): string {
 
     return `products/${slug}`;
 }
+
+/**
+ * Append the incoming request's query params (e.g. fbclid, gclid, utm_*) onto a
+ * redirect target path. Next.js's `searchParams` prop is the only way a Server
+ * Component sees the original query string - a bare `permanentRedirect(path)`
+ * silently drops it. Ad-click landing pages frequently redirect once (legacy
+ * URL cleanup, clean-format migration, etc.) before the Meta/Google Pixel
+ * scripts ever mount, so losing these here means the click ID never reaches
+ * the page that would otherwise capture it.
+ *
+ * @param path Destination path (no query string)
+ * @param searchParams The resolved Next.js searchParams object for the current request
+ * @returns path with the original query string re-appended, if any
+ */
+export function withPreservedQueryParams(
+    path: string,
+    searchParams: Record<string, string | string[] | undefined> | null | undefined
+): string {
+    if (!searchParams) return path;
+
+    const query = new URLSearchParams();
+    Object.entries(searchParams).forEach(([key, value]) => {
+        if (value === undefined) return;
+        if (Array.isArray(value)) {
+            value.forEach(v => query.append(key, v));
+        } else {
+            query.append(key, value);
+        }
+    });
+
+    const queryString = query.toString();
+    return queryString ? `${path}?${queryString}` : path;
+}

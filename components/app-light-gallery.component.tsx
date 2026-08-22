@@ -358,7 +358,7 @@ export const AppLightGallery: FC<AppLightGalleryProps> = ({productImages, produc
                   <ImageWithFallback
                     width={!showOne ? 100 : 403}
                     height={!showOne ? 100 : 403}
-                    className="object-contain"
+                    className={!showOne ? 'object-cover' : 'object-contain'}
                     src={media.imageUrl}
                     priority={showOne || index <= 5}
                     alt={altText}
