@@ -1458,7 +1458,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="flex items-center gap-3">
           <div className="flex-shrink-0">
-            <div className="text-xs text-gray-500">Total</div>
+            <div className="text-xs text-gray-500">Total ({quantity} {quantity === 1 ? 'unit' : 'units'})</div>
             <div className="text-lg font-bold text-gray-900">${totalPrice.toFixed(2)}</div>
           </div>
           <Button
