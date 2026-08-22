@@ -1225,7 +1225,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
+            <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
           )}
 
           {/* Primary CTA */}
@@ -1365,7 +1365,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
             {/* Form */}
             <div className="p-6 space-y-4">
               {error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <div role="alert" className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
                   {error}
                 </div>
               )}
@@ -1449,6 +1449,28 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
           </div>
         </div>
       )}
+
+      {/* Mobile Sticky Buy Bar - the inline Buy Now button sits at the bottom of a
+          3-step configurator (logo, color, quantity/size); without this, a mobile
+          visitor has no persistent price/CTA while scrolling through those steps.
+          z-40 keeps it under the customer-info modal (z-50) so it's correctly
+          covered once that opens, rather than showing through the backdrop. */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <div className="flex items-center gap-3">
+          <div className="flex-shrink-0">
+            <div className="text-xs text-gray-500">Total</div>
+            <div className="text-lg font-bold text-gray-900">${totalPrice.toFixed(2)}</div>
+          </div>
+          <Button
+            variant="primary"
+            onClick={handleCheckout}
+            disabled={isOutOfStock || isProcessing || !isStep3Complete || (hasColors && !selectedColor)}
+            className="flex-1 py-3 px-4 rounded-lg text-base bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+          >
+            {isProcessing ? 'Processing...' : isOutOfStock ? 'Out of Stock' : 'Buy Now'}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
