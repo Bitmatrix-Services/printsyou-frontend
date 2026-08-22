@@ -6,6 +6,7 @@ import {IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 import {Navigation} from 'swiper/modules';
 import {ProductCard} from '@components/home/product/product-card.component';
 import Typography from '@mui/joy/Typography';
+import {Button} from '@components/globals/button.component';
 
 interface IRelatedProductsSection {
   relatedProducts: EnclosureProduct[] | null;
@@ -51,18 +52,20 @@ export const RelatedProductsSection: FC<IRelatedProductsSection> = ({relatedProd
               </SwiperSlide>
             ))}
           </Swiper>
-          <button
-            className="swiper-nav-prev absolute left-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-primary hover:bg-primary hover:text-white transition"
+          <Button
+            variant="icon"
+            className="swiper-nav-prev absolute left-1 top-1/2 -translate-y-1/2"
             aria-label="Previous"
           >
             <IoIosArrowBack size={20} />
-          </button>
-          <button
-            className="swiper-nav-next absolute right-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-md text-primary hover:bg-primary hover:text-white transition"
+          </Button>
+          <Button
+            variant="icon"
+            className="swiper-nav-next absolute right-1 top-1/2 -translate-y-1/2"
             aria-label="Next"
           >
             <IoIosArrowForward size={20} />
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="m-16 flex items-center justify-center">

@@ -2,6 +2,7 @@
 
 import React, {FC, useRef} from 'react';
 import {EmbeddedReview, ReviewSourcePlatform} from '@components/home/product/product.types';
+import {Button} from '@components/globals/button.component';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import type {Swiper as SwiperType} from 'swiper';
 import {Autoplay, Pagination, Navigation} from 'swiper/modules';
@@ -124,20 +125,22 @@ export const ProductReviewsSlider: FC<ProductReviewsSliderProps> = ({reviews}) =
             at negative/overflowing offsets). */}
         <div className="relative px-2 md:px-10">
           {/* Custom Navigation Buttons */}
-          <button
+          <Button
+            variant="icon"
             onClick={() => swiperRef.current?.slidePrev()}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all"
+            className="absolute left-0 top-1/2 -translate-y-1/2"
             aria-label="Previous review"
           >
             <FaChevronLeft className="w-4 h-4" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="icon"
             onClick={() => swiperRef.current?.slideNext()}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-lg border border-gray-200 text-gray-600 hover:text-primary-500 hover:border-primary-500 transition-all"
+            className="absolute right-0 top-1/2 -translate-y-1/2"
             aria-label="Next review"
           >
             <FaChevronRight className="w-4 h-4" />
-          </button>
+          </Button>
 
           <Swiper
             modules={[Autoplay, Pagination]}

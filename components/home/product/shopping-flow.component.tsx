@@ -21,6 +21,7 @@ import {useSearchParams} from 'next/navigation';
 import {Product, PriceGrids, productColors, ProductImageWithZones, CustomizationData, ImageViewType} from '@components/home/product/product.types';
 import {ArtworkUploader, ArtworkFile} from '@components/checkout/artwork-uploader';
 import {SizeBreakdown, SizeQuantity, extractSizesFromProduct, isApparelProduct} from '@components/checkout/size-breakdown.component';
+import {Button} from '@components/globals/button.component';
 import {ProductCustomizer} from '@components/home/product/product-customizer.component';
 import {RiShoppingBag4Fill} from 'react-icons/ri';
 import {FaTruck, FaClock, FaShieldAlt, FaCheckCircle, FaClipboardList, FaBolt, FaUpload, FaPencilAlt, FaTag} from 'react-icons/fa';
@@ -853,14 +854,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                 {customizationData.useDifferentLogos && customizationData.backLogoDataUrl && (
                   <p className="text-xs text-gray-500 mt-1">Different logos for front/back</p>
                 )}
-                <button
-                  type="button"
+                <Button
+                  variant="ghost"
                   onClick={() => setShowCustomizer(true)}
-                  className="mt-3 inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                  className="mt-3 inline-flex items-center gap-2 px-4 py-2 text-sm"
                 >
                   <FaPencilAlt className="w-3.5 h-3.5" />
                   Change or Adjust Artwork
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -957,12 +958,12 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                   const imageUrl = colorImagePath ? `${ASSETS_SERVER_URL}${colorImagePath}` : null;
 
                   return (
-                    <button
+                    <Button
+                      variant="tile"
                       key={color.id}
-                      type="button"
                       onClick={() => { setSelectedColor(color.colorName); setSelectedColorId(color.id); setHasUserPickedColor(true); }}
                       disabled={isOutOfStock}
-                      className={`group relative rounded-lg border-2 transition-all overflow-hidden ${
+                      className={`group relative overflow-hidden ${
                         isSelected ? 'border-gray-900 ring-2 ring-gray-300' : 'border-gray-200 hover:border-gray-400'
                       } ${isOutOfStock ? 'opacity-50 cursor-not-allowed' : ''}`}
                       title={color.colorName}
@@ -992,7 +993,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                           )}
                         </div>
                       )}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
@@ -1003,12 +1004,12 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                   const isSelected = selectedColorId === color.id;
 
                   return (
-                    <button
+                    <Button
+                      variant="tile"
                       key={color.id}
-                      type="button"
                       onClick={() => { setSelectedColor(color.colorName); setSelectedColorId(color.id); setHasUserPickedColor(true); }}
                       disabled={isOutOfStock}
-                      className={`flex items-center gap-2 px-3 py-2 rounded-lg border-2 transition-all ${
+                      className={`flex items-center gap-2 px-3 py-2 ${
                         isSelected
                           ? 'border-gray-900 bg-gray-50 ring-2 ring-gray-300'
                           : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
@@ -1032,7 +1033,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                       <span className={`text-sm font-medium ${isSelected ? 'text-gray-900' : 'text-gray-700'}`}>
                         {color.colorName}
                       </span>
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
@@ -1074,12 +1075,12 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                   (sortedPriceGrids.indexOf(tier) === sortedPriceGrids.length - 1 || quantity < sortedPriceGrids[sortedPriceGrids.indexOf(tier) + 1]?.countFrom);
 
                 return (
-                  <button
+                  <Button
+                    variant="tile"
                     key={tier.id}
-                    type="button"
                     onClick={() => handleTierSelect(tier)}
                     disabled={isOutOfStock}
-                    className={`relative px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
+                    className={`relative px-4 py-2 text-sm font-medium ${
                       isCurrentTier
                         ? 'border-gray-900 bg-gray-900 text-white'
                         : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400'
@@ -1104,7 +1105,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                     ) : (
                       <div className="text-xs opacity-80">${basePrice.toFixed(2)}/ea</div>
                     )}
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -1115,14 +1116,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
         <div className="mb-4">
           <label className="text-sm font-medium text-gray-700 mb-2 block">Exact Quantity</label>
           <div className="flex items-center gap-3">
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={() => handleQuantityChange(quantity - 1)}
               disabled={quantity <= minQuantity || isOutOfStock}
-              className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xl"
+              className="w-11 h-11 flex items-center justify-center font-bold text-xl"
             >
               −
-            </button>
+            </Button>
             <input
               type="text"
               inputMode="numeric"
@@ -1138,14 +1139,14 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               disabled={isOutOfStock}
               className="w-28 h-11 text-center border border-gray-300 rounded-lg font-bold text-xl focus:ring-2 focus:ring-gray-400 focus:border-gray-400"
             />
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={() => handleQuantityChange(quantity + 1)}
               disabled={isOutOfStock}
-              className="w-11 h-11 rounded-lg border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed font-bold text-xl"
+              className="w-11 h-11 flex items-center justify-center font-bold text-xl"
             >
               +
-            </button>
+            </Button>
             <span className="text-sm text-gray-500">@ ${currentUnitPrice.toFixed(2)} each</span>
           </div>
         </div>
@@ -1238,23 +1239,23 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                 <FaClipboardList className="mr-2 h-5 w-5" />
                 Get Custom Quote for {quantity} Units
               </Link>
-              <button
-                type="button"
+              <Button
+                variant="secondary"
                 onClick={handleCheckout}
                 disabled={isOutOfStock || isProcessing || !isStep3Complete || (hasColors && !selectedColor)}
-                className="w-full py-3 px-4 flex items-center justify-center rounded-lg border-2 border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 px-4 flex items-center justify-center"
               >
                 {isProcessing ? 'Processing...' : `Or Buy Now — $${totalPrice.toFixed(2)}`}
-              </button>
+              </Button>
             </div>
           ) : (
             // Standard order - Buy Now is primary
             <div className="space-y-3">
-              <button
-                type="button"
+              <Button
+                variant="primary"
                 onClick={handleCheckout}
                 disabled={isOutOfStock || isProcessing || !isStep3Complete || (hasColors && !selectedColor)}
-                className={`w-full min-h-[64px] py-4 px-6 flex items-center justify-center rounded-xl text-white font-bold text-xl transition-all shadow-lg hover:shadow-xl ${
+                className={`w-full min-h-[64px] py-4 px-6 flex items-center justify-center rounded-xl text-xl ${
                   isOutOfStock || isProcessing || !isStep3Complete || (hasColors && !selectedColor)
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700'
@@ -1275,7 +1276,7 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                     {isFreeShipping && <span className="ml-2 text-sm bg-white/20 px-2 py-0.5 rounded">FREE SHIPPING</span>}
                   </>
                 )}
-              </button>
+              </Button>
 
               {/* Secondary CTA - Quote */}
               {hasQuoteRequests && (
@@ -1409,11 +1410,11 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
               </div>
 
               <div className="pt-2 space-y-3">
-                <button
-                  type="button"
+                <Button
+                  variant="primary"
                   onClick={proceedToCheckout}
                   disabled={isProcessing}
-                  className="w-full py-4 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  className="w-full py-4 px-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-lg rounded-xl flex items-center justify-center"
                 >
                   {isProcessing ? (
                     <>
@@ -1429,15 +1430,15 @@ export const ShoppingFlow: FC<ShoppingFlowProps> = ({product}) => {
                       Continue to Secure Payment
                     </>
                   )}
-                </button>
+                </Button>
 
-                <button
-                  type="button"
+                <Button
+                  variant="secondary"
                   onClick={() => {setShowCustomerInfoModal(false); setError('');}}
-                  className="w-full py-3 px-4 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-all"
+                  className="w-full py-3 px-4"
                 >
                   Go Back
-                </button>
+                </Button>
               </div>
 
               <p className="text-xs text-gray-500 text-center pt-2">

@@ -1,6 +1,7 @@
 import React, {memo, useMemo, useState} from 'react';
 import Link from 'next/link';
 import {ImageWithFallback} from '@components/globals/Image-with-fallback';
+import {Button} from '@components/globals/button.component';
 import {EnclosureProduct} from '@components/home/product/product.types';
 import {ProductQuickViewModal} from '@components/home/product/product-quick-view-modal.component';
 import {buildProductUrl} from '@utils/url-builder';
@@ -63,16 +64,16 @@ export const ProductCard = memo<IProductCard>(
                                 becomes fully opaque on hover for the discrete "revealed" affordance. */}
                             <div className="hidden md:block absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors">
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <button
-                                        type="button"
-                                        className="px-6 py-2.5 bg-blue-600/70 group-hover:bg-blue-700 text-white font-semibold text-sm rounded-md shadow-lg transition-colors"
+                                    <Button
+                                        variant="primary"
+                                        className="px-6 py-2.5 bg-blue-600/70 group-hover:bg-blue-700 text-sm rounded-md"
                                         onClick={e => {
                                             setQuickViewModal(true);
                                             e.preventDefault();
                                         }}
                                     >
                                         Quick View
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         </div>

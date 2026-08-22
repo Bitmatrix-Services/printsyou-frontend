@@ -2,6 +2,7 @@
 
 import React, {FC, useEffect, useMemo, useState} from 'react';
 import {FaTshirt, FaExclamationTriangle} from 'react-icons/fa';
+import {Button} from '@components/globals/button.component';
 
 // Common apparel sizes in order
 const STANDARD_SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL'];
@@ -190,22 +191,12 @@ export const SizeBreakdown: FC<SizeBreakdownProps> = ({
           Size Breakdown
         </h3>
         <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={handleQuickDistribute}
-            disabled={disabled}
-            className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors disabled:opacity-50"
-          >
+          <Button variant="ghost" onClick={handleQuickDistribute} disabled={disabled} className="text-xs px-2 py-1">
             Distribute Evenly
-          </button>
-          <button
-            type="button"
-            onClick={handleClear}
-            disabled={disabled}
-            className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors disabled:opacity-50"
-          >
+          </Button>
+          <Button variant="ghost" onClick={handleClear} disabled={disabled} className="text-xs px-2 py-1">
             Clear
-          </button>
+          </Button>
         </div>
       </div>
 
